@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My website</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --accent-color: #00d4ff;
+            --investment-color: #00ff88;
+            --text-main: #e0e0e0;
+            --text-dim: #b0b0b0;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            line-height: 1.6;
+        }
+
+        /* شريط التنقل */
+        nav {
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: sticky;
+            top: 0; z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-color);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        /* محرك البحث */
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        #globalSearch {
+            width: 100%;
+            padding: 18px 25px;
+            border-radius: 50px;
+            border: 2px solid #333;
+            background: var(--card-bg);
+            color: white;
+            font-size: 1.2rem;
+            outline: none;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        #globalSearch:focus {
+            border-color: var(--accent-color);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        /* تصميم البطاقة */
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #333;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-color);
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            align-self: flex-start;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .badge-vsa { background: rgba(0, 212, 255, 0.2); color: var(--accent-color); }
+        .badge-invest { background: rgba(0, 255, 136, 0.2); color: var(--investment-color); }
+
+        .card h3 { margin: 10px 0; color: #fff; font-size: 1.3rem; }
+        .card-content { color: var(--text-dim); flex-grow: 1; white-space: pre-line; margin-bottom: 15px; }
+        
+        .card-links { display: flex; flex-wrap: wrap; gap: 10px; border-top: 1px solid #333; padding-top: 15px; }
+        .card-links a { 
+            color: var(--accent-color); 
+            text-decoration: none; 
+            font-size: 0.85rem; 
+            font-weight: bold; 
+            border: 1px solid rgba(0, 212, 255, 0.3); 
+            padding: 6px 12px; 
+            border-radius: 5px; 
+            transition: 0.2s;
+        }
+        .card-links a:hover { background: var(--accent-color); color: #000; }
+
+        #statusMsg { text-align: center; color: var(--text-dim); margin-top: 20px; font-size: 1.1rem; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* تنسيق الفيديو الاحترافي */
+    .video-wrapper { 
+        position: relative; 
+        padding-bottom: 56.25%; /* هذه النسبة تجعل الفيديو يحافظ على أبعاد 16:9 دائماً */
+        height: 0; 
+        overflow: hidden; 
+        margin-top: 15px; 
+        border-radius: 10px; /* يعطي زوايا دائرية جميلة */
+        background: #000; 
+    }
+
+    .video-wrapper iframe { 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+        border: none; 
+    }
+    /* تنسيق التلجرام */
+    .telegram-btn { 
+        margin:15px 0; 
+        padding:10px; 
+        background:rgba(0, 136, 204, 0.1); 
+        border-radius:8px; 
+        text-align:center; 
+    }
+    .telegram-btn a { 
+        color:#0088cc; 
+        font-weight:bold; 
+        text-decoration:none; 
+    }
+    </style>
+</head>
+<body>
+/*اضافة زر لأقسام*/
+<nav>
+    <a href="#/" id="btn-vsa">📊 قسم VSA والتحليل</a>
+    <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
+    <a href="#/videos" id="btn-videos">🎥 أكاديمية الفيديوهات</a>
+</nav>
+
+<div class="container">
+    <div class="search-container">
+        <input type="text" id="globalSearch" placeholder="ابحث عن إشارة VSA، شركة استثمار، أو رابط معين...">
+    </div>
+
+    <h1 id="pageTitle" style="text-align: center; margin-bottom: 1.5rem;"></h1>
+    <div id="statusMsg"></div>
+    <div class="grid-layout" id="mainGrid"></div>
+</div>
+
+<script>
+    // --- قاعدة البيانات (أضف محتواك هنا دائماً بنفس التنسيق) ---
+    const allData = [
+        // قسم الـ VSA
+        {
+            category: 'vsa',
+            title: 'إشارات الاختبار والقوة',
+            content: `• أقوى إشارة الاختبار على فوليوم منخفض.\n• إشارات لابد من انتظار بارين بعدها.\n• مناطق التجميع هي المصيدة الكبرى للمحترفين.`,
+            links: []
+        },
+        {
+            category: 'vsa',
+            title: 'تتبع المحترفين وبار المجهود',
+            content: `• تتبع حركة المحترفين حصراً.\n• بار المجهود: واسع المدى، فوليوم عالٍ يخترق المقاومة.`,
+            links: [{ text: 'شرح الفيديو (د16)', url: 'https://www.youtube.com/watch?v=OXrv8gZO0TY&t=984s' }]
+        },
+        {
+            category: 'vsa',
+            title: 'شركات الوساطة الموثوقة',
+            content: `قائمة الشركات المعتمدة للتداول (Forex):\n• Inzo\n• Maxify\n• PrimeX Capital`,
+            links: [
+                { text: 'Inzo Dashboard', url: 'https://my.inzo.co/dashboard' },
+                { text: 'Maxify P2P', url: 'https://my.maxifyfx.com/ar/dashboard' }
+            ]
+        },
+        {
+        category: 'vsa',
+            title: 'تجميع المحترفين وبار المجهود',
+            content: 'بار المجهود: واضح جداً، فوليوم عالٍ يخترق المقاومة...',
+            links: [
+            { text: 'رابط الموقع', url: '...' } // هذا موجود لديك أصلاً
+        ],
+        // أضف السطر التالي هنا (تأكد من وضع فاصلة في نهاية السطر السابق):
+        videoUrl: 'https://www.youtube.com/watch?v=Fs66AynGasA' 
+        },
+        
+        // قسم الاستثمار
+        {
+            category: 'invest',
+            title: 'شركة الربيع للوساطة (RS)',
+            content: `تأسست عام 1995. مرخصة من هيئة الأوراق المالية وسوق العراق للأوراق المالية.`,
+            links: [{ text: 'الموقع الرسمي', url: 'https://rs.iq/' }]
+        },
+        {
+            category: 'invest',
+            title: 'مزرعة نيوويوولك (New Yolk)',
+            content: `أول مزرعة ذكية للاستثمار بالثروة الحيوانية في العراق عبر الإنترنت.`,
+            links: [{ text: 'موقع المزرعة', url: 'https://www.newyolkfarm.com/' }]
+        },
+        {
+            category: 'invest',
+            title: 'نبض الخليج العقارية',
+            content: `شركة متخصصة في الاستثمارات العقارية الكبرى داخل العراق.`,
+            links: [{ text: 'فيسبوك الشركة', url: 'https://www.facebook.com/NabdAlKhaleejPropertyIraq' }]
+        },
+        {
+            category: 'invest',
+            title: 'شركة جوهرة سما بابل للتجارة والمقاولات العامة والاستثمارات العقارية',
+            content: `شركة جوهرة سما بابل للتجارة والمقاولات العامة والاستثمارات العقارية.`,
+            links: [{ text: 'فيسبوك الشركة', url: 'https://www.facebook.com/jawhraht' }]
+   
+        },
+        {
+            category: 'invest',
+            title: 'شركة الأرقام للوساطة المالية',
+            content: `أول شركة مرخصة من هيأة الاوراق المالية العراقية كوسيط مالي لتقديم خدمة التداول في اسواق المال الامريكية`,
+            links: [
+                { text: 'موقع الشركة', url: 'https://www.arqam.one/' },
+                {text: 'facebook Arqam ', url: 'https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web' }
+            ]
+        },
+        {
+            category: 'invest',
+            title: 'شركة الأرقام للوساطة المالية',
+            content: `أول شركة مرخصة من هيأة الاوراق المالية العراقية كوسيط مالي لتقديم خدمة التداول في اسواق المال الامريكية`,
+            links: [
+                { text: 'موقع الشركة', url: 'https://www.arqam.one/' },
+                {text: 'facebook Arqam ', url: 'https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web' }
+            ]
+        },
+        {
+            category: 'invest',
+            title: 'الدرس الثالث الزمني',
+            content: `أول شركة مرخصة من هيأة الاوراق المالية العراقية كوسيط مالي لتقديم خدمة التداول في اسواق المال الامريكية`,
+            links: [
+                { text: 'موقع الشركة', url: 'https://web.telegram.org/a/#-1001195192763' },
+                {text: 'facebook Arqam ', url: 'https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web' }
+            ]
+        },
+        //قسم التحليل الزمني 
+        {
+        category: 'videos',
+        title: 'شرح مؤشر الفوليوم المتقدم',
+        content: 'في هذا الفيديو ستتعلم كيفية دمج الفوليوم مع السعر بدقة.',
+        links: [],
+        videoUrl: 'https://www.youtube.com/watch?v=jNQXAC9IVRw' // رابط الفيديو المشهور للتجربة
+        },
+    ];
+    // بيانات الفيديوهات مستقلة تماماً
+    const videoData = [
+    {
+        title: 'شرح احتراف التداول',
+        videoUrl: 'https://www.youtube.com/watch?v=...'
+    },
+    {
+        title: 'درس VSA المتقدم',
+        videoUrl: 'https://www.youtube.com/watch?v=...'
+    }
+];
+    // دالة اليوتيوب الأصلية
+        function getYouTubeEmbed(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) 
+            ? `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${match[2]}" frameborder="0" allowfullscreen></iframe></div>` 
+            : null;
+       }
+    // دالة خاصة لروابط تلجرام
+    function getTelegramLink(url) {
+    return `<div style="margin:15px 0; padding:10px; background:rgba(0, 136, 204, 0.1); border-radius:8px; text-align:center;">
+                <a href="${url}" target="_blank" style="color:#0088cc; font-weight:bold; text-decoration:none;">
+                    🎥 مشاهدة الفيديو على تلجرام
+                </a>
+            </div>`;
+    }
+    const grid = document.getElementById('mainGrid');
+    const searchInput = document.getElementById('globalSearch');
+    const pageTitle = document.getElementById('pageTitle');
+    const statusMsg = document.getElementById('statusMsg');
+
+  // وظيفة العرض المحدثة
+    function render(data, isSearch = false) {
+        grid.innerHTML = '';
+        statusMsg.innerHTML = isSearch && data.length > 0 ? `تم العثور على (${data.length}) نتيجة:` : '';
+        
+        if (data.length === 0) {
+            statusMsg.innerHTML = 'عذراً، لم نجد نتائج تطابق بحثك.';
+            return;
+        }
+
+        data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            const badgeClass = item.category === 'vsa' ? 'badge-vsa' : 'badge-invest';
+            const badgeText = item.category === 'vsa' ? 'VSA & التحليل' : 'استثمار العراق';
+
+            // المنطق الذكي لعرض الفيديو
+            let mediaContent = '';
+            if (item.videoUrl) {
+                if (item.videoUrl.includes('youtube') || item.videoUrl.includes('youtu.be')) {
+                    mediaContent = getYouTubeEmbed(item.videoUrl) || '';
+                } else if (item.videoUrl.includes('t.me')) {
+                    mediaContent = getTelegramLink(item.videoUrl);
+                }
+            }
+
+            card.innerHTML = `
+                <span class="badge ${badgeClass}">${badgeText}</span>
+                <h3>${item.title}</h3>
+                <div class="card-content">${item.content}</div>
+                ${mediaContent}
+                <div class="card-links">
+                    ${item.links.map(link => `<a href="${link.url}" target="_blank">${link.text}</a>`).join('')}
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+    // نظام التوجيه
+    function handleRoute() {
+    const hash = window.location.hash || '#/';
+    searchInput.value = ''; // تصفير البحث عند الانتقال
+
+    if (hash === '#/investment') {
+        const filtered = allData.filter(d => d.category === 'invest');
+        pageTitle.innerText = 'دليل الاستثمار في العراق';
+        render(filtered);
+        setActiveNav('btn-invest');
+        
+    } else if (hash === '#/videos') {
+        // القسم الجديد الخاص بالفيديوهات فقط
+        const filtered = allData.filter(d => d.category === 'videos');
+        pageTitle.innerText = 'مكتبة الشروحات والفيديوهات التعليمية';
+        render(filtered);
+        setActiveNav('btn-videos');
+        
+    } else {
+        // القسم الافتراضي (VSA)
+        const filtered = allData.filter(d => d.category === 'vsa');
+        pageTitle.innerText = 'أكاديمية VSA والتداول';
+        render(filtered);
+        setActiveNav('btn-vsa');
+    }
+}
+
+
+        function setActiveNav(id) {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // محرك البحث
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase().trim();
+        if (term === '') { handleRoute(); return; }
+
+        const results = allData.filter(item => 
+            item.title.toLowerCase().includes(term) || 
+            item.content.toLowerCase().includes(term)
+        );
+        pageTitle.innerText = 'نتائج البحث في كل الأقسام';
+        render(results, true);
+    });
+
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('load', handleRoute);
+</script>
+</body>
+</html>
