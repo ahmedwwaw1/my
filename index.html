@@ -230,119 +230,26 @@
 
 <script>
     // --- قاعدة البيانات (أضف محتواك هنا دائماً بنفس التنسيق) ---
-    const allData = [
-        // قسم الـ VSA
-        {
-            category: 'vsa',
-            title: 'إشارات الاختبار والقوة',
-            content: `• أقوى إشارة الاختبار على فوليوم منخفض.\n• إشارات لابد من انتظار بارين بعدها.\n• مناطق التجميع هي المصيدة الكبرى للمحترفين.`,
-            links: []
-        },
-        {
-            category: 'vsa',
-            title: 'تتبع المحترفين وبار المجهود',
-            content: `• تتبع حركة المحترفين حصراً.\n• بار المجهود: واسع المدى، فوليوم عالٍ يخترق المقاومة.`,
-            links: [{ text: 'شرح الفيديو (د16)', url: 'https://www.youtube.com/watch?v=OXrv8gZO0TY&t=984s' }]
-        },
-        {
-            category: 'vsa',
-            title: 'شركات الوساطة الموثوقة',
-            content: `قائمة الشركات المعتمدة للتداول (Forex):\n• Inzo\n• Maxify\n• PrimeX Capital`,
-            links: [
-                { text: 'Inzo Dashboard', url: 'https://my.inzo.co/dashboard' },
-                { text: 'Maxify P2P', url: 'https://my.maxifyfx.com/ar/dashboard' }
-            ]
-        },
-        {
-        category: 'vsa',
-            title: 'تجميع المحترفين وبار المجهود',
-            content: 'بار المجهود: واضح جداً، فوليوم عالٍ يخترق المقاومة...',
-            links: [
-            { text: 'رابط الموقع', url: '...' } // هذا موجود لديك أصلاً
-        ],
-        // أضف السطر التالي هنا (تأكد من وضع فاصلة في نهاية السطر السابق):
-        videoUrl: 'https://www.youtube.com/watch?v=Fs66AynGasA' 
-        },
-        
-        //#region قسم الاستثمار
-        {
-            
-            category: 'invest',
-            title: 'شركة الربيع للوساطة (RS)',
-            content: `تأسست عام 1995. مرخصة من هيئة الأوراق المالية وسوق العراق للأوراق المالية.`,
-            links: [{ text: 'الموقع الرسمي', url: 'https://rs.iq/' }]
-        },
-        {
-            
-            category: 'invest',
-            title: 'مزرعة نيوويوولك (New Yolk)',
-            content: `أول مزرعة ذكية للاستثمار بالثروة الحيوانية في العراق عبر الإنترنت.`,
-            links: [{ text: 'موقع المزرعة', url: 'https://www.newyolkfarm.com/' }]
-        },
-        {
-            category: 'invest',
-            title: 'نبض الخليج العقارية',
-            content: `شركة متخصصة في الاستثمارات العقارية الكبرى داخل العراق.`,
-            links: [{ text: 'فيسبوك الشركة', url: 'https://www.facebook.com/NabdAlKhaleejPropertyIraq' }]
-        },
-        {
-            category: 'invest',
-            title: 'شركة جوهرة سما بابل للتجارة والمقاولات العامة والاستثمارات العقارية',
-            content: `شركة جوهرة سما بابل للتجارة والمقاولات العامة والاستثمارات العقارية.`,
-            links: [{ text: 'فيسبوك الشركة', url: 'https://www.facebook.com/jawhraht' }]
-   
-        },
-        
-        {
-            category: 'invest',
-            title: 'شركة الأرقام للوساطة المالية',
-            content: `أول شركة مرخصة من هيأة الاوراق المالية العراقية كوسيط مالي لتقديم خدمة التداول في اسواق المال الامريكية`,
-            links: [
-                { text: 'موقع الشركة', url: 'https://www.arqam.one/' },
-                {text: 'facebook Arqam ', url: 'https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web' }
-            ]
-        },
+    // 1. تعريف المتغير العام لحفظ البيانات بعد جلبها
+let allData = [];
 
-        {
-            category: 'invest',
-            title: 'الدرس الثالث الزمني',
-            content: `أول شركة مرخصة من هيأة الاوراق المالية العراقية كوسيط مالي لتقديم خدمة التداول في اسواق المال الامريكية`,
-            links: [
-                { text: 'موقع الشركة', url: 'https://web.telegram.org/a/#-1001195192763' },
-                {text: 'facebook Arqam ', url: 'https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web' }
-            ]
-        //#endregion
-        },
-        //قسم التحليل الزمني 
-        {
-        category: 'videos',
-        title: 'العلاقة الفنية للفوليوم',
-        content: `في هذا الفيديو ستتعلم كيفية دمج الفوليوم مع السعر بدقة،
-         وسنشرح بالتفصيل مؤشر الجهد والنتيجة،
-         وكيفية تحديد مناطق الدخول القوية.`,
-        links: [],
-        videoUrl: 'https://www.youtube.com/watch?v=K1ckJegtLtY'
-    },
-    
+// 2. جلب البيانات ديناميكياً من الملف الخارجي الجديد
+fetch('data.json')
+    .then(response => response.json())
+    .then(jsonData => {
+        allData = jsonData;
 
-    ];
-    // أضف ما تشاء من شركات هنا، الجافاسكريبت سيتكفل بترقيمها فوراً!
-    // كود الترقيم التلقائي الذكي
-    allData.forEach((item, index) => {
-    item.id = index + 1; // سيقوم بإعطاء العنصر الأول id: 1، والثاني id: 2، وهكذا تلقائياً
+        // أتمتة الـ ID: ترقيم العناصر تلقائياً لكي تعمل دالة الفتح والعرض بشكل سليم
+        allData.forEach((item, index) => {
+            item.id = index + 1;
+        });
+
+        // 3. استدعاء الدالة الخاصة بك لعرض الكروت في الواجهة
+        render(allData); 
+    })
+    .catch(error => {
+        console.error("خطأ أثناء تحميل البيانات الديناميكية:", error);
     });
-    // قاعدة بيانات الفيديوات
-    
-    const videoData = [
-    {
-        title: 'شرح احتراف التداول',
-        videoUrl: 'https://www.youtube.com/watch?v=...'
-    },
-    {
-        title: 'درس VSA المتقدم',
-        videoUrl: 'https://www.youtube.com/watch?v=...'
-    }
-];
     // دالة اليوتيوب الأصلية
         function getYouTubeEmbed(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
