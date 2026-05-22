@@ -16,18 +16,23 @@
     backdrop-filter: blur(5px); /* تأثير ضبابي احترافي */
     }
 
-    /* صندوق المحتوى الأبيض/الرمادي في المنتصف */
+    /* هذا التعديل يجعل النافذة تأخذ كامل مساحة المتصفح */
     .modal-content {
-    background-color: #1c1c1e;
-    margin: 10% auto;
-    padding: 30px;
-    border-radius: 12px;
-    width: 80%;
-    max-width: 700px;
+    background-color: #1c1c1e; /* لون الخلفية */
+    margin: 0;                /* إزالة المسافات الخارجية */
+    padding: 50px;            /* مسافة داخلية مريحة للنص */
+    width: 100vw;             /* العرض يساوي عرض المتصفح بالكامل */
+    height: 100vh;            /* الارتفاع يساوي ارتفاع المتصفح بالكامل */
+    border-radius: 0;         /* إزالة الزوايا الدائرية لتكون حادة كصفحة كاملة */
     position: relative;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    overflow-y: auto;         /* لجعل المحتوى قابلاً للتمرير إذا كان طويلاً جداً */
+    box-sizing: border-box;   /* لضمان عدم خروج النافذة عن الحدود */
     }
 
+    /* تعديل إضافي بسيط للـ modal نفسها */
+    .modal {
+    background-color: #1c1c1e; /* توحيد لون الخلفية مع لون الموقع */
+    }
     /* زر الإغلاق X */
     .close-btn {
     position: absolute;
@@ -267,6 +272,7 @@
             links: [{ text: 'الموقع الرسمي', url: 'https://rs.iq/' }]
         },
         {
+            id:3,
             category: 'invest',
             title: 'مزرعة نيوويوولك (New Yolk)',
             content: `أول مزرعة ذكية للاستثمار بالثروة الحيوانية في العراق عبر الإنترنت.`,
