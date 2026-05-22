@@ -382,11 +382,12 @@
                 <span class="badge ${badgeClass}">${badgeText}</span>
                 <h3>${item.title}</h3>
                 <div class="card-content">${item.content}</div>
-                ${mediaContent}
-                <div class="card-links">
-                    ${item.links.map(link => `<a href="${link.url}" target="_blank">${link.text}</a>`).join('')}
-                </div>
-            `;
+            ${mediaContent}
+            <div class="card-links">
+                ${item.links.map(link => `<a href="${link.url}" target="_blank">${link.text}</a>`).join('')}
+        </div>
+        <button class="view-btn" onclick="openDetails(${item.id})" style="margin-top:10px; cursor:pointer;">عرض المحتوى</button>
+        `;
             grid.appendChild(card);
         });
     }
