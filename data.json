@@ -1,6 +1,17 @@
 [
     {
         "category": "vsa",
+        "title": "تنبيه حيتان البيتكوين (BTC) - آلي",
+        "content": "تحليل VSA مؤتمت: تم رصد حجم تداول مرتفع جداً (660) عند السعر 76047.94. يرجى مراقبة مستويات زوايا جان الهامة للتأكيد.",
+        "links": [
+            {
+                "text": "تداول الآن",
+                "url": "https://www.binance.com"
+            }
+        ]
+    },
+    {
+        "category": "vsa",
         "title": "إشارات الاختبار والقوة",
         "content": "• أقوى إشارة الاختبار على فوليوم منخفض.\n• إشارات لابد من انتظار بارين بعدها.\n• مناطق التجميع هي المصيدة الكبرى للمحترفين.",
         "links": []
@@ -10,7 +21,10 @@
         "title": "تتبع المحترفين وبار المجهود",
         "content": "• تتبع حركة المحترفين حصراً.\n• بار المجهود: واسع المدى، فوليوم عالٍ يخترق المقاومة.",
         "links": [
-            { "text": "شرح الفيديو (د16)", "url": "https://www.youtube.com/watch?v=OXrv8gZO0TY&t=984s" }
+            {
+                "text": "شرح الفيديو (د16)",
+                "url": "https://www.youtube.com/watch?v=OXrv8gZO0TY&t=984s"
+            }
         ]
     },
     {
@@ -18,8 +32,14 @@
         "title": "شركات الوساطة الموثوقة",
         "content": "قائمة الشركات المعتمدة للتداول (Forex):\n• Inzo\n• Maxify\n• PrimeX Capital",
         "links": [
-            { "text": "Inzo Dashboard", "url": "https://my.inzo.co/dashboard" },
-            { "text": "Maxify P2P", "url": "https://my.maxifyfx.com/ar/dashboard" }
+            {
+                "text": "Inzo Dashboard",
+                "url": "https://my.inzo.co/dashboard"
+            },
+            {
+                "text": "Maxify P2P",
+                "url": "https://my.maxifyfx.com/ar/dashboard"
+            }
         ]
     },
     {
@@ -27,7 +47,10 @@
         "title": "تجميع المحترفين وبار المجهود",
         "content": "بار المجهود: واضح جداً، فوليوم عالٍ يخترق المقاومة...",
         "links": [
-            { "text": "رابط الموقع", "url": "..." }
+            {
+                "text": "رابط الموقع",
+                "url": "..."
+            }
         ],
         "videoUrl": "https://www.youtube.com/watch?v=Fs66AynGasA"
     },
@@ -36,7 +59,10 @@
         "title": "شركة الربيع للوساطة (RS)",
         "content": "تأسست عام 1995. مرخصة من هيئة الأوراق المالية وسوق العراق للأوراق المالية.",
         "links": [
-            { "text": "الموقع الرسمي", "url": "https://rs.iq/" }
+            {
+                "text": "الموقع الرسمي",
+                "url": "https://rs.iq/"
+            }
         ]
     },
     {
@@ -44,7 +70,10 @@
         "title": "مزرعة نيوويوولك (New Yolk)",
         "content": "أول مزرعة ذكية للاستثمار بالثروة الحيوانية في العراق عبر الإنترنت.",
         "links": [
-            { "text": "موقع المزرعة", "url": "https://www.newyolkfarm.com/" }
+            {
+                "text": "موقع المزرعة",
+                "url": "https://www.newyolkfarm.com/"
+            }
         ]
     },
     {
@@ -52,7 +81,10 @@
         "title": "نبض الخليج العقارية",
         "content": "شركة متخصصة في الاستثمارات العقارية الكبرى داخل العراق.",
         "links": [
-            { "text": "فيسبوك الشركة", "url": "https://www.facebook.com/NabdAlKhaleejPropertyIraq" }
+            {
+                "text": "فيسبوك الشركة",
+                "url": "https://www.facebook.com/NabdAlKhaleejPropertyIraq"
+            }
         ]
     },
     {
@@ -60,7 +92,10 @@
         "title": "شركة جوهرة سما بابل للتجارة والمقاولات العامة والاستثمارات العقارية",
         "content": "شركة جوهرة سما بابل للتجارة والمقاولات العامة والاستثمارات العقارية.",
         "links": [
-            { "text": "فيسبوك الشركة", "url": "https://www.facebook.com/jawhraht" }
+            {
+                "text": "فيسبوك الشركة",
+                "url": "https://www.facebook.com/jawhraht"
+            }
         ]
     },
     {
@@ -68,8 +103,14 @@
         "title": "شركة الأرقام للوساطة المالية",
         "content": "أول شركة مرخصة من هيأة الاوراق المالية العراقية كوسيط مالي لتقديم خدمة التداول في اسواق المال الامريكية",
         "links": [
-            { "text": "موقع الشركة", "url": "https://www.arqam.one/" },
-            { "text": "facebook Arqam", "url": "https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web" }
+            {
+                "text": "موقع الشركة",
+                "url": "https://www.arqam.one/"
+            },
+            {
+                "text": "facebook Arqam",
+                "url": "https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web"
+            }
         ]
     },
     {
@@ -77,8 +118,14 @@
         "title": "الدرس الثالث الزمني",
         "content": "أول شركة مرخصة من هيأة الاوراق المالية العراقية كوسيط مالي لتقديم خدمة التداول في اسواق المال الامريكية",
         "links": [
-            { "text": "موقع الشركة", "url": "https://web.telegram.org/a/#-1001195192763" },
-            { "text": "facebook Arqam", "url": "https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web" }
+            {
+                "text": "موقع الشركة",
+                "url": "https://web.telegram.org/a/#-1001195192763"
+            },
+            {
+                "text": "facebook Arqam",
+                "url": "https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web"
+            }
         ]
     },
     {
