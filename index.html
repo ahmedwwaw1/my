@@ -225,7 +225,7 @@
         videoUrl: 'https://www.youtube.com/watch?v=Fs66AynGasA' 
         },
         
-        // قسم الاستثمار
+        //#region قسم الاستثمار
         {
             category: 'invest',
             title: 'شركة الربيع للوساطة (RS)',
@@ -270,6 +270,7 @@
                 { text: 'موقع الشركة', url: 'https://web.telegram.org/a/#-1001195192763' },
                 {text: 'facebook Arqam ', url: 'https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web' }
             ]
+        //#endregion
         },
         //قسم التحليل الزمني 
         {
@@ -281,6 +282,7 @@
         },
     ];
     // قاعدة بيانات الفيديوات
+    
     const videoData = [
     {
         title: 'شرح احتراف التداول',
@@ -361,14 +363,16 @@
         render(filtered);
         setActiveNav('btn-invest');
         
-    } else if (hash === '#/videos') {
+    } 
+    else if (hash === '#/videos') {
         // القسم الجديد الخاص بالفيديوهات فقط
         const filtered = allData.filter(d => d.category === 'videos');
         pageTitle.innerText = 'مكتبة الشروحات والفيديوهات التعليمية';
         render(filtered);
         setActiveNav('btn-videos');
         
-    } else {
+    } 
+    else {
         // القسم الافتراضي (VSA)
         const filtered = allData.filter(d => d.category === 'vsa');
         pageTitle.innerText = 'أكاديمية VSA والتداول';
