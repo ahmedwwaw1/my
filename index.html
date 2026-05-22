@@ -5,6 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My website</title>
     <style>
+        /* خلفية النافذة التي تغطي الشاشة وتجعلها شبه شفافة */
+    .modal {
+    display: none; /* مخفية تلقائياً */
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* تعتيم الخلفية */
+    backdrop-filter: blur(5px); /* تأثير ضبابي احترافي */
+    }
+
+    /* صندوق المحتوى الأبيض/الرمادي في المنتصف */
+    .modal-content {
+    background-color: #1c1c1e;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 700px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    /* زر الإغلاق X */
+    .close-btn {
+    position: absolute;
+    top: 15px; left: 20px; /* جهة اليسار لأن موقعك باللغة العربية */
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    }
+    .close-btn:hover { color: #fff; }
         :root {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
@@ -227,6 +260,7 @@
         
         //#region قسم الاستثمار
         {
+            id: 1, // 👈 تأكد من إضافة هذا الرقم الفرعي لكل شركة (1، 2، 3...)
             category: 'invest',
             title: 'شركة الربيع للوساطة (RS)',
             content: `تأسست عام 1995. مرخصة من هيئة الأوراق المالية وسوق العراق للأوراق المالية.`,
@@ -406,6 +440,41 @@
 
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('load', handleRoute);
+    // دالة فتح النافذة وحقن البيانات فيها داخل نفس الصفحة
+function openDetails(id) {
+    // 1. البحث عن العنصر في المصفوفة بناءً على الـ id
+    const selectedItem = allData.find(item => item.id === id);
+    
+    // 2. التحقق من أن العنصر موجود فعلاً قبل حقنه
+    if (selectedItem) {
+        // وضع العنوان والمحتوى الطويل من المتغير الصحيح selectedItem
+        document.getElementById('modalTitle').innerText = selectedItem.title;
+        document.getElementById('modalContent').innerText = selectedItem.content;
+        
+        // إظهار النافذة على الشاشة
+        document.getElementById('myModal').style.display = "block";
+    }
+}
+
+// دالة إغلاق النافذة
+function closeModal() {
+    document.getElementById('myModal').style.display = "none";
+}
+
+// إغلاق النافذة إذا ضغط المستخدم في أي مكان خارج الصندوق
+window.onclick = function(event) {
+    const modal = document.getElementById('myModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 </script>
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h1 id="modalTitle" style="color: #0088cc;"></h1>
+    <div id="modalContent" style="white-space: pre-line; line-height: 1.8; color: #b0b0b0;"></div>
+  </div>
+</div>
 </body>
 </html>
