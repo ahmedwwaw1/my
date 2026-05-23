@@ -124,21 +124,65 @@
         }
 
         /* تصميم البطاقة */
-        .card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid #333;
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-            animation: fadeIn 0.4s ease forwards;
-        }
+        /* تنسيق مربع المحتوى بالأبعاد والتظليل الجديد */
+    /* تنسيق المربع الرئيسي بأبعاد وتظليل موقع البرمجة بذكاء */
+.card {
+    background-color: #18181c;
+    border-radius: 12px;
+    padding: 24px;
+    width: 100%;
+    max-width: 340px;          /* الأبعاد التناسقية المثالية للمحتوى */
+    min-height: 420px;         /* ارتفاع موحد لمنع تفاوت أحجام المربعات */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;           /* تحويل الماوس إلى يد إشارة في أي مكان داخل المربع */
+    position: relative;
+    overflow: hidden;
+    
+    /* التظليل الخافت الهادئ في الحالة العادية */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    
+    /* حركة انسيابية ناعمة جداً عند دخول وخروج الماوس */
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                border-color 0.3s ease;
+}
 
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-color);
-        }
+/* التأثير السحري والإضاءة الخافتة الفاخرة عند تمرير الماوس */
+.card:hover {
+    transform: translateY(-6px); /* يرتفع الكارت قليلاً لمواكبة حركة العين */
+    border-color: #0088cc;       /* إضاءة إطار المربع بلون موقعك الأزرق */
+    
+    /* التظليل الممتد المضيء باللون الأزرق الخافت جداً المماثل للفيديو */
+    box-shadow: 0 12px 30px rgba(0, 136, 204, 0.18); 
+}
+
+/* تنسيق حاوية الصور لتبدو متناسقة ومقصوصة باحترافية */
+.card-image-container {
+    width: 100%;
+    height: 160px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 12px 0;
+    background-color: #222;
+}
+
+.card-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* لضمان عدم تمطط الصورة واحتوائها بشكل كامل */
+}
+
+/* تنسيق سهم الإشارة السفلي */
+.card-footer-arrow {
+    color: #0088cc;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    text-align: left;
+    font-weight: bold;
+}
 
         .badge {
             font-size: 0.7rem;
@@ -272,45 +316,66 @@ fetch('data.json')
     const pageTitle = document.getElementById('pageTitle');
     const statusMsg = document.getElementById('statusMsg');
 
-  // وظيفة العرض المحدثة
-    function render(data, isSearch = false) {
-        grid.innerHTML = '';
-        statusMsg.innerHTML = isSearch && data.length > 0 ? `تم العثور على (${data.length}) نتيجة:` : '';
+  // وظيفة العرض المعدلة لتجعل الكارت بالكامل تفاعلياً ويحتوي على صورة وأبعاد متناسقة
+function render(data, isSearch = false) {
+    grid.innerHTML = '';
+    statusMsg.innerHTML = isSearch && data.length > 0 ? `نتيجة: تم العثور على (${data.length})` : '';
+
+    if (data.length === 0) {
+        statusMsg.innerHTML = 'عذراً، لم نجد نتائج تطابق بحثك.';
+        return;
+    }
+
+    data.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
         
-        if (data.length === 0) {
-            statusMsg.innerHTML = 'عذراً، لم نجد نتائج تطابق بحثك.';
-            return;
+        // 🔥 أولاً: جعل المربع بالكامل يدخل إلى التفاصيل بمجرد النقر عليه في أي مكان
+        card.setAttribute('onclick', `openDetails(${item.id})`);
+        
+        const badgeClass = item.category === 'vsa' ? 'badge-vsa' : 'badge-invest';
+        const badgeText = item.category === 'vsa' ? 'VSA & التحليل' : 'استثمار العراق';
+
+        let mediaContent = '';
+        if (item.videoUrl) {
+            if (item.videoUrl.includes('youtube') || item.videoUrl.includes('youtu.be')) {
+                mediaContent = getYouTubeEmbed(item.videoUrl) || '';
+            } else if (item.videoUrl.includes('t.me')) {
+                mediaContent = getTelegramLink(item.videoUrl);
+            }
+        }
+        
+        // 🔥 ثانياً: إذا لم يكن هناك فيديو، يتم وضع صورة مخصصة أو صورة افتراضية متناسقة الأبعاد
+        if (!mediaContent) {
+            const imageSrc = item.image ? item.image : 'https://via.placeholder.com/340x160/222/0088cc?text=VSA+Academy';
+            mediaContent = `
+                <div class="card-image-container">
+                    <img src="${imageSrc}" alt="${item.title}">
+                </div>
+            `;
         }
 
-        data.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            const badgeClass = item.category === 'vsa' ? 'badge-vsa' : 'badge-invest';
-            const badgeText = item.category === 'vsa' ? 'VSA & التحليل' : 'استثمار العراق';
-
-            // المنطق الذكي لعرض الفيديو
-            let mediaContent = '';
-            if (item.videoUrl) {
-                if (item.videoUrl.includes('youtube') || item.videoUrl.includes('youtu.be')) {
-                    mediaContent = getYouTubeEmbed(item.videoUrl) || '';
-                } else if (item.videoUrl.includes('t.me')) {
-                    mediaContent = getTelegramLink(item.videoUrl);
-                }
-            }
-
-            card.innerHTML = `
-                <span class="badge ${badgeClass}">${badgeText}</span>
-                <h3>${item.title}</h3>
-                <div class="card-content">${item.content}</div>
+        // بناء الهيكل الداخلي وحذف زر "عرض المحتوى" القديم لأن المربع بأكمله أصبح زراً
+        card.innerHTML = `
+            <span class="badge ${badgeClass}">${badgeText}</span>
+            <h3>${item.title}</h3>
+            <div class="card-content">${item.content}</div>
+            
             ${mediaContent}
+            
             <div class="card-links">
-                ${item.links.map(link => `<a href="${link.url}" target="_blank">${link.text}</a>`).join('')}
-        </div>
-        <button class="view-btn" onclick="openDetails(${item.id})" style="margin-top:10px; cursor:pointer;">عرض المحتوى</button>
+                /* 🔥 ملاحظة هامة: أضفنا stopPropagation لمنع تداخل فتح رابط الزر مع فتح نافذة الكارت الخارجي */
+                ${item.links.map(link => `<a href="${link.url}" target="_blank" onclick="event.stopPropagation();">${link.text}</a>`).join('')}
+            </div>
+            
+            <div class="card-footer-arrow">
+                عرض التفاصيل ←
+            </div>
         `;
-            grid.appendChild(card);
-        });
-    }
+
+        grid.appendChild(card);
+    });
+}
     // نظام التوجيه
     function handleRoute() {
     const hash = window.location.hash || '#/';
