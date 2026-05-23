@@ -362,54 +362,100 @@ fetch('data.json')
     window.addEventListener('load', handleRoute);
     // دالة فتح النافذة وحقن البيانات فيها داخل نفس الصفحة
 function openDetails(id) {
-    // 1. البحث عن العنصر في المصفوفة بناءً على الـ id
     const selectedItem = allData.find(item => item.id === id);
 
-    // التحقق من أن العنصر موجود فعلاً قبل عرضه
     if (selectedItem) {
         document.getElementById('modalTitle').innerText = selectedItem.title;
         document.getElementById('modalContent').innerText = selectedItem.content;
 
-        // تهيئة وحقن الحاويات الجديدة التي أضفناها في الـ HTML
         const videoContainer = document.getElementById('modalVideoContainer');
         const linksContainer = document.getElementById('modalLinksContainer');
         
-        // تفريغ الحاويات أولاً حتى لا تظهر بيانات الكارت القديم في الكارت الجديد
         videoContainer.innerHTML = '';
         linksContainer.innerHTML = '';
 
-        // 2. التحقق من وجود فيديو وعرضه باستخدام الدالة الجاهزة لديك
+        // 1. تشغيل الفيديو إذا كان موجوداً
         if (selectedItem.videoUrl) {
             const embedHtml = getYouTubeEmbed(selectedItem.videoUrl);
             if (embedHtml) {
                 videoContainer.innerHTML = embedHtml;
+                
+                // 2. إنشاء مقابض سحب جانبية (يمين ويسار) احترافية حول إطار الفيديو
+                const rightHandle = document.createElement('div');
+                rightHandle.style = 'position: absolute; right: 0; top: 0; width: 10px; height: 100%; cursor: ew-resize; z-index: 10; border-right: 4px solid rgba(0, 136, 204, 0.4); transition: border 0.2s;';
+                
+                const leftHandle = document.createElement('div');
+                leftHandle.style = 'position: absolute; left: 0; top: 0; width: 10px; height: 100%; cursor: ew-resize; z-index: 10; border-left: 4px solid rgba(0, 136, 204, 0.4); transition: border 0.2s;';
+                
+                // تأثير توهج أزرق جميل عند تمرير الماوس لإعلام المستخدم بإمكانية السحب
+                rightHandle.onmouseenter = () => rightHandle.style.borderRight = '4px solid #0088cc';
+                rightHandle.onmouseleave = () => rightHandle.style.borderRight = '4px solid rgba(0, 136, 204, 0.4)';
+                leftHandle.onmouseenter = () => leftHandle.style.borderLeft = '4px solid #0088cc';
+                leftHandle.onmouseleave = () => leftHandle.style.borderLeft = '4px solid rgba(0, 136, 204, 0.4)';
+
+                videoContainer.appendChild(rightHandle);
+                videoContainer.appendChild(leftHandle);
+
+                // 3. برمجة حركة الماوس لتكبير وتصغير الفيديو ديناميكياً من الجانبين
+                let isResizing = false;
+                let initialX, initialWidth, activeHandle;
+
+                const startResize = (e, handleType) => {
+                    isResizing = true;
+                    activeHandle = handleType;
+                    initialX = e.clientX;
+                    initialWidth = videoContainer.offsetWidth;
+                    document.body.style.userSelect = 'none'; // منع تحديد النصوص أثناء السحب
+                    document.body.style.cursor = 'ew-resize';
+                };
+
+                rightHandle.addEventListener('mousedown', (e) => startResize(e, 'right'));
+                leftHandle.addEventListener('mousedown', (e) => startResize(e, 'left'));
+
+                window.addEventListener('mousemove', (e) => {
+                    if (!isResizing) return;
+                    
+                    const deltaX = e.clientX - initialX;
+                    let newWidth;
+
+                    // بما أن الفيديو يتوسط الشاشة تلقائياً، السحب من جهة واحدة يغير العرض بمقدار الضعف للحفاظ على التوسط الفائق والنعومة
+                    if (activeHandle === 'right') {
+                        newWidth = initialWidth + deltaX * 2;
+                    } else {
+                        newWidth = initialWidth - deltaX * 2;
+                    }
+
+                    // حدود الحجم: يسمح بالتصغير حتى 320px والتكبير بحرية تامة حتى عرض النافذة بالكامل!
+                    const maxWidthLimit = videoContainer.parentElement.offsetWidth - 20;
+                    if (newWidth >= 320 && newWidth <= maxWidthLimit) {
+                        videoContainer.style.width = newWidth + 'px';
+                    }
+                });
+
+                window.addEventListener('mouseup', () => {
+                    if (isResizing) {
+                        isResizing = false;
+                        document.body.style.userSelect = '';
+                        document.body.style.cursor = '';
+                    }
+                });
             }
         }
 
-        // 3. التحقق من وجود روابط وتكرارها لتظهر كأزرار أنيقة
+        // 4. عرض الروابط والأزرار تلقائياً
         if (selectedItem.links && selectedItem.links.length > 0) {
             selectedItem.links.forEach(link => {
                 const linkBtn = document.createElement('a');
                 linkBtn.href = link.url;
-                linkBtn.target = '_blank'; // لفتح الرابط في تبويب جديد
+                linkBtn.target = '_blank';
                 linkBtn.innerText = link.text;
                 
-                // تنسيق الأزرار لتتناسب مع التصميم الغامق لموقعك
-                linkBtn.style.display = 'inline-block';
-                linkBtn.style.padding = '10px 20px';
-                linkBtn.style.marginTop = '10px';
-                linkBtn.style.marginRight = '10px';
-                linkBtn.style.backgroundColor = '#0088cc';
-                linkBtn.style.color = '#ffffff';
-                linkBtn.style.textDecoration = 'none';
-                linkBtn.style.borderRadius = '5px';
-                linkBtn.style.fontWeight = 'bold';
+                linkBtn.style = 'display: inline-block; padding: 10px 20px; marginTop: 10px; marginRight: 10px; backgroundColor: #0088cc; color: #ffffff; textDecoration: none; borderRadius: 5px; fontWeight: bold;';
                 
                 linksContainer.appendChild(linkBtn);
             });
         }
 
-        // إظهار النافذة المنبثقة على الشاشة
         document.getElementById('myModal').style.display = "block";
     }
 }
@@ -433,7 +479,7 @@ window.onclick = function(event) {
         <h1 id="modalTitle" style="color: #0088cc;"></h1>
         <div id="modalContent" style="white-space: pre-line; line-height: 1.8; color: #b0b0b0;"></div>
         
-        <div id="modalVideoContainer" style="margin: 20px auto; max-width: 640px; width: 100%; resize: horizontal; overflow: hidden; cursor: ew-resize; padding-bottom: 15px;"></div>
+        <div id="modalVideoContainer" style="margin: 20px auto; width: 640px; max-width: 100%; position: relative; padding: 0 12px; box-sizing: border-box;"></div>
         <div id="modalLinksContainer" style="margin-top: 20px;"></div>
     </div>
 </div>
