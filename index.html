@@ -364,14 +364,52 @@ fetch('data.json')
 function openDetails(id) {
     // 1. البحث عن العنصر في المصفوفة بناءً على الـ id
     const selectedItem = allData.find(item => item.id === id);
-    
-    // 2. التحقق من أن العنصر موجود فعلاً قبل حقنه
+
+    // التحقق من أن العنصر موجود فعلاً قبل عرضه
     if (selectedItem) {
-        // وضع العنوان والمحتوى الطويل من المتغير الصحيح selectedItem
         document.getElementById('modalTitle').innerText = selectedItem.title;
         document.getElementById('modalContent').innerText = selectedItem.content;
+
+        // تهيئة وحقن الحاويات الجديدة التي أضفناها في الـ HTML
+        const videoContainer = document.getElementById('modalVideoContainer');
+        const linksContainer = document.getElementById('modalLinksContainer');
         
-        // إظهار النافذة على الشاشة
+        // تفريغ الحاويات أولاً حتى لا تظهر بيانات الكارت القديم في الكارت الجديد
+        videoContainer.innerHTML = '';
+        linksContainer.innerHTML = '';
+
+        // 2. التحقق من وجود فيديو وعرضه باستخدام الدالة الجاهزة لديك
+        if (selectedItem.videoUrl) {
+            const embedHtml = getYouTubeEmbed(selectedItem.videoUrl);
+            if (embedHtml) {
+                videoContainer.innerHTML = embedHtml;
+            }
+        }
+
+        // 3. التحقق من وجود روابط وتكرارها لتظهر كأزرار أنيقة
+        if (selectedItem.links && selectedItem.links.length > 0) {
+            selectedItem.links.forEach(link => {
+                const linkBtn = document.createElement('a');
+                linkBtn.href = link.url;
+                linkBtn.target = '_blank'; // لفتح الرابط في تبويب جديد
+                linkBtn.innerText = link.text;
+                
+                // تنسيق الأزرار لتتناسب مع التصميم الغامق لموقعك
+                linkBtn.style.display = 'inline-block';
+                linkBtn.style.padding = '10px 20px';
+                linkBtn.style.marginTop = '10px';
+                linkBtn.style.marginRight = '10px';
+                linkBtn.style.backgroundColor = '#0088cc';
+                linkBtn.style.color = '#ffffff';
+                linkBtn.style.textDecoration = 'none';
+                linkBtn.style.borderRadius = '5px';
+                linkBtn.style.fontWeight = 'bold';
+                
+                linksContainer.appendChild(linkBtn);
+            });
+        }
+
+        // إظهار النافذة المنبثقة على الشاشة
         document.getElementById('myModal').style.display = "block";
     }
 }
@@ -390,11 +428,15 @@ window.onclick = function(event) {
 }
 </script>
 <div id="myModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
-    <h1 id="modalTitle" style="color: #0088cc;"></h1>
-    <div id="modalContent" style="white-space: pre-line; line-height: 1.8; color: #b0b0b0;"></div>
-  </div>
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h1 id="modalTitle" style="color: #0088cc;"></h1>
+        <div id="modalContent" style="white-space: pre-line; line-height: 1.8; color: #b0b0b0;"></div>
+        
+        <div id="modalVideoContainer" style="margin-top: 20px;"></div>
+        <div id="modalLinksContainer" style="margin-top: 20px;"></div>
+    </div>
+</div>
 </div>
 </body>
 </html>
