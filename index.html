@@ -293,7 +293,17 @@
         font-weight:bold; 
         text-decoration:none; 
     }
-    
+    /* الكود السحري لضبط تباعد الكروت تماماً مثل موقع الدكتور أبو هدهود */
+.grid, #grid {
+    display: grid;
+    /* توزيع تلقائي ذكي يحافظ على حجم الكارت (310px إلى 340px) */
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
+    gap: 24px;             /* المسافة الاحترافية والمعقولة بين الكروت طولاً وعرضاً */
+    padding: 20px;
+    max-width: 1140px;     /* تمنع الكروت من التباعد المفرط على الشاشات الكبيرة وتجعلها ملمومة */
+    margin: 0 auto;        /* لتوسط الحاوية بالكامل في منتصف الشاشة */
+    justify-content: center;
+}
     </style>
 </head>
 <body>
@@ -413,9 +423,9 @@ function render(data, isSearch = false) {
                         ${item.links.map(link => `<a href="${link.url}" target="_blank" onclick="event.stopPropagation();">${link.text}</a>`).join('')}
                     </div>
                     
-                    <div class="image-controls" onclick="event.stopPropagation();">
-                        <button class="btn-control btn-add-edit" onclick="manageCardImage(${item.id}, 'edit')">📸 إضافة / تبديل</button>
-                        ${item.image ? `<button class="btn-control btn-delete" onclick="manageCardImage(${item.id}, 'delete')">🗑️ حذف</button>` : ''}
+                    <div class="image-controls">
+                        <button class="btn-control btn-add-edit" onclick="manageCardImage(event, ${item.id}, 'edit')">📸 إضافة / تبديل</button>
+                        <button class="btn-control btn-delete" onclick="manageCardImage(event, ${item.id}, 'delete')">🗑️ حذف</button>
                     </div>
                     
                     <div class="card-footer-arrow">
@@ -430,22 +440,37 @@ function render(data, isSearch = false) {
 }
 
 // 💡 دالة إدارة الصور: تفتح لك نافذة لإدخال الرابط وتحديث الكارت في نفس اللحظة
-function manageCardImage(id, action) {
-    // ملاحظة: استبدل "data" بالاسم الفعلي للمصفوفة العامة لديك إن كان مختلفاً (مثل globalData أو articles)
-    const item = data.find(i => i.id === id); 
-    if (!item) return;
+// دالة إدارة الصور المطورة: تعمل مباشرة على العناصر وتمنع التعارض
+function manageCardImage(event, id, action) {
+    // 1. منع الحدث من الانتقال للكارت الأب (حل مشكلة عدم الاستجابة والتعارض)
+    event.stopPropagation(); 
+
+    // 2. الوصول لوسم الصورة داخل الكارت الذي تم النقر عليه حالياً
+    const cardElement = event.target.closest('.card');
+    const imgElement = cardElement.querySelector('.card-media-top img');
 
     if (action === 'edit') {
-        const newUrl = prompt('قم بلصق رابط الصورة الجديد هنا:', item.image || '');
-        if (newUrl !== null) {
-            item.image = newUrl.trim();
-            render(data); // إعادة بناء الشاشة فوراً لرؤية النتيجة
-            alert('تم تحديث صورة الكارت بنجاح! تأكد من حفظها في ملفك البرمجي لاحقاً.');
+        const currentSrc = imgElement ? imgElement.src : '';
+        const newUrl = prompt('قم بلصق رابط الصورة الجديد (URL) هنا:', currentSrc);
+        
+        if (newUrl !== null && newUrl.trim() !== '') {
+            if (imgElement) {
+                // تحديث الصورة فوراً أمامك على الشاشة
+                imgElement.src = newUrl.trim();
+            } else {
+                // في حال لم يكن هناك حاوية صورة (تحديث احتياطي)
+                const mediaTop = cardElement.querySelector('.card-media-top');
+                if (mediaTop) mediaTop.innerHTML = `<img src="${newUrl.trim()}" alt="صورة">`;
+            }
         }
-    } else if (action === 'delete') {
-        if (confirm('هل تريد حذف صورة هذا الكارت وتحويلها للافتراضية؟')) {
-            item.image = '';
-            render(data); // إعادة تدوير الكروت لعرض الشكل بدون صورة
+    } 
+    
+    else if (action === 'delete') {
+        if (confirm('هل أنت متأكد من حذف صورة هذا الكارت؟')) {
+            if (imgElement) {
+                // إرجاع الصورة لصورة افتراضية أنيقة عند الحذف
+                imgElement.src = 'https://via.placeholder.com/340x170/222/0088cc?text=VSA+Academy';
+            }
         }
     }
 }
