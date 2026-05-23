@@ -374,13 +374,13 @@ function openDetails(id) {
         videoContainer.innerHTML = '';
         linksContainer.innerHTML = '';
 
-        // 1. تشغيل الفيديو إذا كان موجوداً وحقنه في الواجهة
+        // 1. حقن الفيديو إذا كان موجوداً
         if (selectedItem.videoUrl) {
             const embedHtml = getYouTubeEmbed(selectedItem.videoUrl);
             if (embedHtml) {
                 videoContainer.innerHTML = embedHtml;
                 
-                // 2. إنشاء مقابض سحب شفافة تماماً (غير مرئية) للثماني اتجاهات
+                // 2. تعريف المقابض الشفافة للجهات الثمانية
                 const handles = {
                     'r': 'ew-resize', 'l': 'ew-resize', 'b': 'ns-resize', 't': 'ns-resize',
                     'rb': 'nwse-resize', 'lb': 'nesw-resize', 'rt': 'nesw-resize', 'lt': 'nwse-resize'
@@ -391,96 +391,113 @@ function openDetails(id) {
                     handle.className = `resize-handle resize-handle-${handleType}`;
                     handle.style.position = 'absolute';
                     handle.style.cursor = cursor;
-                    handle.style.zIndex = '10'; // لضمان بقائها فوق الفيديو
+                    handle.style.zIndex = '1000'; // جعلها في المقدمة دائماً فوق أي حواف
                     
-                    // تحديد منطقة Handles الشفافة على حافة الإطار بدقة
-                    const size = 10; // عرض منطقة السحب الشفافة بالبكسل
-                    const isSide = handleType.length === 1;
+                    const size = 12; // عرض منطقة السحب الشفافة بالبكسل لتسهيل التقاطها بالماوس
                     
-                    if (isSide) {
-                        // تعريف الجوانب
-                        if (handleType === 'r' || handleType === 'l') {
-                            handle.style.width = `${size}px`;
-                            handle.style.height = '100%';
-                            handle.style[handleType === 'r' ? 'right' : 'left'] = `-${size / 2}px`;
-                        } else { // 'b' || 't'
-                            handle.style.height = `${size}px`;
-                            handle.style.width = '100%';
-                            handle.style[handleType === 'b' ? 'bottom' : 'top'] = `-${size / 2}px`;
-                        }
+                    // توزيع المقابض على حواف الصندوق بدقة هندسية
+                    if (handleType === 'r') {
+                        handle.style.width = `${size}px`; handle.style.height = '100%';
+                        handle.style.right = `-${size / 2}px`; handle.style.top = '0';
+                    } else if (handleType === 'l') {
+                        handle.style.width = `${size}px`; handle.style.height = '100%';
+                        handle.style.left = `-${size / 2}px`; handle.style.top = '0';
+                    } else if (handleType === 'b') {
+                        handle.style.height = `${size}px`; handle.style.width = '100%';
+                        handle.style.bottom = `-${size / 2}px`; handle.style.left = '0';
+                    } else if (handleType === 't') {
+                        handle.style.height = `${size}px`; handle.style.width = '100%';
+                        handle.style.top = `-${size / 2}px`; handle.style.left = '0';
                     } else {
-                        // تعريف الزوايا
-                        handle.style.width = `${size}px`;
-                        handle.style.height = `${size}px`;
-                        handle.style.borderRadius = '50%'; // جعل الزوايا أكثر نعومة للسحب
+                        // الزوايا الأربع
+                        handle.style.width = `${size}px`; handle.style.height = `${size}px`;
                         handle.style[handleType.includes('r') ? 'right' : 'left'] = `-${size / 2}px`;
                         handle.style[handleType.includes('b') ? 'bottom' : 'top'] = `-${size / 2}px`;
                     }
 
                     videoContainer.appendChild(handle);
 
-                    // 3. برمجة حركة الماوس لتكبير وتصغير الفيديو مع الحفاظ على التناسب
+                    // 3. برمجة حركة السحب والتحجيم الذكي
                     let isResizing = false;
                     let initialX, initialY, initialWidth, initialHeight;
-                    const aspectRatio = 16 / 9; // نسبة العرض إلى الارتفاع القياسية
+                    const aspectRatio = 16 / 9;
 
-                    const startResize = (e) => {
+                    // دالة تبدأ عند الضغط كليك يسار على الحافة
+                    handle.addEventListener('mousedown', (e) => {
                         isResizing = true;
                         initialX = e.clientX;
                         initialY = e.clientY;
                         initialWidth = videoContainer.offsetWidth;
                         initialHeight = videoContainer.offsetHeight;
-                        document.body.style.userSelect = 'none'; // منع تحديد النصوص أثناء السحب
+                        
+                        document.body.style.userSelect = 'none';
                         document.body.style.cursor = cursor;
-                    };
 
-                    handle.addEventListener('mousedown', startResize);
+                        // الحل العبقري: تجميد تinteraction الفيديو مؤقتاً لكي لا يسرق حركة الماوس!
+                        const iframe = videoContainer.querySelector('iframe');
+                        if (iframe) {
+                            iframe.style.pointerEvents = 'none';
+                        }
+                    });
 
+                    // دالة التحجيم أثناء تحريك الماوس (تعمل فقط وفقط إذا كان الزر مضغوطاً)
                     window.addEventListener('mousemove', (e) => {
-                        if (!isResizing) return;
+                        if (!isResizing) return; // إذا لم يكن مضغوطاً، لا تفعل أي شيء مطلقاً
                         
                         const deltaX = e.clientX - initialX;
                         const deltaY = e.clientY - initialY;
-                        let newWidth, newHeight;
+                        let newWidth = initialWidth;
+                        let newHeight = initialHeight;
 
-                        // برمجة السحب من كل جانب وزاوية بدقة مع الحفاظ على التناسب
-                        if (handleType.includes('r')) {
+                        // معالجة كل اتجاه بشكل منفصل تماماً لضمان عمل اليمين واليسار وكل زاوية
+                        if (handleType === 'r') {
                             newWidth = initialWidth + deltaX * 2;
                             newHeight = newWidth / aspectRatio;
-                        } else if (handleType.includes('l')) {
+                        } else if (handleType === 'l') {
                             newWidth = initialWidth - deltaX * 2;
                             newHeight = newWidth / aspectRatio;
-                        } else if (handleType.includes('b')) {
+                        } else if (handleType === 'b') {
                             newHeight = initialHeight + deltaY * 2;
                             newWidth = newHeight * aspectRatio;
-                        } else if (handleType.includes('t')) {
+                        } else if (handleType === 't') {
                             newHeight = initialHeight - deltaY * 2;
                             newWidth = newHeight * aspectRatio;
+                        } else if (handleType === 'rb' || handleType === 'rt') {
+                            newWidth = initialWidth + deltaX * 2;
+                            newHeight = newWidth / aspectRatio;
+                        } else if (handleType === 'lb' || handleType === 'lt') {
+                            newWidth = initialWidth - deltaX * 2;
+                            newHeight = newWidth / aspectRatio;
                         }
 
-                        // تطبيق حدود الحجم لضمان بقاء الفيديو متناسقاً
-                        const minWidthLimit = 320;
-                        const maxWidthLimit = videoContainer.parentElement.offsetWidth - 20;
-                        const minHeightLimit = 180;
-                        const maxHeightLimit = (maxWidthLimit / aspectRatio);
+                        // تعيين الحدود الدنيا والقصوى المتناسقة لحجم الشاشة
+                        const minWidthLimit = 280;
+                        const maxWidthLimit = videoContainer.parentElement.offsetWidth - 10;
 
                         if (newWidth >= minWidthLimit && newWidth <= maxWidthLimit) {
                             videoContainer.style.width = newWidth + 'px';
                         }
                     });
 
+                    // دالة الإيقاف الفوري عند رفع إصبعك عن زر الماوس الأيسر
                     window.addEventListener('mouseup', () => {
                         if (isResizing) {
                             isResizing = false;
                             document.body.style.userSelect = '';
                             document.body.style.cursor = '';
+
+                            // إعادة تفعيل الفيديو فوراً ليعود للعمل الطبيعي والضغط عليه
+                            const iframe = videoContainer.querySelector('iframe');
+                            if (iframe) {
+                                iframe.style.pointerEvents = 'auto';
+                            }
                         }
                     });
                 }
             }
         }
 
-        // 4. عرض الروابط والأزرار تلقائياً
+        // 4. عرض الروابط الملحقة
         if (selectedItem.links && selectedItem.links.length > 0) {
             selectedItem.links.forEach(link => {
                 const linkBtn = document.createElement('a');
