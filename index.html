@@ -124,58 +124,97 @@
         }
 
         /* تصميم البطاقة */
-        /* تنسيق مربع المحتوى بالأبعاد والتظليل الجديد */
-/* التنسيق الجديد للمربع بالأبعاد الدقيقة المتطابقة مع الفيديو */
+   /* التنسيق النهائي المتطابق كلياً مع الطول والتظليل المحيط */
 .card {
     background-color: #18181c;
     border-radius: 12px;
-    padding: 20px;             /* تقليل المسافات الداخلية قليلاً للمساعدة في ضبط الطول */
+    padding: 0;                /* جعل البادينج صفر لكي تلتصق حاوية الصورة بالحواف تماماً */
     width: 100%;
-    max-width: 340px;          /* العرض المطابق تماماً */
-    
-    /* الارتفاع المثالي الجديد: قمنا بتقليله من 420px إلى 365px ليطابق طول كروت الدكتور */
-    min-height: 365px;         
-    
+    max-width: 340px;          /* العرض المطابق لقياسك */
+    min-height: 365px;         /* الطول المنسق بدقة مع مسطرة الـ Notepad الخاصة بك */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    cursor: pointer;           /* تحويل الماوس ليد إشارة في أي مكان */
+    cursor: pointer;
     position: relative;
     overflow: hidden;
     
-    /* التظليل الخافت الافتراضي */
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    /* التظليل الافتراضي الكامل والعميق خلف الكارت بالكامل لمنحه بعداً ثلاثياً */
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     
-    /* انتقال ناعم للإضاءة والتظليل فقط بدون أي حركة في الأبعاد */
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-/* التأثير الاحترافي عند تمرير الماوس (مطابق تماماً لموقع البرمجة بذكاء) */
+/* التظليل الخافت والعميق والشامل لكل الكارت عند تمرير الماوس مع الحفاظ على الثبات */
 .card:hover {
-    transform: none;           /* 🔥 إلغاء الحركة للأعلى نهائياً ليبقى الكارت ثابتاً كما طلبت */
+    transform: none;           /* ثبات كامل للكارت بدون أي حركة مفاجئة */
+    border-color: rgba(255, 255, 255, 0.12);
     
-    border-color: rgba(255, 255, 255, 0.12); /* إضاءة خفيفة وناعمة جداً للإطار */
-    
-    /* 🔥 تظليل خافت، عميق وهادئ جداً (رمادي داكن مع لمحة زرقاء غير ملحوظة) */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 
-                0 0 12px rgba(0, 136, 204, 0.04); 
+    /* تظليل منتشر وعريض يملأ المساحة المحيطة بالكامل لمنحه فخامة هادئة */
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 
+                0 0 25px rgba(0, 0, 0, 0.3); 
 }
 
-/* تنسيق حاوية الميديا أو الصورة لضمان تناسق الارتفاع الجديد */
-.card-image-container {
+/* حاوية الميديا العلوية لتظهر في أعلى الكارت وبحجم كبير ممتاز */
+.card-media-top {
     width: 100%;
-    height: 150px;             /* تقليل ارتفاع مساحة الصورة بـ 10 بكسل ليتناسق مع الطول الجديد */
-    border-radius: 8px;
+    height: 170px;             /* الارتفاع المثالي لتظهر الصورة واضحة وكبيرة في الأعلى */
     overflow: hidden;
-    margin-bottom: 12px;
-    background-color: #222;
+    background-color: #111;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 }
 
-.card-image-container img {
+.card-media-top img, 
+.card-media-top iframe {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover;         /* قص الصورة باحترافية كاملة ومنع تمططها */
+    border: none;
+}
+
+/* حاوية المحتوى الداخلي لتعويض مسافات البادينج للنصوص أسفل الصورة */
+.card-body-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between; /* توزيع النصوص والأزرار بشكل متناسق عمودياً */
+}
+
+/* تنسيق أزرار التحكم بالصور التفاعلية */
+.image-controls {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0 6px 0;
+}
+
+.btn-control {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s;
+}
+
+.btn-add-edit {
+    background-color: #0088cc;
+    color: white;
+}
+
+.btn-add-edit:hover {
+    background-color: #006699;
+}
+
+.btn-delete {
+    background-color: #d9534f;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c9302c;
 }
 
 /* تنسيق سهم الإشارة السفلي */
@@ -319,7 +358,7 @@ fetch('data.json')
     const pageTitle = document.getElementById('pageTitle');
     const statusMsg = document.getElementById('statusMsg');
 
-  // وظيفة العرض المعدلة لتجعل الكارت بالكامل تفاعلياً ويحتوي على صورة وأبعاد متناسقة
+// دالة العرض الحديثة والمطابقة لتصميم موقع الدكتور أبو هدهود وهيكليته
 function render(data, isSearch = false) {
     grid.innerHTML = '';
     statusMsg.innerHTML = isSearch && data.length > 0 ? `نتيجة: تم العثور على (${data.length})` : '';
@@ -333,7 +372,7 @@ function render(data, isSearch = false) {
         const card = document.createElement('div');
         card.className = 'card';
         
-        // 🔥 أولاً: جعل المربع بالكامل يدخل إلى التفاصيل بمجرد النقر عليه في أي مكان
+        // جعل الكارت بالكامل يدخل إلى التفاصيل عند النقر
         card.setAttribute('onclick', `openDetails(${item.id})`);
         
         const badgeClass = item.category === 'vsa' ? 'badge-vsa' : 'badge-invest';
@@ -342,42 +381,73 @@ function render(data, isSearch = false) {
         let mediaContent = '';
         if (item.videoUrl) {
             if (item.videoUrl.includes('youtube') || item.videoUrl.includes('youtu.be')) {
-                mediaContent = getYouTubeEmbed(item.videoUrl) || '';
+                mediaContent = `<div class="card-media-top">${getYouTubeEmbed(item.videoUrl) || ''}</div>`;
             } else if (item.videoUrl.includes('t.me')) {
-                mediaContent = getTelegramLink(item.videoUrl);
+                mediaContent = `<div class="card-media-top">${getTelegramLink(item.videoUrl)}</div>`;
             }
         }
         
-        // 🔥 ثانياً: إذا لم يكن هناك فيديو، يتم وضع صورة مخصصة أو صورة افتراضية متناسقة الأبعاد
+        // 📸 إذا لم يكن هناك فيديو، يتم عرض الصورة في الأعلى تماماً بالحجم الكامل المطور
         if (!mediaContent) {
-            const imageSrc = item.image ? item.image : 'https://via.placeholder.com/340x160/222/0088cc?text=VSA+Academy';
+            const imageSrc = item.image ? item.image : 'https://via.placeholder.com/340x170/222/0088cc?text=VSA+Academy';
             mediaContent = `
-                <div class="card-image-container">
+                <div class="card-media-top">
                     <img src="${imageSrc}" alt="${item.title}">
                 </div>
             `;
         }
 
-        // بناء الهيكل الداخلي وحذف زر "عرض المحتوى" القديم لأن المربع بأكمله أصبح زراً
+        // الهيكل الحديث: الميديا في الأعلى أولاً، ثم حاوية المحتوى والنصوص أسفلها مباشرة
         card.innerHTML = `
-            <span class="badge ${badgeClass}">${badgeText}</span>
-            <h3>${item.title}</h3>
-            <div class="card-content">${item.content}</div>
-            
             ${mediaContent}
             
-            <div class="card-links">
-                /* 🔥 ملاحظة هامة: أضفنا stopPropagation لمنع تداخل فتح رابط الزر مع فتح نافذة الكارت الخارجي */
-                ${item.links.map(link => `<a href="${link.url}" target="_blank" onclick="event.stopPropagation();">${link.text}</a>`).join('')}
-            </div>
-            
-            <div class="card-footer-arrow">
-                عرض التفاصيل ←
+            <div class="card-body-container">
+                <div>
+                    <span class="badge ${badgeClass}">${badgeText}</span>
+                    <h3>${item.title}</h3>
+                    <div class="card-content">${item.content}</div>
+                </div>
+                
+                <div>
+                    <div class="card-links">
+                        ${item.links.map(link => `<a href="${link.url}" target="_blank" onclick="event.stopPropagation();">${link.text}</a>`).join('')}
+                    </div>
+                    
+                    <div class="image-controls" onclick="event.stopPropagation();">
+                        <button class="btn-control btn-add-edit" onclick="manageCardImage(${item.id}, 'edit')">📸 إضافة / تبديل</button>
+                        ${item.image ? `<button class="btn-control btn-delete" onclick="manageCardImage(${item.id}, 'delete')">🗑️ حذف</button>` : ''}
+                    </div>
+                    
+                    <div class="card-footer-arrow">
+                        عرض التفاصيل ←
+                    </div>
+                </div>
             </div>
         `;
 
         grid.appendChild(card);
     });
+}
+
+// 💡 دالة إدارة الصور: تفتح لك نافذة لإدخال الرابط وتحديث الكارت في نفس اللحظة
+function manageCardImage(id, action) {
+    // ملاحظة: استبدل "data" بالاسم الفعلي للمصفوفة العامة لديك إن كان مختلفاً (مثل globalData أو articles)
+    const item = data.find(i => i.id === id); 
+    if (!item) return;
+
+    if (action === 'edit') {
+        const newUrl = prompt('قم بلصق رابط الصورة الجديد هنا:', item.image || '');
+        if (newUrl !== null) {
+            item.image = newUrl.trim();
+            render(data); // إعادة بناء الشاشة فوراً لرؤية النتيجة
+            alert('تم تحديث صورة الكارت بنجاح! تأكد من حفظها في ملفك البرمجي لاحقاً.');
+        }
+    } else if (action === 'delete') {
+        if (confirm('هل تريد حذف صورة هذا الكارت وتحويلها للافتراضية؟')) {
+            item.image = '';
+            render(data); // إعادة تدوير الكروت لعرض الشكل بدون صورة
+        }
+    }
 }
     // نظام التوجيه
     function handleRoute() {
