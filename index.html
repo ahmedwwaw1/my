@@ -374,10 +374,11 @@
 <script>
     // --- قاعدة البيانات (أضف محتواك هنا دائماً بنفس التنسيق) ---
     // 1. تعريف المتغير العام لحفظ البيانات بعد جلبها
+// 🟢 1. تعريف مصفوفة البيانات العامة كـ لستة فارغة في البداية
 let allData = [];
 
 // 2. جلب البيانات ديناميكياً من الملف الخارجي الجديد
-fetch('data.json')
+fetch('data.json') 
     .then(response => response.json())
     .then(jsonData => {
         allData = jsonData;
@@ -394,62 +395,110 @@ fetch('data.json')
     .catch(error => {
         console.error("خطأ أثناء تحميل البيانات الديناميكية:", error);
     });
-    // دالة اليوتيوب الأصلية
-        function getYouTubeEmbed(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) 
-            ? `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${match[2]}" frameborder="0" allowfullscreen></iframe></div>` 
-            : null;
-       }
-    // دالة خاصة لروابط تلجرام
-    function getTelegramLink(url) {
-    return `<div style="margin:15px 0; padding:10px; background:rgba(0, 136, 204, 0.1); border-radius:8px; text-align:center;">
-                <a href="${url}" target="_blank" style="color:#0088cc; font-weight:bold; text-decoration:none;">
-                    🎥 مشاهدة الفيديو على تلجرام
-                </a>
-            </div>`;
-    }
+    
+    
     const grid = document.getElementById('mainGrid');
     const searchInput = document.getElementById('globalSearch');
     const pageTitle = document.getElementById('pageTitle');
     const statusMsg = document.getElementById('statusMsg');
 
-// 🟢 1. كود قراءة البيانات من الذاكرة لضمان الحفاظ على التعديلات بعد الـ Refresh
-// ضع هذا السطر فوق مصفوفة data الأصلية الخاصة بك مباشرة
-let data = JSON.parse(localStorage.getItem('my_cards_data')) || [
-    // هنا تضع بيانات الكروت الأصلية الخاصة بك (تنبيه جيل السكوتين، إلخ...) كما هي
-];
-// 🟢 2. دالة الـ render المحدثة لتعطي الأولوية للصورة الجديدة وتمنع التضارب
+// 🟢 1. تعريف مصفوفة البيانات العامة كـ لستة فارغة في البداية
+let data = [];
+
+// 🟢 2. دالة جلب البيانات الذكية (تدمج بين الـ fetch والذاكرة المحلية للمتصفح)
+async function loadWebsiteData() {
+    try {
+        // نتحقق أولاً: هل توجد بيانات معدلة ومحفوظة مسبقاً في متصفح المستخدم؟
+        const localData = localStorage.getItem('my_cards_data');
+        
+        if (localData) {
+            // إذا وجدنا التعديلات المخزنة (مثل الصور الجديدة)، نعتمد عليها فوراً
+            data = JSON.parse(localData);
+            console.log("🚀 تم تحميل البيانات المحدثة بنجاح من الذاكرة المحلية.");
+        } else {
+            // إذا كانت أول مرة يفتح فيها المستخدم الموقع، نجلب النسخة الأصلية من ملف data.json
+            const response = await fetch('data.json');
+            
+            if (!response.ok) {
+                throw new Error(`فشل الاتصال بالملف، حالة السيرفر: ${response.status}`);
+            }
+            
+            data = await response.json();
+            
+            // نحفظ هذه النسخة الأصلية في ذاكرة المتصفح لتكون جاهزة للتعديل المستقبلي عبر لوحة التحكم
+            localStorage.setItem('my_cards_data', JSON.stringify(data));
+            console.log("🌐 تم جلب قاعدة البيانات لأول مرة بنجاح من ملف data.json");
+        }
+
+        // إظهار الكروت فوراً على الشاشة بعد إتمام الجلب بنجاح
+        render(data);
+
+    } catch (error) {
+        console.error("❌ خطأ حرج في جلب قاعدة البيانات:", error);
+        // حماية بصرية للزائر: إظهار رسالة تنبيه أنيقة في الصفحة بدلاً من تركها فارغة تماماً
+        const grid = document.getElementById('grid');
+        if (grid) {
+            grid.innerHTML = `
+                <div style="color: #ff4d4d; text-align: center; width: 100%; padding: 40px; font-size: 18px; font-family: sans-serif;">
+                    ⚠️ عذراً، فشل تحميل محتوى البطاقات من ملف data.json. <br>
+                    <small style="color: #aaa; display:block; margin-top:10px;">تأكد من تشغيل الموقع عبر سيرفر محلي (Live Server) وليس بفتح الملف مباشرة.</small>
+                </div>`;
+        }
+    }
+}
+
+// تشغيل دالة الجلب تلقائياً بمجرد تحميل هيكل الصفحة
+document.addEventListener('DOMContentLoaded', loadWebsiteData);
+
+// 🟢 3. دالة الـ render المحمية (مستحيل تسبب اختفاء للكروت أو كراش عند التنقل)
 function render(dataArray) {
-    populateCardSelect(dataArray); // تحديث القائمة المنسدلة تلقائياً
-
     const grid = document.getElementById('grid');
-    grid.innerHTML = '';
+    if (!grid) return; // حماية ضد الأخطاء إذا لم تكن الحاوية موجودة في تلك اللحظة
 
+    grid.innerHTML = ''; // تفريغ الجريد لبناء محتوى القسم الجديد
+
+    // تحديث خيارات لوحة الأتمتة المنسدلة تلقائياً بالبيانات الحالية
+    if (typeof populateCardSelect === 'function') {
+        populateCardSelect(dataArray);
+    }
+
+    // إذا كان القسم فارغاً أو المصفوفة فارغة
+    if (!dataArray || dataArray.length === 0) {
+        grid.innerHTML = `
+            <div style="color: #aaa; text-align: center; width: 100%; padding: 50px; font-size: 18px;">
+                لا توجد بطاقات معروضة في هذا القسم حالياً.
+            </div>`;
+        return;
+    }
+
+    // بناء الكروت بتنسيقات يوتيوب والأتمتة الذكية
     dataArray.forEach(item => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.setAttribute('onclick', `openDetails(${item.id})`);
+        
+        // تشغيل دالة تفاصيل الكارت بأمان عند الضغط
+        card.setAttribute('onclick', `if(typeof openDetails === 'function') { openDetails(${item.id}) }`);
         
         const badgeClass = item.category === 'vsa' ? 'badge-vsa' : 'badge-invest';
         const badgeText = item.category === 'vsa' ? 'VSA & التحليل' : 'استثمار العراق';
 
         let mediaContent = '';
         
-        // ذكاء الأتمتة: إذا أضفت صورة عبر لوحة التحكم، فستظهر هي فوراً وتخفي أي تضارب
+        // منطق الأتمتة: إذا أضفت صورة مخصصة من اللوحة، تظهر فوراً وتلغي تضارب الفيديو القديم
         if (item.image && item.image.trim() !== '') {
-            mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title}"></div>`;
+            mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
         } else if (item.videoUrl) {
+            // التحقق من وجود دوال معالجة روابط الفيديوهات قبل استدعائها لمنع توقف الكود
             if (item.videoUrl.includes('youtube') || item.videoUrl.includes('youtu.be')) {
-                mediaContent = `<div class="card-media-top">${getYouTubeEmbed(item.videoUrl) || ''}</div>`;
+                mediaContent = `<div class="card-media-top">${typeof getYouTubeEmbed === 'function' ? getYouTubeEmbed(item.videoUrl) : ''}</div>`;
             } else if (item.videoUrl.includes('t.me')) {
-                mediaContent = `<div class="card-media-top">${getTelegramLink(item.videoUrl)}</div>`;
+                mediaContent = `<div class="card-media-top">${typeof getTelegramLink === 'function' ? getTelegramLink(item.videoUrl) : ''}</div>`;
             }
         }
         
+        // صورة افتراضية أنيقة في حال عدم وجود صورة أو فيديو للكارت
         if (!mediaContent) {
-            mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/340x170/222/0088cc?text=VSA+Academy" alt="${item.title}"></div>`;
+            mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/340x170/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
         }
 
         card.innerHTML = `
@@ -457,8 +506,8 @@ function render(dataArray) {
             <div class="card-body-container">
                 <div>
                     <span class="badge ${badgeClass}">${badgeText}</span>
-                    <h3>${item.title}</h3>
-                    <div class="card-content">${item.content}</div>
+                    <h3>${item.title || 'بدون عنوان'}</h3>
+                    <div class="card-content">${item.content || ''}</div>
                 </div>
                 <div>
                     <div class="card-links">
@@ -508,10 +557,12 @@ function onCardSelectChange() {
     }
 }
 
-// 🟢 3. دالة زر التحديث الفوري مع ميزة الحفظ الدائم (تحديث فوري وبدون فقدان البيانات)
+// 🟢 4. دالة لوحة الأتمتة: تقوم بالتحديث الفوري للمصفوفة وحفظ التعديل داخل الذاكرة
 function updateImageAutomation() {
     const select = document.getElementById('cardSelect');
     const input = document.getElementById('panelImageUrl');
+    if (!select || !input) return;
+
     const cardId = parseInt(select.value);
     const newUrl = input.value.trim();
     
@@ -520,16 +571,20 @@ function updateImageAutomation() {
         return;
     }
     
+    // البحث عن الكارت المطلوب في المصفوفة الشاملة التي جلبها الـ fetch
     const item = data.find(i => i.id === cardId);
     if (item) {
-        item.image = newUrl;      // حفظ رابط الصورة الجديد
-        item.videoUrl = '';       // إفراغ رابط الفيديو لمنع أي تضارب في العرض وعرض الصورة فوراً
+        item.image = newUrl;
+        item.videoUrl = ''; // تصفير رابط الفيديو لضمان ظهور الصورة فوراً وبدون أي تضارب بامتياز
         
-        // 💾 السحر هنا: حفظ التعديلات في المتصفح لكي لا تختفي عند عمل Refresh للصفحة!
+        // حفظ التغيير الجديد في ذاكرة المتصفح ليبقى ثابتاً حتى بعد الـ Refresh
         localStorage.setItem('my_cards_data', JSON.stringify(data));
         
-        render(data);             // إعادة عرض الكروت وتطبيق التصميم الجديد فوراً بدون ريفريش
-        alert(`🚀 تم تحديث وحفظ صورة بطاقة "${item.title}" بنجاح وتثبيتها بالمتصفح!`);
+        // تحديث الكروت المعروضة على الشاشة بلحظتها
+        render(data); 
+        
+        input.value = ''; // تفريغ حقل الإدخال بعد النجاح
+        alert(`🚀 تم تحديث وأتمتة صورة بطاقة "${item.title}" وتثبيتها بنجاح!`);
     }
 }
 
@@ -748,6 +803,22 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+// دالة اليوتيوب الأصلية
+        function getYouTubeEmbed(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) 
+            ? `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${match[2]}" frameborder="0" allowfullscreen></iframe></div>` 
+            : null;
+       }
+       // دالة خاصة لروابط تلجرام
+    function getTelegramLink(url) {
+    return `<div style="margin:15px 0; padding:10px; background:rgba(0, 136, 204, 0.1); border-radius:8px; text-align:center;">
+                <a href="${url}" target="_blank" style="color:#0088cc; font-weight:bold; text-decoration:none;">
+                    🎥 مشاهدة الفيديو على تلجرام
+                </a>
+            </div>`;
+    }
 </script>
 <div id="myModal" class="modal">
     <div class="modal-content">
