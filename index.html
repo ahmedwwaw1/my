@@ -397,34 +397,47 @@ async function loadWebsiteData() {
     }
 
     // تحديث الصورة عبر لوحة التحكم وحفظها
-    function updateImageAutomation() {
-        const select = document.getElementById('cardSelect');
-        const input = document.getElementById('panelImageUrl');
-        if (!select || !input) return;
+// دالة تحديث الصورة المحسنة
+function updateImageAutomation() {
+    const select = document.getElementById('cardSelect');
+    const input = document.getElementById('panelImageUrl');
+    
+    if (!select || !input) return;
 
-        const cardId = parseInt(select.value);
-        const newUrl = input.value.trim();
-        
-        if (!cardId) {
-            alert('الرجاء اختيار اسم البطاقة أولاً من القائمة المنسدلة!');
-            return;
-        }
-        
-        const item = allData.find(i => i.id === cardId);
-        if (item) {
-            item.image = newUrl; 
-            
-            localStorage.setItem('my_cards_data', JSON.stringify(allData));
-            
-            if (typeof handleRoute === 'function') {
-                handleRoute();
-            }
-            
-            input.value = ''; 
-            alert(`🚀 تم تحديث الصورة للبطاقة "${item.title}" بنجاح!`);
-        }
+    const cardId = parseInt(select.value);
+    const newUrl = input.value.trim();
+    
+    // التحقق من اختيار بطاقة
+    if (!cardId) {
+        alert('الرجاء اختيار اسم البطاقة أولاً من القائمة المنسدلة!');
+        return;
     }
-
+    
+    // التحقق من وجود رابط
+    if (!newUrl) {
+        alert('⚠️ يرجى إدخال رابط صورة صحيح!');
+        return;
+    }
+    
+    // البحث عن البطاقة في البيانات وتحديث صورتها
+    const item = allData.find(i => i.id === cardId);
+    if (item) {
+        item.image = newUrl; // تحديث الرابط في المصفوفة
+        
+        // حفظ التحديث في الذاكرة
+        localStorage.setItem('my_cards_data', JSON.stringify(allData));
+        
+        // إعادة تحميل العرض ليظهر التغيير فوراً
+        if (typeof handleRoute === 'function') {
+            handleRoute();
+        }
+        
+        input.value = ''; // تفريغ حقل الرابط
+        alert(`🚀 تم تحديث الصورة للبطاقة "${item.title}" بنجاح!`);
+    } else {
+        alert("❌ لم يتم العثور على البطاقة!");
+    }
+}
     // نظام التوجيه والتنقل الداخلي (Router System)
     function handleRoute() {
         const hash = window.location.hash || '#/';
