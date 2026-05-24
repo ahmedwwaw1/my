@@ -5,14 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My website</title>
     <style>
+        /* خلفية النافذة التي تغطي الشاشة وتجعلها شبه شفافة */
+        .modal {
+            display: none; /* مخفية تلقائياً */
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: #1c1c1e; /* توحيد لون الخلفية مع لون الموقع */
+            backdrop-filter: blur(5px); /* تأثير ضبابي احترافي */
+        }
+
+        /* هذا التعديل يجعل النافذة تأخذ كامل مساحة المتصفح */
+        .modal-content {
+            background-color: #1c1c1e; /* لون الخلفية */
+            margin: 0;                /* إزالة المسافات الخارجية */
+            padding: 50px;            /* مسافة داخلية مريحة للنص */
+            width: 100vw;             /* العرض يساوي عرض المتصفح بالكامل */
+            height: 100vh;            /* الارتفاع يساوي ارتفاع المتصفح بالكامل */
+            border-radius: 0;         /* إزالة الزوايا الدائرية لتكون حادة كصفحة كاملة */
+            position: relative;
+            overflow-y: auto;         /* لجعل المحتوى قابلاً للتمرير إذا كان طويلاً جداً */
+            box-sizing: border-box;   /* لضمان عدم خروج النافذة عن الحدود */
+        }
+        
+        /* زر الإغلاق X */
+        .close-btn {
+            position: absolute;
+            top: 25px; left: 25px; /* جهة اليسار لأن الموقع باللغة العربية */
+            color: #aaa;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-btn:hover { color: #fff; }
+        
         :root {
-            --bg-color: #0f0f0f; /* لون خلفية يوتيوب الداكن الرسمي */
-            --card-bg: transparent;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
             --accent-color: #00d4ff;
             --investment-color: #00ff88;
-            --text-main: #f1f1f1;
-            --text-dim: #aaa;
-            --transition: all 0.2s ease;
+            --text-main: #e0e0e0;
+            --text-dim: #b0b0b0;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         body {
@@ -23,43 +59,9 @@
             line-height: 1.6;
         }
 
-        /* خلفية النافذة التي تغطي الشاشة بالكامل */
-        .modal {
-            display: none; 
-            position: fixed;
-            z-index: 2000;
-            left: 0; top: 0;
-            width: 100vw; height: 100vh;
-            background-color: #1c1c1e; 
-        }
-
-        .modal-content {
-            background-color: #1c1c1e; 
-            margin: 0;                
-            padding: 50px;            
-            width: 100vw;             
-            height: 100vh;            
-            border-radius: 0;         
-            position: relative;
-            overflow-y: auto;         
-            box-sizing: border-box;   
-        }
-        
-        /* زر الإغلاق X */
-        .close-btn {
-            position: absolute;
-            top: 20px; left: 25px; 
-            color: #aaa;
-            font-size: 35px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .close-btn:hover { color: #fff; }
-
         /* شريط التنقل */
         nav {
-            background: rgba(15, 15, 15, 0.98);
+            background: rgba(30, 30, 30, 0.95);
             backdrop-filter: blur(10px);
             padding: 1rem;
             display: flex;
@@ -67,7 +69,7 @@
             gap: 20px;
             position: sticky;
             top: 0; z-index: 1000;
-            border-bottom: 1px solid #222;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
         nav a {
@@ -80,75 +82,74 @@
         }
 
         nav a:hover, nav a.active {
-            color: #fff;
-            background: #272727;
+            color: var(--accent-color);
+            background: rgba(0, 212, 255, 0.1);
         }
 
-        /* حاوية الموقع - ممتدة بالكامل مثل اليوتيوب من اليمين لليسار */
         .container {
-            width: 100%;
-            max-width: 100%;
-            margin: 2rem 0;
-            padding: 0 24px;
-            box-sizing: border-box;
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 20px;
         }
 
         /* محرك البحث */
         .search-container {
             margin-bottom: 2rem;
-            padding: 0 24px;
         }
 
         #globalSearch {
             width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            display: block;
-            padding: 12px 20px;
-            border-radius: 40px;
-            border: 1px solid #303030;
-            background: #121212;
+            padding: 18px 25px;
+            border-radius: 50px;
+            border: 2px solid #333;
+            background: var(--card-bg);
             color: white;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             outline: none;
             transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
         }
 
         #globalSearch:focus {
-            border-color: #1c62b9;
-            background: #0f0f0f;
+            border-color: var(--accent-color);
         }
 
-        /* نظام شبكة تباعد وحجم كروت اليوتيوب بالضبط */
-        .grid-layout {
+        /* تنسيق حجم وتباعد الكروت تماماً مثل يوتيوب بدون فراغات مفرطة وبمقاس كبير فخم */
+        .grid-layout, .grid, #grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 16px;
-            row-gap: 40px;
-            width: 100%;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); 
+            gap: 20px;          
+            row-gap: 40px;      
+            padding: 10px 0;
+            width: 100%;        
+            max-width: 100%;    
             box-sizing: border-box;
         }
 
-        /* تصميم البطاقة كصورة مصغرة لليوتيوب - بدون تحرك عند التمرير */
+        /* تصميم البطاقة بالتضليل الفيزيائي والانتقال الناعم عند مرور الماوس */
         .card {
             background: transparent; 
             border: none;
-            border-radius: 0;
+            border-radius: 12px;
             padding: 0;           
             cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            transition: opacity 0.2s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .card:hover {
-            transform: none;    
-            box-shadow: none; 
-            opacity: 0.9;
+            background-color: #232323; 
+            transform: translateY(-6px); /* حركة فيزيائية ناعمة للأعلى */
+            box-sizing: border-box;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(0, 0, 0, 0.3); /* تضليل احترافي ناعم وعميق */
         }
 
-        /* أبعاد الميديا الثابتة بدقة 16:9 كاليوتيوب */
+        /* ضبط مقاسات صورة عرض البطاقة لتطابق مقاسات فيديو اليوتيوب بالضبط (16:9) */
         .card-media-top {
             width: 100%;
             aspect-ratio: 16 / 9;     
@@ -164,75 +165,100 @@
             height: 100%;
             object-fit: cover;        
             border: none;
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        /* حاوية النصوص أسفل الصورة */
+        /* زووم فيزيائي هادئ داخل الصورة عند تمرير السهم */
+        .card:hover .card-media-top img {
+            transform: scale(1.03);
+        }
+
+        /* حاوية المحتوى الداخلي لتعويض مسافات البادينج للنصوص أسفل الصورة */
         .card-body-container {
-            padding: 4px 0;
+            padding: 10px 15px 15px 15px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            flex-grow: 1;
+            justify-content: space-between; 
         }
 
-        .card h3 { 
-            margin: 0; 
-            color: #fff; 
-            font-size: 1.1rem; 
-            font-weight: 600;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .card-content { 
-            color: var(--text-dim); 
+        /* تنسيق سهم الإشارة السفلي */
+        .card-footer-arrow {
+            color: #0088cc;
             font-size: 0.9rem;
-            line-height: 1.4;
-            margin: 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 2; /* حد أقصى سطرين كتعليقات يوتيوب المصغرة */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            white-space: normal;
+            margin-top: 12px;
+            text-align: left;
+            font-weight: bold;
         }
+
+        .badge {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            align-self: flex-start;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .badge-vsa { background: rgba(0, 212, 255, 0.2); color: var(--accent-color); }
+        .badge-invest { background: rgba(0, 255, 136, 0.2); color: var(--investment-color); }
+
+        .card h3 { margin: 5px 0 10px 0; color: #fff; font-size: 1.25rem; font-weight: 600; }
+        .card-content { color: var(--text-dim); flex-grow: 1; white-space: pre-line; margin-bottom: 15px; font-size: 0.95rem; }
+        
+        .card-links { display: flex; flex-wrap: wrap; gap: 10px; border-top: 1px solid #333; padding-top: 15px; }
+        .card-links a { 
+            color: var(--accent-color); 
+            text-decoration: none; 
+            font-size: 0.85rem; 
+            font-weight: bold; 
+            border: 1px solid rgba(0, 212, 255, 0.3); 
+            padding: 6px 12px; 
+            border-radius: 5px; 
+            transition: 0.2s;
+        }
+        .card-links a:hover { background: var(--accent-color); color: #000; }
 
         #statusMsg { text-align: center; color: var(--text-dim); margin-top: 20px; font-size: 1.1rem; }
 
-        /* تنسيق الفيديو داخل المودال */
+        /* تنسيق الفيديو الاحترافي التفاعلي */
         .video-wrapper { 
             position: relative; 
-            padding-bottom: 56.25%; 
+            padding-bottom: 56.25%; /* أبعاد 16:9 السينمائية */
             height: 0; 
             overflow: hidden; 
-            border-radius: 12px; 
+            margin-top: 15px; 
+            border-radius: 10px; 
             background: #000; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
         .video-wrapper iframe { 
             position: absolute; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
             border: none; 
         }
 
-        /* لوحة الأتمتة العلوية */
+        /* تنسيق لوحة الأتمتة العلوية بشكل داكن فخم يتوافق مع تصميم موقعك */
         .automation-panel {
-            background-color: #1f1f1f;
-            border: 1px solid #333;
+            background-color: #18181c;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             padding: 15px 20px;
-            width: calc(100% - 48px);
-            max-width: 1100px;
+            max-width: 100%;
             margin: 20px auto;
             color: #fff;
-            box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         .automation-panel h4 {
             margin-top: 0;
             margin-bottom: 12px;
             color: #0088cc;
+            font-size: 1.1rem;
         }
         .panel-controls {
             display: flex;
@@ -240,26 +266,27 @@
             flex-wrap: wrap;
         }
         .panel-controls select, .panel-controls input {
-            background-color: #0f0f0f;
-            border: 1px solid #3f3f3f;
+            background-color: #111;
+            border: 1px solid #333;
             color: white;
-            padding: 10px 14px;
-            border-radius: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
             font-size: 0.9rem;
+            outline: none;
         }
-        .panel-controls select { flex: 1; min-width: 220px; }
+        .panel-controls select { flex: 1; min-width: 200px; }
         .panel-controls input { flex: 2; min-width: 300px; }
         .panel-controls button {
-            background-color: #f1f1f1;
-            color: #0f0f0f;
+            background-color: #0088cc;
+            color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: 8px 16px;
+            border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            transition: var(--transition);
+            transition: background 0.2s;
         }
-        .panel-controls button:hover { background-color: #d9d9d9; }
+        .panel-controls button:hover { background-color: #006699; }
     </style>
 </head>
 <body>
@@ -272,7 +299,7 @@
 
 <div class="container">
     <div class="search-container">
-        <input type="text" id="globalSearch" placeholder="ابحث في أكاديمية الفيديوهات والإشارات والشركات...">
+        <input type="text" id="globalSearch" placeholder="ابحث عن إشارة VSA، شركة استثمار، أو رابط معين...">
     </div>
 
     <div class="automation-panel">
@@ -286,12 +313,13 @@
         </div>
     </div>
 
-    <h1 id="pageTitle" style="text-align: center; margin-bottom: 1.5rem; font-size: 1.8rem;"></h1>
+    <h1 id="pageTitle" style="text-align: center; margin-bottom: 1.5rem; font-weight: 700;"></h1>
     <div id="statusMsg"></div>
     <div class="grid-layout" id="mainGrid"></div>
 </div>
 
 <script>
+    // --- المعرفات الأساسية وقاعدة البيانات ---
     let allData = []; 
     
     const grid = document.getElementById('mainGrid');
@@ -299,54 +327,59 @@
     const pageTitle = document.getElementById('pageTitle');
     const statusMsg = document.getElementById('statusMsg');
 
-    // دالة تحميل البيانات المستقرة والمربوطة بالـ localStorage
+    // دالة جلب البيانات الذكية والمستقرة والمربوطة بالـ localStorage للتعامل الآمن مع السيرفر
     async function loadWebsiteData() {
         try {
             const localData = localStorage.getItem('my_cards_data');
             
             if (localData && localData !== '[]' && localData !== 'undefined') {
                 allData = JSON.parse(localData);
-                console.log("🚀 تم تحميل البيانات المحدثة بنجاح.");
-                populateCardSelect(); // تعبئة قائمة الأتمتة بالبيانات الكاملة فوراً ولأمرة واحدة لتثبيتها وعزلها
+                console.log("🚀 تم تحميل البيانات المحدثة بنجاح من الذاكرة المحلية.");
                 if (typeof handleRoute === 'function') {
                     handleRoute();
                 }
             } else {
                 const response = await fetch('data.json');
                 if (!response.ok) {
-                    throw new Error(`فشل الاتصال بالملف: ${response.status}`);
+                    throw new Error(`فشل الاتصال بالملف، حالة السيرفر: ${response.status}`);
                 }
                 
-                allData = await response.json();
+                allData = await response.ok ? await response.json() : [];
                 
+                // ترقيم المعرفات تلقائياً لضمان سلامة الفتح
                 allData.forEach((item, index) => {
                     item.id = index + 1;
                 });
                 
                 localStorage.setItem('my_cards_data', JSON.stringify(allData));
-                populateCardSelect();
+                console.log("🌐 تم جلب قاعدة البيانات لأول مرة بنجاح من ملف data.json");
                 
                 if (typeof handleRoute === 'function') {
                     handleRoute();
                 }
             }
         } catch (error) {
-            console.error("❌ خطأ في جلب قاعدة البيانات:", error);
+            console.error("❌ خطأ حرج في جلب قاعدة البيانات:", error);
             if (grid) {
                 grid.innerHTML = `
                     <div style="color: #ff4d4d; text-align: center; width: 100%; padding: 40px; font-size: 18px;">
-                        ⚠️ عذراً، فشل تحميل محتوى البطاقات من ملف data.json.
+                        ⚠️ عذراً، فشل تحميل محتوى البطاقات من ملف data.json. <br>
+                        <small style="color: #aaa; display:block; margin-top:10px;">تأكد من تشغيل الموقع عبر Live Server.</small>
                     </div>`;
             }
         }
     }
 
-    // بناء الكروت لعرضها بالواجهة الرئيسية بشكل نظيف (صورة، عنوان، وصف فقط)
+    // دالة بناء وعرض الكروت الديناميكية على الشاشة
     function render(dataArray) {
         const mainGrid = document.getElementById('mainGrid');
         if (!mainGrid) return; 
 
         mainGrid.innerHTML = ''; 
+
+        if (typeof populateCardSelect === 'function') {
+            populateCardSelect(dataArray);
+        }
 
         if (!dataArray || dataArray.length === 0) {
             mainGrid.innerHTML = `
@@ -359,44 +392,59 @@
         dataArray.forEach(item => {
             const card = document.createElement('div');
             card.className = 'card';
-            card.setAttribute('onclick', `openDetails(${item.id})`);
+            card.setAttribute('onclick', `if(typeof openDetails === 'function') { openDetails(${item.id}) }`);
             
+            const badgeClass = item.category === 'vsa' ? 'badge-vsa' : 'badge-invest';
+            let badgeText = 'استثمار العراق';
+            if (item.category === 'vsa') badgeText = 'VSA & التحليل';
+            if (item.category === 'videos') badgeText = 'أكاديمية الفيديوهات';
+
             let mediaContent = '';
             
-            if (item.image && item.image.trim() !== '') {
-                mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
-            } else if (item.videoUrl) {
+            // ترتيب ذكي لعرض الفيديوهات أولاً إذا وجدت في بطاقات الأكاديمية لمنع حجبها
+            if (item.videoUrl && item.videoUrl.trim() !== '') {
                 if (item.videoUrl.includes('youtube') || item.videoUrl.includes('youtu.be')) {
-                    mediaContent = `<div class="card-media-top">${getYouTubeEmbed(item.videoUrl)}</div>`;
+                    mediaContent = `<div class="card-media-top">${typeof getYouTubeEmbed === 'function' ? getYouTubeEmbed(item.videoUrl) : ''}</div>`;
                 } else if (item.videoUrl.includes('t.me')) {
-                    mediaContent = `<div class="card-media-top">${getTelegramLink(item.videoUrl)}</div>`;
+                    mediaContent = `<div class="card-media-top">${typeof getTelegramLink === 'function' ? getTelegramLink(item.videoUrl) : ''}</div>`;
                 }
+            } else if (item.image && item.image.trim() !== '') {
+                mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
             }
             
             if (!mediaContent) {
-                mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/340x170/222/0088cc?text=No+Media" alt="No Media"></div>`;
+                mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/360x203/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
             }
 
             card.innerHTML = `
                 ${mediaContent}
                 <div class="card-body-container">
-                    <h3>${item.title || 'بدون عنوان'}</h3>
-                    <div class="card-content">${item.content || ''}</div>
+                    <div>
+                        <span class="badge ${badgeClass}">${badgeText}</span>
+                        <h3>${item.title || 'بدون عنوان'}</h3>
+                        <div class="card-content">${item.content || ''}</div>
+                    </div>
+                    <div>
+                        <div class="card-links">
+                            ${item.links ? item.links.map(link => `<a href="${link.url}" target="_blank" onclick="event.stopPropagation();">${link.text}</a>`).join('') : ''}
+                        </div>
+                        <div class="card-footer-arrow">عرض التفاصيل ←</div>
+                    </div>
                 </div>
             `;
             mainGrid.appendChild(card);
         });
     }
 
-    // دالة تعبئة قائمة الأتمتة تعتمد بشكل ثابت على قاعدة البيانات الشاملة لمنع حدوث أي خطأ تفريغ
-    function populateCardSelect() {
+    // دالة تعبئة خيارات أسماء البطاقات تلقائياً في لوحة التحكم
+    function populateCardSelect(dataArray) {
         const select = document.getElementById('cardSelect');
         if (!select) return;
         
         const currentSelectedValue = select.value; 
         select.innerHTML = '<option value="">اختر اسم البطاقة لتغيير صورتها...</option>';
         
-        allData.forEach(item => {
+        dataArray.forEach(item => {
             const option = document.createElement('option');
             option.value = item.id;
             option.textContent = item.title; 
@@ -406,6 +454,7 @@
         select.value = currentSelectedValue;
     }
 
+    // جلب رابط الصورة الفعلي بمجرد اختيار اسم البطاقة من القائمة المنسدلة
     function onCardSelectChange() {
         const select = document.getElementById('cardSelect');
         const input = document.getElementById('panelImageUrl');
@@ -422,6 +471,7 @@
         }
     }
 
+    // تحديث الصورة عبر لوحة التحكم وحفظها دون مسح الفيديوهات
     function updateImageAutomation() {
         const select = document.getElementById('cardSelect');
         const input = document.getElementById('panelImageUrl');
@@ -437,7 +487,8 @@
         
         const item = allData.find(i => i.id === cardId);
         if (item) {
-            item.image = newUrl; // تم إزالة تصفير الرابط الآخر لحماية روابط اليوتيوب والتليجرام من الحذف والضياع
+            item.image = newUrl; // تحديث رابط الصورة فقط
+            // تم إزالة تصفير سطر الـ videoUrl لحماية بياناتك وفيديوهاتك السابقة من الضياع التام!
             
             localStorage.setItem('my_cards_data', JSON.stringify(allData));
             
@@ -446,11 +497,11 @@
             }
             
             input.value = ''; 
-            alert(`🚀 تم تحديث وأتمتة صورة بطاقة "${item.title}" وتثبيتها بنجاح!`);
+            alert(`🚀 تم تحديث الصورة للبطاقة "${item.title}" بنجاح مع الحفاظ على روابط الفيديو واليوتيوب الفعالة!`);
         }
     }
 
-    // نظام التنقل
+    // نظام التوجيه والتنقل الداخلي (Router System)
     function handleRoute() {
         const hash = window.location.hash || '#/';
         if (searchInput) searchInput.value = ''; 
@@ -481,7 +532,7 @@
         if (activeLink) activeLink.classList.add('active');
     }
 
-    // محرك البحث
+    // محرك البحث الشامل والسلس
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase().trim();
@@ -496,11 +547,12 @@
         });
     }
 
+    // ربط مستمعي الأحداث البرمجية لتشغيل الصفحة بدقة ومثالية
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('load', handleRoute);
     document.addEventListener('DOMContentLoaded', loadWebsiteData);
 
-    // دالة فتح النافذة وعرض كافة المكونات الداخلية (النص الكامل، الفيديوهات، والروابط)
+    // دالة فتح النافذة المنبثقة وحقن البيانات والتحكم السحري بحركة وحجم الفيديو والروابط بشكل صحيح
     function openDetails(id) {
         const selectedItem = allData.find(item => item.id === id);
 
@@ -514,136 +566,148 @@
             videoContainer.innerHTML = '';
             linksContainer.innerHTML = '';
 
-            // 1. عرض الفيديو الأساسي بداخل النافذة المنبثقة إن وجد
-            if (selectedItem.videoUrl) {
-                if (selectedItem.videoUrl.includes('youtube') || selectedItem.videoUrl.includes('youtu.be')) {
-                    const embedHtml = getYouTubeEmbed(selectedItem.videoUrl);
-                    if (embedHtml) {
-                        videoContainer.innerHTML = embedHtml;
-                        setupResizeHandles(videoContainer); // تشغيل ميزة التحجيم بالماوس هندسياً
+            // فحص ذكي وحقن محتوى الميديا بداخل الـ Modal (فيديو يوتيوب أو صورة مخصصة) لشاشة كاملة ممتازة
+            if (selectedItem.videoUrl && selectedItem.videoUrl.trim() !== '') {
+                const embedHtml = getYouTubeEmbed(selectedItem.videoUrl);
+                if (embedHtml) {
+                    videoContainer.innerHTML = embedHtml;
+                    
+                    // توليد مقابض السحب الشفافة الثمانية هندسياً للتحجيم بالماوس
+                    const handles = {
+                        'r': 'ew-resize', 'l': 'ew-resize', 'b': 'ns-resize', 't': 'ns-resize',
+                        'rb': 'nwse-resize', 'lb': 'nesw-resize', 'rt': 'nesw-resize', 'lt': 'nwse-resize'
+                    };
+
+                    for (const [handleType, cursor] of Object.entries(handles)) {
+                        const handle = document.createElement('div');
+                        handle.className = `resize-handle resize-handle-${handleType}`;
+                        handle.style.position = 'absolute';
+                        handle.style.cursor = cursor;
+                        handle.style.zIndex = '1000'; 
+                        
+                        const size = 12; 
+                        
+                        if (handleType === 'r') {
+                            handle.style.width = `${size}px`; handle.style.height = '100%';
+                            handle.style.right = `-${size / 2}px`; handle.style.top = '0';
+                        } else if (handleType === 'l') {
+                            handle.style.width = `${size}px`; handle.style.height = '100%';
+                            handle.style.left = `-${size / 2}px`; handle.style.top = '0';
+                        } else if (handleType === 'b') {
+                            handle.style.height = `${size}px`; handle.style.width = '100%';
+                            handle.style.bottom = `-${size / 2}px`; handle.style.left = '0';
+                        } else if (handleType === 't') {
+                            handle.style.height = `${size}px`; handle.style.width = '100%';
+                            handle.style.top = `-${size / 2}px`; handle.style.left = '0';
+                        } else {
+                            handle.style.width = `${size}px`; handle.style.height = `${size}px`;
+                            handle.style[handleType.includes('r') ? 'right' : 'left'] = `-${size / 2}px`;
+                            handle.style[handleType.includes('b') ? 'bottom' : 'top'] = `-${size / 2}px`;
+                        }
+
+                        videoContainer.appendChild(handle);
+
+                        let isResizing = false;
+                        let initialX, initialY, initialWidth, initialHeight;
+                        const aspectRatio = 16 / 9;
+
+                        handle.addEventListener('mousedown', (e) => {
+                            isResizing = true;
+                            initialX = e.clientX;
+                            initialY = e.clientY;
+                            initialWidth = videoContainer.offsetWidth;
+                            initialHeight = videoContainer.offsetHeight;
+                            
+                            document.body.style.userSelect = 'none';
+                            document.body.style.cursor = cursor;
+
+                            const iframe = videoContainer.querySelector('iframe');
+                            if (iframe) {
+                                iframe.style.pointerEvents = 'none';
+                            }
+                        });
+
+                        window.addEventListener('mousemove', (e) => {
+                            if (!isResizing) return; 
+                            
+                            const deltaX = e.clientX - initialX;
+                            const deltaY = e.clientY - initialY;
+                            let newWidth = initialWidth;
+                            let newHeight = initialHeight;
+
+                            if (handleType === 'r') {
+                                newWidth = initialWidth + deltaX * 2;
+                                newHeight = newWidth / aspectRatio;
+                            } else if (handleType === 'l') {
+                                newWidth = initialWidth - deltaX * 2;
+                                newHeight = newWidth / aspectRatio;
+                            } else if (handleType === 'b') {
+                                newHeight = initialHeight + deltaY * 2;
+                                newWidth = newHeight * aspectRatio;
+                            } else if (handleType === 't') {
+                                newHeight = initialHeight - deltaY * 2;
+                                newWidth = newHeight * aspectRatio;
+                            } else if (handleType === 'rb' || handleType === 'rt') {
+                                newWidth = initialWidth + deltaX * 2;
+                                newHeight = newWidth / aspectRatio;
+                            } else if (handleType === 'lb' || handleType === 'lt') {
+                                newWidth = initialWidth - deltaX * 2;
+                                newHeight = newWidth / aspectRatio;
+                            }
+
+                            const minWidthLimit = 280;
+                            const maxWidthLimit = videoContainer.parentElement.offsetWidth - 10;
+
+                            if (newWidth >= minWidthLimit && newWidth <= maxWidthLimit) {
+                                videoContainer.style.width = newWidth + 'px';
+                            }
+                        });
+
+                        window.addEventListener('mouseup', () => {
+                            if (isResizing) {
+                                isResizing = false;
+                                document.body.style.userSelect = '';
+                                document.body.style.cursor = '';
+
+                                const iframe = videoContainer.querySelector('iframe');
+                                if (iframe) {
+                                    iframe.style.pointerEvents = 'auto';
+                                }
+                            }
+                        });
                     }
                 } else if (selectedItem.videoUrl.includes('t.me')) {
                     videoContainer.innerHTML = getTelegramLink(selectedItem.videoUrl);
                 }
-            } 
-            // 2. إذا لم يتوافر فيديو وكانت هناك صورة، يتم عرض الصورة بحجم كامل مميز داخل النافذة الكبيرة أيضاً
-            else if (selectedItem.image && selectedItem.image.trim() !== '') {
-                videoContainer.innerHTML = `<img src="${selectedItem.image}" style="width:100%; max-height:450px; object-fit:contain; border-radius:12px; display:block; margin:0 auto;">`;
+            } else if (selectedItem.image && selectedItem.image.trim() !== '') {
+                // إذا لم يوجد فيديو ويوجد صورة، يتم عرض الصورة في الشاشة الكبيرة بشكل أنيق جداً
+                videoContainer.innerHTML = `<img src="${selectedItem.image}" style="width:100%; max-height:65vh; border-radius:12px; object-fit:contain; box-shadow: 0 10px 30px rgba(0,0,0,0.5);" alt="">`;
             }
 
-            // 3. حقن وعرض الأزرار والروابط في المحتوى الداخلي للنافذة الكبيرة بدقة فخمة
+            // تم تصحيح تنسيق أزرار الروابط بالشاشة الكبيرة لتعمل وتظهر 100% بدون أي خطأ برمي
             if (selectedItem.links && selectedItem.links.length > 0) {
                 selectedItem.links.forEach(link => {
                     const linkBtn = document.createElement('a');
                     linkBtn.href = link.url;
                     linkBtn.target = '_blank';
                     linkBtn.innerText = link.text;
-                    linkBtn.style = 'display: inline-block; padding: 12px 24px; margin-top: 15px; margin-left: 12px; background-color: #0088cc; color: #ffffff; text-decoration: none; border-radius: 25px; font-weight: bold; transition: background 0.2s;';
-                    linkBtn.onmouseover = () => linkBtn.style.backgroundColor = '#006699';
-                    linkBtn.onmouseout = () => linkBtn.style.backgroundColor = '#0088cc';
+                    linkBtn.style.display = 'inline-block';
+                    linkBtn.style.padding = '12px 24px';
+                    linkBtn.style.marginTop = '15px';
+                    linkBtn.style.marginLeft = '12px';
+                    linkBtn.style.backgroundColor = '#0088cc';
+                    linkBtn.style.color = '#ffffff';
+                    linkBtn.style.textDecoration = 'none';
+                    linkBtn.style.borderRadius = '6px';
+                    linkBtn.style.fontWeight = 'bold';
+                    linkBtn.style.transition = 'background 0.2s';
+                    linkBtn.onmouseenter = () => linkBtn.style.backgroundColor = '#006699';
+                    linkBtn.onmouseleave = () => linkBtn.style.backgroundColor = '#0088cc';
                     linksContainer.appendChild(linkBtn);
                 });
             }
 
             document.getElementById('myModal').style.display = "block";
-        }
-    }
-
-    // دالة بناء مقابض التحجيم التفاعلية بالماوس للفيديو داخل المودال
-    function setupResizeHandles(container) {
-        const handles = {
-            'r': 'ew-resize', 'l': 'ew-resize', 'b': 'ns-resize', 't': 'ns-resize',
-            'rb': 'nwse-resize', 'lb': 'nesw-resize', 'rt': 'nesw-resize', 'lt': 'nwse-resize'
-        };
-
-        for (const [handleType, cursor] of Object.entries(handles)) {
-            const handle = document.createElement('div');
-            handle.className = `resize-handle resize-handle-${handleType}`;
-            handle.style.position = 'absolute';
-            handle.style.cursor = cursor;
-            handle.style.zIndex = '1000'; 
-            const size = 12; 
-            
-            if (handleType === 'r') {
-                handle.style.width = `${size}px`; handle.style.height = '100%';
-                handle.style.right = `-${size / 2}px`; handle.style.top = '0';
-            } else if (handleType === 'l') {
-                handle.style.width = `${size}px`; handle.style.height = '100%';
-                handle.style.left = `-${size / 2}px`; handle.style.top = '0';
-            } else if (handleType === 'b') {
-                handle.style.height = `${size}px`; handle.style.width = '100%';
-                handle.style.bottom = `-${size / 2}px`; handle.style.left = '0';
-            } else if (handleType === 't') {
-                handle.style.height = `${size}px`; handle.style.width = '100%';
-                handle.style.top = `-${size / 2}px`; handle.style.left = '0';
-            } else {
-                handle.style.width = `${size}px`; handle.style.height = `${size}px`;
-                handle.style[handleType.includes('r') ? 'right' : 'left'] = `-${size / 2}px`;
-                handle.style[handleType.includes('b') ? 'bottom' : 'top'] = `-${size / 2}px`;
-            }
-
-            container.appendChild(handle);
-
-            let isResizing = false;
-            let initialX, initialY, initialWidth, initialHeight;
-            const aspectRatio = 16 / 9;
-
-            handle.addEventListener('mousedown', (e) => {
-                isResizing = true;
-                initialX = e.clientX;
-                initialY = e.clientY;
-                initialWidth = container.offsetWidth;
-                initialHeight = container.offsetHeight;
-                document.body.style.userSelect = 'none';
-                document.body.style.cursor = cursor;
-                const iframe = container.querySelector('iframe');
-                if (iframe) iframe.style.pointerEvents = 'none';
-            });
-
-            window.addEventListener('mousemove', (e) => {
-                if (!isResizing) return; 
-                const deltaX = e.clientX - initialX;
-                const deltaY = e.clientY - initialY;
-                let newWidth = initialWidth;
-                let newHeight = initialHeight;
-
-                if (handleType === 'r') {
-                    newWidth = initialWidth + deltaX * 2;
-                    newHeight = newWidth / aspectRatio;
-                } else if (handleType === 'l') {
-                    newWidth = initialWidth - deltaX * 2;
-                    newHeight = newWidth / aspectRatio;
-                } else if (handleType === 'b') {
-                    newHeight = initialHeight + deltaY * 2;
-                    newWidth = newHeight * aspectRatio;
-                } else if (handleType === 't') {
-                    newHeight = initialHeight - deltaY * 2;
-                    newWidth = newHeight * aspectRatio;
-                } else if (handleType === 'rb' || handleType === 'rt') {
-                    newWidth = initialWidth + deltaX * 2;
-                    newHeight = newWidth / aspectRatio;
-                } else if (handleType === 'lb' || handleType === 'lt') {
-                    newWidth = initialWidth - deltaX * 2;
-                    newHeight = newWidth / aspectRatio;
-                }
-
-                const minWidthLimit = 280;
-                const maxWidthLimit = container.parentElement.offsetWidth - 10;
-
-                if (newWidth >= minWidthLimit && newWidth <= maxWidthLimit) {
-                    container.style.width = newWidth + 'px';
-                }
-            });
-
-            window.addEventListener('mouseup', () => {
-                if (isResizing) {
-                    isResizing = false;
-                    document.body.style.userSelect = '';
-                    document.body.style.cursor = '';
-                    const iframe = container.querySelector('iframe');
-                    if (iframe) iframe.style.pointerEvents = 'auto';
-                }
-            });
         }
     }
 
@@ -659,6 +723,7 @@
     }
 
     function getYouTubeEmbed(url) {
+        if (!url) return null;
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
         const match = url.match(regExp);
         return (match && match[2].length === 11) 
@@ -667,9 +732,9 @@
     }
 
     function getTelegramLink(url) {
-        return `<div style="margin:15px 0; padding:15px; background:rgba(0, 136, 204, 0.1); border-radius:12px; text-align:center;">
-                    <a href="${url}" target="_blank" style="color:#0088cc; font-weight:bold; text-decoration:none;">
-                        🎥 مشاهدة الفيديو المباشر عبر تطبيق تلجرام
+        return `<div style="margin:15px 0; padding:15px; background:rgba(0, 136, 204, 0.1); border-radius:8px; text-align:center; border: 1px solid rgba(0, 136, 204, 0.2);">
+                    <a href="${url}" target="_blank" style="color:#0088cc; font-weight:bold; text-decoration:none; font-size:1.1rem;">
+                        🎥 مشاهدة الفيديو التعليمي الفوري على تلجرام
                     </a>
                 </div>`;
     }
@@ -678,12 +743,11 @@
 <div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h1 id="modalTitle" style="color: #0088cc; margin-top: 20px; font-size: 2rem;"></h1>
-        <div id="modalContent" style="white-space: pre-line; line-height: 1.8; color: #b0b0b0; font-size: 1.1rem; margin-bottom: 25px;"></div>
+        <h1 id="modalTitle" style="color: #0088cc; margin-top: 0; margin-bottom: 20px;"></h1>
+        <div id="modalContent" style="white-space: pre-line; line-height: 1.8; color: #b0b0b0; font-size: 1.1rem;"></div>
         
-        <div id="modalVideoContainer" style="margin: 30px auto; width: 720px; max-width: 100%; position: relative;"></div>
-        
-        <div id="modalLinksContainer" style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;"></div>
+        <div id="modalVideoContainer" style="margin: 25px auto; width: 750px; max-width: 100%; position: relative;"></div>
+        <div id="modalLinksContainer" style="margin-top: 25px; border-top: 1px solid #333; padding-top: 15px;"></div>
     </div>
 </div>
 
