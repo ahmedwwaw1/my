@@ -269,47 +269,54 @@
     const statusMsg = document.getElementById('statusMsg');
 
     // دالة جلب البيانات الذكية والمستقرة والمربوطة بالـ localStorage للتعامل الآمن مع السيرفر
-    async function loadWebsiteData() {
-        try {
-            const localData = localStorage.getItem('my_cards_data');
+async function loadWebsiteData() {
+    try {
+        // 1. جلب البيانات الطازجة دائماً من ملف data.json المحدث
+        const response = await fetch('data.json');
+        if (!response.ok) throw new Error(`فشل الاتصال بالملف`);
+        const serverData = await response.json();
+        
+        // 2. جلب البيانات المخزنة حالياً في الذاكرة المحلية
+        const localDataRaw = localStorage.getItem('my_cards_data');
+        let localData = [];
+        if (localDataRaw && localDataRaw !== '[]' && localDataRaw !== 'undefined') {
+            localData = JSON.parse(localDataRaw);
+        }
+
+        // 3. دمج ذكي: نمر على كل البطاقات القادمة من الملف
+        allData = serverData.map((serverItem, index) => {
+            const id = index + 1;
+            // ابحث إذا كانت هذه البطاقة موجودة مسبقاً في الذاكرة المحلية
+            // (نبحث بالـ title لضمان دقة المطابقة)
+            const matchedLocal = localData.find(localItem => localItem.title === serverItem.title);
             
-            if (localData && localData !== '[]' && localData !== 'undefined') {
-                allData = JSON.parse(localData);
-                console.log("🚀 تم تحميل البيانات المحدثة بنجاح من الذاكرة المحلية.");
-                if (typeof handleRoute === 'function') {
-                    handleRoute();
-                }
-            } else {
-                const response = await fetch('data.json');
-                if (!response.ok) {
-                    throw new Error(`فشل الاتصال بالملف، حالة السيرفر: ${response.status}`);
-                }
-                
-                allData = await response.json();
-                
-                // ترقيم المعرفات تلقائياً لضمان سلامة الفتح
-                allData.forEach((item, index) => {
-                    item.id = index + 1;
-                });
-                
-                localStorage.setItem('my_cards_data', JSON.stringify(allData));
-                console.log("🌐 تم جلب قاعدة البيانات لأول مرة بنجاح من ملف data.json");
-                
-                if (typeof handleRoute === 'function') {
-                    handleRoute();
-                }
-            }
-        } catch (error) {
-            console.error("❌ خطأ حرج في جلب قاعدة البيانات:", error);
-            if (grid) {
-                grid.innerHTML = `
-                    <div style="color: #ff4d4d; text-align: center; width: 100%; padding: 40px; font-size: 18px;">
-                        ⚠️ عذراً، فشل تحميل محتوى البطاقات من ملف data.json. <br>
-                        <small style="color: #aaa; display:block; margin-top:10px;">تأكد من تشغيل الموقع عبر Live Server.</small>
-                    </div>`;
-            }
+            return {
+                id: id,
+                title: serverItem.title,
+                content: serverItem.content,
+                category: serverItem.category,
+                // إذا كان المستخدم قد عدّل الصورة من لوحة الأتمتة نأخذ صورتها، وإلا نأخذ صورة الملف الأساسية
+                image: matchedLocal ? matchedLocal.image : serverItem.image
+            };
+        });
+
+        // 4. حفظ النسخة المدمجة والجديدة في الذاكرة فوراً
+        localStorage.setItem('my_cards_data', JSON.stringify(allData));
+        console.log("🔄 تم فحص دمج البيانات الجديدة من data.json مع الحفاظ على تعديلات الصور!");
+
+        if (typeof handleRoute === 'function') {
+            handleRoute();
+        }
+    } catch (error) {
+        console.error("❌ خطأ:", error);
+        // حل احتياطي في حال عدم تشغيل السيرفر المحرك (يقرأ من الذاكرة فقط)
+        const localData = localStorage.getItem('my_cards_data');
+        if (localData) {
+            allData = JSON.parse(localData);
+            if (typeof handleRoute === 'function') handleRoute();
         }
     }
+}
 
     // دالة بناء وعرض الكروت الديناميكية على الشاشة
     function render(dataArray) {
