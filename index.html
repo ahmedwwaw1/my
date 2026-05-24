@@ -120,21 +120,21 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); 
             gap: 20px;          
-            row-gap: 40px;      
+            row-gap: 30px;      
             padding: 10px 0;
             width: 100%;        
             max-width: 100%;    
             box-sizing: border-box;
         }
 
-        /* تصميم البطاقة بالتضليل الفيزيائي والانتقال الناعم عند مرور الماوس */
+        /* تصميم البطاقة بالتضليل الفيزيائي والانتقال الناعم عند مرور الماوس بدون حركة للأعلى */
         .card {
             background: transparent; 
             border: none;
             border-radius: 12px;
             padding: 0;           
             cursor: pointer;
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease;
+            transition: box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -144,9 +144,8 @@
 
         .card:hover {
             background-color: #232323; 
-            transform: translateY(-6px); /* حركة فيزيائية ناعمة للأعلى */
             box-sizing: border-box;
-            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(0, 0, 0, 0.3); /* تضليل احترافي ناعم وعميق */
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2); /* تضليل احترافي ناعم وعميق يعطي إيحاء بروز الـ Shadow فقط */
         }
 
         /* ضبط مقاسات صورة عرض البطاقة لتطابق مقاسات فيديو اليوتيوب بالضبط (16:9) */
@@ -159,8 +158,7 @@
             position: relative;
         }
 
-        .card-media-top img, 
-        .card-media-top iframe {
+        .card-media-top img {
             width: 100%;
             height: 100%;
             object-fit: cover;        
@@ -170,78 +168,21 @@
 
         /* زووم فيزيائي هادئ داخل الصورة عند تمرير السهم */
         .card:hover .card-media-top img {
-            transform: scale(1.03);
+            transform: scale(1.02);
         }
 
-        /* حاوية المحتوى الداخلي لتعويض مسافات البادينج للنصوص أسفل الصورة */
+        /* حاوية المحتوى الداخلي النظيف للبطاقة */
         .card-body-container {
-            padding: 10px 15px 15px 15px;
+            padding: 5px 10px 15px 10px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
-            justify-content: space-between; 
         }
 
-        /* تنسيق سهم الإشارة السفلي */
-        .card-footer-arrow {
-            color: #0088cc;
-            font-size: 0.9rem;
-            margin-top: 12px;
-            text-align: left;
-            font-weight: bold;
-        }
-
-        .badge {
-            font-size: 0.7rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            align-self: flex-start;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .badge-vsa { background: rgba(0, 212, 255, 0.2); color: var(--accent-color); }
-        .badge-invest { background: rgba(0, 255, 136, 0.2); color: var(--investment-color); }
-
-        .card h3 { margin: 5px 0 10px 0; color: #fff; font-size: 1.25rem; font-weight: 600; }
-        .card-content { color: var(--text-dim); flex-grow: 1; white-space: pre-line; margin-bottom: 15px; font-size: 0.95rem; }
+        .card h3 { margin: 5px 0 8px 0; color: #fff; font-size: 1.2rem; font-weight: 600; line-height: 1.4; }
+        .card-content { color: var(--text-dim); flex-grow: 1; white-space: pre-line; font-size: 0.95rem; line-height: 1.5; }
         
-        .card-links { display: flex; flex-wrap: wrap; gap: 10px; border-top: 1px solid #333; padding-top: 15px; }
-        .card-links a { 
-            color: var(--accent-color); 
-            text-decoration: none; 
-            font-size: 0.85rem; 
-            font-weight: bold; 
-            border: 1px solid rgba(0, 212, 255, 0.3); 
-            padding: 6px 12px; 
-            border-radius: 5px; 
-            transition: 0.2s;
-        }
-        .card-links a:hover { background: var(--accent-color); color: #000; }
-
         #statusMsg { text-align: center; color: var(--text-dim); margin-top: 20px; font-size: 1.1rem; }
-
-        /* تنسيق الفيديو الاحترافي التفاعلي */
-        .video-wrapper { 
-            position: relative; 
-            padding-bottom: 56.25%; /* أبعاد 16:9 السينمائية */
-            height: 0; 
-            overflow: hidden; 
-            margin-top: 15px; 
-            border-radius: 10px; 
-            background: #000; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-
-        .video-wrapper iframe { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            border: none; 
-        }
 
         /* تنسيق لوحة الأتمتة العلوية بشكل داكن فخم يتوافق مع تصميم موقعك */
         .automation-panel {
@@ -344,7 +285,7 @@
                     throw new Error(`فشل الاتصال بالملف، حالة السيرفر: ${response.status}`);
                 }
                 
-                allData = await response.ok ? await response.json() : [];
+                allData = await response.json();
                 
                 // ترقيم المعرفات تلقائياً لضمان سلامة الفتح
                 allData.forEach((item, index) => {
@@ -394,42 +335,20 @@
             card.className = 'card';
             card.setAttribute('onclick', `if(typeof openDetails === 'function') { openDetails(${item.id}) }`);
             
-            const badgeClass = item.category === 'vsa' ? 'badge-vsa' : 'badge-invest';
-            let badgeText = 'استثمار العراق';
-            if (item.category === 'vsa') badgeText = 'VSA & التحليل';
-            if (item.category === 'videos') badgeText = 'أكاديمية الفيديوهات';
-
             let mediaContent = '';
             
-            // ترتيب ذكي لعرض الفيديوهات أولاً إذا وجدت في بطاقات الأكاديمية لمنع حجبها
-            if (item.videoUrl && item.videoUrl.trim() !== '') {
-                if (item.videoUrl.includes('youtube') || item.videoUrl.includes('youtu.be')) {
-                    mediaContent = `<div class="card-media-top">${typeof getYouTubeEmbed === 'function' ? getYouTubeEmbed(item.videoUrl) : ''}</div>`;
-                } else if (item.videoUrl.includes('t.me')) {
-                    mediaContent = `<div class="card-media-top">${typeof getTelegramLink === 'function' ? getTelegramLink(item.videoUrl) : ''}</div>`;
-                }
-            } else if (item.image && item.image.trim() !== '') {
+            if (item.image && item.image.trim() !== '') {
                 mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
-            }
-            
-            if (!mediaContent) {
+            } else {
                 mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/360x203/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
             }
 
+            // تم إبقاء العنوان والتعليق فقط لتكون الواجهة نظيفة تماماً وهادئة
             card.innerHTML = `
                 ${mediaContent}
                 <div class="card-body-container">
-                    <div>
-                        <span class="badge ${badgeClass}">${badgeText}</span>
-                        <h3>${item.title || 'بدون عنوان'}</h3>
-                        <div class="card-content">${item.content || ''}</div>
-                    </div>
-                    <div>
-                        <div class="card-links">
-                            ${item.links ? item.links.map(link => `<a href="${link.url}" target="_blank" onclick="event.stopPropagation();">${link.text}</a>`).join('') : ''}
-                        </div>
-                        <div class="card-footer-arrow">عرض التفاصيل ←</div>
-                    </div>
+                    <h3>${item.title || 'بدون عنوان'}</h3>
+                    <div class="card-content">${item.content || ''}</div>
                 </div>
             `;
             mainGrid.appendChild(card);
@@ -471,7 +390,7 @@
         }
     }
 
-    // تحديث الصورة عبر لوحة التحكم وحفظها دون مسح الفيديوهات
+    // تحديث الصورة عبر لوحة التحكم وحفظها
     function updateImageAutomation() {
         const select = document.getElementById('cardSelect');
         const input = document.getElementById('panelImageUrl');
@@ -487,8 +406,7 @@
         
         const item = allData.find(i => i.id === cardId);
         if (item) {
-            item.image = newUrl; // تحديث رابط الصورة فقط
-            // تم إزالة تصفير سطر الـ videoUrl لحماية بياناتك وفيديوهاتك السابقة من الضياع التام!
+            item.image = newUrl; 
             
             localStorage.setItem('my_cards_data', JSON.stringify(allData));
             
@@ -497,7 +415,7 @@
             }
             
             input.value = ''; 
-            alert(`🚀 تم تحديث الصورة للبطاقة "${item.title}" بنجاح مع الحفاظ على روابط الفيديو واليوتيوب الفعالة!`);
+            alert(`🚀 تم تحديث الصورة للبطاقة "${item.title}" بنجاح!`);
         }
     }
 
@@ -552,7 +470,7 @@
     window.addEventListener('load', handleRoute);
     document.addEventListener('DOMContentLoaded', loadWebsiteData);
 
-    // دالة فتح النافذة المنبثقة وحقن البيانات والتحكم السحري بحركة وحجم الفيديو والروابط بشكل صحيح
+    // دالة فتح النافذة المنبثقة النظيفة تماماً (فقط العنوان والتعليق)
     function openDetails(id) {
         const selectedItem = allData.find(item => item.id === id);
 
@@ -560,153 +478,7 @@
             document.getElementById('modalTitle').innerText = selectedItem.title || '';
             document.getElementById('modalContent').innerText = selectedItem.content || '';
 
-            const videoContainer = document.getElementById('modalVideoContainer');
-            const linksContainer = document.getElementById('modalLinksContainer');
-            
-            videoContainer.innerHTML = '';
-            linksContainer.innerHTML = '';
-
-            // فحص ذكي وحقن محتوى الميديا بداخل الـ Modal (فيديو يوتيوب أو صورة مخصصة) لشاشة كاملة ممتازة
-            if (selectedItem.videoUrl && selectedItem.videoUrl.trim() !== '') {
-                const embedHtml = getYouTubeEmbed(selectedItem.videoUrl);
-                if (embedHtml) {
-                    videoContainer.innerHTML = embedHtml;
-                    
-                    // توليد مقابض السحب الشفافة الثمانية هندسياً للتحجيم بالماوس
-                    const handles = {
-                        'r': 'ew-resize', 'l': 'ew-resize', 'b': 'ns-resize', 't': 'ns-resize',
-                        'rb': 'nwse-resize', 'lb': 'nesw-resize', 'rt': 'nesw-resize', 'lt': 'nwse-resize'
-                    };
-
-                    for (const [handleType, cursor] of Object.entries(handles)) {
-                        const handle = document.createElement('div');
-                        handle.className = `resize-handle resize-handle-${handleType}`;
-                        handle.style.position = 'absolute';
-                        handle.style.cursor = cursor;
-                        handle.style.zIndex = '1000'; 
-                        
-                        const size = 12; 
-                        
-                        if (handleType === 'r') {
-                            handle.style.width = `${size}px`; handle.style.height = '100%';
-                            handle.style.right = `-${size / 2}px`; handle.style.top = '0';
-                        } else if (handleType === 'l') {
-                            handle.style.width = `${size}px`; handle.style.height = '100%';
-                            handle.style.left = `-${size / 2}px`; handle.style.top = '0';
-                        } else if (handleType === 'b') {
-                            handle.style.height = `${size}px`; handle.style.width = '100%';
-                            handle.style.bottom = `-${size / 2}px`; handle.style.left = '0';
-                        } else if (handleType === 't') {
-                            handle.style.height = `${size}px`; handle.style.width = '100%';
-                            handle.style.top = `-${size / 2}px`; handle.style.left = '0';
-                        } else {
-                            handle.style.width = `${size}px`; handle.style.height = `${size}px`;
-                            handle.style[handleType.includes('r') ? 'right' : 'left'] = `-${size / 2}px`;
-                            handle.style[handleType.includes('b') ? 'bottom' : 'top'] = `-${size / 2}px`;
-                        }
-
-                        videoContainer.appendChild(handle);
-
-                        let isResizing = false;
-                        let initialX, initialY, initialWidth, initialHeight;
-                        const aspectRatio = 16 / 9;
-
-                        handle.addEventListener('mousedown', (e) => {
-                            isResizing = true;
-                            initialX = e.clientX;
-                            initialY = e.clientY;
-                            initialWidth = videoContainer.offsetWidth;
-                            initialHeight = videoContainer.offsetHeight;
-                            
-                            document.body.style.userSelect = 'none';
-                            document.body.style.cursor = cursor;
-
-                            const iframe = videoContainer.querySelector('iframe');
-                            if (iframe) {
-                                iframe.style.pointerEvents = 'none';
-                            }
-                        });
-
-                        window.addEventListener('mousemove', (e) => {
-                            if (!isResizing) return; 
-                            
-                            const deltaX = e.clientX - initialX;
-                            const deltaY = e.clientY - initialY;
-                            let newWidth = initialWidth;
-                            let newHeight = initialHeight;
-
-                            if (handleType === 'r') {
-                                newWidth = initialWidth + deltaX * 2;
-                                newHeight = newWidth / aspectRatio;
-                            } else if (handleType === 'l') {
-                                newWidth = initialWidth - deltaX * 2;
-                                newHeight = newWidth / aspectRatio;
-                            } else if (handleType === 'b') {
-                                newHeight = initialHeight + deltaY * 2;
-                                newWidth = newHeight * aspectRatio;
-                            } else if (handleType === 't') {
-                                newHeight = initialHeight - deltaY * 2;
-                                newWidth = newHeight * aspectRatio;
-                            } else if (handleType === 'rb' || handleType === 'rt') {
-                                newWidth = initialWidth + deltaX * 2;
-                                newHeight = newWidth / aspectRatio;
-                            } else if (handleType === 'lb' || handleType === 'lt') {
-                                newWidth = initialWidth - deltaX * 2;
-                                newHeight = newWidth / aspectRatio;
-                            }
-
-                            const minWidthLimit = 280;
-                            const maxWidthLimit = videoContainer.parentElement.offsetWidth - 10;
-
-                            if (newWidth >= minWidthLimit && newWidth <= maxWidthLimit) {
-                                videoContainer.style.width = newWidth + 'px';
-                            }
-                        });
-
-                        window.addEventListener('mouseup', () => {
-                            if (isResizing) {
-                                isResizing = false;
-                                document.body.style.userSelect = '';
-                                document.body.style.cursor = '';
-
-                                const iframe = videoContainer.querySelector('iframe');
-                                if (iframe) {
-                                    iframe.style.pointerEvents = 'auto';
-                                }
-                            }
-                        });
-                    }
-                } else if (selectedItem.videoUrl.includes('t.me')) {
-                    videoContainer.innerHTML = getTelegramLink(selectedItem.videoUrl);
-                }
-            } else if (selectedItem.image && selectedItem.image.trim() !== '') {
-                // إذا لم يوجد فيديو ويوجد صورة، يتم عرض الصورة في الشاشة الكبيرة بشكل أنيق جداً
-                videoContainer.innerHTML = `<img src="${selectedItem.image}" style="width:100%; max-height:65vh; border-radius:12px; object-fit:contain; box-shadow: 0 10px 30px rgba(0,0,0,0.5);" alt="">`;
-            }
-
-            // تم تصحيح تنسيق أزرار الروابط بالشاشة الكبيرة لتعمل وتظهر 100% بدون أي خطأ برمي
-            if (selectedItem.links && selectedItem.links.length > 0) {
-                selectedItem.links.forEach(link => {
-                    const linkBtn = document.createElement('a');
-                    linkBtn.href = link.url;
-                    linkBtn.target = '_blank';
-                    linkBtn.innerText = link.text;
-                    linkBtn.style.display = 'inline-block';
-                    linkBtn.style.padding = '12px 24px';
-                    linkBtn.style.marginTop = '15px';
-                    linkBtn.style.marginLeft = '12px';
-                    linkBtn.style.backgroundColor = '#0088cc';
-                    linkBtn.style.color = '#ffffff';
-                    linkBtn.style.textDecoration = 'none';
-                    linkBtn.style.borderRadius = '6px';
-                    linkBtn.style.fontWeight = 'bold';
-                    linkBtn.style.transition = 'background 0.2s';
-                    linkBtn.onmouseenter = () => linkBtn.style.backgroundColor = '#006699';
-                    linkBtn.onmouseleave = () => linkBtn.style.backgroundColor = '#0088cc';
-                    linksContainer.appendChild(linkBtn);
-                });
-            }
-
+            // تم إزالة الفيديوهات والروابط الخارجية تماماً لتصبح الشاشة الكبيرة فارغة ونظيفة
             document.getElementById('myModal').style.display = "block";
         }
     }
@@ -721,23 +493,6 @@
             modal.style.display = "none";
         }
     }
-
-    function getYouTubeEmbed(url) {
-        if (!url) return null;
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length === 11) 
-        ? `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${match[2]}" frameborder="0" allowfullscreen></iframe></div>` 
-        : null;
-    }
-
-    function getTelegramLink(url) {
-        return `<div style="margin:15px 0; padding:15px; background:rgba(0, 136, 204, 0.1); border-radius:8px; text-align:center; border: 1px solid rgba(0, 136, 204, 0.2);">
-                    <a href="${url}" target="_blank" style="color:#0088cc; font-weight:bold; text-decoration:none; font-size:1.1rem;">
-                        🎥 مشاهدة الفيديو التعليمي الفوري على تلجرام
-                    </a>
-                </div>`;
-    }
 </script>
 
 <div id="myModal" class="modal">
@@ -745,9 +500,6 @@
         <span class="close-btn" onclick="closeModal()">&times;</span>
         <h1 id="modalTitle" style="color: #0088cc; margin-top: 0; margin-bottom: 20px;"></h1>
         <div id="modalContent" style="white-space: pre-line; line-height: 1.8; color: #b0b0b0; font-size: 1.1rem;"></div>
-        
-        <div id="modalVideoContainer" style="margin: 25px auto; width: 750px; max-width: 100%; position: relative;"></div>
-        <div id="modalLinksContainer" style="margin-top: 25px; border-top: 1px solid #333; padding-top: 15px;"></div>
     </div>
 </div>
 
