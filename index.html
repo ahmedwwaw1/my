@@ -418,7 +418,13 @@ function updateImageAutomation() {
         alert('⚠️ يرجى إدخال رابط صورة صحيح!');
         return;
     }
+    // 2. التحقق من أن الرابط ينتهي بصيغة صورة (jpg, png, gif, webp)
+    const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(newUrl);
     
+    if (!isImage) {
+        alert('⚠️ خطأ: الرابط غير صحيح! يرجى إدخال رابط ينتهي بصيغة صورة (مثل jpg أو png).');
+        return; // سيتوقف الكود هنا ولن تظهر رسالة "تم التحديث"
+    }
     // البحث عن البطاقة في البيانات وتحديث صورتها
     const item = allData.find(i => i.id === cardId);
     if (item) {
