@@ -373,29 +373,46 @@
 
 <script>
     // --- قاعدة البيانات (أضف محتواك هنا دائماً بنفس التنسيق) ---
-    // 1. تعريف المتغير العام لحفظ البيانات بعد جلبها
-// 🟢 1. تعريف مصفوفة البيانات العامة كـ لستة فارغة في البداية
-let allData = [];
+// 🟢 بديل السطور من 379 إلى 396 لجلب البيانات والتعامل مع الذاكرة المحلية بأمان
+const localData = localStorage.getItem('my_cards_data');
 
-// 2. جلب البيانات ديناميكياً من الملف الخارجي الجديد
-fetch('data.json') 
-    .then(response => response.json())
-    .then(jsonData => {
-        allData = jsonData;
-
-        // ترقيم العناصر تلقائياً لكي تعمل دالة الفتح والعرض بشكل سليم ID: أتمتة الـ
-        allData.forEach((item, index) => {
-            item.id = index + 1;
-        });
-
-        // 🔥 التعديل السحري هنا: بدلاً من عرض كل البيانات مباشرة، نترك التوجيه لـ handleRoute
-        // لتقرأ القسم الحالي من الرابط (سواء كنت في الـ Bookmark أو عملت ريفريش) وتعرضه بدقة
-        handleRoute();
-    })
-    .catch(error => {
-        console.error("خطأ أثناء تحميل البيانات الديناميكية:", error);
-    });
+if (localData) {
+    // 1. إذا وُجدت بيانات معدلة في المتصفح، نقرأها فوراً
+    allData = JSON.parse(localData);
+    console.log("🚀 تم تحميل البيانات المحدثة من الذاكرة المحلية بنجاح.");
     
+    // تشغيل نظام التوجيه الأصلي الخاص بك لعرض الكروت في أقسامها
+    if (typeof handleRoute === 'function') {
+        handleRoute();
+    }
+} else {
+    // 2. إذا كانت أول مرة يفتح فيها الموقع، نستخدم الـ fetch الافتراضي
+    fetch('data.json')
+        .then(response => {
+            if (!response.ok) throw new Error("فشل في الاتصال بملف data.json");
+            return response.json();
+        })
+        .then(jsonData => {
+            allData = jsonData;
+            
+            // ترقيم الـ ID تلقائياً كما وضح كودك الأصلي تماماً
+            allData.forEach((item, index) => {
+                item.id = index + 1;
+            });
+            
+            // حفظ النسخة الأصلية في الذاكرة لتكون جاهزة لأي تعديل مستقبلي
+            localStorage.setItem('my_cards_data', JSON.stringify(allData));
+            console.log("🌐 تم جلب قاعدة البيانات لأول مرة من ملف data.json");
+            
+            // تشغيل نظام التوجيه الأصلي الخاص بك
+            if (typeof handleRoute === 'function') {
+                handleRoute();
+            }
+        })
+        .catch(error => {
+            console.error("❌ خطأ أثناء تحميل البيانات الديناميكية:", error);
+        });
+}    
     
     const grid = document.getElementById('mainGrid');
     const searchInput = document.getElementById('globalSearch');
