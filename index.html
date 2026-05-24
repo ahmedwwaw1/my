@@ -6,43 +6,45 @@
     <title>My website</title>
     <style>
         /* خلفية النافذة التي تغطي الشاشة وتجعلها شبه شفافة */
-    .modal {
-    display: none; /* مخفية تلقائياً */
-    position: fixed;
-    z-index: 1000;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* تعتيم الخلفية */
-    backdrop-filter: blur(5px); /* تأثير ضبابي احترافي */
-    }
+        .modal {
+            display: none; /* مخفية تلقائياً */
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* تعتيم الخلفية */
+            backdrop-filter: blur(5px); /* تأثير ضبابي احترافي */
+        }
 
-    /* هذا التعديل يجعل النافذة تأخذ كامل مساحة المتصفح */
-    .modal-content {
-    background-color: #1c1c1e; /* لون الخلفية */
-    margin: 0;                /* إزالة المسافات الخارجية */
-    padding: 50px;            /* مسافة داخلية مريحة للنص */
-    width: 100vw;             /* العرض يساوي عرض المتصفح بالكامل */
-    height: 100vh;            /* الارتفاع يساوي ارتفاع المتصفح بالكامل */
-    border-radius: 0;         /* إزالة الزوايا الدائرية لتكون حادة كصفحة كاملة */
-    position: relative;
-    overflow-y: auto;         /* لجعل المحتوى قابلاً للتمرير إذا كان طويلاً جداً */
-    box-sizing: border-box;   /* لضمان عدم خروج النافذة عن الحدود */
-    }
+        /* هذا التعديل يجعل النافذة تأخذ كامل مساحة المتصفح */
+        .modal-content {
+            background-color: #1c1c1e; /* لون الخلفية */
+            margin: 0;                /* إزالة المسافات الخارجية */
+            padding: 50px;            /* مسافة داخلية مريحة للنص */
+            width: 100vw;             /* العرض يساوي عرض المتصفح بالكامل */
+            height: 100vh;            /* الارتفاع يساوي ارتفاع المتصفح بالكامل */
+            border-radius: 0;         /* إزالة الزوايا الدائرية لتكون حادة كصفحة كاملة */
+            position: relative;
+            overflow-y: auto;         /* لجعل المحتوى قابلاً للتمرير إذا كان طويلاً جداً */
+            box-sizing: border-box;   /* لضمان عدم خروج النافذة عن الحدود */
+        }
 
-    /* تعديل إضافي بسيط للـ modal نفسها */
-    .modal {
-    background-color: #1c1c1e; /* توحيد لون الخلفية مع لون الموقع */
-    }
-    /* زر الإغلاق X */
-    .close-btn {
-    position: absolute;
-    top: 15px; left: 20px; /* جهة اليسار لأن موقعك باللغة العربية */
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    }
-    .close-btn:hover { color: #fff; }
+        /* تعديل إضافي بسيط للـ modal نفسها */
+        .modal {
+            background-color: #1c1c1e; /* توحيد لون الخلفية مع لون الموقع */
+        }
+        
+        /* زر الإغلاق X */
+        .close-btn {
+            position: absolute;
+            top: 15px; left: 20px; /* جهة اليسار لأن موقعك باللغة العربية */
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover { color: #fff; }
+        
         :root {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
@@ -67,6 +69,7 @@
             backdrop-filter: blur(10px);
             padding: 1rem;
             display: flex;
+            justify(content: center);
             justify-content: center;
             gap: 20px;
             position: sticky;
@@ -123,100 +126,96 @@
             gap: 25px;
         }
 
-        /* تصميم البطاقة */
-   /* التنسيق النهائي المتطابق كلياً مع الطول والتظليل المحيط */
-/* 2. تصميم البطاقة بالتضليل الاحترافي الخارجي عند مرور الماوس (Hover Effect) */
-.card {
-    background: transparent; /* إزالة الحدود التقليدية المزعجة ليكون المظهر ناعم مثل يوتيوب */
-    border: none;
-    border-radius: 12px;
-    padding: 10px;           /* مسافة داخلية طفيفة لكي يبرز التضليل الخارجي بوضوح */
-    cursor: pointer;
-    transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+        /* تصميم البطاقة بالتضليل الاحترافي الخارجي عند مرور الماوس */
+        .card {
+            background: transparent; 
+            border: none;
+            border-radius: 12px;
+            padding: 10px;           
+            cursor: pointer;
+            transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-/* التضليل الخارجي الفخم لليوتيوب: يظهر خارج إطار البطاقة ليشمل العنوان والتعليقات بالأسفل */
-.card:hover {
-    background-color: #212121; /* تفتيح خلفية البطاقة بالكامل عند تمرير الماوس مثل يوتيوب */
-    transform: scale(1.02);    /* تكبير تفاعلي خفيف وانسيابي جداً */
-    border-radius: 12px;
-    /* تضليل خارجي عميق وناعم يمنح الكارت طابعاً ثلاثي الأبعاد ويبرز النصوص بالأسفل */
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3); 
-}
+        .card:hover {
+            background-color: #212121; 
+            transform: scale(1.02);    
+            border-radius: 12px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3); 
+        }
 
-/* 3. ضبط مقاسات صورة عرض البطاقة لتطابق مقاسات فيديو اليوتيوب بالضبط (16:9) */
-.card-media-top {
-    width: 100%;
-    aspect-ratio: 16 / 9;     /* النسبة السينمائية القياسية لليوتيوب */
-    border-radius: 12px;      /* زوايا دائرية ناعمة للصورة مثل يوتيوب تماماً */
-    overflow: hidden;
-    background-color: #000;
-    position: relative;
-}
+        /* ضبط مقاسات صورة عرض البطاقة لتطابق مقاسات فيديو اليوتيوب بالضبط (16:9) */
+        .card-media-top {
+            width: 100%;
+            aspect-ratio: 16 / 9;     
+            border-radius: 12px;      
+            overflow: hidden;
+            background-color: #000;
+            position: relative;
+        }
 
-.card-media-top img, 
-.card-media-top iframe {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;        /* تملأ الصورة أو الفيديو المساحة بالكامل بدون أي تمطيط أو تشويه */
-    border: none;
-}
+        .card-media-top img, 
+        .card-media-top iframe {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;        
+            border: none;
+        }
 
-/* حاوية المحتوى الداخلي لتعويض مسافات البادينج للنصوص أسفل الصورة */
-.card-body-container {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    justify-content: space-between; /* توزيع النصوص والأزرار بشكل متناسق عمودياً */
-}
+        /* حاوية المحتوى الداخلي لتعويض مسافات البادينج للنصوص أسفل الصورة */
+        .card-body-container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between; 
+        }
 
-/* تنسيق أزرار التحكم بالصور التفاعلية */
-.image-controls {
-    display: flex;
-    gap: 8px;
-    margin: 12px 0 6px 0;
-}
+        /* تنسيق أزرار التحكم بالصور التفاعلية */
+        .image-controls {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0 6px 0;
+        }
 
-.btn-control {
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.78rem;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    transition: background 0.2s;
-}
+        .btn-control {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+        }
 
-.btn-add-edit {
-    background-color: #0088cc;
-    color: white;
-}
+        .btn-add-edit {
+            background-color: #0088cc;
+            color: white;
+        }
 
-.btn-add-edit:hover {
-    background-color: #006699;
-}
+        .btn-add-edit:hover {
+            background-color: #006699;
+        }
 
-.btn-delete {
-    background-color: #d9534f;
-    color: white;
-}
+        .btn-delete {
+            background-color: #d9534f;
+            color: white;
+        }
 
-.btn-delete:hover {
-    background-color: #c9302c;
-}
+        .btn-delete:hover {
+            background-color: #c9302c;
+        }
 
-/* تنسيق سهم الإشارة السفلي */
-.card-footer-arrow {
-    color: #0088cc;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    text-align: left;
-    font-weight: bold;
-}
+        /* تنسيق سهم الإشارة السفلي */
+        .card-footer-arrow {
+            color: #0088cc;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
 
         .badge {
             font-size: 0.7rem;
@@ -253,97 +252,99 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* تنسيق الفيديو الاحترافي */
-    .video-wrapper { 
-        position: relative; 
-        padding-bottom: 56.25%; /* هذه النسبة تجعل الفيديو يحافظ على أبعاد 16:9 دائماً */
-        height: 0; 
-        overflow: hidden; 
-        margin-top: 15px; 
-        border-radius: 10px; /* يعطي زوايا دائرية جميلة */
-        background: #000; 
-    }
 
-    .video-wrapper iframe { 
-        position: absolute; 
-        top: 0; 
-        left: 0; 
-        width: 100%; 
-        height: 100%; 
-        border: none; 
-    }
-    /* تنسيق التلجرام */
-    .telegram-btn { 
-        margin:15px 0; 
-        padding:10px; 
-        background:rgba(0, 136, 204, 0.1); 
-        border-radius:8px; 
-        text-align:center; 
-    }
-    .telegram-btn a { 
-        color:#0088cc; 
-        font-weight:bold; 
-        text-decoration:none; 
-    }
-    /* الكود السحري لضبط تباعد الكروت تماماً مثل موقع الدكتور أبو هدهود */
-/* 1. شبكة مرنة تملأ كامل الصفحة وتتوزع تلقائياً بدون أي فراغات جانبية مثل يوتيوب */
-.grid, #grid {
-    display: grid;
-    /* السحر هنا: minmax يجعل الكروت تتسع وتضيق تلقائياً لتملأ كامل عرض الصفحة تماماً كاليوتيوب */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-    gap: 16px;          /* المسافة الأفقية الموزونة بين البطاقات */
-    row-gap: 36px;      /* المسافة العمودية لجعل العناوين والنصوص مريحة للعين */
-    padding: 24px;
-    width: 100%;        /* استغلال العرض الكامل للموقع */
-    max-width: 100%;    /* إلغاء تحديد العرض الخاص بأبو هدهود لمنع الفراغات الجانبية المفرطة */
-    box-sizing: border-box;
-}
-/* تنسيق لوحة الأتمتة العلوية بشكل داكن فخم يتوافق مع تصميم موقعك */
-.automation-panel {
-    background-color: #18181c;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 15px 20px;
-    max-width: 1060px;
-    margin: 20px auto;
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-.automation-panel h4 {
-    margin-top: 0;
-    margin-bottom: 12px;
-    color: #0088cc;
-}
-.panel-controls {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-.panel-controls select, .panel-controls input {
-    background-color: #111;
-    border: 1px solid #333;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-}
-.panel-controls select { flex: 1; min-width: 200px; }
-.panel-controls input { flex: 2; min-width: 300px; }
-.panel-controls button {
-    background-color: #0088cc;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.panel-controls button:hover { background-color: #006699; }
+        /* تنسيق الفيديو الاحترافي */
+        .video-wrapper { 
+            position: relative; 
+            padding-bottom: 56.25%; /* هذه النسبة تجعل الفيديو يحافظ على أبعاد 16:9 دائماً */
+            height: 0; 
+            overflow: hidden; 
+            margin-top: 15px; 
+            border-radius: 10px; 
+            background: #000; 
+        }
+
+        .video-wrapper iframe { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+        }
+
+        /* تنسيق التلجرام */
+        .telegram-btn { 
+            margin:15px 0; 
+            padding:10px; 
+            background:rgba(0, 136, 204, 0.1); 
+            border-radius:8px; 
+            text-align:center; 
+        }
+        .telegram-btn a { 
+            color:#0088cc; 
+            font-weight:bold; 
+            text-decoration:none; 
+        }
+
+        /* ضبط تباعد الكروت تماماً مثل موقع الدكتور أبو هدهود بدون فراغات مفرطة */
+        .grid, #grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 16px;          
+            row-gap: 36px;      
+            padding: 24px;
+            width: 100%;        
+            max-width: 100%;    
+            box-sizing: border-box;
+        }
+
+        /* تنسيق لوحة الأتمتة العلوية بشكل داكن فخم يتوافق مع تصميم موقعك */
+        .automation-panel {
+            background-color: #18181c;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 15px 20px;
+            max-width: 1060px;
+            margin: 20px auto;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .automation-panel h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #0088cc;
+        }
+        .panel-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .panel-controls select, .panel-controls input {
+            background-color: #111;
+            border: 1px solid #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        .panel-controls select { flex: 1; min-width: 200px; }
+        .panel-controls input { flex: 2; min-width: 300px; }
+        .panel-controls button {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .panel-controls button:hover { background-color: #006699; }
     </style>
 </head>
 <body>
-<!-- اضافة زر لأقسام -->
+
 <nav>
     <a href="#/" id="btn-vsa">📊 قسم VSA والتحليل</a>
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
@@ -356,15 +357,15 @@
     </div>
 
     <div class="automation-panel">
-    <h4>🛠️ لوحة الأتمتة الذكية للصور</h4>
-    <div class="panel-controls">
-        <select id="cardSelect" onchange="onCardSelectChange()">
-            <option value="">اختر اسم البطاقة لتغيير صورتها...</option>
-        </select>
-        <input type="text" id="panelImageUrl" placeholder="قم بلصق رابط الصورة الجديد هنا...">
-        <button onclick="updateImageAutomation()">تحديث الصورة فوراً 🚀</button>
+        <h4>🛠️ لوحة الأتمتة الذكية للصور</h4>
+        <div class="panel-controls">
+            <select id="cardSelect" onchange="onCardSelectChange()">
+                <option value="">اختر اسم البطاقة لتغيير صورتها...</option>
+            </select>
+            <input type="text" id="panelImageUrl" placeholder="قم بلصق رابط الصورة الجديد هنا...">
+            <button onclick="updateImageAutomation()">تحديث الصورة فوراً 🚀</button>
+        </div>
     </div>
-</div>
 
     <h1 id="pageTitle" style="text-align: center; margin-bottom: 1.5rem;"></h1>
     <div id="statusMsg"></div>
@@ -372,475 +373,408 @@
 </div>
 
 <script>
-    // --- قاعدة البيانات (أضف محتواك هنا دائماً بنفس التنسيق) ---
-// 🟢 بديل السطور من 379 إلى 396 لجلب البيانات والتعامل مع الذاكرة المحلية بأمان
-const localData = localStorage.getItem('my_cards_data');
-
-if (localData) {
-    // 1. إذا وُجدت بيانات معدلة في المتصفح، نقرأها فوراً
-    allData = JSON.parse(localData);
-    console.log("🚀 تم تحميل البيانات المحدثة من الذاكرة المحلية بنجاح.");
-    
-    // تشغيل نظام التوجيه الأصلي الخاص بك لعرض الكروت في أقسامها
-    if (typeof handleRoute === 'function') {
-        handleRoute();
-    }
-} else {
-    // 2. إذا كانت أول مرة يفتح فيها الموقع، نستخدم الـ fetch الافتراضي
-    fetch('data.json')
-        .then(response => {
-            if (!response.ok) throw new Error("فشل في الاتصال بملف data.json");
-            return response.json();
-        })
-        .then(jsonData => {
-            allData = jsonData;
-            
-            // ترقيم الـ ID تلقائياً كما وضح كودك الأصلي تماماً
-            allData.forEach((item, index) => {
-                item.id = index + 1;
-            });
-            
-            // حفظ النسخة الأصلية في الذاكرة لتكون جاهزة لأي تعديل مستقبلي
-            localStorage.setItem('my_cards_data', JSON.stringify(allData));
-            console.log("🌐 تم جلب قاعدة البيانات لأول مرة من ملف data.json");
-            
-            // تشغيل نظام التوجيه الأصلي الخاص بك
-            if (typeof handleRoute === 'function') {
-                handleRoute();
-            }
-        })
-        .catch(error => {
-            console.error("❌ خطأ أثناء تحميل البيانات الديناميكية:", error);
-        });
-}    
+    // --- المعرفات الأساسية وقاعدة البيانات ---
+    let allData = []; 
     
     const grid = document.getElementById('mainGrid');
     const searchInput = document.getElementById('globalSearch');
     const pageTitle = document.getElementById('pageTitle');
     const statusMsg = document.getElementById('statusMsg');
 
-// 🟢 1. قاعدة البيانات (بنفس اسم المتغير الخاص بك تماماً)
-let allData = [];
-
-// 🟢 2. دالة جلب البيانات الذكية المتوافقة مع كودك ونظام الـ الـ localStorage
-async function loadWebsiteData() {
-    try {
-        // نتحقق أولاً: هل توجد بيانات معدلة ومحفوظة مسبقاً في متصفح المستخدم؟
-        const localData = localStorage.getItem('my_cards_data');
-        
-        if (localData) {
-            // إذا وجدنا التعديلات المخزنة، نعتمد عليها فوراً
-            allData = JSON.parse(localData);
-            console.log("🚀 تم تحميل البيانات المحدثة بنجاح من الذاكرة المحلية.");
-        } else {
-            // إذا كانت أول مرة، نجلب النسخة الأصلية من ملف data.json
-            const response = await fetch('data.json');
+    // دالة جلب البيانات الذكية والمستقرة والمربوطة بالـ localStorage للتعامل الآمن مع السيرفر
+    async function loadWebsiteData() {
+        try {
+            const localData = localStorage.getItem('my_cards_data');
             
-            if (!response.ok) {
-                throw new Error(`فشل الاتصال بالملف، حالة السيرفر: ${response.status}`);
-            }
-            
-            allData = await response.json();
-            
-            // ترقيم الـ ID تلقائياً كما وضح كودك الأصلي تماماً لضمان سلامة الفتح
-            allData.forEach((item, index) => {
-                item.id = index + 1;
-            });
-            
-            // نحفظ هذه النسخة الأصلية في ذاكرة المتصفح لتكون جاهزة للتعديل المستقبلي
-            localStorage.setItem('my_cards_data', JSON.stringify(allData));
-            console.log("🌐 تم جلب قاعدة البيانات لأول مرة بنجاح من ملف data.json");
-        }
-
-        // 🔥 هنا السر: استدعاء دالتك الأصلية handleRoute لتوزيع الكروت على الأقسام بشكل صحيح!
-        if (typeof handleRoute === 'function') {
-            handleRoute();
-        }
-
-    } catch (error) {
-        console.error("❌ خطأ حرج في جلب قاعدة البيانات:", error);
-        // حماية بصرية للزائر باستخدام الـ ID الخاص بك mainGrid
-        const mainGrid = document.getElementById('mainGrid');
-        if (mainGrid) {
-            mainGrid.innerHTML = `
-                <div style="color: #ff4d4d; text-align: center; width: 100%; padding: 40px; font-size: 18px;">
-                    ⚠️ عذراً، فشل تحميل محتوى البطاقات من ملف data.json. <br>
-                    <small style="color: #aaa; display:block; margin-top:10px;">تأكد من تشغيل الموقع عبر Live Server.</small>
-                </div>`;
-        }
-    }
-}
-
-// تشغيل دالة الجلب تلقائياً بمجرد تحميل هيكل الصفحة
-document.addEventListener('DOMContentLoaded', loadWebsiteData);
-
-
-// 🟢 3. دالة الـ render المعدلة لتعمل مع معرف الحاوية الخاص بك (mainGrid)
-function render(dataArray) {
-    const mainGrid = document.getElementById('mainGrid'); // تم التعديل إلى mainGrid هنا بامتياز
-    if (!mainGrid) return; 
-
-    mainGrid.innerHTML = ''; // تفريغ الجريد لبناء محتوى القسم المختار
-
-    // تحديث خيارات لوحة الأتمتة المنسدلة تلقائياً بالبيانات الحالية
-    if (typeof populateCardSelect === 'function') {
-        populateCardSelect(dataArray);
-    }
-
-    if (!dataArray || dataArray.length === 0) {
-        mainGrid.innerHTML = `
-            <div style="color: #aaa; text-align: center; width: 100%; padding: 50px; font-size: 18px;">
-                لا توجد بطاقات معروضة في هذا القسم حالياً.
-            </div>`;
-        return;
-    }
-
-    // بناء الكروت
-    dataArray.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        
-        card.setAttribute('onclick', `if(typeof openDetails === 'function') { openDetails(${item.id}) }`);
-        
-        const badgeClass = item.category === 'vsa' ? 'badge-vsa' : 'badge-invest';
-        const badgeText = item.category === 'vsa' ? 'VSA & التحليل' : 'استثمار العراق';
-
-        let mediaContent = '';
-        
-        if (item.image && item.image.trim() !== '') {
-            mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
-        } else if (item.videoUrl) {
-            if (item.videoUrl.includes('youtube') || item.videoUrl.includes('youtu.be')) {
-                mediaContent = `<div class="card-media-top">${typeof getYouTubeEmbed === 'function' ? getYouTubeEmbed(item.videoUrl) : ''}</div>`;
-            } else if (item.videoUrl.includes('t.me')) {
-                mediaContent = `<div class="card-media-top">${typeof getTelegramLink === 'function' ? getTelegramLink(item.videoUrl) : ''}</div>`;
-            }
-        }
-        
-        if (!mediaContent) {
-            mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/340x170/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
-        }
-
-        card.innerHTML = `
-            ${mediaContent}
-            <div class="card-body-container">
-                <div>
-                    <span class="badge ${badgeClass}">${badgeText}</span>
-                    <h3>${item.title || 'بدون عنوان'}</h3>
-                    <div class="card-content">${item.content || ''}</div>
-                </div>
-                <div>
-                    <div class="card-links">
-                        ${item.links ? item.links.map(link => `<a href="${link.url}" target="_blank" onclick="event.stopPropagation();">${link.text}</a>`).join('') : ''}
-                    </div>
-                    <div class="card-footer-arrow">عرض التفاصيل ←</div>
-                </div>
-            </div>
-        `;
-        mainGrid.appendChild(card);
-    });
-}
-// 🟢 1. دالة لتعبئة خيارات أسماء البطاقات تلقائياً في اللوحة العلوية
-function populateCardSelect(dataArray) {
-    const select = document.getElementById('cardSelect');
-    if (!select) return;
-    
-    const currentSelectedValue = select.value; // الحفاظ على الخيار المحدد حالياً
-    select.innerHTML = '<option value="">اختر اسم البطاقة لتغيير صورتها...</option>';
-    
-    dataArray.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.id;
-        option.textContent = item.title; // الأتمتة بالاعتماد على عنوان البطاقة
-        select.appendChild(option);
-    });
-    
-    select.value = currentSelectedValue;
-}
-
-// 🟢 2. دالة لـ جلب رابط الصورة الحالي بمجرد اختيار اسم البطاقة من القائمة
-function onCardSelectChange() {
-    const select = document.getElementById('cardSelect');
-    const input = document.getElementById('panelImageUrl');
-    const cardId = parseInt(select.value);
-    
-    if (!cardId) {
-        input.value = '';
-        return;
-    }
-    
-    // ملاحظة: تأكد أن "data" هي اسم المصفوفة الرئيسية لملفاتك
-    const item = data.find(i => i.id === cardId);
-    if (item) {
-        input.value = item.image || ''; // إظهار الرابط الحالي إن وجد ليتم تعديله بسهولة
-    }
-}
-
-// 🟢 4. دالة لوحة الأتمتة المحدثة لتتوافق مع مصفوفة allData الخاصة بك
-function updateImageAutomation() {
-    const select = document.getElementById('cardSelect');
-    const input = document.getElementById('panelImageUrl');
-    if (!select || !input) return;
-
-    const cardId = parseInt(select.value);
-    const newUrl = input.value.trim();
-    
-    if (!cardId) {
-        alert('الرجاء اختيار اسم البطاقة أولاً من القائمة المنسدلة!');
-        return;
-    }
-    
-    // البحث في مصفوفة allData المتوافقة مع ملفك
-    const item = allData.find(i => i.id === cardId);
-    if (item) {
-        item.image = newUrl;
-        item.videoUrl = ''; // تصفير رابط الفيديو لمنع أي تضارب بامتياز
-        
-        // حفظ التغيير الجديد في ذاكرة المتصفح
-        localStorage.setItem('my_cards_data', JSON.stringify(allData));
-        
-        // إعادة تشغيل دالة التوجيه لتحديث القسم الحالي فوراً على الشاشة
-        if (typeof handleRoute === 'function') {
-            handleRoute();
-        }
-        
-        input.value = ''; 
-        alert(`🚀 تم تحديث وأتمتة صورة بطاقة "${item.title}" وتثبيتها بنجاح!`);
-    }
-}
-
-    // نظام التوجيه
-    function handleRoute() {
-    const hash = window.location.hash || '#/';
-    searchInput.value = ''; // تصفير البحث عند الانتقال
-
-    if (hash === '#/investment') {
-        const filtered = allData.filter(d => d.category === 'invest');
-        pageTitle.innerText = 'دليل الاستثمار في العراق';
-        render(filtered);
-        setActiveNav('btn-invest');
-        
-    } 
-    else if (hash === '#/videos') {
-        // القسم الجديد الخاص بالفيديوهات فقط
-        const filtered = allData.filter(d => d.category === 'videos');
-        pageTitle.innerText = 'مكتبة الشروحات والفيديوهات التعليمية';
-        render(filtered);
-        setActiveNav('btn-videos');
-        
-    } 
-    else {
-        // القسم الافتراضي (VSA)
-        const filtered = allData.filter(d => d.category === 'vsa');
-        pageTitle.innerText = 'أكاديمية VSA والتداول';
-        render(filtered);
-        setActiveNav('btn-vsa');
-    }
-}
-
-
-        function setActiveNav(id) {
-        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-
-    // محرك البحث
-    searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase().trim();
-        if (term === '') { handleRoute(); return; }
-
-        const results = allData.filter(item => 
-            item.title.toLowerCase().includes(term) || 
-            item.content.toLowerCase().includes(term)
-        );
-        pageTitle.innerText = 'نتائج البحث في كل الأقسام';
-        render(results, true);
-    });
-
-    window.addEventListener('hashchange', handleRoute);
-    window.addEventListener('load', handleRoute);
-    // دالة فتح النافذة وحقن البيانات فيها داخل نفس الصفحة
-function openDetails(id) {
-    const selectedItem = allData.find(item => item.id === id);
-
-    if (selectedItem) {
-        document.getElementById('modalTitle').innerText = selectedItem.title;
-        document.getElementById('modalContent').innerText = selectedItem.content;
-
-        const videoContainer = document.getElementById('modalVideoContainer');
-        const linksContainer = document.getElementById('modalLinksContainer');
-        
-        videoContainer.innerHTML = '';
-        linksContainer.innerHTML = '';
-
-        // 1. حقن الفيديو إذا كان موجوداً
-        if (selectedItem.videoUrl) {
-            const embedHtml = getYouTubeEmbed(selectedItem.videoUrl);
-            if (embedHtml) {
-                videoContainer.innerHTML = embedHtml;
+            if (localData && localData !== '[]' && localData !== 'undefined') {
+                allData = JSON.parse(localData);
+                console.log("🚀 تم تحميل البيانات المحدثة بنجاح من الذاكرة المحلية.");
+                if (typeof handleRoute === 'function') {
+                    handleRoute();
+                }
+            } else {
+                const response = await fetch('data.json');
+                if (!response.ok) {
+                    throw new Error(`فشل الاتصال بالملف، حالة السيرفر: ${response.status}`);
+                }
                 
-                // 2. تعريف المقابض الشفافة للجهات الثمانية
-                const handles = {
-                    'r': 'ew-resize', 'l': 'ew-resize', 'b': 'ns-resize', 't': 'ns-resize',
-                    'rb': 'nwse-resize', 'lb': 'nesw-resize', 'rt': 'nesw-resize', 'lt': 'nwse-resize'
-                };
-
-                for (const [handleType, cursor] of Object.entries(handles)) {
-                    const handle = document.createElement('div');
-                    handle.className = `resize-handle resize-handle-${handleType}`;
-                    handle.style.position = 'absolute';
-                    handle.style.cursor = cursor;
-                    handle.style.zIndex = '1000'; // جعلها في المقدمة دائماً فوق أي حواف
-                    
-                    const size = 12; // عرض منطقة السحب الشفافة بالبكسل لتسهيل التقاطها بالماوس
-                    
-                    // توزيع المقابض على حواف الصندوق بدقة هندسية
-                    if (handleType === 'r') {
-                        handle.style.width = `${size}px`; handle.style.height = '100%';
-                        handle.style.right = `-${size / 2}px`; handle.style.top = '0';
-                    } else if (handleType === 'l') {
-                        handle.style.width = `${size}px`; handle.style.height = '100%';
-                        handle.style.left = `-${size / 2}px`; handle.style.top = '0';
-                    } else if (handleType === 'b') {
-                        handle.style.height = `${size}px`; handle.style.width = '100%';
-                        handle.style.bottom = `-${size / 2}px`; handle.style.left = '0';
-                    } else if (handleType === 't') {
-                        handle.style.height = `${size}px`; handle.style.width = '100%';
-                        handle.style.top = `-${size / 2}px`; handle.style.left = '0';
-                    } else {
-                        // الزوايا الأربع
-                        handle.style.width = `${size}px`; handle.style.height = `${size}px`;
-                        handle.style[handleType.includes('r') ? 'right' : 'left'] = `-${size / 2}px`;
-                        handle.style[handleType.includes('b') ? 'bottom' : 'top'] = `-${size / 2}px`;
-                    }
-
-                    videoContainer.appendChild(handle);
-
-                    // 3. برمجة حركة السحب والتحجيم الذكي
-                    let isResizing = false;
-                    let initialX, initialY, initialWidth, initialHeight;
-                    const aspectRatio = 16 / 9;
-
-                    // دالة تبدأ عند الضغط كليك يسار على الحافة
-                    handle.addEventListener('mousedown', (e) => {
-                        isResizing = true;
-                        initialX = e.clientX;
-                        initialY = e.clientY;
-                        initialWidth = videoContainer.offsetWidth;
-                        initialHeight = videoContainer.offsetHeight;
-                        
-                        document.body.style.userSelect = 'none';
-                        document.body.style.cursor = cursor;
-
-                        // الحل العبقري: تجميد تinteraction الفيديو مؤقتاً لكي لا يسرق حركة الماوس!
-                        const iframe = videoContainer.querySelector('iframe');
-                        if (iframe) {
-                            iframe.style.pointerEvents = 'none';
-                        }
-                    });
-
-                    // دالة التحجيم أثناء تحريك الماوس (تعمل فقط وفقط إذا كان الزر مضغوطاً)
-                    window.addEventListener('mousemove', (e) => {
-                        if (!isResizing) return; // إذا لم يكن مضغوطاً، لا تفعل أي شيء مطلقاً
-                        
-                        const deltaX = e.clientX - initialX;
-                        const deltaY = e.clientY - initialY;
-                        let newWidth = initialWidth;
-                        let newHeight = initialHeight;
-
-                        // معالجة كل اتجاه بشكل منفصل تماماً لضمان عمل اليمين واليسار وكل زاوية
-                        if (handleType === 'r') {
-                            newWidth = initialWidth + deltaX * 2;
-                            newHeight = newWidth / aspectRatio;
-                        } else if (handleType === 'l') {
-                            newWidth = initialWidth - deltaX * 2;
-                            newHeight = newWidth / aspectRatio;
-                        } else if (handleType === 'b') {
-                            newHeight = initialHeight + deltaY * 2;
-                            newWidth = newHeight * aspectRatio;
-                        } else if (handleType === 't') {
-                            newHeight = initialHeight - deltaY * 2;
-                            newWidth = newHeight * aspectRatio;
-                        } else if (handleType === 'rb' || handleType === 'rt') {
-                            newWidth = initialWidth + deltaX * 2;
-                            newHeight = newWidth / aspectRatio;
-                        } else if (handleType === 'lb' || handleType === 'lt') {
-                            newWidth = initialWidth - deltaX * 2;
-                            newHeight = newWidth / aspectRatio;
-                        }
-
-                        // تعيين الحدود الدنيا والقصوى المتناسقة لحجم الشاشة
-                        const minWidthLimit = 280;
-                        const maxWidthLimit = videoContainer.parentElement.offsetWidth - 10;
-
-                        if (newWidth >= minWidthLimit && newWidth <= maxWidthLimit) {
-                            videoContainer.style.width = newWidth + 'px';
-                        }
-                    });
-
-                    // دالة الإيقاف الفوري عند رفع إصبعك عن زر الماوس الأيسر
-                    window.addEventListener('mouseup', () => {
-                        if (isResizing) {
-                            isResizing = false;
-                            document.body.style.userSelect = '';
-                            document.body.style.cursor = '';
-
-                            // إعادة تفعيل الفيديو فوراً ليعود للعمل الطبيعي والضغط عليه
-                            const iframe = videoContainer.querySelector('iframe');
-                            if (iframe) {
-                                iframe.style.pointerEvents = 'auto';
-                            }
-                        }
-                    });
+                allData = await response.json();
+                
+                // ترقيم المعرفات تلقائياً لضمان سلامة الفتح
+                allData.forEach((item, index) => {
+                    item.id = index + 1;
+                });
+                
+                localStorage.setItem('my_cards_data', JSON.stringify(allData));
+                console.log("🌐 تم جلب قاعدة البيانات لأول مرة بنجاح من ملف data.json");
+                
+                if (typeof handleRoute === 'function') {
+                    handleRoute();
                 }
             }
+        } catch (error) {
+            console.error("❌ خطأ حرج في جلب قاعدة البيانات:", error);
+            if (grid) {
+                grid.innerHTML = `
+                    <div style="color: #ff4d4d; text-align: center; width: 100%; padding: 40px; font-size: 18px;">
+                        ⚠️ عذراً، فشل تحميل محتوى البطاقات من ملف data.json. <br>
+                        <small style="color: #aaa; display:block; margin-top:10px;">تأكد من تشغيل الموقع عبر Live Server.</small>
+                    </div>`;
+            }
+        }
+    }
+
+    // دالة بناء وعرض الكروت الديناميكية على الشاشة
+    function render(dataArray) {
+        const mainGrid = document.getElementById('mainGrid');
+        if (!mainGrid) return; 
+
+        mainGrid.innerHTML = ''; 
+
+        if (typeof populateCardSelect === 'function') {
+            populateCardSelect(dataArray);
         }
 
-        // 4. عرض الروابط الملحقة
-        if (selectedItem.links && selectedItem.links.length > 0) {
-            selectedItem.links.forEach(link => {
-                const linkBtn = document.createElement('a');
-                linkBtn.href = link.url;
-                linkBtn.target = '_blank';
-                linkBtn.innerText = link.text;
-                linkBtn.style = 'display: inline-block; padding: 10px 20px; marginTop: 10px; marginRight: 10px; backgroundColor: #0088cc; color: #ffffff; textDecoration: none; borderRadius: 5px; fontWeight: bold;';
-                linksContainer.appendChild(linkBtn);
-            });
+        if (!dataArray || dataArray.length === 0) {
+            mainGrid.innerHTML = `
+                <div style="color: #aaa; text-align: center; width: 100%; padding: 50px; font-size: 18px;">
+                    لا توجد بطاقات معروضة في هذا القسم حالياً.
+                </div>`;
+            return;
         }
 
-        document.getElementById('myModal').style.display = "block";
-    }
-}
+        dataArray.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('onclick', `if(typeof openDetails === 'function') { openDetails(${item.id}) }`);
+            
+            const badgeClass = item.category === 'vsa' ? 'badge-vsa' : 'badge-invest';
+            let badgeText = 'استثمار العراق';
+            if (item.category === 'vsa') badgeText = 'VSA & التحليل';
+            if (item.category === 'videos') badgeText = 'أكاديمية الفيديوهات';
 
-// دالة إغلاق النافذة
-function closeModal() {
-    document.getElementById('myModal').style.display = "none";
-}
+            let mediaContent = '';
+            
+            if (item.image && item.image.trim() !== '') {
+                mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
+            } else if (item.videoUrl) {
+                if (item.videoUrl.includes('youtube') || item.videoUrl.includes('youtu.be')) {
+                    mediaContent = `<div class="card-media-top">${typeof getYouTubeEmbed === 'function' ? getYouTubeEmbed(item.videoUrl) : ''}</div>`;
+                } else if (item.videoUrl.includes('t.me')) {
+                    mediaContent = `<div class="card-media-top">${typeof getTelegramLink === 'function' ? getTelegramLink(item.videoUrl) : ''}</div>`;
+                }
+            }
+            
+            if (!mediaContent) {
+                mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/340x170/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
+            }
 
-// إغلاق النافذة إذا ضغط المستخدم في أي مكان خارج الصندوق
-window.onclick = function(event) {
-    const modal = document.getElementById('myModal');
-    if (event.target == modal) {
-        modal.style.display = "none";
+            card.innerHTML = `
+                ${mediaContent}
+                <div class="card-body-container">
+                    <div>
+                        <span class="badge ${badgeClass}">${badgeText}</span>
+                        <h3>${item.title || 'بدون عنوان'}</h3>
+                        <div class="card-content">${item.content || ''}</div>
+                    </div>
+                    <div>
+                        <div class="card-links">
+                            ${item.links ? item.links.map(link => `<a href="${link.url}" target="_blank" onclick="event.stopPropagation();">${link.text}</a>`).join('') : ''}
+                        </div>
+                        <div class="card-footer-arrow">عرض التفاصيل ←</div>
+                    </div>
+                </div>
+            `;
+            mainGrid.appendChild(card);
+        });
     }
-}
-// دالة اليوتيوب الأصلية
-        function getYouTubeEmbed(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) 
-            ? `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${match[2]}" frameborder="0" allowfullscreen></iframe></div>` 
-            : null;
-       }
-       // دالة خاصة لروابط تلجرام
+
+    // دالة تعبئة خيارات أسماء البطاقات تلقائياً في لوحة التحكم
+    function populateCardSelect(dataArray) {
+        const select = document.getElementById('cardSelect');
+        if (!select) return;
+        
+        const currentSelectedValue = select.value; 
+        select.innerHTML = '<option value="">اختر اسم البطاقة لتغيير صورتها...</option>';
+        
+        dataArray.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = item.title; 
+            select.appendChild(option);
+        });
+        
+        select.value = currentSelectedValue;
+    }
+
+    // جلب رابط الصورة الفعلي بمجرد اختيار اسم البطاقة من القائمة المنسدلة
+    function onCardSelectChange() {
+        const select = document.getElementById('cardSelect');
+        const input = document.getElementById('panelImageUrl');
+        const cardId = parseInt(select.value);
+        
+        if (!cardId) {
+            input.value = '';
+            return;
+        }
+        
+        // تم تصحيح المعرف هنا من data.find إلى allData.find بنجاح لمنع أي توقف حرج
+        const item = allData.find(i => i.id === cardId);
+        if (item) {
+            input.value = item.image || ''; 
+        }
+    }
+
+    // تحديث الصورة عبر لوحة التحكم وحفظها ثنائياً في الذاكرة المحلية
+    function updateImageAutomation() {
+        const select = document.getElementById('cardSelect');
+        const input = document.getElementById('panelImageUrl');
+        if (!select || !input) return;
+
+        const cardId = parseInt(select.value);
+        const newUrl = input.value.trim();
+        
+        if (!cardId) {
+            alert('الرجاء اختيار اسم البطاقة أولاً من القائمة المنسدلة!');
+            return;
+        }
+        
+        const item = allData.find(i => i.id === cardId);
+        if (item) {
+            item.image = newUrl;
+            item.videoUrl = ''; // تصفير الروابط الأخرى فوراً لمنع التداخل السينمائي
+            
+            localStorage.setItem('my_cards_data', JSON.stringify(allData));
+            
+            if (typeof handleRoute === 'function') {
+                handleRoute();
+            }
+            
+            input.value = ''; 
+            alert(`🚀 تم تحديث وأتمتة صورة بطاقة "${item.title}" وتثبيتها بنجاح!`);
+        }
+    }
+
+    // نظام التوجيه والتنقل الداخلي (Router System)
+    function handleRoute() {
+        const hash = window.location.hash || '#/';
+        if (searchInput) searchInput.value = ''; 
+
+        if (hash === '#/investment') {
+            const filtered = allData.filter(d => d.category === 'invest');
+            pageTitle.innerText = 'دليل الاستثمار في العراق';
+            render(filtered);
+            setActiveNav('btn-invest');
+        } 
+        else if (hash === '#/videos') {
+            const filtered = allData.filter(d => d.category === 'videos');
+            pageTitle.innerText = 'مكتبة الشروحات والفيديوهات التعليمية';
+            render(filtered);
+            setActiveNav('btn-videos');
+        } 
+        else {
+            const filtered = allData.filter(d => d.category === 'vsa');
+            pageTitle.innerText = 'أكاديمية VSA والتداول';
+            render(filtered);
+            setActiveNav('btn-vsa');
+        }
+    }
+
+    function setActiveNav(id) {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        const activeLink = document.getElementById(id);
+        if (activeLink) activeLink.classList.add('active');
+    }
+
+    // محرك البحث الشامل والسلس
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            if (term === '') { handleRoute(); return; }
+
+            const results = allData.filter(item => 
+                (item.title && item.title.toLowerCase().includes(term)) || 
+                (item.content && item.content.toLowerCase().includes(term))
+            );
+            pageTitle.innerText = 'نتائج البحث في كل الأقسام';
+            render(results);
+        });
+    }
+
+    // ربط مستمعي الأحداث البرمجية لتشغيل الصفحة بدقة ومثالية
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('load', handleRoute);
+    document.addEventListener('DOMContentLoaded', loadWebsiteData);
+
+    // دالة فتح النافذة المنبثقة وحقن البيانات والتحكم السحري بحركة وحجم الفيديو
+    function openDetails(id) {
+        const selectedItem = allData.find(item => item.id === id);
+
+        if (selectedItem) {
+            document.getElementById('modalTitle').innerText = selectedItem.title || '';
+            document.getElementById('modalContent').innerText = selectedItem.content || '';
+
+            const videoContainer = document.getElementById('modalVideoContainer');
+            const linksContainer = document.getElementById('modalLinksContainer');
+            
+            videoContainer.innerHTML = '';
+            linksContainer.innerHTML = '';
+
+            if (selectedItem.videoUrl) {
+                const embedHtml = getYouTubeEmbed(selectedItem.videoUrl);
+                if (embedHtml) {
+                    videoContainer.innerHTML = embedHtml;
+                    
+                    // توليد مقابض السحب الشفافة الثمانية هندسياً للتحجيم بالماوس
+                    const handles = {
+                        'r': 'ew-resize', 'l': 'ew-resize', 'b': 'ns-resize', 't': 'ns-resize',
+                        'rb': 'nwse-resize', 'lb': 'nesw-resize', 'rt': 'nesw-resize', 'lt': 'nwse-resize'
+                    };
+
+                    for (const [handleType, cursor] of Object.entries(handles)) {
+                        const handle = document.createElement('div');
+                        handle.className = `resize-handle resize-handle-${handleType}`;
+                        handle.style.position = 'absolute';
+                        handle.style.cursor = cursor;
+                        handle.style.zIndex = '1000'; 
+                        
+                        const size = 12; 
+                        
+                        if (handleType === 'r') {
+                            handle.style.width = `${size}px`; handle.style.height = '100%';
+                            handle.style.right = `-${size / 2}px`; handle.style.top = '0';
+                        } else if (handleType === 'l') {
+                            handle.style.width = `${size}px`; handle.style.height = '100%';
+                            handle.style.left = `-${size / 2}px`; handle.style.top = '0';
+                        } else if (handleType === 'b') {
+                            handle.style.height = `${size}px`; handle.style.width = '100%';
+                            handle.style.bottom = `-${size / 2}px`; handle.style.left = '0';
+                        } else if (handleType === 't') {
+                            handle.style.height = `${size}px`; handle.style.width = '100%';
+                            handle.style.top = `-${size / 2}px`; handle.style.left = '0';
+                        } else {
+                            handle.style.width = `${size}px`; handle.style.height = `${size}px`;
+                            handle.style[handleType.includes('r') ? 'right' : 'left'] = `-${size / 2}px`;
+                            handle.style[handleType.includes('b') ? 'bottom' : 'top'] = `-${size / 2}px`;
+                        }
+
+                        videoContainer.appendChild(handle);
+
+                        let isResizing = false;
+                        let initialX, initialY, initialWidth, initialHeight;
+                        const aspectRatio = 16 / 9;
+
+                        handle.addEventListener('mousedown', (e) => {
+                            isResizing = true;
+                            initialX = e.clientX;
+                            initialY = e.clientY;
+                            initialWidth = videoContainer.offsetWidth;
+                            initialHeight = videoContainer.offsetHeight;
+                            
+                            document.body.style.userSelect = 'none';
+                            document.body.style.cursor = cursor;
+
+                            const iframe = videoContainer.querySelector('iframe');
+                            if (iframe) {
+                                iframe.style.pointerEvents = 'none';
+                            }
+                        });
+
+                        window.addEventListener('mousemove', (e) => {
+                            if (!isResizing) return; 
+                            
+                            const deltaX = e.clientX - initialX;
+                            const deltaY = e.clientY - initialY;
+                            let newWidth = initialWidth;
+                            let newHeight = initialHeight;
+
+                            if (handleType === 'r') {
+                                newWidth = initialWidth + deltaX * 2;
+                                newHeight = newWidth / aspectRatio;
+                            } else if (handleType === 'l') {
+                                newWidth = initialWidth - deltaX * 2;
+                                newHeight = newWidth / aspectRatio;
+                            } else if (handleType === 'b') {
+                                newHeight = initialHeight + deltaY * 2;
+                                newWidth = newHeight * aspectRatio;
+                            } else if (handleType === 't') {
+                                newHeight = initialHeight - deltaY * 2;
+                                newWidth = newHeight * aspectRatio;
+                            } else if (handleType === 'rb' || handleType === 'rt') {
+                                newWidth = initialWidth + deltaX * 2;
+                                newHeight = newWidth / aspectRatio;
+                            } else if (handleType === 'lb' || handleType === 'lt') {
+                                newWidth = initialWidth - deltaX * 2;
+                                newHeight = newWidth / aspectRatio;
+                            }
+
+                            const minWidthLimit = 280;
+                            const maxWidthLimit = videoContainer.parentElement.offsetWidth - 10;
+
+                            if (newWidth >= minWidthLimit && newWidth <= maxWidthLimit) {
+                                videoContainer.style.width = newWidth + 'px';
+                            }
+                        });
+
+                        window.addEventListener('mouseup', () => {
+                            if (isResizing) {
+                                isResizing = false;
+                                document.body.style.userSelect = '';
+                                document.body.style.cursor = '';
+
+                                const iframe = videoContainer.querySelector('iframe');
+                                if (iframe) {
+                                    iframe.style.pointerEvents = 'auto';
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+
+            if (selectedItem.links && selectedItem.links.length > 0) {
+                selectedItem.links.forEach(link => {
+                    const linkBtn = document.createElement('a');
+                    linkBtn.href = link.url;
+                    linkBtn.target = '_blank';
+                    linkBtn.innerText = link.text;
+                    linkBtn.style = 'display: inline-block; padding: 10px 20px; marginTop: 10px; marginRight: 10px; backgroundColor: #0088cc; color: #ffffff; textDecoration: none; borderRadius: 5px; fontWeight: bold;';
+                    linksContainer.appendChild(linkBtn);
+                });
+            }
+
+            document.getElementById('myModal').style.display = "block";
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('myModal');
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function getYouTubeEmbed(url) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) 
+        ? `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${match[2]}" frameborder="0" allowfullscreen></iframe></div>` 
+        : null;
+    }
+
     function getTelegramLink(url) {
-    return `<div style="margin:15px 0; padding:10px; background:rgba(0, 136, 204, 0.1); border-radius:8px; text-align:center;">
-                <a href="${url}" target="_blank" style="color:#0088cc; font-weight:bold; text-decoration:none;">
-                    🎥 مشاهدة الفيديو على تلجرام
-                </a>
-            </div>`;
+        return `<div style="margin:15px 0; padding:10px; background:rgba(0, 136, 204, 0.1); border-radius:8px; text-align:center;">
+                    <a href="${url}" target="_blank" style="color:#0088cc; font-weight:bold; text-decoration:none;">
+                        🎥 مشاهدة الفيديو على تلجرام
+                    </a>
+                </div>`;
     }
 </script>
+
 <div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -851,6 +785,6 @@ window.onclick = function(event) {
         <div id="modalLinksContainer" style="margin-top: 20px;"></div>
     </div>
 </div>
-</div>
+
 </body>
 </html>
