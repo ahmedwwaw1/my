@@ -125,51 +125,43 @@
 
         /* تصميم البطاقة */
    /* التنسيق النهائي المتطابق كلياً مع الطول والتظليل المحيط */
+/* 2. تصميم البطاقة بالتضليل الاحترافي الخارجي عند مرور الماوس (Hover Effect) */
 .card {
-    background-color: #18181c;
+    background: transparent; /* إزالة الحدود التقليدية المزعجة ليكون المظهر ناعم مثل يوتيوب */
+    border: none;
     border-radius: 12px;
-    padding: 0;                /* جعل البادينج صفر لكي تلتصق حاوية الصورة بالحواف تماماً */
-    width: 100%;
-    max-width: 340px;          /* العرض المطابق لقياسك */
-    min-height: 365px;         /* الطول المنسق بدقة مع مسطرة الـ Notepad الخاصة بك */
+    padding: 10px;           /* مسافة داخلية طفيفة لكي يبرز التضليل الخارجي بوضوح */
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
     display: flex;
     flex-direction: column;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    
-    /* التظليل الافتراضي الكامل والعميق خلف الكارت بالكامل لمنحه بعداً ثلاثياً */
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    
-    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    gap: 12px;
 }
 
-/* التظليل الخافت والعميق والشامل لكل الكارت عند تمرير الماوس مع الحفاظ على الثبات */
+/* التضليل الخارجي الفخم لليوتيوب: يظهر خارج إطار البطاقة ليشمل العنوان والتعليقات بالأسفل */
 .card:hover {
-    transform: none;           /* ثبات كامل للكارت بدون أي حركة مفاجئة */
-    border-color: rgba(255, 255, 255, 0.12);
-    
-    /* تظليل منتشر وعريض يملأ المساحة المحيطة بالكامل لمنحه فخامة هادئة */
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 
-                0 0 25px rgba(0, 0, 0, 0.3); 
+    background-color: #212121; /* تفتيح خلفية البطاقة بالكامل عند تمرير الماوس مثل يوتيوب */
+    transform: scale(1.02);    /* تكبير تفاعلي خفيف وانسيابي جداً */
+    border-radius: 12px;
+    /* تضليل خارجي عميق وناعم يمنح الكارت طابعاً ثلاثي الأبعاد ويبرز النصوص بالأسفل */
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3); 
 }
 
-/* حاوية الميديا العلوية لتظهر في أعلى الكارت وبحجم كبير ممتاز */
+/* 3. ضبط مقاسات صورة عرض البطاقة لتطابق مقاسات فيديو اليوتيوب بالضبط (16:9) */
 .card-media-top {
     width: 100%;
-    height: 170px;             /* الارتفاع المثالي لتظهر الصورة واضحة وكبيرة في الأعلى */
+    aspect-ratio: 16 / 9;     /* النسبة السينمائية القياسية لليوتيوب */
+    border-radius: 12px;      /* زوايا دائرية ناعمة للصورة مثل يوتيوب تماماً */
     overflow: hidden;
-    background-color: #111;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    background-color: #000;
+    position: relative;
 }
 
 .card-media-top img, 
 .card-media-top iframe {
     width: 100%;
     height: 100%;
-    object-fit: cover;         /* قص الصورة باحترافية كاملة ومنع تمططها */
+    object-fit: cover;        /* تملأ الصورة أو الفيديو المساحة بالكامل بدون أي تمطيط أو تشويه */
     border: none;
 }
 
@@ -294,16 +286,17 @@
         text-decoration:none; 
     }
     /* الكود السحري لضبط تباعد الكروت تماماً مثل موقع الدكتور أبو هدهود */
-/* الكود المطور لإنهاء الفراغات الكبيرة وتجميع الكروت بشكل متناسق */
+/* 1. شبكة مرنة تملأ كامل الصفحة وتتوزع تلقائياً بدون أي فراغات جانبية مثل يوتيوب */
 .grid, #grid {
     display: grid;
-    /* 🔥 جعلنا العرض ثابت 340px لكل عمود لكي لا يتمدد ويترك أي فراغات جانية مفرطة */
-    grid-template-columns: repeat(auto-fill, 340px); 
-    gap: 24px;             /* المسافة الاحترافية الثابتة بين الكروت */
-    padding: 20px;
-    max-width: 1100px;     /* العرض الكلي المثالي لاستيعاب 3 كروت متراصفة بجانب بعضها */
-    margin: 0 auto;        /* لتوسط الشبكة بالكامل في منتصف الشاشة */
-    justify-content: center; /* تجميع وتقريب الكروت إلى بعضها في المنتصف */
+    /* السحر هنا: minmax يجعل الكروت تتسع وتضيق تلقائياً لتملأ كامل عرض الصفحة تماماً كاليوتيوب */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 16px;          /* المسافة الأفقية الموزونة بين البطاقات */
+    row-gap: 36px;      /* المسافة العمودية لجعل العناوين والنصوص مريحة للعين */
+    padding: 24px;
+    width: 100%;        /* استغلال العرض الكامل للموقع */
+    max-width: 100%;    /* إلغاء تحديد العرض الخاص بأبو هدهود لمنع الفراغات الجانبية المفرطة */
+    box-sizing: border-box;
 }
 /* تنسيق لوحة الأتمتة العلوية بشكل داكن فخم يتوافق مع تصميم موقعك */
 .automation-panel {
@@ -422,21 +415,19 @@ fetch('data.json')
     const pageTitle = document.getElementById('pageTitle');
     const statusMsg = document.getElementById('statusMsg');
 
-// دالة العرض الحديثة والمطابقة لتصميم موقع الدكتور أبو هدهود وهيكليته
-// دالة الـ render الحديثة والمدمج بها أتمتة القائمة المنسدلة
-function render(data, isSearch = false) {
-    // 🔥 خطوة الأتمتة: تحديث قائمة الأسماء المنسدلة تلقائياً بناءً على البيانات المتوفرة حالياً
-    populateCardSelect(data);
+// 🟢 1. كود قراءة البيانات من الذاكرة لضمان الحفاظ على التعديلات بعد الـ Refresh
+// ضع هذا السطر فوق مصفوفة data الأصلية الخاصة بك مباشرة
+let data = JSON.parse(localStorage.getItem('my_cards_data')) || [
+    // هنا تضع بيانات الكروت الأصلية الخاصة بك (تنبيه جيل السكوتين، إلخ...) كما هي
+];
+// 🟢 2. دالة الـ render المحدثة لتعطي الأولوية للصورة الجديدة وتمنع التضارب
+function render(dataArray) {
+    populateCardSelect(dataArray); // تحديث القائمة المنسدلة تلقائياً
 
+    const grid = document.getElementById('grid');
     grid.innerHTML = '';
-    statusMsg.innerHTML = isSearch && data.length > 0 ? `نتيجة: تم العثور على (${data.length})` : '';
 
-    if (data.length === 0) {
-        statusMsg.innerHTML = 'عذراً، لم نجد نتائج تطابق بحثك.';
-        return;
-    }
-
-    data.forEach(item => {
+    dataArray.forEach(item => {
         const card = document.createElement('div');
         card.className = 'card';
         card.setAttribute('onclick', `openDetails(${item.id})`);
@@ -445,7 +436,11 @@ function render(data, isSearch = false) {
         const badgeText = item.category === 'vsa' ? 'VSA & التحليل' : 'استثمار العراق';
 
         let mediaContent = '';
-        if (item.videoUrl) {
+        
+        // ذكاء الأتمتة: إذا أضفت صورة عبر لوحة التحكم، فستظهر هي فوراً وتخفي أي تضارب
+        if (item.image && item.image.trim() !== '') {
+            mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title}"></div>`;
+        } else if (item.videoUrl) {
             if (item.videoUrl.includes('youtube') || item.videoUrl.includes('youtu.be')) {
                 mediaContent = `<div class="card-media-top">${getYouTubeEmbed(item.videoUrl) || ''}</div>`;
             } else if (item.videoUrl.includes('t.me')) {
@@ -454,8 +449,7 @@ function render(data, isSearch = false) {
         }
         
         if (!mediaContent) {
-            const imageSrc = item.image ? item.image : 'https://via.placeholder.com/340x170/222/0088cc?text=VSA+Academy';
-            mediaContent = `<div class="card-media-top"><img src="${imageSrc}" alt="${item.title}"></div>`;
+            mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/340x170/222/0088cc?text=VSA+Academy" alt="${item.title}"></div>`;
         }
 
         card.innerHTML = `
@@ -468,7 +462,7 @@ function render(data, isSearch = false) {
                 </div>
                 <div>
                     <div class="card-links">
-                        ${item.links.map(link => `<a href="${link.url}" target="_blank" onclick="event.stopPropagation();">${link.text}</a>`).join('')}
+                        ${item.links ? item.links.map(link => `<a href="${link.url}" target="_blank" onclick="event.stopPropagation();">${link.text}</a>`).join('') : ''}
                     </div>
                     <div class="card-footer-arrow">عرض التفاصيل ←</div>
                 </div>
@@ -514,7 +508,7 @@ function onCardSelectChange() {
     }
 }
 
-// 🟢 3. دالة التحديث المؤتمتة عند الضغط على الزر الرئيسي
+// 🟢 3. دالة زر التحديث الفوري مع ميزة الحفظ الدائم (تحديث فوري وبدون فقدان البيانات)
 function updateImageAutomation() {
     const select = document.getElementById('cardSelect');
     const input = document.getElementById('panelImageUrl');
@@ -528,9 +522,14 @@ function updateImageAutomation() {
     
     const item = data.find(i => i.id === cardId);
     if (item) {
-        item.image = newUrl; // تحديث الرابط داخل المصفوفة الذكية
-        render(data);        // إعادة بناء وعرض الكروت بالمسافات الجديدة فوراً
-        alert(`تم تحديث صورة بطاقة "${item.title}" بنجاح وبشكل مؤتمت!`);
+        item.image = newUrl;      // حفظ رابط الصورة الجديد
+        item.videoUrl = '';       // إفراغ رابط الفيديو لمنع أي تضارب في العرض وعرض الصورة فوراً
+        
+        // 💾 السحر هنا: حفظ التعديلات في المتصفح لكي لا تختفي عند عمل Refresh للصفحة!
+        localStorage.setItem('my_cards_data', JSON.stringify(data));
+        
+        render(data);             // إعادة عرض الكروت وتطبيق التصميم الجديد فوراً بدون ريفريش
+        alert(`🚀 تم تحديث وحفظ صورة بطاقة "${item.title}" بنجاح وتثبيتها بالمتصفح!`);
     }
 }
 
