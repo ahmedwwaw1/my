@@ -402,46 +402,53 @@ fetch('data.json')
     const pageTitle = document.getElementById('pageTitle');
     const statusMsg = document.getElementById('statusMsg');
 
-// 🟢 1. تعريف مصفوفة البيانات العامة كـ لستة فارغة في البداية
-let data = [];
+// 🟢 1. قاعدة البيانات (بنفس اسم المتغير الخاص بك تماماً)
+let allData = [];
 
-// 🟢 2. دالة جلب البيانات الذكية (تدمج بين الـ fetch والذاكرة المحلية للمتصفح)
+// 🟢 2. دالة جلب البيانات الذكية المتوافقة مع كودك ونظام الـ الـ localStorage
 async function loadWebsiteData() {
     try {
         // نتحقق أولاً: هل توجد بيانات معدلة ومحفوظة مسبقاً في متصفح المستخدم؟
         const localData = localStorage.getItem('my_cards_data');
         
         if (localData) {
-            // إذا وجدنا التعديلات المخزنة (مثل الصور الجديدة)، نعتمد عليها فوراً
-            data = JSON.parse(localData);
+            // إذا وجدنا التعديلات المخزنة، نعتمد عليها فوراً
+            allData = JSON.parse(localData);
             console.log("🚀 تم تحميل البيانات المحدثة بنجاح من الذاكرة المحلية.");
         } else {
-            // إذا كانت أول مرة يفتح فيها المستخدم الموقع، نجلب النسخة الأصلية من ملف data.json
+            // إذا كانت أول مرة، نجلب النسخة الأصلية من ملف data.json
             const response = await fetch('data.json');
             
             if (!response.ok) {
                 throw new Error(`فشل الاتصال بالملف، حالة السيرفر: ${response.status}`);
             }
             
-            data = await response.json();
+            allData = await response.json();
             
-            // نحفظ هذه النسخة الأصلية في ذاكرة المتصفح لتكون جاهزة للتعديل المستقبلي عبر لوحة التحكم
-            localStorage.setItem('my_cards_data', JSON.stringify(data));
+            // ترقيم الـ ID تلقائياً كما وضح كودك الأصلي تماماً لضمان سلامة الفتح
+            allData.forEach((item, index) => {
+                item.id = index + 1;
+            });
+            
+            // نحفظ هذه النسخة الأصلية في ذاكرة المتصفح لتكون جاهزة للتعديل المستقبلي
+            localStorage.setItem('my_cards_data', JSON.stringify(allData));
             console.log("🌐 تم جلب قاعدة البيانات لأول مرة بنجاح من ملف data.json");
         }
 
-        // إظهار الكروت فوراً على الشاشة بعد إتمام الجلب بنجاح
-        render(data);
+        // 🔥 هنا السر: استدعاء دالتك الأصلية handleRoute لتوزيع الكروت على الأقسام بشكل صحيح!
+        if (typeof handleRoute === 'function') {
+            handleRoute();
+        }
 
     } catch (error) {
         console.error("❌ خطأ حرج في جلب قاعدة البيانات:", error);
-        // حماية بصرية للزائر: إظهار رسالة تنبيه أنيقة في الصفحة بدلاً من تركها فارغة تماماً
-        const grid = document.getElementById('grid');
-        if (grid) {
-            grid.innerHTML = `
-                <div style="color: #ff4d4d; text-align: center; width: 100%; padding: 40px; font-size: 18px; font-family: sans-serif;">
+        // حماية بصرية للزائر باستخدام الـ ID الخاص بك mainGrid
+        const mainGrid = document.getElementById('mainGrid');
+        if (mainGrid) {
+            mainGrid.innerHTML = `
+                <div style="color: #ff4d4d; text-align: center; width: 100%; padding: 40px; font-size: 18px;">
                     ⚠️ عذراً، فشل تحميل محتوى البطاقات من ملف data.json. <br>
-                    <small style="color: #aaa; display:block; margin-top:10px;">تأكد من تشغيل الموقع عبر سيرفر محلي (Live Server) وليس بفتح الملف مباشرة.</small>
+                    <small style="color: #aaa; display:block; margin-top:10px;">تأكد من تشغيل الموقع عبر Live Server.</small>
                 </div>`;
         }
     }
@@ -450,33 +457,32 @@ async function loadWebsiteData() {
 // تشغيل دالة الجلب تلقائياً بمجرد تحميل هيكل الصفحة
 document.addEventListener('DOMContentLoaded', loadWebsiteData);
 
-// 🟢 3. دالة الـ render المحمية (مستحيل تسبب اختفاء للكروت أو كراش عند التنقل)
-function render(dataArray) {
-    const grid = document.getElementById('grid');
-    if (!grid) return; // حماية ضد الأخطاء إذا لم تكن الحاوية موجودة في تلك اللحظة
 
-    grid.innerHTML = ''; // تفريغ الجريد لبناء محتوى القسم الجديد
+// 🟢 3. دالة الـ render المعدلة لتعمل مع معرف الحاوية الخاص بك (mainGrid)
+function render(dataArray) {
+    const mainGrid = document.getElementById('mainGrid'); // تم التعديل إلى mainGrid هنا بامتياز
+    if (!mainGrid) return; 
+
+    mainGrid.innerHTML = ''; // تفريغ الجريد لبناء محتوى القسم المختار
 
     // تحديث خيارات لوحة الأتمتة المنسدلة تلقائياً بالبيانات الحالية
     if (typeof populateCardSelect === 'function') {
         populateCardSelect(dataArray);
     }
 
-    // إذا كان القسم فارغاً أو المصفوفة فارغة
     if (!dataArray || dataArray.length === 0) {
-        grid.innerHTML = `
+        mainGrid.innerHTML = `
             <div style="color: #aaa; text-align: center; width: 100%; padding: 50px; font-size: 18px;">
                 لا توجد بطاقات معروضة في هذا القسم حالياً.
             </div>`;
         return;
     }
 
-    // بناء الكروت بتنسيقات يوتيوب والأتمتة الذكية
+    // بناء الكروت
     dataArray.forEach(item => {
         const card = document.createElement('div');
         card.className = 'card';
         
-        // تشغيل دالة تفاصيل الكارت بأمان عند الضغط
         card.setAttribute('onclick', `if(typeof openDetails === 'function') { openDetails(${item.id}) }`);
         
         const badgeClass = item.category === 'vsa' ? 'badge-vsa' : 'badge-invest';
@@ -484,11 +490,9 @@ function render(dataArray) {
 
         let mediaContent = '';
         
-        // منطق الأتمتة: إذا أضفت صورة مخصصة من اللوحة، تظهر فوراً وتلغي تضارب الفيديو القديم
         if (item.image && item.image.trim() !== '') {
             mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
         } else if (item.videoUrl) {
-            // التحقق من وجود دوال معالجة روابط الفيديوهات قبل استدعائها لمنع توقف الكود
             if (item.videoUrl.includes('youtube') || item.videoUrl.includes('youtu.be')) {
                 mediaContent = `<div class="card-media-top">${typeof getYouTubeEmbed === 'function' ? getYouTubeEmbed(item.videoUrl) : ''}</div>`;
             } else if (item.videoUrl.includes('t.me')) {
@@ -496,7 +500,6 @@ function render(dataArray) {
             }
         }
         
-        // صورة افتراضية أنيقة في حال عدم وجود صورة أو فيديو للكارت
         if (!mediaContent) {
             mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/340x170/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
         }
@@ -517,10 +520,9 @@ function render(dataArray) {
                 </div>
             </div>
         `;
-        grid.appendChild(card);
+        mainGrid.appendChild(card);
     });
 }
-
 // 🟢 1. دالة لتعبئة خيارات أسماء البطاقات تلقائياً في اللوحة العلوية
 function populateCardSelect(dataArray) {
     const select = document.getElementById('cardSelect');
@@ -557,7 +559,7 @@ function onCardSelectChange() {
     }
 }
 
-// 🟢 4. دالة لوحة الأتمتة: تقوم بالتحديث الفوري للمصفوفة وحفظ التعديل داخل الذاكرة
+// 🟢 4. دالة لوحة الأتمتة المحدثة لتتوافق مع مصفوفة allData الخاصة بك
 function updateImageAutomation() {
     const select = document.getElementById('cardSelect');
     const input = document.getElementById('panelImageUrl');
@@ -571,19 +573,21 @@ function updateImageAutomation() {
         return;
     }
     
-    // البحث عن الكارت المطلوب في المصفوفة الشاملة التي جلبها الـ fetch
-    const item = data.find(i => i.id === cardId);
+    // البحث في مصفوفة allData المتوافقة مع ملفك
+    const item = allData.find(i => i.id === cardId);
     if (item) {
         item.image = newUrl;
-        item.videoUrl = ''; // تصفير رابط الفيديو لضمان ظهور الصورة فوراً وبدون أي تضارب بامتياز
+        item.videoUrl = ''; // تصفير رابط الفيديو لمنع أي تضارب بامتياز
         
-        // حفظ التغيير الجديد في ذاكرة المتصفح ليبقى ثابتاً حتى بعد الـ Refresh
-        localStorage.setItem('my_cards_data', JSON.stringify(data));
+        // حفظ التغيير الجديد في ذاكرة المتصفح
+        localStorage.setItem('my_cards_data', JSON.stringify(allData));
         
-        // تحديث الكروت المعروضة على الشاشة بلحظتها
-        render(data); 
+        // إعادة تشغيل دالة التوجيه لتحديث القسم الحالي فوراً على الشاشة
+        if (typeof handleRoute === 'function') {
+            handleRoute();
+        }
         
-        input.value = ''; // تفريغ حقل الإدخال بعد النجاح
+        input.value = ''; 
         alert(`🚀 تم تحديث وأتمتة صورة بطاقة "${item.title}" وتثبيتها بنجاح!`);
     }
 }
