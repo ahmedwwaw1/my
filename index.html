@@ -127,7 +127,7 @@
             box-sizing: border-box;
         }
 
-        /* تصميم البطاقة بالتضليل الفيزيائي والانتقال الناعم عند مرور الماوس بدون حركة للأعلى */
+        /* تصميم البطاقة بالتضليل الفيزيائي للانتقال الناعم عند مرور الماوس بدون حركة للأعلى */
         .card {
             background: transparent; 
             border: none;
@@ -145,7 +145,7 @@
         .card:hover {
             background-color: #232323; 
             box-sizing: border-box;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2); /* تضليل احترافي ناعم وعميق يعطي إيحاء بروز الـ Shadow فقط */
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2); 
         }
 
         /* ضبط مقاسات صورة عرض البطاقة لتطابق مقاسات فيديو اليوتيوب بالضبط (16:9) */
@@ -261,8 +261,6 @@
         </div>
     </div>
 
-    </div>
-
     <h1 id="pageTitle" style="text-align: center; margin-bottom: 1.5rem; font-weight: 700;"></h1>
     <div id="statusMsg"></div>
     <div class="grid-layout" id="mainGrid"></div>
@@ -277,26 +275,21 @@
     const pageTitle = document.getElementById('pageTitle');
     const statusMsg = document.getElementById('statusMsg');
 
-    // دالة جلب البيانات الذكية والمستقرة والمربوطة بالـ localStorage للتعامل الآمن مع السيرفر
+    // دالة جلب البيانات
 async function loadWebsiteData() {
     try {
-        // 1. جلب البيانات الطازجة دائماً من ملف data.json المحدث
         const response = await fetch('data.json');
         if (!response.ok) throw new Error(`فشل الاتصال بالملف`);
         const serverData = await response.json();
         
-        // 2. جلب البيانات المخزنة حالياً في الذاكرة المحلية
         const localDataRaw = localStorage.getItem('my_cards_data');
         let localData = [];
         if (localDataRaw && localDataRaw !== '[]' && localDataRaw !== 'undefined') {
             localData = JSON.parse(localDataRaw);
         }
 
-        // 3. دمج ذكي: نمر على كل البطاقات القادمة من الملف
         allData = serverData.map((serverItem, index) => {
             const id = index + 1;
-            // ابحث إذا كانت هذه البطاقة موجودة مسبقاً في الذاكرة المحلية
-            // (نبحث بالـ title لضمان دقة المطابقة)
             const matchedLocal = localData.find(localItem => localItem.title === serverItem.title);
             
             return {
@@ -304,21 +297,19 @@ async function loadWebsiteData() {
                 title: serverItem.title,
                 content: serverItem.content,
                 category: serverItem.category,
-                // إذا كان المستخدم قد عدّل الصورة من لوحة الأتمتة نأخذ صورتها، وإلا نأخذ صورة الملف الأساسية
-                image: matchedLocal ? matchedLocal.image : serverItem.image
+                image: matchedLocal ? matchedLocal.image : serverItem.image,
+                videoUrl: matchedLocal && matchedLocal.videoUrl ? matchedLocal.videoUrl : serverItem.videoUrl
             };
         });
 
-        // 4. حفظ النسخة المدمجة والجديدة في الذاكرة فوراً
         localStorage.setItem('my_cards_data', JSON.stringify(allData));
-        console.log("🔄 تم فحص دمج البيانات الجديدة من data.json مع الحفاظ على تعديلات الصور!");
+        console.log("🔄 تم فحص دمج البيانات بنجاح!");
 
         if (typeof handleRoute === 'function') {
             handleRoute();
         }
     } catch (error) {
         console.error("❌ خطأ:", error);
-        // حل احتياطي في حال عدم تشغيل السيرفر المحرك (يقرأ من الذاكرة فقط)
         const localData = localStorage.getItem('my_cards_data');
         if (localData) {
             allData = JSON.parse(localData);
@@ -326,7 +317,8 @@ async function loadWebsiteData() {
         }
     }
 }
-    // دالة بناء وعرض الكروت الديناميكية على الشاشة
+
+    // 🌟 [تعديل] دالة بناء وعرض الكروت الديناميكية بدون وضع openDetails داخل الـ HTML
     function render(dataArray) {
         const mainGrid = document.getElementById('mainGrid');
         if (!mainGrid) return; 
@@ -348,17 +340,20 @@ async function loadWebsiteData() {
         dataArray.forEach(item => {
             const card = document.createElement('div');
             card.className = 'card';
-            card.setAttribute('onclick', `if(typeof openDetails === 'function') { openDetails(${item.id}) }`);
+            
+            // 🚀 التعديل السحري: ربط دالة الفتح برمجياً بالكامل هنا لحماية التصميم والنقاء
+            card.addEventListener('click', function() {
+                openDetails(item.id);
+            });
             
             let mediaContent = '';
-            
             if (item.image && item.image.trim() !== '') {
                 mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
             } else {
                 mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/360x203/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
             }
 
-            // تم إبقاء العنوان والتعليق فقط لتكون الواجهة نظيفة تماماً وهادئة
+            // الـ HTML هنا أصبح نظيفاً تماماً من أي وسوم أزرار أو أحداث onclick
             card.innerHTML = `
                 ${mediaContent}
                 <div class="card-body-container">
@@ -405,16 +400,13 @@ async function loadWebsiteData() {
         }
     }
 
-// 1. دالة التعامل مع رفع الصورة من الكمبيوتر وتحويلها تلقائياً
+// دالة التعامل مع رفع الصورة من الكمبيوتر
 function handleLocalImageUpload(event) {
-    // دالة لتحديث الصورة الفورية المرفوعة من الجهاز
     const select = document.getElementById('cardSelect');
     const file = event.target.files[0];
     if (!file) return;
 
-    // التأكد من أن الملف المرفوع هو صورة بالفعل
     if (!file.type.match('image.*')) {
-        // تم استبدال الـ alert القديم بالإشعار الذكي للخطأ
         showNotification("⚠️ خطأ: يرجى اختيار ملف صورة مدعوم مثل png, jpg, webp, gif", true);
         return;
     }
@@ -425,8 +417,6 @@ function handleLocalImageUpload(event) {
         if (item) {
             item.image = e.target.result;
             document.getElementById('panelImageUrl').value = e.target.result;
-            
-            // 🚀 هنا التعديل السحري: حذف الـ alert واستبداله بالإشعار التلقائي بدون أزرار
             showNotification(`🎉 تم تحميل الصورة من جهازك بنجاح للبطاقة "${item.title}"! اضغط على زر "تحديث الصورة فورا" لحفظ التغييرات.`);
         } else {
             showNotification("❌ الرجاء اختيار اسم البطاقة أولاً قبل رفع الصورة!", true);
@@ -435,9 +425,7 @@ function handleLocalImageUpload(event) {
     reader.readAsDataURL(file);
 }
 
-    // 2. دالة تحديث وحفظ الصورة المحسنة بالتحقق الثنائي
-// 2. دالة تحديث وحفظ الصورة المحسنة والمرنة
-// دالة تحديث وحفظ الصورة المحدثة بالكامل بالإشعارات الذكية التلقائية
+// دالة تحديث وحفظ الصورة
 function updateImageAutomation() {
     const select = document.getElementById('cardSelect');
     const input = document.getElementById('panelImageUrl');
@@ -466,43 +454,38 @@ function updateImageAutomation() {
     
     const item = allData.find(i => i.id === cardId);
     if (item) {
-        item.image = newUrl; // تحديث قاعدة البيانات
-        
+        item.image = newUrl; 
         localStorage.setItem('my_cards_data', JSON.stringify(allData));
         
         if (typeof handleRoute === 'function') {
             handleRoute();
         }
         
-        // هنا تم حذف الـ alert واستبداله بالإشعار الذكي السريع المختفي تلقائياً!
         showNotification(`🚀 تم تحديث الصورة للبطاقة "${item.title}" بنجاح!`);
     } else {
         showNotification("❌ لم يتم العثور على البطاقة المحددة!", true);
     }
 }
 
-    // دالة الإشعار التلقائي الذكي (البديل الاحترافي للـ alert وبدون أزرار)
+// دالة الإشعار التلقائي الذكي
 function showNotification(message, isError = false) {
-    // إزالة أي إشعار سابق فوراً لمنع التراكم على الشاشة
     const oldNotify = document.getElementById('custom-toast-notification');
     if (oldNotify) oldNotify.remove();
 
-    // إنشاء عنصر الإشعار الجديد
     const notify = document.createElement('div');
     notify.id = 'custom-toast-notification';
     notify.innerText = message;
 
-    // تصميم احترافي عائم ومتناسق يظهر في أعلى المنتصف بدون أي أزرار تعطل العمل
     notify.style.position = 'fixed';
     notify.style.top = '15px';
     notify.style.left = '50%';
     notify.style.transform = 'translateX(-50%)';
-    notify.style.backgroundColor = isError ? '#d9534f' : '#2ecc71'; // أحمر للخطأ، وأخضر ناعم للنجاح
+    notify.style.backgroundColor = isError ? '#d9534f' : '#2ecc71'; 
     notify.style.color = '#ffffff';
     notify.style.padding = '12px 25px';
     notify.style.borderRadius = '8px';
     notify.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)';
-    notify.style.zIndex = '99999'; // لضمان ظهورها فوق كل عناصر الموقع
+    notify.style.zIndex = '99999'; 
     notify.style.fontFamily = 'system-ui, -apple-system, sans-serif';
     notify.style.fontSize = '14px';
     notify.style.fontWeight = '500';
@@ -512,13 +495,11 @@ function showNotification(message, isError = false) {
 
     document.body.appendChild(notify);
 
-    // تأثير حركي ناعم عند الظهور
     setTimeout(() => {
         notify.style.opacity = '1';
         notify.style.top = '30px';
     }, 50);
 
-    // تختفي الرسالة تلقائياً وتُحذف بالكامل بعد ثانيتين ونصف (2500 مللي ثانية) بدون تدخل منك
     setTimeout(() => {
         notify.style.opacity = '0';
         notify.style.top = '15px';
@@ -528,7 +509,7 @@ function showNotification(message, isError = false) {
     }, 2500);
 }
     
-    // نظام التوجيه والتنقل الداخلي (Router System)
+    // نظام التوجيه والتنقل الداخلي
     function handleRoute() {
         const hash = window.location.hash || '#/';
         if (searchInput) searchInput.value = ''; 
@@ -559,7 +540,7 @@ function showNotification(message, isError = false) {
         if (activeLink) activeLink.classList.add('active');
     }
 
-    // محرك البحث الشامل والسلس
+    // محرك البحث
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase().trim();
@@ -574,12 +555,22 @@ function showNotification(message, isError = false) {
         });
     }
 
-    // ربط مستمعي الأحداث البرمجية لتشغيل الصفحة بدقة ومثالية
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('load', handleRoute);
     document.addEventListener('DOMContentLoaded', loadWebsiteData);
 
-    // دالة فتح النافذة المنبثقة النظيفة تماماً (فقط العنوان والتعليق)
+    // دالة مخصصة لاستخراج معرف اليوتيوب
+    function getYouTubeEmbedUrl(url) {
+        if (!url) return '';
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        if (match && match[2].length === 11) {
+            return `https://www.youtube.com/embed/${match[2]}?rel=0&showinfo=0`;
+        }
+        return url;
+    }
+
+    // 🌟 دالة فتح النافذة المنبثقة المستقلة والذكية
     function openDetails(id) {
         const selectedItem = allData.find(item => item.id === id);
 
@@ -587,19 +578,54 @@ function showNotification(message, isError = false) {
             document.getElementById('modalTitle').innerText = selectedItem.title || '';
             document.getElementById('modalContent').innerText = selectedItem.content || '';
 
-            // تم إزالة الفيديوهات والروابط الخارجية تماماً لتصبح الشاشة الكبيرة فارغة ونظيفة
+            const videoContainer = document.getElementById('popupVideoContainer');
+            const telegramBtn = document.getElementById('popupTelegramLinkBtn');
+
+            if (videoContainer) {
+                videoContainer.innerHTML = '';
+                videoContainer.style.display = 'none';
+            }
+            if (telegramBtn) {
+                telegramBtn.style.display = 'none';
+                telegramBtn.href = '#';
+            }
+
+            const url = selectedItem.videoUrl;
+
+            if (url && url.trim() !== '') {
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    const embedUrl = getYouTubeEmbedUrl(url);
+                    if (videoContainer) {
+                        videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+                        videoContainer.style.display = 'block';
+                    }
+                } 
+                else if (url.includes('t.me')) {
+                    if (telegramBtn) {
+                        telegramBtn.href = url;
+                        telegramBtn.style.display = 'inline-block';
+                    }
+                }
+            }
+
             document.getElementById('myModal').style.display = "block";
         }
     }
 
+    // دالة إغلاق النافذة
     function closeModal() {
         document.getElementById('myModal').style.display = "none";
+        const videoContainer = document.getElementById('popupVideoContainer');
+        if (videoContainer) {
+            videoContainer.innerHTML = '';
+            videoContainer.style.display = 'none';
+        }
     }
 
     window.onclick = function(event) {
         const modal = document.getElementById('myModal');
         if (event.target == modal) {
-            modal.style.display = "none";
+            closeModal();
         }
     }
 </script>
@@ -608,7 +634,16 @@ function showNotification(message, isError = false) {
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
         <h1 id="modalTitle" style="color: #0088cc; margin-top: 0; margin-bottom: 20px;"></h1>
-        <div id="modalContent" style="white-space: pre-line; line-height: 1.8; color: #b0b0b0; font-size: 1.1rem;"></div>
+        
+        <div id="popupVideoContainer" style="width: 100%; max-width: 820px; margin: 25px auto; aspect-ratio: 16 / 9; display: none; border-radius: 12px; overflow: hidden; background-color: #000; box-shadow: 0 8px 25px rgba(0,0,0,0.6);"></div>
+        
+        <div style="text-align: center; margin: 20px auto; max-width: 820px;">
+            <a id="popupTelegramLinkBtn" href="#" target="_blank" style="display: none; background-color: #0088cc; color: white; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; font-size: 1rem; transition: background 0.2s; box-shadow: 0 4px 15px rgba(0,136,204,0.3);">
+                🔹 انتقل لمشاهدة الشرح المباشر على تليجرام
+            </a>
+        </div>
+
+        <div id="modalContent" style="white-space: pre-line; line-height: 1.8; color: #b0b0b0; font-size: 1.1rem; max-width: 820px; margin: 0 auto;"></div>
     </div>
 </div>
 
