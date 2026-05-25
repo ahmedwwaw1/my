@@ -415,24 +415,25 @@ function updateImageAutomation() {
     const cardId = parseInt(select.value);
     const newUrl = input.value.trim();
     
-    // التحقق من اختيار بطاقة
-    if (!cardId) {
-        alert('الرجاء اختيار اسم البطاقة أولاً من القائمة المنسدلة!');
+// 1. التحقق من أن المربع ليس فارغاً
+    if (!newUrl) {
+        alert('⚠️ يرجى إدخال رابط صورة أو رفع ملف أولاً!');
         return;
-    }
-    
+    }    
     // التحقق من وجود رابط
     if (!newUrl) {
         alert('⚠️ يرجى إدخال رابط صورة صحيح!');
         return;
     }
-    // 2. التحقق من أن الرابط ينتهي بصيغة صورة (jpg, png, gif, webp)
-    const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(newUrl);
-    
-    if (!isImage) {
-        alert('⚠️ خطأ: الرابط غير صحيح! يرجى إدخال رابط ينتهي بصيغة صورة (مثل jpg أو png).');
-        return; // سيتوقف الكود هنا ولن تظهر رسالة "تم التحديث"
+// 2. التحقق: هل هو رابط صورة عادي أم صورة مرفوعة Base64 من الجهاز؟
+    const isStandardImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(newUrl);
+    const isBase64Image = /^data:image\/(png|jpeg|jpg|webp|gif);base64,/.test(newUrl); 
+
+    if (!isStandardImage && !isBase64Image) {
+        alert('⚠️ خطأ: الرابط غير صحيح أو ملف الصورة غير مدعوم! يرجى التأكد من جودة الملف.');
+        return; // يتوقف هنا في حال لم يكن رابطاً أو ملفاً صحيحاً
     }
+
     // البحث عن البطاقة في البيانات وتحديث صورتها
     const item = allData.find(i => i.id === cardId);
     if (item) {
