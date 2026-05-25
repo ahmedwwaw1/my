@@ -576,6 +576,35 @@ function getYouTubeEmbedUrl(url) {
     }
     return null; // ليس رابط يوتيوب
 }
+// دالة تحويل الروابط الذكية
+function getUniversalEmbedUrl(url) {
+    if (!url) return null;
+    const lowerUrl = url.toLowerCase();
+
+    // 1. إذا كان الرابط يوتيوب
+    if (lowerUrl.includes('youtube.com') || lowerUrl.includes('youtu.be')) {
+        return getYouTubeEmbedUrl(url); // استخدام دالتك الحالية لليوتيوب
+    }
+
+    // 2. إذا كان رابط منشور فيديو فيسبوك عام
+    if (lowerUrl.includes('facebook.com') && (lowerUrl.includes('/videos/') || lowerUrl.includes('/watch') || lowerUrl.includes('/posts/'))) {
+        return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=100%`;
+    }
+
+    // 3. إذا كان رابط منشور فيديو تليجرام في قناة عامة
+    if (lowerUrl.includes('t.me/') && !lowerUrl.includes('t.me/joinchat')) {
+        const parts = url.split('/');
+        const lastPart = parts[parts.length - 1].split('?')[0];
+        // التأكد من أن الرابط ينتهي برقم المنشور مثل t.me/channel/15
+        if (!isNaN(lastPart) && lastPart !== '') {
+            return `${url.split('?')[0]}?embed=1`;
+        }
+    }
+
+    // إذا لم يكن رابط فيديو مدعوم للعرض المباشر (مثل موقع بينانس أو رابط تليجرام ويب الخاص بك)
+    return null; 
+}
+
 function updateBigScreen(url) {
     // قم بتغيير 'bigScreenContainer' إلى المعرّف (ID) الخاص بالشاشة الكبيرة في كودك
     const bigScreen = document.getElementById("bigScreenContainer"); 
@@ -669,28 +698,29 @@ function openDetails(id) {
             linksContainer.appendChild(btn);
         }
 
-        // 2. 🛡️ الفحص الذكي لحقل الـ videoUrl الأساسي
-        const mainUrl = selectedItem.videoUrl;
-        if (mainUrl && mainUrl.trim() !== '') {
-            if (mainUrl.includes('youtube.com') || mainUrl.includes('youtu.be')) {
-                // إذا كان يوتيوب 🎥 يشغله داخل الشاشة الكبيرة مباشرة
-                const embedUrl = getYouTubeEmbedUrl(mainUrl);
-                if (videoContainer) {
-                    videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
-                    videoContainer.style.display = 'block';
-                }
-            } else {
-                // 🚀 الحل السحري: إذا وضعت رابط تليجرام أو فيسبوك أو بينانس داخل حقل videoUrl بالخطأ
-                // الكود سيكتشفه فوراً ويقوم بتحويله إلى زر أنيق بدلاً من محاولة عرضه كفيديو
-                let btnLabel = '🔗 الانتقال للرابط المرفق';
-                if (mainUrl.includes('t.me')) btnLabel = '📱 فتح الشرح على تليجرام';
-                if (mainUrl.includes('facebook.com')) btnLabel = '👥 فتح المنشور على فيسبوك';
-                if (mainUrl.includes('binance.com')) btnLabel = '🪙 منصة بينانس الرقمية';
+// 2. 🛡️ الفحص الذكي والشامل لحقل الـ videoUrl الأساسي
+const mainUrl = selectedItem.videoUrl;
+if (mainUrl && mainUrl.trim() !== '') {
+    
+    // تشغيل الفاحص العالمي الجديد
+    const embedUrl = getUniversalEmbedUrl(mainUrl);
 
-                createDynamicButton(mainUrl, btnLabel);
-            }
+    if (embedUrl) {
+        // 🎉 إذا كان فيديو مدعوم (يوتيوب / فيسبوك / تليجرام عام) -> افتح الشاشة الكبيرة فوراً!
+        if (videoContainer) {
+            videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen scrolling="no" style="width:100%; height:100%; border:none; overflow:hidden;"></iframe>`;
+            videoContainer.style.display = 'block';
         }
+    } else {
+        // 🚀 إذا كان رابط عادي (بينانس، رابط تليجرام ويب الشخصي، موقع شركة) -> حوله لزر أنيق تلقائياً
+        let btnLabel = '🔗 الانتقال للرابط المرفق';
+        if (mainUrl.includes('t.me')) btnLabel = '📱 فتح الرابط على تليجرام';
+        if (mainUrl.includes('facebook.com')) btnLabel = '👥 فتح الصفحة على فيسبوك';
+        if (mainUrl.includes('binance.com')) btnLabel = '🪙 منصة بينانس الرقمية';
 
+        createDynamicButton(mainUrl, btnLabel);
+    }
+}
         // 3. الفحص الإضافي في حال كنت تستخدم مصفوفة الـ links في الـ JSON
         if (selectedItem.links && Array.isArray(selectedItem.links)) {
             selectedItem.links.forEach(link => {
