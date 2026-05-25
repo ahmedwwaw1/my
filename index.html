@@ -646,14 +646,14 @@ function openDetails(id) {
     const selectedItem = allData.find(item => item.id === id);
 
     if (selectedItem) {
-        // تعبئة النصوص الأساسية
+        // 1. تعبئة النصوص الأساسية في المودال
         document.getElementById('modalTitle').innerText = selectedItem.title || '';
         document.getElementById('modalContent').innerText = selectedItem.content || '';
 
         const videoContainer = document.getElementById('popupVideoContainer');
         const linksContainer = document.getElementById('popupLinksContainer');
 
-        // تنظيف وتصفير الحاويات عند كل عملية فتح جديدة
+        // تصفير وتفريغ الحاويات عند كل عملية فتح جديدة لمنع التكرار
         if (videoContainer) {
             videoContainer.innerHTML = '';
             videoContainer.style.display = 'none';
@@ -662,7 +662,7 @@ function openDetails(id) {
             linksContainer.innerHTML = '';
         }
 
-        // 📥 دالة داخلية سريعة لإنشاء الأزرار العادية (مثل بينانس وشركات الوساطة)
+        // 📥 دالة مساعدة داخلية لإنشاء الأزرار العادية (بينانس، تليجرام ويب، إلخ)
         function createDynamicButton(url, text) {
             const btn = document.createElement('a');
             btn.href = url;
@@ -670,15 +670,16 @@ function openDetails(id) {
             btn.rel = 'noopener noreferrer';
             btn.innerText = text;
 
-            // تنسيق الزر الفخم
+            // تنسيق الزر الفخم المتوافق مع تصميم موقعك
             btn.style.textDecoration = 'none';
             btn.style.padding = '12px 24px';
             btn.style.borderRadius = '8px';
             btn.style.fontWeight = 'bold';
             btn.style.fontSize = '0.95rem';
-            btn.style.transition = 'all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            btn.style.transition = 'all 0.25s ease';
             btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
             btn.style.display = 'inline-block';
+            btn.style.margin = '5px';
 
             const lowerUrl = url.toLowerCase();
             if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram')) {
@@ -697,13 +698,13 @@ function openDetails(id) {
             linksContainer.appendChild(btn);
         }
 
-        // 📺 أولاً: عرض فيديو اليوتيوب الرئيسي في الشاشة العلوية المعتادة
+        // 📺 أولاً: تشغيل فيديو اليوتيوب الرئيسي في الحاوية العلوية (إن وُجد)
         const mainUrl = selectedItem.videoUrl;
         if (mainUrl && mainUrl.trim() !== '') {
-            const mainEmbed = getUniversalEmbedUrl(mainUrl);
-            if (mainEmbed) {
-                if (videoContainer) {
-                    videoContainer.innerHTML = `<iframe src="${mainEmbed}" frameborder="0" allowfullscreen scrolling="no" style="width:100%; height:100%; border:none; overflow:hidden;"></iframe>`;
+            if (mainUrl.includes('youtube.com') || mainUrl.includes('youtu.be')) {
+                const embedUrl = getYouTubeEmbedUrl(mainUrl);
+                if (videoContainer && embedUrl) {
+                    videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
                     videoContainer.style.display = 'block';
                 }
             } else {
@@ -711,50 +712,81 @@ function openDetails(id) {
             }
         }
 
-        // 🚀 ثانياً: معالجة مصفوفة الـ links بشكل ذكي (إنشاء شاشة فيديو أو زر)
+        // 🚀 ثانياً: معالجة الروابط الفرعية في مصفوفة links وعرض ودجت التليجرام الرسمي
         if (selectedItem.links && Array.isArray(selectedItem.links)) {
             selectedItem.links.forEach(link => {
-                const linkEmbed = getUniversalEmbedUrl(link.url);
+                if (!link.url) return;
 
-                if (linkEmbed) {
-                    // 🎉 سحر البرمجة: الكود اكتشف أن الرابط الفرعي هو فيديو (مثل تليجرام)! سيصنع له شاشة عرض كاملة
-                    const videoBlock = document.createElement('div');
-                    videoBlock.style.flex = '0 0 100%'; // لكي يأخذ السطر كاملاً بشكل أنيق
-                    videoBlock.style.width = '100%';
-                    videoBlock.style.margin = '20px auto';
+                const lowerUrl = link.url.toLowerCase();
 
-                    // إضافة عنوان الفيديو الفرعي المكتوب في الـ JSON فوق الشاشة الخاصة به
-                    if (link.text) {
-                        const title = document.createElement('p');
-                        title.innerText = link.text;
-                        title.style.color = '#00ff88'; // اللون الفسفوري الفخم الخاص بموقعك
-                        title.style.fontSize = '1.1rem';
-                        title.style.fontWeight = 'bold';
-                        title.style.marginBottom = '10px';
-                        title.style.textAlign = 'right';
-                        videoBlock.appendChild(title);
+                // 🌟 فحص رابط منشور التليجرام العام لبناء الـ Widget
+                if (lowerUrl.includes('t.me/') && 
+                    !lowerUrl.includes('joinchat') && 
+                    !lowerUrl.includes('web.telegram.org') && 
+                    !lowerUrl.includes('/c/')) {
+                    
+                    const urlClean = link.url.split('?')[0];
+                    const parts = urlClean.split('/');
+                    const postId = parts[parts.length - 1];
+                    const channelName = parts[parts.length - 2];
+
+                    // التأكد من استخراج اسم القناة ورقم المنشور بشكل صحيح
+                    if (channelName && postId && !isNaN(postId)) {
+                        
+                        // إنشاء حاوية خاصة بالودجت لترتيب المظهر
+                        const telegramWrapper = document.createElement('div');
+                        telegramWrapper.style.width = '100%';
+                        telegramWrapper.style.margin = '20px 0';
+                        telegramWrapper.style.textAlign = 'right';
+
+                        // إضافة عنوان الفيديو المكتوب في الـ JSON إذا وُجد
+                        if (link.text) {
+                            const title = document.createElement('p');
+                            title.innerText = link.text;
+                            title.style.color = '#00ff88';
+                            title.style.fontSize = '1.05rem';
+                            title.style.fontWeight = 'bold';
+                            title.style.marginBottom = '10px';
+                            telegramWrapper.appendChild(title);
+                        }
+
+                        // 💡 بناء عنصر السكريبت الرسمي للتليجرام وتمرير البيانات له ديناميكياً
+                        const telegramScript = document.createElement('script');
+                        telegramScript.async = true;
+                        telegramScript.src = "https://telegram.org/js/telegram-widget.js?23";
+                        telegramScript.setAttribute('data-telegram-post', `${channelName}/${postId}`);
+                        telegramScript.setAttribute('data-width', '100%');
+                        telegramScript.setAttribute('data-dark', '1'); // متناسق مع تصميمك المظلم
+
+                        telegramWrapper.appendChild(telegramScript);
+                        linksContainer.appendChild(telegramWrapper);
+                        
+                        return; // الانتقال للرابط التالي وتخطي إنشاء الزر العادي لهذا العنصر
                     }
-
-                    // بناء شاشة الـ Player السوداء للفيديو الفرعي
-                    const player = document.createElement('div');
-                    player.style.width = '100%';
-                    player.style.aspectRatio = '16 / 9';
-                    player.style.borderRadius = '12px';
-                    player.style.overflow = 'hidden';
-                    player.style.backgroundColor = '#000';
-                    player.style.boxShadow = '0 8px 25px rgba(0,0,0,0.6)';
-                    player.innerHTML = `<iframe src="${linkEmbed}" frameborder="0" allowfullscreen scrolling="no" style="width:100%; height:100%; border:none; overflow:hidden;"></iframe>`;
-
-                    videoBlock.appendChild(player);
-                    linksContainer.appendChild(videoBlock); // إضافته داخل المودال
-                } else {
-                    // إذا لم يكن فيديو (رابط عادي)، سيصنع له زراً ملوناً كالعادة
-                    createDynamicButton(link.url, link.text || 'زيارة الرابط');
                 }
+
+                // 🎥 فحص روابط الفيسبوك لعرضها كمشغل فيديو مدمج
+                if (lowerUrl.includes('facebook.com') && (lowerUrl.includes('/videos/') || lowerUrl.includes('/watch'))) {
+                    const fbWrapper = document.createElement('div');
+                    fbWrapper.style.width = '100%';
+                    fbWrapper.style.aspectRatio = '16 / 9';
+                    fbWrapper.style.margin = '20px 0';
+                    fbWrapper.style.borderRadius = '12px';
+                    fbWrapper.style.overflow = 'hidden';
+                    
+                    const fbEmbed = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(link.url)}&show_text=false&width=100%`;
+                    fbWrapper.innerHTML = `<iframe src="${fbEmbed}" frameborder="0" allowfullscreen scrolling="no" style="width:100%; height:100%; border:none; overflow:hidden;"></iframe>`;
+                    
+                    linksContainer.appendChild(fbWrapper);
+                    return;
+                }
+
+                // 🔗 إذا كان الرابط عادياً (رابط موقع، أو حساب شخصي، أو تليجرام ويب) يتم إنشاؤه كـ زر تفاعلي فخم
+                createDynamicButton(link.url, link.text || 'زيارة الرابط');
             });
         }
 
-        // إظهار النافذة المنبثقة للمستخدم
+        // إظهار نافذة المودال للمستخدم
         document.getElementById('myModal').style.display = "block";
     }
 }
