@@ -581,26 +581,33 @@ function getUniversalEmbedUrl(url) {
     if (!url) return null;
     const lowerUrl = url.toLowerCase();
 
-    // فحص روابط اليوتيوب
+    // 1. روابط اليوتيوب (شغالة تمام)
     if (lowerUrl.includes('youtube.com') || lowerUrl.includes('youtu.be')) {
-        return getYouTubeEmbedUrl(url); // استخدام دالة اليوتيوب الموجودة عندك أصلاً
+        return getYouTubeEmbedUrl(url); 
     }
 
-    // فحص روابط فيديوهات الفيسبوك العامة
+    // 2. روابط فيديوهات الفيسبوك العامة
     if (lowerUrl.includes('facebook.com') && (lowerUrl.includes('/videos/') || lowerUrl.includes('/watch') || lowerUrl.includes('/posts/'))) {
         return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=100%`;
     }
 
-    // فحص روابط منشورات التليجرام في القنوات العامة (التي تنتهي برقم المنشور مثل t.me/username/178)
-    if (lowerUrl.includes('t.me/') && !lowerUrl.includes('t.me/joinchat') && !lowerUrl.includes('web.telegram.org')) {
+    // 3. 🛡️ فحص التليجرام الصارم (فقط القنوات العامة التي تنتهي برقم منشور)
+    // نمنع روابط الويب والمجموعات الخاصة والـ joinchat حتى لا تسبب شاشة سوداء
+    if (lowerUrl.includes('t.me/') && 
+        !lowerUrl.includes('joinchat') && 
+        !lowerUrl.includes('web.telegram.org') && 
+        !lowerUrl.includes('/c/')) { // /c/ تعني قناة خاصة
+        
         const parts = url.split('?')[0].split('/');
         const lastPart = parts[parts.length - 1];
+        
+        // التأكد من أن نهاية الرابط هي رقم المنشور المباشر (مثل: t.me/username/15)
         if (lastPart && !isNaN(lastPart)) {
             return `${url.split('?')[0]}?embed=1`;
         }
     }
 
-    // إذا كان رابط عادي لا يدعم العرض كفيديو (مثل موقع بينانس أو رابط حسابك الشخصي)
+    // 🚀 أي رابط آخر لا يدعم العرض (كرابط تليجرام ويب الخاص بك) سيرجع null ليتحول تلقائياً لزر فخم
     return null;
 }
 function updateBigScreen(url) {
