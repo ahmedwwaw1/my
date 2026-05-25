@@ -434,6 +434,7 @@ async function loadWebsiteData() {
 
     // 2. دالة تحديث وحفظ الصورة المحسنة بالتحقق الثنائي
 // 2. دالة تحديث وحفظ الصورة المحسنة والمرنة
+// دالة تحديث وحفظ الصورة المحدثة بالكامل بالإشعارات الذكية التلقائية
 function updateImageAutomation() {
     const select = document.getElementById('cardSelect');
     const input = document.getElementById('panelImageUrl');
@@ -443,43 +444,87 @@ function updateImageAutomation() {
     const newUrl = input.value.trim();
     
     if (!cardId) {
-        alert('الرجاء اختيار اسم البطاقة أولاً من القائمة المنسدلة!');
+        showNotification('الرجاء اختيار اسم البطاقة أولاً من القائمة المنسدلة!', true);
         return;
     }
     
     if (!newUrl) {
-        alert('⚠️ يرجى إدخال رابط صورة أو رفع ملف من الجهاز أولاً!');
+        showNotification('⚠️ يرجى إدخال رابط صورة أو رفع ملف من الجهاز أولاً!', true);
         return;
     }
 
-    // فحص مرن وذكي: هل هو رابط إنترنت يبدأ بـ http أو https أم كود صورة Base64 مرفوع من الجهاز؟
     const isStandardLink = /^https?:\/\//i.test(newUrl);
     const isBase64Image = /^data:image\/(png|jpeg|jpg|webp|gif);base64,/.test(newUrl);
     
     if (!isStandardLink && !isBase64Image) {
-        alert('⚠️ خطأ: الرابط أو الملف غير مدعوم! يرجى التأكد من نسخ رابط إنترنت صحيح أو رفع صورة من جهازك.');
-        return; // يتوقف الكود لحمايتك من المدخلات الخاطئة
+        showNotification('⚠️ خطأ: الرابط أو الملف غير مدعوم! يرجى التأكد من نسخ رابط صحيح.', true);
+        return;
     }
     
     const item = allData.find(i => i.id === cardId);
     if (item) {
-        item.image = newUrl; // تحديث رابط الصورة في قاعدة البيانات
+        item.image = newUrl; // تحديث قاعدة البيانات
         
-        // التخزين في الذاكرة المحلية فوراً لضمان الحفظ المستمر
         localStorage.setItem('my_cards_data', JSON.stringify(allData));
         
-        // إعادة تحديث العرض على الشاشة فوراً وبناء القائمة المنسدلة للقسم النشط مجدداً
         if (typeof handleRoute === 'function') {
             handleRoute();
         }
         
-        // [تمت الإزالة]: سطر تفريغ الحقل لكي يظل الرابط ثابتاً أمام عينك وتتأكد من نجاح العملية
-        alert(`🚀 تم تحديث الصورة للبطاقة "${item.title}" بنجاح!`);
+        // هنا تم حذف الـ alert واستبداله بالإشعار الذكي السريع المختفي تلقائياً!
+        showNotification(`🚀 تم تحديث الصورة للبطاقة "${item.title}" بنجاح!`);
     } else {
-        alert("❌ لم يتم العثور على البطاقة المحددة!");
+        showNotification("❌ لم يتم العثور على البطاقة المحددة!", true);
     }
-    }
-        
+}
+
+    // دالة الإشعار التلقائي الذكي (البديل الاحترافي للـ alert وبدون أزرار)
+function showNotification(message, isError = false) {
+    // إزالة أي إشعار سابق فوراً لمنع التراكم على الشاشة
+    const oldNotify = document.getElementById('custom-toast-notification');
+    if (oldNotify) oldNotify.remove();
+
+    // إنشاء عنصر الإشعار الجديد
+    const notify = document.createElement('div');
+    notify.id = 'custom-toast-notification';
+    notify.innerText = message;
+
+    // تصميم احترافي عائم ومتناسق يظهر في أعلى المنتصف بدون أي أزرار تعطل العمل
+    notify.style.position = 'fixed';
+    notify.style.top = '15px';
+    notify.style.left = '50%';
+    notify.style.transform = 'translateX(-50%)';
+    notify.style.backgroundColor = isError ? '#d9534f' : '#2ecc71'; // أحمر للخطأ، وأخضر ناعم للنجاح
+    notify.style.color = '#ffffff';
+    notify.style.padding = '12px 25px';
+    notify.style.borderRadius = '8px';
+    notify.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)';
+    notify.style.zIndex = '99999'; // لضمان ظهورها فوق كل عناصر الموقع
+    notify.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+    notify.style.fontSize = '14px';
+    notify.style.fontWeight = '500';
+    notify.style.direction = 'rtl';
+    notify.style.opacity = '0';
+    notify.style.transition = 'all 0.3s ease';
+
+    document.body.appendChild(notify);
+
+    // تأثير حركي ناعم عند الظهور
+    setTimeout(() => {
+        notify.style.opacity = '1';
+        notify.style.top = '30px';
+    }, 50);
+
+    // تختفي الرسالة تلقائياً وتُحذف بالكامل بعد ثانيتين ونصف (2500 مللي ثانية) بدون تدخل منك
+    setTimeout(() => {
+        notify.style.opacity = '0';
+        notify.style.top = '15px';
+        setTimeout(() => {
+            notify.remove();
+        }, 300);
+    }, 2500);
+}
+    
     // نظام التوجيه والتنقل الداخلي (Router System)
     function handleRoute() {
         const hash = window.location.hash || '#/';
