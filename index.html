@@ -420,11 +420,7 @@ function updateImageAutomation() {
         alert('⚠️ يرجى إدخال رابط صورة أو رفع ملف أولاً!');
         return;
     }    
-    // التحقق من وجود رابط
-    if (!newUrl) {
-        alert('⚠️ يرجى إدخال رابط صورة صحيح!');
-        return;
-    }
+    
 // 2. التحقق: هل هو رابط صورة عادي أم صورة مرفوعة Base64 من الجهاز؟
     const isStandardImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(newUrl);
     const isBase64Image = /^data:image\/(png|jpeg|jpg|webp|gif);base64,/.test(newUrl); 
