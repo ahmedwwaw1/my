@@ -24,6 +24,8 @@
             {
                 "text": "شرح الفيديو (د16)",
                 "url": "https://www.youtube.com/watch?v=OXrv8gZO0TY&t=984s"
+
+                
             }
         ]
     },
@@ -39,6 +41,7 @@
             {
                 "text": "Maxify P2P",
                 "url": "https://my.maxifyfx.com/ar/dashboard"
+                
             }
         ]
     },
@@ -50,9 +53,17 @@
             {
                 "text": "رابط الموقع",
                 "url": "..."
+ 
+            },
+            {
+                "text": "الدرس الأول ما تعني الدورة السعرية الزمنية ",
+                "url": "https://web.telegram.org/a/#-1001195192763"
+ 
+                
             }
         ],
         "videoUrl": "https://www.youtube.com/watch?v=Fs66AynGasA"
+        
     },
     {
         "category": "invest",
