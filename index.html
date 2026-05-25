@@ -653,7 +653,7 @@ function openDetails(id) {
         const videoContainer = document.getElementById('popupVideoContainer');
         const linksContainer = document.getElementById('popupLinksContainer');
 
-        // تصفير وتفريغ الحاويات عند كل عملية فتح جديدة لمنع التكرار
+        // تصفير وتفريغ الحاويات عند كل عملية فتح جديدة
         if (videoContainer) {
             videoContainer.innerHTML = '';
             videoContainer.style.display = 'none';
@@ -665,9 +665,11 @@ function openDetails(id) {
         // 📥 دالة مساعدة داخلية لإنشاء الأزرار التفاعلية بتصميم متناسق وفخم
         function createDynamicButton(url, text) {
             const btn = document.createElement('a');
-            btn.href = url;
-            btn.target = '_blank';
-            btn.rel = 'noopener noreferrer';
+            btn.href = url; // قراءة الرابط المباشر من الـ JSON كما هو تماماً بدون أي تعديل
+            btn.target = '_blank'; 
+            
+            // 💡 تم حذف سطر noopener noreferrer لضمان بقاء الجلسة مفتوحة وتوجيه تليجرام ويب للفيديو مباشرة
+            
             btn.innerText = text;
 
             // تنسيق التصميم العصري للأزرار ليتناسب مع هوية موقعك
@@ -684,8 +686,8 @@ function openDetails(id) {
 
             const lowerUrl = url.toLowerCase();
             
-            // 🔹 تلوين وتنسيق زر التليجرام خصيصاً
-            if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram')) {
+            // 🔹 تلوين وتنسيق زر التليجرام 
+            if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram.org')) {
                 btn.style.backgroundColor = '#0088cc'; 
                 btn.style.color = '#ffffff';
                 btn.innerText = '🔹 ' + text;
@@ -737,13 +739,13 @@ function openDetails(id) {
             }
         }
 
-        // 🚀 ثانياً: معالجة مصفوفة الروابط (Links) وتحويل التليجرام تلقائياً إلى أزرار
+        // 🚀 ثانياً: معالجة مصفوفة الروابط (Links) وإنشاء الأزرار بالروابط الأصلية مباشرة
         if (selectedItem.links && Array.isArray(selectedItem.links)) {
             selectedItem.links.forEach(link => {
                 if (!link.url) return;
-
-                // إرسال الرابط مباشرة لإنشاء زر احترافي يحمل اسم الدرس المكتوب في الـ JSON
-                createDynamicButton(link.url, link.text || 'مشاهدة الدرس على تليجرام');
+                
+                // يتم إرسال الرابط والنص الأصليين مباشرة دون تدخل برمي يعيق التوجيه
+                createDynamicButton(link.url, link.text || 'مشاهدة الدرس');
             });
         }
 
