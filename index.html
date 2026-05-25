@@ -405,34 +405,35 @@ async function loadWebsiteData() {
         }
     }
 
-    // تحديث الصورة عبر لوحة التحكم وحفظها
-// دالة تحديث الصورة المحسنة
 // 1. دالة التعامل مع رفع الصورة من الكمبيوتر وتحويلها تلقائياً
-    function handleLocalImageUpload(event) {
-        const file = event.target.files[0];
-        if (!file) return;
+function handleLocalImageUpload(event) {
+    // دالة لتحديث الصورة الفورية المرفوعة من الجهاز
+    const select = document.getElementById('cardSelect');
+    const file = event.target.files[0];
+    if (!file) return;
 
-        // التأكد من أن الملف المختار هو صورة بالفعل
-        if (!file.type.startsWith('image/')) {
-            alert('⚠️ يرجى اختيار ملف صورة صحيح (png, jpg, webp, gif)!');
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            // ربط مباشر وصحيح مع معرف المربع الخاص بك panelImageUrl
-            const input = document.getElementById('panelImageUrl');
-            if (input) {
-                input.value = e.target.result; // لصق كود الصورة المشفر فوراً داخل المربع
-                alert('✅ تم تحميل الصورة من جهازك بنجاح! اضغط الآن على زر "تحديث الصورة فوراً 🚀" لحفظ التغييرات.');
-            } else {
-                // هنا تم حذف الـ alert واستبداله بالإشعار الذكي السريع المختفي تلقائياً!
-        showNotification(`🚀 تم تحديث الصورة للبطاقة "${item.title}" بنجاح!`);
-        
-            }
-        };
-        reader.readAsDataURL(file);
+    // التأكد من أن الملف المرفوع هو صورة بالفعل
+    if (!file.type.match('image.*')) {
+        // تم استبدال الـ alert القديم بالإشعار الذكي للخطأ
+        showNotification("⚠️ خطأ: يرجى اختيار ملف صورة مدعوم مثل png, jpg, webp, gif", true);
+        return;
     }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const item = allData.find(i => i.id === parseInt(select.value));
+        if (item) {
+            item.image = e.target.result;
+            document.getElementById('panelImageUrl').value = e.target.result;
+            
+            // 🚀 هنا التعديل السحري: حذف الـ alert واستبداله بالإشعار التلقائي بدون أزرار
+            showNotification(`🎉 تم تحميل الصورة من جهازك بنجاح للبطاقة "${item.title}"! اضغط على زر "تحديث الصورة فورا" لحفظ التغييرات.`);
+        } else {
+            showNotification("❌ الرجاء اختيار اسم البطاقة أولاً قبل رفع الصورة!", true);
+        }
+    };
+    reader.readAsDataURL(file);
+}
 
     // 2. دالة تحديث وحفظ الصورة المحسنة بالتحقق الثنائي
 // 2. دالة تحديث وحفظ الصورة المحسنة والمرنة
