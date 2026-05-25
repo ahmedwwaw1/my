@@ -407,50 +407,75 @@ async function loadWebsiteData() {
 
     // تحديث الصورة عبر لوحة التحكم وحفظها
 // دالة تحديث الصورة المحسنة
-function updateImageAutomation() {
-    const select = document.getElementById('cardSelect');
-    const input = document.getElementById('panelImageUrl');
-    
-    if (!select || !input) return;
+// 1. دالة التعامل مع رفع الصورة من الكمبيوتر وتحويلها تلقائياً
+    function handleLocalImageUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
 
-    const cardId = parseInt(select.value);
-    const newUrl = input.value.trim();
-    
-// 1. التحقق من أن المربع ليس فارغاً
-    if (!newUrl) {
-        alert('⚠️ يرجى إدخال رابط صورة أو رفع ملف أولاً!');
-        return;
-    }    
-    
-// 2. التحقق: هل هو رابط صورة عادي أم صورة مرفوعة Base64 من الجهاز؟
-    const isStandardImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(newUrl);
-    const isBase64Image = /^data:image\/(png|jpeg|jpg|webp|gif);base64,/.test(newUrl); 
+        // التأكد من أن الملف المختار هو صورة بالفعل
+        if (!file.type.startsWith('image/')) {
+            alert('⚠️ يرجى اختيار ملف صورة صحيح (png, jpg, webp, gif)!');
+            return;
+        }
 
-    if (!isStandardImage && !isBase64Image) {
-        alert('⚠️ خطأ: الرابط غير صحيح أو ملف الصورة غير مدعوم! يرجى التأكد من جودة الملف.');
-        return; // يتوقف هنا في حال لم يكن رابطاً أو ملفاً صحيحاً
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // ربط مباشر وصحيح مع معرف المربع الخاص بك panelImageUrl
+            const input = document.getElementById('panelImageUrl');
+            if (input) {
+                input.value = e.target.result; // لصق كود الصورة المشفر فوراً داخل المربع
+                alert('✅ تم تحميل الصورة من جهازك بنجاح! اضغط الآن على زر "تحديث الصورة فوراً 🚀" لحفظ التغييرات.');
+            } else {
+                alert('⚠️ خطأ تقني: لم يتم العثور على حقل إدخال الرابط في الصفحة.');
+            }
+        };
+        reader.readAsDataURL(file);
     }
 
-    // البحث عن البطاقة في البيانات وتحديث صورتها
-    const item = allData.find(i => i.id === cardId);
-    if (item) {
-        item.image = newUrl; // تحديث الرابط في المصفوفة
+    // 2. دالة تحديث وحفظ الصورة المحسنة بالتحقق الثنائي
+    function updateImageAutomation() {
+        const select = document.getElementById('cardSelect');
+        const input = document.getElementById('panelImageUrl');
+        if (!select || !input) return;
+
+        const cardId = parseInt(select.value);
+        const newUrl = input.value.trim();
         
-        // حفظ التحديث في الذاكرة
-        localStorage.setItem('my_cards_data', JSON.stringify(allData));
-        
-        // إعادة تحميل العرض ليظهر التغيير فوراً
-        if (typeof handleRoute === 'function') {
-            handleRoute();
+        if (!cardId) {
+            alert('الرجاء اختيار اسم البطاقة أولاً من القائمة المنسدلة!');
+            return;
         }
         
-        input.value = ''; // تفريغ حقل الرابط
-        alert(`🚀 تم تحديث الصورة للبطاقة "${item.title}" بنجاح!`);
-    } else {
-        alert("❌ لم يتم العثور على البطاقة!");
-    }
-}
+        if (!newUrl) {
+            alert('⚠️ يرجى إدخال رابط صورة أو رفع ملف من الجهاز أولاً!');
+            return;
+        }
 
+        // التحقق الصارم: هل هو رابط إنترنت عادي ينتهي بصيغة صورة أم كود صورة Base64 مرفوع من الجهاز؟
+        const isStandardImage = /\.(jpg|jpeg|png|gif|webp)/i.test(newUrl);
+        const isBase64Image = /^data:image\/(png|jpeg|jpg|webp|gif);base64,/.test(newUrl);
+        
+        if (!isStandardImage && !isBase64Image) {
+            alert('⚠️ خطأ: الملف أو الرابط غير صحيح! يرجى إدخال رابط ينتهي بصيغة صورة (مثل jpg أو png) أو رفع صورة مدعومة من الجهاز.');
+            return; // يتوقف الكود فوراً لحمايتك من الأخطاء
+        }
+        
+        const item = allData.find(i => i.id === cardId);
+        if (item) {
+            item.image = newUrl; // تحديث رابط الصورة في قاعدة البيانات المخزنة
+            
+            localStorage.setItem('my_cards_data', JSON.stringify(allData));
+            
+            if (typeof handleRoute === 'function') {
+                handleRoute();
+            }
+            
+            input.value = ''; // تفريغ الحقل بعد النجاح
+            alert(`🚀 تم تحديث الصورة للبطاقة "${item.title}" بنجاح!`);
+        } else {
+            alert("❌ لم يتم العثور على البطاقة المحددة!");
+        }
+    }
     // نظام التوجيه والتنقل الداخلي (Router System)
     function handleRoute() {
         const hash = window.location.hash || '#/';
