@@ -576,35 +576,33 @@ function getYouTubeEmbedUrl(url) {
     }
     return null; // ليس رابط يوتيوب
 }
-// دالة تحويل الروابط الذكية
+// 1️⃣ الدالة الذكية لتحويل روابط الفيديو (يوتيوب، تليجرام، فيسبوك) إلى صيغة قابلة للعرض داخل iFrame
 function getUniversalEmbedUrl(url) {
     if (!url) return null;
     const lowerUrl = url.toLowerCase();
 
-    // 1. إذا كان الرابط يوتيوب
+    // فحص روابط اليوتيوب
     if (lowerUrl.includes('youtube.com') || lowerUrl.includes('youtu.be')) {
-        return getYouTubeEmbedUrl(url); // استخدام دالتك الحالية لليوتيوب
+        return getYouTubeEmbedUrl(url); // استخدام دالة اليوتيوب الموجودة عندك أصلاً
     }
 
-    // 2. إذا كان رابط منشور فيديو فيسبوك عام
+    // فحص روابط فيديوهات الفيسبوك العامة
     if (lowerUrl.includes('facebook.com') && (lowerUrl.includes('/videos/') || lowerUrl.includes('/watch') || lowerUrl.includes('/posts/'))) {
         return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=100%`;
     }
 
-    // 3. إذا كان رابط منشور فيديو تليجرام في قناة عامة
-    if (lowerUrl.includes('t.me/') && !lowerUrl.includes('t.me/joinchat')) {
-        const parts = url.split('/');
-        const lastPart = parts[parts.length - 1].split('?')[0];
-        // التأكد من أن الرابط ينتهي برقم المنشور مثل t.me/channel/15
-        if (!isNaN(lastPart) && lastPart !== '') {
+    // فحص روابط منشورات التليجرام في القنوات العامة (التي تنتهي برقم المنشور مثل t.me/username/178)
+    if (lowerUrl.includes('t.me/') && !lowerUrl.includes('t.me/joinchat') && !lowerUrl.includes('web.telegram.org')) {
+        const parts = url.split('?')[0].split('/');
+        const lastPart = parts[parts.length - 1];
+        if (lastPart && !isNaN(lastPart)) {
             return `${url.split('?')[0]}?embed=1`;
         }
     }
 
-    // إذا لم يكن رابط فيديو مدعوم للعرض المباشر (مثل موقع بينانس أو رابط تليجرام ويب الخاص بك)
-    return null; 
+    // إذا كان رابط عادي لا يدعم العرض كفيديو (مثل موقع بينانس أو رابط حسابك الشخصي)
+    return null;
 }
-
 function updateBigScreen(url) {
     // قم بتغيير 'bigScreenContainer' إلى المعرّف (ID) الخاص بالشاشة الكبيرة في كودك
     const bigScreen = document.getElementById("bigScreenContainer"); 
@@ -636,19 +634,19 @@ function updateBigScreen(url) {
     }
 }
 
-    // 🌟 دالة فتح النافذة المنبثقة المستقلة والذكية
+// 2️⃣ دالة فتح تفاصيل المودال المحدثة بالكامل لتدعم شاشات فيديو متعددة
 function openDetails(id) {
     const selectedItem = allData.find(item => item.id === id);
 
     if (selectedItem) {
-        // 1. تعبئة النصوص الأساسية في النافذة
+        // تعبئة النصوص الأساسية
         document.getElementById('modalTitle').innerText = selectedItem.title || '';
         document.getElementById('modalContent').innerText = selectedItem.content || '';
 
         const videoContainer = document.getElementById('popupVideoContainer');
         const linksContainer = document.getElementById('popupLinksContainer');
 
-        // تصفير وتنظيف الحاويات تماماً عند كل عملية فتح
+        // تنظيف وتصفير الحاويات عند كل عملية فتح جديدة
         if (videoContainer) {
             videoContainer.innerHTML = '';
             videoContainer.style.display = 'none';
@@ -657,27 +655,24 @@ function openDetails(id) {
             linksContainer.innerHTML = '';
         }
 
-        // 🔥 دالة فرعية داخلية لتوليد الأزرار الملونة والآمنة تلقائياً منعاً للتكرار
+        // 📥 دالة داخلية سريعة لإنشاء الأزرار العادية (مثل بينانس وشركات الوساطة)
         function createDynamicButton(url, text) {
-            if (!url || url.trim() === '') return;
-
             const btn = document.createElement('a');
             btn.href = url;
-            btn.target = '_blank';            // فتح في نافذة جديدة حمايةً للموقع
-            btn.rel = 'noopener noreferrer';  // الحماية الأمنية القصوى التي شرحناها
+            btn.target = '_blank';
+            btn.rel = 'noopener noreferrer';
             btn.innerText = text;
 
-            // التنسيق الجمالي الموحد للأزرار
+            // تنسيق الزر الفخم
             btn.style.textDecoration = 'none';
-            btn.style.padding = '14px 28px';
+            btn.style.padding = '12px 24px';
             btn.style.borderRadius = '8px';
             btn.style.fontWeight = 'bold';
-            btn.style.fontSize = '1rem';
+            btn.style.fontSize = '0.95rem';
             btn.style.transition = 'all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)';
-            btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+            btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
             btn.style.display = 'inline-block';
 
-            // نظام كاشف الألوان الذكي بحسب الرابط
             const lowerUrl = url.toLowerCase();
             if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram')) {
                 btn.style.backgroundColor = '#0088cc'; btn.style.color = '#ffffff';
@@ -685,46 +680,70 @@ function openDetails(id) {
                 btn.style.backgroundColor = '#1877f2'; btn.style.color = '#ffffff';
             } else if (lowerUrl.includes('binance.com')) {
                 btn.style.backgroundColor = '#fcd535'; btn.style.color = '#111111';
-            } else if (lowerUrl.includes('youtube.com') || lowerUrl.includes('youtu.be')) {
-                btn.style.backgroundColor = '#ff0000'; btn.style.color = '#ffffff';
             } else {
                 btn.style.backgroundColor = '#222222'; btn.style.color = '#00ff88'; btn.style.border = '1px solid #333';
             }
 
-            // تأثير الحركة الفيزيائية عند مرور الماوس
-            btn.onmouseenter = () => { btn.style.transform = 'translateY(-2px)'; btn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.5)'; };
-            btn.onmouseleave = () => { btn.style.transform = 'translateY(0)'; btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)'; };
+            btn.onmouseenter = () => { btn.style.transform = 'translateY(-2px)'; };
+            btn.onmouseleave = () => { btn.style.transform = 'translateY(0)'; };
 
             linksContainer.appendChild(btn);
         }
 
-// 2. 🛡️ الفحص الذكي والشامل لحقل الـ videoUrl الأساسي
-const mainUrl = selectedItem.videoUrl;
-if (mainUrl && mainUrl.trim() !== '') {
-    
-    // تشغيل الفاحص العالمي الجديد
-    const embedUrl = getUniversalEmbedUrl(mainUrl);
-
-    if (embedUrl) {
-        // 🎉 إذا كان فيديو مدعوم (يوتيوب / فيسبوك / تليجرام عام) -> افتح الشاشة الكبيرة فوراً!
-        if (videoContainer) {
-            videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen scrolling="no" style="width:100%; height:100%; border:none; overflow:hidden;"></iframe>`;
-            videoContainer.style.display = 'block';
+        // 📺 أولاً: عرض فيديو اليوتيوب الرئيسي في الشاشة العلوية المعتادة
+        const mainUrl = selectedItem.videoUrl;
+        if (mainUrl && mainUrl.trim() !== '') {
+            const mainEmbed = getUniversalEmbedUrl(mainUrl);
+            if (mainEmbed) {
+                if (videoContainer) {
+                    videoContainer.innerHTML = `<iframe src="${mainEmbed}" frameborder="0" allowfullscreen scrolling="no" style="width:100%; height:100%; border:none; overflow:hidden;"></iframe>`;
+                    videoContainer.style.display = 'block';
+                }
+            } else {
+                createDynamicButton(mainUrl, '🔗 الرابط الرئيسي');
+            }
         }
-    } else {
-        // 🚀 إذا كان رابط عادي (بينانس، رابط تليجرام ويب الشخصي، موقع شركة) -> حوله لزر أنيق تلقائياً
-        let btnLabel = '🔗 الانتقال للرابط المرفق';
-        if (mainUrl.includes('t.me')) btnLabel = '📱 فتح الرابط على تليجرام';
-        if (mainUrl.includes('facebook.com')) btnLabel = '👥 فتح الصفحة على فيسبوك';
-        if (mainUrl.includes('binance.com')) btnLabel = '🪙 منصة بينانس الرقمية';
 
-        createDynamicButton(mainUrl, btnLabel);
-    }
-}
-        // 3. الفحص الإضافي في حال كنت تستخدم مصفوفة الـ links في الـ JSON
+        // 🚀 ثانياً: معالجة مصفوفة الـ links بشكل ذكي (إنشاء شاشة فيديو أو زر)
         if (selectedItem.links && Array.isArray(selectedItem.links)) {
             selectedItem.links.forEach(link => {
-                createDynamicButton(link.url, link.text || 'زيارة الرابط');
+                const linkEmbed = getUniversalEmbedUrl(link.url);
+
+                if (linkEmbed) {
+                    // 🎉 سحر البرمجة: الكود اكتشف أن الرابط الفرعي هو فيديو (مثل تليجرام)! سيصنع له شاشة عرض كاملة
+                    const videoBlock = document.createElement('div');
+                    videoBlock.style.flex = '0 0 100%'; // لكي يأخذ السطر كاملاً بشكل أنيق
+                    videoBlock.style.width = '100%';
+                    videoBlock.style.margin = '20px auto';
+
+                    // إضافة عنوان الفيديو الفرعي المكتوب في الـ JSON فوق الشاشة الخاصة به
+                    if (link.text) {
+                        const title = document.createElement('p');
+                        title.innerText = link.text;
+                        title.style.color = '#00ff88'; // اللون الفسفوري الفخم الخاص بموقعك
+                        title.style.fontSize = '1.1rem';
+                        title.style.fontWeight = 'bold';
+                        title.style.marginBottom = '10px';
+                        title.style.textAlign = 'right';
+                        videoBlock.appendChild(title);
+                    }
+
+                    // بناء شاشة الـ Player السوداء للفيديو الفرعي
+                    const player = document.createElement('div');
+                    player.style.width = '100%';
+                    player.style.aspectRatio = '16 / 9';
+                    player.style.borderRadius = '12px';
+                    player.style.overflow = 'hidden';
+                    player.style.backgroundColor = '#000';
+                    player.style.boxShadow = '0 8px 25px rgba(0,0,0,0.6)';
+                    player.innerHTML = `<iframe src="${linkEmbed}" frameborder="0" allowfullscreen scrolling="no" style="width:100%; height:100%; border:none; overflow:hidden;"></iframe>`;
+
+                    videoBlock.appendChild(player);
+                    linksContainer.appendChild(videoBlock); // إضافته داخل المودال
+                } else {
+                    // إذا لم يكن فيديو (رابط عادي)، سيصنع له زراً ملوناً كالعادة
+                    createDynamicButton(link.url, link.text || 'زيارة الرابط');
+                }
             });
         }
 
