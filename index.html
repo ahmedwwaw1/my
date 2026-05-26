@@ -285,7 +285,7 @@ async function loadWebsiteData() {
         if (!response.ok) throw new Error(`فشل الاتصال بالملف`);
         const serverData = await response.json();
         
-        const localDataRaw = localStorage.getItem('my_cards_data_v2');
+        const localDataRaw = localStorage.getItem('my_cards_data');
         let localData = [];
         if (localDataRaw && localDataRaw !== '[]' && localDataRaw !== 'undefined') {
             localData = JSON.parse(localDataRaw);
