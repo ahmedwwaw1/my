@@ -546,71 +546,89 @@ function showNotification(message, isError = false) {
         if (activeLink) activeLink.classList.add('active');
     }
 
-// 🔍 محرك البحث الذكي المطور: إظهار الاقتراحات أسفل شريط البحث والفتح المباشر في المودال
+// 🔍 محرك البحث الشامل والذكي جداً (يدعم البحث عن الروابط، الفيديوهات، والعناوين)
     const dropdown = document.getElementById('searchDropdown');
 
     if (searchInput && dropdown) {
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase().trim();
             
-            // إذا كان حقل البحث فارغاً، نخفي القائمة المنسدلة تماماً
             if (term === '') { 
                 dropdown.innerHTML = '';
                 dropdown.style.display = 'none';
                 return; 
             }
 
-            // فحص البيانات والبحث بالداخل والخارج
-            const results = allData.filter(item => {
-                const matchTitle = item.title && item.title.toLowerCase().includes(term);
-                const matchContent = item.content && item.content.toLowerCase().includes(term);
-                
-                let matchLinks = false;
+            dropdown.innerHTML = ''; // تصفير القائمة لبناء النتائج الجديدة
+            let hasResults = false;
+
+            allData.forEach(item => {
+                // 1. فحص الرابط الرئيسي للبطاقة (videoUrl)
+                if (item.videoUrl && item.videoUrl.toLowerCase().includes(term)) {
+                    hasResults = true;
+                    createDropdownItem(`📺 فيديو: ${item.title}`, item.id, item.videoUrl);
+                }
+
+                // 2. فحص مصفوفة الروابط والأزرار الداخلية بالتفصيل
                 if (item.links && Array.isArray(item.links)) {
-                    matchLinks = item.links.some(link => {
-                        return (
-                            (link.text && link.text.toLowerCase().includes(term)) || 
-                            (link.url && link.url.toLowerCase().includes(term))
-                        );
+                    item.links.forEach(link => {
+                        const matchText = link.text && link.text.toLowerCase().includes(term);
+                        const matchUrl = link.url && link.url.toLowerCase().includes(term);
+                        
+                        if (matchText || matchUrl) {
+                            hasResults = true;
+                            // يعرض اسم الزر والرابط بجانبه ليكون البحث شفافاً وذكياً
+                            createDropdownItem(`🔗 رابط: ${link.text || 'مشاهدة'}`, item.id, link.url);
+                        }
                     });
                 }
-                return matchTitle || matchContent || matchLinks;
+
+                // 3. فحص العنوان الرئيسي والمحتوى النصي للبطاقة
+                const matchTitle = item.title && item.title.toLowerCase().includes(term);
+                const matchContent = item.content && item.content.toLowerCase().includes(term);
+                if (matchTitle || matchContent) {
+                    hasResults = true;
+                    createDropdownItem(`📄 بطاقة: ${item.title}`, item.id);
+                }
             });
 
-            // بناء عناصر القائمة المنسدلة بناءً على النتائج
-            if (results.length > 0) {
-                dropdown.innerHTML = ''; // تصفير القائمة القديمة
+            // 📥 دالة داخلية ذكية لبناء أسطر الاقتراحات داخل القائمة
+            function createDropdownItem(displayText, itemId, directUrl = null) {
+                const div = document.createElement('div');
+                div.className = 'search-item';
+                div.innerText = displayText;
                 
-                results.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'search-item';
-                    div.innerText = item.title; // عرض عنوان البطاقة في القائمة
-                    
-                    // 🚀 عند الضغط على اسم البطاقة من القائمة: تفتح النافذة الكبيرة فوراً!
-                    div.addEventListener('click', () => {
-                        openDetails(item.id); // فتح المودال الأصلي
-                        dropdown.style.display = 'none'; // إخفاء القائمة بعد الاختيار
-                        searchInput.value = ''; // تصفير مربع البحث (اختياري، حسب رغبتك)
-                    });
-                    
-                    dropdown.appendChild(div);
+                div.addEventListener('click', () => {
+                    if (directUrl) {
+                        // 🚀 إذا كان البحث عن رابط محدد، يفتحه فوراً في نافذة خارجية كطلبك!
+                        window.open(directUrl, '_blank');
+                    } else {
+                        // إذا كان البحث عن البطاقة نفسها، يفتح الـ Popup الكاملة للموقع
+                        openDetails(itemId);
+                    }
+                    dropdown.style.display = 'none';
+                    searchInput.value = ''; // تصفير حقل البحث بعد الضغط
                 });
                 
-                dropdown.style.display = 'block'; // إظهار القائمة للمستخدم
+                dropdown.appendChild(div);
+            }
+
+            // إظهار القائمة المنسدلة أو كلمة لا توجد نتائج
+            if (hasResults) {
+                dropdown.style.display = 'block';
             } else {
-                // إذا لم توجد نتائج، نعرض كلمة "لا توجد نتائج" أو نخفي القائمة
-                dropdown.innerHTML = `<div class="search-item" style="color: #aaa; cursor: default;">عذراً، لا توجد نتائج مطابقة...</div>`;
+                dropdown.innerHTML = `<div class="search-item" style="color: #aaa; cursor: default;">عذراً، لم يتم العثور على عناوين أو روابط مطابقة...</div>`;
                 dropdown.style.display = 'block';
             }
         });
 
-        // إغلاق القائمة تلقائياً إذا ضغط المستخدم في أي مكان خارجها
+        // إغلاق القائمة عند الضغط في أي مكان خارجها
         document.addEventListener('click', (event) => {
             if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
                 dropdown.style.display = 'none';
             }
         });
-    }
+    }    
     
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('load', handleRoute);
