@@ -548,19 +548,25 @@ function showNotification(message, isError = false) {
     }
 
 // 🔍 محرك البحث الشامل والذكي جداً (يدعم البحث عن الروابط، الفيديوهات، والعناوين)
+// 🔍 محرك البحث الشامل والذكي جداً (مع ميزة الدخول السريع عبر زر Enter)
     const dropdown = document.getElementById('searchDropdown');
 
     if (searchInput && dropdown) {
+        // مصفوفة مؤقتة لحفظ الروابط أو المعرفات المعروضة حالياً في القائمة المنسدلة
+        let currentDropdownItems = [];
+
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase().trim();
             
             if (term === '') { 
                 dropdown.innerHTML = '';
                 dropdown.style.display = 'none';
+                currentDropdownItems = []; // تصفير المصفوفة المؤقتة
                 return; 
             }
 
             dropdown.innerHTML = ''; // تصفير القائمة لبناء النتائج الجديدة
+            currentDropdownItems = []; // تصفير النتائج السابقة
             let hasResults = false;
 
             allData.forEach(item => {
@@ -578,11 +584,9 @@ function showNotification(message, isError = false) {
                         
                         if (matchText || matchUrl) {
                             hasResults = true;
-                            // يعرض اسم الزر والرابط بجانبه ليكون البحث شفافاً وذكياً
                             createDropdownItem(`🔗 رابط: ${link.text || 'مشاهدة'}`, item.id, link.url);
                         }
                     });
-                    
                 }
 
                 // 3. فحص العنوان الرئيسي والمحتوى النصي للبطاقة
@@ -594,28 +598,23 @@ function showNotification(message, isError = false) {
                 }
             });
 
-            // 📥 دالة داخلية ذكية لبناء أسطر الاقتراحات داخل القائمة
+            // دالة بناء عناصر القائمة المنسدلة
             function createDropdownItem(displayText, itemId, directUrl = null) {
                 const div = document.createElement('div');
                 div.className = 'search-item';
                 div.innerText = displayText;
                 
+                // حفظ البيانات في المصفوفة المؤقتة لاستخدامها مع زر Enter
+                currentDropdownItems.push({ itemId, directUrl });
+
                 div.addEventListener('click', () => {
-                    if (directUrl) {
-                        // 🚀 إذا كان البحث عن رابط محدد، يفتحه فوراً في نافذة خارجية كطلبك!
-                        window.open(directUrl, '_blank');
-                    } else {
-                        // إذا كان البحث عن البطاقة نفسها، يفتح الـ Popup الكاملة للموقع
-                        openDetails(itemId);
-                    }
-                    dropdown.style.display = 'none';
-                    searchInput.value = ''; // تصفير حقل البحث بعد الضغط
+                    executeSearchAction(itemId, directUrl);
                 });
                 
                 dropdown.appendChild(div);
             }
 
-            // إظهار القائمة المنسدلة أو كلمة لا توجد نتائج
+            // إظهار القائمة المنسدلة أو إخفاؤها
             if (hasResults) {
                 dropdown.style.display = 'block';
             } else {
@@ -624,14 +623,44 @@ function showNotification(message, isError = false) {
             }
         });
 
+        // 🔥 الميزة السحرية الجديدة: الاستماع لضغط زر Enter من الكيبورد
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                // التأكد من وجود نتائج معروضة حالياً في القائمة
+                if (currentDropdownItems.length > 0) {
+                    e.preventDefault(); // منع المتصفح من إعادة تحميل الصفحة الافتراضية
+                    
+                    // أخذ النتيجة الأولى المعروضة في أعلى القائمة المنسدلة مباشرة
+                    const firstResult = currentDropdownItems[0];
+                    
+                    // تنفيذ الدخول التلقائي فوراً
+                    executeSearchAction(firstResult.itemId, firstResult.directUrl);
+                }
+            }
+        });
+
+        // دالة مركزية موحدة لتنفيذ إجراء الدخول (بالماوس أو بالإنتر)
+        function executeSearchAction(itemId, directUrl) {
+            if (directUrl) {
+                window.open(directUrl, '_blank'); // فتح الموقع أو الفيديو في تبويب جديد
+            } else {
+                if (typeof openDetails === 'function') {
+                    openDetails(itemId); // فتح نافذة التفاصيل الـ Popup
+                }
+            }
+            dropdown.style.display = 'none';
+            searchInput.value = ''; 
+            currentDropdownItems = []; // تصفير الذاكرة المؤقتة بعد الدخول
+        }
+
         // إغلاق القائمة عند الضغط في أي مكان خارجها
         document.addEventListener('click', (event) => {
             if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
                 dropdown.style.display = 'none';
             }
         });
-    }    
-
+    }
+    
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('load', handleRoute);
     document.addEventListener('DOMContentLoaded', loadWebsiteData);
