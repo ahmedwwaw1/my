@@ -291,6 +291,7 @@ async function loadWebsiteData() {
             localData = JSON.parse(localDataRaw);
         }
 
+// --- استبدل جزء الـ map داخل دالة loadWebsiteData بهذا الكود المحمي ---
 allData = serverData.map((serverItem, index) => {
     const matchLocal = localData.find(localItem => localItem.title === serverItem.title);
     
@@ -300,10 +301,10 @@ allData = serverData.map((serverItem, index) => {
         category: serverItem.category,
         content: matchLocal ? matchLocal.content : serverItem.content,
         image: matchLocal ? matchLocal.image : serverItem.image,
-        // للتأكد من قراءة الرابط سواء كُتب بحروف كبيرة أو صغيرة في الـ JSON
         videoUrl: matchLocal ? matchLocal.videoUrl : (serverItem.videoUrl || serverItem.videourl),
         
-        // 🚀 السطر السحري المفقود الذي تسبب في المشكلة:
+        // 🔥 الحماية القصوى: نأخذ الروابط دائماً وبشكل مباشر من الـ JSON المحدث
+        // حتى لو كانت الـ localStorage قديمة أو تالفة
         links: serverItem.links || [] 
     };
 });
