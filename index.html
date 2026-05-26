@@ -516,21 +516,39 @@ function showNotification(message, isError = false) {
         if (activeLink) activeLink.classList.add('active');
     }
 
-    // محرك البحث
+// 🔍 محرك البحث الذكي والمطور لفحص محتويات وأزرار البطاقة من الداخل
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase().trim();
             if (term === '') { handleRoute(); return; }
 
-            const results = allData.filter(item => 
-                (item.title && item.title.toLowerCase().includes(term)) || 
-                (item.content && item.content.toLowerCase().includes(term))
-            );
+            const results = allData.filter(item => {
+                // 1. المطابقة مع العنوان الرئيسي للبطاقة
+                const matchTitle = item.title && item.title.toLowerCase().includes(term);
+                
+                // 2. المطابقة مع النص والمحتوى الداخلي للبطاقة
+                const matchContent = item.content && item.content.toLowerCase().includes(term);
+                
+                // 3. المطابقة مع أسماء الروابط والأزرار المضافة بالداخل (مثل: انزو)
+                let matchLinks = false;
+                if (item.links && Array.isArray(item.links)) {
+                    matchLinks = item.links.some(link => {
+                        return (
+                            (link.text && link.text.toLowerCase().includes(term)) || 
+                            (link.url && link.url.toLowerCase().includes(term))
+                        );
+                    });
+                }
+
+                // تظهر البطاقة إذا تحقق أي شرط من الثلاثة
+                return matchTitle || matchContent || matchLinks;
+            });
+
             pageTitle.innerText = 'نتائج البحث في كل الأقسام';
-            render(results);
+            render(results); // استدعاء دالة الرسم الأصلية لعرض النتائج المتطابقة
         });
     }
-
+    
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('load', handleRoute);
     document.addEventListener('DOMContentLoaded', loadWebsiteData);
