@@ -218,6 +218,35 @@
             transition: background 0.2s;
         }
         .panel-controls button:hover { background-color: #006699; }
+        .search-dropdown {
+        position: absolute;
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 8px;
+        width: 100%;
+        max-height: 250px;
+        overflow-y: auto;
+        z-index: 9999;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        margin-top: 5px;
+        direction: rtl;
+    }
+    .search-item {
+    padding: 12px 15px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+    border-bottom: 1px solid #2a2a2a;
+    }
+    .search-item:last-child {
+    border-bottom: none;
+    }
+    .search-item:hover {
+    background: #0088cc;
+    color: #fff;
+    }
+
     </style>
 </head>
 <body>
@@ -231,6 +260,7 @@
 <div class="container">
     <div class="search-container">
         <input type="text" id="globalSearch" placeholder="ابحث عن إشارة VSA، شركة استثمار، أو رابط معين...">
+        <div id="searchDropdown" class="search-dropdown" style="display: none;"></div>
     </div>
 
 
@@ -516,12 +546,21 @@ function showNotification(message, isError = false) {
         if (activeLink) activeLink.classList.add('active');
     }
 
-// 🔍 محرك البحث الذكي والمطور لفحص محتويات وأزار البطاقة من الداخل + الفتح التلقائي الذكي
-    if (searchInput) {
+// 🔍 محرك البحث الذكي المطور: إظهار الاقتراحات أسفل شريط البحث والفتح المباشر في المودال
+    const dropdown = document.getElementById('searchDropdown');
+
+    if (searchInput && dropdown) {
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase().trim();
-            if (term === '') { handleRoute(); return; }
+            
+            // إذا كان حقل البحث فارغاً، نخفي القائمة المنسدلة تماماً
+            if (term === '') { 
+                dropdown.innerHTML = '';
+                dropdown.style.display = 'none';
+                return; 
+            }
 
+            // فحص البيانات والبحث بالداخل والخارج
             const results = allData.filter(item => {
                 const matchTitle = item.title && item.title.toLowerCase().includes(term);
                 const matchContent = item.content && item.content.toLowerCase().includes(term);
@@ -535,20 +574,44 @@ function showNotification(message, isError = false) {
                         );
                     });
                 }
-
                 return matchTitle || matchContent || matchLinks;
             });
 
-            pageTitle.innerText = 'نتائج البحث في كل الأقسام';
-            render(results);
+            // بناء عناصر القائمة المنسدلة بناءً على النتائج
+            if (results.length > 0) {
+                dropdown.innerHTML = ''; // تصفير القائمة القديمة
+                
+                results.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'search-item';
+                    div.innerText = item.title; // عرض عنوان البطاقة في القائمة
+                    
+                    // 🚀 عند الضغط على اسم البطاقة من القائمة: تفتح النافذة الكبيرة فوراً!
+                    div.addEventListener('click', () => {
+                        openDetails(item.id); // فتح المودال الأصلي
+                        dropdown.style.display = 'none'; // إخفاء القائمة بعد الاختيار
+                        searchInput.value = ''; // تصفير مربع البحث (اختياري، حسب رغبتك)
+                    });
+                    
+                    dropdown.appendChild(div);
+                });
+                
+                dropdown.style.display = 'block'; // إظهار القائمة للمستخدم
+            } else {
+                // إذا لم توجد نتائج، نعرض كلمة "لا توجد نتائج" أو نخفي القائمة
+                dropdown.innerHTML = `<div class="search-item" style="color: #aaa; cursor: default;">عذراً، لا توجد نتائج مطابقة...</div>`;
+                dropdown.style.display = 'block';
+            }
+        });
 
-            // 🚀 السطر السحري المطور: يفتح تلقائياً فقط إذا ظهرت نتيجة واحدة وكانت الكلمة المكتوبة حرفين أو أكثر
-            if (results.length === 1 && term.length >= 2) {
-                openDetails(results[0].id);
+        // إغلاق القائمة تلقائياً إذا ضغط المستخدم في أي مكان خارجها
+        document.addEventListener('click', (event) => {
+            if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
             }
         });
     }
-        
+    
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('load', handleRoute);
     document.addEventListener('DOMContentLoaded', loadWebsiteData);
