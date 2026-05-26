@@ -281,34 +281,34 @@
     // دالة جلب البيانات
 async function loadWebsiteData() {
     try {
-        const response = await fetch('data.json');
-        if (!response.ok) throw new Error(`فشل الاتصال بالملف`);
+// 1. جلب ملف الـ JSON مع تكتيك منع الكاش لضمان التحديث المستمر
+        const response = await fetch('data.json?v=' + new Date().getTime());
+        if (!response.ok) throw new Error("فشل الاتصال بالملف");
         const serverData = await response.json();
-        
+
         const localDataRaw = localStorage.getItem('my_cards_data');
         let localData = [];
         if (localDataRaw && localDataRaw !== '[]' && localDataRaw !== 'undefined') {
             localData = JSON.parse(localDataRaw);
         }
 
-// --- استبدل جزء الـ map داخل دالة loadWebsiteData بهذا الكود المحمي ---
-allData = serverData.map((serverItem, index) => {
-    const matchLocal = localData.find(localItem => localItem.title === serverItem.title);
-    
-    return {
-        id: index + 1,
-        title: serverItem.title,
-        category: serverItem.category,
-        content: matchLocal ? matchLocal.content : serverItem.content,
-        image: matchLocal ? matchLocal.image : serverItem.image,
-        videoUrl: matchLocal ? matchLocal.videoUrl : (serverItem.videoUrl || serverItem.videourl),
+        // 2. دمج البيانات الذكي مع الحماية القصوى لحقل الروابط الـ links
+        allData = serverData.map((serverItem, index) => {
+            const matchLocal = localData.find(localItem => localItem.title === serverItem.title);
+            
+            return {
+                id: index + 1,
+                title: serverItem.title,
+                category: serverItem.category,
+                content: matchLocal ? matchLocal.content : serverItem.content,
+                image: matchLocal ? matchLocal.image : serverItem.image,
+                videoUrl: matchLocal ? matchLocal.videoUrl : (serverItem.videoUrl || serverItem.videourl),
+                
+                // 🔥 الأمان التام: نأخذ الروابط دائماً وبشكل مباشر وجديد من ملف الـ JSON
+                links: serverItem.links || []
+            };
+        });
         
-        // 🔥 الحماية القصوى: نأخذ الروابط دائماً وبشكل مباشر من الـ JSON المحدث
-        // حتى لو كانت الـ localStorage قديمة أو تالفة
-        links: serverItem.links || [] 
-    };
-});
-
         localStorage.setItem('my_cards_data', JSON.stringify(allData));
         console.log("🔄 تم فحص دمج البيانات بنجاح!");
 
@@ -582,8 +582,7 @@ function showNotification(message, isError = false) {
                             createDropdownItem(`🔗 رابط: ${link.text || 'مشاهدة'}`, item.id, link.url);
                         }
                     });
-                    // 🚀 هنا نضع كود الجاسوس المطور ليعمل بمجرد الكتابة في الصندوق:
-                    console.log("🕵️ كود الجاسوس - البيانات الكاملة في allData حالياً هي:", allData);
+                    
                 }
 
                 // 3. فحص العنوان الرئيسي والمحتوى النصي للبطاقة
