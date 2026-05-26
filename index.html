@@ -92,27 +92,50 @@
             padding: 0 20px;
         }
 
-        /* محرك البحث */
+        /* 1️⃣ الحاوية الكبيرة: لجعل المحرك واسعاً ومتمركزاً في المنتصف تماماً مثل جوجل */
         .search-container {
-            margin-bottom: 2rem;
+            position: relative;
+            width: 100%;
+            max-width: 690px; /* حجم عريض وفخم يعطي مساحة مريحة مثل جوجل */
+            margin: 30px auto; /* تمركز تلقائي في منتصف الصفحة مع مسافة عمودية */
+            box-sizing: border-box;
         }
 
+        /* 2️⃣ شريط البحث الذكي: باللون الرمادي الخافت والانسيابي */
         #globalSearch {
             width: 100%;
-            padding: 18px 25px;
-            border-radius: 50px;
-            border: 2px solid #333;
-            background: var(--card-bg);
-            color: white;
-            font-size: 1.2rem;
-            outline: none;
-            transition: var(--transition);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            text-align: center;
+            padding: 14px 24px; /* يعطي سماكة مريحة وارتفاعاً فخماً للشريط */
+            font-size: 16px;
+            background-color: #f1f3f4; /* 🎨 لون رمادي خافت وناعم جداً ومريح للعين */
+            border: 1px solid #e8eaed; /* حدود رمادية خافتة جداً تذوب مع الخلفية */
+            border-radius: 28px; /* تصميم كبسولة دائري بالكامل يعطيه هوية جوجل */
+            color: #202124;
+            outline: none; /* إلغاء الإطار الأزرق الافتراضي للمتصفحات */
+            transition: all 0.2s ease-in-out; /* حركة ناعمة وسلسة أثناء التفاعل */
+            box-sizing: border-box;
         }
 
+        /* 3️⃣ 🔥 تأثير الـ Hover والـ Focus: عند تحريك السهم عليه أو الضغط داخله */
+        #globalSearch:hover, 
         #globalSearch:focus {
-            border-color: var(--accent-color);
+            background-color: #ffffff; /* يتحول للون الأبيض الصافي ليصبح بارزاً */
+            border-color: #9aa0a6; /* 🎯 يتحول الإطار إلى رمادي داكن ومحدد ومائل للقتامة */
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.20); /* ظل جوجل الشهير الذي يعطي عمقاً ثلاثي الأبعاد */
+        }
+        /* 4️⃣ تنسيق القائمة المنسدلة لكي تتناسق مع الأبعاد الجديدة لشريط جوجل */
+        #searchDropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            border: 1px solid #dfe1e5;
+            border-radius: 16px; /* حواف دائرية ناعمة تتوافق مع انحناء شريط البحث */
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); /* ظل ناعم للقائمة */
+            z-index: 999;
+            overflow: hidden;
+            display: none;
         }
 
         /* تنسيق حجم وتباعد الكروت تماماً مثل يوتيوب بدون فراغات مفرطة وبمقاس كبير فخم */
@@ -663,7 +686,7 @@ function showNotification(message, isError = false) {
             }
         });
     }
-        
+
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('load', handleRoute);
     document.addEventListener('DOMContentLoaded', loadWebsiteData);
