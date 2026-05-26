@@ -92,50 +92,74 @@
             padding: 0 20px;
         }
 
-        /* 1️⃣ الحاوية الكبيرة: لجعل المحرك واسعاً ومتمركزاً في المنتصف تماماً مثل جوجل */
+        /* 1️⃣ الحاوية الكبيرة: متمركزة ومتناسقة تماماً مع أبعاد جوجل العريضة */
         .search-container {
             position: relative;
             width: 100%;
-            max-width: 690px; /* حجم عريض وفخم يعطي مساحة مريحة مثل جوجل */
-            margin: 30px auto; /* تمركز تلقائي في منتصف الصفحة مع مسافة عمودية */
+            max-width: 690px;
+            margin: 30px auto;
             box-sizing: border-box;
         }
 
-        /* 2️⃣ شريط البحث الذكي: باللون الرمادي الخافت والانسيابي */
+        /* 2️⃣ شريط البحث الاحترافي: متوافق 100% مع المظهر الداكن لجوجل */
         #globalSearch {
             width: 100%;
-            padding: 14px 24px; /* يعطي سماكة مريحة وارتفاعاً فخماً للشريط */
+            padding: 14px 24px;
             font-size: 16px;
-            background-color: #f1f3f4; /* 🎨 لون رمادي خافت وناعم جداً ومريح للعين */
-            border: 1px solid #e8eaed; /* حدود رمادية خافتة جداً تذوب مع الخلفية */
-            border-radius: 28px; /* تصميم كبسولة دائري بالكامل يعطيه هوية جوجل */
-            color: #202124;
-            outline: none; /* إلغاء الإطار الأزرق الافتراضي للمتصفحات */
-            transition: all 0.2s ease-in-out; /* حركة ناعمة وسلسة أثناء التفاعل */
+            background-color: #202124; /* 🎨 لون رمادي داكن مطفأ ومريح جداً مثل جوجل */
+            border: 1px solid #3c4043; /* حدود خافتة تذوب مع التصميم الداكن */
+            border-radius: 28px;
+            color: #e8eaed; /* نص أبيض ناعم وواضح جداً للكتابة */
+            outline: none;
+            transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
             box-sizing: border-box;
         }
+                /* تنسيق النص التوضيحي الباهت ليناسب الوضع الداكن */
+        #globalSearch::placeholder {
+            color: #9aa0a6;
+        }
 
-        /* 3️⃣ 🔥 تأثير الـ Hover والـ Focus: عند تحريك السهم عليه أو الضغط داخله */
+
+        /* 3️⃣ 🔥 تأثير الـ Hover والـ Focus: التفاعل الذكي عند الضغط بالماوس */
         #globalSearch:hover, 
         #globalSearch:focus {
-            background-color: #ffffff; /* يتحول للون الأبيض الصافي ليصبح بارزاً */
-            border-color: #9aa0a6; /* 🎯 يتحول الإطار إلى رمادي داكن ومحدد ومائل للقتامة */
-            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.20); /* ظل جوجل الشهير الذي يعطي عمقاً ثلاثي الأبعاد */
-        }
-        /* 4️⃣ تنسيق القائمة المنسدلة لكي تتناسق مع الأبعاد الجديدة لشريط جوجل */
+            background-color: #303134; /* 🎯 يتحول للرمادي المتفاعل المائل للقتامة تماماً مثل جوجل */
+            border-color: #5f6368; /* تصبح الحدود أكثر وضوحاً وعمقاً */
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5); /* ظل داكن ناعم يعطي حساً ثلاثي الأبعاد */
+        }        
+
+        /* 4️⃣ حل مشكلة التشويه واختفاء النتائج (تنسيق القائمة المنسدلة الداكنة) */
         #searchDropdown {
             position: absolute;
             top: 100%;
             left: 0;
             right: 0;
-            background-color: #ffffff;
-            border: 1px solid #dfe1e5;
-            border-radius: 16px; /* حواف دائرية ناعمة تتوافق مع انحناء شريط البحث */
+            background-color: #303134; /* خلفية داكنة منسجمة تمنع تداخل الألوان */
+            border: 1px solid #5f6368;
+            border-radius: 16px;
             margin-top: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); /* ظل ناعم للقائمة */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
             z-index: 999;
             overflow: hidden;
             display: none;
+        }
+                /* 5️⃣ تنسيق عناصر النتائج بالداخل لظهور النصوص بوضوح خارق */
+        .search-item {
+            padding: 12px 20px;
+            color: #e8eaed !important; /* 👁️ إجبار النص على الظهور باللون الأبيض الناعم الواضح جداً */
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid #3c4043;
+            text-align: right; /* متناسق مع اتجاه القراءة العربي */
+        }
+        .search-item:last-child {
+        border-bottom: none;
+        }
+        /* تأثير تمرير سهم الماوس فوق النتيجة قبل الضغط عليها */
+        .search-item:hover {
+            background-color: #3c4043 !important; /* تظليل رمادي خفيف عند الوقوف بالسهم */
+            color: #ffffff !important;
         }
 
         /* تنسيق حجم وتباعد الكروت تماماً مثل يوتيوب بدون فراغات مفرطة وبمقاس كبير فخم */
