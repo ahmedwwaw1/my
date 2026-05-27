@@ -318,7 +318,8 @@
 
 <script>
     // --- المعرفات الأساسية وقاعدة البيانات ---
-    let allData = []; 
+    let allData = [];
+    let isDataLoaded = false; // 🔥 مفتاح الأمان الجديد لمنع وميض الرسالة
     
     const grid = document.getElementById('mainGrid');
     const searchInput = document.getElementById('globalSearch');
@@ -355,23 +356,40 @@ async function loadWebsiteData() {
                 links: serverItem.links || []
             };
         });
-        
-        localStorage.setItem('my_cards_data', JSON.stringify(allData));
-        console.log("🔄 تم فحص دمج البيانات بنجاح!");
 
+// 🔥 هنا تضع المفتاح السحري فوراً بعد نجاح واكتمال عملية الدمج بالكامل:
+// 🔥 1. هنا نضع المفتاح السحري واستدعاء الرسم فوراً بعد نجاح واكتمال عملية الدمج بالكامل
+        isDataLoaded = true; 
+        render(allData);
+
+        // 2. حفظ البيانات المدمجة في الـ localStorage للتحديث المستقبلي
+        localStorage.setItem('my_cards_data', JSON.stringify(allData));
+        console.log("تم دمج البيانات بنجاح 🎉");
+
+        // 3. تشغيل نظام التوجيه (الراوتر) إذا كان متاحاً
         if (typeof handleRoute === 'function') {
             handleRoute();
         }
+
     } catch (error) {
-        console.error("❌ خطأ:", error);
+        console.error("❌ خلل في جلب البيانات من السيرفر:", error);
+        
+        // 🛡️ الحماية الذكية: في حال فشل الإنترنت، نحاول تشغيل الموقع من البيانات المحلية
         const localData = localStorage.getItem('my_cards_data');
         if (localData) {
             allData = JSON.parse(localData);
+            isDataLoaded = true; // تفعيل المفتاح حتى لا تظهر الرسالة المزعجة طالما هناك بيانات محلية
+            render(allData);
             if (typeof handleRoute === 'function') handleRoute();
+        } else {
+            // إذا لم تكن هناك بيانات لا في السيرفر ولا محلياً، تظهر رسالة الخطأ للمستخدم
+            if (statusMsg) {
+                statusMsg.innerText = "عذراً، حدث خلل أثناء تحميل البيانات.";
+            }
         }
     }
-}
-
+} // 👈 هذا القوس النهائي يغلق دالة loadWebsiteData بالكامل وبشكل سليم
+    
     // 🌟 [تعديل] دالة بناء وعرض الكروت الديناميكية بدون وضع openDetails داخل الـ HTML
     function render(dataArray) {
         const mainGrid = document.getElementById('mainGrid');
@@ -383,15 +401,19 @@ async function loadWebsiteData() {
             populateCardSelect(dataArray);
         }
 
-        if (!dataArray || dataArray.length === 0) {
-            mainGrid.innerHTML = `
-                <div style="color: #aaa; text-align: center; width: 100%; padding: 50px; font-size: 18px;">
-                    لا توجد بطاقات معروضة في هذا القسم حالياً.
-                </div>`;
+        // داخل دالة العرض أو الفلترة الخاصة بك:
+        if (dataArray.length === 0) {
+            grid.innerHTML = ''; 
+            
+            // 🔥 شرط ذكي: لا تعرض رسالة الخطأ إلا إذا تأكدنا أن البيانات تم تحميلها بالكامل من السيرفر!
+            if (isDataLoaded) {
+                statusMsg.innerText = "لا توجد بطاقات معروضة في هذا القسم";
+            }
             return;
         }
-
-        dataArray.forEach(item => {
+        statusMsg.innerText = ''; // تفريغ الرسالة في حال وجود بيانات
+        
+            dataArray.forEach(item => {
             const card = document.createElement('div');
             card.className = 'card';
             
