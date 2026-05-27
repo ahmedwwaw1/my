@@ -419,26 +419,6 @@ async function loadWebsiteData() {
         });
     }
 
-    // دالة تعبئة خيارات أسماء البطاقات تلقائياً في لوحة التحكم
-    function populateCardSelect(dataArray) {
-        const select = document.getElementById('cardSelect');
-        if (!select) return;
-        
-        const currentSelectedValue = select.value; 
-        select.innerHTML = '<option value="">اختر اسم البطاقة لتغيير صورتها...</option>';
-        
-        dataArray.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = item.title; 
-            select.appendChild(option);
-        });
-        
-        select.value = currentSelectedValue;
-    }
-
-
-
 
 // دالة الإشعار التلقائي الذكي
 function showNotification(message, isError = false) {
