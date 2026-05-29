@@ -266,50 +266,50 @@
         }
         .panel-controls button:hover { background-color: #006699; }
         .search-dropdown {
-            position: absolute;
-            background: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 8px;
-            width: 100%;
-            max-height: 250px;
-            overflow-y: auto;
-            z-index: 9999;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            margin-top: 5px;
-            direction: rtl;
-        }
-        .search-item {
-            padding: 12px 15px;
-            color: #fff;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.2s;
-            border-bottom: 1px solid #2a2a2a;
-        }
-        .search-item:last-child {
-            border-bottom: none;
-        }
-        .search-item:hover {
-            background: #0088cc;
-            color: #fff;
-        }
+        position: absolute;
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 8px;
+        width: 100%;
+        max-height: 250px;
+        overflow-y: auto;
+        z-index: 9999;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        margin-top: 5px;
+        direction: rtl;
+    }
+    .search-item {
+    padding: 12px 15px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+    border-bottom: 1px solid #2a2a2a;
+    }
+    .search-item:last-child {
+    border-bottom: none;
+    }
+    .search-item:hover {
+    background: #0088cc;
+    color: #fff;
+    }
+
     </style>
 </head>
 <body>
 
 <nav>
     <a href="#/" id="btn-vsa">التحليل الزمني</a>
-    <a href="#/ahmed" id="btn-ahmed">🐬 دورة MySQL</a> 
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
     <a href="#/videos" id="btn-videos">🎥 أكاديمية الفيديوهات</a>
-
-    </nav>
+</nav>
 
 <div class="container">
     <div class="search-container">
         <input type="text" id="globalSearch" placeholder="ابحث هنا...">
         <div id="searchDropdown" class="search-dropdown" style="display: none;"></div>
     </div>
+
 
     <h1 id="pageTitle" style="text-align: center; margin-bottom: 1.5rem; font-weight: 700;"></h1>
     <div id="statusMsg"></div>
@@ -319,88 +319,78 @@
 <script>
     // --- المعرفات الأساسية وقاعدة البيانات ---
     let allData = [];
-    let isDataLoaded = false; 
+    let isDataLoaded = false; // 🔥 مفتاح الأمان الجديد لمنع وميض الرسالة
     
     const grid = document.getElementById('mainGrid');
     const searchInput = document.getElementById('globalSearch');
     const pageTitle = document.getElementById('pageTitle');
     const statusMsg = document.getElementById('statusMsg');
 
-    // دالة جلب البيانات المدمجة ذكياً بين ملف الـ JSON وقاعدة بيانات MySQL عبر السيرفر الخاص بك
-    async function loadWebsiteData() {
-        try {
-            // 1. جلب ملف الـ JSON مع تكتيك منع الكاش لضمان التحديث المستمر
-            const response = await fetch('data.json?v=' + new Date().getTime());
-            if (!response.ok) throw new Error("فشل الاتصال بالملف الثابت");
-            const serverData = await response.json();
+    // دالة جلب البيانات
+async function loadWebsiteData() {
+    try {
+// 1. جلب ملف الـ JSON مع تكتيك منع الكاش لضمان التحديث المستمر
+        const response = await fetch('data.json?v=' + new Date().getTime());
+        if (!response.ok) throw new Error("فشل الاتصال بالملف");
+        const serverData = await response.json();
 
-            // 2. 🔥 جلب البيانات من سيرفر الـ Node.js المرتبط بقاعدة بيانات MySQL الخاصة بك
-            let mysqlData = [];
-            try {
-                // (تأكد أن رابط الـ API والمنفذ 3000 متطابقين مع ملف الـ server.js الخاص بك)
-                const mysqlResponse = await fetch('http://localhost:3000/api/cards'); 
-                if (mysqlResponse.ok) {
-                    mysqlData = await mysqlResponse.json();
-                }
-            } catch (mysqlErr) {
-                console.warn("⚠️ لم يتم الاتصال بسيرفر MySQL المحلي. سيتم عرض بيانات JSON فقط حالياً:", mysqlErr);
-            }
+        const localDataRaw = localStorage.getItem('my_cards_data');
+        let localData = [];
+        if (localDataRaw && localDataRaw !== '[]' && localDataRaw !== 'undefined') {
+            localData = JSON.parse(localDataRaw);
+        }
 
-            // الدمج الذكي الفوري للمصوفتين معاً لتكوين قاعدة بيانات واحدة شاملة وموحدة
-            const combinedRawData = [...serverData, ...mysqlData];
-
-            const localDataRaw = localStorage.getItem('my_cards_data');
-            let localData = [];
-            if (localDataRaw && localDataRaw !== '[]' && localDataRaw !== 'undefined') {
-                localData = JSON.parse(localDataRaw);
-            }
-
-            // 3. دمج البيانات الذكي مع الحماية القصوى لحقل الروابط الـ links
-            allData = combinedRawData.map((serverItem, index) => {
-                const matchLocal = localData.find(localItem => localItem.title === serverItem.title);
-                
-                return {
-                    id: serverItem.id || (index + 1), // استخدام الـ ID الحقيقي القادم من MySQL أو إنشاء تلقائي
-                    title: serverItem.title,
-                    category: serverItem.category,
-                    content: matchLocal ? matchLocal.content : serverItem.content,
-                    image: matchLocal ? matchLocal.image : serverItem.image,
-                    videoUrl: matchLocal ? matchLocal.videoUrl : (serverItem.videoUrl || serverItem.videourl),
-                    links: serverItem.links || []
-                };
-            });
-
-            isDataLoaded = true; 
-            render(allData);
-
-            // حفظ البيانات المدمجة في الـ localStorage للتحديث المستقبلي المريح
-            localStorage.setItem('my_cards_data', JSON.stringify(allData));
-            console.log("تم دمج بيانات JSON و MySQL بنجاح وسلاسة 🎉");
-
-            // تشغيل نظام التوجيه (الراوتر) لفرز الأقسام فوراً
-            if (typeof handleRoute === 'function') {
-                handleRoute();
-            }
-
-        } catch (error) {
-            console.error("❌ خلل في جلب البيانات من السيرفر:", error);
+        // 2. دمج البيانات الذكي مع الحماية القصوى لحقل الروابط الـ links
+        allData = serverData.map((serverItem, index) => {
+            const matchLocal = localData.find(localItem => localItem.title === serverItem.title);
             
-            // 🛡️ الحماية الذكية: في حال فشل السيرفر بالكامل، نحاول تشغيل الموقع من البيانات المحلية المخزنة سابقاً
-            const localData = localStorage.getItem('my_cards_data');
-            if (localData) {
-                allData = JSON.parse(localData);
-                isDataLoaded = true; 
-                render(allData);
-                if (typeof handleRoute === 'function') handleRoute();
-            } else {
-                if (statusMsg) {
-                    statusMsg.innerText = "عذراً، حدث خلل أثناء تحميل البيانات.";
-                }
+            return {
+                id: index + 1,
+                title: serverItem.title,
+                category: serverItem.category,
+                content: matchLocal ? matchLocal.content : serverItem.content,
+                image: matchLocal ? matchLocal.image : serverItem.image,
+                videoUrl: matchLocal ? matchLocal.videoUrl : (serverItem.videoUrl || serverItem.videourl),
+                
+                // 🔥 الأمان التام: نأخذ الروابط دائماً وبشكل مباشر وجديد من ملف الـ JSON
+                links: serverItem.links || []
+            };
+        });
+
+// 🔥 هنا تضع المفتاح السحري فوراً بعد نجاح واكتمال عملية الدمج بالكامل:
+// 🔥 1. هنا نضع المفتاح السحري واستدعاء الرسم فوراً بعد نجاح واكتمال عملية الدمج بالكامل
+        isDataLoaded = true; 
+        render(allData);
+
+        // 2. حفظ البيانات المدمجة في الـ localStorage للتحديث المستقبلي
+        localStorage.setItem('my_cards_data', JSON.stringify(allData));
+        console.log("تم دمج البيانات بنجاح 🎉");
+
+        // 3. تشغيل نظام التوجيه (الراوتر) إذا كان متاحاً
+        if (typeof handleRoute === 'function') {
+            handleRoute();
+        }
+
+    } catch (error) {
+        console.error("❌ خلل في جلب البيانات من السيرفر:", error);
+        
+        // 🛡️ الحماية الذكية: في حال فشل الإنترنت، نحاول تشغيل الموقع من البيانات المحلية
+        const localData = localStorage.getItem('my_cards_data');
+        if (localData) {
+            allData = JSON.parse(localData);
+            isDataLoaded = true; // تفعيل المفتاح حتى لا تظهر الرسالة المزعجة طالما هناك بيانات محلية
+            render(allData);
+            if (typeof handleRoute === 'function') handleRoute();
+        } else {
+            // إذا لم تكن هناك بيانات لا في السيرفر ولا محلياً، تظهر رسالة الخطأ للمستخدم
+            if (statusMsg) {
+                statusMsg.innerText = "عذراً، حدث خلل أثناء تحميل البيانات.";
             }
         }
     }
+} // 👈 هذا القوس النهائي يغلق دالة loadWebsiteData بالكامل وبشكل سليم
     
-    // دالة بناء وعرض الكروت الديناميكية برمجياً بحماية تامة
+    // 🌟 [تعديل] دالة بناء وعرض الكروت الديناميكية بدون وضع openDetails داخل الـ HTML
     function render(dataArray) {
         const mainGrid = document.getElementById('mainGrid');
         if (!mainGrid) return; 
@@ -411,19 +401,23 @@
             populateCardSelect(dataArray);
         }
 
+        // داخل دالة العرض أو الفلترة الخاصة بك:
         if (dataArray.length === 0) {
             grid.innerHTML = ''; 
+            
+            // 🔥 شرط ذكي: لا تعرض رسالة الخطأ إلا إذا تأكدنا أن البيانات تم تحميلها بالكامل من السيرفر!
             if (isDataLoaded) {
-                statusMsg.innerText = "لا توجد بطاقات معروضة في هذا القسم حالياً";
+                statusMsg.innerText = "لا توجد بطاقات معروضة في هذا القسم";
             }
             return;
         }
-        statusMsg.innerText = ''; 
+        statusMsg.innerText = ''; // تفريغ الرسالة في حال وجود بيانات
         
-        dataArray.forEach(item => {
+            dataArray.forEach(item => {
             const card = document.createElement('div');
             card.className = 'card';
             
+            // 🚀 التعديل السحري: ربط دالة الفتح برمجياً بالكامل هنا لحماية التصميم والنقاء
             card.addEventListener('click', function() {
                 openDetails(item.id);
             });
@@ -435,6 +429,7 @@
                 mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/360x203/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
             }
 
+            // الـ HTML هنا أصبح نظيفاً تماماً من أي وسوم أزرار أو أحداث onclick
             card.innerHTML = `
                 ${mediaContent}
                 <div class="card-body-container">
@@ -446,49 +441,50 @@
         });
     }
 
-    // دالة الإشعار التلقائي الذكي
-    function showNotification(message, isError = false) {
-        const oldNotify = document.getElementById('custom-toast-notification');
-        if (oldNotify) oldNotify.remove();
 
-        const notify = document.createElement('div');
-        notify.id = 'custom-toast-notification';
-        notify.innerText = message;
+// دالة الإشعار التلقائي الذكي
+function showNotification(message, isError = false) {
+    const oldNotify = document.getElementById('custom-toast-notification');
+    if (oldNotify) oldNotify.remove();
 
-        notify.style.position = 'fixed';
-        notify.style.top = '15px';
-        notify.style.left = '50%';
-        notify.style.transform = 'translateX(-50%)';
-        notify.style.backgroundColor = isError ? '#d9534f' : '#2ecc71'; 
-        notify.style.color = '#ffffff';
-        notify.style.padding = '12px 25px';
-        notify.style.borderRadius = '8px';
-        notify.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)';
-        notify.style.zIndex = '99999'; 
-        notify.style.fontFamily = 'system-ui, -apple-system, sans-serif';
-        notify.style.fontSize = '14px';
-        notify.style.fontWeight = '500';
-        notify.style.direction = 'rtl';
+    const notify = document.createElement('div');
+    notify.id = 'custom-toast-notification';
+    notify.innerText = message;
+
+    notify.style.position = 'fixed';
+    notify.style.top = '15px';
+    notify.style.left = '50%';
+    notify.style.transform = 'translateX(-50%)';
+    notify.style.backgroundColor = isError ? '#d9534f' : '#2ecc71'; 
+    notify.style.color = '#ffffff';
+    notify.style.padding = '12px 25px';
+    notify.style.borderRadius = '8px';
+    notify.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)';
+    notify.style.zIndex = '99999'; 
+    notify.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+    notify.style.fontSize = '14px';
+    notify.style.fontWeight = '500';
+    notify.style.direction = 'rtl';
+    notify.style.opacity = '0';
+    notify.style.transition = 'all 0.3s ease';
+
+    document.body.appendChild(notify);
+
+    setTimeout(() => {
+        notify.style.opacity = '1';
+        notify.style.top = '30px';
+    }, 50);
+
+    setTimeout(() => {
         notify.style.opacity = '0';
-        notify.style.transition = 'all 0.3s ease';
-
-        document.body.appendChild(notify);
-
+        notify.style.top = '15px';
         setTimeout(() => {
-            notify.style.opacity = '1';
-            notify.style.top = '30px';
-        }, 50);
-
-        setTimeout(() => {
-            notify.style.opacity = '0';
-            notify.style.top = '15px';
-            setTimeout(() => {
-                notify.remove();
-            }, 300);
-        }, 2500);
-    }
+            notify.remove();
+        }, 300);
+    }, 2500);
+}
     
-    // نظام التوجيه والتنقل الداخلي الفوري (الراوتر المحدث ليدعم الـ MySQL)
+    // نظام التوجيه والتنقل الداخلي
     function handleRoute() {
         const hash = window.location.hash || '#/';
         if (searchInput) searchInput.value = ''; 
@@ -505,12 +501,6 @@
             render(filtered);
             setActiveNav('btn-videos');
         } 
-        else if (hash === '#/ahmed') { // 🌟 إضافة مسار قسم كروت قواعد البيانات القادمة من MySQL
-            const filtered = allData.filter(d => d.category === 'ahmed');
-            pageTitle.innerText = 'مقدمة في تحليل حجم التداول';
-            render(filtered);
-            setActiveNav('btn-ahmed');
-        }
         else {
             const filtered = allData.filter(d => d.category === 'vsa');
             pageTitle.innerText = 'أكاديمية VSA والتداول';
@@ -525,12 +515,15 @@
         if (activeLink) activeLink.classList.add('active');
     }
 
-    // محرك البحث الشامل والذكي 
+// 🔍 محرك البحث الشامل والذكي جداً (يدعم البحث عن الروابط، الفيديوهات، والعناوين)
+// 🔍 محرك البحث الشامل والذكي جداً (مع ميزة الدخول السريع عبر زر Enter)
+// 🔍 محرك البحث الشامل والذكي (المحدث لمحاكاة جوجل عند الضغط والتركيز)
     const dropdown = document.getElementById('searchDropdown');
 
     if (searchInput && dropdown) {
         let currentDropdownItems = [];
 
+        // دالة مركزية لتشغيل الفلترة والبحث بناءً على النص المكتوب
         function performSearch() {
             const term = searchInput.value.toLowerCase().trim();
             
@@ -546,11 +539,13 @@
             let hasResults = false;
 
             allData.forEach(item => {
+                // 1. فحص الرابط الرئيسي للبطاقة (videoUrl)
                 if (item.videoUrl && item.videoUrl.toLowerCase().includes(term)) {
                     hasResults = true;
                     createDropdownItem(`📺 فيديو: ${item.title}`, item.id, item.videoUrl);
                 }
 
+                // 2. فحص مصفوفة الروابط والأزرار الداخلية
                 if (item.links && Array.isArray(item.links)) {
                     item.links.forEach(link => {
                         const matchText = link.text && link.text.toLowerCase().includes(term);
@@ -563,6 +558,7 @@
                     });
                 }
 
+                // 3. فحص العنوان الرئيسي والمحتوى النصي
                 const matchTitle = item.title && item.title.toLowerCase().includes(term);
                 const matchContent = item.content && item.content.toLowerCase().includes(term);
                 if (matchTitle || matchContent) {
@@ -593,14 +589,17 @@
             }
         }
 
+        // 1️⃣ الحدث الأول: عند الكتابة في خانة البحث (المعتاد)
         searchInput.addEventListener('input', performSearch);
 
+        // 2️⃣ 🔥 الحدث الثاني الجديد: إظهار النتائج فوراً بمجرد الضغط بالماوس داخل الصندوق (مثل جوجل)
         searchInput.addEventListener('focus', () => {
             if (searchInput.value.trim() !== '') {
                 performSearch();
             }
         });
 
+        // 3️⃣ ميزة الدخول السريع عبر زر Enter من الكيبورد
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 if (currentDropdownItems.length > 0) {
@@ -611,6 +610,7 @@
             }
         });
 
+        // دالة مركزية لتنفيذ إجراء الدخول
         function executeSearchAction(itemId, directUrl) {
             if (directUrl) {
                 window.open(directUrl, '_blank'); 
@@ -624,6 +624,7 @@
             currentDropdownItems = []; 
         }
 
+        // إغلاق القائمة عند الضغط في أي مكان خارجها
         document.addEventListener('click', (event) => {
             if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
                 dropdown.style.display = 'none';
@@ -635,159 +636,199 @@
     window.addEventListener('load', handleRoute);
     document.addEventListener('DOMContentLoaded', loadWebsiteData);
 
-    function getYouTubeEmbedUrl(url) {
-        if (!url) return null;
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        if (match && match[2].length === 11) {
-            return `https://www.youtube.com/embed/${match[2]}`;
-        }
-        return null;
+    // دالة مخصصة لاستخراج معرف اليوتيوب
+function getYouTubeEmbedUrl(url) {
+    if (!url) return null;
+    
+    // تعبير نمطي (RegEx) للتعرف على جميع صيغ روابط اليوتيوب واستخراج الـ ID
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    
+    if (match && match[2].length === 11) {
+        const videoId = match[2];
+        return `https://www.youtube.com/embed/${videoId}`;
+    }
+    return null; // ليس رابط يوتيوب
+}
+// 1️⃣ الدالة الذكية لتحويل روابط الفيديو (يوتيوب، تليجرام، فيسبوك) إلى صيغة قابلة للعرض داخل iFrame
+function getUniversalEmbedUrl(url) {
+    if (!url) return null;
+    const lowerUrl = url.toLowerCase();
+
+    // 1. روابط اليوتيوب (شغالة تمام)
+    if (lowerUrl.includes('youtube.com') || lowerUrl.includes('youtu.be')) {
+        return getYouTubeEmbedUrl(url); 
     }
 
-    function getUniversalEmbedUrl(url) {
-        if (!url) return null;
-        const lowerUrl = url.toLowerCase();
-
-        if (lowerUrl.includes('youtube.com') || lowerUrl.includes('youtu.be')) {
-            return getYouTubeEmbedUrl(url); 
-        }
-        if (lowerUrl.includes('facebook.com') && (lowerUrl.includes('/videos/') || lowerUrl.includes('/watch') || lowerUrl.includes('/posts/'))) {
-            return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=100%`;
-        }
-        if (lowerUrl.includes('t.me/') && !lowerUrl.includes('joinchat') && !lowerUrl.includes('web.telegram.org') && !lowerUrl.includes('/c/')) { 
-            const parts = url.split('?')[0].split('/');
-            const lastPart = parts[parts.length - 1];
-            if (lastPart && !isNaN(lastPart)) {
-                return `${url.split('?')[0]}?embed=1`;
-            }
-        }
-        return null;
+    // 2. روابط فيديوهات الفيسبوك العامة
+    if (lowerUrl.includes('facebook.com') && (lowerUrl.includes('/videos/') || lowerUrl.includes('/watch') || lowerUrl.includes('/posts/'))) {
+        return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=100%`;
     }
 
-    function updateBigScreen(url) {
-        const bigScreen = document.getElementById("bigScreenContainer"); 
-        if (!bigScreen) return;
-        if (!url) {
-            bigScreen.innerHTML = `<div class="placeholder-text">الرجاء تحديد بطاقة لعرض المحتوى</div>`;
-            return;
-        }
-
-        const embedUrl = getYouTubeEmbedUrl(url);
-        if (embedUrl) {
-            bigScreen.innerHTML = `
-                <iframe src="${embedUrl}" width="100%" height="100%" frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
-                </iframe>`;
-        } else {
-            bigScreen.innerHTML = `
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #fff; padding: 20px; text-align: center; background: #111;">
-                    <p style="margin-bottom: 15px; font-size: 16px;">هذا الرابط لا يدعم العرض المباشر داخل النافذة لحماية خصوصية الموقع المصدر.</p>
-                    <a href="${url}" target="_blank" style="background: #0088cc; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,136,204,0.3);">
-                        اضغط هنا لفتح الرابط في نافذة خارجية 🚀
-                    </a>
-                </div>`;
+    // 3. 🛡️ فحص التليجرام الصارم (فقط القنوات العامة التي تنتهي برقم منشور)
+    // نمنع روابط الويب والمجموعات الخاصة والـ joinchat حتى لا تسبب شاشة سوداء
+    if (lowerUrl.includes('t.me/') && 
+        !lowerUrl.includes('joinchat') && 
+        !lowerUrl.includes('web.telegram.org') && 
+        !lowerUrl.includes('/c/')) { // /c/ تعني قناة خاصة
+        
+        const parts = url.split('?')[0].split('/');
+        const lastPart = parts[parts.length - 1];
+        
+        // التأكد من أن نهاية الرابط هي رقم المنشور المباشر (مثل: t.me/username/15)
+        if (lastPart && !isNaN(lastPart)) {
+            return `${url.split('?')[0]}?embed=1`;
         }
     }
 
-    // دالة فتح تفاصيل المودال الشاملة
-    function openDetails(id) {
-        const selectedItem = allData.find(item => item.id === id);
+    // 🚀 أي رابط آخر لا يدعم العرض (كرابط تليجرام ويب الخاص بك) سيرجع null ليتحول تلقائياً لزر فخم
+    return null;
+}
+function updateBigScreen(url) {
+    // قم بتغيير 'bigScreenContainer' إلى المعرّف (ID) الخاص بالشاشة الكبيرة في كودك
+    const bigScreen = document.getElementById("bigScreenContainer"); 
+    
+    if (!url) {
+        bigScreen.innerHTML = `<div class="placeholder-text">الرجاء تحديد بطاقة لعرض المحتوى</div>`;
+        return;
+    }
 
-        if (selectedItem) {
-            document.getElementById('modalTitle').innerText = selectedItem.title || '';
-            document.getElementById('modalContent').innerText = selectedItem.content || '';
+    // 1. التحقق أولاً إذا كان الرابط يوتيوب
+    const embedUrl = getYouTubeEmbedUrl(url);
+    
+    if (embedUrl) {
+        // إذا كان يوتيوب، نعرض الـ iframe بشكل طبيعي باستخدام رابط الـ embed الجديد
+        bigScreen.innerHTML = `
+            <iframe src="${embedUrl}" width="100%" height="100%" frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+            </iframe>`;
+    } else {
+        // 2. إذا كان موقعاً آخر (بينانس، فيسبوك، تليجرام) لا يدعم التضمين لأسباب أمنية
+        bigScreen.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #fff; padding: 20px; text-align: center; background: #111;">
+                <p style="margin-bottom: 15px; font-size: 16px;">هذا الرابط لا يدعم العرض المباشر داخل النافذة لحماية خصوصية الموقع المصدر.</p>
+                <a href="${url}" target="_blank" style="background: #0088cc; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,136,204,0.3);">
+                    اضغط هنا لفتح الرابط في نافذة خارجية 🚀
+                </a>
+            </div>`;
+    }
+}
 
-            const videoContainer = document.getElementById('popupVideoContainer');
-            const linksContainer = document.getElementById('popupLinksContainer');
+// 2️⃣ دالة فتح تفاصيل المودال المحدثة بالكامل لتدعم شاشات فيديو متعددة
+function openDetails(id) {
+    const selectedItem = allData.find(item => item.id === id);
 
-            if (videoContainer) {
-                videoContainer.innerHTML = '';
-                videoContainer.style.display = 'none';
+    if (selectedItem) {
+        // 1. تعبئة النصوص الأساسية في المودال
+        document.getElementById('modalTitle').innerText = selectedItem.title || '';
+        document.getElementById('modalContent').innerText = selectedItem.content || '';
+
+        const videoContainer = document.getElementById('popupVideoContainer');
+        const linksContainer = document.getElementById('popupLinksContainer');
+
+        // تصفير وتفريغ الحاويات عند كل عملية فتح جديدة
+        if (videoContainer) {
+            videoContainer.innerHTML = '';
+            videoContainer.style.display = 'none';
+        }
+        if (linksContainer) {
+            linksContainer.innerHTML = '';
+        }
+
+        // 📥 دالة مساعدة داخلية لإنشاء الأزرار التفاعلية بتصميم متناسق وفخم
+        function createDynamicButton(url, text) {
+            const btn = document.createElement('a');
+            btn.href = url; // قراءة الرابط المباشر من الـ JSON كما هو تماماً بدون أي تعديل
+            btn.target = '_blank'; 
+            
+            // 💡 تم حذف سطر noopener noreferrer لضمان بقاء الجلسة مفتوحة وتوجيه تليجرام ويب للفيديو مباشرة
+            
+            btn.innerText = text;
+
+            // تنسيق التصميم العصري للأزرار ليتناسب مع هوية موقعك
+            btn.style.textDecoration = 'none';
+            btn.style.padding = '14px 28px';
+            btn.style.borderRadius = '10px';
+            btn.style.fontWeight = 'bold';
+            btn.style.fontSize = '1rem';
+            btn.style.transition = 'all 0.25s ease';
+            btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+            btn.style.display = 'inline-block';
+            btn.style.margin = '8px';
+            btn.style.textAlign = 'center';
+
+            const lowerUrl = url.toLowerCase();
+            
+            // 🔹 تلوين وتنسيق زر التليجرام 
+            if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram.org')) {
+                btn.style.backgroundColor = '#0088cc'; 
+                btn.style.color = '#ffffff';
+                btn.innerText = '🔹 ' + text;
+            } 
+            // 🔵 زر الفيسبوك
+            else if (lowerUrl.includes('facebook.com')) {
+                btn.style.backgroundColor = '#1877f2'; 
+                btn.style.color = '#ffffff';
+                btn.innerText = '🔵 ' + text;
+            } 
+            // 🔸 زر بينانس الأصفر
+            else if (lowerUrl.includes('binance.com')) {
+                btn.style.backgroundColor = '#fcd535'; 
+                btn.style.color = '#111111';
+                btn.innerText = '🔸 ' + text;
+            } 
+            // 🟢 باقي الروابط الخارجية وأدوات التحليل
+            else {
+                btn.style.backgroundColor = '#222222'; 
+                btn.style.color = '#00ff88'; 
+                btn.style.border = '1px solid #333';
+                btn.innerText = '🔗 ' + text;
             }
-            if (linksContainer) {
-                linksContainer.innerHTML = '';
-            }
 
-            function createDynamicButton(url, text) {
-                const btn = document.createElement('a');
-                btn.href = url; 
-                btn.target = '_blank'; 
-                btn.innerText = text;
-
-                btn.style.textDecoration = 'none';
-                btn.style.padding = '14px 28px';
-                btn.style.borderRadius = '10px';
-                btn.style.fontWeight = 'bold';
-                btn.style.fontSize = '1rem';
-                btn.style.transition = 'all 0.25s ease';
+            // تأثيرات الحركة عند تمرير الماوس (Hover)
+            btn.onmouseenter = () => { 
+                btn.style.transform = 'translateY(-3px)'; 
+                btn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
+            };
+            btn.onmouseleave = () => { 
+                btn.style.transform = 'translateY(0)'; 
                 btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
-                btn.style.display = 'inline-block';
-                btn.style.margin = '8px';
-                btn.style.textAlign = 'center';
+            };
 
-                const lowerUrl = url.toLowerCase();
-                
-                if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram.org')) {
-                    btn.style.backgroundColor = '#0088cc'; 
-                    btn.style.color = '#ffffff';
-                    btn.innerText = '🔹 ' + text;
-                } 
-                else if (lowerUrl.includes('facebook.com')) {
-                    btn.style.backgroundColor = '#1877f2'; 
-                    btn.style.color = '#ffffff';
-                    btn.innerText = '🔵 ' + text;
-                } 
-                else if (lowerUrl.includes('binance.com')) {
-                    btn.style.backgroundColor = '#fcd535'; 
-                    btn.style.color = '#111111';
-                    btn.innerText = '🔸 ' + text;
-                } 
-                else {
-                    btn.style.backgroundColor = '#222222'; 
-                    btn.style.color = '#00ff88'; 
-                    btn.style.border = '1px solid #333';
-                    btn.innerText = '🔗 ' + text;
-                }
-
-                btn.onmouseenter = () => { 
-                    btn.style.transform = 'translateY(-3px)'; 
-                    btn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
-                };
-                btn.onmouseleave = () => { 
-                    btn.style.transform = 'translateY(0)'; 
-                    btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
-                };
-
-                linksContainer.appendChild(btn);
-            }
-
-            const mainUrl = selectedItem.videoUrl;
-            if (mainUrl && mainUrl.trim() !== '') {
-                if (mainUrl.includes('youtube.com') || mainUrl.includes('youtu.be')) {
-                    const embedUrl = getYouTubeEmbedUrl(mainUrl);
-                    if (videoContainer && embedUrl) {
-                        videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
-                        videoContainer.style.display = 'block';
-                    }
-                } else {
-                    createDynamicButton(mainUrl, 'فتح الرابط الرئيسي');
-                }
-            }
-
-            // معالجة مصفوفة الأزرار الداخلية الإضافية القادمة من الداتا
-            if (selectedItem.links && Array.isArray(selectedItem.links)) {
-                selectedItem.links.forEach(link => {
-                    if (!link.url) return;
-                    createDynamicButton(link.url, link.text || 'مشاهدة الدرس');
-                });
-            }
-
-            document.getElementById('myModal').style.display = "block";
+            linksContainer.appendChild(btn);
         }
-    }
 
+        // 📺 أولاً: تشغيل فيديو اليوتيوب الرئيسي في الحاوية العلوية (إن وُجد)
+        const mainUrl = selectedItem.videoUrl;
+        if (mainUrl && mainUrl.trim() !== '') {
+            if (mainUrl.includes('youtube.com') || mainUrl.includes('youtu.be')) {
+                const embedUrl = getYouTubeEmbedUrl(mainUrl);
+                if (videoContainer && embedUrl) {
+                    videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+                    videoContainer.style.display = 'block';
+                }
+            } else {
+                createDynamicButton(mainUrl, 'فتح الرابط الرئيسي');
+            }
+        }
+
+        // 🚀 ثانياً: معالجة مصفوفة الروابط (Links) وإنشاء الأزرار بالروابط الأصلية مباشرة
+        if (selectedItem.links && Array.isArray(selectedItem.links)) {
+            selectedItem.links.forEach(link => {
+                if (!link.url) return;
+                
+                // يتم إرسال الرابط والنص الأصليين مباشرة دون تدخل برمي يعيق التوجيه
+                createDynamicButton(link.url, link.text || 'مشاهدة الدرس');
+            });
+        }
+
+        // إظهار نافذة المودال للمستخدم
+        document.getElementById('myModal').style.display = "block";
+    }
+}
+
+    // دالة إغلاق النافذة
     function closeModal() {
         document.getElementById('myModal').style.display = "none";
         const videoContainer = document.getElementById('popupVideoContainer');
