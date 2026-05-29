@@ -299,10 +299,11 @@
 
 <nav>
     <a href="#/" id="btn-vsa">التحليل الزمني</a>
-    <a href="#/mysql" id="btn-mysql">🐬 دورة MySQL</a>
+    <a href="#/ahmed" id="btn-ahmed">🐬 دورة MySQL</a> 
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
     <a href="#/videos" id="btn-videos">🎥 أكاديمية الفيديوهات</a>
-</nav>
+
+    </nav>
 
 <div class="container">
     <div class="search-container">
@@ -504,11 +505,11 @@
             render(filtered);
             setActiveNav('btn-videos');
         } 
-        else if (hash === '#/mysql') { // 🌟 إضافة مسار قسم كروت قواعد البيانات القادمة من MySQL
-            const filtered = allData.filter(d => d.category === 'MySQL');
+        else if (hash === '#/ahmed') { // 🌟 إضافة مسار قسم كروت قواعد البيانات القادمة من MySQL
+            const filtered = allData.filter(d => d.category === 'ahmed');
             pageTitle.innerText = 'مقدمة في تحليل حجم التداول';
             render(filtered);
-            setActiveNav('btn-mysql');
+            setActiveNav('btn-ahmed');
         }
         else {
             const filtered = allData.filter(d => d.category === 'vsa');
