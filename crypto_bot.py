@@ -17,6 +17,7 @@ def auto_github_push():
         print("🚀 تم تحديث موقعك على GitHub Pages بنجاح وبشكل آلي!")
     except Exception as e:
         print(f"⚠️ تنبيه: لم يتم الرفع (قد لا توجد تغييرات جديدة أو مشكلة اتصال): {e}")
+ 
 
 def analyze_crypto_market():
     # ... (الأكواد الحالية الخاصة بك لجلب البيانات من بينانس) ...
