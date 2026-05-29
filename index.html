@@ -299,7 +299,8 @@
 
 <nav>
     <a href="#/" id="btn-vsa">التحليل الزمني</a>
-    <a href="#/mysql" id="btn-mysql">🐬 دورة MySQL</a> <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
+    <a href="#/mysql" id="btn-mysql">🐬 دورة MySQL</a>
+    <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
     <a href="#/videos" id="btn-videos">🎥 أكاديمية الفيديوهات</a>
 </nav>
 
@@ -505,7 +506,7 @@
         } 
         else if (hash === '#/mysql') { // 🌟 إضافة مسار قسم كروت قواعد البيانات القادمة من MySQL
             const filtered = allData.filter(d => d.category === 'MySQL');
-            pageTitle.innerText = 'دورة قواعد البياناتMySQL';
+            pageTitle.innerText = 'مقدمة في تحليل حجم التداول';
             render(filtered);
             setActiveNav('btn-mysql');
         }
