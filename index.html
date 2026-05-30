@@ -854,15 +854,15 @@ function openDetails(id) {
     }
    // #region دوال دعم الفصول والملاحظات الزمنية داخل الفيديو
 function openCardModal(cardId) {
-    // البحث عن الكارت المختار داخل البيانات العامة
+    // 1. البحث عن الكارت المختار داخل البيانات العامة القادمة من data.json
     const selectedItem = allData.find(item => item.id === cardId);
     if (!selectedItem) return;
 
-    // وضع العنوان والنص الأساسي
+    // 2. تعبئة العنوان والنص الأساسي للكارت
     document.getElementById('modalTitle').innerText = selectedItem.title || '';
     document.getElementById('modalContent').innerText = selectedItem.content || '';
 
-    // تفعيل وإعداد الفيديو
+    // 3. التحكم في تشغيل الفيديو وعرض الحاوية الخاصة به
     const videoContainer = document.getElementById('popupVideoContainer');
     const videoElement = document.getElementById('modalVideo');
     if (selectedItem.videoUrl) {
@@ -874,17 +874,16 @@ function openCardModal(cardId) {
         videoElement.src = '';
     }
 
-    // ─── 1️⃣ بناء أزرار الأوقات (Chapters) تلقائياً ───
+    // 4. بناء أزرار الأوقات والشباتر (Chapters) تلقائياً
     const chaptersContainer = document.getElementById('chaptersContainer');
-    chaptersContainer.innerHTML = ''; // تنظيف الحاوية السابقة
+    chaptersContainer.innerHTML = ''; // تنظيف الأزرار السابقة قبل البناء الجديد
     
-    // ملاحظة: تم كتابة "Chapters" بحرف C كبير لتطابق ملف الـ JSON الخاص بك تماماً
     if (selectedItem.Chapters && selectedItem.Chapters.length > 0) {
         selectedItem.Chapters.forEach(chapter => {
             const chapBtn = document.createElement('button');
             chapBtn.innerText = chapter.text;
             
-            // تصميم أنيق مخصص للأزرار
+            // تنسيق شكل الأزرار برمجياً لتظهر بشكل أنيق ومتناسق
             chapBtn.style.padding = '8px 14px';
             chapBtn.style.background = '#111';
             chapBtn.style.color = '#0088cc';
@@ -894,14 +893,14 @@ function openCardModal(cardId) {
             chapBtn.style.fontSize = '0.9rem';
             chapBtn.style.transition = '0.3s';
 
-            // ميزة الانتقال للوقت المحدد بالفيديو عند النقر
+            // ميزة الانتقال للثانية المحددة في الفيديو عند الضغط على الزر
             if (chapter.seconds !== undefined) {
                 chapBtn.addEventListener('click', () => {
-                    videoElement.currentTime = chapter.seconds; // توجيه الفيديو للثانية المطلوبة
-                    videoElement.play(); // تشغيل الفيديو تلقائياً
+                    videoElement.currentTime = chapter.seconds; // توجيه مؤشر الوقت
+                    videoElement.play(); // تشغيل تلقائي
                 });
             } else if (chapter.url) {
-                // إذا كان التشابتر يحتوي رابط خارجي بدلاً من ثواني
+                // في حال وجود روابط خارجية بديلة للأوقات
                 chapBtn.addEventListener('click', () => {
                     window.open(chapter.url, '_blank');
                 });
@@ -913,64 +912,68 @@ function openCardModal(cardId) {
         chaptersContainer.style.display = 'none';
     }
 
-    // ─── 2️⃣ بناء الروابط المخصصة (Links) ───
+    // 5. بناء أزرار الروابط الإضافية (popupLinksContainer)
     const linksContainer = document.getElementById('popupLinksContainer');
-    linksContainer.innerHTML = '';
-    if (selectedItem.links && selectedItem.links.length > 0) {
-        selectedItem.links.forEach(link => {
-            const btn = document.createElement('a');
-            btn.href = link.url;
-            btn.target = '_blank';
-            btn.innerText = link.text;
-            btn.style.padding = '10px 20px';
-            btn.style.background = '#28a745'; // اللون الأخضر الحالي عندك
-            btn.style.color = '#fff';
-            btn.style.borderRadius = '6px';
-            btn.style.textDecoration = 'none';
-            linksContainer.appendChild(btn);
-        });
-        linksContainer.style.display = 'flex';
-    } else {
-        linksContainer.style.display = 'none';
+    if (linksContainer) {
+        linksContainer.innerHTML = '';
+        if (selectedItem.links && selectedItem.links.length > 0) {
+            selectedItem.links.forEach(link => {
+                const btn = document.createElement('a');
+                btn.href = link.url;
+                btn.target = '_blank';
+                btn.innerText = link.text;
+                btn.style.padding = '10px 20px';
+                btn.style.background = '#28a745';
+                btn.style.color = '#fff';
+                btn.style.borderRadius = '6px';
+                btn.style.textDecoration = 'none';
+                linksContainer.appendChild(btn);
+            });
+            linksContainer.style.display = 'flex';
+        } else {
+            linksContainer.style.display = 'none';
+        }
     }
 
-    // ─── 3️⃣ بناء قسم الاقتراحات (Recommendations) ───
+    // 6. بناء قسم الكروت المقترحة ذات الصلة (Recommendations)
     const recContainer = document.getElementById('recommendationsContainer');
     const recList = document.getElementById('recommendationsList');
-    recList.innerHTML = ''; // تنظيف القائمة
+    if (recContainer && recList) {
+        recList.innerHTML = ''; // تنظيف القائمة السابقة
+        
+        if (selectedItem.recommendations && selectedItem.recommendations.length > 0) {
+            selectedItem.recommendations.forEach(recId => {
+                // العثور على الكارت المقترح بالاعتماد على معرّفه الفريد id
+                const recItem = allData.find(item => item.id === recId);
+                if (recItem) {
+                    const recCard = document.createElement('div');
+                    recCard.style.background = '#161616';
+                    recCard.style.padding = '12px';
+                    recCard.style.borderRadius = '8px';
+                    recCard.style.border = '1px solid #333';
+                    recCard.style.cursor = 'pointer';
+                    recCard.style.transition = '0.3s';
+                    
+                    recCard.innerHTML = `
+                        <h4 style="color: #fff; margin: 0 0 5px 0; font-size: 1rem;">${recItem.title}</h4>
+                        <span style="color: #0088cc; font-size: 0.8rem; text-transform: uppercase;">${recItem.category || ''}</span>
+                    `;
 
-    if (selectedItem.recommendations && selectedItem.recommendations.length > 0) {
-        selectedItem.recommendations.forEach(recId => {
-            // البحث عن بيانات الكارت المقترح بالاعتماد على الـ id
-            const recItem = allData.find(item => item.id === recId);
-            if (recItem) {
-                const recCard = document.createElement('div');
-                recCard.style.background = '#161616';
-                recCard.style.padding = '12px';
-                recCard.style.borderRadius = '8px';
-                recCard.style.border = '1px solid #333';
-                recCard.style.cursor = 'pointer';
-                recCard.style.transition = '0.3s';
-                
-                recCard.innerHTML = `
-                    <h4 style="color: #fff; margin: 0 0 5px 0; font-size: 1rem;">${recItem.title}</h4>
-                    <span style="color: #0088cc; font-size: 0.8rem; text-transform: uppercase;">${recItem.category}</span>
-                `;
-
-                // عند الضغط على الكارت المقترح يفتح تفاصيله فوراً داخل المودال
-                recCard.addEventListener('click', () => {
-                    openCardModal(recId);
-                });
-                
-                recList.appendChild(recCard);
-            }
-        });
-        recContainer.style.display = 'block';
-    } else {
-        recContainer.style.display = 'none';
+                    // عند الضغط على أحد الكروت المقترحة، يتم فتح تفاصيله فوراً داخل نفس المودال
+                    recCard.addEventListener('click', () => {
+                        openCardModal(recId);
+                    });
+                    
+                    recList.appendChild(recCard);
+                }
+            });
+            recContainer.style.display = 'block';
+        } else {
+            recContainer.style.display = 'none';
+        }
     }
 
-    // إظهار المودال للمستخدم
+    // 7. إظهار المودال للمستخدم بعد تجهيز كافة البيانات والأزرار
     document.getElementById('myModal').style.display = 'block';
 }
 
