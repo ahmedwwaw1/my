@@ -852,6 +852,106 @@ function openDetails(id) {
             closeModal();
         }
     }
+   // #region دوال دعم الفصول والملاحظات الزمنية داخل الفيديو
+    function openCardModal(cardData) {
+    // 1. عرض المودال وتحديث العنوان والوصف الأساسي
+    document.getElementById("myModal").style.display = "block";
+    document.getElementById("modalTitle").innerText = cardData.title;
+    
+    const videoContainer = document.getElementById("popupVideoContainer");
+    const linksContainer = document.getElementById("popupLinksContainer");
+    const modalContent = document.getElementById("modalContent");
+
+    // تفريغ الحاويات أولاً لتجنب تكرار البيانات القديمة
+    videoContainer.innerHTML = "";
+    linksContainer.innerHTML = "";
+    modalContent.innerHTML = "";
+
+    // 2. إذا كان الكرت يحتوي على فيديو، نقوم بإنشائه داخل الـ Container الخاص به
+    if (cardData.videoUrl) {
+        videoContainer.style.display = "block";
+        videoContainer.innerHTML = `
+            <video id="mainVideoPlayer" controls style="width:100%; border-radius:12px;">
+                <source src="${cardData.videoUrl}" type="video/mp4">
+                متصفحك لا يدعم تشغيل الفيديو.
+            </video>
+        `;
+    } else {
+        videoContainer.style.display = "none";
+    }
+
+    // 3. طباعة المحتوى النصي العادي للبطاقة
+    modalContent.innerHTML = `<p>${cardData.content}</p>`;
+
+    // 4. السحر هنا: إذا كان هناك فصول وملاحظات زمنية (Chapters)
+    if (cardData.chapters && cardData.chapters.length > 0) {
+        
+        // إنشاء حاوية مخصصة للملاحظات الزمنية أسفل الفيديو مباشرة
+        const chaptersWrapper = document.createElement("div");
+        chaptersWrapper.className = "chapters-wrapper";
+        chaptersWrapper.innerHTML = `<h3 style="color: #0088cc; margin-top: 15px;">📌 الفصول والملاحظات التفاعلية:</h3>`;
+
+        cardData.chapters.forEach(chapter => {
+            // إنشاء زر لكل ملاحظة زمنية
+            const chapterBtn = document.createElement("button");
+            chapterBtn.className = "chapter-btn";
+            chapterBtn.style.cssText = "display: block; width: 100%; text-align: right; padding: 10px; margin: 5px 0; background: #1a1a1a; border: 1px solid #333; color: #fff; cursor: pointer; border-radius: 6px; transition: 0.2s;";
+            chapterBtn.innerHTML = `<span style="color: #0088cc; font-weight: bold;">[${chapter.timeLabel}]</span> ${chapter.note}`;
+
+            // حدث الضغط على الملاحظة
+            chapterBtn.onclick = function() {
+                const videoPlayer = document.getElementById("mainVideoPlayer");
+                if (videoPlayer) {
+                    videoPlayer.currentTime = chapter.seconds; // القفز للثانية المطلوبة فوراً
+                    videoPlayer.play(); // تشغيل الفيديو تلقائياً
+                }
+
+                // عرض التوصيات والاقتراحات المرتبطة بهذه اللحظة الزمنية في الـ linksContainer
+                displayRecommendations(chapter.recommendations);
+            };
+
+            // إشعار بصري عند تمرير الماوس فوق الملاحظة
+            chapterBtn.onmouseenter = () => chapterBtn.style.background = "#222";
+            chapterBtn.onmouseleave = () => chapterBtn.style.background = "#1a1a1a";
+
+            chaptersWrapper.appendChild(chapterBtn);
+        });
+
+        // إضافة الملاحظات التفاعلية داخل المودال (تحت الفيديو وفوق النص)
+        modalContent.insertBefore(chaptersWrapper, modalContent.firstChild);
+    }
+}
+
+// دالة مساعدة لتحديث صندوق الاقتراحات (linksContainer) ديناميكياً
+function displayRecommendations(recommendations) {
+    const linksContainer = document.getElementById("popupLinksContainer");
+    linksContainer.innerHTML = ""; // مسح الاقتراحات السابقة
+
+    if (recommendations && recommendations.length > 0) {
+        // إظهار نص توضيحي للمستخدم
+        const title = document.createElement("div");
+        title.style.cssText = "width: 100%; text-align: center; color: #a0a0a0; margin-bottom: 10px; font-size: 0.9rem;";
+        title.innerText = "💡 مصادر واقتراحات مكملة لهذه اللقطة:";
+        linksContainer.appendChild(title);
+
+        // رسم الروابط
+        recommendations.forEach(link => {
+            const a = document.createElement("a");
+            a.href = link.url;
+            a.target = link.url.startsWith("http") ? "_blank" : "_self"; // فتح الروابط الخارجية في نافذة جديدة
+            a.className = "rec-link";
+            a.style.cssText = "padding: 8px 16px; background: #0088cc; color: white; border-radius: 20px; text-decoration: none; font-size: 0.85rem; margin: 5px; transition: 0.2s;";
+            a.innerText = link.text;
+            
+            a.onmouseenter = () => a.style.background = "#006699";
+            a.onmouseleave = () => a.style.background = "#0088cc";
+
+            linksContainer.appendChild(a);
+        });
+    }
+}
+ //#endregion
+
 </script>
 
 <div id="myModal" class="modal">
