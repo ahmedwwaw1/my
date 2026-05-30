@@ -302,6 +302,7 @@
     <a href="#/" id="btn-vsa">التحليل الزمني</a>
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
     <a href="#/videos" id="btn-videos">🎥 أكاديمية الفيديوهات</a>
+    <a href="#/rw" id="btn-rw"> التحليل الحجمي </a>
 </nav>
 
 <div class="container">
@@ -495,6 +496,12 @@ function showNotification(message, isError = false) {
             render(filtered);
             setActiveNav('btn-invest');
         } 
+        else if (hash === '#/rw') {
+            const filtered = allData.filter(d => d.category === 'rw');
+            pageTitle.innerText = ' مكتبة وايكوف';
+            render(filtered);
+            setActiveNav('btn-rw');
+        } 
         else if (hash === '#/videos') {
             const filtered = allData.filter(d => d.category === 'videos');
             pageTitle.innerText = 'مكتبة الشروحات والفيديوهات التعليمية';
@@ -507,6 +514,7 @@ function showNotification(message, isError = false) {
             render(filtered);
             setActiveNav('btn-vsa');
         }
+       
     }
 
     function setActiveNav(id) {
