@@ -49,7 +49,7 @@
         "content": "• تتبع حركة المحترفين حصراً.\n• بار المجهود: واسع المدى، فوليوم عالٍ يخترق المقاومة.",
         "links": [
             {
-                "text": "شرح الفيديو (د16)",
+                "text": "vsa1)",
                 "url": "https://www.youtube.com/watch?v=OXrv8gZO0TY&t=984s"
 
                 
@@ -94,40 +94,24 @@
         
     },
     {"__comment__": "=== بيانات ميزة الطوابع الزمنية ===",
-    "id": "vsa-analysis-1",
-    "category": "vsa",
-    "title": "مقدمة في تحليل حجم التداول",
-    "videoUrl": "videos/vsa_lesson1.mp4",
-    "content": "شرح متقدم لعلاقة الفوليوم بمدى الشموع وتطبيقاتها في السوق.",
-    "chapters": [
-        {
-        "timeLabel": "02:03",
-        "seconds": 123,
-        "note": "💡 علاقة حجم التداول بمدى شمعة التداول (Volume Spread Relationship)",
-        "recommendations": [
-        {
-          "text": "📖 مقال مكمل: قوانين وايكوف وعلاقة الجهد بالنتيجة",
-          "url": "https://example.com/wyckoff-law"
-        },
-        {
-          "text": "🎥 فيديو: تطبيقات عملية على الشموع واسعة المدى",
-          "url": "#/videos?id=vsa-lesson-2"
-        }
-      ]
+        "id": "vsa_lesson1",
+        "url": "https://www.youtube.com/watch?v=OXrv8gZO0TY&t=984s",
+        "title": "تتبع المحترفين وبار المجهود",
+
+        "desc": "شرح متقدم لعلاقة الفوليوم بمدى الشموع وتطبيقاتها في السوق",
+        "chapters": [
+            {
+            "time": "00:00",
+            "text": "مقدمة وطبيعة حركة السوق"
+            },
+            {
+            "time": "01:45",
+            "text": "إشارة قوة هامة جداً"
+            }
+        ],
+        "recommendations": ["vsa_lesson2"]
     },
-    {
-      "timeLabel": "05:45",
-      "seconds": 345,
-      "note": "⚠️ إشارة ضعف: ظهور بار المجهود البيعي بدون نتيجة",
-      "recommendations": [
-        {
-          "text": "🌐 موقع فحص مؤشر الفوليوم المطور",
-          "url": "https://example.com/vsa-tools"
-        }
-      ]
-    }
-    ]
-    },
+
     {
         "category": "invest",
         "title": "شركة الربيع للوساطة (RS)",
