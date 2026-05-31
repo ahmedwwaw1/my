@@ -80,7 +80,7 @@
         "image": "./images/wg.jpg",
         "title": "مقدمة في تحليل حجم التداول",
         "content": "شرح متقدم لعلاقة الفوليوم بمدى الشموع وتطبيقاتها في السوق",
-        "videoUrl": "vsa_lesson1.mp4",
+        "videoUrl": "videos//vsa_lesson1.mp4",
         "chapters": [
             {
                 "time": "00:00",
