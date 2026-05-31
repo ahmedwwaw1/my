@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My website</title>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: #1c1c1e;
+            backdrop-filter: blur(5px);
+        }
+        /* Modal Contentw */
+        .modal-content {
+            background-color: #1c1c1e;
+            margin: 0;
+            padding: 50px;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            position: relative;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 25px; left: 25px;
+            color: #aaa;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-btn:hover { color: #fff; }
+        
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --accent-color: #00d4ff;
+            --investment-color: #00ff88;
+            --text-main: #e0e0e0;
+            --text-dim: #b0b0b0;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            line-height: 1.6;
+        }
+
+        nav {
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: sticky;
+            top: 0; z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-color);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 690px;
+            margin: 30px auto;
+            box-sizing: border-box;
+        }
+
+        #globalSearch {
+            width: 100%;
+            padding: 14px 24px;
+            font-size: 16px;
+            background-color: #202124;
+            border: 1px solid #3c4043;
+            border-radius: 28px;
+            color: #e8eaed;
+            outline: none;
+            transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+        
+        #globalSearch::placeholder {
+            color: #9aa0a6;
+        }
+
+        #globalSearch:hover, 
+        #globalSearch:focus {
+            background-color: #303134;
+            border-color: #5f6368;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+        }        
+
+        #searchDropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #303134;
+            border: 1px solid #5f6368;
+            border-radius: 16px;
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .search-item {
+            padding: 12px 20px;
+            color: #e8eaed !important;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid #3c4043;
+            text-align: right;
+        }
+        .search-item:last-child { border-bottom: none; }
+        .search-item:hover {
+            background-color: #3c4043 !important;
+            color: #ffffff !important;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); 
+            gap: 20px;          
+            row-gap: 30px;      
+            padding: 10px 0;
+            width: 100%;        
+            box-sizing: border-box;
+        }
+
+        .card {
+            background: transparent; 
+            border: none;
+            border-radius: 12px;
+            padding: 0;           
+            cursor: pointer;
+            transition: box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            background-color: #232323; 
+            box-sizing: border-box;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2); 
+        }
+
+        .card-media-top {
+            width: 100%;
+            aspect-ratio: 16 / 9;     
+            border-radius: 12px;      
+            overflow: hidden;
+            background-color: #000;
+            position: relative;
+        }
+
+        .card-media-top img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;        
+            border: none;
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .card:hover .card-media-top img { transform: scale(1.02); }
+
+        .card-body-container {
+            padding: 5px 10px 15px 10px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card h3 { margin: 5px 0 8px 0; color: #fff; font-size: 1.2rem; font-weight: 600; line-height: 1.4; }
+        .card-content { color: var(--text-dim); flex-grow: 1; white-space: pre-line; font-size: 0.95rem; line-height: 1.5; }
+        
+        #statusMsg { text-align: center; color: var(--text-dim); margin-top: 20px; font-size: 1.1rem; }
+
+        .search-dropdown {
+            position: absolute;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            width: 100%;
+            max-height: 250px;
+            overflow-y: auto;
+            z-index: 9999;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            margin-top: 5px;
+            direction: rtl;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="#/" id="btn-vsa">التحليل الزمني</a>
+    <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
+    <a href="#/videos" id="btn-videos">🎥 أكاديمية الفيديوهات</a>
+    <a href="#/rw" id="btn-rw"> التحليل الحجمي </a>
+</nav>
+
+<div class="container">
+    <div class="search-container">
+        <input type="text" id="globalSearch" placeholder="ابحث هنا...">
+        <div id="searchDropdown" class="search-dropdown" style="display: none;"></div>
+    </div>
+
+    <h1 id="pageTitle" style="text-align: center; margin-bottom: 1.5rem; font-weight: 700;"></h1>
+    <div id="statusMsg"></div>
+    <div class="grid-layout" id="mainGrid"></div>
+</div>
+
+<script>
+    let allData = [];
+    let isDataLoaded = false;
+    
+    const grid = document.getElementById('mainGrid');
+    const searchInput = document.getElementById('globalSearch');
+    const pageTitle = document.getElementById('pageTitle');
+    const statusMsg = document.getElementById('statusMsg');
+
+    // دالة تحويل صيغة الوقت (01:45) إلى ثواني نقية
+    function parseTimeToSeconds(timeStr) {
+        if (!timeStr) return 0;
+        if (typeof timeStr === 'number') return timeStr;
+        const parts = timeStr.split(':').map(Number);
+        if (parts.length === 2) {
+            return parts[0] * 60 + parts[1]; // دقائق : ثواني
+        } else if (parts.length === 3) {
+            return parts[0] * 3600 + parts[1] * 60 + parts[2]; // ساعات : دقائق : ثواني
+        }
+        return parseFloat(timeStr) || 0;
+    }
+
+    async function loadWebsiteData() {
+        try {
+            const response = await fetch('data.json?v=' + new Date().getTime());
+            if (!response.ok) throw new Error("فشل الاتصال بالملف");
+            const serverData = await response.json();
+
+            const localDataRaw = localStorage.getItem('my_cards_data');
+            let localData = [];
+            if (localDataRaw && localDataRaw !== '[]' && localDataRaw !== 'undefined') {
+                localData = JSON.parse(localDataRaw);
+            }
+
+            allData = serverData.map((serverItem, index) => {
+                const currentId = serverItem.id ? String(serverItem.id) : String(index + 1);
+                const matchLocal = localData.find(localItem => String(localItem.title) === String(serverItem.title));
+                
+                return {
+                    id: currentId,
+                    title: serverItem.title,
+                    category: serverItem.category || 'videos',
+                    content: matchLocal ? matchLocal.content : (serverItem.content || serverItem.desc || ''),
+                    image: matchLocal ? matchLocal.image : (serverItem.image || ''),
+                    videoUrl: matchLocal ? matchLocal.videoUrl : (serverItem.videoUrl || serverItem.videourl || serverItem.url || ''),
+                    links: serverItem.links || [],
+                    chapters: serverItem.chapters || [],
+                    recommendations: serverItem.recommendations || []
+                };
+            });
+
+            isDataLoaded = true; 
+            render(allData);
+
+            localStorage.setItem('my_cards_data', JSON.stringify(allData));
+            console.log("تم دمج البيانات بنجاح 🎉");
+
+            if (typeof handleRoute === 'function') {
+                handleRoute();
+            }
+
+        } catch (error) {
+            console.error("❌ خلل في جلب البيانات من السيرفر:", error);
+            const localData = localStorage.getItem('my_cards_data');
+            if (localData) {
+                allData = JSON.parse(localData);
+                isDataLoaded = true;
+                render(allData);
+                if (typeof handleRoute === 'function') handleRoute();
+            } else {
+                if (statusMsg) {
+                    statusMsg.innerText = "عذراً، حدث خلل أثناء تحميل البيانات.";
+                }
+            }
+        }
+    }
+    
+    function render(dataArray) {
+        const mainGrid = document.getElementById('mainGrid');
+        if (!mainGrid) return; 
+
+        mainGrid.innerHTML = ''; 
+
+        if (dataArray.length === 0) {
+            if (isDataLoaded) {
+                statusMsg.innerText = "لا توجد بطاقات معروضة في هذا القسم";
+            }
+            return;
+        }
+        statusMsg.innerText = '';
+        
+        dataArray.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            card.addEventListener('click', function() {
+                openDetails(item.id);
+            });
+            
+            let mediaContent = '';
+            if (item.image && item.image.trim() !== '') {
+                mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
+            } else {
+                mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/360x203/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
+            }
+
+            card.innerHTML = `
+                ${mediaContent}
+                <div class="card-body-container">
+                    <h3>${item.title || 'بدون عنوان'}</h3>
+                    <div class="card-content">${item.content || ''}</div>
+                </div>
+            `;
+            mainGrid.appendChild(card);
+        });
+    }
+
+    function handleRoute() {
+        const hash = window.location.hash || '#/';
+        if (searchInput) searchInput.value = ''; 
+
+        if (hash === '#/investment') {
+            const filtered = allData.filter(d => d.category === 'invest');
+            pageTitle.innerText = 'دليل الاستثمار في العراق';
+            render(filtered);
+            setActiveNav('btn-invest');
+        } 
+        else if (hash === '#/rw') {
+            const filtered = allData.filter(d => d.category === 'rw');
+            pageTitle.innerText = ' مكتبة وايكوف';
+            render(filtered);
+            setActiveNav('btn-rw');
+        } 
+        else if (hash === '#/videos') {
+            const filtered = allData.filter(d => d.category === 'videos');
+            pageTitle.innerText = 'مكتبة الشروحات والفيديوهات التعليمية';
+            render(filtered);
+            setActiveNav('btn-videos');
+        } 
+        else {
+            const filtered = allData.filter(d => d.category === 'vsa');
+            pageTitle.innerText = 'أكاديمية VSA والتداول';
+            render(filtered);
+            setActiveNav('btn-vsa');
+        }
+    }
+
+    function setActiveNav(id) {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        const activeLink = document.getElementById(id);
+        if (activeLink) activeLink.classList.add('active');
+    }
+
+    const dropdown = document.getElementById('searchDropdown');
+
+    if (searchInput && dropdown) {
+        let currentDropdownItems = [];
+
+        function performSearch() {
+            const term = searchInput.value.toLowerCase().trim();
+            
+            if (term === '') { 
+                dropdown.innerHTML = '';
+                dropdown.style.display = 'none';
+                currentDropdownItems = []; 
+                return; 
+            }
+
+            dropdown.innerHTML = ''; 
+            currentDropdownItems = []; 
+            let hasResults = false;
+
+            allData.forEach(item => {
+                if (item.videoUrl && item.videoUrl.toLowerCase().includes(term)) {
+                    hasResults = true;
+                    createDropdownItem(`📺 فيديو: ${item.title}`, item.id, item.videoUrl);
+                }
+
+                if (item.links && Array.isArray(item.links)) {
+                    item.links.forEach(link => {
+                        const matchText = link.text && link.text.toLowerCase().includes(term);
+                        const matchUrl = link.url && link.url.toLowerCase().includes(term);
+                        
+                        if (matchText || matchUrl) {
+                            hasResults = true;
+                            createDropdownItem(`🔗 رابط: ${link.text || 'مشاهدة'}`, item.id, link.url);
+                        }
+                    });
+                }
+
+                const matchTitle = item.title && item.title.toLowerCase().includes(term);
+                const matchContent = item.content && item.content.toLowerCase().includes(term);
+                if (matchTitle || matchContent) {
+                    hasResults = true;
+                    createDropdownItem(`📄 بطاقة: ${item.title}`, item.id);
+                }
+            });
+
+            function createDropdownItem(displayText, itemId, directUrl = null) {
+                const div = document.createElement('div');
+                div.className = 'search-item';
+                div.innerText = displayText;
+                
+                currentDropdownItems.push({ itemId, directUrl });
+
+                div.addEventListener('click', () => {
+                    executeSearchAction(itemId, directUrl);
+                });
+                
+                dropdown.appendChild(div);
+            }
+
+            if (hasResults) {
+                dropdown.style.display = 'block';
+            } else {
+                dropdown.innerHTML = `<div class="search-item" style="color: #aaa; cursor: default;">عذراً، لم يتم العثور على عناوين أو روابط مطابقة...</div>`;
+                dropdown.style.display = 'block';
+            }
+        }
+
+        searchInput.addEventListener('input', performSearch);
+        searchInput.addEventListener('focus', () => {
+            if (searchInput.value.trim() !== '') performSearch();
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                if (currentDropdownItems.length > 0) {
+                    e.preventDefault(); 
+                    const firstResult = currentDropdownItems[0];
+                    executeSearchAction(firstResult.itemId, firstResult.directUrl);
+                }
+            }
+        });
+
+        function executeSearchAction(itemId, directUrl) {
+            if (directUrl) {
+                window.open(directUrl, '_blank'); 
+            } else {
+                openDetails(itemId); 
+            }
+            dropdown.style.display = 'none';
+            searchInput.value = ''; 
+            currentDropdownItems = []; 
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    }
+
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('load', handleRoute);
+    document.addEventListener('DOMContentLoaded', loadWebsiteData);
+
+    function getYouTubeEmbedUrl(url) {
+        if (!url) return null;
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        if (match && match[2].length === 11) {
+            return `https://www.youtube.com/embed/${match[2]}`;
+        }
+        return null;
+    }
+
+    // 🔥 دالة فتح التفاصيل الذكية والموحدة بالكامل
+    function openDetails(id) {
+        const selectedItem = allData.find(item => String(item.id) === String(id));
+        if (!selectedItem) return;
+
+        document.getElementById('modalTitle').innerText = selectedItem.title || '';
+        document.getElementById('modalContent').innerText = selectedItem.content || '';
+
+        const videoContainer = document.getElementById('popupVideoContainer');
+        const linksContainer = document.getElementById('popupLinksContainer');
+        const chaptersContainer = document.getElementById('chaptersContainer');
+
+        if (videoContainer) { videoContainer.innerHTML = ''; videoContainer.style.display = 'none'; }
+        if (linksContainer) { linksContainer.innerHTML = ''; }
+        if (chaptersContainer) { chaptersContainer.innerHTML = ''; chaptersContainer.style.display = 'none'; }
+
+        function createDynamicButton(url, text) {
+            const btn = document.createElement('a');
+            btn.href = url;
+            btn.target = '_blank'; 
+            btn.innerText = text;
+
+            btn.style.cssText = "text-decoration:none; padding:14px 28px; border-radius:10px; font-weight:bold; font-size:1rem; transition:all 0.25s ease; box-shadow:0 4px 15px rgba(0,0,0,0.3); display:inline-block; margin:8px; text-align:center;";
+
+            const lowerUrl = url.toLowerCase();
+            if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram.org')) {
+                btn.style.backgroundColor = '#0088cc'; btn.style.color = '#ffffff'; btn.innerText = '🔹 ' + text;
+            } else if (lowerUrl.includes('facebook.com')) {
+                btn.style.backgroundColor = '#1877f2'; btn.style.color = '#ffffff'; btn.innerText = '🔵 ' + text;
+            } else if (lowerUrl.includes('binance.com')) {
+                btn.style.backgroundColor = '#fcd535'; btn.style.color = '#111111'; btn.innerText = '🔸 ' + text;
+            } else {
+                btn.style.backgroundColor = '#222222'; btn.style.color = '#00ff88'; btn.style.border = '1px solid #333'; btn.innerText = '🔗 ' + text;
+            }
+
+            btn.onmouseenter = () => { btn.style.transform = 'translateY(-3px)'; btn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)'; };
+            btn.onmouseleave = () => { btn.style.transform = 'translateY(0)'; btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)'; };
+
+            linksContainer.appendChild(btn);
+        }
+
+        // 📺 1. تشغيل الفيديو والتعرف على نوعه تلقائياً
+        if (selectedItem.videoUrl && selectedItem.videoUrl.trim() !== '') {
+            const url = selectedItem.videoUrl;
+            
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                const embedUrl = getYouTubeEmbedUrl(url);
+                if (videoContainer && embedUrl) {
+                    videoContainer.innerHTML = `<iframe id="modalIframe" src="${embedUrl}" frameborder="0" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+                    videoContainer.style.display = 'block';
+                }
+            } else if (url.toLowerCase().endsWith('.mp4') || url.includes('videos/') || url.includes('Recording')) {
+                // مشغل فيديو محلي فخم يدعم الطوابع الزمنية
+                if (videoContainer) {
+                    videoContainer.innerHTML = `<video id="modalVideo" src="${url}" controls style="width:100%; height:100%; background:#000; border:none;"></video>`;
+                    videoContainer.style.display = 'block';
+                }
+            } else {
+                createDynamicButton(url, 'فتح الرابط الرئيسي');
+            }
+        }
+
+        // ⏱️ 2. بناء أزرار الطوابع الزمنية (Chapters) ودعم القفز للوقت
+        if (selectedItem.chapters && selectedItem.chapters.length > 0) {
+            selectedItem.chapters.forEach(chapter => {
+                const chapBtn = document.createElement('button');
+                chapBtn.innerText = chapter.text + " (" + chapter.time + ")";
+                
+                chapBtn.style.cssText = "padding:8px 14px; background:#111; color:#0088cc; border:1px solid #0088cc; border-radius:6px; cursor:pointer; font-size:0.9rem; transition:0.3s; font-weight:bold;";
+                chapBtn.onmouseenter = () => { chapBtn.style.background = "#0088cc"; chapBtn.style.color = "#fff"; };
+                chapBtn.onmouseleave = () => { chapBtn.style.background = "#111"; chapBtn.style.color = "#0088cc"; };
+
+                const seconds = parseTimeToSeconds(chapter.time);
+                
+                chapBtn.addEventListener('click', () => {
+                    const localVid = document.getElementById('modalVideo');
+                    const ytIframe = document.getElementById('modalIframe');
+                    
+                    if (localVid) {
+                        localVid.currentTime = seconds;
+                        localVid.play();
+                    } else if (ytIframe) {
+                        const baseUrl = getYouTubeEmbedUrl(selectedItem.videoUrl);
+                        ytIframe.src = `${baseUrl}?start=${seconds}&autoplay=1`;
+                    }
+                });
+
+                chaptersContainer.appendChild(chapBtn);
+            });
+            chaptersContainer.style.display = 'flex';
+        }
+
+        // 🔗 3. بناء الأزرار والروابط العادية
+        if (selectedItem.links && Array.isArray(selectedItem.links)) {
+            selectedItem.links.forEach(link => {
+                if (link.url) createDynamicButton(link.url, link.text || 'مشاهدة الدرس');
+            });
+        }
+
+        // 💡 4. بناء الكروت المقترحة ذات الصلة (Recommendations)
+        const recContainer = document.getElementById('recommendationsContainer');
+        const recList = document.getElementById('recommendationsList');
+        
+        if (recContainer && recList) {
+            recList.innerHTML = '';
+            if (selectedItem.recommendations && selectedItem.recommendations.length > 0) {
+                let hasRecs = false;
+                selectedItem.recommendations.forEach(recId => {
+                    const recItem = allData.find(item => String(item.id) === String(recId));
+                    if (recItem) {
+                        hasRecs = true;
+                        const recCard = document.createElement('div');
+                        recCard.style.cssText = "background:#232323; padding:15px; border-radius:10px; border:1px solid #3c4043; cursor:pointer; transition:all 0.2s;";
+                        recCard.innerHTML = `
+                            <h4 style="color:#fff; margin:0 0 8px 0; font-size:1rem; line-height:1.4;">${recItem.title}</h4>
+                            <span style="color:#00d4ff; font-size:0.8rem; font-weight:600;">مشاهدة الآن ←</span>
+                        `;
+                        recCard.onmouseenter = () => recCard.style.borderColor = '#00d4ff';
+                        recCard.onmouseleave = () => recCard.style.borderColor = '#3c4043';
+                        
+                        recCard.addEventListener('click', () => {
+                            openDetails(recItem.id);
+                        });
+                        recList.appendChild(recCard);
+                    }
+                });
+                recContainer.style.display = hasRecs ? 'block' : 'none';
+            } else {
+                recContainer.style.display = 'none';
+            }
+        }
+
+        document.getElementById('myModal').style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = "none";
+        const videoContainer = document.getElementById('popupVideoContainer');
+        if (videoContainer) {
+            videoContainer.innerHTML = '';
+            videoContainer.style.display = 'none';
+        }
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('myModal');
+        if (event.target == modal) closeModal();
+    }
+</script>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h1 id="modalTitle" style="color: #0088cc; margin-top: 0; margin-bottom: 20px;"></h1>
+        
+        <div id="popupVideoContainer" style="width: 100%; max-width: 820px; margin: 25px auto; aspect-ratio: 16 / 9; display: none; border-radius: 12px; overflow: hidden; background-color: #000; box-shadow: 0 8px 25px rgba(0,0,0,0.6);"></div>
+       
+        <div id="chaptersContainer" style="margin: 20px auto; max-width: 820px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+       
+        <div id="popupLinksContainer" style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 20px auto; max-width: 820px;"></div>
+
+        <div id="modalContent" style="white-space: pre-line; line-height: 1.8; color: #b0b0b0; font-size: 1.1rem; max-width: 820px; margin: 0 auto; margin-bottom: 30px;"></div>
+
+        <div id="recommendationsContainer" style="margin: 30px auto; max-width: 820px; border-top: 1px solid #333; padding-top: 20px; display: none;">
+            <h3 style="color: #fff; margin-bottom: 15px; font-size: 1.2rem;">💡 دروس ومقترحات ذات صلة:</h3>
+            <div id="recommendationsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 15px;"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
