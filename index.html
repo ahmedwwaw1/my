@@ -282,15 +282,14 @@
 
             allData = serverData.map((serverItem, index) => {
                 const currentId = serverItem.id ? String(serverItem.id) : String(index + 1);
-                const matchLocal = localData.find(localItem => String(localItem.title) === String(serverItem.title));
                 
                 return {
                     id: currentId,
                     title: serverItem.title,
                     category: serverItem.category || 'videos',
-                    content: matchLocal ? matchLocal.content : (serverItem.content || serverItem.desc || ''),
-                    image: matchLocal ? matchLocal.image : (serverItem.image || ''),
-                    videoUrl: matchLocal ? matchLocal.videoUrl : (serverItem.videoUrl || serverItem.videourl || serverItem.url || ''),
+                    content: serverItem.content || serverItem.desc || '',
+                    image: serverItem.image || '',
+                    videoUrl: serverItem.videoUrl || serverItem.videourl || serverItem.url || '',
                     links: serverItem.links || [],
                     chapters: serverItem.chapters || [],
                     recommendations: serverItem.recommendations || []
