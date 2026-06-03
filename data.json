@@ -13,6 +13,7 @@
         ]
     },
     { 
+        "id": "vsa_lesson3",
         "__comment__": "=== خاص بي ===",
         "category": "rw",
         "image": "./images/rw.jpg",
@@ -87,11 +88,15 @@
                 "text": "⏱️ مقدمة وطبيعة حركة السوق"
             },
             {
-                "time": "01:45",
-                "text": "⏱️ إشارة قوة هامة جداً"
+                "time": "00:30",
+                "text": "📊 العلاقة بين الفوليوم ومدى الشموع"
+            },
+            {
+                "time": "00:10",
+                "text": "🔍 تطبيقات عملية في تحليل السوق"
             }
         ],
-        "recommendations": ["vsa_lesson2"]
+        "recommendations": ["vsa_lesson2", "vsa_lesson3"]
     },
     {
         "category": "invest",
