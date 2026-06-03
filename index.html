@@ -5,38 +5,246 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My website</title>
     <style>
+        /* Modal Cinema Styling */
         .modal {
             display: none;
             position: fixed;
             z-index: 1000;
             left: 0; top: 0;
             width: 100%; height: 100%;
-            background-color: #1c1c1e;
-            backdrop-filter: blur(5px);
+            background-color: rgba(10, 10, 12, 0.95);
+            backdrop-filter: blur(12px);
+            animation: fadeIn 0.3s ease-out;
         }
-        /* Modal Contentw */
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .modal-content {
-            background-color: #1c1c1e;
+            background-color: #121214;
             margin: 0;
-            padding: 50px;
+            padding: 30px;
             width: 100vw;
             height: 100vh;
             border-radius: 0;
             position: relative;
             overflow-y: auto;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #222226;
+            padding-bottom: 15px;
+            margin-bottom: 5px;
+            position: relative;
+            direction: rtl;
         }
         
         .close-btn {
-            position: absolute;
-            top: 25px; left: 25px;
+            position: static;
             color: #aaa;
-            font-size: 35px;
+            font-size: 32px;
             font-weight: bold;
             cursor: pointer;
-            transition: color 0.2s;
+            transition: color 0.2s, transform 0.2s;
+            line-height: 1;
         }
-        .close-btn:hover { color: #fff; }
+        .close-btn:hover {
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .modal-body-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            flex-grow: 1;
+            box-sizing: border-box;
+            direction: rtl;
+        }
+
+        @media (min-width: 992px) {
+            .modal-body-grid {
+                grid-template-columns: 2fr 1fr;
+                align-items: start;
+            }
+        }
+
+        .modal-main-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .modal-sidebar-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .video-container-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: #000;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+            border: 1px solid #222226;
+            position: relative;
+        }
+
+        .video-container-wrapper iframe, 
+        .video-container-wrapper video {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .links-container-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: flex-start;
+        }
+
+        .details-section {
+            background: #18181c;
+            border: 1px solid #222226;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .modal-description-text {
+            white-space: pre-line;
+            line-height: 1.8;
+            color: var(--text-dim);
+            font-size: 1.05rem;
+        }
+
+        .sidebar-card {
+            background: #18181c;
+            border: 1px solid #222226;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .chapters-flex-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        /* Customize Scrollbar for elegance */
+        .chapters-flex-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chapters-flex-list::-webkit-scrollbar-track {
+            background: #111;
+        }
+        .chapters-flex-list::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+        .chapters-flex-list::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .chapter-row-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 12px 16px;
+            background: #1e1e24;
+            color: var(--text-main);
+            border: 1px solid #2d2d35;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .chapter-row-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-color);
+            color: #fff;
+            transform: translateX(-3px);
+        }
+
+        .chapter-time-badge {
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--accent-color);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: monospace;
+            font-weight: 600;
+        }
+
+        .chapters-notice {
+            background: rgba(255, 179, 0, 0.1);
+            color: #ffb300;
+            border: 1px solid rgba(255, 179, 0, 0.2);
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        .recommendations-vertical-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rec-item-card {
+            background: #1e1e24;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid #2d2d35;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .rec-item-card:hover {
+            border-color: var(--accent-color);
+            background: #24242d;
+            transform: translateX(-3px);
+        }
+
+        .rec-item-card h4 {
+            color: #fff;
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .rec-item-card .watch-now {
+            color: var(--accent-color);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
         
         :root {
             --bg-color: #121212;
@@ -502,25 +710,395 @@
     window.addEventListener('load', handleRoute);
     document.addEventListener('DOMContentLoaded', loadWebsiteData);
 
-    function getYouTubeEmbedUrl(url) {
+    let ytSdkPromise = null;
+    let fbSdkPromise = null;
+    let vimeoSdkPromise = null;
+
+    function loadYouTubeSDK() {
+        if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
+        if (ytSdkPromise) return ytSdkPromise;
+        ytSdkPromise = new Promise((resolve) => {
+            if (window.YT && window.YT.Player) {
+                resolve(window.YT);
+                return;
+            }
+            const oldCallback = window.onYouTubeIframeAPIReady;
+            window.onYouTubeIframeAPIReady = () => {
+                if (oldCallback) oldCallback();
+                resolve(window.YT);
+            };
+            const script = document.createElement('script');
+            script.src = "https://www.youtube.com/iframe_api";
+            script.async = true;
+            document.head.appendChild(script);
+        });
+        return ytSdkPromise;
+    }
+
+    function loadFacebookSDK() {
+        if (window.FB) return Promise.resolve(window.FB);
+        if (fbSdkPromise) return fbSdkPromise;
+        fbSdkPromise = new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = "https://connect.facebook.net/ar_AR/sdk.js";
+            script.async = true;
+            script.defer = true;
+            script.onload = () => {
+                window.FB.init({
+                    xfbml: true,
+                    version: 'v16.0'
+                });
+                resolve(window.FB);
+            };
+            document.head.appendChild(script);
+        });
+        return fbSdkPromise;
+    }
+
+    function loadVimeoSDK() {
+        if (window.Vimeo) return Promise.resolve(window.Vimeo);
+        if (vimeoSdkPromise) return vimeoSdkPromise;
+        vimeoSdkPromise = new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = "https://player.vimeo.com/api/player.js";
+            script.async = true;
+            script.onload = () => {
+                resolve(window.Vimeo);
+            };
+            document.head.appendChild(script);
+        });
+        return vimeoSdkPromise;
+    }
+
+    function getYouTubeId(url) {
         if (!url) return null;
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
         const match = url.match(regExp);
-        if (match && match[2].length === 11) {
-            return `https://www.youtube.com/embed/${match[2]}`;
-        }
-        return null;
+        return (match && match[2].length === 11) ? match[2] : null;
     }
 
-    function getGoogleDriveEmbedUrl(url) {
+    function getVimeoId(url) {
+        if (!url) return null;
+        const regExp = /(?:vimeo\.com\/|video\/)(\d+)/;
+        const match = url.match(regExp);
+        return match ? match[1] : null;
+    }
+
+    function getGoogleDriveId(url) {
         if (!url) return null;
         const regExp = /(?:file\/d\/|id=)([^/\?&]+)/;
         const match = url.match(regExp);
-        if (match && match[1]) {
-            return `https://drive.google.com/file/d/${match[1]}/preview`;
-        }
-        return null;
+        return match ? match[1] : null;
     }
+
+    function getTikTokId(url) {
+        if (!url) return null;
+        const regExp = /\/video\/(\d+)/;
+        const match = url.match(regExp);
+        return match ? match[1] : null;
+    }
+
+    const UnifiedPlayer = {
+        currentType: null,
+        apiPlayer: null,
+        element: null,
+        supportsSeeking: false,
+        pendingSeek: null,
+
+        detectVideoType: function(url) {
+            if (!url) return null;
+            url = url.trim();
+            
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                return 'youtube';
+            }
+            if (url.includes('vimeo.com')) {
+                return 'vimeo';
+            }
+            if (url.includes('facebook.com') || url.includes('fb.watch')) {
+                return 'facebook';
+            }
+            if (url.includes('drive.google.com')) {
+                return 'google-drive';
+            }
+            if (url.includes('tiktok.com')) {
+                return 'tiktok';
+            }
+            if (url.includes('t.me/')) {
+                const lower = url.toLowerCase();
+                if (lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.includes('/videos/') || lower.includes('recording')) {
+                    return 'html5';
+                }
+                const parts = url.split('/');
+                if (parts.length > 4 && !isNaN(parseInt(parts[parts.length - 1]))) {
+                    return 'telegram-embed';
+                }
+            }
+            
+            const lowerUrl = url.toLowerCase();
+            if (
+                lowerUrl.endsWith('.mp4') || 
+                lowerUrl.endsWith('.webm') || 
+                lowerUrl.endsWith('.ogg') ||
+                lowerUrl.includes('raw=1') ||
+                lowerUrl.includes('dl=1') ||
+                lowerUrl.includes('/videos/') ||
+                lowerUrl.includes('recording') ||
+                (lowerUrl.includes('github.com') && lowerUrl.includes('/raw/'))
+            ) {
+                return 'html5';
+            }
+            
+            return 'html5';
+        },
+
+        init: async function(container, url) {
+            this.cleanup();
+            if (!url || url.trim() === '') return;
+
+            const type = this.detectVideoType(url);
+            this.currentType = type;
+            this.supportsSeeking = (type === 'youtube' || type === 'vimeo' || type === 'facebook' || type === 'html5');
+            this.pendingSeek = null;
+
+            const notice = document.getElementById('chaptersUnsupportedNotice');
+            if (notice) {
+                notice.style.display = this.supportsSeeking ? 'none' : 'block';
+            }
+
+            container.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#fff; font-size:1.2rem;">⏱️ جاري تحميل المشغل...</div>';
+            container.style.display = 'block';
+
+            try {
+                if (type === 'youtube') {
+                    const ytId = getYouTubeId(url);
+                    if (!ytId) throw new Error("لم يتم العثور على معرف فيديو يوتيوب");
+
+                    await loadYouTubeSDK();
+                    
+                    const playerDivId = 'yt-player-target';
+                    container.innerHTML = `<div id="${playerDivId}"></div>`;
+
+                    this.apiPlayer = new YT.Player(playerDivId, {
+                        height: '100%',
+                        width: '100%',
+                        videoId: ytId,
+                        playerVars: {
+                            'autoplay': 1,
+                            'controls': 1,
+                            'rel': 0,
+                            'showinfo': 0,
+                            'modestbranding': 1
+                        },
+                        events: {
+                            'onReady': (event) => {
+                                const player = event.target;
+                                if (this.pendingSeek !== null) {
+                                    player.seekTo(this.pendingSeek, true);
+                                    this.pendingSeek = null;
+                                }
+                            }
+                        }
+                    });
+                } 
+                else if (type === 'vimeo') {
+                    const vimeoId = getVimeoId(url);
+                    if (!vimeoId) throw new Error("لم يتم العثور على معرف فيديو فيميو");
+
+                    await loadVimeoSDK();
+
+                    const iframe = document.createElement('iframe');
+                    iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&api=1`;
+                    iframe.allow = "autoplay; fullscreen; picture-in-picture";
+                    iframe.style.width = "100%";
+                    iframe.style.height = "100%";
+                    iframe.style.border = "none";
+                    
+                    container.innerHTML = '';
+                    container.appendChild(iframe);
+
+                    this.apiPlayer = new Vimeo.Player(iframe);
+                    this.apiPlayer.ready().then(() => {
+                        if (this.pendingSeek !== null) {
+                            this.apiPlayer.setCurrentTime(this.pendingSeek);
+                            this.pendingSeek = null;
+                        }
+                    });
+                } 
+                else if (type === 'facebook') {
+                    await loadFacebookSDK();
+
+                    const fbDivId = 'fb-player-target';
+                    container.innerHTML = `
+                        <div class="fb-video" id="${fbDivId}" 
+                             data-href="${url}" 
+                             data-allowfullscreen="true" 
+                             data-autoplay="true" 
+                             data-controls="true"
+                             style="width:100%; height:100%; display:block;">
+                        </div>
+                    `;
+
+                    FB.XFBML.parse(container);
+
+                    const self = this;
+                    const readySubscription = (msg) => {
+                        if (msg.type === 'video') {
+                            self.apiPlayer = msg.instance;
+                            if (self.pendingSeek !== null) {
+                                self.apiPlayer.seek(self.pendingSeek);
+                                self.apiPlayer.play();
+                                self.pendingSeek = null;
+                            }
+                        }
+                    };
+                    
+                    if (!window._fbReadySubscribed) {
+                        FB.Event.subscribe('xfbml.ready', readySubscription);
+                        window._fbReadySubscribed = true;
+                    }
+                } 
+                else if (type === 'google-drive') {
+                    const driveId = getGoogleDriveId(url);
+                    if (!driveId) throw new Error("لم يتم العثور على معرف ملف جوجل درايف");
+
+                    container.innerHTML = `
+                        <iframe src="https://drive.google.com/file/d/${driveId}/preview" 
+                                frameborder="0" 
+                                allowfullscreen 
+                                style="width:100%; height:100%; border:none;">
+                        </iframe>
+                    `;
+                } 
+                else if (type === 'tiktok') {
+                    const tiktokId = getTikTokId(url);
+                    const embedUrl = tiktokId ? `https://www.tiktok.com/embed/v2/${tiktokId}` : url;
+
+                    container.innerHTML = `
+                        <iframe src="${embedUrl}" 
+                                frameborder="0" 
+                                allow="autoplay; fullscreen" 
+                                allowfullscreen 
+                                style="width:100%; height:100%; border:none;">
+                        </iframe>
+                    `;
+                } 
+                else if (type === 'telegram-embed') {
+                    const embedUrl = url.includes('?embed=1') ? url : `${url}?embed=1`;
+                    container.innerHTML = `
+                        <iframe src="${embedUrl}" 
+                                frameborder="0" 
+                                allowfullscreen 
+                                style="width:100%; height:100%; border:none;">
+                        </iframe>
+                    `;
+                } 
+                else if (type === 'html5') {
+                    let directUrl = url;
+                    
+                    if (directUrl.includes('dropbox.com')) {
+                        if (directUrl.includes('dl=0')) {
+                            directUrl = directUrl.replace('dl=0', 'raw=1');
+                        } else if (directUrl.includes('dl=1')) {
+                            directUrl = directUrl.replace('dl=1', 'raw=1');
+                        } else if (!directUrl.includes('raw=1')) {
+                            directUrl += (directUrl.includes('?') ? '&' : '?') + 'raw=1';
+                        }
+                    }
+
+                    const video = document.createElement('video');
+                    video.src = directUrl;
+                    video.controls = true;
+                    video.autoplay = true;
+                    video.style.width = "100%";
+                    video.style.height = "100%";
+                    video.style.background = "#000";
+                    video.style.border = "none";
+                    
+                    container.innerHTML = '';
+                    container.appendChild(video);
+                    this.element = video;
+
+                    video.addEventListener('loadedmetadata', () => {
+                        if (this.pendingSeek !== null) {
+                            video.currentTime = this.pendingSeek;
+                            video.play();
+                            this.pendingSeek = null;
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error("UnifiedPlayer Init Error: ", err);
+                container.innerHTML = `<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#ff4d4d; font-size:1rem; padding: 20px; text-align:center;">❌ فشل تحميل الفيديو: ${err.message}</div>`;
+            }
+        },
+
+        seekTo: function(seconds) {
+            if (!this.supportsSeeking) return;
+
+            if (this.currentType === 'youtube') {
+                if (this.apiPlayer && typeof this.apiPlayer.seekTo === 'function') {
+                    this.apiPlayer.seekTo(seconds, true);
+                    if (this.apiPlayer.playVideo) this.apiPlayer.playVideo();
+                } else {
+                    this.pendingSeek = seconds;
+                }
+            } 
+            else if (this.currentType === 'vimeo') {
+                if (this.apiPlayer && typeof this.apiPlayer.setCurrentTime === 'function') {
+                    this.apiPlayer.setCurrentTime(seconds);
+                    this.apiPlayer.play();
+                } else {
+                    this.pendingSeek = seconds;
+                }
+            } 
+            else if (this.currentType === 'facebook') {
+                if (this.apiPlayer && typeof this.apiPlayer.seek === 'function') {
+                    this.apiPlayer.seek(seconds);
+                    this.apiPlayer.play();
+                } else {
+                    this.pendingSeek = seconds;
+                }
+            } 
+            else if (this.currentType === 'html5') {
+                if (this.element) {
+                    this.element.currentTime = seconds;
+                    this.element.play();
+                } else {
+                    this.pendingSeek = seconds;
+                }
+            }
+        },
+
+        cleanup: function() {
+            if (this.currentType === 'youtube' && this.apiPlayer && typeof this.apiPlayer.destroy === 'function') {
+                try { this.apiPlayer.destroy(); } catch (e) {}
+            }
+            if (this.currentType === 'facebook' && this.apiPlayer) {
+                try {
+                    if (typeof this.apiPlayer.pause === 'function') this.apiPlayer.pause();
+                } catch (e) {}
+            }
+            if (this.currentType === 'vimeo' && this.apiPlayer) {
+                try {
+                    if (typeof this.apiPlayer.unload === 'function') this.apiPlayer.unload();
+                } catch (e) {}
+            }
+            if (this.element) {
+                try {
+                    this.element.pause();
+                    this.element.src = "";
+                    this.element.load();
+                } catch (e) {}
+            }
+
+            this.currentType = null;
+            this.apiPlayer = null;
+            this.element = null;
+            this.supportsSeeking = false;
+            this.pendingSeek = null;
+        }
+    };
 
     // 🔥 دالة فتح التفاصيل الذكية والموحدة بالكامل
     function openDetails(id) {
@@ -533,10 +1111,12 @@
         const videoContainer = document.getElementById('popupVideoContainer');
         const linksContainer = document.getElementById('popupLinksContainer');
         const chaptersContainer = document.getElementById('chaptersContainer');
+        const chaptersSection = document.getElementById('chaptersSection');
 
         if (videoContainer) { videoContainer.innerHTML = ''; videoContainer.style.display = 'none'; }
         if (linksContainer) { linksContainer.innerHTML = ''; }
-        if (chaptersContainer) { chaptersContainer.innerHTML = ''; chaptersContainer.style.display = 'none'; }
+        if (chaptersContainer) { chaptersContainer.innerHTML = ''; }
+        if (chaptersSection) { chaptersSection.style.display = 'none'; }
 
         function createDynamicButton(url, text) {
             const btn = document.createElement('a');
@@ -565,80 +1145,28 @@
 
         // 📺 1. تشغيل الفيديو والتعرف على نوعه تلقائياً
         if (selectedItem.videoUrl && selectedItem.videoUrl.trim() !== '') {
-            const url = selectedItem.videoUrl;
-            
-            if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                const embedUrl = getYouTubeEmbedUrl(url);
-                if (videoContainer && embedUrl) {
-                    videoContainer.innerHTML = `<iframe id="modalIframe" src="${embedUrl}" frameborder="0" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
-                    videoContainer.style.display = 'block';
-                }
-            } else if (url.includes('drive.google.com')) {
-                const embedUrl = getGoogleDriveEmbedUrl(url);
-                if (videoContainer && embedUrl) {
-                    videoContainer.innerHTML = `<iframe id="modalIframe" src="${embedUrl}" frameborder="0" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
-                    videoContainer.style.display = 'block';
-                }
-            } else if (url.includes('dropbox.com')) {
-                let directUrl = url;
-                if (directUrl.includes('dl=0')) {
-                    directUrl = directUrl.replace('dl=0', 'raw=1');
-                } else if (directUrl.includes('dl=1')) {
-                    directUrl = directUrl.replace('dl=1', 'raw=1');
-                } else if (!directUrl.includes('raw=1')) {
-                    directUrl += (directUrl.includes('?') ? '&' : '?') + 'raw=1';
-                }
-                if (videoContainer) {
-                    videoContainer.innerHTML = `<video id="modalVideo" src="${directUrl}" controls style="width:100%; height:100%; background:#000; border:none;"></video>`;
-                    videoContainer.style.display = 'block';
-                }
-            } else if (
-                url.toLowerCase().includes('.mp4') || 
-                url.toLowerCase().includes('.webm') || 
-                url.toLowerCase().includes('.ogg') || 
-                url.includes('videos/') || 
-                url.includes('Recording')
-            ) {
-                // مشغل فيديو محلي فخم يدعم الطوابع الزمنية لجميع الروابط المباشرة (مثل تلغرام أو خوادم خاصة)
-                if (videoContainer) {
-                    videoContainer.innerHTML = `<video id="modalVideo" src="${url}" controls style="width:100%; height:100%; background:#000; border:none;"></video>`;
-                    videoContainer.style.display = 'block';
-                }
-            } else {
-                createDynamicButton(url, 'فتح الرابط الرئيسي');
-            }
+            UnifiedPlayer.init(videoContainer, selectedItem.videoUrl);
         }
 
         // ⏱️ 2. بناء أزرار الطوابع الزمنية (Chapters) ودعم القفز للوقت
         if (selectedItem.chapters && selectedItem.chapters.length > 0) {
+            if (chaptersSection) chaptersSection.style.display = 'block';
             selectedItem.chapters.forEach(chapter => {
                 const chapBtn = document.createElement('button');
-                chapBtn.innerText = chapter.text + " (" + chapter.time + ")";
+                chapBtn.className = 'chapter-row-btn';
+                chapBtn.innerHTML = `
+                    <span>${chapter.text}</span>
+                    <span class="chapter-time-badge">${chapter.time}</span>
+                `;
                 
-                chapBtn.style.cssText = "padding:8px 14px; background:#111; color:#0088cc; border:1px solid #0088cc; border-radius:6px; cursor:pointer; font-size:0.9rem; transition:0.3s; font-weight:bold;";
-                chapBtn.onmouseenter = () => { chapBtn.style.background = "#0088cc"; chapBtn.style.color = "#fff"; };
-                chapBtn.onmouseleave = () => { chapBtn.style.background = "#111"; chapBtn.style.color = "#0088cc"; };
-
                 const seconds = parseTimeToSeconds(chapter.time);
                 
                 chapBtn.addEventListener('click', () => {
-                    const localVid = document.getElementById('modalVideo');
-                    const ytIframe = document.getElementById('modalIframe');
-                    
-                    if (localVid) {
-                        localVid.currentTime = seconds;
-                        localVid.play();
-                    } else if (ytIframe) {
-                        const baseUrl = getYouTubeEmbedUrl(selectedItem.videoUrl);
-                        if (baseUrl) {
-                            ytIframe.src = `${baseUrl}?start=${seconds}&autoplay=1`;
-                        }
-                    }
+                    UnifiedPlayer.seekTo(seconds);
                 });
 
                 chaptersContainer.appendChild(chapBtn);
             });
-            chaptersContainer.style.display = 'flex';
         }
 
         // 🔗 3. بناء الأزرار والروابط العادية
@@ -661,14 +1189,11 @@
                     if (recItem) {
                         hasRecs = true;
                         const recCard = document.createElement('div');
-                        recCard.style.cssText = "background:#232323; padding:15px; border-radius:10px; border:1px solid #3c4043; cursor:pointer; transition:all 0.2s;";
+                        recCard.className = 'rec-item-card';
                         recCard.innerHTML = `
-                            <h4 style="color:#fff; margin:0 0 8px 0; font-size:1rem; line-height:1.4;">${recItem.title}</h4>
-                            <span style="color:#00d4ff; font-size:0.8rem; font-weight:600;">مشاهدة الآن ←</span>
+                            <h4>${recItem.title}</h4>
+                            <span class="watch-now">مشاهدة الآن ←</span>
                         `;
-                        recCard.onmouseenter = () => recCard.style.borderColor = '#00d4ff';
-                        recCard.onmouseleave = () => recCard.style.borderColor = '#3c4043';
-                        
                         recCard.addEventListener('click', () => {
                             openDetails(recItem.id);
                         });
@@ -686,11 +1211,7 @@
 
     function closeModal() {
         document.getElementById('myModal').style.display = "none";
-        const videoContainer = document.getElementById('popupVideoContainer');
-        if (videoContainer) {
-            videoContainer.innerHTML = '';
-            videoContainer.style.display = 'none';
-        }
+        UnifiedPlayer.cleanup();
     }
 
     window.onclick = function(event) {
@@ -701,20 +1222,41 @@
 
 <div id="myModal" class="modal">
     <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h1 id="modalTitle" style="color: #0088cc; margin-top: 0; margin-bottom: 20px;"></h1>
+        <div class="modal-header">
+            <h2 id="modalTitle" style="color: var(--accent-color); margin: 0; font-weight: 700; font-size: 1.5rem;"></h2>
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+        </div>
         
-        <div id="popupVideoContainer" style="width: 100%; max-width: 820px; margin: 25px auto; aspect-ratio: 16 / 9; display: none; border-radius: 12px; overflow: hidden; background-color: #000; box-shadow: 0 8px 25px rgba(0,0,0,0.6);"></div>
-       
-        <div id="chaptersContainer" style="margin: 20px auto; max-width: 820px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
-       
-        <div id="popupLinksContainer" style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 20px auto; max-width: 820px;"></div>
-
-        <div id="modalContent" style="white-space: pre-line; line-height: 1.8; color: #b0b0b0; font-size: 1.1rem; max-width: 820px; margin: 0 auto; margin-bottom: 30px;"></div>
-
-        <div id="recommendationsContainer" style="margin: 30px auto; max-width: 820px; border-top: 1px solid #333; padding-top: 20px; display: none;">
-            <h3 style="color: #fff; margin-bottom: 15px; font-size: 1.2rem;">💡 دروس ومقترحات ذات صلة:</h3>
-            <div id="recommendationsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 15px;"></div>
+        <div class="modal-body-grid">
+            <!-- Main Content Area: Video and Details -->
+            <div class="modal-main-area">
+                <div id="popupVideoContainer" class="video-container-wrapper" style="display: none;"></div>
+                
+                <div id="popupLinksContainer" class="links-container-wrapper"></div>
+                
+                <div class="details-section">
+                    <h3 style="color: #fff; border-bottom: 1px solid #222226; padding-bottom: 8px; margin-top: 0; font-size: 1.2rem;">الوصف والتفاصيل</h3>
+                    <div id="modalContent" class="modal-description-text"></div>
+                </div>
+            </div>
+            
+            <!-- Sidebar: Chapters and Recommendations -->
+            <div class="modal-sidebar-area">
+                <div id="chaptersSection" class="sidebar-card" style="display: none;">
+                    <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                        ⏱️ الفصول والطوابع الزمنية
+                    </h3>
+                    <div id="chaptersContainer" class="chapters-flex-list"></div>
+                    <div id="chaptersUnsupportedNotice" class="chapters-notice" style="display: none;">
+                        ⚠️ الطوابع الزمنية التفاعلية غير مدعومة لهذه المنصة.
+                    </div>
+                </div>
+                
+                <div id="recommendationsContainer" class="sidebar-card" style="display: none;">
+                    <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">💡 دروس ومقترحات ذات صلة</h3>
+                    <div id="recommendationsList" class="recommendations-vertical-list"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
