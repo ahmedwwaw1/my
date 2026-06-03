@@ -498,6 +498,7 @@
                     content: serverItem.content || serverItem.desc || '',
                     image: serverItem.image || '',
                     videoUrl: serverItem.videoUrl || serverItem.videourl || serverItem.url || '',
+                    videoDirectUrl: serverItem.videoDirectUrl || serverItem.videoDirecturl || '',
                     links: serverItem.links || [],
                     chapters: serverItem.chapters || [],
                     recommendations: serverItem.recommendations || []
@@ -986,11 +987,17 @@
                 else if (type === 'telegram-embed') {
                     const embedUrl = url.includes('?embed=1') ? url : `${url}?embed=1`;
                     container.innerHTML = `
-                        <iframe src="${embedUrl}" 
-                                frameborder="0" 
-                                allowfullscreen 
-                                style="width:100%; height:100%; border:none;">
-                        </iframe>
+                        <div style="position:relative; width:100%; height:100%; background:#0d0d0d; display:flex; flex-direction:column;">
+                            <iframe src="${embedUrl}" 
+                                    frameborder="0" 
+                                    allowfullscreen 
+                                    style="width:100%; flex:1; border:none;">
+                            </iframe>
+                            <div style="background:#1a1a2e; border-top:1px solid #2d2d3a; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:0.85rem; flex-shrink:0;">
+                                <span style="color:#ffb300;">⚠️ للحصول على طوابع زمنية، أضف رابط الفيديو المباشر (.mp4) في حقل <code style="background:#111; padding:2px 6px; border-radius:4px;">videoDirectUrl</code></span>
+                                <a href="${url}" target="_blank" style="color:#0088cc; font-weight:bold; text-decoration:none; white-space:nowrap;">🔗 فتح في تيليغرام</a>
+                            </div>
+                        </div>
                     `;
                 } 
                 else if (type === 'html5') {
@@ -1144,8 +1151,16 @@
         }
 
         // 📺 1. تشغيل الفيديو والتعرف على نوعه تلقائياً
-        if (selectedItem.videoUrl && selectedItem.videoUrl.trim() !== '') {
-            UnifiedPlayer.init(videoContainer, selectedItem.videoUrl);
+        // إذا يوجد رابط مباشر (videoDirectUrl) نستخدمه أولاً لدعم الطوابع الزمنية
+        const effectiveVideoUrl = (selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== '')
+            ? selectedItem.videoDirectUrl
+            : selectedItem.videoUrl;
+        
+        if (effectiveVideoUrl && effectiveVideoUrl.trim() !== '') {
+            // إذا كان الرابط الأصلي تيليغرام embed لكن توجد videoDirectUrl، نُظهر شارة
+            const isUsingDirectFallback = selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== ''
+                && selectedItem.videoUrl && (selectedItem.videoUrl.includes('t.me/') || selectedItem.videoUrl.includes('telegram'));
+            UnifiedPlayer.init(videoContainer, effectiveVideoUrl, isUsingDirectFallback ? selectedItem.videoUrl : null);
         }
 
         // ⏱️ 2. بناء أزرار الطوابع الزمنية (Chapters) ودعم القفز للوقت
