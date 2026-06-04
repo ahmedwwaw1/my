@@ -510,6 +510,42 @@
     <div class="grid-layout" id="mainGrid"></div>
 </div>
 
+<!-- Modal for Card Details -->
+<div id="detailsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close-btn" onclick="closeDetails()">&times;</span>
+            <h2 id="modalTitle" style="margin: 0; color: #fff; font-size: 1.8rem;"></h2>
+        </div>
+        <div class="modal-body-grid">
+            <div class="modal-main-area">
+                <div class="video-container-wrapper">
+                    <iframe id="videoPlayer" width="100%" height="100%" style="border: none;"></iframe>
+                </div>
+                <div class="details-section">
+                    <h3 style="color: var(--accent-color); margin-top: 0;">الوصف</h3>
+                    <div class="modal-description-text" id="modalDescription"></div>
+                </div>
+                <div class="details-section" id="linksSection" style="display: none;">
+                    <h3 style="color: var(--accent-color); margin-top: 0;">الروابط المهمة</h3>
+                    <div class="links-container-wrapper" id="linksList"></div>
+                </div>
+            </div>
+            <div class="modal-sidebar-area">
+                <div class="sidebar-card" id="chaptersSection" style="display: none;">
+                    <h3 style="color: var(--accent-color); margin-top: 0;">الفصول</h3>
+                    <div class="chapters-flex-list" id="chaptersList"></div>
+                    <div class="chapters-notice">💡 اضغط على أي فصل للانتقال إليه مباشرة</div>
+                </div>
+                <div class="sidebar-card" id="recommendationsSection" style="display: none;">
+                    <h3 style="color: var(--accent-color); margin-top: 0;">موصى به أيضًا</h3>
+                    <div class="recommendations-vertical-list" id="recommendationsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     let allData = [];
     let cryptoAlerts = [];
@@ -519,6 +555,7 @@
     const searchInput = document.getElementById('globalSearch');
     const pageTitle = document.getElementById('pageTitle');
     const statusMsg = document.getElementById('statusMsg');
+    const detailsModal = document.getElementById('detailsModal');
 
     // دالة تحويل صيغة الوقت (01:45) إلى ثواني نقية
     function parseTimeToSeconds(timeStr) {
@@ -665,7 +702,8 @@
             const card = document.createElement('div');
             card.className = 'card';
             
-            card.addEventListener('click', function() {
+            card.addEventListener('click', function(e) {
+                e.stopPropagation();
                 openDetails(item.id);
             });
             
@@ -685,6 +723,94 @@
             `;
             mainGrid.appendChild(card);
         });
+    }
+
+    // 🔧 دالة فتح التفاصيل
+    function openDetails(itemId) {
+        const item = allData.find(d => d.id === itemId);
+        if (!item) return;
+
+        document.getElementById('modalTitle').innerText = item.title;
+        document.getElementById('modalDescription').innerText = item.content || 'لا توجد وصف';
+        
+        const videoPlayer = document.getElementById('videoPlayer');
+        if (item.videoUrl) {
+            videoPlayer.src = item.videoUrl;
+        }
+
+        // الروابط
+        const linksSection = document.getElementById('linksSection');
+        const linksList = document.getElementById('linksList');
+        linksList.innerHTML = '';
+        if (item.links && item.links.length > 0) {
+            linksSection.style.display = 'block';
+            item.links.forEach(link => {
+                const linkBtn = document.createElement('a');
+                linkBtn.href = link.url;
+                linkBtn.target = '_blank';
+                linkBtn.style.cssText = 'padding: 10px 20px; background: #00d4ff; color: #000; border-radius: 6px; text-decoration: none; font-weight: 600; cursor: pointer; transition: all 0.2s;';
+                linkBtn.innerText = link.text || 'فتح الرابط';
+                linkBtn.addEventListener('mouseover', () => linkBtn.style.background = '#00b8d4');
+                linkBtn.addEventListener('mouseout', () => linkBtn.style.background = '#00d4ff');
+                linksList.appendChild(linkBtn);
+            });
+        } else {
+            linksSection.style.display = 'none';
+        }
+
+        // الفصول
+        const chaptersSection = document.getElementById('chaptersSection');
+        const chaptersList = document.getElementById('chaptersList');
+        chaptersList.innerHTML = '';
+        if (item.chapters && item.chapters.length > 0) {
+            chaptersSection.style.display = 'block';
+            item.chapters.forEach(chapter => {
+                const chapterBtn = document.createElement('button');
+                chapterBtn.className = 'chapter-row-btn';
+                const seconds = parseTimeToSeconds(chapter.time);
+                chapterBtn.innerHTML = `
+                    <span class="chapter-time-badge">${chapter.time || '00:00'}</span>
+                    <span style="flex: 1; text-align: right; margin-right: 12px;">${chapter.title}</span>
+                `;
+                chapterBtn.addEventListener('click', () => {
+                    videoPlayer.currentTime = seconds;
+                });
+                chaptersList.appendChild(chapterBtn);
+            });
+        } else {
+            chaptersSection.style.display = 'none';
+        }
+
+        // التوصيات
+        const recommendationsSection = document.getElementById('recommendationsSection');
+        const recommendationsList = document.getElementById('recommendationsList');
+        recommendationsList.innerHTML = '';
+        if (item.recommendations && item.recommendations.length > 0) {
+            recommendationsSection.style.display = 'block';
+            item.recommendations.forEach(rec => {
+                const recItem = document.createElement('div');
+                recItem.className = 'rec-item-card';
+                recItem.style.cursor = 'pointer';
+                recItem.innerHTML = `
+                    <h4>${rec.title}</h4>
+                    <span class="watch-now">مشاهدة الآن →</span>
+                `;
+                recItem.addEventListener('click', () => {
+                    openDetails(rec.id);
+                });
+                recommendationsList.appendChild(recItem);
+            });
+        } else {
+            recommendationsSection.style.display = 'none';
+        }
+
+        detailsModal.style.display = 'block';
+    }
+
+    // 🔧 دالة إغلاق التفاصيل
+    function closeDetails() {
+        detailsModal.style.display = 'none';
+        document.getElementById('videoPlayer').src = '';
     }
 
     function handleRoute() {
@@ -827,6 +953,13 @@
             }
         });
     }
+
+    // إغلاق Modal عند الضغط على الخلفية
+    detailsModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeDetails();
+        }
+    });
 
     // تحديث التنبيهات كل 5 دقائق
     setInterval(() => {
