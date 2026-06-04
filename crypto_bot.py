@@ -5,7 +5,7 @@ from datetime import datetime
 
 def analyze_crypto_market():
     """
-    جلب بيانات العملات من Binance وتحديث ملف data.json
+    جلب بيانات العملات من Binance وتحديث ملف crypto_alerts.json
     """
     try:
         # إنشاء اتصال مع بينانس (بدون API keys للبيانات العامة)
@@ -53,9 +53,9 @@ def analyze_crypto_market():
 
 def save_alerts(new_alerts):
     """
-    حفظ التنبيهات الجديدة في data.json مع تجنب التكرار
+    حفظ التنبيهات الجديدة في crypto_alerts.json مع تجنب التكرار
     """
-    file_name = 'data.json'
+    file_name = 'crypto_alerts.json'
     existing_data = []
     
     # قراءة البيانات القديمة
