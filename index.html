@@ -245,6 +245,59 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
+
+        /* 🚀 تنبيهات العملات - Styles */
+        .crypto-alert-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: 1px solid #00d4ff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+        }
+
+        .crypto-alert-card:hover {
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .crypto-symbol {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 8px;
+        }
+
+        .crypto-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+
+        .crypto-detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .crypto-detail-label {
+            color: #9aa0a6;
+            font-size: 0.8rem;
+        }
+
+        .crypto-detail-value {
+            color: #e8eaed;
+            font-weight: 600;
+        }
+
+        .crypto-timestamp {
+            font-size: 0.75rem;
+            color: #7a8a96;
+            margin-top: 8px;
+            text-align: left;
+        }
         
         :root {
             --bg-color: #121212;
@@ -274,6 +327,7 @@
             position: sticky;
             top: 0; z-index: 1000;
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            flex-wrap: wrap;
         }
 
         nav a {
@@ -283,6 +337,7 @@
             padding: 10px 20px;
             border-radius: 8px;
             transition: var(--transition);
+            white-space: nowrap;
         }
 
         nav a:hover, nav a.active {
@@ -440,7 +495,8 @@
     <a href="#/" id="btn-vsa">التحليل الزمني</a>
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
     <a href="#/videos" id="btn-videos">🎥 أكاديمية الفيديوهات</a>
-    <a href="#/rw" id="btn-rw"> التحليل الحجمي </a>
+    <a href="#/rw" id="btn-rw">التحليل الحجمي</a>
+    <a href="#/alerts" id="btn-alerts">⚡ تنبيهات العملات</a>
 </nav>
 
 <div class="container">
@@ -456,6 +512,7 @@
 
 <script>
     let allData = [];
+    let cryptoAlerts = [];
     let isDataLoaded = false;
     
     const grid = document.getElementById('mainGrid');
@@ -469,11 +526,24 @@
         if (typeof timeStr === 'number') return timeStr;
         const parts = timeStr.split(':').map(Number);
         if (parts.length === 2) {
-            return parts[0] * 60 + parts[1]; // دقائق : ثواني
+            return parts[0] * 60 + parts[1];
         } else if (parts.length === 3) {
-            return parts[0] * 3600 + parts[1] * 60 + parts[2]; // ساعات : دقائق : ثواني
+            return parts[0] * 3600 + parts[1] * 60 + parts[2];
         }
         return parseFloat(timeStr) || 0;
+    }
+
+    // 🚀 تحميل تنبيهات العملات
+    async function loadCryptoAlerts() {
+        try {
+            const response = await fetch('crypto_alerts.json?v=' + new Date().getTime());
+            if (!response.ok) throw new Error("فشل تحميل التنبيهات");
+            cryptoAlerts = await response.json();
+            console.log("✅ تم تحميل تنبيهات العملات:", cryptoAlerts.length);
+        } catch (error) {
+            console.error("⚠️ خطأ في تحميل التنبيهات:", error);
+            cryptoAlerts = [];
+        }
     }
 
     async function loadWebsiteData() {
@@ -531,6 +601,52 @@
         }
     }
     
+    function renderCryptoAlerts(alerts) {
+        const mainGrid = document.getElementById('mainGrid');
+        mainGrid.innerHTML = '';
+        
+        if (alerts.length === 0) {
+            statusMsg.innerText = "لا توجد تنبيهات عملات حالياً";
+            return;
+        }
+        
+        statusMsg.innerText = '';
+        
+        alerts.forEach(alert => {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'crypto-alert-card';
+            
+            const timestamp = new Date(alert.timestamp).toLocaleString('ar-SA');
+            
+            alertDiv.innerHTML = `
+                <div class="crypto-symbol">💰 ${alert.symbol}</div>
+                <div class="crypto-details">
+                    <div class="crypto-detail-item">
+                        <span class="crypto-detail-label">السعر الحالي</span>
+                        <span class="crypto-detail-value">$${alert.price.toFixed(2)}</span>
+                    </div>
+                    <div class="crypto-detail-item">
+                        <span class="crypto-detail-label">التغيير %</span>
+                        <span class="crypto-detail-value" style="color: ${alert.change_percent > 0 ? '#00ff88' : '#ff4444'};">
+                            ${alert.change_percent > 0 ? '+' : ''}${alert.change_percent.toFixed(2)}%
+                        </span>
+                    </div>
+                    <div class="crypto-detail-item">
+                        <span class="crypto-detail-label">حجم التداول</span>
+                        <span class="crypto-detail-value">${(alert.volume / 1000000).toFixed(2)}M</span>
+                    </div>
+                    <div class="crypto-detail-item">
+                        <span class="crypto-detail-label">الفئة</span>
+                        <span class="crypto-detail-value">حجم عالي</span>
+                    </div>
+                </div>
+                <div class="crypto-timestamp">⏰ ${timestamp}</div>
+            `;
+            
+            mainGrid.appendChild(alertDiv);
+        });
+    }
+
     function render(dataArray) {
         const mainGrid = document.getElementById('mainGrid');
         if (!mainGrid) return; 
@@ -583,7 +699,7 @@
         } 
         else if (hash === '#/rw') {
             const filtered = allData.filter(d => d.category === 'rw');
-            pageTitle.innerText = ' مكتبة وايكوف';
+            pageTitle.innerText = 'مكتبة وايكوف';
             render(filtered);
             setActiveNav('btn-rw');
         } 
@@ -592,7 +708,12 @@
             pageTitle.innerText = 'مكتبة الشروحات والفيديوهات التعليمية';
             render(filtered);
             setActiveNav('btn-videos');
-        } 
+        }
+        else if (hash === '#/alerts') {
+            pageTitle.innerText = '⚡ تنبيهات العملات الآلية';
+            renderCryptoAlerts(cryptoAlerts);
+            setActiveNav('btn-alerts');
+        }
         else {
             const filtered = allData.filter(d => d.category === 'vsa');
             pageTitle.innerText = 'أكاديمية VSA والتداول';
@@ -707,574 +828,20 @@
         });
     }
 
+    // تحديث التنبيهات كل 5 دقائق
+    setInterval(() => {
+        loadCryptoAlerts();
+        if (window.location.hash === '#/alerts') {
+            renderCryptoAlerts(cryptoAlerts);
+        }
+    }, 300000); // 5 دقائق
+
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('load', handleRoute);
-    document.addEventListener('DOMContentLoaded', loadWebsiteData);
-
-    let ytSdkPromise = null;
-    let fbSdkPromise = null;
-    let vimeoSdkPromise = null;
-
-    function loadYouTubeSDK() {
-        if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
-        if (ytSdkPromise) return ytSdkPromise;
-        ytSdkPromise = new Promise((resolve) => {
-            if (window.YT && window.YT.Player) {
-                resolve(window.YT);
-                return;
-            }
-            const oldCallback = window.onYouTubeIframeAPIReady;
-            window.onYouTubeIframeAPIReady = () => {
-                if (oldCallback) oldCallback();
-                resolve(window.YT);
-            };
-            const script = document.createElement('script');
-            script.src = "https://www.youtube.com/iframe_api";
-            script.async = true;
-            document.head.appendChild(script);
-        });
-        return ytSdkPromise;
-    }
-
-    function loadFacebookSDK() {
-        if (window.FB) return Promise.resolve(window.FB);
-        if (fbSdkPromise) return fbSdkPromise;
-        fbSdkPromise = new Promise((resolve) => {
-            const script = document.createElement('script');
-            script.src = "https://connect.facebook.net/ar_AR/sdk.js";
-            script.async = true;
-            script.defer = true;
-            script.onload = () => {
-                window.FB.init({
-                    xfbml: true,
-                    version: 'v16.0'
-                });
-                resolve(window.FB);
-            };
-            document.head.appendChild(script);
-        });
-        return fbSdkPromise;
-    }
-
-    function loadVimeoSDK() {
-        if (window.Vimeo) return Promise.resolve(window.Vimeo);
-        if (vimeoSdkPromise) return vimeoSdkPromise;
-        vimeoSdkPromise = new Promise((resolve) => {
-            const script = document.createElement('script');
-            script.src = "https://player.vimeo.com/api/player.js";
-            script.async = true;
-            script.onload = () => {
-                resolve(window.Vimeo);
-            };
-            document.head.appendChild(script);
-        });
-        return vimeoSdkPromise;
-    }
-
-    function getYouTubeId(url) {
-        if (!url) return null;
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length === 11) ? match[2] : null;
-    }
-
-    function getVimeoId(url) {
-        if (!url) return null;
-        const regExp = /(?:vimeo\.com\/|video\/)(\d+)/;
-        const match = url.match(regExp);
-        return match ? match[1] : null;
-    }
-
-    function getGoogleDriveId(url) {
-        if (!url) return null;
-        const regExp = /(?:file\/d\/|id=)([^/\?&]+)/;
-        const match = url.match(regExp);
-        return match ? match[1] : null;
-    }
-
-    function getTikTokId(url) {
-        if (!url) return null;
-        const regExp = /\/video\/(\d+)/;
-        const match = url.match(regExp);
-        return match ? match[1] : null;
-    }
-
-    const UnifiedPlayer = {
-        currentType: null,
-        apiPlayer: null,
-        element: null,
-        supportsSeeking: false,
-        pendingSeek: null,
-
-        detectVideoType: function(url) {
-            if (!url) return null;
-            url = url.trim();
-            
-            if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                return 'youtube';
-            }
-            if (url.includes('vimeo.com')) {
-                return 'vimeo';
-            }
-            if (url.includes('facebook.com') || url.includes('fb.watch')) {
-                return 'facebook';
-            }
-            if (url.includes('drive.google.com')) {
-                return 'google-drive';
-            }
-            if (url.includes('tiktok.com')) {
-                return 'tiktok';
-            }
-            if (url.includes('t.me/')) {
-                const lower = url.toLowerCase();
-                if (lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.includes('/videos/') || lower.includes('recording')) {
-                    return 'html5';
-                }
-                const parts = url.split('/');
-                if (parts.length > 4 && !isNaN(parseInt(parts[parts.length - 1]))) {
-                    return 'telegram-embed';
-                }
-            }
-            
-            const lowerUrl = url.toLowerCase();
-            if (
-                lowerUrl.endsWith('.mp4') || 
-                lowerUrl.endsWith('.webm') || 
-                lowerUrl.endsWith('.ogg') ||
-                lowerUrl.includes('raw=1') ||
-                lowerUrl.includes('dl=1') ||
-                lowerUrl.includes('/videos/') ||
-                lowerUrl.includes('recording') ||
-                (lowerUrl.includes('github.com') && lowerUrl.includes('/raw/'))
-            ) {
-                return 'html5';
-            }
-            
-            return 'html5';
-        },
-
-        init: async function(container, url) {
-            this.cleanup();
-            if (!url || url.trim() === '') return;
-
-            const type = this.detectVideoType(url);
-            this.currentType = type;
-            this.supportsSeeking = (type === 'youtube' || type === 'vimeo' || type === 'facebook' || type === 'html5');
-            this.pendingSeek = null;
-
-            const notice = document.getElementById('chaptersUnsupportedNotice');
-            if (notice) {
-                notice.style.display = this.supportsSeeking ? 'none' : 'block';
-            }
-
-            container.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#fff; font-size:1.2rem;">⏱️ جاري تحميل المشغل...</div>';
-            container.style.display = 'block';
-
-            try {
-                if (type === 'youtube') {
-                    const ytId = getYouTubeId(url);
-                    if (!ytId) throw new Error("لم يتم العثور على معرف فيديو يوتيوب");
-
-                    await loadYouTubeSDK();
-                    
-                    const playerDivId = 'yt-player-target';
-                    container.innerHTML = `<div id="${playerDivId}"></div>`;
-
-                    this.apiPlayer = new YT.Player(playerDivId, {
-                        height: '100%',
-                        width: '100%',
-                        videoId: ytId,
-                        playerVars: {
-                            'autoplay': 1,
-                            'controls': 1,
-                            'rel': 0,
-                            'showinfo': 0,
-                            'modestbranding': 1
-                        },
-                        events: {
-                            'onReady': (event) => {
-                                const player = event.target;
-                                if (this.pendingSeek !== null) {
-                                    player.seekTo(this.pendingSeek, true);
-                                    this.pendingSeek = null;
-                                }
-                            }
-                        }
-                    });
-                } 
-                else if (type === 'vimeo') {
-                    const vimeoId = getVimeoId(url);
-                    if (!vimeoId) throw new Error("لم يتم العثور على معرف فيديو فيميو");
-
-                    await loadVimeoSDK();
-
-                    const iframe = document.createElement('iframe');
-                    iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&api=1`;
-                    iframe.allow = "autoplay; fullscreen; picture-in-picture";
-                    iframe.style.width = "100%";
-                    iframe.style.height = "100%";
-                    iframe.style.border = "none";
-                    
-                    container.innerHTML = '';
-                    container.appendChild(iframe);
-
-                    this.apiPlayer = new Vimeo.Player(iframe);
-                    this.apiPlayer.ready().then(() => {
-                        if (this.pendingSeek !== null) {
-                            this.apiPlayer.setCurrentTime(this.pendingSeek);
-                            this.pendingSeek = null;
-                        }
-                    });
-                } 
-                else if (type === 'facebook') {
-                    await loadFacebookSDK();
-
-                    const fbDivId = 'fb-player-target';
-                    container.innerHTML = `
-                        <div class="fb-video" id="${fbDivId}" 
-                             data-href="${url}" 
-                             data-allowfullscreen="true" 
-                             data-autoplay="true" 
-                             data-controls="true"
-                             style="width:100%; height:100%; display:block;">
-                        </div>
-                    `;
-
-                    FB.XFBML.parse(container);
-
-                    const self = this;
-                    const readySubscription = (msg) => {
-                        if (msg.type === 'video') {
-                            self.apiPlayer = msg.instance;
-                            if (self.pendingSeek !== null) {
-                                self.apiPlayer.seek(self.pendingSeek);
-                                self.apiPlayer.play();
-                                self.pendingSeek = null;
-                            }
-                        }
-                    };
-                    
-                    if (!window._fbReadySubscribed) {
-                        FB.Event.subscribe('xfbml.ready', readySubscription);
-                        window._fbReadySubscribed = true;
-                    }
-                } 
-                else if (type === 'google-drive') {
-                    const driveId = getGoogleDriveId(url);
-                    if (!driveId) throw new Error("لم يتم العثور على معرف ملف جوجل درايف");
-
-                    container.innerHTML = `
-                        <iframe src="https://drive.google.com/file/d/${driveId}/preview" 
-                                frameborder="0" 
-                                allowfullscreen 
-                                style="width:100%; height:100%; border:none;">
-                        </iframe>
-                    `;
-                } 
-                else if (type === 'tiktok') {
-                    const tiktokId = getTikTokId(url);
-                    const embedUrl = tiktokId ? `https://www.tiktok.com/embed/v2/${tiktokId}` : url;
-
-                    container.innerHTML = `
-                        <iframe src="${embedUrl}" 
-                                frameborder="0" 
-                                allow="autoplay; fullscreen" 
-                                allowfullscreen 
-                                style="width:100%; height:100%; border:none;">
-                        </iframe>
-                    `;
-                } 
-                else if (type === 'telegram-embed') {
-                    const embedUrl = url.includes('?embed=1') ? url : `${url}?embed=1`;
-                    container.innerHTML = `
-                        <div style="position:relative; width:100%; height:100%; background:#0d0d0d; display:flex; flex-direction:column;">
-                            <iframe src="${embedUrl}" 
-                                    frameborder="0" 
-                                    allowfullscreen 
-                                    style="width:100%; flex:1; border:none;">
-                            </iframe>
-                            <div style="background:#1a1a2e; border-top:1px solid #2d2d3a; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:0.85rem; flex-shrink:0;">
-                                <span style="color:#ffb300;">⚠️ للحصول على طوابع زمنية، أضف رابط الفيديو المباشر (.mp4) في حقل <code style="background:#111; padding:2px 6px; border-radius:4px;">videoDirectUrl</code></span>
-                                <a href="${url}" target="_blank" style="color:#0088cc; font-weight:bold; text-decoration:none; white-space:nowrap;">🔗 فتح في تيليغرام</a>
-                            </div>
-                        </div>
-                    `;
-                } 
-                else if (type === 'html5') {
-                    let directUrl = url;
-                    
-                    if (directUrl.includes('dropbox.com')) {
-                        if (directUrl.includes('dl=0')) {
-                            directUrl = directUrl.replace('dl=0', 'raw=1');
-                        } else if (directUrl.includes('dl=1')) {
-                            directUrl = directUrl.replace('dl=1', 'raw=1');
-                        } else if (!directUrl.includes('raw=1')) {
-                            directUrl += (directUrl.includes('?') ? '&' : '?') + 'raw=1';
-                        }
-                    }
-
-                    const video = document.createElement('video');
-                    video.src = directUrl;
-                    video.controls = true;
-                    video.autoplay = true;
-                    video.style.width = "100%";
-                    video.style.height = "100%";
-                    video.style.background = "#000";
-                    video.style.border = "none";
-                    
-                    container.innerHTML = '';
-                    container.appendChild(video);
-                    this.element = video;
-
-                    video.addEventListener('loadedmetadata', () => {
-                        if (this.pendingSeek !== null) {
-                            video.currentTime = this.pendingSeek;
-                            video.play();
-                            this.pendingSeek = null;
-                        }
-                    });
-                }
-            } catch (err) {
-                console.error("UnifiedPlayer Init Error: ", err);
-                container.innerHTML = `<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#ff4d4d; font-size:1rem; padding: 20px; text-align:center;">❌ فشل تحميل الفيديو: ${err.message}</div>`;
-            }
-        },
-
-        seekTo: function(seconds) {
-            if (!this.supportsSeeking) return;
-
-            if (this.currentType === 'youtube') {
-                if (this.apiPlayer && typeof this.apiPlayer.seekTo === 'function') {
-                    this.apiPlayer.seekTo(seconds, true);
-                    if (this.apiPlayer.playVideo) this.apiPlayer.playVideo();
-                } else {
-                    this.pendingSeek = seconds;
-                }
-            } 
-            else if (this.currentType === 'vimeo') {
-                if (this.apiPlayer && typeof this.apiPlayer.setCurrentTime === 'function') {
-                    this.apiPlayer.setCurrentTime(seconds);
-                    this.apiPlayer.play();
-                } else {
-                    this.pendingSeek = seconds;
-                }
-            } 
-            else if (this.currentType === 'facebook') {
-                if (this.apiPlayer && typeof this.apiPlayer.seek === 'function') {
-                    this.apiPlayer.seek(seconds);
-                    this.apiPlayer.play();
-                } else {
-                    this.pendingSeek = seconds;
-                }
-            } 
-            else if (this.currentType === 'html5') {
-                if (this.element) {
-                    this.element.currentTime = seconds;
-                    this.element.play();
-                } else {
-                    this.pendingSeek = seconds;
-                }
-            }
-        },
-
-        cleanup: function() {
-            if (this.currentType === 'youtube' && this.apiPlayer && typeof this.apiPlayer.destroy === 'function') {
-                try { this.apiPlayer.destroy(); } catch (e) {}
-            }
-            if (this.currentType === 'facebook' && this.apiPlayer) {
-                try {
-                    if (typeof this.apiPlayer.pause === 'function') this.apiPlayer.pause();
-                } catch (e) {}
-            }
-            if (this.currentType === 'vimeo' && this.apiPlayer) {
-                try {
-                    if (typeof this.apiPlayer.unload === 'function') this.apiPlayer.unload();
-                } catch (e) {}
-            }
-            if (this.element) {
-                try {
-                    this.element.pause();
-                    this.element.src = "";
-                    this.element.load();
-                } catch (e) {}
-            }
-
-            this.currentType = null;
-            this.apiPlayer = null;
-            this.element = null;
-            this.supportsSeeking = false;
-            this.pendingSeek = null;
-        }
-    };
-
-    // 🔥 دالة فتح التفاصيل الذكية والموحدة بالكامل
-    function openDetails(id) {
-        const selectedItem = allData.find(item => String(item.id) === String(id));
-        if (!selectedItem) return;
-
-        document.getElementById('modalTitle').innerText = selectedItem.title || '';
-        document.getElementById('modalContent').innerText = selectedItem.content || '';
-
-        const videoContainer = document.getElementById('popupVideoContainer');
-        const linksContainer = document.getElementById('popupLinksContainer');
-        const chaptersContainer = document.getElementById('chaptersContainer');
-        const chaptersSection = document.getElementById('chaptersSection');
-
-        if (videoContainer) { videoContainer.innerHTML = ''; videoContainer.style.display = 'none'; }
-        if (linksContainer) { linksContainer.innerHTML = ''; }
-        if (chaptersContainer) { chaptersContainer.innerHTML = ''; }
-        if (chaptersSection) { chaptersSection.style.display = 'none'; }
-
-        function createDynamicButton(url, text) {
-            const btn = document.createElement('a');
-            btn.href = url;
-            btn.target = '_blank'; 
-            btn.innerText = text;
-
-            btn.style.cssText = "text-decoration:none; padding:14px 28px; border-radius:10px; font-weight:bold; font-size:1rem; transition:all 0.25s ease; box-shadow:0 4px 15px rgba(0,0,0,0.3); display:inline-block; margin:8px; text-align:center;";
-
-            const lowerUrl = url.toLowerCase();
-            if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram.org')) {
-                btn.style.backgroundColor = '#0088cc'; btn.style.color = '#ffffff'; btn.innerText = '🔹 ' + text;
-            } else if (lowerUrl.includes('facebook.com')) {
-                btn.style.backgroundColor = '#1877f2'; btn.style.color = '#ffffff'; btn.innerText = '🔵 ' + text;
-            } else if (lowerUrl.includes('binance.com')) {
-                btn.style.backgroundColor = '#fcd535'; btn.style.color = '#111111'; btn.innerText = '🔸 ' + text;
-            } else {
-                btn.style.backgroundColor = '#222222'; btn.style.color = '#00ff88'; btn.style.border = '1px solid #333'; btn.innerText = '🔗 ' + text;
-            }
-
-            btn.onmouseenter = () => { btn.style.transform = 'translateY(-3px)'; btn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)'; };
-            btn.onmouseleave = () => { btn.style.transform = 'translateY(0)'; btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)'; };
-
-            linksContainer.appendChild(btn);
-        }
-
-        // 📺 1. تشغيل الفيديو والتعرف على نوعه تلقائياً
-        // إذا يوجد رابط مباشر (videoDirectUrl) نستخدمه أولاً لدعم الطوابع الزمنية
-        const effectiveVideoUrl = (selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== '')
-            ? selectedItem.videoDirectUrl
-            : selectedItem.videoUrl;
-        
-        if (effectiveVideoUrl && effectiveVideoUrl.trim() !== '') {
-            // إذا كان الرابط الأصلي تيليغرام embed لكن توجد videoDirectUrl، نُظهر شارة
-            const isUsingDirectFallback = selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== ''
-                && selectedItem.videoUrl && (selectedItem.videoUrl.includes('t.me/') || selectedItem.videoUrl.includes('telegram'));
-            UnifiedPlayer.init(videoContainer, effectiveVideoUrl, isUsingDirectFallback ? selectedItem.videoUrl : null);
-        }
-
-        // ⏱️ 2. بناء أزرار الطوابع الزمنية (Chapters) ودعم القفز للوقت
-        if (selectedItem.chapters && selectedItem.chapters.length > 0) {
-            if (chaptersSection) chaptersSection.style.display = 'block';
-            selectedItem.chapters.forEach(chapter => {
-                const chapBtn = document.createElement('button');
-                chapBtn.className = 'chapter-row-btn';
-                chapBtn.innerHTML = `
-                    <span>${chapter.text}</span>
-                    <span class="chapter-time-badge">${chapter.time}</span>
-                `;
-                
-                const seconds = parseTimeToSeconds(chapter.time);
-                
-                chapBtn.addEventListener('click', () => {
-                    UnifiedPlayer.seekTo(seconds);
-                });
-
-                chaptersContainer.appendChild(chapBtn);
-            });
-        }
-
-        // 🔗 3. بناء الأزرار والروابط العادية
-        if (selectedItem.links && Array.isArray(selectedItem.links)) {
-            selectedItem.links.forEach(link => {
-                if (link.url) createDynamicButton(link.url, link.text || 'مشاهدة الدرس');
-            });
-        }
-
-        // 💡 4. بناء الكروت المقترحة ذات الصلة (Recommendations)
-        const recContainer = document.getElementById('recommendationsContainer');
-        const recList = document.getElementById('recommendationsList');
-        
-        if (recContainer && recList) {
-            recList.innerHTML = '';
-            if (selectedItem.recommendations && selectedItem.recommendations.length > 0) {
-                let hasRecs = false;
-                selectedItem.recommendations.forEach(recId => {
-                    const recItem = allData.find(item => String(item.id) === String(recId));
-                    if (recItem) {
-                        hasRecs = true;
-                        const recCard = document.createElement('div');
-                        recCard.className = 'rec-item-card';
-                        recCard.innerHTML = `
-                            <h4>${recItem.title}</h4>
-                            <span class="watch-now">مشاهدة الآن ←</span>
-                        `;
-                        recCard.addEventListener('click', () => {
-                            openDetails(recItem.id);
-                        });
-                        recList.appendChild(recCard);
-                    }
-                });
-                recContainer.style.display = hasRecs ? 'block' : 'none';
-            } else {
-                recContainer.style.display = 'none';
-            }
-        }
-
-        document.getElementById('myModal').style.display = "block";
-    }
-
-    function closeModal() {
-        document.getElementById('myModal').style.display = "none";
-        UnifiedPlayer.cleanup();
-    }
-
-    window.onclick = function(event) {
-        const modal = document.getElementById('myModal');
-        if (event.target == modal) closeModal();
-    }
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadCryptoAlerts();
+        await loadWebsiteData();
+    });
 </script>
-
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modalTitle" style="color: var(--accent-color); margin: 0; font-weight: 700; font-size: 1.5rem;"></h2>
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-        </div>
-        
-        <div class="modal-body-grid">
-            <!-- Main Content Area: Video and Details -->
-            <div class="modal-main-area">
-                <div id="popupVideoContainer" class="video-container-wrapper" style="display: none;"></div>
-                
-                <div id="popupLinksContainer" class="links-container-wrapper"></div>
-                
-                <div class="details-section">
-                    <h3 style="color: #fff; border-bottom: 1px solid #222226; padding-bottom: 8px; margin-top: 0; font-size: 1.2rem;">الوصف والتفاصيل</h3>
-                    <div id="modalContent" class="modal-description-text"></div>
-                </div>
-            </div>
-            
-            <!-- Sidebar: Chapters and Recommendations -->
-            <div class="modal-sidebar-area">
-                <div id="chaptersSection" class="sidebar-card" style="display: none;">
-                    <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-                        ⏱️ الفصول والطوابع الزمنية
-                    </h3>
-                    <div id="chaptersContainer" class="chapters-flex-list"></div>
-                    <div id="chaptersUnsupportedNotice" class="chapters-notice" style="display: none;">
-                        ⚠️ الطوابع الزمنية التفاعلية غير مدعومة لهذه المنصة.
-                    </div>
-                </div>
-                
-                <div id="recommendationsContainer" class="sidebar-card" style="display: none;">
-                    <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">💡 دروس ومقترحات ذات صلة</h3>
-                    <div id="recommendationsList" class="recommendations-vertical-list"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 </body>
 </html>
