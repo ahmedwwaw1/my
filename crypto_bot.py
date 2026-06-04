@@ -25,8 +25,8 @@ def analyze_crypto_market():
                 price = ticker['last']  # السعر الحالي
                 change_percent = ticker['percentage']  # نسبة التغيير
                 
-                # الشرط: إذا كان حجم التداول أكثر من 100 مليون
-                if volume > 100000000:
+                # الشرط: إذا كان حجم التداول أكثر من 10 مليون (تعديل)
+                if volume > 10000000:
                     new_alert = {
                         "symbol": symbol,
                         "price": price,
