@@ -435,7 +435,7 @@
     </style>
 </head>
 <body>
-
+<!-- اضافة ازرار -->
 <nav>
     <a href="#/" id="btn-vsa">التحليل الزمني</a>
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
@@ -475,48 +475,82 @@
         }
         return parseFloat(timeStr) || 0;
     }
-
+    
     async function loadWebsiteData() {
+        // ضع هنا ملفات الـ JSON الخاصة بك (حتى لو لم تكن موجودة أو قيد الإنشاء لن تعطّل الموقع)
+        const jsonFiles = ['data.json', 'NewTextDocument.json', 'data3.json']; 
+        
+        let combinedServerData = [];
+        let anyFileLoaded = false;
+
         try {
-            const response = await fetch('data.json?v=' + new Date().getTime());
-            if (!response.ok) throw new Error("فشل الاتصال بالملف");
-            const serverData = await response.json();
-
-            const localDataRaw = localStorage.getItem('my_cards_data');
-            let localData = [];
-            if (localDataRaw && localDataRaw !== '[]' && localDataRaw !== 'undefined') {
-                localData = JSON.parse(localDataRaw);
-            }
-
-            allData = serverData.map((serverItem, index) => {
-                const currentId = serverItem.id ? String(serverItem.id) : String(index + 1);
-                
-                return {
-                    id: currentId,
-                    title: serverItem.title,
-                    category: serverItem.category || 'videos',
-                    content: serverItem.content || serverItem.desc || '',
-                    image: serverItem.image || '',
-                    videoUrl: serverItem.videoUrl || serverItem.videourl || serverItem.url || '',
-                    videoDirectUrl: serverItem.videoDirectUrl || serverItem.videoDirecturl || '',
-                    links: serverItem.links || [],
-                    chapters: serverItem.chapters || [],
-                    recommendations: serverItem.recommendations || []
-                };
+            // 1. جلب البيانات من الملفات مع حماية كل ملف على حدة لمنع الانهيار الكامل
+            const fetchPromises = jsonFiles.map(async (file) => {
+                try {
+                    const response = await fetch(file + '?v=' + new Date().getTime());
+                    if (!response.ok) {
+                        console.warn(`⚠️ تنبيه: ملف [${file}] غير موجود على السيرفر أو فشل تحميله حالياً.`);
+                        return null; 
+                    }
+                    const data = await response.json();
+                    anyFileLoaded = true; // علامة تدل على نجاح جلب ملف واحد على الأقل من السيرفر
+                    return data;
+                } catch (fileError) {
+                    console.error(`❌ خطأ في قراءة أو تحليل صيغة الـ JSON داخل ملف [${file}]:`, fileError);
+                    return null; // نرجع null لكي لا نعطل بقية الملفات السليمة
+                }
             });
 
-            isDataLoaded = true; 
-            render(allData);
+            // الانتظار حتى تنتهي محاولات جلب كافة الملفات (سواء نجحت أو فشلت)
+            const results = await Promise.all(fetchPromises);
 
-            localStorage.setItem('my_cards_data', JSON.stringify(allData));
-            console.log("تم دمج البيانات بنجاح 🎉");
+            // 2. تجميع البيانات وتفريغها من الملفات التي نجحت فقط
+            results.forEach((data) => {
+                if (data) {
+                    if (Array.isArray(data)) {
+                        combinedServerData = combinedServerData.concat(data);
+                    } else {
+                        combinedServerData.push(data);
+                    }
+                }
+            });
 
-            if (typeof handleRoute === 'function') {
-                handleRoute();
+            // 3. إذا نجح تحميل ملف واحد على الأقل ويحتوي على بيانات، نقوم بالتحديث والحفظ فوراً
+            if (anyFileLoaded && combinedServerData.length > 0) {
+                allData = combinedServerData.map((serverItem, index) => {
+                    const currentId = serverItem.id ? String(serverItem.id) : String(index + 1);
+                    
+                    return {
+                        id: currentId,
+                        title: serverItem.title,
+                        category: serverItem.category || 'videos',
+                        content: serverItem.content || serverItem.desc || '',
+                        image: serverItem.image || '',
+                        videoUrl: serverItem.videoUrl || serverItem.videourl || serverItem.url || '',
+                        videoDirectUrl: serverItem.videoDirectUrl || serverItem.videoDirecturl || '',
+                        links: serverItem.links || [],
+                        chapters: serverItem.chapters || [],
+                        recommendations: serverItem.recommendations || []
+                    };
+                });
+
+                isDataLoaded = true; 
+                render(allData);
+
+                // حفظ النسخة المدمجة والمحدثة كلياً في المتصفح لتحديث الـ localStorage فوراً
+                localStorage.setItem('my_cards_data', JSON.stringify(allData));
+                console.log("تم دمج وتحديث البيانات من كافة الملفات الجاهزة بنجاح 🎉");
+
+                if (typeof handleRoute === 'function') {
+                    handleRoute();
+                }
+            } else {
+                // إذا فشلت جميع الملفات تماماً ولم ينجح أي ملف من السيرفر، ننتقل للـ localStorage الاحتياطي
+                throw new Error("لم يتم تحميل أي ملف JSON بنجاح من السيرفر.");
             }
 
         } catch (error) {
-            console.error("❌ خلل في جلب البيانات من السيرفر:", error);
+            console.error("❌ خلل كلي في الاتصال، جاري التحميل من الذاكرة المحلية الاحتياطية:", error);
             const localData = localStorage.getItem('my_cards_data');
             if (localData) {
                 allData = JSON.parse(localData);
@@ -530,7 +564,8 @@
             }
         }
     }
-    
+
+
     function render(dataArray) {
         const mainGrid = document.getElementById('mainGrid');
         if (!mainGrid) return; 
