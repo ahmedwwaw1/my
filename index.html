@@ -476,7 +476,7 @@
         return parseFloat(timeStr) || 0;
     }
 
-    async function loadWebsiteData() {
+async function loadWebsiteData() {
         // ضع هنا ملفات الـ JSON الخاصة بك (حتى لو لم تكن موجودة أو قيد الإنشاء لن تعطّل الموقع)
         const jsonFiles = ['data.json', 'data2.json', 'data3.json']; 
         
@@ -563,8 +563,8 @@
                 }
             }
         }
-    }    
-
+    }
+    
     function render(dataArray) {
         const mainGrid = document.getElementById('mainGrid');
         if (!mainGrid) return; 
