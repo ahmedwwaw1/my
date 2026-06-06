@@ -10,21 +10,18 @@
             {
                 "text": "بينانس",
                 "url": "https://www.binance.com"
-            },
-            {
-                "text": "بينانس",
-                "url": "https://www.binance.com"
             }
+            
         ]
     },
     
   [
   {
-    "id": "general_lesson1",
+    "id": "vsa_lesson4",
     "title": "درس التحليل الزمني والتداول",
-    "category": "vsa",
+    "category": "rw",
     "content": "وصف الدرس هنا...",
-    "image": "https://via.placeholder.com/360",
+    
     "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     "chapters": [
       { "time": "00:15", "text": "المقدمة وفكرة الدرس" },
@@ -225,10 +222,9 @@
                 "time": "00:10",
                 "title": "🔍 تطبيقات عملية في تحليل السوق"
             }
-
+        ]
         
        
 
     }
 ]
-    
