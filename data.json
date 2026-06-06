@@ -22,11 +22,12 @@
     "category": "rw",
     "content": "وصف الدرس هنا...",
     
-    "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "videoUrl": "https://www.youtube.com/watch?v=Fs66AynGasA",
     "chapters": [
       { "time": "00:15", "text": "المقدمة وفكرة الدرس" },
       { "time": "01:45", "text": "شرح زوايا جان الزمني" },
-      { "time": "04:30", "text": "تطبيقات عملية على المنصة" }
+      { "time": "04:30", "text": "تطبيقات عملية على المنصة" },
+      { "time": "09:48", "text": "مؤشر الهارمونك اصبح متوفر على منصة جات شارت AI " }
     ]
   },
   { 
