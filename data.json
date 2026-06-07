@@ -17,17 +17,18 @@
     
   
   {
-    "id": "vsa_lesson4",
+    "id": "was",
     "title": "درس التحليل الزمني والتداول",
     "category": "rw",
     "content": "وصف الدرس هنا...",
-    
+    "image": "https://via.placeholder.com/360",
     "videoUrl": "https://www.youtube.com/watch?v=Fs66AynGasA",
-    "chapters": [
+    "chapters": [ 
       { "time": "00:15", "text": "المقدمة وفكرة الدرس" },
       { "time": "01:45", "text": "شرح زوايا جان الزمني" },
       { "time": "04:30", "text": "تطبيقات عملية على المنصة" },
       { "time": "09:48", "text": "مؤشر الهارمونك اصبح متوفر على منصة جات شارت AI " }
+      
     ]
   },
   { 
@@ -111,7 +112,7 @@
         "image": "./images/wg.jpg",
         "title": "مقدمة في تحليل حجم التداول",
         "content": "شرح متقدم لعلاقة الفوليوم بمدى الشموع وتطبيقاتها في السوق",
-        "videoUrl": "./videos/vsa_lesson1.mp4",
+        "videoDirectUrl": "./videos/vsa_lesson1.mp4",
         "chapters": [
             {
                 "time": "00:00",
@@ -126,8 +127,9 @@
                 "title": "🔍 تطبيقات عملية في تحليل السوق"
             }
         ],
-        "recommendations": ["vsa_lesson2", "vsa_lesson3"]
+        "recommendations": ["vsa_lesson2", "vsa_lesson3", "vsw"]
     },
+
     {
         "category": "invest",
         "title": "شركة الربيع للوساطة (RS)",

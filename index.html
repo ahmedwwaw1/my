@@ -435,7 +435,7 @@
     </style>
 </head>
 <body>
-
+<!-- add buttons -->
 <nav>
     <a href="#/" id="btn-vsa">التحليل الزمني</a>
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
@@ -475,10 +475,10 @@
         }
         return parseFloat(timeStr) || 0;
     }
-
-async function loadWebsiteData() {
+    // add data json
+    async function loadWebsiteData() {
         // ضع هنا ملفات الـ JSON الخاصة بك (حتى لو لم تكن موجودة أو قيد الإنشاء لن تعطّل الموقع)
-        const jsonFiles = ['data.json', 'data2.json', 'data3.json']; 
+        const jsonFiles = ['data.json', 'crypto_alerts.json', 'data3.json']; 
         
         let combinedServerData = [];
         let anyFileLoaded = false;
