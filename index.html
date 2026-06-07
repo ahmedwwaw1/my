@@ -432,12 +432,37 @@
             margin-top: 5px;
             direction: rtl;
         }
+
+        /* أزرار التنقل الذكي داخل شاشة العرض */
+        .nav-arrow-btn {
+            background: #1e1e24;
+            border: 1px solid #2d2d35;
+            color: var(--text-main);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-arrow-btn:hover:not(:disabled) {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+        .nav-arrow-btn:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            border-color: #222226;
+        }
     </style>
 </head>
 <body>
-<!-- add buttons -->
 <nav>
-    <a href="#/" id="btn-vsa">التحليل الزمني</a>
+    <a href="#/" id="btn-vsa">التحليل الزمنّي</a>
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
     <a href="#/videos" id="btn-videos">🎥 أكاديمية الفيديوهات</a>
     <a href="#/rw" id="btn-rw"> التحليل الحجمي </a>
@@ -463,6 +488,33 @@
     const pageTitle = document.getElementById('pageTitle');
     const statusMsg = document.getElementById('statusMsg');
 
+    // مصفوفة تتبع تاريخ ومسار التنقل داخل الـ Modal
+    let modalHistory = [];
+    let modalHistoryIndex = -1;
+
+    function modalGoBack() {
+        if (modalHistoryIndex > 0) {
+            modalHistoryIndex--;
+            openDetails(modalHistory[modalHistoryIndex], true);
+        }
+    }
+
+    function modalGoForward() {
+        if (modalHistoryIndex < modalHistory.length - 1) {
+            modalHistoryIndex++;
+            openDetails(modalHistory[modalHistoryIndex], true);
+        }
+    }
+
+    function updateModalNavButtons() {
+        const backBtn = document.getElementById('modalBackBtn');
+        const forwardBtn = document.getElementById('modalForwardBtn');
+        if (!backBtn || !forwardBtn) return;
+
+        backBtn.disabled = (modalHistoryIndex <= 0);
+        forwardBtn.disabled = (modalHistoryIndex >= modalHistory.length - 1);
+    }
+
     // دالة تحويل صيغة الوقت (01:45) إلى ثواني نقية
     function parseTimeToSeconds(timeStr) {
         if (!timeStr) return 0;
@@ -477,14 +529,12 @@
     }
     // add data json
     async function loadWebsiteData() {
-        // ضع هنا ملفات الـ JSON الخاصة بك (حتى لو لم تكن موجودة أو قيد الإنشاء لن تعطّل الموقع)
         const jsonFiles = ['data.json', 'crypto_alerts.json', 'data3.json']; 
         
         let combinedServerData = [];
         let anyFileLoaded = false;
 
         try {
-            // 1. جلب البيانات من الملفات مع حماية كل ملف على حدة لمنع الانهيار الكامل
             const fetchPromises = jsonFiles.map(async (file) => {
                 try {
                     const response = await fetch(file + '?v=' + new Date().getTime());
@@ -493,18 +543,16 @@
                         return null; 
                     }
                     const data = await response.json();
-                    anyFileLoaded = true; // علامة تدل على نجاح جلب ملف واحد على الأقل من السيرفر
+                    anyFileLoaded = true; 
                     return data;
                 } catch (fileError) {
                     console.error(`❌ خطأ في قراءة أو تحليل صيغة الـ JSON داخل ملف [${file}]:`, fileError);
-                    return null; // نرجع null لكي لا نعطل بقية الملفات السليمة
+                    return null; 
                 }
             });
 
-            // الانتظار حتى تنتهي محاولات جلب كافة الملفات (سواء نجحت أو فشلت)
             const results = await Promise.all(fetchPromises);
 
-            // 2. تجميع البيانات وتفريغها من الملفات التي نجحت فقط
             results.forEach((data) => {
                 if (data) {
                     if (Array.isArray(data)) {
@@ -515,7 +563,6 @@
                 }
             });
 
-            // 3. إذا نجح تحميل ملف واحد على الأقل ويحتوي على بيانات، نقوم بالتحديث والحفظ فوراً
             if (anyFileLoaded && combinedServerData.length > 0) {
                 allData = combinedServerData.map((serverItem, index) => {
                     const currentId = serverItem.id ? String(serverItem.id) : String(index + 1);
@@ -537,7 +584,6 @@
                 isDataLoaded = true; 
                 render(allData);
 
-                // حفظ النسخة المدمجة والمحدثة كلياً في المتصفح لتحديث الـ localStorage فوراً
                 localStorage.setItem('my_cards_data', JSON.stringify(allData));
                 console.log("تم دمج وتحديث البيانات من كافة الملفات الجاهزة بنجاح 🎉");
 
@@ -545,7 +591,6 @@
                     handleRoute();
                 }
             } else {
-                // إذا فشلت جميع الملفات تماماً ولم ينجح أي ملف من السيرفر، ننتقل للـ localStorage الاحتياطي
                 throw new Error("لم يتم تحميل أي ملف JSON بنجاح من السيرفر.");
             }
 
@@ -604,7 +649,7 @@
             mainGrid.appendChild(card);
         });
     }
-    // عرض بطاقات القسم المختار 
+
     function handleRoute() {
         const hash = window.location.hash || '#/';
         if (searchInput) searchInput.value = ''; 
@@ -1142,9 +1187,24 @@
     };
 
     // 🔥 دالة فتح التفاصيل الذكية والموحدة بالكامل
-    function openDetails(id) {
+    function openDetails(id, isHistoryNavigation = false) {
         const selectedItem = allData.find(item => String(item.id) === String(id));
         if (!selectedItem) return;
+
+        // إدارة تاريخ التنقل لمنع الضياع عند الانتقال المتبادل
+        if (!isHistoryNavigation) {
+            if (modalHistory.length === 0 || document.getElementById('myModal').style.display !== "block") {
+                modalHistory = [String(id)];
+                modalHistoryIndex = 0;
+            } else {
+                // مسح أي تاريخ أمامي في حال عاد المستخدم للخلف ثم اختار كرت مقترح جديد
+                modalHistory = modalHistory.slice(0, modalHistoryIndex + 1);
+                modalHistory.push(String(id));
+                modalHistoryIndex++;
+            }
+        }
+
+        updateModalNavButtons();
 
         document.getElementById('modalTitle').innerText = selectedItem.title || '';
         document.getElementById('modalContent').innerText = selectedItem.content || '';
@@ -1184,20 +1244,16 @@
             linksContainer.appendChild(btn);
         }
 
-        // 📺 1. تشغيل الفيديو والتعرف على نوعه تلقائياً
-        // إذا يوجد رابط مباشر (videoDirectUrl) نستخدمه أولاً لدعم الطوابع الزمنية
         const effectiveVideoUrl = (selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== '')
             ? selectedItem.videoDirectUrl
             : selectedItem.videoUrl;
         
         if (effectiveVideoUrl && effectiveVideoUrl.trim() !== '') {
-            // إذا كان الرابط الأصلي تيليغرام embed لكن توجد videoDirectUrl، نُظهر شارة
             const isUsingDirectFallback = selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== ''
                 && selectedItem.videoUrl && (selectedItem.videoUrl.includes('t.me/') || selectedItem.videoUrl.includes('telegram'));
             UnifiedPlayer.init(videoContainer, effectiveVideoUrl, isUsingDirectFallback ? selectedItem.videoUrl : null);
         }
 
-        // ⏱️ 2. بناء أزرار الطوابع الزمنية (Chapters) ودعم القفز للوقت
         if (selectedItem.chapters && selectedItem.chapters.length > 0) {
             if (chaptersSection) chaptersSection.style.display = 'block';
             selectedItem.chapters.forEach(chapter => {
@@ -1218,14 +1274,12 @@
             });
         }
 
-        // 🔗 3. بناء الأزرار والروابط العادية
         if (selectedItem.links && Array.isArray(selectedItem.links)) {
             selectedItem.links.forEach(link => {
                 if (link.url) createDynamicButton(link.url, link.text || 'مشاهدة الدرس');
             });
         }
 
-        // 💡 4. بناء الكروت المقترحة ذات الصلة (Recommendations)
         const recContainer = document.getElementById('recommendationsContainer');
         const recList = document.getElementById('recommendationsList');
         
@@ -1261,6 +1315,9 @@
     function closeModal() {
         document.getElementById('myModal').style.display = "none";
         UnifiedPlayer.cleanup();
+        // تصفير السجلات عند إغلاق العرض بالكامل للبدء من جديد لاحقاً
+        modalHistory = [];
+        modalHistoryIndex = -1;
     }
 
     window.onclick = function(event) {
@@ -1273,11 +1330,20 @@
     <div class="modal-content">
         <div class="modal-header">
             <h2 id="modalTitle" style="color: var(--accent-color); margin: 0; font-weight: 700; font-size: 1.5rem;"></h2>
-            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="display: flex; gap: 8px; direction: ltr;">
+                    <button id="modalBackBtn" class="nav-arrow-btn" onclick="modalGoBack()" title="المحتوى السابق">
+                        <span>&larr;</span> السابق
+                    </button>
+                    <button id="modalForwardBtn" class="nav-arrow-btn" onclick="modalGoForward()" title="المحتوى التالي">
+                        التالي <span>&rarr;</span>
+                    </button>
+                </div>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
         </div>
         
         <div class="modal-body-grid">
-            <!-- Main Content Area: Video and Details -->
             <div class="modal-main-area">
                 <div id="popupVideoContainer" class="video-container-wrapper" style="display: none;"></div>
                 
@@ -1289,7 +1355,6 @@
                 </div>
             </div>
             
-            <!-- Sidebar: Chapters and Recommendations -->
             <div class="modal-sidebar-area">
                 <div id="chaptersSection" class="sidebar-card" style="display: none;">
                     <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
