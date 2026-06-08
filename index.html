@@ -180,11 +180,15 @@
             font-weight: 500;
         }
 
-        .chapter-row-btn:hover {
+        .chapter-row-btn:hover, .chapter-row-btn.active {
             background: rgba(0, 212, 255, 0.1);
             border-color: var(--accent-color);
             color: #fff;
             transform: translateX(-3px);
+        }
+        
+        .chapter-row-btn.active {
+            border-width: 2px;
         }
 
         .chapter-time-badge {
@@ -527,7 +531,8 @@
         }
         return parseFloat(timeStr) || 0;
     }
-    // add data json
+
+    // دالة جلب ومعالجة ملفات الـ JSON المحدثة لمنع تفكيك الكروت والحفاظ عليها موحدة
     async function loadWebsiteData() {
         const jsonFiles = ['data.json', 'crypto_alerts.json', 'data3.json']; 
         
@@ -564,12 +569,16 @@
             });
 
             if (anyFileLoaded && combinedServerData.length > 0) {
-                allData = combinedServerData.map((serverItem, index) => {
-                    const currentId = serverItem.id ? String(serverItem.id) : String(index + 1);
+                let flattenedData = [];
+                let counter = 1;
+
+                // معالجة ذكية للحفاظ على الكورس كبطاقة واحدة وحفظ مصفوفة فيديوهاته بداخلها
+                combinedServerData.forEach((serverItem) => {
+                    const currentId = serverItem.id ? String(serverItem.id) : `item_${counter++}`;
                     
-                    return {
+                    flattenedData.push({
                         id: currentId,
-                        title: serverItem.title,
+                        title: serverItem.title || 'بدون عنوان',
                         category: serverItem.category || 'videos',
                         content: serverItem.content || serverItem.desc || '',
                         image: serverItem.image || '',
@@ -577,15 +586,17 @@
                         videoDirectUrl: serverItem.videoDirectUrl || serverItem.videoDirecturl || '',
                         links: serverItem.links || [],
                         chapters: serverItem.chapters || [],
-                        recommendations: serverItem.recommendations || []
-                    };
+                        recommendations: serverItem.recommendations || [],
+                        videos: serverItem.videos || null // الحفاظ على مصفوفة الفيديوهات الفرعية كاملة هنا
+                    });
                 });
 
+                allData = flattenedData;
                 isDataLoaded = true; 
                 render(allData);
 
                 localStorage.setItem('my_cards_data', JSON.stringify(allData));
-                console.log("تم دمج وتحديث البيانات من كافة الملفات الجاهزة بنجاح 🎉");
+                console.log("تم دمج وتحديث البيانات من كافة الملفات بنجاح 🎉");
 
                 if (typeof handleRoute === 'function') {
                     handleRoute();
@@ -711,6 +722,16 @@
                     createDropdownItem(`📺 فيديو: ${item.title}`, item.id, item.videoUrl);
                 }
 
+                // دعم البحث الذكي داخل الفيديوهات الفرعية للكورس الموحد
+                if (item.videos && Array.isArray(item.videos)) {
+                    item.videos.forEach((subVid, subIdx) => {
+                        if (subVid.title && subVid.title.toLowerCase().includes(term)) {
+                            hasResults = true;
+                            createDropdownItem(`🎥 درس: ${subVid.title} (داخل ${item.title})`, item.id, null, subIdx);
+                        }
+                    });
+                }
+
                 if (item.links && Array.isArray(item.links)) {
                     item.links.forEach(link => {
                         const matchText = link.text && link.text.toLowerCase().includes(term);
@@ -731,15 +752,15 @@
                 }
             });
 
-            function createDropdownItem(displayText, itemId, directUrl = null) {
+            function createDropdownItem(displayText, itemId, directUrl = null, videoIdx = null) {
                 const div = document.createElement('div');
                 div.className = 'search-item';
                 div.innerText = displayText;
                 
-                currentDropdownItems.push({ itemId, directUrl });
+                currentDropdownItems.push({ itemId, directUrl, videoIdx });
 
                 div.addEventListener('click', () => {
-                    executeSearchAction(itemId, directUrl);
+                    executeSearchAction(itemId, directUrl, videoIdx);
                 });
                 
                 dropdown.appendChild(div);
@@ -763,16 +784,21 @@
                 if (currentDropdownItems.length > 0) {
                     e.preventDefault(); 
                     const firstResult = currentDropdownItems[0];
-                    executeSearchAction(firstResult.itemId, firstResult.directUrl);
+                    executeSearchAction(firstResult.itemId, firstResult.directUrl, firstResult.videoIdx);
                 }
             }
         });
 
-        function executeSearchAction(itemId, directUrl) {
+        function executeSearchAction(itemId, directUrl, videoIdx = null) {
             if (directUrl) {
                 window.open(directUrl, '_blank'); 
             } else {
                 openDetails(itemId); 
+                if (videoIdx !== null) {
+                    setTimeout(() => {
+                        playPlaylistItem(itemId, videoIdx);
+                    }, 450);
+                }
             }
             dropdown.style.display = 'none';
             searchInput.value = ''; 
@@ -1186,18 +1212,15 @@
         }
     };
 
-    // 🔥 دالة فتح التفاصيل الذكية والموحدة بالكامل
     function openDetails(id, isHistoryNavigation = false) {
         const selectedItem = allData.find(item => String(item.id) === String(id));
         if (!selectedItem) return;
 
-        // إدارة تاريخ التنقل لمنع الضياع عند الانتقال المتبادل
         if (!isHistoryNavigation) {
             if (modalHistory.length === 0 || document.getElementById('myModal').style.display !== "block") {
                 modalHistory = [String(id)];
                 modalHistoryIndex = 0;
             } else {
-                // مسح أي تاريخ أمامي في حال عاد المستخدم للخلف ثم اختار كرت مقترح جديد
                 modalHistory = modalHistory.slice(0, modalHistoryIndex + 1);
                 modalHistory.push(String(id));
                 modalHistoryIndex++;
@@ -1213,11 +1236,15 @@
         const linksContainer = document.getElementById('popupLinksContainer');
         const chaptersContainer = document.getElementById('chaptersContainer');
         const chaptersSection = document.getElementById('chaptersSection');
+        const playlistSection = document.getElementById('playlistSection');
+        const playlistContainer = document.getElementById('playlistContainer');
 
         if (videoContainer) { videoContainer.innerHTML = ''; videoContainer.style.display = 'none'; }
         if (linksContainer) { linksContainer.innerHTML = ''; }
         if (chaptersContainer) { chaptersContainer.innerHTML = ''; }
         if (chaptersSection) { chaptersSection.style.display = 'none'; }
+        if (playlistSection) { playlistSection.style.display = 'none'; }
+        if (playlistContainer) { playlistContainer.innerHTML = ''; }
 
         function createDynamicButton(url, text) {
             const btn = document.createElement('a');
@@ -1244,34 +1271,53 @@
             linksContainer.appendChild(btn);
         }
 
-        const effectiveVideoUrl = (selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== '')
-            ? selectedItem.videoDirectUrl
-            : selectedItem.videoUrl;
-        
-        if (effectiveVideoUrl && effectiveVideoUrl.trim() !== '') {
-            const isUsingDirectFallback = selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== ''
-                && selectedItem.videoUrl && (selectedItem.videoUrl.includes('t.me/') || selectedItem.videoUrl.includes('telegram'));
-            UnifiedPlayer.init(videoContainer, effectiveVideoUrl, isUsingDirectFallback ? selectedItem.videoUrl : null);
-        }
-
-        if (selectedItem.chapters && selectedItem.chapters.length > 0) {
-            if (chaptersSection) chaptersSection.style.display = 'block';
-            selectedItem.chapters.forEach(chapter => {
-                const chapBtn = document.createElement('button');
-                chapBtn.className = 'chapter-row-btn';
-                chapBtn.innerHTML = `
-                    <span>${chapter.text}</span>
-                    <span class="chapter-time-badge">${chapter.time}</span>
-                `;
-                
-                const seconds = parseTimeToSeconds(chapter.time);
-                
-                chapBtn.addEventListener('click', () => {
-                    UnifiedPlayer.seekTo(seconds);
+        // إذا كان الكارت يحتوي على مصفوفة فيديوهات فرعية، نقوم ببناء قائمة التشغيل الجانبية
+        if (selectedItem.videos && selectedItem.videos.length > 0) {
+            if (playlistSection && playlistContainer) {
+                playlistSection.style.display = 'block';
+                selectedItem.videos.forEach((vid, idx) => {
+                    const rowBtn = document.createElement('button');
+                    rowBtn.className = 'chapter-row-btn';
+                    rowBtn.id = `playlist-item-${idx}`;
+                    rowBtn.style.marginBottom = '8px';
+                    rowBtn.innerHTML = `<span>▶️ ${vid.title || `الدرس ${idx + 1}`}</span>`;
+                    rowBtn.addEventListener('click', () => {
+                        playPlaylistItem(selectedItem.id, idx);
+                    });
+                    playlistContainer.appendChild(rowBtn);
                 });
+                
+                // تشغيل الدرس الأول تلقائياً عند فتح الكارت
+                playPlaylistItem(selectedItem.id, 0);
+            }
+        } else {
+            // الحالة الافتراضية للكروت العادية التي تحتوي على فيديو واحد فقط مباشر
+            const effectiveVideoUrl = (selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== '')
+                ? selectedItem.videoDirectUrl
+                : selectedItem.videoUrl;
+            
+            if (effectiveVideoUrl && effectiveVideoUrl.trim() !== '') {
+                const isUsingDirectFallback = selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== ''
+                    && selectedItem.videoUrl && (selectedItem.videoUrl.includes('t.me/') || selectedItem.videoUrl.includes('telegram'));
+                UnifiedPlayer.init(videoContainer, effectiveVideoUrl, isUsingDirectFallback ? selectedItem.videoUrl : null);
+            }
 
-                chaptersContainer.appendChild(chapBtn);
-            });
+            if (selectedItem.chapters && selectedItem.chapters.length > 0) {
+                if (chaptersSection) chaptersSection.style.display = 'block';
+                selectedItem.chapters.forEach(chapter => {
+                    const chapBtn = document.createElement('button');
+                    chapBtn.className = 'chapter-row-btn';
+                    chapBtn.innerHTML = `
+                        <span>${chapter.text}</span>
+                        <span class="chapter-time-badge">${chapter.time}</span>
+                    `;
+                    const seconds = parseTimeToSeconds(chapter.time);
+                    chapBtn.addEventListener('click', () => {
+                        UnifiedPlayer.seekTo(seconds);
+                    });
+                    chaptersContainer.appendChild(chapBtn);
+                });
+            }
         }
 
         if (selectedItem.links && Array.isArray(selectedItem.links)) {
@@ -1312,10 +1358,55 @@
         document.getElementById('myModal').style.display = "block";
     }
 
+    // دالة لتشغيل عنصر من قائمة التشغيل داخل الـ Modal وتحديث الفصول التابعة له
+    function playPlaylistItem(courseId, videoIndex) {
+        const selectedItem = allData.find(item => String(item.id) === String(courseId));
+        if (!selectedItem || !selectedItem.videos || !selectedItem.videos[videoIndex]) return;
+
+        // تحديث المظهر البصري للزر النشط في القائمة
+        document.querySelectorAll('#playlistContainer .chapter-row-btn').forEach(b => b.classList.remove('active'));
+        const currentActiveBtn = document.getElementById(`playlist-item-${videoIndex}`);
+        if (currentActiveBtn) currentActiveBtn.classList.add('active');
+
+        const targetVideo = selectedItem.videos[videoIndex];
+        const videoContainer = document.getElementById('popupVideoContainer');
+        const chaptersContainer = document.getElementById('chaptersContainer');
+        const chaptersSection = document.getElementById('chaptersSection');
+
+        if (videoContainer) { videoContainer.innerHTML = ''; videoContainer.style.display = 'none'; }
+        if (chaptersContainer) { chaptersContainer.innerHTML = ''; }
+        if (chaptersSection) { chaptersSection.style.display = 'none'; }
+
+        const effectiveVideoUrl = (targetVideo.videoDirectUrl && targetVideo.videoDirectUrl.trim() !== '')
+            ? targetVideo.videoDirectUrl
+            : (targetVideo.url || targetVideo.videoUrl || targetVideo.videourl || '');
+
+        if (effectiveVideoUrl && effectiveVideoUrl.trim() !== '') {
+            UnifiedPlayer.init(videoContainer, effectiveVideoUrl);
+        }
+
+        // عرض الفصول والطوابع الزمنية الخاصة بالفيديو الفرعي المشغل حالياً
+        if (targetVideo.chapters && targetVideo.chapters.length > 0) {
+            if (chaptersSection) chaptersSection.style.display = 'block';
+            targetVideo.chapters.forEach(chapter => {
+                const chapBtn = document.createElement('button');
+                chapBtn.className = 'chapter-row-btn';
+                chapBtn.innerHTML = `
+                    <span>${chapter.text}</span>
+                    <span class="chapter-time-badge">${chapter.time}</span>
+                `;
+                const seconds = parseTimeToSeconds(chapter.time);
+                chapBtn.addEventListener('click', () => {
+                    UnifiedPlayer.seekTo(seconds);
+                });
+                chaptersContainer.appendChild(chapBtn);
+            });
+        }
+    }
+
     function closeModal() {
         document.getElementById('myModal').style.display = "none";
         UnifiedPlayer.cleanup();
-        // تصفير السجلات عند إغلاق العرض بالكامل للبدء من جديد لاحقاً
         modalHistory = [];
         modalHistoryIndex = -1;
     }
@@ -1356,6 +1447,13 @@
             </div>
             
             <div class="modal-sidebar-area">
+                <div id="playlistSection" class="sidebar-card" style="display: none; border-color: var(--accent-color);">
+                    <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
+                        📚 قائمة دروس الدورة
+                    </h3>
+                    <div id="playlistContainer" class="chapters-flex-list"></div>
+                </div>
+
                 <div id="chaptersSection" class="sidebar-card" style="display: none;">
                     <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
                         ⏱️ الفصول والطوابع الزمنية

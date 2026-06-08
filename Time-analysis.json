@@ -1,0 +1,15 @@
+    [
+{ 
+    "id": "vsa_lesson7",
+    "category": "rw",
+    "image": "./images/rw.jpg",
+    "title": "تطبيقات عملية على منصة جات شارت AI",
+    "content": "التحليل الحجمي",
+    "videoUrl": [
+        { "title": "الدرس 1: فلسفة ريتشارد وايكوف والـ VSA", "url": "https://www.youtube.com/watch?v=Fs66AynGasA" },
+        { "title": "الدرس 2: الجهد مقابل النتيجة في الشموع اليابانية", "url": "https://www.youtube.com/watch?v=Fs66AynGasA" },
+        { "title": "الدرس 3: كيفية تحديد الشراء المخفي وفخاخ الحيتان", "url": "https://www.youtube.com/watch?v=Fs66AynGasA" },
+        { "title": "الدرس 4: تطبيقات عملية على الـ Nasdaq والتداول الحي", "url": "https://www.youtube.com/watch?v=Fs66AynGasA" }
+    ]
+}   
+ ]
