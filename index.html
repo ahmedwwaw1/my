@@ -471,6 +471,7 @@
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
     <a href="#/videos" id="btn-videos">🎥 أكاديمية الفيديوهات</a>
     <a href="#/rw" id="btn-rw"> التحليل الحجمي </a>
+    <a href="#/crypto" id="btn-crypto">🤖 تنبيهات الكريبتو</a>
 </nav>
 
 <div class="container">
@@ -574,24 +575,40 @@
                 let counter = 1;
 
                 // معالجة ذكية للحفاظ على الكورس كبطاقة واحدة وحفظ مصفوفة فيديوهاته بداخلها
-                combinedServerData.forEach((serverItem) => {
-                    const currentId = serverItem.id ? String(serverItem.id) : `item_${counter++}`;
-                    
-                    flattenedData.push({
-                        id: currentId,
-                        title: serverItem.title || 'بدون عنوان',
-                        category: serverItem.category || 'videos',
-                        content: serverItem.content || serverItem.desc || '',
-                        image: serverItem.image || '',
-                        videoUrl: serverItem.videoUrl || serverItem.videourl || serverItem.url || '',
-                        videoDirectUrl: serverItem.videoDirectUrl || serverItem.videoDirecturl || '',
-                        links: serverItem.links || [],
-                        chapters: serverItem.chapters || [],
-                        recommendations: serverItem.recommendations || [],
-                        videos: serverItem.videos || null // الحفاظ على مصفوفة الفيديوهات الفرعية كاملة هنا
-                    });
-                });
+combinedServerData.forEach((serverItem) => {
+                const currentId = serverItem.id ? String(serverItem.id) : `item_${counter++}`;
+                
+                // متغيرات مرنة لاستيعاب بيانات الموقع المعتادة أو بيانات البوت
+                let itemTitle = serverItem.title;
+                let itemCategory = serverItem.category || 'videos';
+                let itemContent = serverItem.content || serverItem.desc || '';
 
+                // 🤖 فحص ذكي: إذا كان العنصر قادماً من بوت الكريبتو ويحتوي على رمز العملة
+                if (serverItem.symbol) {
+                    itemTitle = `🚨 حركة قوية على زوج: ${serverItem.symbol}`;
+                    itemCategory = 'high_volume'; // تصنيف التنبيهات
+                    
+                    // تنسيق نص البطاقة بشكل منظم ومريح للعين
+                    itemContent = `💵 السعر الحالي: ${serverItem.price} USDT
+                📊 حجم التداول: ${serverItem.volume.toLocaleString()}
+                📈 نسبة التغيير (24س): ${serverItem.change_percent}%
+                🕒 وقت التنبيه: ${new Date(serverItem.timestamp).toLocaleTimeString('ar-EG')}`;
+                }
+
+                flattenedData.push({
+                    id: currentId,
+                    title: itemTitle || 'بدون عنوان',
+                    category: itemCategory,
+                    content: itemContent,
+                    image: serverItem.image || '',
+                    videoUrl: serverItem.videoUrl || serverItem.videourl || serverItem.url || '',
+                    videoDirectUrl: serverItem.videoDirectUrl || serverItem.videoDirecturl || '',
+                    links: serverItem.links || [],
+                    chapters: serverItem.chapters || [],
+                    recommendations: serverItem.recommendations || [],
+                    videos: serverItem.videos || null 
+                });
+            });
                 allData = flattenedData;
                 isDataLoaded = true; 
                 render(allData);
@@ -683,6 +700,13 @@
             pageTitle.innerText = 'مكتبة الشروحات والفيديوهات التعليمية';
             render(filtered);
             setActiveNav('btn-videos');
+        }
+        // 🛠️ المسار الجديد لعرض تنبيهات الكريبتو القادمة من البوت
+        else if (hash === '#/crypto') {
+            const filtered = allData.filter(d => d.category === 'high_volume');
+            pageTitle.innerText = '🤖 تنبيهات بث حي لحركة العملات الرقمية';
+            render(filtered);
+            setActiveNav('btn-crypto');
         } 
         else {
             const filtered = allData.filter(d => d.category === 'vsa');
@@ -690,6 +714,7 @@
             render(filtered);
             setActiveNav('btn-vsa');
         }
+        
     }
 
     function setActiveNav(id) {
