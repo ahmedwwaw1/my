@@ -1,0 +1,73 @@
+    [
+{ "__comment__": "=== كورس vsa وائل احمد ===",
+    "id": "vsa-w",
+    "title": "كورس vsa وائل احمد",
+    "category": "rw",
+    "content": "الكورس مكون من6 دروس...",
+    "image": "https://via.placeholder.com/360",
+    "recommendations": ["vsa_lesson2", "vsa_lesson3"], 
+    "videos": [
+      {
+        "title": "المحاضرة الأولى",
+        "url": "https://youtu.be/dzw0Ar_5E2M",
+        "chapters": [
+          { "time": "00:00", "text": "مقدمة وايكوف" },
+          { "time": "05:30", "text": "قوانين السوق الثلاثة" }
+        ]
+      },
+      {
+        "title": "المحاضرة الثانية",
+        "url": "https://youtu.be/1EmVQf8OLos",
+        "chapters": [
+          { "time": "00:00", "text": "مراجعة سريعة" },
+          { "time": "03:15", "text": "تطبيقات الجهد والنتيجة على الشارت" }
+        ]
+      },
+      {
+        "title": "المحاضرة الثالثة",
+        "url": "https://youtu.be/96f2Ewm4Go0",
+        "chapters": [
+          { "time": "00:00", "text": "مراجعة سريعة" },
+          { "time": "03:15", "text": "تطبيقات الجهد والنتيجة على الشارت" }
+        ]
+      },
+      {
+        "title": "المحاضرة الرابعة",
+        "url": "https://youtu.be/pwIE36Fkk5Q",
+        "chapters": [
+          { "time": "00:00", "text": "مراجعة سريعة" },
+          { "time": "03:15", "text": "تطبيقات الجهد والنتيجة على الشارت" }
+        ]
+      },
+      {
+        "title": "المحاضرة الخامسة",
+        "url": "https://youtu.be/s_dn45j_vg8",
+        "chapters": [
+          { "time": "00:00", "text": "مراجعة سريعة" },
+          { "time": "03:15", "text": "تطبيقات الجهد والنتيجة على الشارت" }
+        ]
+      },
+      {
+        "title": "المحاضرة السادسة",
+        "url": "https://youtu.be/amkWbdUaqG0",
+        "chapters": [
+          { "time": "00:00", "text": "مراجعة سريعة" },
+          { "time": "03:15", "text": "تطبيقات الجهد والنتيجة على الشارت" }
+        ]
+      },
+      {
+        "title": "المحاضرة المراجعة",
+        "url": "https://youtu.be/KfI0JAWrvCs",
+        "chapters": [
+          { "time": "00:00", "text": "مراجعة سريعة" },
+          { "time": "03:15", "text": "تطبيقات الجهد والنتيجة على الشارت" }
+        ]
+      }
+    ]
+    
+}  
+
+
+
+
+ ]

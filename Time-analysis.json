@@ -1,15 +1,33 @@
     [
-{ 
-    "id": "vsa_lesson7",
+{ "__comment__": "=== دليل الاستثمار في العراق ===",
+    "id": "wass",
+    "title": "بطاقة",
     "category": "rw",
-    "image": "./images/rw.jpg",
-    "title": "تطبيقات عملية على منصة جات شارت AI",
-    "content": "التحليل الحجمي",
-    "videoUrl": [
-        { "title": "الدرس 1: فلسفة ريتشارد وايكوف والـ VSA", "url": "https://www.youtube.com/watch?v=Fs66AynGasA" },
-        { "title": "الدرس 2: الجهد مقابل النتيجة في الشموع اليابانية", "url": "https://www.youtube.com/watch?v=Fs66AynGasA" },
-        { "title": "الدرس 3: كيفية تحديد الشراء المخفي وفخاخ الحيتان", "url": "https://www.youtube.com/watch?v=Fs66AynGasA" },
-        { "title": "الدرس 4: تطبيقات عملية على الـ Nasdaq والتداول الحي", "url": "https://www.youtube.com/watch?v=Fs66AynGasA" }
+    "content": "وصف الدرس هنا...",
+    "image": "https://via.placeholder.com/360",
+    "recommendations": ["vsa_lesson2", "vsa_lesson3"], 
+    "videos": [
+      {
+        "title": "الدرس 1: فلسفة ريتشارد وايكوف والـ VSA",
+        "url": "./videos/vsa_lesson1.mp4",
+        "chapters": [
+          { "time": "00:00", "text": "مقدمة وايكوف" },
+          { "time": "05:30", "text": "قوانين السوق الثلاثة" }
+        ]
+      },
+      {
+        "title": "الدرس 2: الجهد مقابل النتيجة",
+        "url": "https://www.youtube.com/watch?v=Fs66AynGasA",
+        "chapters": [
+          { "time": "00:00", "text": "مراجعة سريعة" },
+          { "time": "03:15", "text": "تطبيقات الجهد والنتيجة على الشارت" }
+        ]
+      }
     ]
-}   
+    
+}  
+
+
+
+
  ]

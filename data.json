@@ -16,6 +16,41 @@
         ]
     },
     
+  { "__comment__": "=== دليل الاستثمار في العراق ===",
+    "id": "new_look_farm_course",
+    "title": "دليل الاستثمار في العراق",
+    "category": "invest",
+    "content": "هنا تضع الوصف العام للمشروع أو القسم، وسيظهر هذا الكلام في واجهة البطاقة وفي تفاصيل الـ Modal.",
+    "image": "https://via.placeholder.com/360x203/222/0088cc?text=New+Look+Farm",
+    "links": [
+      {
+        "title": "الفيديو الأول: مقدمة وتفاصيل المشروع",
+        "url": "https://www.binance.com"
+        }
+      ]
+      
+      
+      },
+    
+    
+  
+  {
+    "id": "nabdh_al_khaleej_course",
+    "title": "مشروع نبض الخليج",
+    "category": "invest",
+    "content": "هنا تضع تفاصيل بطاقة نبض الخليج الموحدة.",
+    "image": "https://via.placeholder.com/360x203/222/00ff88?text=Nabdh+Al+Khaleej",
+    "videos": [
+      {
+        "title": "التقرير الأول لبطاقة نبض الخليج",
+        "url": "https://www.binance.com"
+      },
+      {
+        "title": "التقرير الثاني والتحديثات الأخيرة",
+        "url": "https://www.youtube.com/watch?v=مثال4"
+      }
+    ]
+  },
   
   {
     "id": "wass",
@@ -27,7 +62,7 @@
     "videos": [
       {
         "title": "الدرس 1: فلسفة ريتشارد وايكوف والـ VSA",
-        "url": "https://www.youtube.com/watch?v=Fs66AynGasA",
+        "url": "./videos/vsa_lesson1.mp4",
         "chapters": [
           { "time": "00:00", "text": "مقدمة وايكوف" },
           { "time": "05:30", "text": "قوانين السوق الثلاثة" }
@@ -42,6 +77,7 @@
         ]
       }
     ]
+    
     
   },
   { 

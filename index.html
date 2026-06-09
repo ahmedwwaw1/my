@@ -465,6 +465,7 @@
     </style>
 </head>
 <body>
+    <!-- اضافة زر -->
 <nav>
     <a href="#/" id="btn-vsa">التحليل الزمنّي</a>
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
@@ -531,10 +532,10 @@
         }
         return parseFloat(timeStr) || 0;
     }
-
+    // اضافة ملف json
     // دالة جلب ومعالجة ملفات الـ JSON المحدثة لمنع تفكيك الكروت والحفاظ عليها موحدة
     async function loadWebsiteData() {
-        const jsonFiles = ['data.json', 'crypto_alerts.json', 'data3.json']; 
+        const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json']; 
         
         let combinedServerData = [];
         let anyFileLoaded = false;
@@ -1404,7 +1405,7 @@
         }
     }
 
-    function closeModal() {
+    function closeModal() { 
         document.getElementById('myModal').style.display = "none";
         UnifiedPlayer.cleanup();
         modalHistory = [];
