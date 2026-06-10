@@ -5,10 +5,10 @@ from datetime import datetime
 
 def analyze_crypto_market():
     """
-    جلب بيانات العملات من Binance وتحديث ملف crypto_alerts.json
+    جلب بيانات العملات وتحديث ملف crypto_alerts.json
     """
     try:
-        # إنشاء اتصال مع بينانس (بدون API keys للبيانات العامة)
+        # استخدام منصة KuCoin لتجنب الحظر الجغرافي لـ GitHub الأمريكي
         exchange = ccxt.kucoin()
         
         # العملات المراد مراقبتها
@@ -21,11 +21,11 @@ def analyze_crypto_market():
                 # جلب البيانات الأخيرة
                 ticker = exchange.fetch_ticker(symbol)
                 
-                volume = ticker['quoteVolume']  # حجم التداول
+                volume = ticker['quoteVolume']  # حجم التداول بالـ USDT
                 price = ticker['last']  # السعر الحالي
                 change_percent = ticker['percentage']  # نسبة التغيير
                 
-                # الشرط: إذا كان حجم التداول أكثر من 10 مليون (تعديل)
+                # الشرط: إذا كان حجم التداول أكثر من 10 مليون
                 if volume > 10000000:
                     new_alert = {
                         "symbol": symbol,
@@ -37,17 +37,16 @@ def analyze_crypto_market():
                     }
                     alerts.append(new_alert)
                     print(f"✅ تنبيه: {symbol} - السعر: {price} - الحجم: {volume}")
-            
             except Exception as e:
                 print(f"⚠️ خطأ في جلب بيانات {symbol}: {e}")
                 continue
         
-        # حفظ البيانات الجديدة
+        # استدعاء دالة الحفظ في حال وجود تنبيهات
         if alerts:
             save_alerts(alerts)
         else:
-            print("ℹ️ لا توجد تنبيهات جديدة الآن")
-    
+            print("ℹ️ لم يتم العثور على أي عملة حققت شرط الحجم المطلق حالياً.")
+            
     except Exception as e:
         print(f"❌ خطأ في تحليل السوق: {e}")
 
@@ -58,7 +57,7 @@ def save_alerts(new_alerts):
     file_name = 'crypto_alerts.json'
     existing_data = []
     
-    # قراءة البيانات القديمة
+    # قراءة البيانات القديمة إن وجدت
     if os.path.exists(file_name):
         with open(file_name, 'r', encoding='utf-8') as f:
             try:
@@ -66,9 +65,8 @@ def save_alerts(new_alerts):
             except json.JSONDecodeError:
                 existing_data = []
     
-    # إضافة التنبيهات الجديدة مع تجنب التكرار
+    # إضافة التنبيهات الجديدة مع منع التكرار
     for alert in new_alerts:
-        # التحقق من عدم وجود نفس التنبيه مسبقاً
         is_duplicate = any(
             item.get('symbol') == alert['symbol'] and 
             item.get('timestamp') == alert['timestamp']
@@ -77,20 +75,15 @@ def save_alerts(new_alerts):
         
         if not is_duplicate:
             existing_data.insert(0, alert)
-            print(f"✅ تم إضافة تنبيه: {alert['symbol']}")
+            print(f"✅ تم إضافة تنبيه إلى القائمة: {alert['symbol']}")
     
-    # الحفاظ على آخر 50 تنبيه فقط
+    # الاحتفاظ بآخر 50 تنبيه فقط ليبقى الملف خفيفاً ومناسباً للموقع
     existing_data = existing_data[:50]
     
-    # حفظ الملف محلياً
+    # كتابة وحفظ الملف بنظام الترميز العام ليعرض اللغة العربية والرموز بشكل صحيح
     with open(file_name, 'w', encoding='utf-8') as f:
         json.dump(existing_data, f, ensure_ascii=False, indent=2)
-    
-    print(f"💾 تم حفظ {len(existing_data)} تنبيه في {file_name}")
 
-# 🎯 تشغيل البرنامج مرة واحدة فقط (بدون حلقة لانهائية)
-if __name__ == "__main__":
-    print("🤖 بدء تحليل السوق...")
-    print(f"⏰ الوقت: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+# 🚀 السطرين السحريين لتشغيل البوت فوراً عند استدعاء الملف
+if __name__ == '__main__':
     analyze_crypto_market()
-    print("✅ انتهى التحليل")
