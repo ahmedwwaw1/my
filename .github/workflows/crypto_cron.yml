@@ -2,27 +2,25 @@ name: Auto Update Crypto Alerts
 
 on:
   schedule:
-    # سيقوم السيرفر بتشغيل السكربت تلقائياً كل ساعة
-    # يمكنك تعديلها حسب رغبتك (مثلاً '*/30 * * * *' للتشغيل كل 30 دقيقة)
     - cron: '0 * * * *'
-  workflow_dispatch: # هذا الخيار يتيح لك تشغيل السكربت يدوياً بنقرة زر من موقع GitHub في أي وقت
+  workflow_dispatch:
 
 jobs:
   update-data:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. سحب الكود الحالي من المستودع إلى سيرفر GitHub التخيلي
+    # 1. سحب الكود الحالي من المستودع
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 2. تنصيب بيئة بايثون على السيرفر
+    # 2. تنصيب بيئة بايثون
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    # 3. تثبيت المكتبات المطلوبة (مثل مكتبة ccxt للتعامل مع بينانس)
+    # 3. تثبيت المكتبات المطلوبة
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -32,11 +30,10 @@ jobs:
     - name: Run crypto bot script
       run: python crypto_bot.py
 
-    # 5. حفظ وتمرير التعديلات الجديدة (Commit & Push) إلى المستودع الخاص بك تلقائياً
+    # 5. حفظ وتمرير التعديلات الجديدة تلقائياً
     - name: Commit and Push changes
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add crypto_alerts.json
-        # التحقق مما إذا كانت هناك تعديلات جديدة أم لا لمنع حدوث خطأ في حال عدم وجود تنبيهات جديدة
         git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 تحديث تلقائي لبيانات التداول" && git push)

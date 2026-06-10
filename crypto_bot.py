@@ -9,7 +9,7 @@ def analyze_crypto_market():
     """
     try:
         # إنشاء اتصال مع بينانس (بدون API keys للبيانات العامة)
-        exchange = ccxt.binance()
+        exchange = ccxt.kucoin()
         
         # العملات المراد مراقبتها
         symbols = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT']
