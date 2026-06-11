@@ -533,6 +533,61 @@
         }
         return parseFloat(timeStr) || 0;
     }
+
+    // دالة مساعدة للعثور على فيديو عبر video_id
+    function findVideoById(item, videoId) {
+        if (!item.videos) return null;
+        return item.videos.find(v => v.id === videoId);
+    }
+
+    // دالة لتشغيل فيديو معين (من خلال معرف الفيديو أو الفهرس)
+    function playSpecificVideo(item, videoIdOrIndex, seekSeconds = 0) {
+        let videoObj = null;
+        let videoIndex = -1;
+        
+        if (typeof videoIdOrIndex === 'number') {
+            videoIndex = videoIdOrIndex;
+            videoObj = item.videos[videoIndex];
+        } else {
+            videoIndex = item.videos.findIndex(v => v.id === videoIdOrIndex);
+            videoObj = videoIndex !== -1 ? item.videos[videoIndex] : null;
+        }
+        
+        if (!videoObj) return;
+        
+        // تحديث القائمة النشطة
+        document.querySelectorAll('#playlistContainer .chapter-row-btn').forEach(btn => btn.classList.remove('active'));
+        const targetBtn = document.getElementById(`playlist-item-${videoIndex}`);
+        if (targetBtn) targetBtn.classList.add('active');
+        
+        const effectiveUrl = videoObj.videoDirectUrl || videoObj.url || videoObj.videoUrl || '';
+        const videoContainer = document.getElementById('popupVideoContainer');
+        if (effectiveUrl && videoContainer) {
+            UnifiedPlayer.init(videoContainer, effectiveUrl);
+            if (seekSeconds > 0) {
+                setTimeout(() => UnifiedPlayer.seekTo(seekSeconds), 500);
+            }
+        }
+        
+        // تحديث الفصول (الطوابع الزمنية) للفيديو الحالي
+        const chaptersContainer = document.getElementById('chaptersContainer');
+        const chaptersSection = document.getElementById('chaptersSection');
+        if (chaptersContainer) chaptersContainer.innerHTML = '';
+        if (videoObj.chapters && videoObj.chapters.length) {
+            chaptersSection.style.display = 'block';
+            videoObj.chapters.forEach(ch => {
+                const btn = document.createElement('button');
+                btn.className = 'chapter-row-btn';
+                btn.innerHTML = `<span>${ch.text}</span><span class="chapter-time-badge">${ch.time}</span>`;
+                const secs = parseTimeToSeconds(ch.time);
+                btn.addEventListener('click', () => UnifiedPlayer.seekTo(secs));
+                chaptersContainer.appendChild(btn);
+            });
+        } else {
+            chaptersSection.style.display = 'none';
+        }
+    }
+
     // اضافة ملف json
     // دالة جلب ومعالجة ملفات الـ JSON المحدثة لمنع تفكيك الكروت والحفاظ عليها موحدة
     async function loadWebsiteData() {
@@ -575,40 +630,41 @@
                 let counter = 1;
 
                 // معالجة ذكية للحفاظ على الكورس كبطاقة واحدة وحفظ مصفوفة فيديوهاته بداخلها
-combinedServerData.forEach((serverItem) => {
-                const currentId = serverItem.id ? String(serverItem.id) : `item_${counter++}`;
-                
-                // متغيرات مرنة لاستيعاب بيانات الموقع المعتادة أو بيانات البوت
-                let itemTitle = serverItem.title;
-                let itemCategory = serverItem.category || 'videos';
-                let itemContent = serverItem.content || serverItem.desc || '';
-
-                // 🤖 فحص ذكي: إذا كان العنصر قادماً من بوت الكريبتو ويحتوي على رمز العملة
-                if (serverItem.symbol) {
-                    itemTitle = `🚨 حركة قوية على زوج: ${serverItem.symbol}`;
-                    itemCategory = 'high_volume'; // تصنيف التنبيهات
+                combinedServerData.forEach((serverItem) => {
+                    const currentId = serverItem.id ? String(serverItem.id) : `item_${counter++}`;
                     
-                    // تنسيق نص البطاقة بشكل منظم ومريح للعين
-                    itemContent = `💵 السعر الحالي: ${serverItem.price} USDT
-                📊 حجم التداول: ${serverItem.volume.toLocaleString()}
-                📈 نسبة التغيير (24س): ${serverItem.change_percent}%
-                🕒 وقت التنبيه: ${new Date(serverItem.timestamp).toLocaleTimeString('ar-EG')}`;
-                }
+                    // متغيرات مرنة لاستيعاب بيانات الموقع المعتادة أو بيانات البوت
+                    let itemTitle = serverItem.title;
+                    let itemCategory = serverItem.category || 'videos';
+                    let itemContent = serverItem.content || serverItem.desc || '';
 
-                flattenedData.push({
-                    id: currentId,
-                    title: itemTitle || 'بدون عنوان',
-                    category: itemCategory,
-                    content: itemContent,
-                    image: serverItem.image || '',
-                    videoUrl: serverItem.videoUrl || serverItem.videourl || serverItem.url || '',
-                    videoDirectUrl: serverItem.videoDirectUrl || serverItem.videoDirecturl || '',
-                    links: serverItem.links || [],
-                    chapters: serverItem.chapters || [],
-                    recommendations: serverItem.recommendations || [],
-                    videos: serverItem.videos || null 
+                    // 🤖 فحص ذكي: إذا كان العنصر قادماً من بوت الكريبتو ويحتوي على رمز العملة
+                    if (serverItem.symbol) {
+                        itemTitle = `🚨 حركة قوية على زوج: ${serverItem.symbol}`;
+                        itemCategory = 'high_volume'; // تصنيف التنبيهات
+                        
+                        // تنسيق نص البطاقة بشكل منظم ومريح للعين
+                        itemContent = `💵 السعر الحالي: ${serverItem.price} USDT
+                    📊 حجم التداول: ${serverItem.volume.toLocaleString()}
+                    📈 نسبة التغيير (24س): ${serverItem.change_percent}%
+                    🕒 وقت التنبيه: ${new Date(serverItem.timestamp).toLocaleTimeString('ar-EG')}`;
+                    }
+
+                    flattenedData.push({
+                        id: currentId,
+                        title: itemTitle || 'بدون عنوان',
+                        category: itemCategory,
+                        content: itemContent,
+                        image: serverItem.image || '',
+                        videoUrl: serverItem.videoUrl || serverItem.videourl || serverItem.url || '',
+                        videoDirectUrl: serverItem.videoDirectUrl || serverItem.videoDirecturl || '',
+                        links: serverItem.links || [],
+                        chapters: serverItem.chapters || [],
+                        recommendations: serverItem.recommendations || [],
+                        videos: serverItem.videos || null,
+                        thematic_index: serverItem.thematic_index || null   // <-- إضافة دعم الفهارس الموضوعية
+                    });
                 });
-            });
                 allData = flattenedData;
                 isDataLoaded = true; 
                 render(allData);
@@ -1264,6 +1320,8 @@ combinedServerData.forEach((serverItem) => {
         const chaptersSection = document.getElementById('chaptersSection');
         const playlistSection = document.getElementById('playlistSection');
         const playlistContainer = document.getElementById('playlistContainer');
+        const thematicSection = document.getElementById('thematicSection');
+        const thematicContainer = document.getElementById('thematicContainer');
 
         if (videoContainer) { videoContainer.innerHTML = ''; videoContainer.style.display = 'none'; }
         if (linksContainer) { linksContainer.innerHTML = ''; }
@@ -1271,6 +1329,8 @@ combinedServerData.forEach((serverItem) => {
         if (chaptersSection) { chaptersSection.style.display = 'none'; }
         if (playlistSection) { playlistSection.style.display = 'none'; }
         if (playlistContainer) { playlistContainer.innerHTML = ''; }
+        if (thematicSection) { thematicSection.style.display = 'none'; }
+        if (thematicContainer) { thematicContainer.innerHTML = ''; }
 
         function createDynamicButton(url, text) {
             const btn = document.createElement('a');
@@ -1346,6 +1406,41 @@ combinedServerData.forEach((serverItem) => {
             }
         }
 
+        // ========== عرض الفهارس الموضوعية (thematic_index) ==========
+        if (selectedItem.thematic_index && selectedItem.thematic_index.length > 0) {
+            if (thematicSection) thematicSection.style.display = 'block';
+            selectedItem.thematic_index.forEach(topic => {
+                const topicDiv = document.createElement('div');
+                topicDiv.style.marginBottom = '20px';
+                topicDiv.innerHTML = `<h4 style="color: var(--accent-color); margin: 10px 0 8px 0;">📌 ${topic.topic_name}</h4>`;
+                const chaptersDiv = document.createElement('div');
+                chaptersDiv.className = 'chapters-flex-list';
+                chaptersDiv.style.maxHeight = '200px';
+                topic.chapters.forEach(ch => {
+                    const chapBtn = document.createElement('button');
+                    chapBtn.className = 'chapter-row-btn';
+                    chapBtn.style.padding = '8px 12px';
+                    chapBtn.innerHTML = `
+                        <span>${ch.text}</span>
+                        <span class="chapter-time-badge">${ch.time} • ${ch.video_id || ''}</span>
+                    `;
+                    chapBtn.addEventListener('click', () => {
+                        if (ch.video_id) {
+                            const seekSec = parseTimeToSeconds(ch.time);
+                            playSpecificVideo(selectedItem, ch.video_id, seekSec);
+                        } else {
+                            alert('لم يتم تحديد الفيديو لهذا الفصل');
+                        }
+                    });
+                    chaptersDiv.appendChild(chapBtn);
+                });
+                topicDiv.appendChild(chaptersDiv);
+                thematicContainer.appendChild(topicDiv);
+            });
+        } else {
+            if (thematicSection) thematicSection.style.display = 'none';
+        }
+
         if (selectedItem.links && Array.isArray(selectedItem.links)) {
             selectedItem.links.forEach(link => {
                 if (link.url) createDynamicButton(link.url, link.text || 'مشاهدة الدرس');
@@ -1388,46 +1483,7 @@ combinedServerData.forEach((serverItem) => {
     function playPlaylistItem(courseId, videoIndex) {
         const selectedItem = allData.find(item => String(item.id) === String(courseId));
         if (!selectedItem || !selectedItem.videos || !selectedItem.videos[videoIndex]) return;
-
-        // تحديث المظهر البصري للزر النشط في القائمة
-        document.querySelectorAll('#playlistContainer .chapter-row-btn').forEach(b => b.classList.remove('active'));
-        const currentActiveBtn = document.getElementById(`playlist-item-${videoIndex}`);
-        if (currentActiveBtn) currentActiveBtn.classList.add('active');
-
-        const targetVideo = selectedItem.videos[videoIndex];
-        const videoContainer = document.getElementById('popupVideoContainer');
-        const chaptersContainer = document.getElementById('chaptersContainer');
-        const chaptersSection = document.getElementById('chaptersSection');
-
-        if (videoContainer) { videoContainer.innerHTML = ''; videoContainer.style.display = 'none'; }
-        if (chaptersContainer) { chaptersContainer.innerHTML = ''; }
-        if (chaptersSection) { chaptersSection.style.display = 'none'; }
-
-        const effectiveVideoUrl = (targetVideo.videoDirectUrl && targetVideo.videoDirectUrl.trim() !== '')
-            ? targetVideo.videoDirectUrl
-            : (targetVideo.url || targetVideo.videoUrl || targetVideo.videourl || '');
-
-        if (effectiveVideoUrl && effectiveVideoUrl.trim() !== '') {
-            UnifiedPlayer.init(videoContainer, effectiveVideoUrl);
-        }
-
-        // عرض الفصول والطوابع الزمنية الخاصة بالفيديو الفرعي المشغل حالياً
-        if (targetVideo.chapters && targetVideo.chapters.length > 0) {
-            if (chaptersSection) chaptersSection.style.display = 'block';
-            targetVideo.chapters.forEach(chapter => {
-                const chapBtn = document.createElement('button');
-                chapBtn.className = 'chapter-row-btn';
-                chapBtn.innerHTML = `
-                    <span>${chapter.text}</span>
-                    <span class="chapter-time-badge">${chapter.time}</span>
-                `;
-                const seconds = parseTimeToSeconds(chapter.time);
-                chapBtn.addEventListener('click', () => {
-                    UnifiedPlayer.seekTo(seconds);
-                });
-                chaptersContainer.appendChild(chapBtn);
-            });
-        }
+        playSpecificVideo(selectedItem, videoIndex, 0);
     }
 
     function closeModal() { 
@@ -1478,6 +1534,14 @@ combinedServerData.forEach((serverItem) => {
                         📚 قائمة دروس الدورة
                     </h3>
                     <div id="playlistContainer" class="chapters-flex-list"></div>
+                </div>
+
+                <!-- القسم الجديد للفهارس الموضوعية -->
+                <div id="thematicSection" class="sidebar-card" style="display: none;">
+                    <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
+                        🧠 الفهارس الموضوعية (حسب المواضيع)
+                    </h3>
+                    <div id="thematicContainer" class="chapters-flex-list"></div>
                 </div>
 
                 <div id="chaptersSection" class="sidebar-card" style="display: none;">
