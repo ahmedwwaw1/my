@@ -465,13 +465,15 @@
     </style>
 </head>
 <body>
-    <!-- اضافة زر -->
+    <!--للقسم اضافة زر -->
 <nav>
-    <a href="#/" id="btn-vsa">التحليل الزمنّي</a>
+    <a href="#/" id="btn-vsa">منوعات</a>
+    <a href="#/time-analysis" id="btn-time-analysis">⏱️ التحليل الزمني</a>
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
     <a href="#/videos" id="btn-videos">🎥 أكاديمية الفيديوهات</a>
     <a href="#/rw" id="btn-rw"> التحليل الحجمي </a>
     <a href="#/crypto" id="btn-crypto">🤖 تنبيهات الكريبتو</a>
+    
 </nav>
 
 <div class="container">
@@ -591,7 +593,7 @@
     // اضافة ملف json
     // دالة جلب ومعالجة ملفات الـ JSON المحدثة لمنع تفكيك الكروت والحفاظ عليها موحدة
     async function loadWebsiteData() {
-        const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json']; 
+        const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json','Time-analysis.json']; 
         
         let combinedServerData = [];
         let anyFileLoaded = false;
@@ -744,6 +746,14 @@
             pageTitle.innerText = 'دليل الاستثمار في العراق';
             render(filtered);
             setActiveNav('btn-invest');
+        } 
+       
+        
+        else if (hash === '#/time-analysis') {
+            const filtered = allData.filter(d => d.category === 'time_analysis');
+            pageTitle.innerText = '⏱️ التحليل الزمني';
+            render(filtered);
+            setActiveNav('btn-time-analysis');
         } 
         else if (hash === '#/rw') {
             const filtered = allData.filter(d => d.category === 'rw');
