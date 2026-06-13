@@ -747,20 +747,20 @@
             render(filtered);
             setActiveNav('btn-invest');
         } 
-       
-        
         else if (hash === '#/time-analysis') {
-            const filtered = allData.filter(d => d.category === 'time_analysis');
-            pageTitle.innerText = '⏱️ التحليل الزمني';
+            const filtered = allData.filter(d => d.category === 'time-analysis');
+            pageTitle.innerText = ' التحليل الزمني ';
             render(filtered);
-            setActiveNav('btn-time-analysis');
-        } 
+            setActiveNav('btn-time-analysis');           
+        }
+        
         else if (hash === '#/rw') {
             const filtered = allData.filter(d => d.category === 'rw');
             pageTitle.innerText = ' مكتبة وايكوف';
             render(filtered);
-            setActiveNav('btn-rw');
-        } 
+            setActiveNav('btn-rw');           
+        }
+
         else if (hash === '#/videos') {
             const filtered = allData.filter(d => d.category === 'videos');
             pageTitle.innerText = 'مكتبة الشروحات والفيديوهات التعليمية';
