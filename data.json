@@ -1,7 +1,29 @@
 [  
-   
+   { 
+    "id": "alaitihad",
+    "title": "شركات الوساطة المالية  ",
+    "category": "invest",
+    "content":"",
+
+    "image": "",
+    "links": [
+      {
+        "text": "inzo ",
+        "url": "https://my.inzo.co/dashboard"
+        },
+        {
+        "text": "Maxify",
+        "url": "https://my.maxifyfx.com/ar/dashboard"
+        },
+        {
+        "text": "primexcapital",
+        "url": "https://primexcapital.com/ar"
+        }
+      ]
+
+      },  
     
-  { "__comment__": "=== دليل الاستثمار في العراق ===",
+    { "__comment__": "=== دليل الاستثمار في العراق ===",
     "id": "new_look_farm_course",
     "title": "دليل الاستثمار في العراق",
     "category": "invest",
@@ -15,23 +37,7 @@
       ]
       
       
-      },
-    
-    
-  
-  {
-    "id": "nabdh_al_khaleej_course",
-    "title": "مشروع نبض الخليج",
-    "category": "invest",
-    "content": "هنا تضع تفاصيل بطاقة نبض الخليج الموحدة.",
-    "image": "https://via.placeholder.com/360x203/222/00ff88?text=Nabdh+Al+Khaleej",
-    "links":[]
-   
-  },
-  
- 
-   
-   
+      },   
     {
         "category": "vsa",
         "title": "شركات الوساطة الموثوقة",
