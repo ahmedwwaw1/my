@@ -1,44 +1,5 @@
 [  
-   { 
-    "id": "alaitihad",
-    "title": "شركات الوساطة المالية  ",
-    "category": "invest",
-    "content":"",
-
-    "image": "",
-    "links": [
-      {
-        "text": "inzo ",
-        "url": "https://my.inzo.co/dashboard"
-        },
-        {
-        "text": "Maxify",
-        "url": "https://my.maxifyfx.com/ar/dashboard"
-        },
-        {
-        "text": "primexcapital",
-        "url": "https://primexcapital.com/ar"
-        }
-      ]
-
-      },  
-    
-    { "__comment__": "=== دليل الاستثمار في العراق ===",
-    "id": "new_look_farm_course",
-    "title": "دليل الاستثمار في العراق",
-    "category": "invest",
-    "content": "هنا تضع الوصف العام للمشروع أو القسم، وسيظهر هذا الكلام في واجهة البطاقة وفي تفاصيل الـ Modal.",
-    "image": "https://via.placeholder.com/360x203/222/0088cc?text=New+Look+Farm",
-    "links": [
-      {
-        "title": "الفيديو الأول: مقدمة وتفاصيل المشروع",
-        "url": "https://www.binance.com"
-        }
-      ]
-      
-      
-      },   
-    {
+   {
         "category": "vsa",
         "title": "شركات الوساطة الموثوقة",
         "content": "قائمة الشركات المعتمدة للتداول (Forex):\n• Inzo\n• Maxify\n• PrimeX Capital",
@@ -50,10 +11,13 @@
             {
                 "text": "Maxify P2P",
                 "url": "https://my.maxifyfx.com/ar/dashboard"
+            },
+            {
+            "text": "primexcapital",
+            "url": "https://primexcapital.com/ar"
             }
         ]
     },
-   
     {
         "id": "vsa_lesson1",
         "category": "videos",
