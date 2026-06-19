@@ -25,16 +25,8 @@
     "category": "invest",
     "content": "هنا تضع تفاصيل بطاقة نبض الخليج الموحدة.",
     "image": "https://via.placeholder.com/360x203/222/00ff88?text=Nabdh+Al+Khaleej",
-    "videos": [
-      {
-        "title": "التقرير الأول لبطاقة نبض الخليج",
-        "url": "https://www.binance.com"
-      },
-      {
-        "title": "التقرير الثاني والتحديثات الأخيرة",
-        "url": "https://www.youtube.com/watch?v=مثال4"
-      }
-    ]
+    "links":[]
+   
   },
   
  
@@ -153,7 +145,145 @@
                 "url": "https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web"
             }
         ]
-    }
+    },
+    { "__comment__": "=== دليل الاستثمار في العراق ===",
+    "id": "al-Jawhara",
+    "title": "شركة الجوهرة الرصينة فرع المنصور",
+    "category": "invest",
+    "content": "شركة الجوهرة الرصينة فرع المنصور",
+    "image": "",
+    "links": [
+      {
+        "title": "فيس بوك الجوهرةالرصينة",
+        "url": "https://www.facebook.com/johartbahdaad"
+        }
+      ]
+      
+      
+      },
+       { 
+    "id": "Ata",
+    "title": "شركةعطاءالساقي",
+    "category": "invest",
+    "content":"شركة عطاء الساقي رائدة في مجال الثروة الحيوانية، التجارة العامة، الاستثمارات العقارية والسياحية، وكالات الأجهزة الكهربائية",
+    "image": "",
+    "links": [
+      {
+        "title": "فيس بوك عطاءالساقي",
+        "url": "https://www.facebook.com/profile.php?id=61583971433793"
+        }
+      ]
+      
+      
+      },
+      { 
+    "id": "Ata",
+    "title": "مستشفى قائم آل محمد الجراحي الاهلي",
+    "category": "invest",
+    "content":"يمكنك الإستثمار وشراء الأسهم في أكبر مستشفيات النجف الأشرف ",
+
+    "image": "",
+    "links": [
+      {
+        "title": "فيس بوك ",
+        "url": "https://www.facebook.com/qamhospital"
+        }
+      ]
+      
+      
+      },
+            { 
+    "id": "Ata",
+    "title": "مستشفى قائم آل محمد الجراحي الاهلي",
+    "category": "invest",
+    "content":"يمكنك الإستثمار وشراء الأسهم في أكبر مستشفيات النجف الأشرف ",
+
+    "image": "",
+    "links": [
+      {
+        "title": "فيس بوك ",
+        "url": "https://www.facebook.com/qamhospital"
+        }
+      ]
+      
+      
+    },
+    { 
+    "id": "Ata",
+    "title": "مستشفى قائم آل محمد الجراحي الاهلي",
+    "category": "invest",
+    "content":"يمكنك الإستثمار وشراء الأسهم في أكبر مستشفيات النجف الأشرف ",
+
+    "image": "",
+    "links": [
+      {
+        "title": "فيس بوك ",
+        "url": "https://www.facebook.com/qamhospital"
+        }
+      ]
+
+      },
+      { 
+    "id": "al-asafi",
+    "title": "Al Asafy Group",
+    "category": "invest",
+    "content":" ",
+
+    "image": "",
+    "links": [
+      {
+        "title": "الموقع الالكتروني ",
+        "url": "https://alasafygroup.com/"
+        }
+      ]
+
+      },
+      { 
+    "id": "almustashar",
+    "title": "شركة المستشار المؤسسي",
+    "category": "invest",
+    "content":" ",
+
+    "image": "",
+    "links": [
+      {
+        "title": "facebook ",
+        "url": "https://www.facebook.com/a1mostashar"
+        }
+      ]
+
+      },
+      { 
+    "id": "alaitihad",
+    "title": "شركة اتحاد الفارس ",
+    "category": "invest",
+    "content":"شركة اتحاد الفارس للتاجرة العامةالمحدودة ",
+
+    "image": "",
+    "links": [
+      {
+        "title": "facebook ",
+        "url": "https://www.facebook.com/profile.php?id=61569008091386"
+        }
+      ]
+
+      },
+      { 
+    "id": "alaitihad",
+    "title": "شركة دلتا المتطوره للتجارة العامة والاستثمارات العقاري والبيع بالتقسيط ",
+    "category": "invest",
+    "content":"شركة اتحاد الفارس للتاجرة العامةالمحدودة ",
+
+    "image": "",
+    "links": [
+      {
+        "title": "facebook ",
+        "url": "https://www.facebook.com/profile.php?id=61569008091386"
+        }
+      ]
+
+      }
+
     
         
        
