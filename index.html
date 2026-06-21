@@ -470,8 +470,9 @@
     <a href="#/" id="btn-vsa">منوعات</a>
     <a href="#/rw" id="btn-rw"> التحليل الحجمي </a>
     <a href="#/time-analysis" id="btn-time-analysis">⏱️ التحليل الزمني</a>
+    <a href="#/technical-analysis" id="btn-technical-analysis">التحليل الفني</a>
     <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
-    <a href="#/videos" id="btn-videos">🎥 أكاديمية الفيديوهات</a>
+    
     
     <a href="#/crypto" id="btn-crypto">🤖 تنبيهات الكريبتو</a>
     
@@ -713,7 +714,7 @@
     // اضافة ملف json
     // دالة جلب ومعالجة ملفات الـ JSON المحدثة لمنع تفكيك الكروت والحفاظ عليها موحدة
     async function loadWebsiteData() {
-        const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json','Time-analysis.json']; 
+        const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json','Time-analysis.json',technical-analysis.json]; 
         
         let combinedServerData = [];
         let anyFileLoaded = false;
@@ -881,11 +882,11 @@
             setActiveNav('btn-rw');           
         }
 
-        else if (hash === '#/videos') {
-            const filtered = allData.filter(d => d.category === 'videos');
-            pageTitle.innerText = 'مكتبة الشروحات والفيديوهات التعليمية';
+        else if (hash === '#/technical-analysis') {
+            const filtered = allData.filter(d => d.category === 'technical-analysis');
+            pageTitle.innerText = 'مدارس التحليل الفني';
             render(filtered);
-            setActiveNav('btn-videos');
+            setActiveNav('btn-technical-analysis');
         }
         // 🛠️ المسار الجديد لعرض تنبيهات الكريبتو القادمة من البوت
         else if (hash === '#/crypto') {

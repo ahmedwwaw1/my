@@ -1,0 +1,85 @@
+[
+    {
+    "__comment__": "محمد مهدي",
+    "id": "time-m",
+    "title": "كورس التحليل الزمني ",
+    "category": "time-analysis",
+    "content": "كورس التحليل الزمني...",
+    "image": "images/w-g.jpg",
+    "recommendations": [],
+    "videos": [
+         {
+        "id": "Elliot-Yasser-1",
+        "title": "البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الأولي)",
+        "url": "https://www.youtube.com/watch?v=Z0PNiNdWLPE&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0",
+        "chapters": []
+      },
+      {
+        "id": "Elliot-Yasser-2",
+        "title": "البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الثانية)",
+        "url": "https://www.youtube.com/watch?v=61AOw0-1rjY&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=2",
+        "chapters": []
+      },
+      {
+        "id": "Elliot-Yasser-3",
+        "title": "البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الثالثة)",
+        "url": "https://www.youtube.com/watch?v=hxGcLyS9O_A&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=3",
+        "chapters": []
+      },
+      {
+        "id": "Elliot-Yasser-4",
+        "title": "البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الرابعة)",
+        "url": "https://www.youtube.com/watch?v=L5qlIwp2MgY&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=4",
+        "chapters": []
+      },
+      {
+        "id": "Elliot-Yasser-5",
+        "title": "البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الخامسة)",
+        "url": "https://www.youtube.com/watch?v=0y1ZL_eovAM&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=5",
+        "chapters": []
+      },
+      {
+        "id": "Elliot-Yasser-6",
+        "title": "البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة السادسة)",
+        "url": "https://www.youtube.com/watch?v=fQ7y-ffuRng&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=6",
+        "chapters": []
+      },
+      {
+        "id": "Elliot-Yasser-7",
+        "title": "البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة السابعة)",
+        "url": "https://www.youtube.com/watch?v=5ZFFT_W79o8&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=7",
+        "chapters": []
+      },
+      {
+        "id": "Elliot-Yasser-8",
+        "title": "البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الثامنة)",
+        "url": "https://www.youtube.com/watch?v=t7t8gJ83GWk&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=8",
+        "chapters": []
+      }
+
+    ],
+            "thematic_index": [
+      {
+        "topic_name": "🔥 سلسلة حجم التداول العالي (High Volume)",
+        "chapters": [
+          { "video_id": "tm-1", "time": "03:15", "text": "مفهوم" },
+          { "video_id": "vw_4", "time": "05:40", "text": "أسباب ظهور الحجم العالي المفاجئ" }
+        ]
+      },
+      {
+        "topic_name": "🔥 vsa (High Volume)",
+        "chapters": [
+          { "video_id": "vw_5", "time": "03:15", "text": "مفهوم" },
+          { "video_id": "vw_6", "time": "05:40", "text": "أسباب ظهور الحجم العالي المفاجئ" },
+          { 
+          "video_id": "tm-new","time": "05:40","text": "هل جان يتوقع المستقبل بهذه الطريقة؟"
+          }
+          
+           
+        ]
+      }
+    ]
+
+    
+    }
+]
