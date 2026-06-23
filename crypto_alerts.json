@@ -1,6 +1,22 @@
 [
   {
     "symbol": "ETH/USDT",
+    "price": 1666.64,
+    "volume": 203820971.9,
+    "change_percent": -3.88,
+    "timestamp": "2026-06-23T21:27:22.092618",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "BTC/USDT",
+    "price": 62564.6,
+    "volume": 268269224.86,
+    "change_percent": -2.71,
+    "timestamp": "2026-06-23T21:27:21.904992",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "ETH/USDT",
     "price": 1659.25,
     "volume": 206478219.08,
     "change_percent": -4.24,
@@ -47,5 +63,4 @@
     "timestamp": "2026-06-23T13:40:58.235044",
     "category": "high_volume"
   }
-
 ]
