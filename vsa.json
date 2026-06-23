@@ -459,7 +459,7 @@
         ]
       },
       {
-        "id": "vsa-nnadir",
+        "id": "vsa-nadir",
         "title": "الوينار المنتظر كشف التلاعب",
         "url": "https://youtu.be/ZVOU3n-lRmw",
         "chapters": [
@@ -479,7 +479,7 @@
       {
         "topic_name": "سلسلة الاختبارات",
         "chapters": [
-          { "video_id": "vsa-nnadir", "time": "135:00", "text": "حجم الاختبار تحت المتوسط وقل من حجم شمعة الامتصاص" }
+          { "video_id": "vsa-nadir", "time": "1:35:00", "text": "حجم الاختبار تحت المتوسط وقل من حجم شمعة الامتصاص" }
           
            
         ]
