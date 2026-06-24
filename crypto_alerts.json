@@ -1,6 +1,86 @@
 [
   {
     "symbol": "ETH/USDT",
+    "price": 1665.44,
+    "volume": 146455419.76,
+    "change_percent": 0.61,
+    "timestamp": "2026-06-24T10:17:38.425179",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "BTC/USDT",
+    "price": 62589.6,
+    "volume": 212411196.2,
+    "change_percent": 0.24,
+    "timestamp": "2026-06-24T10:17:38.254478",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "ETH/USDT",
+    "price": 1675.66,
+    "volume": 185673777.18,
+    "change_percent": -0.93,
+    "timestamp": "2026-06-24T06:41:53.210016",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "BTC/USDT",
+    "price": 62849.2,
+    "volume": 236768635.72,
+    "change_percent": -0.15,
+    "timestamp": "2026-06-24T06:41:53.081484",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "ETH/USDT",
+    "price": 1668.71,
+    "volume": 200607675.64,
+    "change_percent": -3.63,
+    "timestamp": "2026-06-24T02:42:37.587957",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "BTC/USDT",
+    "price": 62774.1,
+    "volume": 254805122.12,
+    "change_percent": -2.22,
+    "timestamp": "2026-06-24T02:42:37.408214",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "ETH/USDT",
+    "price": 1663.33,
+    "volume": 196487805.59,
+    "change_percent": -3.59,
+    "timestamp": "2026-06-23T23:03:49.101878",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "BTC/USDT",
+    "price": 62596.4,
+    "volume": 255240405.88,
+    "change_percent": -2.2,
+    "timestamp": "2026-06-23T23:03:48.909051",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "ETH/USDT",
+    "price": 1666.64,
+    "volume": 203820971.9,
+    "change_percent": -3.88,
+    "timestamp": "2026-06-23T21:27:22.092618",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "BTC/USDT",
+    "price": 62564.6,
+    "volume": 268269224.86,
+    "change_percent": -2.71,
+    "timestamp": "2026-06-23T21:27:21.904992",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "ETH/USDT",
     "price": 1659.25,
     "volume": 206478219.08,
     "change_percent": -4.24,
@@ -47,5 +127,4 @@
     "timestamp": "2026-06-23T13:40:58.235044",
     "category": "high_volume"
   }
-
 ]
