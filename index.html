@@ -545,7 +545,7 @@
         return item.videos.find(v => v.id === videoId);
     }
 
-    // دالة لتشغيل فيديو معين (من خلال معرف الفيديو) مع إمكانية البحث في كل البيانات
+// دالة لتشغيل فيديو معين (من خلال معرف الفيديو) مع إمكانية البحث في كل البيانات
     // هذه النسخة المعدلة تحافظ على originalThematicItem ولا تغلق الـ Modal
     function playSpecificVideo(initialItem, videoIdOrIndex, seekSeconds = 0) {
         let targetItem = initialItem;
@@ -640,39 +640,24 @@
                 btn.className = 'chapter-row-btn';
                 btn.innerHTML = `<span>${ch.text}</span><span class="chapter-time-badge">${ch.time}</span>`;
                 const secs = parseTimeToSeconds(ch.time);
-                btn.addEventListener('click', () => UnifiedPlayer.seekTo(secs));
+                
+                // حدث الضغط المحدث ليشمل الانتقال التلقائي للأعلى
+                btn.addEventListener('click', () => {
+                    UnifiedPlayer.seekTo(secs); // تقديم الفيديو للوقت المطلوب
+                    
+                    // 🚀 بلوك الانتقال التلقائي المضاف لقائمة الطوابع الزمنية العادية
+                    const modalContentElement = document.querySelector('.modal-content');
+                    if (modalContentElement) {
+                        modalContentElement.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else if (videoContainer) {
+                        videoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+                
                 chaptersContainer.appendChild(btn);
             });
         } else {
             chaptersSection.style.display = 'none';
-        }
-
-        // 5. تحديث الروابط (links) الخاصة بالبطاقة الجديدة
-        const linksContainer = document.getElementById('popupLinksContainer');
-        if (linksContainer) {
-            linksContainer.innerHTML = '';
-            if (targetItem.links && Array.isArray(targetItem.links)) {
-                targetItem.links.forEach(link => {
-                    if (link.url) {
-                        const btn = document.createElement('a');
-                        btn.href = link.url;
-                        btn.target = '_blank';
-                        btn.innerText = link.text || 'مشاهدة الدرس';
-                        btn.style.cssText = "text-decoration:none; padding:14px 28px; border-radius:10px; font-weight:bold; font-size:1rem; transition:all 0.25s ease; box-shadow:0 4px 15px rgba(0,0,0,0.3); display:inline-block; margin:8px; text-align:center;";
-                        const lowerUrl = link.url.toLowerCase();
-                        if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram.org')) {
-                            btn.style.backgroundColor = '#0088cc'; btn.style.color = '#ffffff'; btn.innerText = '🔹 ' + btn.innerText;
-                        } else if (lowerUrl.includes('facebook.com')) {
-                            btn.style.backgroundColor = '#1877f2'; btn.style.color = '#ffffff'; btn.innerText = '🔵 ' + btn.innerText;
-                        } else if (lowerUrl.includes('binance.com')) {
-                            btn.style.backgroundColor = '#fcd535'; btn.style.color = '#111111'; btn.innerText = '🔸 ' + btn.innerText;
-                        } else {
-                            btn.style.backgroundColor = '#222222'; btn.style.color = '#00ff88'; btn.style.border = '1px solid #333'; btn.innerText = '🔗 ' + btn.innerText;
-                        }
-                        linksContainer.appendChild(btn);
-                    }
-                });
-            }
         }
 
         // 6. **الحفاظ على thematic_index الأصلي**: لا نغيره، بل نستخدم originalThematicItem (إن وُجد)
@@ -714,7 +699,7 @@
         } else {
             thematicSection.style.display = 'none';
         }
-    }
+    }    
     // اضافة ملف json
     // دالة جلب ومعالجة ملفات الـ JSON المحدثة لمنع تفكيك الكروت والحفاظ عليها موحدة
     async function loadWebsiteData() {
