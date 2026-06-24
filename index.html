@@ -595,8 +595,15 @@
             if (seekSeconds > 0) {
                 setTimeout(() => UnifiedPlayer.seekTo(seekSeconds), 500);
             }
+        }        
+        const modalContent = document.querySelector('.modal-content');
+        if (modalContent) {
+            // تمرين محتوى المودال بالكامل إلى الأعلى بشكل سلس
+            modalContent.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            // حل بديل في حال لم يجد الحاوية، يذهب مباشرة للمشغل
+            videoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-
         // 3. تحديث قائمة التشغيل (playlist) لتعكس فيديوهات البطاقة الجديدة
         const playlistSection = document.getElementById('playlistSection');
         const playlistContainer = document.getElementById('playlistContainer');
