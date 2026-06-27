@@ -14,13 +14,6 @@
     "change_percent": 0.69,
     "timestamp": "2026-06-27T00:00:05.235349",
     "category": "high_volume"
-  },
-  {
-    "symbol": "BTC/USDT",
-    "price": 60099.7,
-    "volume": 287086907.2,
-    "change_percent": 0.5,
-    "timestamp": "2026-06-27T00:00:05.108337",
-    "category": "high_volume"
   }
+  
 ]
