@@ -52,7 +52,7 @@ def analyze_crypto_market():
 
 def save_alerts(new_alerts):
     """
-    حفظ التنبيهات الجديدة في crypto_alerts.json مع تجنب التكرار
+    حفظ التنبيهات الجديدة في crypto_alerts.json مع تجنب التكرار اليومي
     """
     file_name = 'crypto_alerts.json'
     existing_data = []
@@ -65,17 +65,22 @@ def save_alerts(new_alerts):
             except json.JSONDecodeError:
                 existing_data = []
     
-    # إضافة التنبيهات الجديدة مع منع التكرار
+    today_date = datetime.now().strftime('%Y-%m-%d')
+    
+    # إضافة التنبيهات الجديدة مع منع التكرار لكل عملة في نفس اليوم
     for alert in new_alerts:
-        is_duplicate = any(
+        # التحقق مما إذا كانت العملة قد أُضيفت بالفعل اليوم
+        is_already_added_today = any(
             item.get('symbol') == alert['symbol'] and 
-            item.get('timestamp') == alert['timestamp']
+            item.get('timestamp', '').startswith(today_date)
             for item in existing_data
         )
         
-        if not is_duplicate:
+        if not is_already_added_today:
             existing_data.insert(0, alert)
-            print(f"✅ تم إضافة تنبيه إلى القائمة: {alert['symbol']}")
+            print(f"✅ تم إضافة تنبيه جديد لـ {alert['symbol']} اليوم.")
+        else:
+            print(f"ℹ️ تنبيه {alert['symbol']} موجود بالفعل لتاريخ اليوم {today_date}. تخطي الإضافة.")
     
     # الاحتفاظ بآخر 50 تنبيه فقط ليبقى الملف خفيفاً ومناسباً للموقع
     existing_data = existing_data[:50]
