@@ -215,9 +215,9 @@
         /* ===== معرض الصور ===== */
         .images-gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
             gap: 8px;
-            max-height: 320px;
+            max-height: 340px;
             overflow-y: auto;
             padding-right: 4px;
         }
@@ -225,33 +225,50 @@
         .images-gallery-grid::-webkit-scrollbar-track { background: #111; }
         .images-gallery-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
 
-        .gallery-thumb {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid transparent;
+        .gallery-card {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
             cursor: pointer;
+            border: 2px solid #2d2d35;
+            border-radius: 10px;
+            padding: 5px;
+            background: #1e1e24;
             transition: all 0.2s ease;
-            background: #1e1e24;
         }
-        .gallery-thumb:hover { border-color: var(--accent-color); transform: scale(1.05); }
-        .gallery-thumb.active { border-color: var(--accent-color); box-shadow: 0 0 10px rgba(0,212,255,0.4); }
+        .gallery-card:hover { border-color: var(--accent-color); background: #23232e; }
+        .gallery-card.active { border-color: var(--accent-color); box-shadow: 0 0 10px rgba(0,212,255,0.35); background: #1a2530; }
 
-        .gallery-thumb-placeholder {
+        .gallery-card .gallery-thumb {
             width: 100%;
-            aspect-ratio: 1 / 1;
-            border-radius: 8px;
-            background: #1e1e24;
+            aspect-ratio: 16 / 10;
+            object-fit: cover;
+            border-radius: 6px;
+            display: block;
+            background: #111;
+        }
+        .gallery-card .gallery-thumb-placeholder {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            border-radius: 6px;
+            background: #111;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            border: 2px solid #2d2d35;
-            transition: all 0.2s ease;
+            font-size: 1.4rem;
         }
-        .gallery-thumb-placeholder:hover { border-color: var(--accent-color); }
+        .gallery-card-title {
+            font-size: 0.72rem;
+            color: #aaa;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 2px 2px;
+            line-height: 1.3;
+            transition: color 0.2s;
+        }
+        .gallery-card.active .gallery-card-title { color: var(--accent-color); }
 
         /* ===== قائمة PDF ===== */
         .pdf-list-item {
@@ -1440,13 +1457,8 @@
 
                     container.innerHTML = `
                         <div style="position:relative; width:100%; height:100%; background:#1a1a1e; display:flex; flex-direction:column; border-radius:12px; overflow:hidden;">
-                            <div style="background:#18181c; border-bottom:1px solid #2d2d35; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
+                            <div style="background:#18181c; border-bottom:1px solid #2d2d35; padding:10px 16px; display:flex; align-items:center; flex-shrink:0;">
                                 <span style="color:#00d4ff; font-weight:700; font-size:0.95rem;">📄 عارض PDF</span>
-                                <a href="${url}" target="_blank" download
-                                   style="background:#00d4ff; color:#000; font-weight:bold; font-size:0.85rem; padding:6px 14px; border-radius:8px; text-decoration:none; transition:opacity 0.2s;"
-                                   onmouseenter="this.style.opacity='0.8'" onmouseleave="this.style.opacity='1'">
-                                   ⬇️ تحميل PDF
-                                </a>
                             </div>
                             <iframe 
                                 src="${pdfEmbedUrl}"
@@ -1470,14 +1482,13 @@
                     }
 
                     container.innerHTML = `
-                        <div style="position:relative; width:100%; height:100%; background:#0d0d0f; display:flex; flex-direction:column; border-radius:12px; overflow:hidden;">
+                        <div data-imgwrapper="1" style="position:relative; width:100%; height:100%; background:#0d0d0f; display:flex; flex-direction:column; border-radius:12px; overflow:hidden;">
                             <div style="background:#18181c; border-bottom:1px solid #2d2d35; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
                                 <span style="color:#00d4ff; font-weight:700; font-size:0.95rem;">🖼️ عارض الصورة</span>
                                 <div style="display:flex; gap:10px; align-items:center;">
-                                    <button onclick="const img=this.closest('[data-imgviewer]').querySelector('img');let s=parseFloat(img.dataset.scale||1);s=Math.min(s+0.25,4);img.dataset.scale=s;img.style.transform='scale('+s+')';" style="background:#2a2a35;color:#fff;border:1px solid #3d3d4a;border-radius:7px;padding:5px 12px;cursor:pointer;font-size:1rem;">＋</button>
-                                    <button onclick="const img=this.closest('[data-imgviewer]').querySelector('img');let s=parseFloat(img.dataset.scale||1);s=Math.max(s-0.25,0.25);img.dataset.scale=s;img.style.transform='scale('+s+')';" style="background:#2a2a35;color:#fff;border:1px solid #3d3d4a;border-radius:7px;padding:5px 12px;cursor:pointer;font-size:1rem;">－</button>
-                                    <button onclick="const img=this.closest('[data-imgviewer]').querySelector('img');img.dataset.scale=1;img.style.transform='scale(1)';" style="background:#2a2a35;color:#aaa;border:1px solid #3d3d4a;border-radius:7px;padding:5px 12px;cursor:pointer;font-size:0.8rem;">إعادة ضبط</button>
-                                    <a href="${imgSrc}" target="_blank" style="background:#00d4ff;color:#000;font-weight:bold;font-size:0.85rem;padding:6px 14px;border-radius:8px;text-decoration:none;">⬇️ تحميل</a>
+                                    <button onclick="const img=this.closest('[data-imgwrapper]').querySelector('[data-imgviewer] img');let s=parseFloat(img.dataset.scale||1);s=Math.min(s+0.25,4);img.dataset.scale=s;img.style.transform='scale('+s+')';" style="background:#2a2a35;color:#fff;border:1px solid #3d3d4a;border-radius:7px;padding:5px 12px;cursor:pointer;font-size:1rem;">＋</button>
+                                    <button onclick="const img=this.closest('[data-imgwrapper]').querySelector('[data-imgviewer] img');let s=parseFloat(img.dataset.scale||1);s=Math.max(s-0.25,0.25);img.dataset.scale=s;img.style.transform='scale('+s+')';" style="background:#2a2a35;color:#fff;border:1px solid #3d3d4a;border-radius:7px;padding:5px 12px;cursor:pointer;font-size:1rem;">－</button>
+                                    <button onclick="const img=this.closest('[data-imgwrapper]').querySelector('[data-imgviewer] img');img.dataset.scale=1;img.style.transform='scale(1)';" style="background:#2a2a35;color:#aaa;border:1px solid #3d3d4a;border-radius:7px;padding:5px 12px;cursor:pointer;font-size:0.8rem;">إعادة ضبط</button>
                                 </div>
                             </div>
                             <div data-imgviewer="1" style="flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:16px;">
@@ -1781,10 +1792,9 @@
             imagesSection.style.display = 'block';
             imagesContainer.innerHTML = '';
 
-            const openImageInViewer = (url, title, thumbEl) => {
-                // إزالة النشاط من كل الصور
-                imagesContainer.querySelectorAll('.gallery-thumb, .gallery-thumb-placeholder').forEach(t => t.classList.remove('active'));
-                if (thumbEl) thumbEl.classList.add('active');
+            const openImageInViewer = (url, title, cardEl) => {
+                imagesContainer.querySelectorAll('.gallery-card').forEach(c => c.classList.remove('active'));
+                if (cardEl) cardEl.classList.add('active');
                 UnifiedPlayer.init(videoContainer, url);
             };
 
@@ -1794,28 +1804,38 @@
             UnifiedPlayer.init(videoContainer, firstUrl);
 
             selectedItem.images.forEach((imgItem, idx) => {
-                const imgUrl = typeof imgItem === 'string' ? imgItem : imgItem.url;
+                const imgUrl   = typeof imgItem === 'string' ? imgItem : imgItem.url;
                 const imgTitle = typeof imgItem === 'string' ? `صورة ${idx + 1}` : (imgItem.title || `صورة ${idx + 1}`);
 
+                // الكارد الغلاف
+                const card = document.createElement('div');
+                card.className = 'gallery-card' + (idx === 0 ? ' active' : '');
+                card.title = imgTitle;
+
+                // الصورة المصغرة
                 const thumb = document.createElement('img');
-                thumb.className = 'gallery-thumb' + (idx === 0 ? ' active' : '');
+                thumb.className = 'gallery-thumb';
                 thumb.src = imgUrl;
                 thumb.alt = imgTitle;
-                thumb.title = imgTitle;
                 thumb.loading = 'lazy';
 
-                // عند فشل تحميل الصورة المصغرة، نعرض placeholder
+                // بديل عند فشل التحميل
                 thumb.onerror = function() {
-                    const placeholder = document.createElement('div');
-                    placeholder.className = 'gallery-thumb-placeholder' + (idx === 0 ? ' active' : '');
-                    placeholder.title = imgTitle;
-                    placeholder.innerHTML = `<span>🖼️</span>`;
-                    placeholder.addEventListener('click', () => openImageInViewer(imgUrl, imgTitle, placeholder));
-                    thumb.parentNode.replaceChild(placeholder, thumb);
+                    const ph = document.createElement('div');
+                    ph.className = 'gallery-thumb-placeholder';
+                    ph.innerHTML = `<span>🖼️</span>`;
+                    card.replaceChild(ph, thumb);
                 };
 
-                thumb.addEventListener('click', () => openImageInViewer(imgUrl, imgTitle, thumb));
-                imagesContainer.appendChild(thumb);
+                // العنوان
+                const titleEl = document.createElement('span');
+                titleEl.className = 'gallery-card-title';
+                titleEl.textContent = imgTitle;
+
+                card.appendChild(thumb);
+                card.appendChild(titleEl);
+                card.addEventListener('click', () => openImageInViewer(imgUrl, imgTitle, card));
+                imagesContainer.appendChild(card);
             });
         }
 

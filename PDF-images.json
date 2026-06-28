@@ -11,8 +11,8 @@
     "images": [
       {
         "id": "img-vsa-w-1",
-        "url": "",
-        "title": "الجهلة اللفية لبطاقتي"
+        "url": "https://drive.google.com/file/d/1P091WSBMzAOxoQZEfFSzmQnqOmeuz19m/view?usp=sharing",
+        "title": "صينية كيمر من2022"
       },
       {
         "id": "img-vsa-w-2",
@@ -27,6 +27,12 @@
     ],
 
     "pdfs": [
+      {
+  "videoUrl": "https://example.com/chart.png",
+  "links": [
+    { "url": "https://drive.google.com/file/d/1ECixmzgRdoFAx2VlIph_5lcVTItJYdEL/view?usp=sharing", "text": "مخطط التحليل" }
+  ]
+},
       {
         "id": "pdf-vsa-w-1",
         "url": "https://drive.google.com/file/d/1ECixmzgRdoFAx2VlIph_5lcVTItJYdEL/view?usp=sharing",
