@@ -1,0 +1,42 @@
+[
+{ "__comment__": "=== كورس vsa وائل احمد ===",
+    
+    "id": "p-i",
+    "title": "PDF and imgaes",
+    "category": "rw",
+    "content": "صور وملفات PDF",
+    "image": "",
+    "recommendations": ["img-vsa-w-1"],
+
+    "images": [
+      {
+        "id": "img-vsa-w-1",
+        "url": "",
+        "title": "الجهلة اللفية لبطاقتي"
+      },
+      {
+        "id": "img-vsa-w-2",
+        "url": "https://via.placeholder.com/800x450/1a1a2e/00ff88?text=مخطط+خلفية+القوة",
+        "title": "مخطط خلفية القوة والضعف"
+      },
+      {
+        "id": "img-vsa-w-3",
+        "url": "https://via.placeholder.com/800x450/1a1a2e/ffb300?text=مخطط+الاختبار",
+        "title": "مخطط مراحل الاختبار والتأكيد"
+      }
+    ],
+
+    "pdfs": [
+      {
+        "id": "pdf-vsa-w-1",
+        "url": "https://drive.google.com/file/d/1ECixmzgRdoFAx2VlIph_5lcVTItJYdEL/view?usp=sharing",
+        "title": "مكتبة موجات اليوت"
+      },
+      {
+        "id": "pdf-vsa-w-2",
+        "url": "https://example.com/wyckoff-summary.pdf",
+        "title": "ملخص مراحل وايكوف"
+      }
+    ]
+}
+]

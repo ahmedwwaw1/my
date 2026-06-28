@@ -4,11 +4,12 @@
     "id": "technical-1",
     "title": "كورس التحليل الموجي ",
     "category": "technical-analysis",
-    "content": "كورس التحليل الزمني...",
-    "image": "",
+    "content": "كورس التحليل الموجي...",
+    "image": "",    
     "recommendations": [],
-    "videos": [
-         {
+    
+    "videos":[
+      {
         "id": "Elliot-Yasser-1",
         "title": "البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الأولي)",
         "url": "https://www.youtube.com/watch?v=Z0PNiNdWLPE&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0",

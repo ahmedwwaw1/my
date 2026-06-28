@@ -212,6 +212,76 @@
             margin-top: 10px;
         }
 
+        /* ===== معرض الصور ===== */
+        .images-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .images-gallery-grid::-webkit-scrollbar { width: 6px; }
+        .images-gallery-grid::-webkit-scrollbar-track { background: #111; }
+        .images-gallery-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+        .gallery-thumb {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #1e1e24;
+        }
+        .gallery-thumb:hover { border-color: var(--accent-color); transform: scale(1.05); }
+        .gallery-thumb.active { border-color: var(--accent-color); box-shadow: 0 0 10px rgba(0,212,255,0.4); }
+
+        .gallery-thumb-placeholder {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 8px;
+            background: #1e1e24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border: 2px solid #2d2d35;
+            transition: all 0.2s ease;
+        }
+        .gallery-thumb-placeholder:hover { border-color: var(--accent-color); }
+
+        /* ===== قائمة PDF ===== */
+        .pdf-list-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 10px 14px;
+            background: #1e1e24;
+            color: var(--text-main);
+            border: 1px solid #2d2d35;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.25s ease;
+            text-align: right;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+        .pdf-list-item:hover, .pdf-list-item.active {
+            background: rgba(229,57,53,0.1);
+            border-color: #e53935;
+            color: #fff;
+        }
+        .pdf-list-item.active { border-width: 2px; }
+        .pdf-list-item .pdf-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
         .recommendations-vertical-list {
             display: flex;
             flex-direction: column;
@@ -703,7 +773,7 @@
     // اضافة ملف json
     // دالة جلب ومعالجة ملفات الـ JSON المحدثة لمنع تفكيك الكروت والحفاظ عليها موحدة
     async function loadWebsiteData() {
-        const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json','Time-analysis.json','technical-analysis.json']; 
+        const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json','Time-analysis.json','technical-analysis.json','PDF-images.json']; 
         
         let combinedServerData = [];
         let anyFileLoaded = false;
@@ -774,7 +844,9 @@
                         chapters: serverItem.chapters || [],
                         recommendations: serverItem.recommendations || [],
                         videos: serverItem.videos || null,
-                        thematic_index: serverItem.thematic_index || null   // <-- إضافة دعم الفهارس الموضوعية
+                        images: serverItem.images || null,   // ← معرض الصور المستقل
+                        pdfs: serverItem.pdfs || null,       // ← قائمة PDF المستقلة
+                        thematic_index: serverItem.thematic_index || null
                     });
                 });
                 allData = flattenedData;
@@ -1127,6 +1199,17 @@
                 return 'facebook';
             }
             if (url.includes('drive.google.com')) {
+                const lowerDrive = url.toLowerCase();
+                if (lowerDrive.includes('.pdf') || lowerDrive.includes('pdf')) {
+                    return 'pdf';
+                }
+                if (
+                    lowerDrive.includes('.jpg') || lowerDrive.includes('.jpeg') ||
+                    lowerDrive.includes('.png') || lowerDrive.includes('.webp') ||
+                    lowerDrive.includes('.gif') || lowerDrive.includes('.svg')
+                ) {
+                    return 'image';
+                }
                 return 'google-drive';
             }
             if (url.includes('tiktok.com')) {
@@ -1144,6 +1227,35 @@
             }
             
             const lowerUrl = url.toLowerCase();
+
+            // كشف ملفات PDF
+            if (
+                lowerUrl.endsWith('.pdf') ||
+                lowerUrl.includes('.pdf?') ||
+                lowerUrl.includes('type=pdf') ||
+                (lowerUrl.includes('drive.google.com') && lowerUrl.includes('.pdf'))
+            ) {
+                return 'pdf';
+            }
+
+            // كشف ملفات الصور
+            if (
+                lowerUrl.endsWith('.jpg') ||
+                lowerUrl.endsWith('.jpeg') ||
+                lowerUrl.endsWith('.png') ||
+                lowerUrl.endsWith('.gif') ||
+                lowerUrl.endsWith('.webp') ||
+                lowerUrl.endsWith('.svg') ||
+                lowerUrl.endsWith('.bmp') ||
+                lowerUrl.includes('.jpg?') ||
+                lowerUrl.includes('.jpeg?') ||
+                lowerUrl.includes('.png?') ||
+                lowerUrl.includes('.webp?') ||
+                lowerUrl.includes('type=image')
+            ) {
+                return 'image';
+            }
+
             if (
                 lowerUrl.endsWith('.mp4') || 
                 lowerUrl.endsWith('.webm') || 
@@ -1307,6 +1419,79 @@
                         </div>
                     `;
                 } 
+                else if (type === 'pdf') {
+                    // تحديد رابط العرض المناسب
+                    let pdfEmbedUrl = url;
+
+                    // Google Drive PDF: تحويل رابط المشاركة إلى رابط معاينة
+                    if (url.includes('drive.google.com')) {
+                        const driveId = getGoogleDriveId(url);
+                        if (driveId) {
+                            pdfEmbedUrl = `https://drive.google.com/file/d/${driveId}/preview`;
+                        }
+                    }
+                    // Dropbox: تحويل dl=0 إلى raw=1
+                    else if (url.includes('dropbox.com')) {
+                        pdfEmbedUrl = url.replace('dl=0', 'raw=1').replace('dl=1', 'raw=1');
+                        if (!pdfEmbedUrl.includes('raw=1')) {
+                            pdfEmbedUrl += (pdfEmbedUrl.includes('?') ? '&' : '?') + 'raw=1';
+                        }
+                    }
+
+                    container.innerHTML = `
+                        <div style="position:relative; width:100%; height:100%; background:#1a1a1e; display:flex; flex-direction:column; border-radius:12px; overflow:hidden;">
+                            <div style="background:#18181c; border-bottom:1px solid #2d2d35; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
+                                <span style="color:#00d4ff; font-weight:700; font-size:0.95rem;">📄 عارض PDF</span>
+                                <a href="${url}" target="_blank" download
+                                   style="background:#00d4ff; color:#000; font-weight:bold; font-size:0.85rem; padding:6px 14px; border-radius:8px; text-decoration:none; transition:opacity 0.2s;"
+                                   onmouseenter="this.style.opacity='0.8'" onmouseleave="this.style.opacity='1'">
+                                   ⬇️ تحميل PDF
+                                </a>
+                            </div>
+                            <iframe 
+                                src="${pdfEmbedUrl}"
+                                style="flex:1; width:100%; border:none; background:#fff;"
+                                allowfullscreen
+                                loading="lazy"
+                                onerror="this.parentElement.innerHTML='<div style=\\'display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;padding:24px;text-align:center;\\'><span style=\\'font-size:3rem;\\'>📄</span><p style=\\'color:#aaa;\\'>تعذّر عرض الملف مباشرةً. قد يكون بسبب قيود CORS أو إعدادات الخادم.</p><a href=\\'${url}\\' target=\\'_blank\\' style=\\'background:#00d4ff;color:#000;padding:10px 24px;border-radius:8px;font-weight:bold;text-decoration:none;\\'>🔗 فتح الملف في تبويب جديد</a></div>'">
+                            </iframe>
+                        </div>
+                    `;
+                    container.style.display = 'block';
+                }
+                else if (type === 'image') {
+                    // تحويل رابط Google Drive لصورة مباشرة
+                    let imgSrc = url;
+                    if (url.includes('drive.google.com')) {
+                        const driveId = getGoogleDriveId(url);
+                        if (driveId) {
+                            imgSrc = `https://drive.google.com/uc?export=view&id=${driveId}`;
+                        }
+                    }
+
+                    container.innerHTML = `
+                        <div style="position:relative; width:100%; height:100%; background:#0d0d0f; display:flex; flex-direction:column; border-radius:12px; overflow:hidden;">
+                            <div style="background:#18181c; border-bottom:1px solid #2d2d35; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
+                                <span style="color:#00d4ff; font-weight:700; font-size:0.95rem;">🖼️ عارض الصورة</span>
+                                <div style="display:flex; gap:10px; align-items:center;">
+                                    <button onclick="const img=this.closest('[data-imgviewer]').querySelector('img');let s=parseFloat(img.dataset.scale||1);s=Math.min(s+0.25,4);img.dataset.scale=s;img.style.transform='scale('+s+')';" style="background:#2a2a35;color:#fff;border:1px solid #3d3d4a;border-radius:7px;padding:5px 12px;cursor:pointer;font-size:1rem;">＋</button>
+                                    <button onclick="const img=this.closest('[data-imgviewer]').querySelector('img');let s=parseFloat(img.dataset.scale||1);s=Math.max(s-0.25,0.25);img.dataset.scale=s;img.style.transform='scale('+s+')';" style="background:#2a2a35;color:#fff;border:1px solid #3d3d4a;border-radius:7px;padding:5px 12px;cursor:pointer;font-size:1rem;">－</button>
+                                    <button onclick="const img=this.closest('[data-imgviewer]').querySelector('img');img.dataset.scale=1;img.style.transform='scale(1)';" style="background:#2a2a35;color:#aaa;border:1px solid #3d3d4a;border-radius:7px;padding:5px 12px;cursor:pointer;font-size:0.8rem;">إعادة ضبط</button>
+                                    <a href="${imgSrc}" target="_blank" style="background:#00d4ff;color:#000;font-weight:bold;font-size:0.85rem;padding:6px 14px;border-radius:8px;text-decoration:none;">⬇️ تحميل</a>
+                                </div>
+                            </div>
+                            <div data-imgviewer="1" style="flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:16px;">
+                                <img src="${imgSrc}" 
+                                     data-scale="1"
+                                     alt="صورة"
+                                     style="max-width:100%;max-height:100%;object-fit:contain;transition:transform 0.2s ease;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.6);transform-origin:center center;"
+                                     onerror="this.parentElement.innerHTML='<div style=\\'display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;text-align:center;\\'><span style=\\'font-size:2.5rem;\\'>🖼️</span><p style=\\'color:#aaa;margin:0;\\'>تعذّر تحميل الصورة</p><a href=\\'${imgSrc}\\' target=\\'_blank\\' style=\\'background:#00d4ff;color:#000;padding:8px 20px;border-radius:8px;font-weight:bold;text-decoration:none;\\'>🔗 فتح في تبويب جديد</a></div>'"
+                                />
+                            </div>
+                        </div>
+                    `;
+                    container.style.display = 'block';
+                }
                 else if (type === 'html5') {
                     let directUrl = url;
                     
@@ -1445,6 +1630,10 @@
         const playlistContainer = document.getElementById('playlistContainer');
         const thematicSection = document.getElementById('thematicSection');
         const thematicContainer = document.getElementById('thematicContainer');
+        const imagesSection = document.getElementById('imagesSection');
+        const imagesContainer = document.getElementById('imagesContainer');
+        const pdfsSection = document.getElementById('pdfsSection');
+        const pdfsContainer = document.getElementById('pdfsContainer');
 
         if (videoContainer) { videoContainer.innerHTML = ''; videoContainer.style.display = 'none'; }
         if (linksContainer) { linksContainer.innerHTML = ''; }
@@ -1454,6 +1643,10 @@
         if (playlistContainer) { playlistContainer.innerHTML = ''; }
         if (thematicSection) { thematicSection.style.display = 'none'; }
         if (thematicContainer) { thematicContainer.innerHTML = ''; }
+        if (imagesSection) { imagesSection.style.display = 'none'; }
+        if (imagesContainer) { imagesContainer.innerHTML = ''; }
+        if (pdfsSection) { pdfsSection.style.display = 'none'; }
+        if (pdfsContainer) { pdfsContainer.innerHTML = ''; }
 
         function createDynamicButton(url, text) {
             const btn = document.createElement('a');
@@ -1470,6 +1663,14 @@
                 btn.style.backgroundColor = '#1877f2'; btn.style.color = '#ffffff'; btn.innerText = '🔵 ' + text;
             } else if (lowerUrl.includes('binance.com')) {
                 btn.style.backgroundColor = '#fcd535'; btn.style.color = '#111111'; btn.innerText = '🔸 ' + text;
+            } else if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('.pdf?') || lowerUrl.includes('type=pdf')) {
+                btn.style.backgroundColor = '#e53935'; btn.style.color = '#ffffff'; btn.innerText = '📄 ' + text;
+            } else if (
+                lowerUrl.endsWith('.jpg') || lowerUrl.endsWith('.jpeg') || lowerUrl.endsWith('.png') ||
+                lowerUrl.endsWith('.webp') || lowerUrl.endsWith('.gif') || lowerUrl.endsWith('.svg') ||
+                lowerUrl.includes('type=image')
+            ) {
+                btn.style.backgroundColor = '#7b1fa2'; btn.style.color = '#ffffff'; btn.innerText = '🖼️ ' + text;
             } else {
                 btn.style.backgroundColor = '#222222'; btn.style.color = '#00ff88'; btn.style.border = '1px solid #333'; btn.innerText = '🔗 ' + text;
             }
@@ -1575,6 +1776,77 @@
             });
         }
 
+        // ========== معرض الصور المستقل (images: []) ==========
+        if (selectedItem.images && selectedItem.images.length > 0 && imagesSection && imagesContainer) {
+            imagesSection.style.display = 'block';
+            imagesContainer.innerHTML = '';
+
+            const openImageInViewer = (url, title, thumbEl) => {
+                // إزالة النشاط من كل الصور
+                imagesContainer.querySelectorAll('.gallery-thumb, .gallery-thumb-placeholder').forEach(t => t.classList.remove('active'));
+                if (thumbEl) thumbEl.classList.add('active');
+                UnifiedPlayer.init(videoContainer, url);
+            };
+
+            // فتح الصورة الأولى تلقائياً
+            const firstImg = selectedItem.images[0];
+            const firstUrl = typeof firstImg === 'string' ? firstImg : firstImg.url;
+            UnifiedPlayer.init(videoContainer, firstUrl);
+
+            selectedItem.images.forEach((imgItem, idx) => {
+                const imgUrl = typeof imgItem === 'string' ? imgItem : imgItem.url;
+                const imgTitle = typeof imgItem === 'string' ? `صورة ${idx + 1}` : (imgItem.title || `صورة ${idx + 1}`);
+
+                const thumb = document.createElement('img');
+                thumb.className = 'gallery-thumb' + (idx === 0 ? ' active' : '');
+                thumb.src = imgUrl;
+                thumb.alt = imgTitle;
+                thumb.title = imgTitle;
+                thumb.loading = 'lazy';
+
+                // عند فشل تحميل الصورة المصغرة، نعرض placeholder
+                thumb.onerror = function() {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'gallery-thumb-placeholder' + (idx === 0 ? ' active' : '');
+                    placeholder.title = imgTitle;
+                    placeholder.innerHTML = `<span>🖼️</span>`;
+                    placeholder.addEventListener('click', () => openImageInViewer(imgUrl, imgTitle, placeholder));
+                    thumb.parentNode.replaceChild(placeholder, thumb);
+                };
+
+                thumb.addEventListener('click', () => openImageInViewer(imgUrl, imgTitle, thumb));
+                imagesContainer.appendChild(thumb);
+            });
+        }
+
+        // ========== قائمة PDF المستقلة (pdfs: []) ==========
+        if (selectedItem.pdfs && selectedItem.pdfs.length > 0 && pdfsSection && pdfsContainer) {
+            pdfsSection.style.display = 'block';
+            pdfsContainer.innerHTML = '';
+
+            const openPdfInViewer = (url, btn) => {
+                pdfsContainer.querySelectorAll('.pdf-list-item').forEach(b => b.classList.remove('active'));
+                if (btn) btn.classList.add('active');
+                UnifiedPlayer.init(videoContainer, url);
+            };
+
+            // فتح الـ PDF الأول تلقائياً
+            const firstPdf = selectedItem.pdfs[0];
+            const firstPdfUrl = typeof firstPdf === 'string' ? firstPdf : firstPdf.url;
+            UnifiedPlayer.init(videoContainer, firstPdfUrl);
+
+            selectedItem.pdfs.forEach((pdfItem, idx) => {
+                const pdfUrl = typeof pdfItem === 'string' ? pdfItem : pdfItem.url;
+                const pdfTitle = typeof pdfItem === 'string' ? `ملف ${idx + 1}` : (pdfItem.title || `ملف ${idx + 1}`);
+
+                const btn = document.createElement('button');
+                btn.className = 'pdf-list-item' + (idx === 0 ? ' active' : '');
+                btn.innerHTML = `<span class="pdf-icon">📄</span><span>${pdfTitle}</span>`;
+                btn.addEventListener('click', () => openPdfInViewer(pdfUrl, btn));
+                pdfsContainer.appendChild(btn);
+            });
+        }
+
         const recContainer = document.getElementById('recommendationsContainer');
         const recList = document.getElementById('recommendationsList');
         
@@ -1663,6 +1935,22 @@
                         📚 قائمة دروس الدورة
                     </h3>
                     <div id="playlistContainer" class="chapters-flex-list"></div>
+                </div>
+
+                <!-- معرض الصور المستقل -->
+                <div id="imagesSection" class="sidebar-card" style="display: none; border-color: #7b1fa2;">
+                    <h3 style="color: #ce93d8; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
+                        🖼️ معرض الصور
+                    </h3>
+                    <div id="imagesContainer" class="images-gallery-grid"></div>
+                </div>
+
+                <!-- قائمة PDF المستقلة -->
+                <div id="pdfsSection" class="sidebar-card" style="display: none; border-color: #e53935;">
+                    <h3 style="color: #ef9a9a; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
+                        📄 ملفات PDF
+                    </h3>
+                    <div id="pdfsContainer" class="chapters-flex-list"></div>
                 </div>
 
                 <!-- القسم الجديد للفهارس الموضوعية -->

@@ -7,6 +7,38 @@
     "content": "الكورس مكون من6 دروس...",
     "image": "https://via.placeholder.com/360",
     "recommendations": ["vsa_lesson2", "vsa_lesson3"],
+
+    "images": [
+      {
+        "id": "img-vsa-w-1",
+        "url": "https://via.placeholder.com/800x450/1a1a2e/00d4ff?text=مخطط+قوانين+السوق",
+        "title": "مخطط قوانين السوق الثلاثة"
+      },
+      {
+        "id": "img-vsa-w-2",
+        "url": "https://via.placeholder.com/800x450/1a1a2e/00ff88?text=مخطط+خلفية+القوة",
+        "title": "مخطط خلفية القوة والضعف"
+      },
+      {
+        "id": "img-vsa-w-3",
+        "url": "https://via.placeholder.com/800x450/1a1a2e/ffb300?text=مخطط+الاختبار",
+        "title": "مخطط مراحل الاختبار والتأكيد"
+      }
+    ],
+
+    "pdfs": [
+      {
+        "id": "pdf-vsa-w-1",
+        "url": "",
+        "title": "دليل VSA الكامل - وائل أحمد"
+      },
+      {
+        "id": "pdf-vsa-w-2",
+        "url": "https://example.com/wyckoff-summary.pdf",
+        "title": "ملخص مراحل وايكوف"
+      }
+    ],
+
     "videos": [
       {
         "id": "vsa-w-1",
