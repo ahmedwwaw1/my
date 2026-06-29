@@ -790,7 +790,7 @@
     // اضافة ملف json
     // دالة جلب ومعالجة ملفات الـ JSON المحدثة لمنع تفكيك الكروت والحفاظ عليها موحدة
     async function loadWebsiteData() {
-        const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json','Time-analysis.json','technical-analysis.json','PDF-images.json']; 
+        const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json','Time-analysis.json','technical-analysis.json', 'PDF-images.json']; 
         
         let combinedServerData = [];
         let anyFileLoaded = false;
@@ -1013,21 +1013,49 @@
                     createDropdownItem(`📺 فيديو: ${item.title}`, item.id, item.videoUrl);
                 }
 
-                // دعم البحث الذكي داخل الفيديوهات الفرعية للكورس الموحد
+                // البحث داخل الفيديوهات الفرعية
                 if (item.videos && Array.isArray(item.videos)) {
                     item.videos.forEach((subVid, subIdx) => {
                         if (subVid.title && subVid.title.toLowerCase().includes(term)) {
                             hasResults = true;
-                            createDropdownItem(`🎥 درس: ${subVid.title} (داخل ${item.title})`, item.id, null, subIdx);
+                            createDropdownItem(`🎥 درس: ${subVid.title} (داخل ${item.title})`, item.id, null, subIdx, null, null);
                         }
                     });
                 }
 
+                // البحث داخل الصور
+                if (item.images && Array.isArray(item.images)) {
+                    item.images.forEach((imgItem, imgIdx) => {
+                        const imgTitle = typeof imgItem === 'string' ? `صورة ${imgIdx + 1}` : (imgItem.title || `صورة ${imgIdx + 1}`);
+                        const imgUrl   = typeof imgItem === 'string' ? imgItem : imgItem.url;
+                        const matchTitle = imgTitle.toLowerCase().includes(term);
+                        const matchUrl   = imgUrl && imgUrl.toLowerCase().includes(term);
+                        if (matchTitle || matchUrl) {
+                            hasResults = true;
+                            createDropdownItem(`🖼️ صورة: ${imgTitle} (في ${item.title})`, item.id, null, null, imgIdx, null);
+                        }
+                    });
+                }
+
+                // البحث داخل ملفات PDF
+                if (item.pdfs && Array.isArray(item.pdfs)) {
+                    item.pdfs.forEach((pdfItem, pdfIdx) => {
+                        const pdfTitle = typeof pdfItem === 'string' ? `ملف ${pdfIdx + 1}` : (pdfItem.title || `ملف ${pdfIdx + 1}`);
+                        const pdfUrl   = typeof pdfItem === 'string' ? pdfItem : pdfItem.url;
+                        const matchTitle = pdfTitle.toLowerCase().includes(term);
+                        const matchUrl   = pdfUrl && pdfUrl.toLowerCase().includes(term);
+                        if (matchTitle || matchUrl) {
+                            hasResults = true;
+                            createDropdownItem(`📄 PDF: ${pdfTitle} (في ${item.title})`, item.id, null, null, null, pdfIdx);
+                        }
+                    });
+                }
+
+                // البحث داخل الروابط
                 if (item.links && Array.isArray(item.links)) {
                     item.links.forEach(link => {
                         const matchText = link.text && link.text.toLowerCase().includes(term);
-                        const matchUrl = link.url && link.url.toLowerCase().includes(term);
-                        
+                        const matchUrl  = link.url  && link.url.toLowerCase().includes(term);
                         if (matchText || matchUrl) {
                             hasResults = true;
                             createDropdownItem(`🔗 رابط: ${link.text || 'مشاهدة'}`, item.id, link.url);
@@ -1035,25 +1063,23 @@
                     });
                 }
 
-                const matchTitle = item.title && item.title.toLowerCase().includes(term);
+                // البحث في عنوان البطاقة ومحتواها
+                const matchTitle   = item.title   && item.title.toLowerCase().includes(term);
                 const matchContent = item.content && item.content.toLowerCase().includes(term);
                 if (matchTitle || matchContent) {
                     hasResults = true;
-                    createDropdownItem(`📄 بطاقة: ${item.title}`, item.id);
+                    createDropdownItem(`🗂️ بطاقة: ${item.title}`, item.id);
                 }
             });
 
-            function createDropdownItem(displayText, itemId, directUrl = null, videoIdx = null) {
+            function createDropdownItem(displayText, itemId, directUrl = null, videoIdx = null, imageIdx = null, pdfIdx = null) {
                 const div = document.createElement('div');
                 div.className = 'search-item';
                 div.innerText = displayText;
-                
-                currentDropdownItems.push({ itemId, directUrl, videoIdx });
-
+                currentDropdownItems.push({ itemId, directUrl, videoIdx, imageIdx, pdfIdx });
                 div.addEventListener('click', () => {
-                    executeSearchAction(itemId, directUrl, videoIdx);
+                    executeSearchAction(itemId, directUrl, videoIdx, imageIdx, pdfIdx);
                 });
-                
                 dropdown.appendChild(div);
             }
 
@@ -1074,26 +1100,41 @@
             if (e.key === 'Enter') {
                 if (currentDropdownItems.length > 0) {
                     e.preventDefault(); 
-                    const firstResult = currentDropdownItems[0];
-                    executeSearchAction(firstResult.itemId, firstResult.directUrl, firstResult.videoIdx);
+                    const first = currentDropdownItems[0];
+                    executeSearchAction(first.itemId, first.directUrl, first.videoIdx, first.imageIdx, first.pdfIdx);
                 }
             }
         });
 
-        function executeSearchAction(itemId, directUrl, videoIdx = null) {
+        function executeSearchAction(itemId, directUrl, videoIdx = null, imageIdx = null, pdfIdx = null) {
             if (directUrl) {
-                window.open(directUrl, '_blank'); 
+                window.open(directUrl, '_blank');
             } else {
-                openDetails(itemId); 
+                openDetails(itemId);
+
                 if (videoIdx !== null) {
+                    setTimeout(() => { playPlaylistItem(itemId, videoIdx); }, 450);
+                }
+
+                // فتح صورة محددة مباشرةً من نتيجة البحث
+                if (imageIdx !== null) {
                     setTimeout(() => {
-                        playPlaylistItem(itemId, videoIdx);
-                    }, 450);
+                        const cards = document.querySelectorAll('#imagesContainer .gallery-card');
+                        if (cards[imageIdx]) cards[imageIdx].click();
+                    }, 500);
+                }
+
+                // فتح ملف PDF محدد مباشرةً من نتيجة البحث
+                if (pdfIdx !== null) {
+                    setTimeout(() => {
+                        const btns = document.querySelectorAll('#pdfsContainer .pdf-list-item');
+                        if (btns[pdfIdx]) btns[pdfIdx].click();
+                    }, 500);
                 }
             }
             dropdown.style.display = 'none';
-            searchInput.value = ''; 
-            currentDropdownItems = []; 
+            searchInput.value = '';
+            currentDropdownItems = [];
         }
 
         document.addEventListener('click', (event) => {
