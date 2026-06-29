@@ -1008,50 +1008,94 @@
             let hasResults = false;
 
             allData.forEach(item => {
+
+                // ── فيديو مباشر ──
                 if (item.videoUrl && item.videoUrl.toLowerCase().includes(term)) {
                     hasResults = true;
                     createDropdownItem(`📺 فيديو: ${item.title}`, item.id, item.videoUrl);
                 }
 
-                // البحث داخل الفيديوهات الفرعية
+                // ── فيديوهات الكورس + فصولها الزمنية ──
                 if (item.videos && Array.isArray(item.videos)) {
                     item.videos.forEach((subVid, subIdx) => {
+
+                        // عنوان الدرس
                         if (subVid.title && subVid.title.toLowerCase().includes(term)) {
                             hasResults = true;
-                            createDropdownItem(`🎥 درس: ${subVid.title} (داخل ${item.title})`, item.id, null, subIdx, null, null);
+                            createDropdownItem(
+                                `🎥 درس: ${subVid.title} (${item.title})`,
+                                item.id, null, subIdx, null, null, null, null
+                            );
+                        }
+
+                        // فصول هذا الدرس
+                        if (subVid.chapters && Array.isArray(subVid.chapters)) {
+                            subVid.chapters.forEach(ch => {
+                                if (ch.text && ch.text.toLowerCase().includes(term)) {
+                                    hasResults = true;
+                                    createDropdownItem(
+                                        `⏱️ ${ch.time} — ${ch.text} (${subVid.title || item.title})`,
+                                        item.id, null, subIdx, null, null, ch.time, null
+                                    );
+                                }
+                            });
                         }
                     });
                 }
 
-                // البحث داخل الصور
+                // ── الفهارس الموضوعية ──
+                if (item.thematic_index && Array.isArray(item.thematic_index)) {
+                    item.thematic_index.forEach(topic => {
+
+                        // اسم الموضوع نفسه
+                        if (topic.topic_name && topic.topic_name.toLowerCase().includes(term)) {
+                            hasResults = true;
+                            createDropdownItem(
+                                `📌 موضوع: ${topic.topic_name} (${item.title})`,
+                                item.id, null, null, null, null, null, null
+                            );
+                        }
+
+                        // فصول الموضوع
+                        if (topic.chapters && Array.isArray(topic.chapters)) {
+                            topic.chapters.forEach(ch => {
+                                if (ch.text && ch.text.toLowerCase().includes(term)) {
+                                    hasResults = true;
+                                    createDropdownItem(
+                                        `📌 ${topic.topic_name} • ${ch.time} — ${ch.text}`,
+                                        item.id, null, null, null, null, ch.time, ch.video_id
+                                    );
+                                }
+                            });
+                        }
+                    });
+                }
+
+                // ── الصور ──
                 if (item.images && Array.isArray(item.images)) {
                     item.images.forEach((imgItem, imgIdx) => {
                         const imgTitle = typeof imgItem === 'string' ? `صورة ${imgIdx + 1}` : (imgItem.title || `صورة ${imgIdx + 1}`);
                         const imgUrl   = typeof imgItem === 'string' ? imgItem : imgItem.url;
-                        const matchTitle = imgTitle.toLowerCase().includes(term);
-                        const matchUrl   = imgUrl && imgUrl.toLowerCase().includes(term);
-                        if (matchTitle || matchUrl) {
+                        if (imgTitle.toLowerCase().includes(term) || (imgUrl && imgUrl.toLowerCase().includes(term))) {
                             hasResults = true;
-                            createDropdownItem(`🖼️ صورة: ${imgTitle} (في ${item.title})`, item.id, null, null, imgIdx, null);
+                            createDropdownItem(`🖼️ صورة: ${imgTitle} (${item.title})`, item.id, null, null, imgIdx, null, null, null);
                         }
                     });
                 }
 
-                // البحث داخل ملفات PDF
+                // ── ملفات PDF ──
                 if (item.pdfs && Array.isArray(item.pdfs)) {
                     item.pdfs.forEach((pdfItem, pdfIdx) => {
                         const pdfTitle = typeof pdfItem === 'string' ? `ملف ${pdfIdx + 1}` : (pdfItem.title || `ملف ${pdfIdx + 1}`);
                         const pdfUrl   = typeof pdfItem === 'string' ? pdfItem : pdfItem.url;
-                        const matchTitle = pdfTitle.toLowerCase().includes(term);
-                        const matchUrl   = pdfUrl && pdfUrl.toLowerCase().includes(term);
-                        if (matchTitle || matchUrl) {
+                        if (pdfTitle.toLowerCase().includes(term) || (pdfUrl && pdfUrl.toLowerCase().includes(term))) {
                             hasResults = true;
-                            createDropdownItem(`📄 PDF: ${pdfTitle} (في ${item.title})`, item.id, null, null, null, pdfIdx);
+                            createDropdownItem(`📄 PDF: ${pdfTitle} (${item.title})`, item.id, null, null, null, pdfIdx, null, null);
                         }
                     });
                 }
 
-                // البحث داخل الروابط
+                // ── الروابط ──
                 if (item.links && Array.isArray(item.links)) {
                     item.links.forEach(link => {
                         const matchText = link.text && link.text.toLowerCase().includes(term);
@@ -1063,7 +1107,7 @@
                     });
                 }
 
-                // البحث في عنوان البطاقة ومحتواها
+                // ── عنوان البطاقة ومحتواها ──
                 const matchTitle   = item.title   && item.title.toLowerCase().includes(term);
                 const matchContent = item.content && item.content.toLowerCase().includes(term);
                 if (matchTitle || matchContent) {
@@ -1072,13 +1116,15 @@
                 }
             });
 
-            function createDropdownItem(displayText, itemId, directUrl = null, videoIdx = null, imageIdx = null, pdfIdx = null) {
+            // ── بناء عنصر القائمة ──
+            // directUrl | videoIdx | imageIdx | pdfIdx | chapterTime | thematicVideoId
+            function createDropdownItem(displayText, itemId, directUrl = null, videoIdx = null, imageIdx = null, pdfIdx = null, chapterTime = null, thematicVideoId = null) {
                 const div = document.createElement('div');
                 div.className = 'search-item';
                 div.innerText = displayText;
-                currentDropdownItems.push({ itemId, directUrl, videoIdx, imageIdx, pdfIdx });
+                currentDropdownItems.push({ itemId, directUrl, videoIdx, imageIdx, pdfIdx, chapterTime, thematicVideoId });
                 div.addEventListener('click', () => {
-                    executeSearchAction(itemId, directUrl, videoIdx, imageIdx, pdfIdx);
+                    executeSearchAction(itemId, directUrl, videoIdx, imageIdx, pdfIdx, chapterTime, thematicVideoId);
                 });
                 dropdown.appendChild(div);
             }
@@ -1100,23 +1146,42 @@
             if (e.key === 'Enter') {
                 if (currentDropdownItems.length > 0) {
                     e.preventDefault(); 
-                    const first = currentDropdownItems[0];
-                    executeSearchAction(first.itemId, first.directUrl, first.videoIdx, first.imageIdx, first.pdfIdx);
+                    const f = currentDropdownItems[0];
+                    executeSearchAction(f.itemId, f.directUrl, f.videoIdx, f.imageIdx, f.pdfIdx, f.chapterTime, f.thematicVideoId);
                 }
             }
         });
 
-        function executeSearchAction(itemId, directUrl, videoIdx = null, imageIdx = null, pdfIdx = null) {
+        function executeSearchAction(itemId, directUrl, videoIdx = null, imageIdx = null, pdfIdx = null, chapterTime = null, thematicVideoId = null) {
             if (directUrl) {
                 window.open(directUrl, '_blank');
             } else {
                 openDetails(itemId);
 
-                if (videoIdx !== null) {
+                // فيديو + قفز لطابع زمني (فصل)
+                if (videoIdx !== null && chapterTime !== null) {
+                    setTimeout(() => {
+                        const item = allData.find(d => String(d.id) === String(itemId));
+                        if (item) playSpecificVideo(item, videoIdx, parseTimeToSeconds(chapterTime));
+                    }, 500);
+
+                // فيديو بدون طابع زمني (درس)
+                } else if (videoIdx !== null) {
                     setTimeout(() => { playPlaylistItem(itemId, videoIdx); }, 450);
                 }
 
-                // فتح صورة محددة مباشرةً من نتيجة البحث
+                // فصل من الفهرس الموضوعي → يحدد الفيديو بـ video_id ويقفز للوقت
+                if (thematicVideoId !== null) {
+                    setTimeout(() => {
+                        const item = allData.find(d => String(d.id) === String(itemId));
+                        if (item) {
+                            const secs = chapterTime ? parseTimeToSeconds(chapterTime) : 0;
+                            playSpecificVideo(item, thematicVideoId, secs);
+                        }
+                    }, 500);
+                }
+
+                // صورة محددة
                 if (imageIdx !== null) {
                     setTimeout(() => {
                         const cards = document.querySelectorAll('#imagesContainer .gallery-card');
@@ -1124,7 +1189,7 @@
                     }, 500);
                 }
 
-                // فتح ملف PDF محدد مباشرةً من نتيجة البحث
+                // PDF محدد
                 if (pdfIdx !== null) {
                     setTimeout(() => {
                         const btns = document.querySelectorAll('#pdfsContainer .pdf-list-item');
