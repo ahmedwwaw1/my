@@ -843,10 +843,14 @@
                         itemCategory = 'high_volume'; // تصنيف التنبيهات
                         
                         // تنسيق نص البطاقة بشكل منظم ومريح للعين
+                        const alertDate = new Date(serverItem.timestamp);
+                        const formattedDate = alertDate.toLocaleDateString('ar-EG');
+                        const formattedTime = alertDate.toLocaleTimeString('ar-EG');
+                        
                         itemContent = `💵 السعر الحالي: ${serverItem.price} USDT
                     📊 حجم التداول: ${serverItem.volume.toLocaleString()}
                     📈 نسبة التغيير (24س): ${serverItem.change_percent}%
-                    🕒 وقت التنبيه: ${new Date(serverItem.timestamp).toLocaleTimeString('ar-EG')}`;
+                    🕒 وقت التنبيه: ${formattedDate} ${formattedTime}`;
                     }
 
                     flattenedData.push({
