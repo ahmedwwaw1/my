@@ -844,17 +844,19 @@
                         
                         // تنسيق نص البطاقة بشكل منظم ومريح للعين
                         const alertDate = new Date(serverItem.timestamp);
-                        const y = alertDate.getFullYear();
-                        const m = alertDate.getMonth() + 1;
-                        const d = alertDate.getDate();
-                        const hh = String(alertDate.getHours()).padStart(2, '0');
-                        const mm = String(alertDate.getMinutes()).padStart(2, '0');
-                        const formattedDateTime = `${y}/${m}/${d}-${hh}:${mm}`;
+                        // تنسيق الوقت (مثال: 3:06 PM)
+                        const formattedTime = alertDate.toLocaleTimeString('en-US', { 
+                            hour: 'numeric', 
+                            minute: '2-digit', 
+                            hour12: true 
+                        });
+                        // تنسيق التاريخ (مثال: 6/30/2026)
+                        const formattedDate = alertDate.toLocaleDateString('en-US');
                         
                         itemContent = `💵 السعر الحالي: ${serverItem.price} USDT
                     📊 حجم التداول: ${serverItem.volume.toLocaleString()}
                     📈 نسبة التغيير (24س): ${serverItem.change_percent}%
-                    🕒 وقت التنبيه: ${formattedDateTime}`;
+                    🕒 وقت التنبيه: \n                    ${formattedTime}\n                    ${formattedDate}`;
                     }
 
                     flattenedData.push({
