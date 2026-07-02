@@ -477,9 +477,18 @@
         ]
       },
       {
-        "id": "vsa-nadir2",
+        "id": "vsa-nadir3",
         "title": "مقدمة التحليل الحجمي و الفوليوم (VSA) - الجزء الثانى 2/3 - | مع | Nadr Mohamed",
         "url": "https://www.youtube.com/watch?v=LViE1y6Gpws&list=PLXUSGzX5nKTm0hM5FcflYvc3nZ90UWt5_&index=2",
+        "chapters": [
+          { "time": "00:00", "text": "مراجعة سريعة" },
+          { "time": "03:15", "text": "تطبيقات الجهد والنتيجة على الشارت" }
+        ]
+      },
+      {
+        "id": "vsa-nadir2",
+        "title": "مقدمة التحليل الحجمي و الفوليوم (VSA) - الجزء الثالث 3/3 - | مع | Nadr Mohamed",
+        "url": "https://www.youtube.com/watch?v=SdJQp1QOwwE&list=PLXUSGzX5nKTm0hM5FcflYvc3nZ90UWt5_&index=3",
         "chapters": [
           { "time": "00:00", "text": "مراجعة سريعة" },
           { "time": "03:15", "text": "تطبيقات الجهد والنتيجة على الشارت" }
@@ -492,7 +501,8 @@
         "topic_name": "سلسلة العروض العائمة",
         "chapters": [
           { "video_id": "vsa-w-6", "time": "31:39", "text": "مصدر العرض العائم من مشترين في قاع قريب وختباره من صانع السوق" },
-          { "video_id": "vsa-nadir2", "time": "1:50", "text": "كيف يكون الحكم على السوق ضعيف ام قوي " }
+          { "video_id": "vsa-nadir2", "time": "1:50", "text": "كيف يكون الحكم على السوق ضعيف ام قوي " },
+          { "video_id": "vsa-nadir2", "time": "23:35", "text": "في حالة اذا تغير النمط " }
           
         ]
       },
