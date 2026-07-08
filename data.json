@@ -81,21 +81,6 @@
             }
         ]
     },
-    {
-        "category": "invest",
-        "title": "الدرس الثالث الزمني",
-        "content": "أول شركة مرخصة من هيأة الاوراق المالية العراقية كوسيط مالي لتقديم خدمة التداول في اسواق المال العراقية.",
-        "links": [
-            {
-                "text": "موقع الشركة",
-                "url": "https://web.telegram.org/a/#-1001195192763"
-            },
-            {
-                "text": "facebook Arqam",
-                "url": "https://www.facebook.com/profile.php?id=61586447527328&ref=PROFILE_EDIT_xav_ig_profile_page_web"
-            }
-        ]
-    },
     { "__comment__": "=== دليل الاستثمار في العراق ===",
     "id": "al-Jawhara",
     "title": "شركة الجوهرة الرصينة فرع المنصور",
@@ -108,7 +93,6 @@
         "url": "https://www.facebook.com/johartbahdaad"
         }
       ]
-      
       
       },
        { 
@@ -141,37 +125,6 @@
       ]
       
       
-      },
-            { 
-    "id": "Ata",
-    "title": "مستشفى قائم آل محمد الجراحي الاهلي",
-    "category": "invest",
-    "content":"يمكنك الإستثمار وشراء الأسهم في أكبر مستشفيات النجف الأشرف ",
-
-    "image": "",
-    "links": [
-      {
-        "text": "فيس بوك ",
-        "url": "https://www.facebook.com/qamhospital"
-        }
-      ]
-      
-      
-    },
-    { 
-    "id": "Ata",
-    "title": "مستشفى قائم آل محمد الجراحي الاهلي",
-    "category": "invest",
-    "content":"يمكنك الإستثمار وشراء الأسهم في أكبر مستشفيات النجف الأشرف ",
-
-    "image": "",
-    "links": [
-      {
-        "text": "فيس بوك ",
-        "url": "https://www.facebook.com/qamhospital"
-        }
-      ]
-
       },
       { 
     "id": "al-asafi",
@@ -213,7 +166,7 @@
     "links": [
       {
         "text": "facebook ",
-        "url": "https://www.facebook.com/profile.php?id=61569008091386"
+        "url": "https://www.facebook.com/profile.php?id=61572909309751"
         }
       ]
 
@@ -234,9 +187,5 @@
 
       }
 
-    
         
-       
-
-    
 ]
