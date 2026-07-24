@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,16 +11,23 @@
             display: none;
             position: fixed;
             z-index: 1000;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
             background-color: rgba(10, 10, 12, 0.95);
             backdrop-filter: blur(12px);
             animation: fadeIn 0.3s ease-out;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .modal-content {
@@ -47,7 +55,7 @@
             position: relative;
             direction: rtl;
         }
-        
+
         .close-btn {
             position: static;
             color: #aaa;
@@ -57,6 +65,7 @@
             transition: color 0.2s, transform 0.2s;
             line-height: 1;
         }
+
         .close-btn:hover {
             color: #fff;
             transform: scale(1.1);
@@ -96,12 +105,12 @@
             border-radius: 16px;
             overflow: hidden;
             background-color: #000;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
             border: 1px solid #222226;
             position: relative;
         }
 
-        .video-container-wrapper iframe, 
+        .video-container-wrapper iframe,
         .video-container-wrapper video {
             width: 100%;
             height: 100%;
@@ -121,7 +130,7 @@
             border: 1px solid #222226;
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         .modal-description-text {
@@ -136,7 +145,7 @@
             border: 1px solid #222226;
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         .chapters-flex-list {
@@ -152,13 +161,16 @@
         .chapters-flex-list::-webkit-scrollbar {
             width: 6px;
         }
+
         .chapters-flex-list::-webkit-scrollbar-track {
             background: #111;
         }
+
         .chapters-flex-list::-webkit-scrollbar-thumb {
             background: #333;
             border-radius: 3px;
         }
+
         .chapters-flex-list::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
@@ -180,13 +192,14 @@
             font-weight: 500;
         }
 
-        .chapter-row-btn:hover, .chapter-row-btn.active {
+        .chapter-row-btn:hover,
+        .chapter-row-btn.active {
             background: rgba(0, 212, 255, 0.1);
             border-color: var(--accent-color);
             color: #fff;
             transform: translateX(-3px);
         }
-        
+
         .chapter-row-btn.active {
             border-width: 2px;
         }
@@ -221,9 +234,19 @@
             overflow-y: auto;
             padding-right: 4px;
         }
-        .images-gallery-grid::-webkit-scrollbar { width: 6px; }
-        .images-gallery-grid::-webkit-scrollbar-track { background: #111; }
-        .images-gallery-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+        .images-gallery-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .images-gallery-grid::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        .images-gallery-grid::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
 
         .gallery-card {
             display: flex;
@@ -236,8 +259,17 @@
             background: #1e1e24;
             transition: all 0.2s ease;
         }
-        .gallery-card:hover { border-color: var(--accent-color); background: #23232e; }
-        .gallery-card.active { border-color: var(--accent-color); box-shadow: 0 0 10px rgba(0,212,255,0.35); background: #1a2530; }
+
+        .gallery-card:hover {
+            border-color: var(--accent-color);
+            background: #23232e;
+        }
+
+        .gallery-card.active {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.35);
+            background: #1a2530;
+        }
 
         .gallery-card .gallery-thumb {
             width: 100%;
@@ -247,6 +279,7 @@
             display: block;
             background: #111;
         }
+
         .gallery-card .gallery-thumb-placeholder {
             width: 100%;
             aspect-ratio: 16 / 10;
@@ -257,6 +290,7 @@
             justify-content: center;
             font-size: 1.4rem;
         }
+
         .gallery-card-title {
             font-size: 0.72rem;
             color: #aaa;
@@ -268,7 +302,10 @@
             line-height: 1.3;
             transition: color 0.2s;
         }
-        .gallery-card.active .gallery-card-title { color: var(--accent-color); }
+
+        .gallery-card.active .gallery-card-title {
+            color: var(--accent-color);
+        }
 
         /* ===== قائمة PDF ===== */
         .pdf-list-item {
@@ -288,12 +325,18 @@
             font-weight: 500;
             margin-bottom: 6px;
         }
-        .pdf-list-item:hover, .pdf-list-item.active {
-            background: rgba(229,57,53,0.1);
+
+        .pdf-list-item:hover,
+        .pdf-list-item.active {
+            background: rgba(229, 57, 53, 0.1);
             border-color: #e53935;
             color: #fff;
         }
-        .pdf-list-item.active { border-width: 2px; }
+
+        .pdf-list-item.active {
+            border-width: 2px;
+        }
+
         .pdf-list-item .pdf-icon {
             font-size: 1.2rem;
             flex-shrink: 0;
@@ -336,7 +379,7 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-        
+
         :root {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
@@ -351,7 +394,8 @@
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            margin: 0; padding: 0;
+            margin: 0;
+            padding: 0;
             line-height: 1.6;
         }
 
@@ -363,8 +407,9 @@
             justify-content: center;
             gap: 20px;
             position: sticky;
-            top: 0; z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         nav a {
@@ -376,7 +421,8 @@
             transition: var(--transition);
         }
 
-        nav a:hover, nav a.active {
+        nav a:hover,
+        nav a.active {
             color: var(--accent-color);
             background: rgba(0, 212, 255, 0.1);
         }
@@ -407,17 +453,17 @@
             transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
             box-sizing: border-box;
         }
-        
+
         #globalSearch::placeholder {
             color: #9aa0a6;
         }
 
-        #globalSearch:hover, 
+        #globalSearch:hover,
         #globalSearch:focus {
             background-color: #303134;
             border-color: #5f6368;
             box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
-        }        
+        }
 
         #searchDropdown {
             position: absolute;
@@ -433,7 +479,7 @@
             overflow: hidden;
             display: none;
         }
-        
+
         .search-item {
             padding: 12px 20px;
             color: #e8eaed !important;
@@ -443,7 +489,11 @@
             border-bottom: 1px solid #3c4043;
             text-align: right;
         }
-        .search-item:last-child { border-bottom: none; }
+
+        .search-item:last-child {
+            border-bottom: none;
+        }
+
         .search-item:hover {
             background-color: #3c4043 !important;
             color: #ffffff !important;
@@ -451,19 +501,19 @@
 
         .grid-layout {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); 
-            gap: 20px;          
-            row-gap: 30px;      
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 20px;
+            row-gap: 30px;
             padding: 10px 0;
-            width: 100%;        
+            width: 100%;
             box-sizing: border-box;
         }
 
         .card {
-            background: transparent; 
+            background: transparent;
             border: none;
             border-radius: 12px;
-            padding: 0;           
+            padding: 0;
             cursor: pointer;
             transition: box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease;
             display: flex;
@@ -474,15 +524,15 @@
         }
 
         .card:hover {
-            background-color: #232323; 
+            background-color: #232323;
             box-sizing: border-box;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2); 
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .card-media-top {
             width: 100%;
-            aspect-ratio: 16 / 9;     
-            border-radius: 12px;      
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
             overflow: hidden;
             background-color: #000;
             position: relative;
@@ -491,12 +541,14 @@
         .card-media-top img {
             width: 100%;
             height: 100%;
-            object-fit: cover;        
+            object-fit: cover;
             border: none;
             transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .card:hover .card-media-top img { transform: scale(1.02); }
+        .card:hover .card-media-top img {
+            transform: scale(1.02);
+        }
 
         .card-body-container {
             padding: 5px 10px 15px 10px;
@@ -505,10 +557,28 @@
             flex-grow: 1;
         }
 
-        .card h3 { margin: 5px 0 8px 0; color: #fff; font-size: 1.2rem; font-weight: 600; line-height: 1.4; }
-        .card-content { color: var(--text-dim); flex-grow: 1; white-space: pre-line; font-size: 0.95rem; line-height: 1.5; }
-        
-        #statusMsg { text-align: center; color: var(--text-dim); margin-top: 20px; font-size: 1.1rem; }
+        .card h3 {
+            margin: 5px 0 8px 0;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .card-content {
+            color: var(--text-dim);
+            flex-grow: 1;
+            white-space: pre-line;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        #statusMsg {
+            text-align: center;
+            color: var(--text-dim);
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
 
         .search-dropdown {
             position: absolute;
@@ -519,7 +589,7 @@
             max-height: 250px;
             overflow-y: auto;
             z-index: 9999;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
             margin-top: 5px;
             direction: rtl;
         }
@@ -539,11 +609,13 @@
             align-items: center;
             gap: 6px;
         }
+
         .nav-arrow-btn:hover:not(:disabled) {
             background: rgba(0, 212, 255, 0.1);
             border-color: var(--accent-color);
             color: #fff;
         }
+
         .nav-arrow-btn:disabled {
             opacity: 0.25;
             cursor: not-allowed;
@@ -551,938 +623,940 @@
         }
     </style>
 </head>
+
 <body>
     <!--للقسم اضافة زر -->
-<nav>
-    <a href="#/" id="btn-vsa">منوعات</a>
-    <a href="#/rw" id="btn-rw"> التحليل الحجمي </a>
-    <a href="#/time-analysis" id="btn-time-analysis">⏱️ التحليل الزمني</a>
-    <a href="#/technical-analysis" id="btn-technical-analysis">التحليل الفني</a>
-    <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>    
-    <a href="#/crypto" id="btn-crypto">🤖 تنبيهات الكريبتو</a>
-    <a href="viewer.html" id="btn-viewer" style="color: var(--accent-color); border: 1px solid rgba(0, 212, 255, 0.3);">📁 عارض الصور و PDF</a>
-</nav>
+    <nav>
+        <a href="#/" id="btn-vsa">منوعات</a>
+        <a href="#/rw" id="btn-rw"> التحليل الحجمي </a>
+        <a href="#/time-analysis" id="btn-time-analysis">⏱️ التحليل الزمني</a>
+        <a href="#/technical-analysis" id="btn-technical-analysis">التحليل الفني</a>
+        <a href="#/investment" id="btn-invest">🏢 قسم الاستثمار</a>
+        <a href="#/crypto" id="btn-crypto">🤖 تنبيهات الكريبتو</a>
+        <a href="viewer.html" id="btn-viewer"
+            style="color: var(--accent-color); border: 1px solid rgba(0, 212, 255, 0.3);">📁 عارض الصور و PDF</a>
+    </nav>
 
-<div class="container">
-    <div class="search-container">
-        <input type="text" id="globalSearch" placeholder="ابحث هنا...">
-        <div id="searchDropdown" class="search-dropdown" style="display: none;"></div>
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="globalSearch" placeholder="ابحث هنا...">
+            <div id="searchDropdown" class="search-dropdown" style="display: none;"></div>
+        </div>
+
+        <h1 id="pageTitle" style="text-align: center; margin-bottom: 1.5rem; font-weight: 700;"></h1>
+        <div id="statusMsg"></div>
+        <div class="grid-layout" id="mainGrid"></div>
     </div>
 
-    <h1 id="pageTitle" style="text-align: center; margin-bottom: 1.5rem; font-weight: 700;"></h1>
-    <div id="statusMsg"></div>
-    <div class="grid-layout" id="mainGrid"></div>
-</div>
+    <script>
+        let allData = [];
+        let isDataLoaded = false;
 
-<script>
-    let allData = [];
-    let isDataLoaded = false;
-    
-    const grid = document.getElementById('mainGrid');
-    const searchInput = document.getElementById('globalSearch');
-    const pageTitle = document.getElementById('pageTitle');
-    const statusMsg = document.getElementById('statusMsg');
+        const grid = document.getElementById('mainGrid');
+        const searchInput = document.getElementById('globalSearch');
+        const pageTitle = document.getElementById('pageTitle');
+        const statusMsg = document.getElementById('statusMsg');
 
-    // مصفوفة تتبع تاريخ ومسار التنقل داخل الـ Modal
-    let modalHistory = [];
-    let modalHistoryIndex = -1;
+        // مصفوفة تتبع تاريخ ومسار التنقل داخل الـ Modal
+        let modalHistory = [];
+        let modalHistoryIndex = -1;
 
-    // المتغير العام لحفظ البطاقة التي تحتوي على thematic_index الأصلي
-    let originalThematicItem = null;
+        // المتغير العام لحفظ البطاقة التي تحتوي على thematic_index الأصلي
+        let originalThematicItem = null;
 
-    function modalGoBack() {
-        if (modalHistoryIndex > 0) {
-            modalHistoryIndex--;
-            openDetails(modalHistory[modalHistoryIndex], true);
+        function modalGoBack() {
+            if (modalHistoryIndex > 0) {
+                modalHistoryIndex--;
+                openDetails(modalHistory[modalHistoryIndex], true);
+            }
         }
-    }
 
-    function modalGoForward() {
-        if (modalHistoryIndex < modalHistory.length - 1) {
-            modalHistoryIndex++;
-            openDetails(modalHistory[modalHistoryIndex], true);
+        function modalGoForward() {
+            if (modalHistoryIndex < modalHistory.length - 1) {
+                modalHistoryIndex++;
+                openDetails(modalHistory[modalHistoryIndex], true);
+            }
         }
-    }
 
-    function updateModalNavButtons() {
-        const backBtn = document.getElementById('modalBackBtn');
-        const forwardBtn = document.getElementById('modalForwardBtn');
-        if (!backBtn || !forwardBtn) return;
+        function updateModalNavButtons() {
+            const backBtn = document.getElementById('modalBackBtn');
+            const forwardBtn = document.getElementById('modalForwardBtn');
+            if (!backBtn || !forwardBtn) return;
 
-        backBtn.disabled = (modalHistoryIndex <= 0);
-        forwardBtn.disabled = (modalHistoryIndex >= modalHistory.length - 1);
-    }
-
-    // دالة تحويل صيغة الوقت (01:45) إلى ثواني نقية
-    function parseTimeToSeconds(timeStr) {
-        if (!timeStr) return 0;
-        if (typeof timeStr === 'number') return timeStr;
-        const parts = timeStr.split(':').map(Number);
-        if (parts.length === 2) {
-            return parts[0] * 60 + parts[1]; // دقائق : ثواني
-        } else if (parts.length === 3) {
-            return parts[0] * 3600 + parts[1] * 60 + parts[2]; // ساعات : دقائق : ثواني
+            backBtn.disabled = (modalHistoryIndex <= 0);
+            forwardBtn.disabled = (modalHistoryIndex >= modalHistory.length - 1);
         }
-        return parseFloat(timeStr) || 0;
-    }
 
-    // دالة مساعدة للعثور على فيديو عبر video_id
-    function findVideoById(item, videoId) {
-        if (!item.videos) return null;
-        return item.videos.find(v => v.id === videoId);
-    }
+        // دالة تحويل صيغة الوقت (01:45) إلى ثواني نقية
+        function parseTimeToSeconds(timeStr) {
+            if (!timeStr) return 0;
+            if (typeof timeStr === 'number') return timeStr;
+            const parts = timeStr.split(':').map(Number);
+            if (parts.length === 2) {
+                return parts[0] * 60 + parts[1]; // دقائق : ثواني
+            } else if (parts.length === 3) {
+                return parts[0] * 3600 + parts[1] * 60 + parts[2]; // ساعات : دقائق : ثواني
+            }
+            return parseFloat(timeStr) || 0;
+        }
 
-// دالة لتشغيل فيديو معين (من خلال معرف الفيديو) مع إمكانية البحث في كل البيانات
-    // هذه النسخة المعدلة تحافظ على originalThematicItem ولا تغلق الـ Modal
-    function playSpecificVideo(initialItem, videoIdOrIndex, seekSeconds = 0) {
-        let targetItem = initialItem;
-        let videoObj = null;
-        let videoIndex = -1;
+        // دالة مساعدة للعثور على فيديو عبر video_id
+        function findVideoById(item, videoId) {
+            if (!item.videos) return null;
+            return item.videos.find(v => v.id === videoId);
+        }
 
-        // إذا كان المطلوب رقماً (فهرس) نتعامل معه كفهرس داخل initialItem
-        if (typeof videoIdOrIndex === 'number') {
-            videoIndex = videoIdOrIndex;
-            videoObj = targetItem.videos[videoIndex];
-        } else {
-            // البحث عن الفيديو في initialItem أولاً
-            videoIndex = targetItem.videos.findIndex(v => v.id === videoIdOrIndex);
-            if (videoIndex !== -1) {
+        // دالة لتشغيل فيديو معين (من خلال معرف الفيديو) مع إمكانية البحث في كل البيانات
+        // هذه النسخة المعدلة تحافظ على originalThematicItem ولا تغلق الـ Modal
+        function playSpecificVideo(initialItem, videoIdOrIndex, seekSeconds = 0) {
+            let targetItem = initialItem;
+            let videoObj = null;
+            let videoIndex = -1;
+
+            // إذا كان المطلوب رقماً (فهرس) نتعامل معه كفهرس داخل initialItem
+            if (typeof videoIdOrIndex === 'number') {
+                videoIndex = videoIdOrIndex;
                 videoObj = targetItem.videos[videoIndex];
             } else {
-                // إذا لم نجده، نبحث في allData بالكامل
-                for (let item of allData) {
-                    if (item.videos && Array.isArray(item.videos)) {
-                        const foundIndex = item.videos.findIndex(v => v.id === videoIdOrIndex);
-                        if (foundIndex !== -1) {
-                            targetItem = item;
-                            videoIndex = foundIndex;
-                            videoObj = item.videos[foundIndex];
-                            break;
+                // البحث عن الفيديو في initialItem أولاً
+                videoIndex = targetItem.videos.findIndex(v => v.id === videoIdOrIndex);
+                if (videoIndex !== -1) {
+                    videoObj = targetItem.videos[videoIndex];
+                } else {
+                    // إذا لم نجده، نبحث في allData بالكامل
+                    for (let item of allData) {
+                        if (item.videos && Array.isArray(item.videos)) {
+                            const foundIndex = item.videos.findIndex(v => v.id === videoIdOrIndex);
+                            if (foundIndex !== -1) {
+                                targetItem = item;
+                                videoIndex = foundIndex;
+                                videoObj = item.videos[foundIndex];
+                                break;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if (!videoObj) {
-            console.warn(`⚠️ لم يتم العثور على فيديو بالمعرف: ${videoIdOrIndex}`);
-            return;
-        }
-
-        // *** التغيير الجوهري: لا نغلق الـ Modal، بل نقوم بتحديث محتوياته ديناميكياً ***
-        // 1. تحديث العنوان والوصف ليعكس البطاقة الجديدة (إذا اختلفت)
-        document.getElementById('modalTitle').innerText = targetItem.title || '';
-        document.getElementById('modalContent').innerText = targetItem.content || '';
-
-        // 2. تشغيل الفيديو الجديد في نفس المشغل
-        const videoContainer = document.getElementById('popupVideoContainer');
-        const effectiveUrl = videoObj.videoDirectUrl || videoObj.url || videoObj.videoUrl || '';
-        if (effectiveUrl && videoContainer) {
-            UnifiedPlayer.init(videoContainer, effectiveUrl);
-            if (seekSeconds > 0) {
-                setTimeout(() => UnifiedPlayer.seekTo(seekSeconds), 500);
+            if (!videoObj) {
+                console.warn(`⚠️ لم يتم العثور على فيديو بالمعرف: ${videoIdOrIndex}`);
+                return;
             }
-        }        
-        const modalContent = document.querySelector('.modal-content');
-        if (modalContent) {
-            // تمرين محتوى المودال بالكامل إلى الأعلى بشكل سلس
-            modalContent.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-            // حل بديل في حال لم يجد الحاوية، يذهب مباشرة للمشغل
-            videoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        // 3. تحديث قائمة التشغيل (playlist) لتعكس فيديوهات البطاقة الجديدة
-        const playlistSection = document.getElementById('playlistSection');
-        const playlistContainer = document.getElementById('playlistContainer');
-        if (playlistSection && playlistContainer && targetItem.videos && targetItem.videos.length > 0) {
-            playlistSection.style.display = 'block';
-            playlistContainer.innerHTML = '';
-            targetItem.videos.forEach((vid, idx) => {
-                const rowBtn = document.createElement('button');
-                rowBtn.className = 'chapter-row-btn';
-                rowBtn.id = `playlist-item-${idx}`;
-                rowBtn.style.marginBottom = '8px';
-                rowBtn.innerHTML = `<span>▶️ ${vid.title || `الدرس ${idx + 1}`}</span>`;
-                rowBtn.addEventListener('click', () => {
-                    playSpecificVideo(targetItem, idx, 0);
-                });
-                playlistContainer.appendChild(rowBtn);
-            });
-            // إزالة علامة النشاط عن الكل، ثم تفعيل الزر المناسب
-            document.querySelectorAll('#playlistContainer .chapter-row-btn').forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.getElementById(`playlist-item-${videoIndex}`);
-            if (activeBtn) activeBtn.classList.add('active');
-        } else {
-            playlistSection.style.display = 'none';
-        }
 
-        // 4. تحديث الفصول العادية (chapters) الخاصة بالفيديو الجديد
-        const chaptersContainer = document.getElementById('chaptersContainer');
-        const chaptersSection = document.getElementById('chaptersSection');
-        if (chaptersContainer) chaptersContainer.innerHTML = '';
-        if (videoObj.chapters && videoObj.chapters.length) {
-            chaptersSection.style.display = 'block';
-            videoObj.chapters.forEach(ch => {
-                const btn = document.createElement('button');
-                btn.className = 'chapter-row-btn';
-                btn.innerHTML = `<span>${ch.text}</span><span class="chapter-time-badge">${ch.time}</span>`;
-                const secs = parseTimeToSeconds(ch.time);
-                
-                // حدث الضغط المحدث ليشمل الانتقال التلقائي للأعلى
-                btn.addEventListener('click', () => {
-                    UnifiedPlayer.seekTo(secs); // تقديم الفيديو للوقت المطلوب
-                    
-                    // 🚀 بلوك الانتقال التلقائي المضاف لقائمة الطوابع الزمنية العادية
-                    const modalContentElement = document.querySelector('.modal-content');
-                    if (modalContentElement) {
-                        modalContentElement.scrollTo({ top: 0, behavior: 'smooth' });
-                    } else if (videoContainer) {
-                        videoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-                
-                chaptersContainer.appendChild(btn);
-            });
-        } else {
-            chaptersSection.style.display = 'none';
-        }
+            // *** التغيير الجوهري: لا نغلق الـ Modal، بل نقوم بتحديث محتوياته ديناميكياً ***
+            // 1. تحديث العنوان والوصف ليعكس البطاقة الجديدة (إذا اختلفت)
+            document.getElementById('modalTitle').innerText = targetItem.title || '';
+            document.getElementById('modalContent').innerText = targetItem.content || '';
 
-        // 6. **الحفاظ على thematic_index الأصلي**: لا نغيره، بل نستخدم originalThematicItem (إن وُجد)
-        const thematicSection = document.getElementById('thematicSection');
-        const thematicContainer = document.getElementById('thematicContainer');
-        if (originalThematicItem && originalThematicItem.thematic_index && originalThematicItem.thematic_index.length > 0) {
-            thematicSection.style.display = 'block';
-            // نعيد بناء المحتوى من originalThematicItem (نفس القائمة الثابتة)
-            thematicContainer.innerHTML = '';
-            originalThematicItem.thematic_index.forEach(topic => {
-                const topicDiv = document.createElement('div');
-                topicDiv.style.marginBottom = '20px';
-                topicDiv.innerHTML = `<h4 style="color: var(--accent-color); margin: 10px 0 8px 0;">📌 ${topic.topic_name}</h4>`;
-                const chaptersDiv = document.createElement('div');
-                chaptersDiv.className = 'chapters-flex-list';
-                chaptersDiv.style.maxHeight = '200px';
-                topic.chapters.forEach(ch => {
-                    const chapBtn = document.createElement('button');
-                    chapBtn.className = 'chapter-row-btn';
-                    chapBtn.style.padding = '8px 12px';
-                    chapBtn.innerHTML = `
+            // 2. تشغيل الفيديو الجديد في نفس المشغل
+            const videoContainer = document.getElementById('popupVideoContainer');
+            const effectiveUrl = videoObj.videoDirectUrl || videoObj.url || videoObj.videoUrl || '';
+            if (effectiveUrl && videoContainer) {
+                UnifiedPlayer.init(videoContainer, effectiveUrl);
+                if (seekSeconds > 0) {
+                    setTimeout(() => UnifiedPlayer.seekTo(seekSeconds), 500);
+                }
+            }
+            const modalContent = document.querySelector('.modal-content');
+            if (modalContent) {
+                // تمرين محتوى المودال بالكامل إلى الأعلى بشكل سلس
+                modalContent.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // حل بديل في حال لم يجد الحاوية، يذهب مباشرة للمشغل
+                videoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            // 3. تحديث قائمة التشغيل (playlist) لتعكس فيديوهات البطاقة الجديدة
+            const playlistSection = document.getElementById('playlistSection');
+            const playlistContainer = document.getElementById('playlistContainer');
+            if (playlistSection && playlistContainer && targetItem.videos && targetItem.videos.length > 0) {
+                playlistSection.style.display = 'block';
+                playlistContainer.innerHTML = '';
+                targetItem.videos.forEach((vid, idx) => {
+                    const rowBtn = document.createElement('button');
+                    rowBtn.className = 'chapter-row-btn';
+                    rowBtn.id = `playlist-item-${idx}`;
+                    rowBtn.style.marginBottom = '8px';
+                    rowBtn.innerHTML = `<span>▶️ ${vid.title || `الدرس ${idx + 1}`}</span>`;
+                    rowBtn.addEventListener('click', () => {
+                        playSpecificVideo(targetItem, idx, 0);
+                    });
+                    playlistContainer.appendChild(rowBtn);
+                });
+                // إزالة علامة النشاط عن الكل، ثم تفعيل الزر المناسب
+                document.querySelectorAll('#playlistContainer .chapter-row-btn').forEach(btn => btn.classList.remove('active'));
+                const activeBtn = document.getElementById(`playlist-item-${videoIndex}`);
+                if (activeBtn) activeBtn.classList.add('active');
+            } else {
+                playlistSection.style.display = 'none';
+            }
+
+            // 4. تحديث الفصول العادية (chapters) الخاصة بالفيديو الجديد
+            const chaptersContainer = document.getElementById('chaptersContainer');
+            const chaptersSection = document.getElementById('chaptersSection');
+            if (chaptersContainer) chaptersContainer.innerHTML = '';
+            if (videoObj.chapters && videoObj.chapters.length) {
+                chaptersSection.style.display = 'block';
+                videoObj.chapters.forEach(ch => {
+                    const btn = document.createElement('button');
+                    btn.className = 'chapter-row-btn';
+                    btn.innerHTML = `<span>${ch.text}</span><span class="chapter-time-badge">${ch.time}</span>`;
+                    const secs = parseTimeToSeconds(ch.time);
+
+                    // حدث الضغط المحدث ليشمل الانتقال التلقائي للأعلى
+                    btn.addEventListener('click', () => {
+                        UnifiedPlayer.seekTo(secs); // تقديم الفيديو للوقت المطلوب
+
+                        // 🚀 بلوك الانتقال التلقائي المضاف لقائمة الطوابع الزمنية العادية
+                        const modalContentElement = document.querySelector('.modal-content');
+                        if (modalContentElement) {
+                            modalContentElement.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else if (videoContainer) {
+                            videoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    });
+
+                    chaptersContainer.appendChild(btn);
+                });
+            } else {
+                chaptersSection.style.display = 'none';
+            }
+
+            // 6. **الحفاظ على thematic_index الأصلي**: لا نغيره، بل نستخدم originalThematicItem (إن وُجد)
+            const thematicSection = document.getElementById('thematicSection');
+            const thematicContainer = document.getElementById('thematicContainer');
+            if (originalThematicItem && originalThematicItem.thematic_index && originalThematicItem.thematic_index.length > 0) {
+                thematicSection.style.display = 'block';
+                // نعيد بناء المحتوى من originalThematicItem (نفس القائمة الثابتة)
+                thematicContainer.innerHTML = '';
+                originalThematicItem.thematic_index.forEach(topic => {
+                    const topicDiv = document.createElement('div');
+                    topicDiv.style.marginBottom = '20px';
+                    topicDiv.innerHTML = `<h4 style="color: var(--accent-color); margin: 10px 0 8px 0;">📌 ${topic.topic_name}</h4>`;
+                    const chaptersDiv = document.createElement('div');
+                    chaptersDiv.className = 'chapters-flex-list';
+                    chaptersDiv.style.maxHeight = '200px';
+                    topic.chapters.forEach(ch => {
+                        const chapBtn = document.createElement('button');
+                        chapBtn.className = 'chapter-row-btn';
+                        chapBtn.style.padding = '8px 12px';
+                        chapBtn.innerHTML = `
                         <span>${ch.text}</span>
                         <span class="chapter-time-badge">${ch.time} • ${ch.video_id || ''}</span>
                     `;
-                    chapBtn.addEventListener('click', () => {
-                        if (ch.video_id) {
-                            const seekSec = parseTimeToSeconds(ch.time);
-                            // نستخدم originalThematicItem كقاعدة للبحث (لأنه يحتفظ بالفهارس الأصلية)
-                            playSpecificVideo(originalThematicItem, ch.video_id, seekSec);
-                        } else {
-                            alert('لم يتم تحديد الفيديو لهذا الفصل');
-                        }
-                    });
-                    chaptersDiv.appendChild(chapBtn);
-                });
-                topicDiv.appendChild(chaptersDiv);
-                thematicContainer.appendChild(topicDiv);
-            });
-        } else {
-            thematicSection.style.display = 'none';
-        }
-    }    
-    // اضافة ملف json
-    // دالة جلب ومعالجة ملفات الـ JSON المحدثة لمنع تفكيك الكروت والحفاظ عليها موحدة
-    async function loadWebsiteData() {
-        const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json','Time-analysis.json','technical-analysis.json', 'PDF-images.json']; 
-        
-        let combinedServerData = [];
-        let anyFileLoaded = false;
-
-        try {
-            const fetchPromises = jsonFiles.map(async (file) => {
-                try {
-                    const response = await fetch(file + '?v=' + new Date().getTime());
-                    if (!response.ok) {
-                        console.warn(`⚠️ تنبيه: ملف [${file}] غير موجود على السيرفر أو فشل تحميله حالياً.`);
-                        return null; 
-                    }
-                    const data = await response.json();
-                    anyFileLoaded = true; 
-                    return data;
-                } catch (fileError) {
-                    console.error(`❌ خطأ في قراءة أو تحليل صيغة الـ JSON داخل ملف [${file}]:`, fileError);
-                    return null; 
-                }
-            });
-
-            const results = await Promise.all(fetchPromises);
-
-            results.forEach((data) => {
-                if (data) {
-                    if (Array.isArray(data)) {
-                        combinedServerData = combinedServerData.concat(data);
-                    } else {
-                        combinedServerData.push(data);
-                    }
-                }
-            });
-
-            if (anyFileLoaded && combinedServerData.length > 0) {
-                let flattenedData = [];
-                let counter = 1;
-
-                // معالجة ذكية للحفاظ على الكورس كبطاقة واحدة وحفظ مصفوفة فيديوهاته بداخلها
-                combinedServerData.forEach((serverItem) => {
-                    const currentId = serverItem.id ? String(serverItem.id) : `item_${counter++}`;
-                    
-                    // متغيرات مرنة لاستيعاب بيانات الموقع المعتادة أو بيانات البوت
-                    let itemTitle = serverItem.title;
-                    let itemCategory = serverItem.category || 'videos';
-                    let itemContent = serverItem.content || serverItem.desc || '';
-
-                    // 🤖 فحص ذكي: إذا كان العنصر قادماً من بوت الكريبتو ويحتوي على رمز العملة
-                    if (serverItem.symbol) {
-                        itemTitle = `🚨 حركة قوية على زوج: ${serverItem.symbol}`;
-                        itemCategory = 'high_volume'; // تصنيف التنبيهات
-                        
-                        // تنسيق نص البطاقة بشكل منظم ومريح للعين
-                        const alertDate = new Date(serverItem.timestamp);
-                        // تنسيق الوقت (مثال: 3:06 PM)
-                        const formattedTime = alertDate.toLocaleTimeString('en-US', { 
-                            hour: 'numeric', 
-                            minute: '2-digit', 
-                            hour12: true 
+                        chapBtn.addEventListener('click', () => {
+                            if (ch.video_id) {
+                                const seekSec = parseTimeToSeconds(ch.time);
+                                // نستخدم originalThematicItem كقاعدة للبحث (لأنه يحتفظ بالفهارس الأصلية)
+                                playSpecificVideo(originalThematicItem, ch.video_id, seekSec);
+                            } else {
+                                alert('لم يتم تحديد الفيديو لهذا الفصل');
+                            }
                         });
-                        // تنسيق التاريخ (مثال: 6/30/2026)
-                        const formattedDate = alertDate.toLocaleDateString('en-US');
-                        
-                        itemContent = `💵 السعر الحالي: ${serverItem.price} USDT
+                        chaptersDiv.appendChild(chapBtn);
+                    });
+                    topicDiv.appendChild(chaptersDiv);
+                    thematicContainer.appendChild(topicDiv);
+                });
+            } else {
+                thematicSection.style.display = 'none';
+            }
+        }
+        // اضافة ملف json
+        // دالة جلب ومعالجة ملفات الـ JSON المحدثة لمنع تفكيك الكروت والحفاظ عليها موحدة
+        async function loadWebsiteData() {
+            const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json', 'Time-analysis.json', 'technical-analysis.json', 'PDF-images.json'];
+
+            let combinedServerData = [];
+            let anyFileLoaded = false;
+
+            try {
+                const fetchPromises = jsonFiles.map(async (file) => {
+                    try {
+                        const response = await fetch(file + '?v=' + new Date().getTime());
+                        if (!response.ok) {
+                            console.warn(`⚠️ تنبيه: ملف [${file}] غير موجود على السيرفر أو فشل تحميله حالياً.`);
+                            return null;
+                        }
+                        const data = await response.json();
+                        anyFileLoaded = true;
+                        return data;
+                    } catch (fileError) {
+                        console.error(`❌ خطأ في قراءة أو تحليل صيغة الـ JSON داخل ملف [${file}]:`, fileError);
+                        return null;
+                    }
+                });
+
+                const results = await Promise.all(fetchPromises);
+
+                results.forEach((data) => {
+                    if (data) {
+                        if (Array.isArray(data)) {
+                            combinedServerData = combinedServerData.concat(data);
+                        } else {
+                            combinedServerData.push(data);
+                        }
+                    }
+                });
+
+                if (anyFileLoaded && combinedServerData.length > 0) {
+                    let flattenedData = [];
+                    let counter = 1;
+
+                    // معالجة ذكية للحفاظ على الكورس كبطاقة واحدة وحفظ مصفوفة فيديوهاته بداخلها
+                    combinedServerData.forEach((serverItem) => {
+                        const currentId = serverItem.id ? String(serverItem.id) : `item_${counter++}`;
+
+                        // متغيرات مرنة لاستيعاب بيانات الموقع المعتادة أو بيانات البوت
+                        let itemTitle = serverItem.title;
+                        let itemCategory = serverItem.category || 'videos';
+                        let itemContent = serverItem.content || serverItem.desc || '';
+
+                        // 🤖 فحص ذكي: إذا كان العنصر قادماً من بوت الكريبتو ويحتوي على رمز العملة
+                        if (serverItem.symbol) {
+                            itemTitle = `🚨 حركة قوية على زوج: ${serverItem.symbol}`;
+                            itemCategory = 'high_volume'; // تصنيف التنبيهات
+
+                            // تنسيق نص البطاقة بشكل منظم ومريح للعين
+                            const alertDate = new Date(serverItem.timestamp);
+                            // تنسيق الوقت (مثال: 3:06 PM)
+                            const formattedTime = alertDate.toLocaleTimeString('en-US', {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true
+                            });
+                            // تنسيق التاريخ (مثال: 6/30/2026)
+                            const formattedDate = alertDate.toLocaleDateString('en-US');
+
+                            itemContent = `💵 السعر الحالي: ${serverItem.price} USDT
                     📊 حجم التداول: ${serverItem.volume.toLocaleString()}
                     📈 نسبة التغيير (24س): ${serverItem.change_percent}%
                     🕒 وقت التنبيه: \n                    ${formattedTime}\n                    ${formattedDate}`;
-                    }
+                        }
 
-                    flattenedData.push({
-                        id: currentId,
-                        title: itemTitle || 'بدون عنوان',
-                        category: itemCategory,
-                        content: itemContent,
-                        image: serverItem.image || '',
-                        videoUrl: serverItem.videoUrl || serverItem.videourl || serverItem.url || '',
-                        videoDirectUrl: serverItem.videoDirectUrl || serverItem.videoDirecturl || '',
-                        links: serverItem.links || [],
-                        chapters: serverItem.chapters || [],
-                        recommendations: serverItem.recommendations || [],
-                        videos: serverItem.videos || null,
-                        images: serverItem.images || null,   // ← معرض الصور المستقل
-                        pdfs: serverItem.pdfs || null,       // ← قائمة PDF المستقلة
-                        thematic_index: serverItem.thematic_index || null
+                        flattenedData.push({
+                            id: currentId,
+                            title: itemTitle || 'بدون عنوان',
+                            category: itemCategory,
+                            content: itemContent,
+                            image: serverItem.image || '',
+                            videoUrl: serverItem.videoUrl || serverItem.videourl || serverItem.url || '',
+                            videoDirectUrl: serverItem.videoDirectUrl || serverItem.videoDirecturl || '',
+                            links: serverItem.links || [],
+                            chapters: serverItem.chapters || [],
+                            recommendations: serverItem.recommendations || [],
+                            videos: serverItem.videos || null,
+                            images: serverItem.images || null,   // ← معرض الصور المستقل
+                            pdfs: serverItem.pdfs || null,       // ← قائمة PDF المستقلة
+                            thematic_index: serverItem.thematic_index || null
+                        });
                     });
+                    allData = flattenedData;
+                    isDataLoaded = true;
+                    render(allData);
+
+                    localStorage.setItem('my_cards_data', JSON.stringify(allData));
+                    console.log("تم دمج وتحديث البيانات من كافة الملفات بنجاح 🎉");
+
+                    if (typeof handleRoute === 'function') {
+                        handleRoute();
+                    }
+                } else {
+                    throw new Error("لم يتم تحميل أي ملف JSON بنجاح من السيرفر.");
+                }
+
+            } catch (error) {
+                console.error("❌ خلل كلي في الاتصال، جاري التحميل من الذاكرة المحلية الاحتياطية:", error);
+                const localData = localStorage.getItem('my_cards_data');
+                if (localData) {
+                    allData = JSON.parse(localData);
+                    isDataLoaded = true;
+                    render(allData);
+                    if (typeof handleRoute === 'function') handleRoute();
+                } else {
+                    if (statusMsg) {
+                        statusMsg.innerText = "عذراً، حدث خلل أثناء تحميل البيانات.";
+                    }
+                }
+            }
+        }
+
+        function render(dataArray) {
+            const mainGrid = document.getElementById('mainGrid');
+            if (!mainGrid) return;
+
+            mainGrid.innerHTML = '';
+
+            if (dataArray.length === 0) {
+                if (isDataLoaded) {
+                    statusMsg.innerText = "لا توجد بطاقات معروضة في هذا القسم";
+                }
+                return;
+            }
+            statusMsg.innerText = '';
+
+            dataArray.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+
+                card.addEventListener('click', function () {
+                    openDetails(item.id);
                 });
-                allData = flattenedData;
-                isDataLoaded = true; 
-                render(allData);
 
-                localStorage.setItem('my_cards_data', JSON.stringify(allData));
-                console.log("تم دمج وتحديث البيانات من كافة الملفات بنجاح 🎉");
-
-                if (typeof handleRoute === 'function') {
-                    handleRoute();
+                let mediaContent = '';
+                if (item.image && item.image.trim() !== '') {
+                    mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
+                } else {
+                    mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/360x203/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
                 }
-            } else {
-                throw new Error("لم يتم تحميل أي ملف JSON بنجاح من السيرفر.");
-            }
 
-        } catch (error) {
-            console.error("❌ خلل كلي في الاتصال، جاري التحميل من الذاكرة المحلية الاحتياطية:", error);
-            const localData = localStorage.getItem('my_cards_data');
-            if (localData) {
-                allData = JSON.parse(localData);
-                isDataLoaded = true;
-                render(allData);
-                if (typeof handleRoute === 'function') handleRoute();
-            } else {
-                if (statusMsg) {
-                    statusMsg.innerText = "عذراً، حدث خلل أثناء تحميل البيانات.";
-                }
-            }
-        }
-    }
-    
-    function render(dataArray) {
-        const mainGrid = document.getElementById('mainGrid');
-        if (!mainGrid) return; 
-
-        mainGrid.innerHTML = ''; 
-
-        if (dataArray.length === 0) {
-            if (isDataLoaded) {
-                statusMsg.innerText = "لا توجد بطاقات معروضة في هذا القسم";
-            }
-            return;
-        }
-        statusMsg.innerText = '';
-        
-        dataArray.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            
-            card.addEventListener('click', function() {
-                openDetails(item.id);
-            });
-            
-            let mediaContent = '';
-            if (item.image && item.image.trim() !== '') {
-                mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
-            } else {
-                mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/360x203/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
-            }
-
-            card.innerHTML = `
+                card.innerHTML = `
                 ${mediaContent}
                 <div class="card-body-container">
                     <h3>${item.title || 'بدون عنوان'}</h3>
                     <div class="card-content">${item.content || ''}</div>
                 </div>
             `;
-            mainGrid.appendChild(card);
-        });
-    }
-    // اضافة قسم  دالة التوجه بين الاقسام 
-    function handleRoute() {
-        const hash = window.location.hash || '#/';
-        if (searchInput) searchInput.value = ''; 
-
-        if (hash === '#/investment') {
-            const filtered = allData.filter(d => d.category === 'invest');
-            pageTitle.innerText = 'دليل الاستثمار في العراق';
-            render(filtered);
-            setActiveNav('btn-invest');
-        } 
-        else if (hash === '#/time-analysis') {
-            const filtered = allData.filter(d => d.category === 'time-analysis');
-            pageTitle.innerText = ' التحليل الزمني ';
-            render(filtered);
-            setActiveNav('btn-time-analysis');           
+                mainGrid.appendChild(card);
+            });
         }
-        
-        else if (hash === '#/rw') {
-            const filtered = allData.filter(d => d.category === 'rw');
-            pageTitle.innerText = ' مكتبة وايكوف';
-            render(filtered);
-            setActiveNav('btn-rw');           
-        }
+        // اضافة قسم  دالة التوجه بين الاقسام 
+        function handleRoute() {
+            const hash = window.location.hash || '#/';
+            if (searchInput) searchInput.value = '';
 
-        else if (hash === '#/technical-analysis') {
-            const filtered = allData.filter(d => d.category === 'technical-analysis');
-            pageTitle.innerText = 'مدارس التحليل الفني';
-            render(filtered);
-            setActiveNav('btn-technical-analysis');
-        }
-        // 🛠️ المسار الجديد لعرض تنبيهات الكريبتو القادمة من البوت
-        else if (hash === '#/crypto') {
-            const filtered = allData.filter(d => d.category === 'high_volume');
-            pageTitle.innerText = '🤖 تنبيهات بث حي لحركة العملات الرقمية';
-            render(filtered);
-            setActiveNav('btn-crypto');
-        } 
-        else {
-            const filtered = allData.filter(d => d.category === 'vsa');
-            pageTitle.innerText = 'أكاديمية VSA والتداول';
-            render(filtered);
-            setActiveNav('btn-vsa');
-        }
-        
-    }
-
-    function setActiveNav(id) {
-        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-        const activeLink = document.getElementById(id);
-        if (activeLink) activeLink.classList.add('active');
-    }
-
-    const dropdown = document.getElementById('searchDropdown');
-
-    if (searchInput && dropdown) {
-        let currentDropdownItems = [];
-
-        function performSearch() {
-            const term = searchInput.value.toLowerCase().trim();
-            
-            if (term === '') { 
-                dropdown.innerHTML = '';
-                dropdown.style.display = 'none';
-                currentDropdownItems = []; 
-                return; 
+            if (hash === '#/investment') {
+                const filtered = allData.filter(d => d.category === 'invest');
+                pageTitle.innerText = 'دليل الاستثمار في العراق';
+                render(filtered);
+                setActiveNav('btn-invest');
+            }
+            else if (hash === '#/time-analysis') {
+                const filtered = allData.filter(d => d.category === 'time-analysis');
+                pageTitle.innerText = ' التحليل الزمني ';
+                render(filtered);
+                setActiveNav('btn-time-analysis');
             }
 
-            dropdown.innerHTML = ''; 
-            currentDropdownItems = []; 
-            let hasResults = false;
+            else if (hash === '#/rw') {
+                const filtered = allData.filter(d => d.category === 'rw');
+                pageTitle.innerText = ' مكتبة وايكوف';
+                render(filtered);
+                setActiveNav('btn-rw');
+            }
 
-            allData.forEach(item => {
+            else if (hash === '#/technical-analysis') {
+                const filtered = allData.filter(d => d.category === 'technical-analysis');
+                pageTitle.innerText = 'مدارس التحليل الفني';
+                render(filtered);
+                setActiveNav('btn-technical-analysis');
+            }
+            // 🛠️ المسار الجديد لعرض تنبيهات الكريبتو القادمة من البوت
+            else if (hash === '#/crypto') {
+                const filtered = allData.filter(d => d.category === 'high_volume');
+                pageTitle.innerText = '🤖 تنبيهات بث حي لحركة العملات الرقمية';
+                render(filtered);
+                setActiveNav('btn-crypto');
+            }
+            else {
+                const filtered = allData.filter(d => d.category === 'vsa');
+                pageTitle.innerText = 'أكاديمية VSA والتداول';
+                render(filtered);
+                setActiveNav('btn-vsa');
+            }
 
-                // ── فيديو مباشر ──
-                if (item.videoUrl && item.videoUrl.toLowerCase().includes(term)) {
-                    hasResults = true;
-                    createDropdownItem(`📺 فيديو: ${item.title}`, item.id, item.videoUrl);
+        }
+
+        function setActiveNav(id) {
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            const activeLink = document.getElementById(id);
+            if (activeLink) activeLink.classList.add('active');
+        }
+
+        const dropdown = document.getElementById('searchDropdown');
+
+        if (searchInput && dropdown) {
+            let currentDropdownItems = [];
+
+            function performSearch() {
+                const term = searchInput.value.toLowerCase().trim();
+
+                if (term === '') {
+                    dropdown.innerHTML = '';
+                    dropdown.style.display = 'none';
+                    currentDropdownItems = [];
+                    return;
                 }
 
-                // ── فيديوهات الكورس + فصولها الزمنية ──
-                if (item.videos && Array.isArray(item.videos)) {
-                    item.videos.forEach((subVid, subIdx) => {
+                dropdown.innerHTML = '';
+                currentDropdownItems = [];
+                let hasResults = false;
 
-                        // عنوان الدرس
-                        if (subVid.title && subVid.title.toLowerCase().includes(term)) {
-                            hasResults = true;
-                            createDropdownItem(
-                                `🎥 درس: ${subVid.title} (${item.title})`,
-                                item.id, null, subIdx, null, null, null, null
-                            );
-                        }
+                allData.forEach(item => {
 
-                        // فصول هذا الدرس
-                        if (subVid.chapters && Array.isArray(subVid.chapters)) {
-                            subVid.chapters.forEach(ch => {
-                                if (ch.text && ch.text.toLowerCase().includes(term)) {
-                                    hasResults = true;
-                                    createDropdownItem(
-                                        `⏱️ ${ch.time} — ${ch.text} (${subVid.title || item.title})`,
-                                        item.id, null, subIdx, null, null, ch.time, null
-                                    );
-                                }
-                            });
-                        }
+                    // ── فيديو مباشر ──
+                    if (item.videoUrl && item.videoUrl.toLowerCase().includes(term)) {
+                        hasResults = true;
+                        createDropdownItem(`📺 فيديو: ${item.title}`, item.id, item.videoUrl);
+                    }
+
+                    // ── فيديوهات الكورس + فصولها الزمنية ──
+                    if (item.videos && Array.isArray(item.videos)) {
+                        item.videos.forEach((subVid, subIdx) => {
+
+                            // عنوان الدرس
+                            if (subVid.title && subVid.title.toLowerCase().includes(term)) {
+                                hasResults = true;
+                                createDropdownItem(
+                                    `🎥 درس: ${subVid.title} (${item.title})`,
+                                    item.id, null, subIdx, null, null, null, null
+                                );
+                            }
+
+                            // فصول هذا الدرس
+                            if (subVid.chapters && Array.isArray(subVid.chapters)) {
+                                subVid.chapters.forEach(ch => {
+                                    if (ch.text && ch.text.toLowerCase().includes(term)) {
+                                        hasResults = true;
+                                        createDropdownItem(
+                                            `⏱️ ${ch.time} — ${ch.text} (${subVid.title || item.title})`,
+                                            item.id, null, subIdx, null, null, ch.time, null
+                                        );
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    // ── الفهارس الموضوعية ──
+                    if (item.thematic_index && Array.isArray(item.thematic_index)) {
+                        item.thematic_index.forEach(topic => {
+
+                            // اسم الموضوع نفسه
+                            if (topic.topic_name && topic.topic_name.toLowerCase().includes(term)) {
+                                hasResults = true;
+                                createDropdownItem(
+                                    `📌 موضوع: ${topic.topic_name} (${item.title})`,
+                                    item.id, null, null, null, null, null, null
+                                );
+                            }
+
+                            // فصول الموضوع
+                            if (topic.chapters && Array.isArray(topic.chapters)) {
+                                topic.chapters.forEach(ch => {
+                                    if (ch.text && ch.text.toLowerCase().includes(term)) {
+                                        hasResults = true;
+                                        createDropdownItem(
+                                            `📌 ${topic.topic_name} • ${ch.time} — ${ch.text}`,
+                                            item.id, null, null, null, null, ch.time, ch.video_id
+                                        );
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    // ── الصور ──
+                    if (item.images && Array.isArray(item.images)) {
+                        item.images.forEach((imgItem, imgIdx) => {
+                            const imgTitle = typeof imgItem === 'string' ? `صورة ${imgIdx + 1}` : (imgItem.title || `صورة ${imgIdx + 1}`);
+                            const imgUrl = typeof imgItem === 'string' ? imgItem : imgItem.url;
+                            if (imgTitle.toLowerCase().includes(term) || (imgUrl && imgUrl.toLowerCase().includes(term))) {
+                                hasResults = true;
+                                createDropdownItem(`🖼️ صورة: ${imgTitle} (${item.title})`, item.id, null, null, imgIdx, null, null, null);
+                            }
+                        });
+                    }
+
+                    // ── ملفات PDF ──
+                    if (item.pdfs && Array.isArray(item.pdfs)) {
+                        item.pdfs.forEach((pdfItem, pdfIdx) => {
+                            const pdfTitle = typeof pdfItem === 'string' ? `ملف ${pdfIdx + 1}` : (pdfItem.title || `ملف ${pdfIdx + 1}`);
+                            const pdfUrl = typeof pdfItem === 'string' ? pdfItem : pdfItem.url;
+                            if (pdfTitle.toLowerCase().includes(term) || (pdfUrl && pdfUrl.toLowerCase().includes(term))) {
+                                hasResults = true;
+                                createDropdownItem(`📄 PDF: ${pdfTitle} (${item.title})`, item.id, null, null, null, pdfIdx, null, null);
+                            }
+                        });
+                    }
+
+                    // ── الروابط ──
+                    if (item.links && Array.isArray(item.links)) {
+                        item.links.forEach(link => {
+                            const matchText = link.text && link.text.toLowerCase().includes(term);
+                            const matchUrl = link.url && link.url.toLowerCase().includes(term);
+                            if (matchText || matchUrl) {
+                                hasResults = true;
+                                createDropdownItem(`🔗 رابط: ${link.text || 'مشاهدة'}`, item.id, link.url);
+                            }
+                        });
+                    }
+
+                    // ── عنوان البطاقة ومحتواها ──
+                    const matchTitle = item.title && item.title.toLowerCase().includes(term);
+                    const matchContent = item.content && item.content.toLowerCase().includes(term);
+                    if (matchTitle || matchContent) {
+                        hasResults = true;
+                        createDropdownItem(`🗂️ بطاقة: ${item.title}`, item.id);
+                    }
+                });
+
+                // ── بناء عنصر القائمة ──
+                // directUrl | videoIdx | imageIdx | pdfIdx | chapterTime | thematicVideoId
+                function createDropdownItem(displayText, itemId, directUrl = null, videoIdx = null, imageIdx = null, pdfIdx = null, chapterTime = null, thematicVideoId = null) {
+                    const div = document.createElement('div');
+                    div.className = 'search-item';
+                    div.innerText = displayText;
+                    currentDropdownItems.push({ itemId, directUrl, videoIdx, imageIdx, pdfIdx, chapterTime, thematicVideoId });
+                    div.addEventListener('click', () => {
+                        executeSearchAction(itemId, directUrl, videoIdx, imageIdx, pdfIdx, chapterTime, thematicVideoId);
                     });
+                    dropdown.appendChild(div);
                 }
 
-                // ── الفهارس الموضوعية ──
-                if (item.thematic_index && Array.isArray(item.thematic_index)) {
-                    item.thematic_index.forEach(topic => {
-
-                        // اسم الموضوع نفسه
-                        if (topic.topic_name && topic.topic_name.toLowerCase().includes(term)) {
-                            hasResults = true;
-                            createDropdownItem(
-                                `📌 موضوع: ${topic.topic_name} (${item.title})`,
-                                item.id, null, null, null, null, null, null
-                            );
-                        }
-
-                        // فصول الموضوع
-                        if (topic.chapters && Array.isArray(topic.chapters)) {
-                            topic.chapters.forEach(ch => {
-                                if (ch.text && ch.text.toLowerCase().includes(term)) {
-                                    hasResults = true;
-                                    createDropdownItem(
-                                        `📌 ${topic.topic_name} • ${ch.time} — ${ch.text}`,
-                                        item.id, null, null, null, null, ch.time, ch.video_id
-                                    );
-                                }
-                            });
-                        }
-                    });
+                if (hasResults) {
+                    dropdown.style.display = 'block';
+                } else {
+                    dropdown.innerHTML = `<div class="search-item" style="color: #aaa; cursor: default;">عذراً، لم يتم العثور على عناوين أو روابط مطابقة...</div>`;
+                    dropdown.style.display = 'block';
                 }
+            }
 
-                // ── الصور ──
-                if (item.images && Array.isArray(item.images)) {
-                    item.images.forEach((imgItem, imgIdx) => {
-                        const imgTitle = typeof imgItem === 'string' ? `صورة ${imgIdx + 1}` : (imgItem.title || `صورة ${imgIdx + 1}`);
-                        const imgUrl   = typeof imgItem === 'string' ? imgItem : imgItem.url;
-                        if (imgTitle.toLowerCase().includes(term) || (imgUrl && imgUrl.toLowerCase().includes(term))) {
-                            hasResults = true;
-                            createDropdownItem(`🖼️ صورة: ${imgTitle} (${item.title})`, item.id, null, null, imgIdx, null, null, null);
-                        }
-                    });
-                }
+            searchInput.addEventListener('input', performSearch);
+            searchInput.addEventListener('focus', () => {
+                if (searchInput.value.trim() !== '') performSearch();
+            });
 
-                // ── ملفات PDF ──
-                if (item.pdfs && Array.isArray(item.pdfs)) {
-                    item.pdfs.forEach((pdfItem, pdfIdx) => {
-                        const pdfTitle = typeof pdfItem === 'string' ? `ملف ${pdfIdx + 1}` : (pdfItem.title || `ملف ${pdfIdx + 1}`);
-                        const pdfUrl   = typeof pdfItem === 'string' ? pdfItem : pdfItem.url;
-                        if (pdfTitle.toLowerCase().includes(term) || (pdfUrl && pdfUrl.toLowerCase().includes(term))) {
-                            hasResults = true;
-                            createDropdownItem(`📄 PDF: ${pdfTitle} (${item.title})`, item.id, null, null, null, pdfIdx, null, null);
-                        }
-                    });
-                }
-
-                // ── الروابط ──
-                if (item.links && Array.isArray(item.links)) {
-                    item.links.forEach(link => {
-                        const matchText = link.text && link.text.toLowerCase().includes(term);
-                        const matchUrl  = link.url  && link.url.toLowerCase().includes(term);
-                        if (matchText || matchUrl) {
-                            hasResults = true;
-                            createDropdownItem(`🔗 رابط: ${link.text || 'مشاهدة'}`, item.id, link.url);
-                        }
-                    });
-                }
-
-                // ── عنوان البطاقة ومحتواها ──
-                const matchTitle   = item.title   && item.title.toLowerCase().includes(term);
-                const matchContent = item.content && item.content.toLowerCase().includes(term);
-                if (matchTitle || matchContent) {
-                    hasResults = true;
-                    createDropdownItem(`🗂️ بطاقة: ${item.title}`, item.id);
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    if (currentDropdownItems.length > 0) {
+                        e.preventDefault();
+                        const f = currentDropdownItems[0];
+                        executeSearchAction(f.itemId, f.directUrl, f.videoIdx, f.imageIdx, f.pdfIdx, f.chapterTime, f.thematicVideoId);
+                    }
                 }
             });
 
-            // ── بناء عنصر القائمة ──
-            // directUrl | videoIdx | imageIdx | pdfIdx | chapterTime | thematicVideoId
-            function createDropdownItem(displayText, itemId, directUrl = null, videoIdx = null, imageIdx = null, pdfIdx = null, chapterTime = null, thematicVideoId = null) {
-                const div = document.createElement('div');
-                div.className = 'search-item';
-                div.innerText = displayText;
-                currentDropdownItems.push({ itemId, directUrl, videoIdx, imageIdx, pdfIdx, chapterTime, thematicVideoId });
-                div.addEventListener('click', () => {
-                    executeSearchAction(itemId, directUrl, videoIdx, imageIdx, pdfIdx, chapterTime, thematicVideoId);
-                });
-                dropdown.appendChild(div);
-            }
+            function executeSearchAction(itemId, directUrl, videoIdx = null, imageIdx = null, pdfIdx = null, chapterTime = null, thematicVideoId = null) {
+                if (directUrl) {
+                    window.open(directUrl, '_blank');
+                } else {
+                    openDetails(itemId);
 
-            if (hasResults) {
-                dropdown.style.display = 'block';
-            } else {
-                dropdown.innerHTML = `<div class="search-item" style="color: #aaa; cursor: default;">عذراً، لم يتم العثور على عناوين أو روابط مطابقة...</div>`;
-                dropdown.style.display = 'block';
-            }
-        }
+                    // فيديو + قفز لطابع زمني (فصل)
+                    if (videoIdx !== null && chapterTime !== null) {
+                        setTimeout(() => {
+                            const item = allData.find(d => String(d.id) === String(itemId));
+                            if (item) playSpecificVideo(item, videoIdx, parseTimeToSeconds(chapterTime));
+                        }, 500);
 
-        searchInput.addEventListener('input', performSearch);
-        searchInput.addEventListener('focus', () => {
-            if (searchInput.value.trim() !== '') performSearch();
-        });
+                        // فيديو بدون طابع زمني (درس)
+                    } else if (videoIdx !== null) {
+                        setTimeout(() => { playPlaylistItem(itemId, videoIdx); }, 450);
+                    }
 
-        searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                if (currentDropdownItems.length > 0) {
-                    e.preventDefault(); 
-                    const f = currentDropdownItems[0];
-                    executeSearchAction(f.itemId, f.directUrl, f.videoIdx, f.imageIdx, f.pdfIdx, f.chapterTime, f.thematicVideoId);
+                    // فصل من الفهرس الموضوعي → يحدد الفيديو بـ video_id ويقفز للوقت
+                    if (thematicVideoId !== null) {
+                        setTimeout(() => {
+                            const item = allData.find(d => String(d.id) === String(itemId));
+                            if (item) {
+                                const secs = chapterTime ? parseTimeToSeconds(chapterTime) : 0;
+                                playSpecificVideo(item, thematicVideoId, secs);
+                            }
+                        }, 500);
+                    }
+
+                    // صورة محددة
+                    if (imageIdx !== null) {
+                        setTimeout(() => {
+                            const cards = document.querySelectorAll('#imagesContainer .gallery-card');
+                            if (cards[imageIdx]) cards[imageIdx].click();
+                        }, 500);
+                    }
+
+                    // PDF محدد
+                    if (pdfIdx !== null) {
+                        setTimeout(() => {
+                            const btns = document.querySelectorAll('#pdfsContainer .pdf-list-item');
+                            if (btns[pdfIdx]) btns[pdfIdx].click();
+                        }, 500);
+                    }
                 }
-            }
-        });
-
-        function executeSearchAction(itemId, directUrl, videoIdx = null, imageIdx = null, pdfIdx = null, chapterTime = null, thematicVideoId = null) {
-            if (directUrl) {
-                window.open(directUrl, '_blank');
-            } else {
-                openDetails(itemId);
-
-                // فيديو + قفز لطابع زمني (فصل)
-                if (videoIdx !== null && chapterTime !== null) {
-                    setTimeout(() => {
-                        const item = allData.find(d => String(d.id) === String(itemId));
-                        if (item) playSpecificVideo(item, videoIdx, parseTimeToSeconds(chapterTime));
-                    }, 500);
-
-                // فيديو بدون طابع زمني (درس)
-                } else if (videoIdx !== null) {
-                    setTimeout(() => { playPlaylistItem(itemId, videoIdx); }, 450);
-                }
-
-                // فصل من الفهرس الموضوعي → يحدد الفيديو بـ video_id ويقفز للوقت
-                if (thematicVideoId !== null) {
-                    setTimeout(() => {
-                        const item = allData.find(d => String(d.id) === String(itemId));
-                        if (item) {
-                            const secs = chapterTime ? parseTimeToSeconds(chapterTime) : 0;
-                            playSpecificVideo(item, thematicVideoId, secs);
-                        }
-                    }, 500);
-                }
-
-                // صورة محددة
-                if (imageIdx !== null) {
-                    setTimeout(() => {
-                        const cards = document.querySelectorAll('#imagesContainer .gallery-card');
-                        if (cards[imageIdx]) cards[imageIdx].click();
-                    }, 500);
-                }
-
-                // PDF محدد
-                if (pdfIdx !== null) {
-                    setTimeout(() => {
-                        const btns = document.querySelectorAll('#pdfsContainer .pdf-list-item');
-                        if (btns[pdfIdx]) btns[pdfIdx].click();
-                    }, 500);
-                }
-            }
-            dropdown.style.display = 'none';
-            searchInput.value = '';
-            currentDropdownItems = [];
-        }
-
-        document.addEventListener('click', (event) => {
-            if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
                 dropdown.style.display = 'none';
+                searchInput.value = '';
+                currentDropdownItems = [];
             }
-        });
-    }
 
-    window.addEventListener('hashchange', handleRoute);
-    window.addEventListener('load', handleRoute);
-    document.addEventListener('DOMContentLoaded', loadWebsiteData);
+            document.addEventListener('click', (event) => {
+                if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
 
-    let ytSdkPromise = null;
-    let fbSdkPromise = null;
-    let vimeoSdkPromise = null;
+        window.addEventListener('hashchange', handleRoute);
+        window.addEventListener('load', handleRoute);
+        document.addEventListener('DOMContentLoaded', loadWebsiteData);
 
-    function loadYouTubeSDK() {
-        if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
-        if (ytSdkPromise) return ytSdkPromise;
-        ytSdkPromise = new Promise((resolve) => {
-            if (window.YT && window.YT.Player) {
-                resolve(window.YT);
-                return;
-            }
-            const oldCallback = window.onYouTubeIframeAPIReady;
-            window.onYouTubeIframeAPIReady = () => {
-                if (oldCallback) oldCallback();
-                resolve(window.YT);
-            };
-            const script = document.createElement('script');
-            script.src = "https://www.youtube.com/iframe_api";
-            script.async = true;
-            document.head.appendChild(script);
-        });
-        return ytSdkPromise;
-    }
+        let ytSdkPromise = null;
+        let fbSdkPromise = null;
+        let vimeoSdkPromise = null;
 
-    function loadFacebookSDK() {
-        if (window.FB) return Promise.resolve(window.FB);
-        if (fbSdkPromise) return fbSdkPromise;
-        fbSdkPromise = new Promise((resolve) => {
-            const script = document.createElement('script');
-            script.src = "https://connect.facebook.net/ar_AR/sdk.js";
-            script.async = true;
-            script.defer = true;
-            script.onload = () => {
-                window.FB.init({
-                    xfbml: true,
-                    version: 'v16.0'
-                });
-                resolve(window.FB);
-            };
-            document.head.appendChild(script);
-        });
-        return fbSdkPromise;
-    }
+        function loadYouTubeSDK() {
+            if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
+            if (ytSdkPromise) return ytSdkPromise;
+            ytSdkPromise = new Promise((resolve) => {
+                if (window.YT && window.YT.Player) {
+                    resolve(window.YT);
+                    return;
+                }
+                const oldCallback = window.onYouTubeIframeAPIReady;
+                window.onYouTubeIframeAPIReady = () => {
+                    if (oldCallback) oldCallback();
+                    resolve(window.YT);
+                };
+                const script = document.createElement('script');
+                script.src = "https://www.youtube.com/iframe_api";
+                script.async = true;
+                document.head.appendChild(script);
+            });
+            return ytSdkPromise;
+        }
 
-    function loadVimeoSDK() {
-        if (window.Vimeo) return Promise.resolve(window.Vimeo);
-        if (vimeoSdkPromise) return vimeoSdkPromise;
-        vimeoSdkPromise = new Promise((resolve) => {
-            const script = document.createElement('script');
-            script.src = "https://player.vimeo.com/api/player.js";
-            script.async = true;
-            script.onload = () => {
-                resolve(window.Vimeo);
-            };
-            document.head.appendChild(script);
-        });
-        return vimeoSdkPromise;
-    }
+        function loadFacebookSDK() {
+            if (window.FB) return Promise.resolve(window.FB);
+            if (fbSdkPromise) return fbSdkPromise;
+            fbSdkPromise = new Promise((resolve) => {
+                const script = document.createElement('script');
+                script.src = "https://connect.facebook.net/ar_AR/sdk.js";
+                script.async = true;
+                script.defer = true;
+                script.onload = () => {
+                    window.FB.init({
+                        xfbml: true,
+                        version: 'v16.0'
+                    });
+                    resolve(window.FB);
+                };
+                document.head.appendChild(script);
+            });
+            return fbSdkPromise;
+        }
 
-    function getYouTubeId(url) {
-        if (!url) return null;
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length === 11) ? match[2] : null;
-    }
+        function loadVimeoSDK() {
+            if (window.Vimeo) return Promise.resolve(window.Vimeo);
+            if (vimeoSdkPromise) return vimeoSdkPromise;
+            vimeoSdkPromise = new Promise((resolve) => {
+                const script = document.createElement('script');
+                script.src = "https://player.vimeo.com/api/player.js";
+                script.async = true;
+                script.onload = () => {
+                    resolve(window.Vimeo);
+                };
+                document.head.appendChild(script);
+            });
+            return vimeoSdkPromise;
+        }
 
-    function getVimeoId(url) {
-        if (!url) return null;
-        const regExp = /(?:vimeo\.com\/|video\/)(\d+)/;
-        const match = url.match(regExp);
-        return match ? match[1] : null;
-    }
-
-    function getGoogleDriveId(url) {
-        if (!url) return null;
-        const regExp = /(?:file\/d\/|id=)([^/\?&]+)/;
-        const match = url.match(regExp);
-        return match ? match[1] : null;
-    }
-
-    function getTikTokId(url) {
-        if (!url) return null;
-        const regExp = /\/video\/(\d+)/;
-        const match = url.match(regExp);
-        return match ? match[1] : null;
-    }
-
-    const UnifiedPlayer = {
-        currentType: null,
-        apiPlayer: null,
-        element: null,
-        supportsSeeking: false,
-        pendingSeek: null,
-
-        detectVideoType: function(url) {
+        function getYouTubeId(url) {
             if (!url) return null;
-            url = url.trim();
-            
-            if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                return 'youtube';
-            }
-            if (url.includes('vimeo.com')) {
-                return 'vimeo';
-            }
-            if (url.includes('facebook.com') || url.includes('fb.watch')) {
-                return 'facebook';
-            }
-            if (url.includes('drive.google.com')) {
-                const lowerDrive = url.toLowerCase();
-                if (lowerDrive.includes('.pdf') || lowerDrive.includes('pdf')) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        function getVimeoId(url) {
+            if (!url) return null;
+            const regExp = /(?:vimeo\.com\/|video\/)(\d+)/;
+            const match = url.match(regExp);
+            return match ? match[1] : null;
+        }
+
+        function getGoogleDriveId(url) {
+            if (!url) return null;
+            const regExp = /(?:file\/d\/|id=)([^/\?&]+)/;
+            const match = url.match(regExp);
+            return match ? match[1] : null;
+        }
+
+        function getTikTokId(url) {
+            if (!url) return null;
+            const regExp = /\/video\/(\d+)/;
+            const match = url.match(regExp);
+            return match ? match[1] : null;
+        }
+
+        const UnifiedPlayer = {
+            currentType: null,
+            apiPlayer: null,
+            element: null,
+            supportsSeeking: false,
+            pendingSeek: null,
+
+            detectVideoType: function (url) {
+                if (!url) return null;
+                url = url.trim();
+
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    return 'youtube';
+                }
+                if (url.includes('vimeo.com')) {
+                    return 'vimeo';
+                }
+                if (url.includes('facebook.com') || url.includes('fb.watch')) {
+                    return 'facebook';
+                }
+                if (url.includes('drive.google.com')) {
+                    const lowerDrive = url.toLowerCase();
+                    if (lowerDrive.includes('.pdf') || lowerDrive.includes('pdf')) {
+                        return 'pdf';
+                    }
+                    if (
+                        lowerDrive.includes('.jpg') || lowerDrive.includes('.jpeg') ||
+                        lowerDrive.includes('.png') || lowerDrive.includes('.webp') ||
+                        lowerDrive.includes('.gif') || lowerDrive.includes('.svg')
+                    ) {
+                        return 'image';
+                    }
+                    return 'google-drive';
+                }
+                if (url.includes('tiktok.com')) {
+                    return 'tiktok';
+                }
+                if (url.includes('t.me/')) {
+                    const lower = url.toLowerCase();
+                    if (lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.includes('/videos/') || lower.includes('recording')) {
+                        return 'html5';
+                    }
+                    const parts = url.split('/');
+                    if (parts.length > 4 && !isNaN(parseInt(parts[parts.length - 1]))) {
+                        return 'telegram-embed';
+                    }
+                }
+
+                const lowerUrl = url.toLowerCase();
+
+                // كشف ملفات PDF
+                if (
+                    lowerUrl.endsWith('.pdf') ||
+                    lowerUrl.includes('.pdf?') ||
+                    lowerUrl.includes('type=pdf') ||
+                    (lowerUrl.includes('drive.google.com') && lowerUrl.includes('.pdf'))
+                ) {
                     return 'pdf';
                 }
+
+                // كشف ملفات الصور
                 if (
-                    lowerDrive.includes('.jpg') || lowerDrive.includes('.jpeg') ||
-                    lowerDrive.includes('.png') || lowerDrive.includes('.webp') ||
-                    lowerDrive.includes('.gif') || lowerDrive.includes('.svg')
+                    lowerUrl.endsWith('.jpg') ||
+                    lowerUrl.endsWith('.jpeg') ||
+                    lowerUrl.endsWith('.png') ||
+                    lowerUrl.endsWith('.gif') ||
+                    lowerUrl.endsWith('.webp') ||
+                    lowerUrl.endsWith('.svg') ||
+                    lowerUrl.endsWith('.bmp') ||
+                    lowerUrl.includes('.jpg?') ||
+                    lowerUrl.includes('.jpeg?') ||
+                    lowerUrl.includes('.png?') ||
+                    lowerUrl.includes('.webp?') ||
+                    lowerUrl.includes('type=image')
                 ) {
                     return 'image';
                 }
-                return 'google-drive';
-            }
-            if (url.includes('tiktok.com')) {
-                return 'tiktok';
-            }
-            if (url.includes('t.me/')) {
-                const lower = url.toLowerCase();
-                if (lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.includes('/videos/') || lower.includes('recording')) {
+
+                if (
+                    lowerUrl.endsWith('.mp4') ||
+                    lowerUrl.endsWith('.webm') ||
+                    lowerUrl.endsWith('.ogg') ||
+                    lowerUrl.includes('raw=1') ||
+                    lowerUrl.includes('dl=1') ||
+                    lowerUrl.includes('/videos/') ||
+                    lowerUrl.includes('recording') ||
+                    (lowerUrl.includes('github.com') && lowerUrl.includes('/raw/'))
+                ) {
                     return 'html5';
                 }
-                const parts = url.split('/');
-                if (parts.length > 4 && !isNaN(parseInt(parts[parts.length - 1]))) {
-                    return 'telegram-embed';
-                }
-            }
-            
-            const lowerUrl = url.toLowerCase();
 
-            // كشف ملفات PDF
-            if (
-                lowerUrl.endsWith('.pdf') ||
-                lowerUrl.includes('.pdf?') ||
-                lowerUrl.includes('type=pdf') ||
-                (lowerUrl.includes('drive.google.com') && lowerUrl.includes('.pdf'))
-            ) {
-                return 'pdf';
-            }
-
-            // كشف ملفات الصور
-            if (
-                lowerUrl.endsWith('.jpg') ||
-                lowerUrl.endsWith('.jpeg') ||
-                lowerUrl.endsWith('.png') ||
-                lowerUrl.endsWith('.gif') ||
-                lowerUrl.endsWith('.webp') ||
-                lowerUrl.endsWith('.svg') ||
-                lowerUrl.endsWith('.bmp') ||
-                lowerUrl.includes('.jpg?') ||
-                lowerUrl.includes('.jpeg?') ||
-                lowerUrl.includes('.png?') ||
-                lowerUrl.includes('.webp?') ||
-                lowerUrl.includes('type=image')
-            ) {
-                return 'image';
-            }
-
-            if (
-                lowerUrl.endsWith('.mp4') || 
-                lowerUrl.endsWith('.webm') || 
-                lowerUrl.endsWith('.ogg') ||
-                lowerUrl.includes('raw=1') ||
-                lowerUrl.includes('dl=1') ||
-                lowerUrl.includes('/videos/') ||
-                lowerUrl.includes('recording') ||
-                (lowerUrl.includes('github.com') && lowerUrl.includes('/raw/'))
-            ) {
                 return 'html5';
-            }
-            
-            return 'html5';
-        },
+            },
 
-        init: async function(container, url) {
-            this.cleanup();
-            if (!url || url.trim() === '') return;
+            init: async function (container, url) {
+                this.cleanup();
+                if (!url || url.trim() === '') return;
 
-            const type = this.detectVideoType(url);
-            this.currentType = type;
-            this.supportsSeeking = (type === 'youtube' || type === 'vimeo' || type === 'facebook' || type === 'html5');
-            this.pendingSeek = null;
+                const type = this.detectVideoType(url);
+                this.currentType = type;
+                this.supportsSeeking = (type === 'youtube' || type === 'vimeo' || type === 'facebook' || type === 'html5');
+                this.pendingSeek = null;
 
-            const notice = document.getElementById('chaptersUnsupportedNotice');
-            if (notice) {
-                notice.style.display = this.supportsSeeking ? 'none' : 'block';
-            }
+                const notice = document.getElementById('chaptersUnsupportedNotice');
+                if (notice) {
+                    notice.style.display = this.supportsSeeking ? 'none' : 'block';
+                }
 
-            container.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#fff; font-size:1.2rem;">⏱️ جاري تحميل المشغل...</div>';
-            container.style.display = 'block';
+                container.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#fff; font-size:1.2rem;">⏱️ جاري تحميل المشغل...</div>';
+                container.style.display = 'block';
 
-            try {
-                if (type === 'youtube') {
-                    const ytId = getYouTubeId(url);
-                    if (!ytId) throw new Error("لم يتم العثور على معرف فيديو يوتيوب");
+                try {
+                    if (type === 'youtube') {
+                        const ytId = getYouTubeId(url);
+                        if (!ytId) throw new Error("لم يتم العثور على معرف فيديو يوتيوب");
 
-                    await loadYouTubeSDK();
-                    
-                    const playerDivId = 'yt-player-target';
-                    container.innerHTML = `<div id="${playerDivId}"></div>`;
+                        await loadYouTubeSDK();
 
-                    this.apiPlayer = new YT.Player(playerDivId, {
-                        height: '100%',
-                        width: '100%',
-                        videoId: ytId,
-                        playerVars: {
-                            'autoplay': 1,
-                            'controls': 1,
-                            'rel': 0,
-                            'showinfo': 0,
-                            'modestbranding': 1
-                        },
-                        events: {
-                            'onReady': (event) => {
-                                const player = event.target;
-                                if (this.pendingSeek !== null) {
-                                    player.seekTo(this.pendingSeek, true);
-                                    this.pendingSeek = null;
+                        const playerDivId = 'yt-player-target';
+                        container.innerHTML = `<div id="${playerDivId}"></div>`;
+
+                        this.apiPlayer = new YT.Player(playerDivId, {
+                            height: '100%',
+                            width: '100%',
+                            videoId: ytId,
+                            playerVars: {
+                                'autoplay': 1,
+                                'controls': 1,
+                                'rel': 0,
+                                'showinfo': 0,
+                                'modestbranding': 1
+                            },
+                            events: {
+                                'onReady': (event) => {
+                                    const player = event.target;
+                                    if (this.pendingSeek !== null) {
+                                        player.seekTo(this.pendingSeek, true);
+                                        this.pendingSeek = null;
+                                    }
                                 }
                             }
-                        }
-                    });
-                } 
-                else if (type === 'vimeo') {
-                    const vimeoId = getVimeoId(url);
-                    if (!vimeoId) throw new Error("لم يتم العثور على معرف فيديو فيميو");
+                        });
+                    }
+                    else if (type === 'vimeo') {
+                        const vimeoId = getVimeoId(url);
+                        if (!vimeoId) throw new Error("لم يتم العثور على معرف فيديو فيميو");
 
-                    await loadVimeoSDK();
+                        await loadVimeoSDK();
 
-                    const iframe = document.createElement('iframe');
-                    iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&api=1`;
-                    iframe.allow = "autoplay; fullscreen; picture-in-picture";
-                    iframe.style.width = "100%";
-                    iframe.style.height = "100%";
-                    iframe.style.border = "none";
-                    
-                    container.innerHTML = '';
-                    container.appendChild(iframe);
+                        const iframe = document.createElement('iframe');
+                        iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&api=1`;
+                        iframe.allow = "autoplay; fullscreen; picture-in-picture";
+                        iframe.style.width = "100%";
+                        iframe.style.height = "100%";
+                        iframe.style.border = "none";
 
-                    this.apiPlayer = new Vimeo.Player(iframe);
-                    this.apiPlayer.ready().then(() => {
-                        if (this.pendingSeek !== null) {
-                            this.apiPlayer.setCurrentTime(this.pendingSeek);
-                            this.pendingSeek = null;
-                        }
-                    });
-                } 
-                else if (type === 'facebook') {
-                    await loadFacebookSDK();
+                        container.innerHTML = '';
+                        container.appendChild(iframe);
 
-                    const fbDivId = 'fb-player-target';
-                    container.innerHTML = `
+                        this.apiPlayer = new Vimeo.Player(iframe);
+                        this.apiPlayer.ready().then(() => {
+                            if (this.pendingSeek !== null) {
+                                this.apiPlayer.setCurrentTime(this.pendingSeek);
+                                this.pendingSeek = null;
+                            }
+                        });
+                    }
+                    else if (type === 'facebook') {
+                        await loadFacebookSDK();
+
+                        const fbDivId = 'fb-player-target';
+                        container.innerHTML = `
                         <div class="fb-video" id="${fbDivId}" 
                              data-href="${url}" 
                              data-allowfullscreen="true" 
@@ -1492,42 +1566,42 @@
                         </div>
                     `;
 
-                    FB.XFBML.parse(container);
+                        FB.XFBML.parse(container);
 
-                    const self = this;
-                    const readySubscription = (msg) => {
-                        if (msg.type === 'video') {
-                            self.apiPlayer = msg.instance;
-                            if (self.pendingSeek !== null) {
-                                self.apiPlayer.seek(self.pendingSeek);
-                                self.apiPlayer.play();
-                                self.pendingSeek = null;
+                        const self = this;
+                        const readySubscription = (msg) => {
+                            if (msg.type === 'video') {
+                                self.apiPlayer = msg.instance;
+                                if (self.pendingSeek !== null) {
+                                    self.apiPlayer.seek(self.pendingSeek);
+                                    self.apiPlayer.play();
+                                    self.pendingSeek = null;
+                                }
                             }
-                        }
-                    };
-                    
-                    if (!window._fbReadySubscribed) {
-                        FB.Event.subscribe('xfbml.ready', readySubscription);
-                        window._fbReadySubscribed = true;
-                    }
-                } 
-                else if (type === 'google-drive') {
-                    const driveId = getGoogleDriveId(url);
-                    if (!driveId) throw new Error("لم يتم العثور على معرف ملف جوجل درايف");
+                        };
 
-                    container.innerHTML = `
+                        if (!window._fbReadySubscribed) {
+                            FB.Event.subscribe('xfbml.ready', readySubscription);
+                            window._fbReadySubscribed = true;
+                        }
+                    }
+                    else if (type === 'google-drive') {
+                        const driveId = getGoogleDriveId(url);
+                        if (!driveId) throw new Error("لم يتم العثور على معرف ملف جوجل درايف");
+
+                        container.innerHTML = `
                         <iframe src="https://drive.google.com/file/d/${driveId}/preview" 
                                 frameborder="0" 
                                 allowfullscreen 
                                 style="width:100%; height:100%; border:none;">
                         </iframe>
                     `;
-                } 
-                else if (type === 'tiktok') {
-                    const tiktokId = getTikTokId(url);
-                    const embedUrl = tiktokId ? `https://www.tiktok.com/embed/v2/${tiktokId}` : url;
+                    }
+                    else if (type === 'tiktok') {
+                        const tiktokId = getTikTokId(url);
+                        const embedUrl = tiktokId ? `https://www.tiktok.com/embed/v2/${tiktokId}` : url;
 
-                    container.innerHTML = `
+                        container.innerHTML = `
                         <iframe src="${embedUrl}" 
                                 frameborder="0" 
                                 allow="autoplay; fullscreen" 
@@ -1535,10 +1609,10 @@
                                 style="width:100%; height:100%; border:none;">
                         </iframe>
                     `;
-                } 
-                else if (type === 'telegram-embed') {
-                    const embedUrl = url.includes('?embed=1') ? url : `${url}?embed=1`;
-                    container.innerHTML = `
+                    }
+                    else if (type === 'telegram-embed') {
+                        const embedUrl = url.includes('?embed=1') ? url : `${url}?embed=1`;
+                        container.innerHTML = `
                         <div style="position:relative; width:100%; height:100%; background:#0d0d0d; display:flex; flex-direction:column;">
                             <iframe src="${embedUrl}" 
                                     frameborder="0" 
@@ -1551,27 +1625,27 @@
                             </div>
                         </div>
                     `;
-                } 
-                else if (type === 'pdf') {
-                    // تحديد رابط العرض المناسب
-                    let pdfEmbedUrl = url;
-
-                    // Google Drive PDF: تحويل رابط المشاركة إلى رابط معاينة
-                    if (url.includes('drive.google.com')) {
-                        const driveId = getGoogleDriveId(url);
-                        if (driveId) {
-                            pdfEmbedUrl = `https://drive.google.com/file/d/${driveId}/preview`;
-                        }
                     }
-                    // Dropbox: تحويل dl=0 إلى raw=1
-                    else if (url.includes('dropbox.com')) {
-                        pdfEmbedUrl = url.replace('dl=0', 'raw=1').replace('dl=1', 'raw=1');
-                        if (!pdfEmbedUrl.includes('raw=1')) {
-                            pdfEmbedUrl += (pdfEmbedUrl.includes('?') ? '&' : '?') + 'raw=1';
-                        }
-                    }
+                    else if (type === 'pdf') {
+                        // تحديد رابط العرض المناسب
+                        let pdfEmbedUrl = url;
 
-                    container.innerHTML = `
+                        // Google Drive PDF: تحويل رابط المشاركة إلى رابط معاينة
+                        if (url.includes('drive.google.com')) {
+                            const driveId = getGoogleDriveId(url);
+                            if (driveId) {
+                                pdfEmbedUrl = `https://drive.google.com/file/d/${driveId}/preview`;
+                            }
+                        }
+                        // Dropbox: تحويل dl=0 إلى raw=1
+                        else if (url.includes('dropbox.com')) {
+                            pdfEmbedUrl = url.replace('dl=0', 'raw=1').replace('dl=1', 'raw=1');
+                            if (!pdfEmbedUrl.includes('raw=1')) {
+                                pdfEmbedUrl += (pdfEmbedUrl.includes('?') ? '&' : '?') + 'raw=1';
+                            }
+                        }
+
+                        container.innerHTML = `
                         <div style="position:relative; width:100%; height:100%; background:#1a1a1e; display:flex; flex-direction:column; border-radius:12px; overflow:hidden;">
                             <div style="background:#18181c; border-bottom:1px solid #2d2d35; padding:10px 16px; display:flex; align-items:center; flex-shrink:0;">
                                 <span style="color:#00d4ff; font-weight:700; font-size:0.95rem;">📄 عارض PDF</span>
@@ -1585,19 +1659,19 @@
                             </iframe>
                         </div>
                     `;
-                    container.style.display = 'block';
-                }
-                else if (type === 'image') {
-                    // تحويل رابط Google Drive لصورة مباشرة
-                    let imgSrc = url;
-                    if (url.includes('drive.google.com')) {
-                        const driveId = getGoogleDriveId(url);
-                        if (driveId) {
-                            imgSrc = `https://drive.google.com/uc?export=view&id=${driveId}`;
-                        }
+                        container.style.display = 'block';
                     }
+                    else if (type === 'image') {
+                        // تحويل رابط Google Drive لصورة مباشرة
+                        let imgSrc = url;
+                        if (url.includes('drive.google.com')) {
+                            const driveId = getGoogleDriveId(url);
+                            if (driveId) {
+                                imgSrc = `https://drive.google.com/uc?export=view&id=${driveId}`;
+                            }
+                        }
 
-                    container.innerHTML = `
+                        container.innerHTML = `
                         <div data-imgwrapper="1" style="position:relative; width:100%; height:100%; background:#0d0d0f; display:flex; flex-direction:column; border-radius:12px; overflow:hidden;">
                             <div style="background:#18181c; border-bottom:1px solid #2d2d35; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
                                 <span style="color:#00d4ff; font-weight:700; font-size:0.95rem;">🖼️ عارض الصورة</span>
@@ -1617,504 +1691,512 @@
                             </div>
                         </div>
                     `;
-                    container.style.display = 'block';
-                }
-                else if (type === 'html5') {
-                    let directUrl = url;
-                    
-                    if (directUrl.includes('dropbox.com')) {
-                        if (directUrl.includes('dl=0')) {
-                            directUrl = directUrl.replace('dl=0', 'raw=1');
-                        } else if (directUrl.includes('dl=1')) {
-                            directUrl = directUrl.replace('dl=1', 'raw=1');
-                        } else if (!directUrl.includes('raw=1')) {
-                            directUrl += (directUrl.includes('?') ? '&' : '?') + 'raw=1';
-                        }
+                        container.style.display = 'block';
                     }
+                    else if (type === 'html5') {
+                        let directUrl = url;
 
-                    const video = document.createElement('video');
-                    video.src = directUrl;
-                    video.controls = true;
-                    video.autoplay = true;
-                    video.style.width = "100%";
-                    video.style.height = "100%";
-                    video.style.background = "#000";
-                    video.style.border = "none";
-                    
-                    container.innerHTML = '';
-                    container.appendChild(video);
-                    this.element = video;
-
-                    video.addEventListener('loadedmetadata', () => {
-                        if (this.pendingSeek !== null) {
-                            video.currentTime = this.pendingSeek;
-                            video.play();
-                            this.pendingSeek = null;
+                        if (directUrl.includes('dropbox.com')) {
+                            if (directUrl.includes('dl=0')) {
+                                directUrl = directUrl.replace('dl=0', 'raw=1');
+                            } else if (directUrl.includes('dl=1')) {
+                                directUrl = directUrl.replace('dl=1', 'raw=1');
+                            } else if (!directUrl.includes('raw=1')) {
+                                directUrl += (directUrl.includes('?') ? '&' : '?') + 'raw=1';
+                            }
                         }
-                    });
-                }
-            } catch (err) {
-                console.error("UnifiedPlayer Init Error: ", err);
-                container.innerHTML = `<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#ff4d4d; font-size:1rem; padding: 20px; text-align:center;">❌ فشل تحميل الفيديو: ${err.message}</div>`;
-            }
-        },
 
-        seekTo: function(seconds) {
-            if (!this.supportsSeeking) return;
+                        const video = document.createElement('video');
+                        video.src = directUrl;
+                        video.controls = true;
+                        video.autoplay = true;
+                        video.style.width = "100%";
+                        video.style.height = "100%";
+                        video.style.background = "#000";
+                        video.style.border = "none";
 
-            if (this.currentType === 'youtube') {
-                if (this.apiPlayer && typeof this.apiPlayer.seekTo === 'function') {
-                    this.apiPlayer.seekTo(seconds, true);
-                    if (this.apiPlayer.playVideo) this.apiPlayer.playVideo();
-                } else {
-                    this.pendingSeek = seconds;
+                        container.innerHTML = '';
+                        container.appendChild(video);
+                        this.element = video;
+
+                        video.addEventListener('loadedmetadata', () => {
+                            if (this.pendingSeek !== null) {
+                                video.currentTime = this.pendingSeek;
+                                video.play();
+                                this.pendingSeek = null;
+                            }
+                        });
+                    }
+                } catch (err) {
+                    console.error("UnifiedPlayer Init Error: ", err);
+                    container.innerHTML = `<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#ff4d4d; font-size:1rem; padding: 20px; text-align:center;">❌ فشل تحميل الفيديو: ${err.message}</div>`;
                 }
-            } 
-            else if (this.currentType === 'vimeo') {
-                if (this.apiPlayer && typeof this.apiPlayer.setCurrentTime === 'function') {
-                    this.apiPlayer.setCurrentTime(seconds);
-                    this.apiPlayer.play();
-                } else {
-                    this.pendingSeek = seconds;
+            },
+
+            seekTo: function (seconds) {
+                if (!this.supportsSeeking) return;
+
+                if (this.currentType === 'youtube') {
+                    if (this.apiPlayer && typeof this.apiPlayer.seekTo === 'function') {
+                        this.apiPlayer.seekTo(seconds, true);
+                        if (this.apiPlayer.playVideo) this.apiPlayer.playVideo();
+                    } else {
+                        this.pendingSeek = seconds;
+                    }
                 }
-            } 
-            else if (this.currentType === 'facebook') {
-                if (this.apiPlayer && typeof this.apiPlayer.seek === 'function') {
-                    this.apiPlayer.seek(seconds);
-                    this.apiPlayer.play();
-                } else {
-                    this.pendingSeek = seconds;
+                else if (this.currentType === 'vimeo') {
+                    if (this.apiPlayer && typeof this.apiPlayer.setCurrentTime === 'function') {
+                        this.apiPlayer.setCurrentTime(seconds);
+                        this.apiPlayer.play();
+                    } else {
+                        this.pendingSeek = seconds;
+                    }
                 }
-            } 
-            else if (this.currentType === 'html5') {
+                else if (this.currentType === 'facebook') {
+                    if (this.apiPlayer && typeof this.apiPlayer.seek === 'function') {
+                        this.apiPlayer.seek(seconds);
+                        this.apiPlayer.play();
+                    } else {
+                        this.pendingSeek = seconds;
+                    }
+                }
+                else if (this.currentType === 'html5') {
+                    if (this.element) {
+                        this.element.currentTime = seconds;
+                        this.element.play();
+                    } else {
+                        this.pendingSeek = seconds;
+                    }
+                }
+            },
+
+            cleanup: function () {
+                if (this.currentType === 'youtube' && this.apiPlayer && typeof this.apiPlayer.destroy === 'function') {
+                    try { this.apiPlayer.destroy(); } catch (e) { }
+                }
+                if (this.currentType === 'facebook' && this.apiPlayer) {
+                    try {
+                        if (typeof this.apiPlayer.pause === 'function') this.apiPlayer.pause();
+                    } catch (e) { }
+                }
+                if (this.currentType === 'vimeo' && this.apiPlayer) {
+                    try {
+                        if (typeof this.apiPlayer.unload === 'function') this.apiPlayer.unload();
+                    } catch (e) { }
+                }
                 if (this.element) {
-                    this.element.currentTime = seconds;
-                    this.element.play();
+                    try {
+                        this.element.pause();
+                        this.element.src = "";
+                        this.element.load();
+                    } catch (e) { }
+                }
+
+                this.currentType = null;
+                this.apiPlayer = null;
+                this.element = null;
+                this.supportsSeeking = false;
+                this.pendingSeek = null;
+            }
+        };
+
+        function openDetails(id, isHistoryNavigation = false) {
+            const selectedItem = allData.find(item => String(item.id) === String(id));
+            if (!selectedItem) return;
+
+            if (!isHistoryNavigation) {
+                if (modalHistory.length === 0 || document.getElementById('myModal').style.display !== "block") {
+                    modalHistory = [String(id)];
+                    modalHistoryIndex = 0;
+                    // عند فتح نافذة جديدة، نقوم بتصفير originalThematicItem مؤقتاً
+                    // ثم سنعيد تعيينه لاحقاً إذا كان العنصر يحتوي على thematic_index
+                    originalThematicItem = null;
                 } else {
-                    this.pendingSeek = seconds;
+                    modalHistory = modalHistory.slice(0, modalHistoryIndex + 1);
+                    modalHistory.push(String(id));
+                    modalHistoryIndex++;
                 }
             }
-        },
 
-        cleanup: function() {
-            if (this.currentType === 'youtube' && this.apiPlayer && typeof this.apiPlayer.destroy === 'function') {
-                try { this.apiPlayer.destroy(); } catch (e) {}
-            }
-            if (this.currentType === 'facebook' && this.apiPlayer) {
-                try {
-                    if (typeof this.apiPlayer.pause === 'function') this.apiPlayer.pause();
-                } catch (e) {}
-            }
-            if (this.currentType === 'vimeo' && this.apiPlayer) {
-                try {
-                    if (typeof this.apiPlayer.unload === 'function') this.apiPlayer.unload();
-                } catch (e) {}
-            }
-            if (this.element) {
-                try {
-                    this.element.pause();
-                    this.element.src = "";
-                    this.element.load();
-                } catch (e) {}
-            }
+            updateModalNavButtons();
 
-            this.currentType = null;
-            this.apiPlayer = null;
-            this.element = null;
-            this.supportsSeeking = false;
-            this.pendingSeek = null;
-        }
-    };
+            document.getElementById('modalTitle').innerText = selectedItem.title || '';
+            document.getElementById('modalContent').innerText = selectedItem.content || '';
 
-    function openDetails(id, isHistoryNavigation = false) {
-        const selectedItem = allData.find(item => String(item.id) === String(id));
-        if (!selectedItem) return;
+            const videoContainer = document.getElementById('popupVideoContainer');
+            const linksContainer = document.getElementById('popupLinksContainer');
+            const chaptersContainer = document.getElementById('chaptersContainer');
+            const chaptersSection = document.getElementById('chaptersSection');
+            const playlistSection = document.getElementById('playlistSection');
+            const playlistContainer = document.getElementById('playlistContainer');
+            const thematicSection = document.getElementById('thematicSection');
+            const thematicContainer = document.getElementById('thematicContainer');
+            const imagesSection = document.getElementById('imagesSection');
+            const imagesContainer = document.getElementById('imagesContainer');
+            const pdfsSection = document.getElementById('pdfsSection');
+            const pdfsContainer = document.getElementById('pdfsContainer');
 
-        if (!isHistoryNavigation) {
-            if (modalHistory.length === 0 || document.getElementById('myModal').style.display !== "block") {
-                modalHistory = [String(id)];
-                modalHistoryIndex = 0;
-                // عند فتح نافذة جديدة، نقوم بتصفير originalThematicItem مؤقتاً
-                // ثم سنعيد تعيينه لاحقاً إذا كان العنصر يحتوي على thematic_index
-                originalThematicItem = null;
-            } else {
-                modalHistory = modalHistory.slice(0, modalHistoryIndex + 1);
-                modalHistory.push(String(id));
-                modalHistoryIndex++;
-            }
-        }
+            if (videoContainer) { videoContainer.innerHTML = ''; videoContainer.style.display = 'none'; }
+            if (linksContainer) { linksContainer.innerHTML = ''; }
+            if (chaptersContainer) { chaptersContainer.innerHTML = ''; }
+            if (chaptersSection) { chaptersSection.style.display = 'none'; }
+            if (playlistSection) { playlistSection.style.display = 'none'; }
+            if (playlistContainer) { playlistContainer.innerHTML = ''; }
+            if (thematicSection) { thematicSection.style.display = 'none'; }
+            if (thematicContainer) { thematicContainer.innerHTML = ''; }
+            if (imagesSection) { imagesSection.style.display = 'none'; }
+            if (imagesContainer) { imagesContainer.innerHTML = ''; }
+            if (pdfsSection) { pdfsSection.style.display = 'none'; }
+            if (pdfsContainer) { pdfsContainer.innerHTML = ''; }
 
-        updateModalNavButtons();
+            function createDynamicButton(url, text) {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.innerText = text;
 
-        document.getElementById('modalTitle').innerText = selectedItem.title || '';
-        document.getElementById('modalContent').innerText = selectedItem.content || '';
+                btn.style.cssText = "text-decoration:none; padding:14px 28px; border-radius:10px; font-weight:bold; font-size:1rem; transition:all 0.25s ease; box-shadow:0 4px 15px rgba(0,0,0,0.3); display:inline-block; margin:8px; text-align:center;";
 
-        const videoContainer = document.getElementById('popupVideoContainer');
-        const linksContainer = document.getElementById('popupLinksContainer');
-        const chaptersContainer = document.getElementById('chaptersContainer');
-        const chaptersSection = document.getElementById('chaptersSection');
-        const playlistSection = document.getElementById('playlistSection');
-        const playlistContainer = document.getElementById('playlistContainer');
-        const thematicSection = document.getElementById('thematicSection');
-        const thematicContainer = document.getElementById('thematicContainer');
-        const imagesSection = document.getElementById('imagesSection');
-        const imagesContainer = document.getElementById('imagesContainer');
-        const pdfsSection = document.getElementById('pdfsSection');
-        const pdfsContainer = document.getElementById('pdfsContainer');
+                const lowerUrl = url.toLowerCase();
+                if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram.org')) {
+                    btn.style.backgroundColor = '#0088cc'; btn.style.color = '#ffffff'; btn.innerText = '🔹 ' + text;
+                } else if (lowerUrl.includes('facebook.com')) {
+                    btn.style.backgroundColor = '#1877f2'; btn.style.color = '#ffffff'; btn.innerText = '🔵 ' + text;
+                } else if (lowerUrl.includes('binance.com')) {
+                    btn.style.backgroundColor = '#fcd535'; btn.style.color = '#111111'; btn.innerText = '🔸 ' + text;
+                } else if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('.pdf?') || lowerUrl.includes('type=pdf')) {
+                    btn.style.backgroundColor = '#e53935'; btn.style.color = '#ffffff'; btn.innerText = '📄 ' + text;
+                } else if (
+                    lowerUrl.endsWith('.jpg') || lowerUrl.endsWith('.jpeg') || lowerUrl.endsWith('.png') ||
+                    lowerUrl.endsWith('.webp') || lowerUrl.endsWith('.gif') || lowerUrl.endsWith('.svg') ||
+                    lowerUrl.includes('type=image')
+                ) {
+                    btn.style.backgroundColor = '#7b1fa2'; btn.style.color = '#ffffff'; btn.innerText = '🖼️ ' + text;
+                } else {
+                    btn.style.backgroundColor = '#222222'; btn.style.color = '#00ff88'; btn.style.border = '1px solid #333'; btn.innerText = '🔗 ' + text;
+                }
 
-        if (videoContainer) { videoContainer.innerHTML = ''; videoContainer.style.display = 'none'; }
-        if (linksContainer) { linksContainer.innerHTML = ''; }
-        if (chaptersContainer) { chaptersContainer.innerHTML = ''; }
-        if (chaptersSection) { chaptersSection.style.display = 'none'; }
-        if (playlistSection) { playlistSection.style.display = 'none'; }
-        if (playlistContainer) { playlistContainer.innerHTML = ''; }
-        if (thematicSection) { thematicSection.style.display = 'none'; }
-        if (thematicContainer) { thematicContainer.innerHTML = ''; }
-        if (imagesSection) { imagesSection.style.display = 'none'; }
-        if (imagesContainer) { imagesContainer.innerHTML = ''; }
-        if (pdfsSection) { pdfsSection.style.display = 'none'; }
-        if (pdfsContainer) { pdfsContainer.innerHTML = ''; }
+                btn.onmouseenter = () => { btn.style.transform = 'translateY(-3px)'; btn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)'; };
+                btn.onmouseleave = () => { btn.style.transform = 'translateY(0)'; btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)'; };
 
-        function createDynamicButton(url, text) {
-            const btn = document.createElement('a');
-            btn.href = url;
-            btn.target = '_blank'; 
-            btn.innerText = text;
-
-            btn.style.cssText = "text-decoration:none; padding:14px 28px; border-radius:10px; font-weight:bold; font-size:1rem; transition:all 0.25s ease; box-shadow:0 4px 15px rgba(0,0,0,0.3); display:inline-block; margin:8px; text-align:center;";
-
-            const lowerUrl = url.toLowerCase();
-            if (lowerUrl.includes('t.me') || lowerUrl.includes('telegram.org')) {
-                btn.style.backgroundColor = '#0088cc'; btn.style.color = '#ffffff'; btn.innerText = '🔹 ' + text;
-            } else if (lowerUrl.includes('facebook.com')) {
-                btn.style.backgroundColor = '#1877f2'; btn.style.color = '#ffffff'; btn.innerText = '🔵 ' + text;
-            } else if (lowerUrl.includes('binance.com')) {
-                btn.style.backgroundColor = '#fcd535'; btn.style.color = '#111111'; btn.innerText = '🔸 ' + text;
-            } else if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('.pdf?') || lowerUrl.includes('type=pdf')) {
-                btn.style.backgroundColor = '#e53935'; btn.style.color = '#ffffff'; btn.innerText = '📄 ' + text;
-            } else if (
-                lowerUrl.endsWith('.jpg') || lowerUrl.endsWith('.jpeg') || lowerUrl.endsWith('.png') ||
-                lowerUrl.endsWith('.webp') || lowerUrl.endsWith('.gif') || lowerUrl.endsWith('.svg') ||
-                lowerUrl.includes('type=image')
-            ) {
-                btn.style.backgroundColor = '#7b1fa2'; btn.style.color = '#ffffff'; btn.innerText = '🖼️ ' + text;
-            } else {
-                btn.style.backgroundColor = '#222222'; btn.style.color = '#00ff88'; btn.style.border = '1px solid #333'; btn.innerText = '🔗 ' + text;
+                linksContainer.appendChild(btn);
             }
 
-            btn.onmouseenter = () => { btn.style.transform = 'translateY(-3px)'; btn.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)'; };
-            btn.onmouseleave = () => { btn.style.transform = 'translateY(0)'; btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)'; };
-
-            linksContainer.appendChild(btn);
-        }
-
-        // إذا كان الكارت يحتوي على مصفوفة فيديوهات فرعية، نقوم ببناء قائمة التشغيل الجانبية
-        if (selectedItem.videos && selectedItem.videos.length > 0) {
-            if (playlistSection && playlistContainer) {
-                playlistSection.style.display = 'block';
-                selectedItem.videos.forEach((vid, idx) => {
-                    const rowBtn = document.createElement('button');
-                    rowBtn.className = 'chapter-row-btn';
-                    rowBtn.id = `playlist-item-${idx}`;
-                    rowBtn.style.marginBottom = '8px';
-                    rowBtn.innerHTML = `<span>▶️ ${vid.title || `الدرس ${idx + 1}`}</span>`;
-                    rowBtn.addEventListener('click', () => {
-                        playPlaylistItem(selectedItem.id, idx);
+            // إذا كان الكارت يحتوي على مصفوفة فيديوهات فرعية، نقوم ببناء قائمة التشغيل الجانبية
+            if (selectedItem.videos && selectedItem.videos.length > 0) {
+                if (playlistSection && playlistContainer) {
+                    playlistSection.style.display = 'block';
+                    selectedItem.videos.forEach((vid, idx) => {
+                        const rowBtn = document.createElement('button');
+                        rowBtn.className = 'chapter-row-btn';
+                        rowBtn.id = `playlist-item-${idx}`;
+                        rowBtn.style.marginBottom = '8px';
+                        rowBtn.innerHTML = `<span>▶️ ${vid.title || `الدرس ${idx + 1}`}</span>`;
+                        rowBtn.addEventListener('click', () => {
+                            playPlaylistItem(selectedItem.id, idx);
+                        });
+                        playlistContainer.appendChild(rowBtn);
                     });
-                    playlistContainer.appendChild(rowBtn);
-                });
-                
-                // تشغيل الدرس الأول تلقائياً عند فتح الكارت
-                playPlaylistItem(selectedItem.id, 0);
-            }
-        } else {
-            // الحالة الافتراضية للكروت العادية التي تحتوي على فيديو واحد فقط مباشر
-            const effectiveVideoUrl = (selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== '')
-                ? selectedItem.videoDirectUrl
-                : selectedItem.videoUrl;
-            
-            if (effectiveVideoUrl && effectiveVideoUrl.trim() !== '') {
-                const isUsingDirectFallback = selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== ''
-                    && selectedItem.videoUrl && (selectedItem.videoUrl.includes('t.me/') || selectedItem.videoUrl.includes('telegram'));
-                UnifiedPlayer.init(videoContainer, effectiveVideoUrl, isUsingDirectFallback ? selectedItem.videoUrl : null);
-            }
 
-            if (selectedItem.chapters && selectedItem.chapters.length > 0) {
-                if (chaptersSection) chaptersSection.style.display = 'block';
-                selectedItem.chapters.forEach(chapter => {
-                    const chapBtn = document.createElement('button');
-                    chapBtn.className = 'chapter-row-btn';
-                    chapBtn.innerHTML = `
+                    // تشغيل الدرس الأول تلقائياً عند فتح الكارت
+                    playPlaylistItem(selectedItem.id, 0);
+                }
+            } else {
+                // الحالة الافتراضية للكروت العادية التي تحتوي على فيديو واحد فقط مباشر
+                const effectiveVideoUrl = (selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== '')
+                    ? selectedItem.videoDirectUrl
+                    : selectedItem.videoUrl;
+
+                if (effectiveVideoUrl && effectiveVideoUrl.trim() !== '') {
+                    const isUsingDirectFallback = selectedItem.videoDirectUrl && selectedItem.videoDirectUrl.trim() !== ''
+                        && selectedItem.videoUrl && (selectedItem.videoUrl.includes('t.me/') || selectedItem.videoUrl.includes('telegram'));
+                    UnifiedPlayer.init(videoContainer, effectiveVideoUrl, isUsingDirectFallback ? selectedItem.videoUrl : null);
+                }
+
+                if (selectedItem.chapters && selectedItem.chapters.length > 0) {
+                    if (chaptersSection) chaptersSection.style.display = 'block';
+                    selectedItem.chapters.forEach(chapter => {
+                        const chapBtn = document.createElement('button');
+                        chapBtn.className = 'chapter-row-btn';
+                        chapBtn.innerHTML = `
                         <span>${chapter.text}</span>
                         <span class="chapter-time-badge">${chapter.time}</span>
                     `;
-                    const seconds = parseTimeToSeconds(chapter.time);
-                    chapBtn.addEventListener('click', () => {
-                        UnifiedPlayer.seekTo(seconds);
+                        const seconds = parseTimeToSeconds(chapter.time);
+                        chapBtn.addEventListener('click', () => {
+                            UnifiedPlayer.seekTo(seconds);
+                        });
+                        chaptersContainer.appendChild(chapBtn);
                     });
-                    chaptersContainer.appendChild(chapBtn);
-                });
+                }
             }
-        }
 
-        // ========== عرض الفهارس الموضوعية (thematic_index) ==========
-        // إذا كان العنصر الحالي يحتوي على thematic_index، نجعله originalThematicItem
-        if (selectedItem.thematic_index && selectedItem.thematic_index.length > 0) {
-            originalThematicItem = selectedItem;
-            if (thematicSection) thematicSection.style.display = 'block';
-            thematicContainer.innerHTML = '';
-            selectedItem.thematic_index.forEach(topic => {
-                const topicDiv = document.createElement('div');
-                topicDiv.style.marginBottom = '20px';
-                topicDiv.innerHTML = `<h4 style="color: var(--accent-color); margin: 10px 0 8px 0;">📌 ${topic.topic_name}</h4>`;
-                const chaptersDiv = document.createElement('div');
-                chaptersDiv.className = 'chapters-flex-list';
-                chaptersDiv.style.maxHeight = '200px';
-                topic.chapters.forEach(ch => {
-                    const chapBtn = document.createElement('button');
-                    chapBtn.className = 'chapter-row-btn';
-                    chapBtn.style.padding = '8px 12px';
-                    chapBtn.innerHTML = `
+            // ========== عرض الفهارس الموضوعية (thematic_index) ==========
+            // إذا كان العنصر الحالي يحتوي على thematic_index، نجعله originalThematicItem
+            if (selectedItem.thematic_index && selectedItem.thematic_index.length > 0) {
+                originalThematicItem = selectedItem;
+                if (thematicSection) thematicSection.style.display = 'block';
+                thematicContainer.innerHTML = '';
+                selectedItem.thematic_index.forEach(topic => {
+                    const topicDiv = document.createElement('div');
+                    topicDiv.style.marginBottom = '20px';
+                    topicDiv.innerHTML = `<h4 style="color: var(--accent-color); margin: 10px 0 8px 0;">📌 ${topic.topic_name}</h4>`;
+                    const chaptersDiv = document.createElement('div');
+                    chaptersDiv.className = 'chapters-flex-list';
+                    chaptersDiv.style.maxHeight = '200px';
+                    topic.chapters.forEach(ch => {
+                        const chapBtn = document.createElement('button');
+                        chapBtn.className = 'chapter-row-btn';
+                        chapBtn.style.padding = '8px 12px';
+                        chapBtn.innerHTML = `
                         <span>${ch.text}</span>
                         <span class="chapter-time-badge">${ch.time} • ${ch.video_id || ''}</span>
                     `;
-                    chapBtn.addEventListener('click', () => {
-                        if (ch.video_id) {
-                            const seekSec = parseTimeToSeconds(ch.time);
-                            playSpecificVideo(selectedItem, ch.video_id, seekSec);
-                        } else {
-                            alert('لم يتم تحديد الفيديو لهذا الفصل');
-                        }
+                        chapBtn.addEventListener('click', () => {
+                            if (ch.video_id) {
+                                const seekSec = parseTimeToSeconds(ch.time);
+                                playSpecificVideo(selectedItem, ch.video_id, seekSec);
+                            } else {
+                                alert('لم يتم تحديد الفيديو لهذا الفصل');
+                            }
+                        });
+                        chaptersDiv.appendChild(chapBtn);
                     });
-                    chaptersDiv.appendChild(chapBtn);
+                    topicDiv.appendChild(chaptersDiv);
+                    thematicContainer.appendChild(topicDiv);
                 });
-                topicDiv.appendChild(chaptersDiv);
-                thematicContainer.appendChild(topicDiv);
-            });
-        } else {
-            // إذا كان العنصر الحالي لا يحتوي على thematic_index، نخفي القسم
-            // ولكن لا نمسح originalThematicItem لكي يظل متاحاً إذا أردنا استخدامه لاحقاً
-            if (thematicSection) thematicSection.style.display = 'none';
-        }
+            } else {
+                // إذا كان العنصر الحالي لا يحتوي على thematic_index، نخفي القسم
+                // ولكن لا نمسح originalThematicItem لكي يظل متاحاً إذا أردنا استخدامه لاحقاً
+                if (thematicSection) thematicSection.style.display = 'none';
+            }
 
-        if (selectedItem.links && Array.isArray(selectedItem.links)) {
-            selectedItem.links.forEach(link => {
-                if (link.url) createDynamicButton(link.url, link.text || 'مشاهدة الدرس');
-            });
-        }
+            if (selectedItem.links && Array.isArray(selectedItem.links)) {
+                selectedItem.links.forEach(link => {
+                    if (link.url) createDynamicButton(link.url, link.text || 'مشاهدة الدرس');
+                });
+            }
 
-        // ========== معرض الصور المستقل (images: []) ==========
-        if (selectedItem.images && selectedItem.images.length > 0 && imagesSection && imagesContainer) {
-            imagesSection.style.display = 'block';
-            imagesContainer.innerHTML = '';
+            // ========== معرض الصور المستقل (images: []) ==========
+            if (selectedItem.images && selectedItem.images.length > 0 && imagesSection && imagesContainer) {
+                imagesSection.style.display = 'block';
+                imagesContainer.innerHTML = '';
 
-            const openImageInViewer = (url, title, cardEl) => {
-                imagesContainer.querySelectorAll('.gallery-card').forEach(c => c.classList.remove('active'));
-                if (cardEl) cardEl.classList.add('active');
-                UnifiedPlayer.init(videoContainer, url);
-            };
-
-            // فتح الصورة الأولى تلقائياً
-            const firstImg = selectedItem.images[0];
-            const firstUrl = typeof firstImg === 'string' ? firstImg : firstImg.url;
-            UnifiedPlayer.init(videoContainer, firstUrl);
-
-            selectedItem.images.forEach((imgItem, idx) => {
-                const imgUrl   = typeof imgItem === 'string' ? imgItem : imgItem.url;
-                const imgTitle = typeof imgItem === 'string' ? `صورة ${idx + 1}` : (imgItem.title || `صورة ${idx + 1}`);
-
-                // الكارد الغلاف
-                const card = document.createElement('div');
-                card.className = 'gallery-card' + (idx === 0 ? ' active' : '');
-                card.title = imgTitle;
-
-                // الصورة المصغرة
-                const thumb = document.createElement('img');
-                thumb.className = 'gallery-thumb';
-                thumb.src = imgUrl;
-                thumb.alt = imgTitle;
-                thumb.loading = 'lazy';
-
-                // بديل عند فشل التحميل
-                thumb.onerror = function() {
-                    const ph = document.createElement('div');
-                    ph.className = 'gallery-thumb-placeholder';
-                    ph.innerHTML = `<span>🖼️</span>`;
-                    card.replaceChild(ph, thumb);
+                const openImageInViewer = (url, title, cardEl) => {
+                    imagesContainer.querySelectorAll('.gallery-card').forEach(c => c.classList.remove('active'));
+                    if (cardEl) cardEl.classList.add('active');
+                    UnifiedPlayer.init(videoContainer, url);
                 };
 
-                // العنوان
-                const titleEl = document.createElement('span');
-                titleEl.className = 'gallery-card-title';
-                titleEl.textContent = imgTitle;
+                // فتح الصورة الأولى تلقائياً
+                const firstImg = selectedItem.images[0];
+                const firstUrl = typeof firstImg === 'string' ? firstImg : firstImg.url;
+                UnifiedPlayer.init(videoContainer, firstUrl);
 
-                card.appendChild(thumb);
-                card.appendChild(titleEl);
-                card.addEventListener('click', () => openImageInViewer(imgUrl, imgTitle, card));
-                imagesContainer.appendChild(card);
-            });
-        }
+                selectedItem.images.forEach((imgItem, idx) => {
+                    const imgUrl = typeof imgItem === 'string' ? imgItem : imgItem.url;
+                    const imgTitle = typeof imgItem === 'string' ? `صورة ${idx + 1}` : (imgItem.title || `صورة ${idx + 1}`);
 
-        // ========== قائمة PDF المستقلة (pdfs: []) ==========
-        if (selectedItem.pdfs && selectedItem.pdfs.length > 0 && pdfsSection && pdfsContainer) {
-            pdfsSection.style.display = 'block';
-            pdfsContainer.innerHTML = '';
+                    // الكارد الغلاف
+                    const card = document.createElement('div');
+                    card.className = 'gallery-card' + (idx === 0 ? ' active' : '');
+                    card.title = imgTitle;
 
-            const openPdfInViewer = (url, btn) => {
-                pdfsContainer.querySelectorAll('.pdf-list-item').forEach(b => b.classList.remove('active'));
-                if (btn) btn.classList.add('active');
-                UnifiedPlayer.init(videoContainer, url);
-            };
+                    // الصورة المصغرة
+                    const thumb = document.createElement('img');
+                    thumb.className = 'gallery-thumb';
+                    thumb.src = imgUrl;
+                    thumb.alt = imgTitle;
+                    thumb.loading = 'lazy';
 
-            // فتح الـ PDF الأول تلقائياً
-            const firstPdf = selectedItem.pdfs[0];
-            const firstPdfUrl = typeof firstPdf === 'string' ? firstPdf : firstPdf.url;
-            UnifiedPlayer.init(videoContainer, firstPdfUrl);
+                    // بديل عند فشل التحميل
+                    thumb.onerror = function () {
+                        const ph = document.createElement('div');
+                        ph.className = 'gallery-thumb-placeholder';
+                        ph.innerHTML = `<span>🖼️</span>`;
+                        card.replaceChild(ph, thumb);
+                    };
 
-            selectedItem.pdfs.forEach((pdfItem, idx) => {
-                const pdfUrl = typeof pdfItem === 'string' ? pdfItem : pdfItem.url;
-                const pdfTitle = typeof pdfItem === 'string' ? `ملف ${idx + 1}` : (pdfItem.title || `ملف ${idx + 1}`);
+                    // العنوان
+                    const titleEl = document.createElement('span');
+                    titleEl.className = 'gallery-card-title';
+                    titleEl.textContent = imgTitle;
 
-                const btn = document.createElement('button');
-                btn.className = 'pdf-list-item' + (idx === 0 ? ' active' : '');
-                btn.innerHTML = `<span class="pdf-icon">📄</span><span>${pdfTitle}</span>`;
-                btn.addEventListener('click', () => openPdfInViewer(pdfUrl, btn));
-                pdfsContainer.appendChild(btn);
-            });
-        }
+                    card.appendChild(thumb);
+                    card.appendChild(titleEl);
+                    card.addEventListener('click', () => openImageInViewer(imgUrl, imgTitle, card));
+                    imagesContainer.appendChild(card);
+                });
+            }
 
-        const recContainer = document.getElementById('recommendationsContainer');
-        const recList = document.getElementById('recommendationsList');
-        
-        if (recContainer && recList) {
-            recList.innerHTML = '';
-            if (selectedItem.recommendations && selectedItem.recommendations.length > 0) {
-                let hasRecs = false;
-                selectedItem.recommendations.forEach(recId => {
-                    const recItem = allData.find(item => String(item.id) === String(recId));
-                    if (recItem) {
-                        hasRecs = true;
-                        const recCard = document.createElement('div');
-                        recCard.className = 'rec-item-card';
-                        recCard.innerHTML = `
+            // ========== قائمة PDF المستقلة (pdfs: []) ==========
+            if (selectedItem.pdfs && selectedItem.pdfs.length > 0 && pdfsSection && pdfsContainer) {
+                pdfsSection.style.display = 'block';
+                pdfsContainer.innerHTML = '';
+
+                const openPdfInViewer = (url, btn) => {
+                    pdfsContainer.querySelectorAll('.pdf-list-item').forEach(b => b.classList.remove('active'));
+                    if (btn) btn.classList.add('active');
+                    UnifiedPlayer.init(videoContainer, url);
+                };
+
+                // فتح الـ PDF الأول تلقائياً
+                const firstPdf = selectedItem.pdfs[0];
+                const firstPdfUrl = typeof firstPdf === 'string' ? firstPdf : firstPdf.url;
+                UnifiedPlayer.init(videoContainer, firstPdfUrl);
+
+                selectedItem.pdfs.forEach((pdfItem, idx) => {
+                    const pdfUrl = typeof pdfItem === 'string' ? pdfItem : pdfItem.url;
+                    const pdfTitle = typeof pdfItem === 'string' ? `ملف ${idx + 1}` : (pdfItem.title || `ملف ${idx + 1}`);
+
+                    const btn = document.createElement('button');
+                    btn.className = 'pdf-list-item' + (idx === 0 ? ' active' : '');
+                    btn.innerHTML = `<span class="pdf-icon">📄</span><span>${pdfTitle}</span>`;
+                    btn.addEventListener('click', () => openPdfInViewer(pdfUrl, btn));
+                    pdfsContainer.appendChild(btn);
+                });
+            }
+
+            const recContainer = document.getElementById('recommendationsContainer');
+            const recList = document.getElementById('recommendationsList');
+
+            if (recContainer && recList) {
+                recList.innerHTML = '';
+                if (selectedItem.recommendations && selectedItem.recommendations.length > 0) {
+                    let hasRecs = false;
+                    selectedItem.recommendations.forEach(recId => {
+                        const recItem = allData.find(item => String(item.id) === String(recId));
+                        if (recItem) {
+                            hasRecs = true;
+                            const recCard = document.createElement('div');
+                            recCard.className = 'rec-item-card';
+                            recCard.innerHTML = `
                             <h4>${recItem.title}</h4>
                             <span class="watch-now">مشاهدة الآن ←</span>
                         `;
-                        recCard.addEventListener('click', () => {
-                            openDetails(recItem.id);
-                        });
-                        recList.appendChild(recCard);
-                    }
-                });
-                recContainer.style.display = hasRecs ? 'block' : 'none';
-            } else {
-                recContainer.style.display = 'none';
+                            recCard.addEventListener('click', () => {
+                                openDetails(recItem.id);
+                            });
+                            recList.appendChild(recCard);
+                        }
+                    });
+                    recContainer.style.display = hasRecs ? 'block' : 'none';
+                } else {
+                    recContainer.style.display = 'none';
+                }
             }
+
+            document.getElementById('myModal').style.display = "block";
         }
 
-        document.getElementById('myModal').style.display = "block";
-    }
+        // دالة لتشغيل عنصر من قائمة التشغيل داخل الـ Modal وتحديث الفصول التابعة له
+        function playPlaylistItem(courseId, videoIndex) {
+            const selectedItem = allData.find(item => String(item.id) === String(courseId));
+            if (!selectedItem || !selectedItem.videos || !selectedItem.videos[videoIndex]) return;
+            playSpecificVideo(selectedItem, videoIndex, 0);
+        }
 
-    // دالة لتشغيل عنصر من قائمة التشغيل داخل الـ Modal وتحديث الفصول التابعة له
-    function playPlaylistItem(courseId, videoIndex) {
-        const selectedItem = allData.find(item => String(item.id) === String(courseId));
-        if (!selectedItem || !selectedItem.videos || !selectedItem.videos[videoIndex]) return;
-        playSpecificVideo(selectedItem, videoIndex, 0);
-    }
+        function closeModal() {
+            document.getElementById('myModal').style.display = "none";
+            UnifiedPlayer.cleanup();
+            modalHistory = [];
+            modalHistoryIndex = -1;
+            originalThematicItem = null; // إعادة تعيين المتغير عند إغلاق النافذة
+        }
 
-    function closeModal() { 
-        document.getElementById('myModal').style.display = "none";
-        UnifiedPlayer.cleanup();
-        modalHistory = [];
-        modalHistoryIndex = -1;
-        originalThematicItem = null; // إعادة تعيين المتغير عند إغلاق النافذة
-    }
+        window.onclick = function (event) {
+            const modal = document.getElementById('myModal');
+            if (event.target == modal) closeModal();
+        }
+    </script>
 
-    window.onclick = function(event) {
-        const modal = document.getElementById('myModal');
-        if (event.target == modal) closeModal();
-    }
-</script>
-
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modalTitle" style="color: var(--accent-color); margin: 0; font-weight: 700; font-size: 1.5rem;"></h2>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div style="display: flex; gap: 8px; direction: ltr;">
-                    <button id="modalBackBtn" class="nav-arrow-btn" onclick="modalGoBack()" title="المحتوى السابق">
-                        <span>&larr;</span> السابق
-                    </button>
-                    <button id="modalForwardBtn" class="nav-arrow-btn" onclick="modalGoForward()" title="المحتوى التالي">
-                        التالي <span>&rarr;</span>
-                    </button>
-                </div>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
-            </div>
-        </div>
-        
-        <div class="modal-body-grid">
-            <div class="modal-main-area">
-                <div id="popupVideoContainer" class="video-container-wrapper" style="display: none;"></div>
-                
-                <div id="popupLinksContainer" class="links-container-wrapper"></div>
-                
-                <div class="details-section">
-                    <h3 style="color: #fff; border-bottom: 1px solid #222226; padding-bottom: 8px; margin-top: 0; font-size: 1.2rem;">الوصف والتفاصيل</h3>
-                    <div id="modalContent" class="modal-description-text"></div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle" style="color: var(--accent-color); margin: 0; font-weight: 700; font-size: 1.5rem;">
+                </h2>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="display: flex; gap: 8px; direction: ltr;">
+                        <button id="modalBackBtn" class="nav-arrow-btn" onclick="modalGoBack()" title="المحتوى السابق">
+                            <span>&larr;</span> السابق
+                        </button>
+                        <button id="modalForwardBtn" class="nav-arrow-btn" onclick="modalGoForward()"
+                            title="المحتوى التالي">
+                            التالي <span>&rarr;</span>
+                        </button>
+                    </div>
+                    <span class="close-btn" onclick="closeModal()">&times;</span>
                 </div>
             </div>
-            
-            <div class="modal-sidebar-area">
-                <div id="playlistSection" class="sidebar-card" style="display: none; border-color: var(--accent-color);">
-                    <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
-                        📚 قائمة دروس الدورة
-                    </h3>
-                    <div id="playlistContainer" class="chapters-flex-list"></div>
-                </div>
 
-                <!-- معرض الصور المستقل -->
-                <div id="imagesSection" class="sidebar-card" style="display: none; border-color: #7b1fa2;">
-                    <h3 style="color: #ce93d8; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
-                        🖼️ معرض الصور
-                    </h3>
-                    <div id="imagesContainer" class="images-gallery-grid"></div>
-                </div>
+            <div class="modal-body-grid">
+                <div class="modal-main-area">
+                    <div id="popupVideoContainer" class="video-container-wrapper" style="display: none;"></div>
 
-                <!-- قائمة PDF المستقلة -->
-                <div id="pdfsSection" class="sidebar-card" style="display: none; border-color: #e53935;">
-                    <h3 style="color: #ef9a9a; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
-                        📄 ملفات PDF
-                    </h3>
-                    <div id="pdfsContainer" class="chapters-flex-list"></div>
-                </div>
+                    <div id="popupLinksContainer" class="links-container-wrapper"></div>
 
-                <!-- القسم الجديد للفهارس الموضوعية -->
-                <div id="thematicSection" class="sidebar-card" style="display: none;">
-                    <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
-                        🧠 الفهارس الموضوعية (حسب المواضيع)
-                    </h3>
-                    <div id="thematicContainer" class="chapters-flex-list"></div>
-                </div>
-
-                <div id="chaptersSection" class="sidebar-card" style="display: none;">
-                    <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-                        ⏱️ الفصول والطوابع الزمنية
-                    </h3>
-                    <div id="chaptersContainer" class="chapters-flex-list"></div>
-                    <div id="chaptersUnsupportedNotice" class="chapters-notice" style="display: none;">
-                        ⚠️ الطوابع الزمنية التفاعلية غير مدعومة لهذه المنصة.
+                    <div class="details-section">
+                        <h3
+                            style="color: #fff; border-bottom: 1px solid #222226; padding-bottom: 8px; margin-top: 0; font-size: 1.2rem;">
+                            الوصف والتفاصيل</h3>
+                        <div id="modalContent" class="modal-description-text"></div>
                     </div>
                 </div>
-                
-                <div id="recommendationsContainer" class="sidebar-card" style="display: none;">
-                    <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">💡 دروس ومقترحات ذات صلة</h3>
-                    <div id="recommendationsList" class="recommendations-vertical-list"></div>
+
+                <div class="modal-sidebar-area">
+                    <div id="playlistSection" class="sidebar-card"
+                        style="display: none; border-color: var(--accent-color);">
+                        <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
+                            📚 قائمة دروس الدورة
+                        </h3>
+                        <div id="playlistContainer" class="chapters-flex-list"></div>
+                    </div>
+
+                    <!-- معرض الصور المستقل -->
+                    <div id="imagesSection" class="sidebar-card" style="display: none; border-color: #7b1fa2;">
+                        <h3 style="color: #ce93d8; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
+                            🖼️ معرض الصور
+                        </h3>
+                        <div id="imagesContainer" class="images-gallery-grid"></div>
+                    </div>
+
+                    <!-- قائمة PDF المستقلة -->
+                    <div id="pdfsSection" class="sidebar-card" style="display: none; border-color: #e53935;">
+                        <h3 style="color: #ef9a9a; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
+                            📄 ملفات PDF
+                        </h3>
+                        <div id="pdfsContainer" class="chapters-flex-list"></div>
+                    </div>
+
+                    <!-- القسم الجديد للفهارس الموضوعية -->
+                    <div id="thematicSection" class="sidebar-card" style="display: none;">
+                        <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">
+                            🧠 الفهارس الموضوعية (حسب المواضيع)
+                        </h3>
+                        <div id="thematicContainer" class="chapters-flex-list"></div>
+                    </div>
+
+                    <div id="chaptersSection" class="sidebar-card" style="display: none;">
+                        <h3
+                            style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                            ⏱️ الفصول والطوابع الزمنية
+                        </h3>
+                        <div id="chaptersContainer" class="chapters-flex-list"></div>
+                        <div id="chaptersUnsupportedNotice" class="chapters-notice" style="display: none;">
+                            ⚠️ الطوابع الزمنية التفاعلية غير مدعومة لهذه المنصة.
+                        </div>
+                    </div>
+
+                    <div id="recommendationsContainer" class="sidebar-card" style="display: none;">
+                        <h3 style="color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">💡 دروس ومقترحات
+                            ذات صلة</h3>
+                        <div id="recommendationsList" class="recommendations-vertical-list"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 </body>
+
 </html>
