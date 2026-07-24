@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عارض الصور وملفات PDF | موقعي</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #0f0f12;
+            --card-bg: #18181c;
+            --card-border: #26262e;
+            --card-hover: #22222a;
+            --accent-color: #00d4ff;
+            --accent-glow: rgba(0, 212, 255, 0.25);
+            --pdf-color: #ff4757;
+            --pdf-glow: rgba(255, 71, 87, 0.25);
+            --image-color: #2ed573;
+            --text-main: #f1f2f6;
+            --text-dim: #a4b0be;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', 'Tajawal', 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            direction: rtl;
+        }
+
+        /* ===== الشريط العلوي Navigation Bar ===== */
+        nav {
+            background: rgba(20, 20, 26, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #22222a;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
+            flex-wrap: wrap;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+        .nav-logo i {
+            color: var(--accent-color);
+            font-size: 1.4rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-color);
+            background: rgba(0, 212, 255, 0.15);
+            border: 1px solid var(--accent-color);
+        }
+
+        .nav-home-btn {
+            background: #202028;
+            color: #fff !important;
+            border: 1px solid #333340;
+        }
+        .nav-home-btn:hover {
+            border-color: var(--accent-color);
+        }
+
+        /* ===== الحاوية الرئيسية Container ===== */
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            flex-grow: 1;
+        }
+
+        /* ===== هيدر الصفحة والتحكم Page Header & Controls ===== */
+        .header-section {
+            background: linear-gradient(135deg, rgba(24, 24, 28, 0.8) 0%, rgba(30, 30, 38, 0.9) 100%);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #ffffff, var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-desc {
+            color: var(--text-dim);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* منطقة السحب والإفلات / الرفع Drag & Drop Dropzone */
+        .upload-dropzone {
+            border: 2px dashed #3a3a48;
+            border-radius: 16px;
+            padding: 1.8rem;
+            text-align: center;
+            background: rgba(15, 15, 18, 0.6);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        .upload-dropzone:hover, .upload-dropzone.dragover {
+            border-color: var(--accent-color);
+            background: rgba(0, 212, 255, 0.05);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .dropzone-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 0.8rem;
+        }
+
+        .dropzone-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .dropzone-subtext {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* ===== أدوات البحث والتصفية Toolbar ===== */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 1.8rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex-grow: 1;
+            max-width: 450px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 42px 12px 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-dim);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .filter-btn:hover {
+            color: #fff;
+            background: var(--card-hover);
+        }
+
+        .filter-btn.active {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .filter-btn.active.pdf-filter {
+            background: rgba(255, 71, 87, 0.15);
+            border-color: var(--pdf-color);
+            color: var(--pdf-color);
+        }
+
+        .filter-btn.active.img-filter {
+            background: rgba(46, 213, 115, 0.15);
+            border-color: var(--image-color);
+            color: var(--image-color);
+        }
+
+        /* ===== شبكة العرض Grid Layout ===== */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 22px;
+        }
+
+        .media-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .media-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .media-card.pdf-card:hover {
+            border-color: rgba(255, 71, 87, 0.5);
+            box-shadow: 0 12px 30px rgba(255, 71, 87, 0.2);
+        }
+
+        .card-preview {
+            width: 100%;
+            height: 190px;
+            background: #101014;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .media-card:hover .card-preview img {
+            transform: scale(1.06);
+        }
+
+        .pdf-preview-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--pdf-color);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,71,87,0.12) 0%, rgba(16,16,20,1) 80%);
+        }
+
+        .pdf-preview-box i {
+            font-size: 3.8rem;
+            filter: drop-shadow(0 4px 10px var(--pdf-glow));
+        }
+
+        .type-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 2;
+        }
+
+        .type-badge.badge-image {
+            background: rgba(46, 213, 115, 0.85);
+            color: #000;
+        }
+
+        .type-badge.badge-pdf {
+            background: rgba(255, 71, 87, 0.85);
+            color: #fff;
+        }
+
+        .type-badge.badge-local {
+            left: 12px;
+            right: auto;
+            background: rgba(0, 212, 255, 0.85);
+            color: #000;
+        }
+
+        .card-body {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4;
+        }
+
+        .card-meta {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: #202028;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: inherit;
+        }
+
+        .action-btn:hover {
+            background: var(--accent-color);
+            color: #000;
+            border-color: var(--accent-color);
+        }
+
+        .action-btn.pdf-btn:hover {
+            background: var(--pdf-color);
+            color: #fff;
+            border-color: var(--pdf-color);
+        }
+
+        /* ===== حالة التنبيهات والتحميل Status & Empty State ===== */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--card-bg);
+            border: 1px dashed var(--card-border);
+            border-radius: 20px;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        /* ===== Modal عارض الصور (Lightbox) ===== */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(8, 8, 12, 0.96);
+            backdrop-filter: blur(15px);
+            z-index: 2000;
+            flex-direction: column;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .lightbox-header {
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(20, 20, 26, 0.8);
+            border-bottom: 1px solid #22222c;
+            color: #fff;
+        }
+
+        .lightbox-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lightbox-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            background: #20202a;
+            border: 1px solid #30303d;
+            color: #fff;
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .icon-btn:hover {
+            background: var(--accent-color);
+            color: #000;
+            border-color: var(--accent-color);
+        }
+
+        .close-modal-btn {
+            background: #ff4757;
+            border-color: #ff4757;
+            color: #fff;
+        }
+        .close-modal-btn:hover {
+            background: #ff6b81;
+            color: #fff;
+        }
+
+        .lightbox-body {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+            user-select: none;
+        }
+
+        .lightbox-img-wrapper {
+            max-width: 90%;
+            max-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease-out;
+            cursor: grab;
+        }
+
+        .lightbox-img-wrapper:active {
+            cursor: grabbing;
+        }
+
+        .lightbox-img-wrapper img {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        /* ===== Modal عارض الـ PDF ===== */
+        .pdf-modal-frame {
+            width: 100%;
+            height: calc(100vh - 70px);
+            border: none;
+            background: #18181c;
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--card-border);
+            margin-top: 3rem;
+            background: #121216;
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الشريط العلوي للتنقل -->
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <i class="fa-solid fa-photo-film"></i>
+            <span>عارض الصور و PDF</span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-home-btn"><i class="fa-solid fa-house"></i> العودة للرئيسية</a>
+            <a href="index.html#/">منوعات</a>
+            <a href="index.html#/rw">التحليل الحجمي</a>
+            <a href="index.html#/time-analysis">التحليل الزمني</a>
+            <a href="index.html#/technical-analysis">التحليل الفني</a>
+            <a href="viewer.html" class="active"><i class="fa-solid fa-folder-open"></i> المعرض والعارض</a>
+        </div>
+    </nav>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="container">
+        
+        <!-- هيدر الصفحة ومساحة الرفع -->
+        <div class="header-section">
+            <h1 class="header-title">
+                <i class="fa-solid fa-file-pdf" style="-webkit-text-fill-color: var(--pdf-color);"></i>
+                <i class="fa-solid fa-image" style="-webkit-text-fill-color: var(--image-color);"></i>
+                معرض وعارض الملفات المتقدم
+            </h1>
+            <p class="header-desc">عرض وتصفح الصور وملفات المستندات PDF بسهولة من الموقع أو قم برفع ملفاتك الخاصة لمينتها فوراً بحرية تامة.</p>
+            
+            <div class="upload-dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                <i class="fa-solid fa-cloud-arrow-up dropzone-icon"></i>
+                <div class="dropzone-text">اسحب وأسقط الصور أو ملفات PDF هنا، أو انقر للاختيار من جهازك</div>
+                <div class="dropzone-subtext">يدعم صيغ (PDF, PNG, JPG, JPEG, WEBP, GIF, SVG)</div>
+                <input type="file" id="fileInput" accept="image/*,application/pdf" multiple onchange="handleFileSelect(event)">
+            </div>
+        </div>
+
+        <!-- شريط البحث والتصفية -->
+        <div class="toolbar">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="ابحث باسم الملف أو المستند..." oninput="filterMedia()">
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" id="btn-filter-all" onclick="setFilter('all')">
+                    <i class="fa-solid fa-border-all"></i> الكل (<span id="count-all">0</span>)
+                </button>
+                <button class="filter-btn img-filter" id="btn-filter-images" onclick="setFilter('images')">
+                    <i class="fa-solid fa-image"></i> الصور (<span id="count-images">0</span>)
+                </button>
+                <button class="filter-btn pdf-filter" id="btn-filter-pdfs" onclick="setFilter('pdfs')">
+                    <i class="fa-solid fa-file-pdf"></i> ملفات PDF (<span id="count-pdfs">0</span>)
+                </button>
+            </div>
+        </div>
+
+        <!-- شبكة عرض العناصر -->
+        <div class="media-grid" id="mediaGrid">
+            <!-- سيتم توليد العناصر هنا ديناميكياً بواسطة JavaScript -->
+        </div>
+    </div>
+
+    <!-- ===== Lightbox Modal للصور ===== -->
+    <div class="lightbox-modal" id="imageModal">
+        <div class="lightbox-header">
+            <div class="lightbox-title" id="imageModalTitle">
+                <i class="fa-solid fa-image" style="color: var(--image-color);"></i>
+                <span>عنوان الصورة</span>
+            </div>
+            <div class="lightbox-controls">
+                <button class="icon-btn" onclick="zoomImage(0.2)" title="تكبير (+)"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                <button class="icon-btn" onclick="zoomImage(-0.2)" title="تصغير (-)"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                <button class="icon-btn" onclick="rotateImage(90)" title="تدوير 90 درجة"><i class="fa-solid fa-rotate-right"></i></button>
+                <button class="icon-btn" onclick="resetImageTransform()" title="إعادة ضبط"><i class="fa-solid fa-arrows-rotate"></i></button>
+                <a class="icon-btn" id="imageDownloadBtn" download title="تحميل الصورة" target="_blank"><i class="fa-solid fa-download"></i></a>
+                <button class="icon-btn close-modal-btn" onclick="closeImageModal()" title="إغلاق (Esc)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div class="lightbox-body" id="lightboxBody">
+            <div class="lightbox-img-wrapper" id="imgWrapper">
+                <img id="modalImg" src="" alt="معاينة الصورة">
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Modal عارض PDF ===== -->
+    <div class="lightbox-modal" id="pdfModal">
+        <div class="lightbox-header">
+            <div class="lightbox-title" id="pdfModalTitle">
+                <i class="fa-solid fa-file-pdf" style="color: var(--pdf-color);"></i>
+                <span>عنوان ملف PDF</span>
+            </div>
+            <div class="lightbox-controls">
+                <a class="icon-btn" id="pdfOpenExternalBtn" target="_blank" title="فتح في نافذة جديدة"><i class="fa-solid fa-up-right-from-square"></i></a>
+                <a class="icon-btn" id="pdfDownloadBtn" download title="تحميل المستند" target="_blank"><i class="fa-solid fa-download"></i></a>
+                <button class="icon-btn close-modal-btn" onclick="closePdfModal()" title="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <iframe class="pdf-modal-frame" id="pdfIframe" src=""></iframe>
+    </div>
+
+    <footer>
+        جميع الحقوق محفوظة &copy; 2026 | عارض المستندات والصور
+    </footer>
+
+    <script>
+        // مصفوفة البيانات العامة
+        let allItems = [];
+        let currentFilter = 'all';
+
+        // حالات تكبير وتدوير الصورة في الـ Lightbox
+        let currentScale = 1;
+        let currentRotate = 0;
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let translateX = 0, translateY = 0;
+
+        // عند تحميل الصفحة
+        document.body.onload = function() {
+            loadPredefinedData();
+            setupDragAndDrop();
+            setupKeyboardShortcuts();
+        };
+
+        // 1. تحميل البيانات من ملف PDF-images.json إن وجد
+        async function loadPredefinedData() {
+            try {
+                const response = await fetch('PDF-images.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    parseJsonData(data);
+                } else {
+                    console.log('لم يتم العثور على PDF-images.json، سيتم استخدام البيانات الافتراضية.');
+                    loadDefaultSamples();
+                }
+            } catch (err) {
+                console.warn('تعذر قراءة ملف JSON محلي، جاري تحميل أمثلة التوضيح:', err);
+                loadDefaultSamples();
+            }
+            renderGrid();
+        }
+
+        function parseJsonData(data) {
+            allItems = [];
+            let list = Array.isArray(data) ? data : [data];
+            
+            list.forEach(block => {
+                // استخراج الصور
+                if (block.images && Array.isArray(block.images)) {
+                    block.images.forEach(img => {
+                        allItems.push({
+                            id: img.id || 'img-' + Math.random().toString(36).substr(2, 9),
+                            title: img.title || 'صورة بدون عنوان',
+                            type: 'image',
+                            url: img.url,
+                            source: 'remote'
+                        });
+                    });
+                }
+
+                // استخراج ملفات PDF
+                if (block.pdfs && Array.isArray(block.pdfs)) {
+                    block.pdfs.forEach(pdf => {
+                        let finalUrl = pdf.url || (pdf.links && pdf.links[0] ? pdf.links[0].url : '');
+                        let title = pdf.title || (pdf.links && pdf.links[0] ? pdf.links[0].text : 'مستند PDF');
+                        if (finalUrl) {
+                            allItems.push({
+                                id: pdf.id || 'pdf-' + Math.random().toString(36).substr(2, 9),
+                                title: title,
+                                type: 'pdf',
+                                url: finalUrl,
+                                source: 'remote'
+                            });
+                        }
+                    });
+                }
+            });
+
+            if (allItems.length === 0) {
+                loadDefaultSamples();
+            }
+        }
+
+        function loadDefaultSamples() {
+            allItems = [
+                {
+                    id: 'sample-1',
+                    title: 'صينية كيمر من 2022',
+                    type: 'image',
+                    url: 'https://drive.google.com/file/d/1P091WSBMzAOxoQZEfFSzmQnqOmeuz19m/view?usp=sharing',
+                    source: 'remote'
+                },
+                {
+                    id: 'sample-2',
+                    title: 'مخطط خلفية القوة والضعف',
+                    type: 'image',
+                    url: 'https://via.placeholder.com/800x450/1a1a2e/00ff88?text=مخطط+خلفية+القوة',
+                    source: 'remote'
+                },
+                {
+                    id: 'sample-3',
+                    title: 'مكتبة موجات اليوت (PDF)',
+                    type: 'pdf',
+                    url: 'https://drive.google.com/file/d/1ECixmzgRdoFAx2VlIph_5lcVTItJYdEL/view?usp=sharing',
+                    source: 'remote'
+                }
+            ];
+        }
+
+        // 2. معالجة سحب وإفلات أو رفع الملفات المحلية
+        function setupDragAndDrop() {
+            const dropzone = document.getElementById('dropzone');
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropzone.addEventListener(eventName, () => dropzone.classList.add('dragover'), false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, () => dropzone.classList.remove('dragover'), false);
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                processUploadedFiles(files);
+            });
+        }
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            processUploadedFiles(files);
+        }
+
+        function processUploadedFiles(files) {
+            if (!files || files.length === 0) return;
+
+            Array.from(files).forEach(file => {
+                const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+                const isImg = file.type.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(file.name);
+
+                if (!isPdf && !isImg) {
+                    alert(`الملف "${file.name}" ليس صورة أو مستند PDF مدعوم.`);
+                    return;
+                }
+
+                const fileUrl = URL.createObjectURL(file);
+                allItems.unshift({
+                    id: 'local-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
+                    title: file.name,
+                    type: isPdf ? 'pdf' : 'image',
+                    url: fileUrl,
+                    source: 'local',
+                    size: formatBytes(file.size)
+                });
+            });
+
+            renderGrid();
+        }
+
+        function formatBytes(bytes) {
+            if (!bytes || bytes === 0) return 'حجم غير معروف';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        // 3. فلترة وعرض العناصر في الشبكة
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            
+            if (filter === 'all') document.getElementById('btn-filter-all').classList.add('active');
+            if (filter === 'images') document.getElementById('btn-filter-images').classList.add('active');
+            if (filter === 'pdfs') document.getElementById('btn-filter-pdfs').classList.add('active');
+
+            renderGrid();
+        }
+
+        function filterMedia() {
+            renderGrid();
+        }
+
+        function getDirectImageUrl(url) {
+            if (!url) return 'https://via.placeholder.com/600x400/18181c/00d4ff?text=صورة';
+            // تحويل روابط Google Drive للصور إلى رابط مباشر للتقديم
+            if (url.includes('drive.google.com')) {
+                const match = url.match(/\/d\/([^\/]+)/);
+                if (match && match[1]) {
+                    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+                }
+            }
+            return url;
+        }
+
+        function getDirectPdfUrl(url) {
+            if (!url) return '';
+            // تحويل روابط Google Drive لـ PDF إلى preview iframe
+            if (url.includes('drive.google.com')) {
+                const match = url.match(/\/d\/([^\/]+)/);
+                if (match && match[1]) {
+                    return `https://drive.google.com/file/d/${match[1]}/preview`;
+                }
+            }
+            return url;
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('mediaGrid');
+            const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+
+            // تحديث العدادات
+            const totalImages = allItems.filter(i => i.type === 'image').length;
+            const totalPdfs = allItems.filter(i => i.type === 'pdf').length;
+            document.getElementById('count-all').innerText = allItems.length;
+            document.getElementById('count-images').innerText = totalImages;
+            document.getElementById('count-pdfs').innerText = totalPdfs;
+
+            // الفلترة
+            let filtered = allItems.filter(item => {
+                const matchesFilter = (currentFilter === 'all') || 
+                                     (currentFilter === 'images' && item.type === 'image') || 
+                                     (currentFilter === 'pdfs' && item.type === 'pdf');
+                const matchesSearch = item.title.toLowerCase().includes(searchQuery);
+                return matchesFilter && matchesSearch;
+            });
+
+            grid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <h3>لا توجد ملفات مطابقة للبحث أو الفلتر</h3>
+                        <p>قم بسحب ملفاتك وإسقاطها في المنطقة العلوية لعرضها فوراً.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `media-card ${item.type === 'pdf' ? 'pdf-card' : ''}`;
+                
+                if (item.type === 'image') {
+                    const displayImgUrl = getDirectImageUrl(item.url);
+                    card.innerHTML = `
+                        <div class="card-preview" onclick="openImageModal('${displayImgUrl}', '${escapeQuotes(item.title)}')">
+                            <span class="type-badge badge-image"><i class="fa-solid fa-image"></i> صورة</span>
+                            ${item.source === 'local' ? '<span class="type-badge badge-local">محلي</span>' : ''}
+                            <img src="${displayImgUrl}" alt="${escapeQuotes(item.title)}" onerror="this.src='https://via.placeholder.com/600x400/18181c/ff4757?text=خطأ+تحميل+الصورة'">
+                        </div>
+                        <div class="card-body">
+                            <div class="card-title" title="${escapeQuotes(item.title)}">${item.title}</div>
+                            <div class="card-meta">
+                                <span><i class="fa-solid fa-file-image"></i> ملف صورة</span>
+                                <span>${item.size || 'عن بُعد'}</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn" onclick="openImageModal('${displayImgUrl}', '${escapeQuotes(item.title)}')">
+                                    <i class="fa-solid fa-eye"></i> معاينة مكبرة
+                                </button>
+                                <a class="action-btn" href="${displayImgUrl}" target="_blank" download>
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const pdfEmbedUrl = getDirectPdfUrl(item.url);
+                    card.innerHTML = `
+                        <div class="card-preview" onclick="openPdfModal('${pdfEmbedUrl}', '${escapeQuotes(item.title)}', '${item.url}')">
+                            <span class="type-badge badge-pdf"><i class="fa-solid fa-file-pdf"></i> PDF</span>
+                            ${item.source === 'local' ? '<span class="type-badge badge-local">محلي</span>' : ''}
+                            <div class="pdf-preview-box">
+                                <i class="fa-solid fa-file-pdf"></i>
+                                <span style="font-size:0.85rem; font-weight:700;">انقر للفتح والمعاينة</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-title" title="${escapeQuotes(item.title)}">${item.title}</div>
+                            <div class="card-meta">
+                                <span><i class="fa-solid fa-file-lines"></i> مستند PDF</span>
+                                <span>${item.size || 'عن بُعد'}</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn pdf-btn" onclick="openPdfModal('${pdfEmbedUrl}', '${escapeQuotes(item.title)}', '${item.url}')">
+                                    <i class="fa-solid fa-book-open"></i> قراءة الملف
+                                </button>
+                                <a class="action-btn pdf-btn" href="${item.url}" target="_blank" download>
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                grid.appendChild(card);
+            });
+        }
+
+        function escapeQuotes(str) {
+            return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        }
+
+        // 4. Modal معاينة الصورة (Image Lightbox Engine)
+        function openImageModal(imgUrl, title) {
+            document.getElementById('modalImg').src = imgUrl;
+            document.getElementById('imageModalTitle').querySelector('span').innerText = title;
+            document.getElementById('imageDownloadBtn').href = imgUrl;
+            
+            resetImageTransform();
+            
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'flex';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        function zoomImage(amount) {
+            currentScale = Math.max(0.4, Math.min(5, currentScale + amount));
+            updateImageTransform();
+        }
+
+        function rotateImage(deg) {
+            currentRotate = (currentRotate + deg) % 360;
+            updateImageTransform();
+        }
+
+        function resetImageTransform() {
+            currentScale = 1;
+            currentRotate = 0;
+            translateX = 0;
+            translateY = 0;
+            updateImageTransform();
+        }
+
+        function updateImageTransform() {
+            const imgWrapper = document.getElementById('imgWrapper');
+            imgWrapper.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale}) rotate(${currentRotate}deg)`;
+        }
+
+        // إمكانية سحب الصورة عند التكبير
+        const lightboxBody = document.getElementById('lightboxBody');
+        lightboxBody.addEventListener('mousedown', (e) => {
+            if (currentScale > 1) {
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateImageTransform();
+            }
+        });
+
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        // تكبير وتصغير بالماوس Wheel
+        lightboxBody.addEventListener('wheel', (e) => {
+            if (document.getElementById('imageModal').style.display === 'flex') {
+                e.preventDefault();
+                zoomImage(e.deltaY < 0 ? 0.15 : -0.15);
+            }
+        }, { passive: false });
+
+
+        // 5. Modal معاينة PDF
+        function openPdfModal(embedUrl, title, rawUrl) {
+            const iframe = document.getElementById('pdfIframe');
+            iframe.src = embedUrl;
+            
+            document.getElementById('pdfModalTitle').querySelector('span').innerText = title;
+            document.getElementById('pdfOpenExternalBtn').href = rawUrl || embedUrl;
+            document.getElementById('pdfDownloadBtn').href = rawUrl || embedUrl;
+
+            document.getElementById('pdfModal').style.display = 'flex';
+        }
+
+        function closePdfModal() {
+            const modal = document.getElementById('pdfModal');
+            modal.style.display = 'none';
+            document.getElementById('pdfIframe').src = '';
+        }
+
+        // Shortcuts
+        function setupKeyboardShortcuts() {
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeImageModal();
+                    closePdfModal();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
