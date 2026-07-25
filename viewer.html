@@ -687,13 +687,13 @@
                 <span>عنوان الصورة</span>
             </div>
             <div class="lightbox-controls">
-                <button class="icon-btn" onclick="zoomImage(0.2)" title="تكبير (+)"><i
+                <button class="icon-btn zoom-ctrl" onclick="zoomImage(0.2)" title="تكبير (+)"><i
                         class="fa-solid fa-magnifying-glass-plus"></i></button>
-                <button class="icon-btn" onclick="zoomImage(-0.2)" title="تصغير (-)"><i
+                <button class="icon-btn zoom-ctrl" onclick="zoomImage(-0.2)" title="تصغير (-)"><i
                         class="fa-solid fa-magnifying-glass-minus"></i></button>
-                <button class="icon-btn" onclick="rotateImage(90)" title="تدوير 90 درجة"><i
+                <button class="icon-btn zoom-ctrl" onclick="rotateImage(90)" title="تدوير 90 درجة"><i
                         class="fa-solid fa-rotate-right"></i></button>
-                <button class="icon-btn" onclick="resetImageTransform()" title="إعادة ضبط"><i
+                <button class="icon-btn zoom-ctrl" onclick="resetImageTransform()" title="إعادة ضبط"><i
                         class="fa-solid fa-arrows-rotate"></i></button>
                 <a class="icon-btn" id="imageDownloadBtn" download title="تحميل الصورة" target="_blank"><i
                         class="fa-solid fa-download"></i></a>
@@ -705,6 +705,7 @@
             <div class="lightbox-img-wrapper" id="imgWrapper">
                 <img id="modalImg" src="" alt="معاينة الصورة" onerror="handleImgError(this)">
             </div>
+            <iframe class="pdf-modal-frame" id="imageIframe" style="display:none;"></iframe>
         </div>
     </div>
 
@@ -930,10 +931,11 @@
 
         function handleImgError(imgEl, originalUrl) {
             imgEl.onerror = null;
-            const driveId = extractDriveId(originalUrl || imgEl.src);
-            if (driveId && !imgEl.dataset.triedThumbnail) {
-                imgEl.dataset.triedThumbnail = 'true';
-                imgEl.src = `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000`;
+            const raw = originalUrl || imgEl.dataset.rawUrl || imgEl.src;
+            const driveId = extractDriveId(raw);
+            if (driveId && !imgEl.dataset.triedLh3) {
+                imgEl.dataset.triedLh3 = 'true';
+                imgEl.src = `https://lh3.googleusercontent.com/d/${driveId}`;
                 imgEl.onerror = function () {
                     this.onerror = null;
                     this.src = FALLBACK_SVG;
@@ -953,7 +955,7 @@
             if (url.includes('drive.google.com')) {
                 const driveId = extractDriveId(url);
                 if (driveId) {
-                    return `https://lh3.googleusercontent.com/d/${driveId}`;
+                    return `https://drive.google.com/thumbnail?id=${driveId}&sz=w800`;
                 }
             }
             return url;
@@ -1012,7 +1014,7 @@
                     const safeTitle = escapeQuotes(item.title);
                     const safeUrl = escapeQuotes(item.url);
                     card.innerHTML = `
-                        <div class="card-preview" onclick="openImageModal('${displayImgUrl}', '${safeTitle}')">
+                        <div class="card-preview" onclick="openImageModal('${displayImgUrl}', '${safeTitle}', '${safeUrl}')">
                             <span class="type-badge badge-image"><i class="fa-solid fa-image"></i> صورة</span>
                             ${item.source === 'local' ? '<span class="type-badge badge-local">محلي</span>' : ''}
                             <img src="${displayImgUrl}" alt="${safeTitle}" onerror="handleImgError(this, '${safeUrl}')">
@@ -1024,7 +1026,7 @@
                                 <span>${item.size || 'عن بُعد'}</span>
                             </div>
                             <div class="card-actions">
-                                <button class="action-btn" onclick="openImageModal('${displayImgUrl}', '${safeTitle}')">
+                                <button class="action-btn" onclick="openImageModal('${displayImgUrl}', '${safeTitle}', '${safeUrl}')">
                                     <i class="fa-solid fa-eye"></i> معاينة مكبرة
                                 </button>
                                 <a class="action-btn" href="${displayImgUrl}" target="_blank" download>
@@ -1071,12 +1073,36 @@
         }
 
         // 4. Modal معاينة الصورة (Image Lightbox Engine)
-        function openImageModal(imgUrl, title) {
-            document.getElementById('modalImg').src = imgUrl;
-            document.getElementById('imageModalTitle').querySelector('span').innerText = title;
-            document.getElementById('imageDownloadBtn').href = imgUrl;
+        function openImageModal(imgUrl, title, rawUrl) {
+            const fullUrl = rawUrl || imgUrl || '';
+            const driveId = extractDriveId(fullUrl) || extractDriveId(imgUrl);
+            const modalImg = document.getElementById('modalImg');
+            const imgWrapper = document.getElementById('imgWrapper');
+            const imageIframe = document.getElementById('imageIframe');
+            const zoomControls = document.querySelectorAll('.zoom-ctrl');
 
-            resetImageTransform();
+            document.getElementById('imageModalTitle').querySelector('span').innerText = title;
+            document.getElementById('imageDownloadBtn').href = fullUrl || imgUrl;
+
+            if (driveId) {
+                if (imageIframe) {
+                    imageIframe.src = `https://drive.google.com/file/d/${driveId}/preview`;
+                    imageIframe.style.display = 'block';
+                }
+                if (imgWrapper) imgWrapper.style.display = 'none';
+                zoomControls.forEach(btn => btn.style.display = 'none');
+            } else {
+                if (imageIframe) {
+                    imageIframe.src = '';
+                    imageIframe.style.display = 'none';
+                }
+                if (imgWrapper) imgWrapper.style.display = 'flex';
+                zoomControls.forEach(btn => btn.style.display = 'inline-flex');
+
+                modalImg.dataset.rawUrl = fullUrl;
+                modalImg.src = imgUrl;
+                resetImageTransform();
+            }
 
             const modal = document.getElementById('imageModal');
             modal.style.display = 'flex';
@@ -1084,6 +1110,8 @@
 
         function closeImageModal() {
             document.getElementById('imageModal').style.display = 'none';
+            const imageIframe = document.getElementById('imageIframe');
+            if (imageIframe) imageIframe.src = '';
         }
 
         function zoomImage(amount) {
