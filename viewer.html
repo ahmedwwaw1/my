@@ -703,7 +703,7 @@
         </div>
         <div class="lightbox-body" id="lightboxBody">
             <div class="lightbox-img-wrapper" id="imgWrapper">
-                <img id="modalImg" src="" alt="معاينة الصورة">
+                <img id="modalImg" src="" alt="معاينة الصورة" onerror="handleImgError(this)">
             </div>
         </div>
     </div>
@@ -822,7 +822,7 @@
                     id: 'sample-2',
                     title: 'مخطط خلفية القوة والضعف',
                     type: 'image',
-                    url: 'https://via.placeholder.com/800x450/1a1a2e/00ff88?text=مخطط+خلفية+القوة',
+                    url: 'https://placehold.co/800x450/1a1a2e/00ff88.png?text=مخطط+خلفية+القوة',
                     source: 'remote'
                 },
                 {
@@ -917,13 +917,43 @@
             renderGrid();
         }
 
+        const FALLBACK_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"><rect width="100%" height="100%" fill="%2318181c"/><text x="50%" y="50%" fill="%23ff4757" font-family="sans-serif" font-size="20" text-anchor="middle" dominant-baseline="middle">تعذر تحميل الصورة</text></svg>`;
+
+        function extractDriveId(url) {
+            if (!url || typeof url !== 'string') return null;
+            const matchD = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (matchD && matchD[1]) return matchD[1];
+            const matchId = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (matchId && matchId[1]) return matchId[1];
+            return null;
+        }
+
+        function handleImgError(imgEl, originalUrl) {
+            imgEl.onerror = null;
+            const driveId = extractDriveId(originalUrl || imgEl.src);
+            if (driveId && !imgEl.dataset.triedThumbnail) {
+                imgEl.dataset.triedThumbnail = 'true';
+                imgEl.src = `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000`;
+                imgEl.onerror = function () {
+                    this.onerror = null;
+                    this.src = FALLBACK_SVG;
+                };
+            } else {
+                imgEl.src = FALLBACK_SVG;
+            }
+        }
+
         function getDirectImageUrl(url) {
-            if (!url) return 'https://via.placeholder.com/600x400/18181c/00d4ff?text=صورة';
-            // تحويل روابط Google Drive للصور إلى رابط مباشر للتقديم
+            if (!url) return 'https://placehold.co/600x400/18181c/00d4ff.png?text=صورة';
+            if (url.includes('via.placeholder.com')) {
+                let clean = url.replace('via.placeholder.com', 'placehold.co');
+                if (!clean.includes('?') && !clean.endsWith('.png')) clean += '.png';
+                return clean;
+            }
             if (url.includes('drive.google.com')) {
-                const match = url.match(/\/d\/([^\/]+)/);
-                if (match && match[1]) {
-                    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+                const driveId = extractDriveId(url);
+                if (driveId) {
+                    return `https://lh3.googleusercontent.com/d/${driveId}`;
                 }
             }
             return url;
@@ -931,11 +961,10 @@
 
         function getDirectPdfUrl(url) {
             if (!url) return '';
-            // تحويل روابط Google Drive لـ PDF إلى preview iframe
             if (url.includes('drive.google.com')) {
-                const match = url.match(/\/d\/([^\/]+)/);
-                if (match && match[1]) {
-                    return `https://drive.google.com/file/d/${match[1]}/preview`;
+                const driveId = extractDriveId(url);
+                if (driveId) {
+                    return `https://drive.google.com/file/d/${driveId}/preview`;
                 }
             }
             return url;
@@ -980,20 +1009,22 @@
 
                 if (item.type === 'image') {
                     const displayImgUrl = getDirectImageUrl(item.url);
+                    const safeTitle = escapeQuotes(item.title);
+                    const safeUrl = escapeQuotes(item.url);
                     card.innerHTML = `
-                        <div class="card-preview" onclick="openImageModal('${displayImgUrl}', '${escapeQuotes(item.title)}')">
+                        <div class="card-preview" onclick="openImageModal('${displayImgUrl}', '${safeTitle}')">
                             <span class="type-badge badge-image"><i class="fa-solid fa-image"></i> صورة</span>
                             ${item.source === 'local' ? '<span class="type-badge badge-local">محلي</span>' : ''}
-                            <img src="${displayImgUrl}" alt="${escapeQuotes(item.title)}" onerror="this.src='https://via.placeholder.com/600x400/18181c/ff4757?text=خطأ+تحميل+الصورة'">
+                            <img src="${displayImgUrl}" alt="${safeTitle}" onerror="handleImgError(this, '${safeUrl}')">
                         </div>
                         <div class="card-body">
-                            <div class="card-title" title="${escapeQuotes(item.title)}">${item.title}</div>
+                            <div class="card-title" title="${safeTitle}">${item.title}</div>
                             <div class="card-meta">
                                 <span><i class="fa-solid fa-file-image"></i> ملف صورة</span>
                                 <span>${item.size || 'عن بُعد'}</span>
                             </div>
                             <div class="card-actions">
-                                <button class="action-btn" onclick="openImageModal('${displayImgUrl}', '${escapeQuotes(item.title)}')">
+                                <button class="action-btn" onclick="openImageModal('${displayImgUrl}', '${safeTitle}')">
                                     <i class="fa-solid fa-eye"></i> معاينة مكبرة
                                 </button>
                                 <a class="action-btn" href="${displayImgUrl}" target="_blank" download>
