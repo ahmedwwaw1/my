@@ -2303,47 +2303,34 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // تجربة قائمة الموديلات والنسخ لضمان التوافق التام (حل ee و r)
-            const configs = [
-                { model: "gemini-1.5-flash-latest", ver: "v1beta" },
-                { model: "gemini-1.5-flash", ver: "v1beta" },
-                { model: "gemini-1.5-flash", ver: "v1" }
-            ];
+            // استخدام الإعدادات الأكثر استقراراً للمفاتيح الصادرة من AI Studio (AQ...)
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
 
-            let lastErrorMsg = "";
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `أنت مدير موقع متخصص في التداول. ساعد المستخدم في: ${promptText}` }] }]
+                    })
+                });
 
-            for (const config of configs) {
-                const url = `https://generativelanguage.googleapis.com/${config.ver}/models/${config.model}:generateContent?key=${key}`;
+                const data = await res.json();
 
-                try {
-                    const res = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: `أنت مدير موقع تداول. طلب المستخدم: ${promptText}` }] }]
-                        })
-                    });
-
-                    const data = await res.json();
-
-                    if (res.ok && data.candidates && data.candidates.length > 0) {
-                        return data.candidates[0].content.parts[0].text;
-                    }
-
-                    // إذا كان الخطأ هو "الخدمة غير مفعلة" (كما في الصورة r)
-                    if (data.error && data.error.message.toLowerCase().includes("has not been used in project")) {
-                        return "❌ الخدمة غير مفعلة: يرجى الدخول إلى Google Cloud Console وتفعيل 'Generative Language API' أو إنشاء مفتاح جديد كلياً من Google AI Studio.";
-                    }
-
-                    if (res.status === 404) continue;
-                    lastErrorMsg = data.error ? data.error.message : res.statusText;
-
-                } catch (err) {
-                    lastErrorMsg = err.message;
+                if (res.ok && data.candidates && data.candidates.length > 0) {
+                    return data.candidates[0].content.parts[0].text;
                 }
-            }
 
-            return `❌ فشل الاتصال: ${lastErrorMsg}. يرجى مراجعة خطوات الحل في الصورة r.`;
+                if (!res.ok) {
+                    const errMsg = data.error ? data.error.message : res.statusText;
+                    return `❌ خطأ في الاتصال: ${errMsg}. تأكد من صحة المفتاح وتفعيل الخدمة.`;
+                }
+
+                return "⚠️ لم أتمكن من الحصول على رد مفيد من المحرك.";
+            } catch (err) {
+                console.error("Gemini Error:", err);
+                return `⚠️ فشل الاتصال بالخدمة: ${err.message}`;
+            }
         }
 
         async function executeAiFunction(name, args) {
