@@ -2302,7 +2302,8 @@
         }
 
         async function callGemini(promptText) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
+            // استخدام إصدار v1 بدلاً من v1beta وحمل المفتاح في الرابط لضمان التوافق
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
 
             const requestBody = {
                 contents: [{
@@ -2371,10 +2372,7 @@
             try {
                 const res = await fetch(url, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-goog-api-key': geminiApiKey
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(requestBody)
                 });
 
@@ -2383,8 +2381,7 @@
                     const errMsg = errData.error ? errData.error.message : res.statusText;
 
                     if (res.status === 400 && errMsg.includes("API key not valid")) {
-                        geminiApiKey = ''; // Clear invalid key
-                        return "❌ مفتاح Gemini API غير صحيح. يرجى إعادة فتح الدردشة لإدخال مفتاح جديد.";
+                        return "❌ مفتاح Gemini API غير صحيح. يرجى التأكد منه وإعادة المحاولة.";
                     }
 
                     return `❌ خطأ في الاتصال بجيميناي (${res.status}): ${errMsg}`;
