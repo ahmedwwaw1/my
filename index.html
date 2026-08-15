@@ -2302,75 +2302,38 @@
         }
 
         async function callGemini(promptText) {
-            // محاولة الموديلات المختلفة بالترتيب (لحل مشكلة 404 في بعض المناطق)
-            const models = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"];
-            let lastErrorMsg = "";
+            const key = geminiApiKey.trim();
+            // محاولات متعددة لضمان التوافق مع أي موديل أو إصدار متاح في حساب المستخدم
+            const configurations = [
+                { model: "gemini-1.5-flash", ver: "v1beta" },
+                { model: "gemini-1.5-flash", ver: "v1" },
+                { model: "gemini-pro", ver: "v1beta" },
+                { model: "gemini-1.0-pro", ver: "v1beta" }
+            ];
 
-            for (let modelName of models) {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiApiKey.trim()}`;
+            let lastError = "";
+
+            for (const config of configurations) {
+                const url = `https://generativelanguage.googleapis.com/${config.ver}/models/${config.model}:generateContent?key=${key}`;
 
                 const requestBody = {
                     contents: [{
                         parts: [{ text: `أنت مدير موقع متخصص في التداول. لديك صلاحية الوصول إلى قاعدة بيانات Supabase.
-                        المستخدم سيطلب منك تعديلات في الموقع.
-                        البيانات الحالية (للعلم فقط): ${JSON.stringify(allData.slice(0, 10).map(d => ({id: d.id, title: d.title})))}
-                        مهمتك هي فهم الطلب وتنفيذه عبر المناداة بالدوال المناسبة.
                         طلب المستخدم: ${promptText}` }]
                     }],
-                    tools: [{
+                    tools: config.ver === "v1beta" ? [{
                         function_declarations: [
                             {
                                 name: "update_card_description",
                                 description: "تعديل وصف بطاقة محددة",
                                 parameters: {
                                     type: "object",
-                                    properties: {
-                                        card_id: { type: "string" },
-                                        new_content: { type: "string" }
-                                    },
+                                    properties: { card_id: { type: "string" }, new_content: { type: "string" } },
                                     required: ["card_id", "new_content"]
-                                }
-                            },
-                            {
-                                name: "add_new_video",
-                                description: "إضافة فيديو جديد لبطاقة معينة",
-                                parameters: {
-                                    type: "object",
-                                    properties: {
-                                        card_id: { type: "string" },
-                                        video_title: { type: "string" },
-                                        video_url: { type: "string" },
-                                        video_id: { type: "string" }
-                                    },
-                                    required: ["card_id", "video_title", "video_url", "video_id"]
-                                }
-                            },
-                            {
-                                name: "delete_video",
-                                description: "حذف فيديو من قاعدة البيانات",
-                                parameters: {
-                                    type: "object",
-                                    properties: {
-                                        video_id: { type: "string" }
-                                    },
-                                    required: ["video_id"]
-                                }
-                            },
-                            {
-                                name: "add_video_chapter",
-                                description: "إضافة طابع زمني لفيديو",
-                                parameters: {
-                                    type: "object",
-                                    properties: {
-                                        video_id: { type: "string" },
-                                        time: { type: "string" },
-                                        text: { type: "string" }
-                                    },
-                                    required: ["video_id", "time", "text"]
                                 }
                             }
                         ]
-                    }]
+                    }] : []
                 };
 
                 try {
@@ -2382,30 +2345,24 @@
 
                     const data = await res.json();
 
-                    if (res.ok) {
-                        if (!data.candidates || data.candidates.length === 0) continue;
-
+                    if (res.ok && data.candidates && data.candidates.length > 0) {
                         const part = data.candidates[0].content.parts[0];
                         if (part.functionCall) {
                             const { name, args } = part.functionCall;
                             return await executeAiFunction(name, args);
                         }
                         return part.text;
-                    } else {
-                        lastErrorMsg = data.error ? data.error.message : res.statusText;
-                        if (res.status === 404) {
-                            console.warn(`Model ${modelName} not found, trying next...`);
-                            continue; // تجربة الموديل التالي
-                        }
-                        return `❌ خطأ (${res.status}): ${lastErrorMsg}`;
                     }
+
+                    if (res.status === 404) continue; // تجربة الخيار التالي
+
+                    lastError = data.error ? data.error.message : res.statusText;
                 } catch (err) {
-                    console.error("Gemini Error:", err);
-                    lastErrorMsg = err.message;
+                    lastError = err.message;
                 }
             }
 
-            return `❌ تعذر العثور على موديل يعمل حالياً. آخر خطأ: ${lastErrorMsg}. يرجى التأكد من تفعيل Gemini API في حسابك.`;
+            return `❌ عذراً، لا يزال العقل المدبر يواجه مشكلة في التوافق. آخر خطأ: ${lastError}. يرجى التحقق من تفعيل الموديلات في Google AI Studio.`;
         }
 
         async function executeAiFunction(name, args) {
