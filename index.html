@@ -760,7 +760,10 @@
         <div class="ai-chat-box" id="aiChatBox">
             <div class="ai-header">
                 <span style="color: #00d4ff; font-weight: bold;">🤖 العقل المدبر (Gemini)</span>
-                <span style="cursor: pointer;" onclick="toggleAiChat()">✖</span>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span style="cursor: pointer; font-size: 1.1rem;" onclick="resetGeminiKey()" title="تغيير مفتاح API">⚙️</span>
+                    <span style="cursor: pointer; font-size: 1.2rem;" onclick="toggleAiChat()">✖</span>
+                </div>
             </div>
             <div class="ai-messages" id="aiMessages">
                 <div class="msg ai">أهلاً بك! أنا مدير موقعك الذكي. كيف يمكنني مساعدتك اليوم؟</div>
@@ -2214,21 +2217,23 @@
 
         let geminiApiKey = '';
 
+        async function resetGeminiKey() {
+            const key = prompt("الرجاء إدخال Gemini API Key الجديد (AQ...):");
+            if (key) {
+                geminiApiKey = key.trim();
+                await saveApiKeyToSupabase(geminiApiKey);
+                alert("✅ تم تحديث المفتاح وحفظه بنجاح.");
+            }
+        }
+
         async function toggleAiChat() {
             const chatBox = document.getElementById('aiChatBox');
             chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
 
             if (chatBox.style.display === 'flex' && !geminiApiKey) {
-                // 1. محاولة جلب المفتاح من Supabase أولاً
                 geminiApiKey = await fetchApiKeyFromSupabase();
-
-                // 2. إذا لم يوجد، نطلب من المستخدم إدخاله
                 if (!geminiApiKey) {
-                    const key = prompt("الرجاء إدخال Gemini API Key للبدء (سيتم حفظه سحابياً للوصول إليه من أي جهاز):");
-                    if (key) {
-                        geminiApiKey = key;
-                        await saveApiKeyToSupabase(key);
-                    }
+                    await resetGeminiKey();
                 }
             }
         }
@@ -2271,11 +2276,9 @@
             if (!msgText) return;
 
             if (!geminiApiKey) {
-                // نطلب المفتاح إذا فقد لسبب ما
                 geminiApiKey = await fetchApiKeyFromSupabase();
                 if (!geminiApiKey) {
-                    addMessageToUi('ai', "⚠️ مفتاح Gemini API غير متوفر. يرجى إدخاله لتفعيل العقل المدبر.");
-                    toggleAiChat(); // سيظهر الـ prompt
+                    addMessageToUi('ai', "⚠️ مفتاح Gemini API غير متوفر. اضغط على أيقونة الترس ⚙️ لإدخاله.");
                     return;
                 }
             }
@@ -2287,8 +2290,13 @@
                 const response = await callGemini(msgText);
                 addMessageToUi('ai', response);
             } catch (err) {
-                addMessageToUi('ai', `⚠️ خطأ غير متوقع: ${err.message}`);
                 console.error(err);
+                if (err.message.includes("401") || err.message.includes("credentials")) {
+                    addMessageToUi('ai', "❌ المفتاح الحالي غير صالح. يرجى الضغط على أيقونة الترس ⚙️ وتحديثه.");
+                    geminiApiKey = ''; // مسح المفتاح الخاطئ
+                } else {
+                    addMessageToUi('ai', "⚠️ حدث خطأ أثناء الاتصال. تأكد من تفعيل الخدمة والاتصال بالإنترنت.");
+                }
             }
         }
 
