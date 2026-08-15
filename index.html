@@ -2235,26 +2235,29 @@
 
         async function fetchApiKeyFromSupabase() {
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3OTc1MTEsImV4cCI6MjEwMjM3MzUxMX0.5t3iSQ3VvITsNPC7PRi6b49RY5SPseFt5O10oeGv6bk';
+            const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
 
             try {
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/secret_settings?id=eq.gemini_key`, {
-                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    headers: { 'apikey': SERVICE_ROLE_KEY, 'Authorization': `Bearer ${SERVICE_ROLE_KEY}` }
                 });
                 const data = await res.json();
                 return data.length > 0 ? data[0].secret_value : null;
-            } catch (e) { return null; }
+            } catch (e) {
+                console.error("Error fetching API key:", e);
+                return null;
+            }
         }
 
         async function saveApiKeyToSupabase(key) {
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3OTc1MTEsImV4cCI6MjEwMjM3MzUxMX0.5t3iSQ3VvITsNPC7PRi6b49RY5SPseFt5O10oeGv6bk';
+            const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
 
             await fetch(`${SUPABASE_URL}/rest/v1/secret_settings`, {
                 method: 'POST',
                 headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'apikey': SERVICE_ROLE_KEY,
+                    'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
                     'Content-Type': 'application/json',
                     'Prefer': 'resolution=merge-duplicates'
                 },
@@ -2268,8 +2271,13 @@
             if (!msgText) return;
 
             if (!geminiApiKey) {
-                addMessageToUi('ai', "⚠️ عذراً، مفتاح Gemini API غير متوفر. يرجى إعادة فتح الدردشة لإدخاله.");
-                return;
+                // نطلب المفتاح إذا فقد لسبب ما
+                geminiApiKey = await fetchApiKeyFromSupabase();
+                if (!geminiApiKey) {
+                    addMessageToUi('ai', "⚠️ مفتاح Gemini API غير متوفر. يرجى إدخاله لتفعيل العقل المدبر.");
+                    toggleAiChat(); // سيظهر الـ prompt
+                    return;
+                }
             }
 
             addMessageToUi('user', msgText);
@@ -2279,7 +2287,7 @@
                 const response = await callGemini(msgText);
                 addMessageToUi('ai', response);
             } catch (err) {
-                addMessageToUi('ai', "⚠️ حدث خطأ أثناء الاتصال بالعقل المدبر. تأكد من صحة المفتاح والاتصال بالإنترنت.");
+                addMessageToUi('ai', `⚠️ خطأ غير متوقع: ${err.message}`);
                 console.error(err);
             }
         }
@@ -2294,7 +2302,7 @@
         }
 
         async function callGemini(promptText) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
 
             const requestBody = {
                 contents: [{
@@ -2363,13 +2371,23 @@
             try {
                 const res = await fetch(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-goog-api-key': geminiApiKey
+                    },
                     body: JSON.stringify(requestBody)
                 });
 
                 if (!res.ok) {
                     const errData = await res.json();
-                    return `❌ خطأ في الاتصال: ${errData.error ? errData.error.message : res.statusText}`;
+                    const errMsg = errData.error ? errData.error.message : res.statusText;
+
+                    if (res.status === 400 && errMsg.includes("API key not valid")) {
+                        geminiApiKey = ''; // Clear invalid key
+                        return "❌ مفتاح Gemini API غير صحيح. يرجى إعادة فتح الدردشة لإدخال مفتاح جديد.";
+                    }
+
+                    return `❌ خطأ في الاتصال بجيميناي (${res.status}): ${errMsg}`;
                 }
 
                 const data = await res.json();
@@ -2379,7 +2397,7 @@
                 }
 
                 if (!data.candidates || data.candidates.length === 0) {
-                    return "⚠️ لم أتمكن من معالجة الطلب، ربما المفتاح غير صحيح أو المنطقة محظورة.";
+                    return "⚠️ لم أتمكن من الحصول على رد من العقل المدبر. قد تكون هناك قيود على منطقتك الجغرافية.";
                 }
 
                 const part = data.candidates[0].content.parts[0];
@@ -2392,7 +2410,7 @@
                 return part.text;
             } catch (err) {
                 console.error("Gemini Call Error:", err);
-                throw err; // Re-throw to be caught by sendAiMessage
+                return `⚠️ فشل الاتصال بالخدمة: ${err.message}. تأكد من اتصالك بالإنترنت.`;
             }
         }
 
