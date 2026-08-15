@@ -2311,10 +2311,11 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // استخدام الموديلات الأكثر استقراراً مع دعم وظائف الإدارة
+            // استخدام الموديل Flash لأنه الأكثر توافقاً واستقراراً حالياً
             const configs = [
                 { model: "gemini-1.5-flash", ver: "v1beta" },
-                { model: "gemini-1.5-pro", ver: "v1beta" }
+                { model: "gemini-1.5-flash", ver: "v1" },
+                { model: "gemini-pro", ver: "v1beta" }
             ];
 
             let lastError = "";
@@ -2324,9 +2325,7 @@
 
                 const requestBody = {
                     contents: [{
-                        parts: [{ text: `أنت مدير موقع متخصص في التداول. لديك صلاحية الوصول إلى قاعدة بيانات Supabase (جداول: cards, videos).
-                        المستخدم سيطلب منك تعديلات. نفذها عبر الدوال المناسبة.
-                        البيانات الحالية: ${JSON.stringify(allData.slice(0, 5).map(d => ({id: d.id, title: d.title})))}
+                        parts: [{ text: `أنت مدير موقع متخصص في التداول. لديك صلاحية الوصول إلى جداول Supabase (cards, videos).
                         طلب المستخدم: ${promptText}` }]
                     }],
                     tools: [{
@@ -2338,15 +2337,6 @@
                                     type: "object",
                                     properties: { card_id: { type: "string" }, new_content: { type: "string" } },
                                     required: ["card_id", "new_content"]
-                                }
-                            },
-                            {
-                                name: "add_new_video",
-                                description: "إضافة فيديو جديد لبطاقة معينة",
-                                parameters: {
-                                    type: "object",
-                                    properties: { card_id: { type: "string" }, video_title: { type: "string" }, video_url: { type: "string" }, video_id: { type: "string" } },
-                                    required: ["card_id", "video_title", "video_url", "video_id"]
                                 }
                             }
                         ]
@@ -2372,12 +2362,11 @@
                     }
 
                     if (data.error) {
-                        const msg = data.error.message;
-                        // رسالة تشخيصية ذكية بناءً على الصورة رقم 2
-                        if (msg.includes("blocked") || msg.includes("not been used")) {
-                            return "❌ الوصول محظور: يجب عليك تفعيل 'Generative Language API' في لوحة تحكم Google Cloud لهذا المشروع، أو إنشاء مفتاح من Google AI Studio.";
+                        lastError = data.error.message;
+                        // إذا كان الخطأ يتعلق بالصلاحيات (كما في صورتك السابقة)
+                        if (lastError.includes("blocked") || lastError.includes("not been used")) {
+                            return "❌ الوصول محظور: يرجى التأكد من تفعيل 'Generative Language API' في Google Cloud لهذا المشروع.";
                         }
-                        lastError = msg;
                     }
 
                     if (res.status === 404) continue;
@@ -2386,7 +2375,7 @@
                 }
             }
 
-            return `❌ فشل الاتصال: ${lastError}. يرجى مراجعة إعدادات المشروع في Google Cloud.`;
+            return `❌ فشل الاتصال: ${lastError}. تأكد من صحة المفتاح وتفعيل الخدمة في Google Cloud.`;
         }
 
         async function executeAiFunction(name, args) {
