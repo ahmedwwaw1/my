@@ -2302,111 +2302,109 @@
         }
 
         async function callGemini(promptText) {
-            // قائمة بالموديلات المحتملة للتبديل بينها في حال فشل أحدها (حل مشكلة 404)
-            const models = ["gemini-1.5-flash", "gemini-1.5-flash-latest", "gemini-pro"];
-            let lastError = "";
+            // استخدام الموديل المستقر gemini-1.5-flash مع إصدار v1 لضمان أعلى توافق
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiApiKey.trim()}`;
 
-            for (const modelName of models) {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiApiKey}`;
-
-                const requestBody = {
-                    contents: [{
-                        parts: [{ text: `أنت مدير موقع متخصص في التداول. لديك صلاحية الوصول إلى قاعدة بيانات Supabase.
-                        المستخدم سيطلب منك تعديلات في الموقع.
-                        البيانات الحالية (للعلم فقط): ${JSON.stringify(allData.slice(0, 10).map(d => ({id: d.id, title: d.title})))}
-                        مهمتك هي فهم الطلب وتنفيذه عبر المناداة بالدوال المناسبة.
-                        طلب المستخدم: ${promptText}` }]
-                    }],
-                    tools: [{
-                        function_declarations: [
-                            {
-                                name: "update_card_description",
-                                description: "تعديل وصف بطاقة محددة",
-                                parameters: {
-                                    type: "object",
-                                    properties: {
-                                        card_id: { type: "string" },
-                                        new_content: { type: "string" }
-                                    },
-                                    required: ["card_id", "new_content"]
-                                }
-                            },
-                            {
-                                name: "add_new_video",
-                                description: "إضافة فيديو جديد لبطاقة معينة",
-                                parameters: {
-                                    type: "object",
-                                    properties: {
-                                        card_id: { type: "string" },
-                                        video_title: { type: "string" },
-                                        video_url: { type: "string" },
-                                        video_id: { type: "string" }
-                                    },
-                                    required: ["card_id", "video_title", "video_url", "video_id"]
-                                }
-                            },
-                            {
-                                name: "delete_video",
-                                description: "حذف فيديو من قاعدة البيانات",
-                                parameters: {
-                                    type: "object",
-                                    properties: {
-                                        video_id: { type: "string" }
-                                    },
-                                    required: ["video_id"]
-                                }
-                            },
-                            {
-                                name: "add_video_chapter",
-                                description: "إضافة طابع زمني لفيديو",
-                                parameters: {
-                                    type: "object",
-                                    properties: {
-                                        video_id: { type: "string" },
-                                        time: { type: "string" },
-                                        text: { type: "string" }
-                                    },
-                                    required: ["video_id", "time", "text"]
-                                }
+            const requestBody = {
+                contents: [{
+                    parts: [{ text: `أنت مدير موقع متخصص في التداول. لديك صلاحية الوصول إلى قاعدة بيانات Supabase.
+                    المستخدم سيطلب منك تعديلات في الموقع.
+                    البيانات الحالية (للعلم فقط): ${JSON.stringify(allData.slice(0, 10).map(d => ({id: d.id, title: d.title})))}
+                    مهمتك هي فهم الطلب وتنفيذه عبر المناداة بالدوال المناسبة.
+                    طلب المستخدم: ${promptText}` }]
+                }],
+                tools: [{
+                    function_declarations: [
+                        {
+                            name: "update_card_description",
+                            description: "تعديل وصف بطاقة محددة",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    card_id: { type: "string" },
+                                    new_content: { type: "string" }
+                                },
+                                required: ["card_id", "new_content"]
                             }
-                        ]
-                    }]
-                };
-
-                try {
-                    const res = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(requestBody)
-                    });
-
-                    const data = await res.json();
-
-                    if (res.ok && data.candidates && data.candidates.length > 0) {
-                        const part = data.candidates[0].content.parts[0];
-                        if (part.functionCall) {
-                            const { name, args } = part.functionCall;
-                            return await executeAiFunction(name, args);
+                        },
+                        {
+                            name: "add_new_video",
+                            description: "إضافة فيديو جديد لبطاقة معينة",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    card_id: { type: "string" },
+                                    video_title: { type: "string" },
+                                    video_url: { type: "string" },
+                                    video_id: { type: "string" }
+                                },
+                                required: ["card_id", "video_title", "video_url", "video_id"]
+                            }
+                        },
+                        {
+                            name: "delete_video",
+                            description: "حذف فيديو من قاعدة البيانات",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    video_id: { type: "string" }
+                                },
+                                required: ["video_id"]
+                            }
+                        },
+                        {
+                            name: "add_video_chapter",
+                            description: "إضافة طابع زمني لفيديو",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    video_id: { type: "string" },
+                                    time: { type: "string" },
+                                    text: { type: "string" }
+                                },
+                                required: ["video_id", "time", "text"]
+                            }
                         }
-                        return part.text;
+                    ]
+                }]
+            };
+
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    const errMsg = data.error ? data.error.message : res.statusText;
+                    if (res.status === 404) {
+                        return `❌ خطأ 404: الموديل غير متوفر في منطقتك حالياً أو الرابط غير صحيح.`;
                     }
-
-                    if (res.status !== 404) {
-                        // إذا كان الخطأ ليس "غير موجود"، فالمشكلة في المفتاح أو الحساب
-                        return `❌ خطأ في الاتصال (${res.status}): ${data.error ? data.error.message : res.statusText}`;
+                    if (res.status === 400 && errMsg.includes("API key")) {
+                        return "❌ مفتاح API غير صحيح. يرجى التأكد منه وإعادة المحاولة.";
                     }
-
-                    lastError = data.error ? data.error.message : "Model not found";
-                    console.warn(`Model ${modelName} failed, trying next...`);
-                    continue; // تجربة الموديل التالي في القائمة
-
-                } catch (err) {
-                    console.error("Gemini Call Error:", err);
-                    lastError = err.message;
+                    return `❌ خطأ في الاتصال بجيميناي (${res.status}): ${errMsg}`;
                 }
-            }
 
-            return `❌ تعذر العثور على موديل يعمل حالياً. آخر خطأ: ${lastError}. تأكد من تفعيل Gemini API في حسابك على Google Cloud.`;
+                if (!data.candidates || data.candidates.length === 0) {
+                    return "⚠️ العقل المدبر لم يعطِ ردّاً. قد يكون هناك قيود على المحتوى أو المفتاح.";
+                }
+
+                const part = data.candidates[0].content.parts[0];
+
+                if (part.functionCall) {
+                    const { name, args } = part.functionCall;
+                    return await executeAiFunction(name, args);
+                }
+
+                return part.text;
+            } catch (err) {
+                console.error("Gemini Call Error:", err);
+                return `⚠️ فشل الاتصال بالخدمة: ${err.message}. تأكد من اتصالك بالإنترنت.`;
+            }
         }
 
         async function executeAiFunction(name, args) {
