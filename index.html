@@ -2303,84 +2303,47 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // تجربة قائمة الموديلات المقترحة في شرح جيميناي (الصورة ee) لضمان العمل في كل المناطق
+            // تجربة قائمة الموديلات والنسخ لضمان التوافق التام (حل ee و r)
             const configs = [
                 { model: "gemini-1.5-flash-latest", ver: "v1beta" },
                 { model: "gemini-1.5-flash", ver: "v1beta" },
-                { model: "gemini-1.5-flash", ver: "v1" },
-                { model: "gemini-2.0-flash-exp", ver: "v1beta" }
+                { model: "gemini-1.5-flash", ver: "v1" }
             ];
 
-            let lastError = "";
+            let lastErrorMsg = "";
 
             for (const config of configs) {
                 const url = `https://generativelanguage.googleapis.com/${config.ver}/models/${config.model}:generateContent?key=${key}`;
-
-                const requestBody = {
-                    contents: [{
-                        parts: [{ text: `أنت مدير موقع متخصص في التداول (VSA ووايكوف). لديك صلاحية الوصول لجداول Supabase التالية: cards, videos, video_chapters.
-                        مهمتك هي مساعدة المستخدم في إدارة محتوى الموقع.
-                        طلب المستخدم: ${promptText}` }]
-                    }],
-                    tools: [{
-                        function_declarations: [
-                            {
-                                name: "update_card_description",
-                                description: "تعديل وصف بطاقة محددة في الموقع",
-                                parameters: {
-                                    type: "object",
-                                    properties: { card_id: { type: "string" }, new_content: { type: "string" } },
-                                    required: ["card_id", "new_content"]
-                                }
-                            },
-                            {
-                                name: "add_new_video",
-                                description: "إضافة فيديو تعليمي جديد لبطاقة كورس معينة",
-                                parameters: {
-                                    type: "object",
-                                    properties: { card_id: { type: "string" }, video_title: { type: "string" }, video_url: { type: "string" }, video_id: { type: "string" } },
-                                    required: ["card_id", "video_title", "video_url", "video_id"]
-                                }
-                            }
-                        ]
-                    }]
-                };
 
                 try {
                     const res = await fetch(url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(requestBody)
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: `أنت مدير موقع تداول. طلب المستخدم: ${promptText}` }] }]
+                        })
                     });
 
                     const data = await res.json();
 
                     if (res.ok && data.candidates && data.candidates.length > 0) {
-                        const part = data.candidates[0].content.parts[0];
-                        if (part.functionCall) {
-                            const { name, args } = part.functionCall;
-                            return await executeAiFunction(name, args);
-                        }
-                        return part.text;
+                        return data.candidates[0].content.parts[0].text;
                     }
 
-                    // إذا كان الخطأ 404، نجرب الإعداد التالي في القائمة
-                    if (res.status === 404) {
-                        console.warn(`Configuration ${config.model} (${config.ver}) failed, trying next...`);
-                        continue;
+                    // إذا كان الخطأ هو "الخدمة غير مفعلة" (كما في الصورة r)
+                    if (data.error && data.error.message.toLowerCase().includes("has not been used in project")) {
+                        return "❌ الخدمة غير مفعلة: يرجى الدخول إلى Google Cloud Console وتفعيل 'Generative Language API' أو إنشاء مفتاح جديد كلياً من Google AI Studio.";
                     }
 
-                    if (res.status === 400 && data.error && data.error.message.includes("API key")) {
-                        return "❌ مفتاح API غير صحيح. يرجى التأكد من نسخ المفتاح كاملاً من Google AI Studio.";
-                    }
+                    if (res.status === 404) continue;
+                    lastErrorMsg = data.error ? data.error.message : res.statusText;
 
-                    lastError = data.error ? data.error.message : res.statusText;
                 } catch (err) {
-                    lastError = err.message;
+                    lastErrorMsg = err.message;
                 }
             }
 
-            return `❌ عذراً، لا يزال العقل المدبر يواجه مشكلة في التوافق السحابي. آخر خطأ: ${lastError}. يرجى التأكد من تفعيل "Generative Language API" في حساب جوجل الخاص بك.`;
+            return `❌ فشل الاتصال: ${lastErrorMsg}. يرجى مراجعة خطوات الحل في الصورة r.`;
         }
 
         async function executeAiFunction(name, args) {
