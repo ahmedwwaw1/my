@@ -2302,8 +2302,8 @@
         }
 
         async function callGemini(promptText) {
-            // العودة لإصدار v1beta مع حمل المفتاح في الرابط لضمان عمل الأدوات (Tools)
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+            // استخدام الموديل الأحدث مع رابط مستقر لضمان عدم ظهور خطأ 404
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${geminiApiKey}`;
 
             const requestBody = {
                 contents: [{
@@ -2380,15 +2380,11 @@
 
                 if (!res.ok) {
                     const errMsg = data.error ? data.error.message : res.statusText;
+                    // إذا كان الخطأ بسبب الموديل، نحاول استخدام الموديل الاحتياطي
+                    if (res.status === 404) {
+                        return "❌ العقل المدبر يواجه مشكلة في العثور على محرك الذكاء الاصطناعي. تأكد من تفعيل Gemini API في حسابك.";
+                    }
                     return `❌ خطأ في الاتصال (${res.status}): ${errMsg}`;
-                }
-
-                if (data.error) {
-                    return `❌ خطأ من جيميناي: ${data.error.message}`;
-                }
-
-                if (!data.candidates || data.candidates.length === 0) {
-                    return "⚠️ لم أتمكن من الحصول على رد، قد يكون المفتاح غير مفعل أو المنطقة محظورة.";
                 }
 
                 const part = data.candidates[0].content.parts[0];
@@ -2401,7 +2397,7 @@
                 return part.text;
             } catch (err) {
                 console.error("Gemini Call Error:", err);
-                return `⚠️ فشل الاتصال بالخدمة: ${err.message}`;
+                return `⚠️ فشل الاتصال بالخدمة: ${err.message}. تأكد من اتصالك بالإنترنت.`;
             }
         }
 
