@@ -2302,8 +2302,8 @@
         }
 
         async function callGemini(promptText) {
-            // استخدام إصدار v1 بدلاً من v1beta وحمل المفتاح في الرابط لضمان التوافق
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+            // العودة لإصدار v1beta مع حمل المفتاح في الرابط لضمان عمل الأدوات (Tools)
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
 
             const requestBody = {
                 contents: [{
@@ -2376,25 +2376,19 @@
                     body: JSON.stringify(requestBody)
                 });
 
-                if (!res.ok) {
-                    const errData = await res.json();
-                    const errMsg = errData.error ? errData.error.message : res.statusText;
-
-                    if (res.status === 400 && errMsg.includes("API key not valid")) {
-                        return "❌ مفتاح Gemini API غير صحيح. يرجى التأكد منه وإعادة المحاولة.";
-                    }
-
-                    return `❌ خطأ في الاتصال بجيميناي (${res.status}): ${errMsg}`;
-                }
-
                 const data = await res.json();
+
+                if (!res.ok) {
+                    const errMsg = data.error ? data.error.message : res.statusText;
+                    return `❌ خطأ في الاتصال (${res.status}): ${errMsg}`;
+                }
 
                 if (data.error) {
                     return `❌ خطأ من جيميناي: ${data.error.message}`;
                 }
 
                 if (!data.candidates || data.candidates.length === 0) {
-                    return "⚠️ لم أتمكن من الحصول على رد من العقل المدبر. قد تكون هناك قيود على منطقتك الجغرافية.";
+                    return "⚠️ لم أتمكن من الحصول على رد، قد يكون المفتاح غير مفعل أو المنطقة محظورة.";
                 }
 
                 const part = data.candidates[0].content.parts[0];
@@ -2407,7 +2401,7 @@
                 return part.text;
             } catch (err) {
                 console.error("Gemini Call Error:", err);
-                return `⚠️ فشل الاتصال بالخدمة: ${err.message}. تأكد من اتصالك بالإنترنت.`;
+                return `⚠️ فشل الاتصال بالخدمة: ${err.message}`;
             }
         }
 
