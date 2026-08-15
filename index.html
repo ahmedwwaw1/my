@@ -987,24 +987,33 @@
             }
         }
         // اضافة ملف json
-        // دالة جلب ومعالجة البيانات من Supabase
+        // دالة جلب ومعالجة البيانات من Supabase مع دمج تنبيهات الكريبتو المحلية
         async function loadWebsiteData() {
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3OTc1MTEsImV4cCI6MjEwMjM3MzUxMX0.5t3iSQ3VvITsNPC7PRi6b49RY5SPseFt5O10oeGv6bk';
+            const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
 
             const headers = {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`
+                'apikey': SERVICE_ROLE_KEY,
+                'Authorization': `Bearer ${SERVICE_ROLE_KEY}`
             };
 
             try {
-                // جلب البطاقات، الفيديوهات، الفصول، والمرفقات في طلبات متوازية
+                // جلب البيانات من Supabase
                 const [cardsRes, videosRes, chaptersRes, assetsRes] = await Promise.all([
                     fetch(`${SUPABASE_URL}/rest/v1/cards?select=*`, { headers }),
                     fetch(`${SUPABASE_URL}/rest/v1/videos?select=*&order=order_index`, { headers }),
                     fetch(`${SUPABASE_URL}/rest/v1/video_chapters?select=*`, { headers }),
                     fetch(`${SUPABASE_URL}/rest/v1/card_assets?select=*`, { headers })
                 ]);
+
+                // محاولة جلب التنبيهات المحلية
+                let cryptoAlerts = [];
+                try {
+                    const cryptoRes = await fetch('crypto_alerts.json?v=' + new Date().getTime());
+                    if (cryptoRes.ok) {
+                        cryptoAlerts = await cryptoRes.json();
+                    }
+                } catch (e) { console.warn("Could not load crypto_alerts.json"); }
 
                 if (!cardsRes.ok) throw new Error("فشل تحميل البيانات من Supabase");
 
@@ -1013,7 +1022,7 @@
                 const chapters = await chaptersRes.json();
                 const assets = await assetsRes.json();
 
-                // إعادة بناء هيكل البيانات ليتوافق مع الموقع
+                // إعادة بناء هيكل البيانات من Supabase
                 allData = cards.map(card => {
                     const cardVideos = videos.filter(v => v.card_id === card.id).map(v => ({
                         ...v,
@@ -1032,18 +1041,38 @@
                         content: card.content,
                         image: card.image_url,
                         videos: cardVideos.length > 0 ? cardVideos : null,
-                        links: cardAssets.filter(a => a.asset_type === 'link').map(a => ({ text: a.title, url: a.url })),
+                        links: cardAssets.filter(a => a.asset_type === null || a.asset_type === 'link').map(a => ({ text: a.title, url: a.url })),
                         images: cardAssets.filter(a => a.asset_type === 'image').map(a => ({ title: a.title, url: a.url })),
                         pdfs: cardAssets.filter(a => a.asset_type === 'pdf').map(a => ({ title: a.title, url: a.url })),
-                        // سيتم التعامل مع التوصيات والفهارس الموضوعية لاحقاً أو عبر الذكاء الاصطناعي
                         recommendations: [],
                         thematic_index: null
                     };
                 });
 
+                // دمج تنبيهات الكريبتو
+                cryptoAlerts.forEach(alert => {
+                    const alertDate = new Date(alert.timestamp);
+                    const formattedTime = alertDate.toLocaleTimeString('ar-EG', { hour: 'numeric', minute: '2-digit', hour12: true });
+                    const formattedDate = alertDate.toLocaleDateString('ar-EG');
+
+                    allData.push({
+                        id: `crypto-${alert.symbol}-${alert.timestamp}`,
+                        title: `🚨 حركة قوية على زوج: ${alert.symbol}`,
+                        category: 'high_volume',
+                        content: `💵 السعر الحالي: ${alert.price} USDT\n📊 حجم التداول: ${alert.volume.toLocaleString()}\n📈 نسبة التغيير (24س): ${alert.change_percent}%\n🕒 وقت التنبيه: ${formattedTime} - ${formattedDate}`,
+                        image: '',
+                        videos: null,
+                        links: [],
+                        images: null,
+                        pdfs: null,
+                        recommendations: [],
+                        thematic_index: null
+                    });
+                });
+
                 isDataLoaded = true;
                 render(allData);
-                console.log("تم تحميل البيانات بنجاح من Supabase 🚀");
+                console.log("تم تحميل البيانات بنجاح 🚀");
 
                 if (typeof handleRoute === 'function') {
                     handleRoute();
@@ -1051,7 +1080,7 @@
 
             } catch (error) {
                 console.error("❌ خطأ في تحميل البيانات:", error);
-                statusMsg.innerText = "عذراً، حدث خلل أثناء جلب البيانات من القاعدة السحابية.";
+                statusMsg.innerText = "عذراً، حدث خلل أثناء جلب البيانات.";
             }
         }
 
@@ -2236,7 +2265,12 @@
         async function sendAiMessage() {
             const input = document.getElementById('aiInput');
             const msgText = input.value.trim();
-            if (!msgText || !geminiApiKey) return;
+            if (!msgText) return;
+
+            if (!geminiApiKey) {
+                addMessageToUi('ai', "⚠️ عذراً، مفتاح Gemini API غير متوفر. يرجى إعادة فتح الدردشة لإدخاله.");
+                return;
+            }
 
             addMessageToUi('user', msgText);
             input.value = '';
@@ -2245,7 +2279,7 @@
                 const response = await callGemini(msgText);
                 addMessageToUi('ai', response);
             } catch (err) {
-                addMessageToUi('ai', "⚠️ حدث خطأ أثناء الاتصال بالعقل المدبر.");
+                addMessageToUi('ai', "⚠️ حدث خطأ أثناء الاتصال بالعقل المدبر. تأكد من صحة المفتاح والاتصال بالإنترنت.");
                 console.error(err);
             }
         }
@@ -2266,7 +2300,7 @@
                 contents: [{
                     parts: [{ text: `أنت مدير موقع متخصص في التداول. لديك صلاحية الوصول إلى قاعدة بيانات Supabase.
                     المستخدم سيطلب منك تعديلات في الموقع.
-                    البيانات الحالية: ${JSON.stringify(allData.map(d => ({id: d.id, title: d.title})))}
+                    البيانات الحالية (للعلم فقط): ${JSON.stringify(allData.slice(0, 10).map(d => ({id: d.id, title: d.title})))}
                     مهمتك هي فهم الطلب وتنفيذه عبر المناداة بالدوال المناسبة.
                     طلب المستخدم: ${promptText}` }]
                 }],
@@ -2293,14 +2327,14 @@
                                     card_id: { type: "string" },
                                     video_title: { type: "string" },
                                     video_url: { type: "string" },
-                                    video_id: { type: "string", description: "معرف فريد للفيديو مثل vsa-10" }
+                                    video_id: { type: "string" }
                                 },
                                 required: ["card_id", "video_title", "video_url", "video_id"]
                             }
                         },
                         {
                             name: "delete_video",
-                            description: "حذف فيديو نهائياً من قاعدة البيانات",
+                            description: "حذف فيديو من قاعدة البيانات",
                             parameters: {
                                 type: "object",
                                 properties: {
@@ -2326,20 +2360,40 @@
                 }]
             };
 
-            const res = await fetch(url, {
-                method: 'POST',
-                body: JSON.stringify(requestBody)
-            });
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
 
-            const data = await res.json();
-            const part = data.candidates[0].content.parts[0];
+                if (!res.ok) {
+                    const errData = await res.json();
+                    return `❌ خطأ في الاتصال: ${errData.error ? errData.error.message : res.statusText}`;
+                }
 
-            if (part.functionCall) {
-                const { name, args } = part.functionCall;
-                return await executeAiFunction(name, args);
+                const data = await res.json();
+
+                if (data.error) {
+                    return `❌ خطأ من جيميناي: ${data.error.message}`;
+                }
+
+                if (!data.candidates || data.candidates.length === 0) {
+                    return "⚠️ لم أتمكن من معالجة الطلب، ربما المفتاح غير صحيح أو المنطقة محظورة.";
+                }
+
+                const part = data.candidates[0].content.parts[0];
+
+                if (part.functionCall) {
+                    const { name, args } = part.functionCall;
+                    return await executeAiFunction(name, args);
+                }
+
+                return part.text;
+            } catch (err) {
+                console.error("Gemini Call Error:", err);
+                throw err; // Re-throw to be caught by sendAiMessage
             }
-
-            return part.text;
         }
 
         async function executeAiFunction(name, args) {
