@@ -621,6 +621,113 @@
             cursor: not-allowed;
             border-color: #222226;
         }
+
+        /* ===== AI Orchestrator Widget ===== */
+        .ai-widget {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .ai-btn {
+            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: transform 0.3s;
+        }
+
+        .ai-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .ai-chat-box {
+            display: none;
+            width: 350px;
+            height: 450px;
+            background: #18181c;
+            border: 1px solid #2d2d35;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        .ai-header {
+            background: #1e1e24;
+            padding: 15px;
+            border-bottom: 1px solid #2d2d35;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .msg {
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .msg.user {
+            background: #00d4ff;
+            color: #000;
+            align-self: flex-start;
+        }
+
+        .msg.ai {
+            background: #2d2d35;
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .ai-input-area {
+            padding: 10px;
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid #2d2d35;
+        }
+
+        .ai-input-area input {
+            flex-grow: 1;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .ai-send-btn {
+            background: #00d4ff;
+            border: none;
+            color: #000;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -646,6 +753,24 @@
         <h1 id="pageTitle" style="text-align: center; margin-bottom: 1.5rem; font-weight: 700;"></h1>
         <div id="statusMsg"></div>
         <div class="grid-layout" id="mainGrid"></div>
+    </div>
+
+    <!-- AI Orchestrator Widget -->
+    <div class="ai-widget">
+        <div class="ai-chat-box" id="aiChatBox">
+            <div class="ai-header">
+                <span style="color: #00d4ff; font-weight: bold;">🤖 العقل المدبر (Gemini)</span>
+                <span style="cursor: pointer;" onclick="toggleAiChat()">✖</span>
+            </div>
+            <div class="ai-messages" id="aiMessages">
+                <div class="msg ai">أهلاً بك! أنا مدير موقعك الذكي. كيف يمكنني مساعدتك اليوم؟</div>
+            </div>
+            <div class="ai-input-area">
+                <input type="text" id="aiInput" placeholder="اطلب شيئاً من المدير...">
+                <button class="ai-send-btn" onclick="sendAiMessage()">إرسال</button>
+            </div>
+        </div>
+        <button class="ai-btn" onclick="toggleAiChat()" title="تحدث مع العقل المدبر لموقعك">🧠</button>
     </div>
 
     <script>
@@ -862,121 +987,71 @@
             }
         }
         // اضافة ملف json
-        // دالة جلب ومعالجة ملفات الـ JSON المحدثة لمنع تفكيك الكروت والحفاظ عليها موحدة
+        // دالة جلب ومعالجة البيانات من Supabase
         async function loadWebsiteData() {
-            const jsonFiles = ['data.json', 'crypto_alerts.json', 'vsa.json', 'Time-analysis.json', 'technical-analysis.json', 'PDF-images.json'];
+            const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3OTc1MTEsImV4cCI6MjEwMjM3MzUxMX0.5t3iSQ3VvITsNPC7PRi6b49RY5SPseFt5O10oeGv6bk';
 
-            let combinedServerData = [];
-            let anyFileLoaded = false;
+            const headers = {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+            };
 
             try {
-                const fetchPromises = jsonFiles.map(async (file) => {
-                    try {
-                        const response = await fetch(file + '?v=' + new Date().getTime());
-                        if (!response.ok) {
-                            console.warn(`⚠️ تنبيه: ملف [${file}] غير موجود على السيرفر أو فشل تحميله حالياً.`);
-                            return null;
-                        }
-                        const data = await response.json();
-                        anyFileLoaded = true;
-                        return data;
-                    } catch (fileError) {
-                        console.error(`❌ خطأ في قراءة أو تحليل صيغة الـ JSON داخل ملف [${file}]:`, fileError);
-                        return null;
-                    }
+                // جلب البطاقات، الفيديوهات، الفصول، والمرفقات في طلبات متوازية
+                const [cardsRes, videosRes, chaptersRes, assetsRes] = await Promise.all([
+                    fetch(`${SUPABASE_URL}/rest/v1/cards?select=*`, { headers }),
+                    fetch(`${SUPABASE_URL}/rest/v1/videos?select=*&order=order_index`, { headers }),
+                    fetch(`${SUPABASE_URL}/rest/v1/video_chapters?select=*`, { headers }),
+                    fetch(`${SUPABASE_URL}/rest/v1/card_assets?select=*`, { headers })
+                ]);
+
+                if (!cardsRes.ok) throw new Error("فشل تحميل البيانات من Supabase");
+
+                const cards = await cardsRes.json();
+                const videos = await videosRes.json();
+                const chapters = await chaptersRes.json();
+                const assets = await assetsRes.json();
+
+                // إعادة بناء هيكل البيانات ليتوافق مع الموقع
+                allData = cards.map(card => {
+                    const cardVideos = videos.filter(v => v.card_id === card.id).map(v => ({
+                        ...v,
+                        chapters: chapters.filter(ch => ch.video_id === v.id).map(ch => ({
+                            time: ch.chapter_time,
+                            text: ch.chapter_text
+                        }))
+                    }));
+
+                    const cardAssets = assets.filter(a => a.card_id === card.id);
+
+                    return {
+                        id: card.id,
+                        title: card.title,
+                        category: card.category,
+                        content: card.content,
+                        image: card.image_url,
+                        videos: cardVideos.length > 0 ? cardVideos : null,
+                        links: cardAssets.filter(a => a.asset_type === 'link').map(a => ({ text: a.title, url: a.url })),
+                        images: cardAssets.filter(a => a.asset_type === 'image').map(a => ({ title: a.title, url: a.url })),
+                        pdfs: cardAssets.filter(a => a.asset_type === 'pdf').map(a => ({ title: a.title, url: a.url })),
+                        // سيتم التعامل مع التوصيات والفهارس الموضوعية لاحقاً أو عبر الذكاء الاصطناعي
+                        recommendations: [],
+                        thematic_index: null
+                    };
                 });
 
-                const results = await Promise.all(fetchPromises);
+                isDataLoaded = true;
+                render(allData);
+                console.log("تم تحميل البيانات بنجاح من Supabase 🚀");
 
-                results.forEach((data) => {
-                    if (data) {
-                        if (Array.isArray(data)) {
-                            combinedServerData = combinedServerData.concat(data);
-                        } else {
-                            combinedServerData.push(data);
-                        }
-                    }
-                });
-
-                if (anyFileLoaded && combinedServerData.length > 0) {
-                    let flattenedData = [];
-                    let counter = 1;
-
-                    // معالجة ذكية للحفاظ على الكورس كبطاقة واحدة وحفظ مصفوفة فيديوهاته بداخلها
-                    combinedServerData.forEach((serverItem) => {
-                        const currentId = serverItem.id ? String(serverItem.id) : `item_${counter++}`;
-
-                        // متغيرات مرنة لاستيعاب بيانات الموقع المعتادة أو بيانات البوت
-                        let itemTitle = serverItem.title;
-                        let itemCategory = serverItem.category || 'videos';
-                        let itemContent = serverItem.content || serverItem.desc || '';
-
-                        // 🤖 فحص ذكي: إذا كان العنصر قادماً من بوت الكريبتو ويحتوي على رمز العملة
-                        if (serverItem.symbol) {
-                            itemTitle = `🚨 حركة قوية على زوج: ${serverItem.symbol}`;
-                            itemCategory = 'high_volume'; // تصنيف التنبيهات
-
-                            // تنسيق نص البطاقة بشكل منظم ومريح للعين
-                            const alertDate = new Date(serverItem.timestamp);
-                            // تنسيق الوقت (مثال: 3:06 PM)
-                            const formattedTime = alertDate.toLocaleTimeString('en-US', {
-                                hour: 'numeric',
-                                minute: '2-digit',
-                                hour12: true
-                            });
-                            // تنسيق التاريخ (مثال: 6/30/2026)
-                            const formattedDate = alertDate.toLocaleDateString('en-US');
-
-                            itemContent = `💵 السعر الحالي: ${serverItem.price} USDT
-                    📊 حجم التداول: ${serverItem.volume.toLocaleString()}
-                    📈 نسبة التغيير (24س): ${serverItem.change_percent}%
-                    🕒 وقت التنبيه: \n                    ${formattedTime}\n                    ${formattedDate}`;
-                        }
-
-                        flattenedData.push({
-                            id: currentId,
-                            title: itemTitle || 'بدون عنوان',
-                            category: itemCategory,
-                            content: itemContent,
-                            image: serverItem.image || '',
-                            videoUrl: serverItem.videoUrl || serverItem.videourl || serverItem.url || '',
-                            videoDirectUrl: serverItem.videoDirectUrl || serverItem.videoDirecturl || '',
-                            links: serverItem.links || [],
-                            chapters: serverItem.chapters || [],
-                            recommendations: serverItem.recommendations || [],
-                            videos: serverItem.videos || null,
-                            images: serverItem.images || null,   // ← معرض الصور المستقل
-                            pdfs: serverItem.pdfs || null,       // ← قائمة PDF المستقلة
-                            thematic_index: serverItem.thematic_index || null
-                        });
-                    });
-                    allData = flattenedData;
-                    isDataLoaded = true;
-                    render(allData);
-
-                    localStorage.setItem('my_cards_data', JSON.stringify(allData));
-                    console.log("تم دمج وتحديث البيانات من كافة الملفات بنجاح 🎉");
-
-                    if (typeof handleRoute === 'function') {
-                        handleRoute();
-                    }
-                } else {
-                    throw new Error("لم يتم تحميل أي ملف JSON بنجاح من السيرفر.");
+                if (typeof handleRoute === 'function') {
+                    handleRoute();
                 }
 
             } catch (error) {
-                console.error("❌ خلل كلي في الاتصال، جاري التحميل من الذاكرة المحلية الاحتياطية:", error);
-                const localData = localStorage.getItem('my_cards_data');
-                if (localData) {
-                    allData = JSON.parse(localData);
-                    isDataLoaded = true;
-                    render(allData);
-                    if (typeof handleRoute === 'function') handleRoute();
-                } else {
-                    if (statusMsg) {
-                        statusMsg.innerText = "عذراً، حدث خلل أثناء تحميل البيانات.";
-                    }
-                }
+                console.error("❌ خطأ في تحميل البيانات:", error);
+                statusMsg.innerText = "عذراً، حدث خلل أثناء جلب البيانات من القاعدة السحابية.";
             }
         }
 
@@ -2104,9 +2179,147 @@
             originalThematicItem = null; // إعادة تعيين المتغير عند إغلاق النافذة
         }
 
-        window.onclick = function (event) {
-            const modal = document.getElementById('myModal');
-            if (event.target == modal) closeModal();
+        // ==========================================
+        // === AI Orchestrator (Gemini) Integration ===
+        // ==========================================
+
+        let geminiApiKey = localStorage.getItem('gemini_api_key') || '';
+
+        function toggleAiChat() {
+            const chatBox = document.getElementById('aiChatBox');
+            chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
+            if (!geminiApiKey) {
+                const key = prompt("الرجاء إدخال Gemini API Key للبدء (سيتم حفظه محلياً):");
+                if (key) {
+                    geminiApiKey = key;
+                    localStorage.setItem('gemini_api_key', key);
+                }
+            }
+        }
+
+        async function sendAiMessage() {
+            const input = document.getElementById('aiInput');
+            const msgText = input.value.trim();
+            if (!msgText || !geminiApiKey) return;
+
+            addMessageToUi('user', msgText);
+            input.value = '';
+
+            try {
+                const response = await callGemini(msgText);
+                addMessageToUi('ai', response);
+            } catch (err) {
+                addMessageToUi('ai', "⚠️ حدث خطأ أثناء الاتصال بالعقل المدبر.");
+                console.error(err);
+            }
+        }
+
+        function addMessageToUi(sender, text) {
+            const container = document.getElementById('aiMessages');
+            const div = document.createElement('div');
+            div.className = `msg ${sender}`;
+            div.innerText = text;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function callGemini(promptText) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+
+            const requestBody = {
+                contents: [{
+                    parts: [{ text: `أنت مدير موقع متخصص في التداول. لديك صلاحية الوصول إلى قاعدة بيانات Supabase.
+                    المستخدم سيطلب منك تعديلات في الموقع.
+                    البيانات الحالية: ${JSON.stringify(allData.map(d => ({id: d.id, title: d.title})))}
+                    مهمتك هي فهم الطلب وتنفيذه عبر المناداة بالدوال المناسبة.
+                    طلب المستخدم: ${promptText}` }]
+                }],
+                tools: [{
+                    function_declarations: [
+                        {
+                            name: "update_card_description",
+                            description: "تعديل وصف بطاقة محددة",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    card_id: { type: "string" },
+                                    new_content: { type: "string" }
+                                },
+                                required: ["card_id", "new_content"]
+                            }
+                        },
+                        {
+                            name: "add_video_chapter",
+                            description: "إضافة طابع زمني لفيديو",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    video_id: { type: "string" },
+                                    time: { type: "string" },
+                                    text: { type: "string" }
+                                },
+                                required: ["video_id", "time", "text"]
+                            }
+                        }
+                    ]
+                }]
+            };
+
+            const res = await fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(requestBody)
+            });
+
+            const data = await res.json();
+            const part = data.candidates[0].content.parts[0];
+
+            if (part.functionCall) {
+                const { name, args } = part.functionCall;
+                return await executeAiFunction(name, args);
+            }
+
+            return part.text;
+        }
+
+        async function executeAiFunction(name, args) {
+            const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
+
+            const headers = {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json'
+            };
+
+            if (name === "update_card_description") {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/cards?id=eq.${args.card_id}`, {
+                    method: 'PATCH',
+                    headers: headers,
+                    body: JSON.stringify({ content: args.new_content })
+                });
+                if (res.ok) {
+                    setTimeout(loadWebsiteData, 500);
+                    return `✅ تم تحديث وصف البطاقة [${args.card_id}] بنجاح!`;
+                }
+            }
+
+            if (name === "add_video_chapter") {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/video_chapters`, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({
+                        video_id: args.video_id,
+                        chapter_time: args.time,
+                        chapter_text: args.text
+                    })
+                });
+                if (res.ok) {
+                    setTimeout(loadWebsiteData, 500);
+                    return `✅ تم إضافة الطابع الزمني [${args.time} - ${args.text}] للفيديو بنجاح!`;
+                }
+            }
+
+            return "❌ تعذر تنفيذ العملية المطلوبة.";
         }
     </script>
 
