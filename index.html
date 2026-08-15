@@ -2303,66 +2303,64 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // محاولات متعددة لضمان التوافق مع أي موديل أو إصدار متاح في حساب المستخدم
-            const configurations = [
-                { model: "gemini-1.5-flash", ver: "v1beta" },
-                { model: "gemini-1.5-flash", ver: "v1" },
-                { model: "gemini-pro", ver: "v1beta" },
-                { model: "gemini-1.0-pro", ver: "v1beta" }
-            ];
+            // استخدام الرابط والموديل الأكثر استقراراً حالياً بناءً على توصيات جوجل الأخيرة
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
 
-            let lastError = "";
-
-            for (const config of configurations) {
-                const url = `https://generativelanguage.googleapis.com/${config.ver}/models/${config.model}:generateContent?key=${key}`;
-
-                const requestBody = {
-                    contents: [{
-                        parts: [{ text: `أنت مدير موقع متخصص في التداول. لديك صلاحية الوصول إلى قاعدة بيانات Supabase.
-                        طلب المستخدم: ${promptText}` }]
-                    }],
-                    tools: config.ver === "v1beta" ? [{
-                        function_declarations: [
-                            {
-                                name: "update_card_description",
-                                description: "تعديل وصف بطاقة محددة",
-                                parameters: {
-                                    type: "object",
-                                    properties: { card_id: { type: "string" }, new_content: { type: "string" } },
-                                    required: ["card_id", "new_content"]
-                                }
+            const requestBody = {
+                contents: [{
+                    parts: [{ text: `أنت مدير موقع متخصص في التداول. لديك صلاحية الوصول إلى قاعدة بيانات Supabase.
+                    المعلومات الحالية: الموقع يحتوي على أقسام للتحليل الفني والزمني والوساطة.
+                    طلب المستخدم: ${promptText}` }]
+                }],
+                tools: [{
+                    function_declarations: [
+                        {
+                            name: "update_card_description",
+                            description: "تعديل وصف بطاقة محددة",
+                            parameters: {
+                                type: "object",
+                                properties: { card_id: { type: "string" }, new_content: { type: "string" } },
+                                required: ["card_id", "new_content"]
                             }
-                        ]
-                    }] : []
-                };
-
-                try {
-                    const res = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(requestBody)
-                    });
-
-                    const data = await res.json();
-
-                    if (res.ok && data.candidates && data.candidates.length > 0) {
-                        const part = data.candidates[0].content.parts[0];
-                        if (part.functionCall) {
-                            const { name, args } = part.functionCall;
-                            return await executeAiFunction(name, args);
                         }
-                        return part.text;
+                    ]
+                }]
+            };
+
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    const errMsg = data.error ? data.error.message : res.statusText;
+                    // إذا كان الخطأ 404، فهذا يعني أن جوجل تطلب اسماً مختلفاً للموديل في منطقتك
+                    if (res.status === 404) {
+                        return "❌ خطأ في العثور على محرك الذكاء الاصطناعي. يرجى التأكد من اختيار موديل Gemini 1.5 Flash في إعدادات API Key الخاصة بك.";
                     }
-
-                    if (res.status === 404) continue; // تجربة الخيار التالي
-
-                    lastError = data.error ? data.error.message : res.statusText;
-                } catch (err) {
-                    lastError = err.message;
+                    return `❌ خطأ في الاتصال بجيميناي (${res.status}): ${errMsg}`;
                 }
-            }
 
-            return `❌ عذراً، لا يزال العقل المدبر يواجه مشكلة في التوافق. آخر خطأ: ${lastError}. يرجى التحقق من تفعيل الموديلات في Google AI Studio.`;
+                if (!data.candidates || data.candidates.length === 0) {
+                    return "⚠️ العقل المدبر لم يستجب. قد يكون هناك قيود على منطقتك الجغرافية لهذا الموديل.";
+                }
+
+                const part = data.candidates[0].content.parts[0];
+
+                if (part.functionCall) {
+                    const { name, args } = part.functionCall;
+                    return await executeAiFunction(name, args);
+                }
+
+                return part.text;
+            } catch (err) {
+                console.error("Gemini Error:", err);
+                return `⚠️ فشل الاتصال بالخدمة: ${err.message}. تأكد من اتصالك بالإنترنت.`;
+            }
         }
 
         async function executeAiFunction(name, args) {
