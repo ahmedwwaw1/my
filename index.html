@@ -2183,18 +2183,54 @@
         // === AI Orchestrator (Gemini) Integration ===
         // ==========================================
 
-        let geminiApiKey = localStorage.getItem('gemini_api_key') || '';
+        let geminiApiKey = '';
 
-        function toggleAiChat() {
+        async function toggleAiChat() {
             const chatBox = document.getElementById('aiChatBox');
             chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
-            if (!geminiApiKey) {
-                const key = prompt("الرجاء إدخال Gemini API Key للبدء (سيتم حفظه محلياً):");
-                if (key) {
-                    geminiApiKey = key;
-                    localStorage.setItem('gemini_api_key', key);
+
+            if (chatBox.style.display === 'flex' && !geminiApiKey) {
+                // 1. محاولة جلب المفتاح من Supabase أولاً
+                geminiApiKey = await fetchApiKeyFromSupabase();
+
+                // 2. إذا لم يوجد، نطلب من المستخدم إدخاله
+                if (!geminiApiKey) {
+                    const key = prompt("الرجاء إدخال Gemini API Key للبدء (سيتم حفظه سحابياً للوصول إليه من أي جهاز):");
+                    if (key) {
+                        geminiApiKey = key;
+                        await saveApiKeyToSupabase(key);
+                    }
                 }
             }
+        }
+
+        async function fetchApiKeyFromSupabase() {
+            const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3OTc1MTEsImV4cCI6MjEwMjM3MzUxMX0.5t3iSQ3VvITsNPC7PRi6b49RY5SPseFt5O10oeGv6bk';
+
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/secret_settings?id=eq.gemini_key`, {
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                });
+                const data = await res.json();
+                return data.length > 0 ? data[0].secret_value : null;
+            } catch (e) { return null; }
+        }
+
+        async function saveApiKeyToSupabase(key) {
+            const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3OTc1MTEsImV4cCI6MjEwMjM3MzUxMX0.5t3iSQ3VvITsNPC7PRi6b49RY5SPseFt5O10oeGv6bk';
+
+            await fetch(`${SUPABASE_URL}/rest/v1/secret_settings`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'resolution=merge-duplicates'
+                },
+                body: JSON.stringify({ id: 'gemini_key', secret_value: key })
+            });
         }
 
         async function sendAiMessage() {
@@ -2249,6 +2285,31 @@
                             }
                         },
                         {
+                            name: "add_new_video",
+                            description: "إضافة فيديو جديد لبطاقة معينة",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    card_id: { type: "string" },
+                                    video_title: { type: "string" },
+                                    video_url: { type: "string" },
+                                    video_id: { type: "string", description: "معرف فريد للفيديو مثل vsa-10" }
+                                },
+                                required: ["card_id", "video_title", "video_url", "video_id"]
+                            }
+                        },
+                        {
+                            name: "delete_video",
+                            description: "حذف فيديو نهائياً من قاعدة البيانات",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    video_id: { type: "string" }
+                                },
+                                required: ["video_id"]
+                            }
+                        },
+                        {
                             name: "add_video_chapter",
                             description: "إضافة طابع زمني لفيديو",
                             parameters: {
@@ -2300,6 +2361,34 @@
                 if (res.ok) {
                     setTimeout(loadWebsiteData, 500);
                     return `✅ تم تحديث وصف البطاقة [${args.card_id}] بنجاح!`;
+                }
+            }
+
+            if (name === "add_new_video") {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/videos`, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({
+                        id: args.video_id,
+                        card_id: args.card_id,
+                        title: args.video_title,
+                        url: args.video_url
+                    })
+                });
+                if (res.ok) {
+                    setTimeout(loadWebsiteData, 500);
+                    return `✅ تم إضافة الفيديو [${args.video_title}] بنجاح!`;
+                }
+            }
+
+            if (name === "delete_video") {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/videos?id=eq.${args.video_id}`, {
+                    method: 'DELETE',
+                    headers: headers
+                });
+                if (res.ok) {
+                    setTimeout(loadWebsiteData, 500);
+                    return `🗑️ تم حذف الفيديو [${args.video_id}] نهائياً.`;
                 }
             }
 
