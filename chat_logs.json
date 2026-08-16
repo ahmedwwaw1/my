@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل يمكنك الان ايقاف بوت تنبيهات الكريبتو"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "updateWorkflowStatus",
+          "args": {
+            "status": "stop",
+            "workflow_id": "crypto_alerts.yml"
+          },
+          "id": "call_2989549"
+        }
+      }
+    ]
+  }
+]
