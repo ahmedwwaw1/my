@@ -2360,6 +2360,20 @@
             }
         }
 
+        async function updateWorkflowStatus(workflow_id, status) {
+            if (!githubToken) return "⚠️ خطأ: مفتاح GitHub غير متوفر.";
+            const action = status === 'stop' ? 'disable' : 'enable';
+            try {
+                const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/workflows/${workflow_id}/${action}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${githubToken}` }
+                });
+
+                if (res.ok) return `✅ تم ${status === 'stop' ? 'إيقاف' : 'تفعيل'} البوت (${workflow_id}) بنجاح.`;
+                return `❌ فشل تغيير حالة البوت.`;
+            } catch (e) { return `❌ خطأ: ${e.message}`; }
+        }
+
 
         let chatHistory = [];
         let selectedImageBase64 = null;
@@ -2499,7 +2513,9 @@
 
                 صلاحياتك التنفيذية:
                 1. القراءة والتعديل: يمكنك قراءة أي ملف بـ "getGithubFile" وتعديله بـ "githubAction".
-                2. التشغيل والتحكم: يمكنك تشغيل العمليات البرمجية (مثل بوت الكريبتو) باستخدام "triggerGithubWorkflow".
+                2. التشغيل والتحكم: يمكنك تشغيل البوت بـ "triggerGithubWorkflow" أو إيقافه/تفعيله بـ "updateWorkflowStatus".
+
+                هام: لإيقاف بوت تنبيهات الكريبتو تماماً، استخدم "updateWorkflowStatus" مع حالة "stop".
 
                 منهجية العمل الاحترافية:
                 1. الذكاء الاستشاري: اقترح تحسينات ذكية بناءً على تخصص الموقع.
@@ -2533,13 +2549,23 @@
                     },
                     {
                         name: "triggerGithubWorkflow",
-                        description: "تشغيل عملية برمجية (Workflow) على GitHub مثل بوت الكريبتو.",
+                        description: "تشغيل يدوي فوري للعملية.",
+                        parameters: {
+                            type: "OBJECT",
+                            properties: { workflow_id: { type: "STRING" } },
+                            required: ["workflow_id"]
+                        }
+                    },
+                    {
+                        name: "updateWorkflowStatus",
+                        description: "إيقاف أو تفعيل جدول العمل التلقائي للبوت (Cron Job).",
                         parameters: {
                             type: "OBJECT",
                             properties: {
-                                workflow_id: { type: "STRING", description: "اسم ملف الـ workflow (مثال: crypto_cron.yml)" }
+                                workflow_id: { type: "STRING" },
+                                status: { type: "STRING", enum: ["stop", "start"], description: "إيقاف أو بدء" }
                             },
-                            required: ["workflow_id"]
+                            required: ["workflow_id", "status"]
                         }
                     }
                 ]
@@ -2605,8 +2631,13 @@
                                 return await callGemini(`لقد قرأت الملف ${args.path} بنجاح. الآن نفذ طلبي الأصلي: ${promptText}`);
                             }
                             if (name === "triggerGithubWorkflow") {
-                                addMessageToUi('ai', `🚀 جاري تشغيل العملية البرمجية: ${args.workflow_id}...`);
+                                addMessageToUi('ai', `🚀 جاري تشغيل العملية: ${args.workflow_id}...`);
                                 const result = await triggerGithubWorkflow(args.workflow_id);
+                                return result;
+                            }
+                            if (name === "updateWorkflowStatus") {
+                                addMessageToUi('ai', `⚙️ جاري ${args.status === 'stop' ? 'إيقاف' : 'تفعيل'} البوت: ${args.workflow_id}...`);
+                                const result = await updateWorkflowStatus(args.workflow_id, args.status);
                                 return result;
                             }
                         }
