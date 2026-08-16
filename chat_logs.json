@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "قم في ايقاف عمل بوت تنبيهات الكربتو"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": ".github/workflows"
+          },
+          "id": "call_2272215"
+        }
+      }
+    ]
+  }
+]
