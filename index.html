@@ -2354,7 +2354,7 @@
 
                 if (res.ok) return `✅ تم إرسال أمر تشغيل البوت بنجاح! سيتم تحديث البيانات خلال دقائق.`;
                 const errData = await res.json();
-                return `❌ فشل التشغيل: ${errData.message}`;
+                return `❌ فشل التشغيل [${workflow_id}]: ${errData.message || "الملف غير موجود"}. يرجى استخدام listGithubWorkflows للتأكد من الاسم.`;
             } catch (e) {
                 return `❌ خطأ في الاتصال: ${e.message}`;
             }
@@ -2370,7 +2370,8 @@
                 });
 
                 if (res.ok) return `✅ تم ${status === 'stop' ? 'إيقاف' : 'تفعيل'} البوت (${workflow_id}) بنجاح.`;
-                return `❌ فشل تغيير حالة البوت.`;
+                const errData = await res.json();
+                return `❌ فشل تغيير حالة البوت [${workflow_id}]: ${errData.message || "اسم الملف غير صحيح"}.`;
             } catch (e) { return `❌ خطأ: ${e.message}`; }
         }
 
@@ -2535,10 +2536,11 @@
                 صلاحياتك التنفيذية:
                 1. القراءة والتعديل: يمكنك قراءة أي ملف بـ "getGithubFile" وتعديله بـ "githubAction".
                 2. التشغيل والتحكم: يمكنك تشغيل البوت بـ "triggerGithubWorkflow" أو إيقافه/تفعيله بـ "updateWorkflowStatus".
-                3. الاستكشاف: استخدم "listGithubWorkflows" لمعرفة أسماء ملفات الـ workflow الصحيحة قبل محاولة تشغيلها أو إيقافها.
+                3. الاستكشاف: قبل تشغيل أو إيقاف أي بوت، يجب عليك أولاً استخدام "listGithubWorkflows" للتأكد من اسم الملف الصحيح.
 
-                معلومات هامة:
-                - بوت تنبيهات الكريبتو موجود في ملف "crypto_cron.yml".
+                تنبيه هام جداً:
+                - بوت تنبيهات الكريبتو موجود في ملف اسمه "crypto_cron.yml" وليس "crypto_alerts.yml".
+                - لا تحاول تخمين أسماء الملفات، استخدم الأدوات المتاحة لك دائماً.
 
                 منهجية العمل الاحترافية:
                 1. الذكاء الاستشاري: اقترح تحسينات ذكية بناءً على تخصص الموقع.
