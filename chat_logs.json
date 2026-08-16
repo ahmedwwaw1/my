@@ -36,5 +36,18 @@
         }
       }
     ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "name: Auto Update Crypto Alerts\n\non:\n  schedule:\n    - cron: '0 * * * *'\n  workflow_dispatch:\n\njobs:\n  update-data:\n    runs-on: ubuntu-latest\n    \n    # 🔐 إضافة الصلاحيات الصريحة للسماح للسيرفر بالكتابة والحفظ داخل الـ Repository\n    permissions:\n      contents: write\n\n    steps:\n    - name: Checkout repository\n      uses: actions/checkout@v4\n\n    - name: Set up Python\n      uses: actions/setup-python@v5\n      with:\n        python-version: '3.10'\n\n    - name: Install dependencies\n      run: |\n        python -m pip install --upgrade pip\n        pip install ccxt\n\n    - name: Run crypto bot script\n      run: python crypto_bot.py\n\n    - name: Commit and Push changes\n      run: |\n        git config --global user.name \"github-actions[bot]\"\n        git config --global user.email \"github-actions[bot]@users.noreply.github.com\"\n        git add crypto_alerts.json\n        git diff --quiet && git diff --staged --quiet || (git commit -m \"🤖 تحديث تلقائي لبيانات التداول\" && git push)"
+          }
+        }
+      }
+    ]
   }
 ]
