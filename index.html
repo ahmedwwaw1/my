@@ -2311,12 +2311,36 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // استخدام الموديل الأحدث والأكثر استقراراً للمفاتيح الجديدة (AQ...)
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`;
+            // تطبيق حل جيميناي (الصورة 8): استخدام gemini-1.5-flash بدلاً من gemini-1.5-flash-latest
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
 
             const requestBody = {
                 contents: [{
-                    parts: [{ text: `أنت مدير موقع تداول محترف. ساعد المستخدم في طلبه التالي باللغة العربية: ${promptText}` }]
+                    parts: [{ text: `أنت مدير موقع متخصص في التداول. لديك صلاحية الوصول إلى جداول Supabase (cards, videos).
+                    ساعد المستخدم في تنفيذ طلبه. البيانات الحالية: ${JSON.stringify(allData.slice(0, 5).map(d => ({id: d.id, title: d.title})))}
+                    طلب المستخدم: ${promptText}` }]
+                }],
+                tools: [{
+                    function_declarations: [
+                        {
+                            name: "update_card_description",
+                            description: "تعديل وصف بطاقة محددة",
+                            parameters: {
+                                type: "object",
+                                properties: { card_id: { type: "string" }, new_content: { type: "string" } },
+                                required: ["card_id", "new_content"]
+                            }
+                        },
+                        {
+                            name: "add_new_video",
+                            description: "إضافة فيديو جديد لبطاقة معينة",
+                            parameters: {
+                                type: "object",
+                                properties: { card_id: { type: "string" }, video_title: { type: "string" }, video_url: { type: "string" }, video_id: { type: "string" } },
+                                required: ["card_id", "video_title", "video_url", "video_id"]
+                            }
+                        }
+                    ]
                 }]
             };
 
@@ -2330,18 +2354,20 @@
                 const data = await res.json();
 
                 if (res.ok && data.candidates && data.candidates.length > 0) {
-                    return data.candidates[0].content.parts[0].text;
+                    const part = data.candidates[0].content.parts[0];
+                    if (part.functionCall) {
+                        const { name, args } = part.functionCall;
+                        return await executeAiFunction(name, args);
+                    }
+                    return part.text;
                 }
 
                 if (!res.ok) {
                     const errMsg = data.error ? data.error.message : res.statusText;
-                    if (res.status === 403 || errMsg.includes("blocked")) {
-                        return "❌ تم حظر الطلب: تأكد من تفعيل 'Generative Language API' في لوحة تحكم جوجل.";
-                    }
                     return `❌ خطأ في الاتصال بجيميناي: ${errMsg}`;
                 }
 
-                return "⚠️ لم أتمكن من الحصول على رد، يرجى المحاولة مرة أخرى.";
+                return "⚠️ لم أتمكن من الحصول على رد مفيد من المحرك.";
             } catch (err) {
                 console.error("Gemini Error:", err);
                 return `⚠️ فشل الاتصال بالخدمة: ${err.message}`;
