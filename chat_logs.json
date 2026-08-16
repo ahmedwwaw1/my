@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اوقف بوت تنبيهات الكريبتو"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubWorkflows",
+          "args": {},
+          "id": "call_1774976"
+        }
+      }
+    ]
+  }
+]
