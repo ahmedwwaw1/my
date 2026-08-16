@@ -759,18 +759,33 @@
     <div class="ai-widget">
         <div class="ai-chat-box" id="aiChatBox">
             <div class="ai-header">
-                <span style="color: #00d4ff; font-weight: bold;">🤖 العقل المدبر (Gemini)</span>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <span style="cursor: pointer; font-size: 1.1rem;" onclick="resetGeminiKey()" title="تغيير مفتاح API">⚙️</span>
-                    <span style="cursor: pointer; font-size: 1.2rem;" onclick="toggleAiChat()">✖</span>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <span style="color: #00d4ff; font-weight: bold; font-size: 0.9rem;">🤖 العقل المدبر</span>
+                    <select id="modelSelector" style="background: #121214; color: #fff; border: 1px solid #333; font-size: 0.75rem; border-radius: 4px; padding: 2px;">
+                        <option value="gemini-3.7-flash">Gemini 3.7 Flash (أحدث)</option>
+                        <option value="gemini-3.5-flash-lite">Gemini 3.5 Lite (سريع)</option>
+                        <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                        <option value="gemini-flash-latest">Flash Latest (تلقائي)</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <span style="cursor: pointer; font-size: 1rem;" onclick="clearChatHistory()" title="حذف السياق وتصفير المحادثة">🗑️</span>
+                    <span style="cursor: pointer; font-size: 1rem;" onclick="resetGeminiKey()" title="تغيير مفتاح API">⚙️</span>
+                    <span style="cursor: pointer; font-size: 1.1rem;" onclick="toggleAiChat()">✖</span>
                 </div>
             </div>
             <div class="ai-messages" id="aiMessages">
-                <div class="msg ai">أهلاً بك! أنا مدير موقعك الذكي. كيف يمكنني مساعدتك اليوم؟</div>
+                <div class="msg ai">أهلاً بك في **VSA Academy**! أنا العقل المدبر والمدير التنفيذي المسؤول. كيف يمكنني مساعدتك اليوم؟</div>
             </div>
-            <div class="ai-input-area">
-                <input type="text" id="aiInput" placeholder="اطلب شيئاً من المدير...">
-                <button class="ai-send-btn" onclick="sendAiMessage()">إرسال</button>
+            <div id="imagePreviewContainer" style="display: none; padding: 5px 15px; background: #121214; border-top: 1px solid #2d2d35; align-items: center; gap: 10px;">
+                <img id="imagePreview" src="" style="height: 40px; border-radius: 4px; border: 1px solid #00d4ff;">
+                <span style="color: #ff5555; cursor: pointer; font-size: 1.2rem;" onclick="clearSelectedImage()">×</span>
+            </div>
+            <div class="ai-input-area" style="display: flex; align-items: center; padding: 10px; background: #1e1e24; border-top: 1px solid #2d2d35; gap: 8px;">
+                <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                <button class="ai-send-btn" style="background: #2d2d35; padding: 8px;" onclick="document.getElementById('imageInput').click()" title="إضافة صورة">🖼️</button>
+                <input type="text" id="aiInput" placeholder="اطلب شيئاً من المدير..." style="flex-grow: 1; background: #121214; border: 1px solid #333; color: #fff; padding: 8px 12px; border-radius: 8px;">
+                <button class="ai-send-btn" onclick="sendAiMessage()" style="background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%); color: #000; font-weight: bold; padding: 8px 15px; border-radius: 8px;">إرسال</button>
             </div>
         </div>
         <button class="ai-btn" onclick="toggleAiChat()" title="تحدث مع العقل المدبر لموقعك">🧠</button>
@@ -2322,33 +2337,60 @@
         }
 
 
+        let chatHistory = []; // مصفوفة لحفظ سياق المحادثة
+        let selectedImageBase64 = null; // لحفظ الصورة المحددة
+
+        function clearChatHistory() {
+            chatHistory = [];
+            const container = document.getElementById('aiMessages');
+            container.innerHTML = '<div class="msg ai">تم مسح سياق المحادثة. أنا جاهز لبدء مهمة جديدة!</div>';
+            alert("🧹 تم مسح الذاكرة المؤقتة للعقل المدبر.");
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                selectedImageBase64 = e.target.result.split(',')[1];
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imagePreviewContainer').style.display = 'flex';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearSelectedImage() {
+            selectedImageBase64 = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+        }
+
         async function sendAiMessage() {
             const input = document.getElementById('aiInput');
             const msgText = input.value.trim();
-            if (!msgText) return;
+            if (!msgText && !selectedImageBase64) return;
 
             if (!geminiApiKey) {
-                geminiApiKey = await fetchApiKeyFromSupabase();
+                geminiApiKey = await fetchApiKeyFromSupabase('gemini_key');
                 if (!geminiApiKey) {
                     addMessageToUi('ai', "⚠️ مفتاح Gemini API غير متوفر. اضغط على أيقونة الترس ⚙️ لإدخاله.");
                     return;
                 }
             }
 
-            addMessageToUi('user', msgText);
+            if (!githubToken) githubToken = await fetchApiKeyFromSupabase('github_token');
+
+            addMessageToUi('user', msgText || "(صورة)");
             input.value = '';
 
             try {
-                const response = await callGemini(msgText);
+                const response = await callGemini(msgText, selectedImageBase64);
                 addMessageToUi('ai', response);
+                clearSelectedImage();
             } catch (err) {
                 console.error(err);
-                if (err.message.includes("401") || err.message.includes("credentials")) {
-                    addMessageToUi('ai', "❌ المفتاح الحالي غير صالح. يرجى الضغط على أيقونة الترس ⚙️ وتحديثه.");
-                    geminiApiKey = ''; // مسح المفتاح الخاطئ
-                } else {
-                    addMessageToUi('ai', "⚠️ حدث خطأ أثناء الاتصال. تأكد من تفعيل الخدمة والاتصال بالإنترنت.");
-                }
+                addMessageToUi('ai', "⚠️ حدث خطأ أثناء الاتصال.");
             }
         }
 
@@ -2361,49 +2403,59 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        async function callGemini(promptText) {
+        async function callGemini(promptText, imageBase64 = null) {
             const key = geminiApiKey.trim();
-            const modelNames = ['gemini-3.7-flash', 'gemini-3.5-flash-lite', 'gemini-2.0-flash-lite'];
+            const userModel = document.getElementById('modelSelector').value;
+
+            // ترتيب المحاولة لضمان السرعة: الموديل المختار ثم Flash Lite
+            const modelNames = [userModel, 'gemini-3.5-flash-lite', 'gemini-flash-latest'];
 
             const systemInstruction = `
                 أنت "العقل المدبر" (Mastermind) لـ VSA Academy والمدير التنفيذي المسؤول.
                 لديك صلاحيات كاملة للتعديل على ملفات المشروع عبر GitHub.
 
                 قواعد العمل الذكية (التي تجعلك خبيراً):
-                1. إلزامي: لا تقم أبداً بتعديل ملف موجود دون قراءته أولاً باستخدام أداة "getGithubFile". يجب أن تعرف ماذا يوجد في الملف قبل أن تغيره.
-                2. حماية الكود: عند تعديل index.html، يُمنع منعاً باتاً مسح وسوم <style> أو <script> أو هيكل HTML الأساسي. أنت فقط تعدل الجزء المطلوب مع الحفاظ على الباقي.
-                3. الدقة: عند استخدام "githubAction"، أرسل دائماً المحتوى الكامل للملف بعد التعديل.
-                4. أنت لست مجرد شات، أنت مبرمج محترف يعمل بدقة متناهية.
+                1. إلزامي: لا تقم أبداً بتعديل ملف موجود دون قراءته أولاً باستخدام أداة "getGithubFile".
+                2. حماية الكود: حافظ على هيكل index.html (CSS/JS) وتجنب الحذف العشوائي.
+                3. رؤية الصور: إذا أرسل المستخدم صورة، حللها كجزء من واجهة الموقع أو لقطة شاشة لخطأ برمجي.
             `;
 
             const tools = [{
                 function_declarations: [
                     {
                         name: "githubAction",
-                        description: "تعديل أو إنشاء ملف في مستودع GitHub. تحذير: يجب إرسال الكود الكامل للملف وليس جزءاً منه.",
+                        description: "تعديل أو إنشاء ملف في مستودع GitHub.",
                         parameters: {
                             type: "OBJECT",
                             properties: {
-                                path: { type: "STRING", description: "مسار الملف (مثال: index.html)" },
-                                content: { type: "STRING", description: "المحتوى الكامل الجديد للملف" },
-                                message: { type: "STRING", description: "رسالة الـ Commit" }
+                                path: { type: "STRING" },
+                                content: { type: "STRING" },
+                                message: { type: "STRING" }
                             },
                             required: ["path", "content"]
                         }
                     },
                     {
                         name: "getGithubFile",
-                        description: "قراءة محتوى ملف حالي من GitHub للتأكد من عدم مسح بيانات هامة عند التعديل",
+                        description: "قراءة ملف من GitHub.",
                         parameters: {
                             type: "OBJECT",
-                            properties: {
-                                path: { type: "STRING", description: "مسار الملف المراد قراءته" }
-                            },
+                            properties: { path: { type: "STRING" } },
                             required: ["path"]
                         }
                     }
                 ]
             }];
+
+            // بناء محتوى الرسالة الحالية (نص + صورة إن وجدت)
+            let currentParts = [];
+            if (promptText) currentParts.push({ text: promptText });
+            if (imageBase64) currentParts.push({
+                inline_data: { mime_type: "image/jpeg", data: imageBase64 }
+            });
+
+            const currentTurn = { role: "user", parts: currentParts };
+            const fullContents = [...chatHistory, currentTurn];
 
             for (const modelName of modelNames) {
                 const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${key}`;
@@ -2414,7 +2466,7 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             system_instruction: { parts: [{ text: systemInstruction }] },
-                            contents: [{ parts: [{ text: promptText }] }],
+                            contents: fullContents,
                             tools: tools
                         })
                     });
@@ -2426,39 +2478,39 @@
 
                         if (part.functionCall) {
                             const { name, args } = part.functionCall;
-
                             if (name === "githubAction") {
-                                addMessageToUi('ai', `⚙️ جاري تنفيذ التعديل على GitHub: ${args.path}...`);
+                                addMessageToUi('ai', `⚙️ جاري تنفيذ التعديل: ${args.path}...`);
                                 const result = await githubAction(args.path, args.content, args.message);
                                 return result;
                             }
-
                             if (name === "getGithubFile") {
-                                addMessageToUi('ai', `🔍 جاري قراءة الملف ${args.path} لضمان سلامة التعديل...`);
+                                addMessageToUi('ai', `🔍 جاري القراءة الآمنة لـ ${args.path}...`);
                                 const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${args.path}`, {
                                     headers: { 'Authorization': `token ${githubToken}` }
                                 });
                                 const getData = await getRes.json();
                                 const fileContent = decodeURIComponent(escape(atob(getData.content)));
-
-                                return await callGemini(`هذا هو محتوى الملف الحالي لـ ${args.path}:\n\n${fileContent}\n\nالآن قم بتنفيذ الطلب الأصلي للمستخدم مع الحفاظ على كامل هيكل الملف: ${promptText}`);
+                                return await callGemini(`هذا محتوى ${args.path}:\n${fileContent}\n\nنفذ: ${promptText}`);
                             }
                         }
+
+                        // حفظ السياق
+                        chatHistory.push(currentTurn);
+                        chatHistory.push({ role: "model", parts: [{ text: part.text }] });
+
+                        // تنظيف الذاكرة إذا أصبحت طويلة جداً لضمان السرعة
+                        if (chatHistory.length > 10) chatHistory = chatHistory.slice(-10);
 
                         return part.text;
                     }
 
                     if (res.status === 404 || res.status === 503) continue;
-
-                    if (!res.ok) {
-                        const msg = data.error ? data.error.message : res.statusText;
-                        return `❌ خطأ من جوجل (${res.status}): ${msg}`;
-                    }
+                    return `❌ خطأ (${res.status}): ${data.error?.message || "فشل الاتصال"}`;
                 } catch (err) {
                     console.error("Gemini Error:", err);
                 }
             }
-            return "❌ فشل الوصول للموديلات المطلوبة.";
+            return "❌ تعذر الوصول للموديلات.";
         }
 
         async function executeAiFunction(name, args) {
