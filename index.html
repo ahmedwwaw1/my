@@ -2318,7 +2318,17 @@
                 'gemini-2.0-flash-lite',
                 'gemini-flash-latest'
             ];
-            let lastError = '';
+
+            // تعليمات النظام: تحول الذكاء الاصطناعي إلى مدير تنفيذي للمشروع
+            const systemInstruction = `
+                أنت "العقل المدبر" (Mastermind) لـ VSA Academy. أنت المدير المسؤول عن إدارة الموقع بالكامل.
+                صلاحياتك:
+                1. تحليل الأسواق من ملفات المشروع مثل crypto_alerts.json.
+                2. التحكم في واجهة المستخدم (UI) وتعديل مظهر الموقع.
+                3. تقديم كود برمجية جاهزة للتنفيذ.
+
+                مهم: عندما يطلب منك صاحب الموقع (المستخدم) القيام بمهمة، تصرف كمدير ينفذ الأمر.
+            `;
 
             for (const modelName of modelNames) {
                 const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${key}`;
@@ -2328,6 +2338,7 @@
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
+                            system_instruction: { parts: [{ text: systemInstruction }] },
                             contents: [{ parts: [{ text: promptText }] }]
                         })
                     });
