@@ -2311,8 +2311,13 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // قائمة الموديلات المتاحة في أغسطس 2026 حسب تحديثات جوجل الأخيرة
-            const modelNames = ['gemini-3.7-flash', 'gemini-flash-latest', 'gemini-3.5-flash'];
+            // إضافة موديلات متنوعة بما فيها النسخ الخفيفة (Lite) لتجنب الضغط
+            const modelNames = [
+                'gemini-3.7-flash',
+                'gemini-3.5-flash-lite',
+                'gemini-2.0-flash-lite',
+                'gemini-flash-latest'
+            ];
             let lastError = '';
 
             for (const modelName of modelNames) {
@@ -2333,8 +2338,9 @@
                         return data.candidates[0].content.parts[0].text;
                     }
 
-                    if (res.status === 404) {
-                        console.warn(`Model ${modelName} not found, trying next...`);
+                    // إذا كان الموديل غير موجود (404) أو عليه ضغط (503)، جرب الموديل التالي فوراً
+                    if (res.status === 404 || res.status === 503) {
+                        console.warn(`Model ${modelName} failed with ${res.status}, trying next...`);
                         continue; // تجربة الموديل التالي في القائمة
                     }
 
