@@ -2252,13 +2252,17 @@
             }
         }
 
+        async function initKeys() {
+            if (!geminiApiKey) geminiApiKey = await fetchApiKeyFromSupabase('gemini_key');
+            if (!githubToken) githubToken = await fetchApiKeyFromSupabase('github_token');
+        }
+
         async function toggleAiChat() {
             const chatBox = document.getElementById('aiChatBox');
             chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
 
             if (chatBox.style.display === 'flex') {
-                if (!geminiApiKey) geminiApiKey = await fetchApiKeyFromSupabase('gemini_key');
-                if (!githubToken) githubToken = await fetchApiKeyFromSupabase('github_token');
+                await initKeys();
 
                 if (!geminiApiKey) await resetGeminiKey();
                 if (!githubToken) {
@@ -2368,16 +2372,18 @@
                 document.getElementById('modelSelector').value = savedModel;
             }
 
-            // ثم تحميل السياق الحقيقي من GitHub لضمان المزامنة بين الأجهزة
+            // ضمان الحصول على المفاتيح أولاً قبل محاولة التحميل من GitHub
+            await initKeys();
+
             if (githubToken) {
                 try {
                     const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${CHAT_LOG_PATH}`, {
-                        headers: { 'Authorization': `token ${githubToken}` }
+                        headers: { 'Authorization': `token ${githubToken}`, 'Cache-Control': 'no-cache' }
                     });
                     if (res.ok) {
                         const data = await res.json();
                         chatHistory = JSON.parse(decodeURIComponent(escape(atob(data.content))));
-                        console.log("✅ تم تحميل السياق من GitHub");
+                        console.log("✅ تم تحميل سياق المحادثة من GitHub");
                     }
                 } catch (e) { console.error("Error loading chat context:", e); }
             }
@@ -2385,6 +2391,9 @@
             const container = document.getElementById('aiMessages');
             container.scrollTop = container.scrollHeight;
         }
+
+        // تهيئة المفاتيح والسياق عند تحميل الصفحة
+        window.addEventListener('load', loadChatFromStorage);
 
         async function clearChatHistory() {
             chatHistory = [];
@@ -2533,11 +2542,21 @@
 
                         if (part.functionCall) {
                             const { name, args } = part.functionCall;
+
+                            // إضافة استدعاء الدالة للسياق
+                            chatHistory.push(currentTurn);
+                            chatHistory.push({ role: "model", parts: [{ functionCall: part.functionCall }] });
+
                             if (name === "githubAction") {
                                 addMessageToUi('ai', `⚙️ جاري تنفيذ التعديل: ${args.path}...`);
                                 const result = await githubAction(args.path, args.content, args.message);
+
+                                // إضافة نتيجة الدالة للسياق
+                                chatHistory.push({ role: "function", parts: [{ functionResponse: { name: name, response: { content: result } } }] });
+                                saveChatToStorage();
                                 return result;
                             }
+
                             if (name === "getGithubFile") {
                                 addMessageToUi('ai', `🔍 جاري القراءة الآمنة لـ ${args.path}...`);
                                 const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${args.path}`, {
@@ -2545,13 +2564,18 @@
                                 });
                                 const getData = await getRes.json();
                                 const fileContent = decodeURIComponent(escape(atob(getData.content)));
-                                return await callGemini(`هذا محتوى ${args.path}:\n${fileContent}\n\nنفذ: ${promptText}`);
+
+                                // إضافة النتيجة للسياق
+                                chatHistory.push({ role: "function", parts: [{ functionResponse: { name: name, response: { content: fileContent } } }] });
+
+                                return await callGemini(`لقد قرأت الملف ${args.path} بنجاح. الآن نفذ طلبي الأصلي: ${promptText}`);
                             }
                         }
 
-                        // حفظ السياق في الذاكرة (بدون حدود كما طلبت لضمان الذكاء الكامل)
+                        // حفظ السياق العادي في الذاكرة
                         chatHistory.push(currentTurn);
                         chatHistory.push({ role: "model", parts: [{ text: part.text }] });
+                        saveChatToStorage();
 
                         return part.text;
 
