@@ -2311,75 +2311,53 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // استخدام الموديل الأكثر استقراراً وموثوقية (gemini-1.5-flash) كما في نصيحة جيميناي
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+            // قائمة المحاولات الذكية (تبديل الموديلات والنسخ تلقائياً لحل خطأ 404)
+            const configs = [
+                { model: "gemini-1.5-flash", ver: "v1" },
+                { model: "gemini-1.5-flash", ver: "v1beta" },
+                { model: "gemini-1.5-flash-latest", ver: "v1beta" },
+                { model: "gemini-pro", ver: "v1" },
+                { model: "gemini-1.0-pro", ver: "v1" }
+            ];
 
-            const requestBody = {
-                contents: [{
-                    parts: [{ text: `أنت مدير موقع متخصص في التداول (VSA ووايكوف). لديك صلاحية الوصول إلى قاعدة بيانات Supabase.
-                    المعلومات الحالية (للعلم فقط): ${JSON.stringify(allData.slice(0, 5).map(d => ({id: d.id, title: d.title})))}
-                    ساعد المستخدم في تنفيذ طلبه عبر الدوال المناسبة.
-                    طلب المستخدم: ${promptText}` }]
-                }],
-                tools: [{
-                    function_declarations: [
-                        {
-                            name: "update_card_description",
-                            description: "تعديل وصف بطاقة محددة",
-                            parameters: {
-                                type: "object",
-                                properties: { card_id: { type: "string" }, new_content: { type: "string" } },
-                                required: ["card_id", "new_content"]
-                            }
-                        },
-                        {
-                            name: "add_new_video",
-                            description: "إضافة فيديو جديد لبطاقة معينة",
-                            parameters: {
-                                type: "object",
-                                properties: { card_id: { type: "string" }, video_title: { type: "string" }, video_url: { type: "string" }, video_id: { type: "string" } },
-                                required: ["card_id", "video_title", "video_url", "video_id"]
-                            }
-                        }
-                    ]
-                }]
-            };
+            let lastErrorMsg = "";
 
-            try {
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestBody)
-                });
+            for (const config of configs) {
+                const url = `https://generativelanguage.googleapis.com/${config.ver}/models/${config.model}:generateContent?key=${key}`;
 
-                const data = await res.json();
+                try {
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: `أنت مدير موقع تداول. ساعد المستخدم باللغة العربية: ${promptText}` }] }]
+                        })
+                    });
 
-                if (res.ok && data.candidates && data.candidates.length > 0) {
-                    const part = data.candidates[0].content.parts[0];
-                    if (part.functionCall) {
-                        const { name, args } = part.functionCall;
-                        return await executeAiFunction(name, args);
+                    const data = await res.json();
+
+                    if (res.ok && data.candidates && data.candidates.length > 0) {
+                        return data.candidates[0].content.parts[0].text;
                     }
-                    return part.text;
-                }
 
-                if (!res.ok) {
-                    const errMsg = data.error ? data.error.message : res.statusText;
-                    // توضيح المشكلة بناءً على شرح جيميناي في الصورة ee
-                    if (res.status === 403 || errMsg.toLowerCase().includes("restricted") || errMsg.toLowerCase().includes("blocked")) {
-                        return `❌ خطأ في الصلاحيات: ${errMsg}. \n📌 الحل: اذهب لـ Google Cloud Console، اضغط على المفتاح، واجعل Application restrictions هي None.`;
-                    }
                     if (res.status === 404) {
-                        return "❌ خطأ 404: الموديل غير موجود. تم تحديث الكود لاستخدام الموديل المستقر، يرجى تحديث الصفحة والمحاولة.";
+                        console.warn(`404 error with ${config.model} on ${config.ver}, trying next config...`);
+                        continue;
                     }
-                    return `❌ خطأ في الاتصال بجيميناي: ${errMsg}`;
-                }
 
-                return "⚠️ لم أتمكن من الحصول على رد مفيد، يرجى التأكد من صحة المفتاح.";
-            } catch (err) {
-                console.error("Gemini Error:", err);
-                return `⚠️ فشل الاتصال بالخدمة: ${err.message}`;
+                    if (data.error) {
+                        lastErrorMsg = data.error.message;
+                        // إذا كان الخطأ بسبب الصلاحيات
+                        if (lastErrorMsg.includes("API_KEY_INVALID") || lastErrorMsg.includes("blocked")) {
+                            return `❌ خطأ في الصلاحيات: ${lastErrorMsg}. يرجى مراجعة إعدادات المفتاح في Google Cloud.`;
+                        }
+                    }
+                } catch (err) {
+                    lastErrorMsg = err.message;
+                }
             }
+
+            return `❌ تعذر العثور على محرك يعمل حالياً (آخر خطأ: ${lastErrorMsg}). \n💡 نصيحة: تأكد من إلغاء قيود المفتاح (Don't restrict) في لوحة تحكم جوجل.`;
         }
 
         async function executeAiFunction(name, args) {
