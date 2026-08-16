@@ -2372,19 +2372,32 @@
             `;
 
             const tools = [{
-                function_declarations: [{
-                    name: "githubAction",
-                    description: "تعديل أو إنشاء ملف في مستودع GitHub الخاص بالمشروع",
-                    parameters: {
-                        type: "OBJECT",
-                        properties: {
-                            path: { type: "STRING", description: "مسار الملف المراد تعديله (مثال: index.html)" },
-                            content: { type: "STRING", description: "المحتوى الكامل الجديد للملف" },
-                            message: { type: "STRING", description: "رسالة الـ Commit" }
-                        },
-                        required: ["path", "content"]
+                function_declarations: [
+                    {
+                        name: "githubAction",
+                        description: "تعديل أو إنشاء ملف في مستودع GitHub. تحذير: يجب إرسال الكود الكامل للملف وليس جزءاً منه.",
+                        parameters: {
+                            type: "OBJECT",
+                            properties: {
+                                path: { type: "STRING", description: "مسار الملف (مثال: index.html)" },
+                                content: { type: "STRING", description: "المحتوى الكامل الجديد للملف" },
+                                message: { type: "STRING", description: "رسالة الـ Commit" }
+                            },
+                            required: ["path", "content"]
+                        }
+                    },
+                    {
+                        name: "getGithubFile",
+                        description: "قراءة محتوى ملف حالي من GitHub للتأكد من عدم مسح بيانات هامة عند التعديل",
+                        parameters: {
+                            type: "OBJECT",
+                            properties: {
+                                path: { type: "STRING", description: "مسار الملف المراد قراءته" }
+                            },
+                            required: ["path"]
+                        }
                     }
-                }]
+                ]
             }];
 
             for (const modelName of modelNames) {
@@ -2408,10 +2421,22 @@
 
                         if (part.functionCall) {
                             const { name, args } = part.functionCall;
+
                             if (name === "githubAction") {
-                                addMessageToUi('ai', `⚙️ جاري تنفيذ الأمر على GitHub: ${args.path}...`);
+                                addMessageToUi('ai', `⚙️ جاري تنفيذ التعديل على GitHub: ${args.path}...`);
                                 const result = await githubAction(args.path, args.content, args.message);
                                 return result;
+                            }
+
+                            if (name === "getGithubFile") {
+                                addMessageToUi('ai', `🔍 جاري قراءة الملف ${args.path} لضمان سلامة التعديل...`);
+                                const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${args.path}`, {
+                                    headers: { 'Authorization': `token ${githubToken}` }
+                                });
+                                const getData = await getRes.json();
+                                const fileContent = decodeURIComponent(escape(atob(getData.content)));
+
+                                return await callGemini(`هذا هو محتوى الملف الحالي لـ ${args.path}:\n\n${fileContent}\n\nالآن قم بتنفيذ الطلب الأصلي للمستخدم مع الحفاظ على كامل هيكل الملف: ${promptText}`);
                             }
                         }
 
