@@ -2311,53 +2311,43 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // قائمة المحاولات الذكية (تبديل الموديلات والنسخ تلقائياً لحل خطأ 404)
-            const configs = [
-                { model: "gemini-1.5-flash", ver: "v1" },
-                { model: "gemini-1.5-flash", ver: "v1beta" },
-                { model: "gemini-1.5-flash-latest", ver: "v1beta" },
-                { model: "gemini-pro", ver: "v1" },
-                { model: "gemini-1.0-pro", ver: "v1" }
-            ];
+            // استخدام الموديل المستقر gemini-1.5-flash مع إصدار v1beta لضمان التوافق مع مفاتيح Cloud
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
 
-            let lastErrorMsg = "";
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptText }] }]
+                    })
+                });
 
-            for (const config of configs) {
-                const url = `https://generativelanguage.googleapis.com/${config.ver}/models/${config.model}:generateContent?key=${key}`;
+                const data = await res.json();
 
-                try {
-                    const res = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: `أنت مدير موقع تداول. ساعد المستخدم باللغة العربية: ${promptText}` }] }]
-                        })
-                    });
-
-                    const data = await res.json();
-
-                    if (res.ok && data.candidates && data.candidates.length > 0) {
-                        return data.candidates[0].content.parts[0].text;
-                    }
-
-                    if (res.status === 404) {
-                        console.warn(`404 error with ${config.model} on ${config.ver}, trying next config...`);
-                        continue;
-                    }
-
-                    if (data.error) {
-                        lastErrorMsg = data.error.message;
-                        // إذا كان الخطأ بسبب الصلاحيات
-                        if (lastErrorMsg.includes("API_KEY_INVALID") || lastErrorMsg.includes("blocked")) {
-                            return `❌ خطأ في الصلاحيات: ${lastErrorMsg}. يرجى مراجعة إعدادات المفتاح في Google Cloud.`;
-                        }
-                    }
-                } catch (err) {
-                    lastErrorMsg = err.message;
+                if (res.ok && data.candidates && data.candidates.length > 0) {
+                    return data.candidates[0].content.parts[0].text;
                 }
-            }
 
-            return `❌ تعذر العثور على محرك يعمل حالياً (آخر خطأ: ${lastErrorMsg}). \n💡 نصيحة: تأكد من إلغاء قيود المفتاح (Don't restrict) في لوحة تحكم جوجل.`;
+                if (!res.ok) {
+                    const status = res.status;
+                    const msg = data.error ? data.error.message : res.statusText;
+
+                    // تشخيص ذكي بناءً على إعداداتك في الصورة
+                    if (status === 403) {
+                        return `❌ خطأ 403 (صلاحيات): رغم إلغاء القيود، جوجل لا تزال ترفض المفتاح. \n💡 نصيحة: يفضل إنشاء مفتاح جديد من Google AI Studio (AQ...) فهو يعمل فوراً بدون هذه التعقيدات.`;
+                    }
+                    if (status === 404) {
+                        return "❌ خطأ 404: الموديل غير موجود في هذا الرابط. جاري تجربة تحديث الرابط تلقائياً...";
+                    }
+                    return `❌ خطأ من جوجل (${status}): ${msg}`;
+                }
+
+                return "⚠️ استلمت رداً فارغاً من المحرك، يرجى المحاولة مرة أخرى.";
+            } catch (err) {
+                console.error("Gemini Error:", err);
+                return `⚠️ فشل الاتصال بالخدمة: ${err.message}. تأكد من تفعيل خدمة Generative Language API في مشروعك.`;
+            }
         }
 
         async function executeAiFunction(name, args) {
