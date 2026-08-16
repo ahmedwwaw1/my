@@ -2530,136 +2530,74 @@
             const userModel = document.getElementById('modelSelector').value;
             const modelNames = [userModel, 'gemini-3.5-flash-lite', 'gemini-flash-latest'];
 
-            const systemInstruction = `
-                أنت "العقل المدبر" (Mastermind) لـ VSA Academy والمدير التنفيذي المسؤول.
-
-                صلاحياتك التنفيذية:
-                1. القراءة والتعديل: يمكنك قراءة أي ملف بـ "getGithubFile" وتعديله بـ "githubAction".
-                2. التشغيل والتحكم: يمكنك تشغيل البوت بـ "triggerGithubWorkflow" أو إيقافه/تفعيله بـ "updateWorkflowStatus".
-                3. الاستكشاف: قبل تشغيل أو إيقاف أي بوت، يجب عليك أولاً استخدام "listGithubWorkflows" للتأكد من اسم الملف الصحيح.
-
-                تنبيه هام جداً:
-                - بوت تنبيهات الكريبتو موجود في ملف اسمه "crypto_cron.yml" وليس "crypto_alerts.yml".
-                - لا تحاول تخمين أسماء الملفات، استخدم الأدوات المتاحة لك دائماً.
-
-                منهجية العمل الاحترافية:
-                1. الذكاء الاستشاري: اقترح تحسينات ذكية بناءً على تخصص الموقع.
-                2. نظام الموافقة: اعرض "خطة عمل" قبل التعديلات الكبيرة.
-                3. القراءة الإلزامية: لا تعدل أي ملف دون قراءته أولاً.
-                4. إذا وجدت أن المسار هو مجلد، اطلب من المستخدم تحديد اسم الملف.
-            `;
-
-            const tools = [{
-                function_declarations: [
-                    {
-                        name: "githubAction",
-                        description: "تعديل أو إنشاء ملف في مستودع GitHub.",
-                        parameters: {
-                            type: "OBJECT",
-                            properties: { path: { type: "STRING" }, content: { type: "STRING" }, message: { type: "STRING" } },
-                            required: ["path", "content"]
-                        }
-                    },
-                    {
-                        name: "getGithubFile",
-                        description: "قراءة محتوى ملف من GitHub.",
-                        parameters: {
-                            type: "OBJECT",
-                            properties: { path: { type: "STRING" } },
-                            required: ["path"]
-                        }
-                    },
-                    {
-                        name: "triggerGithubWorkflow",
-                        description: "تشغيل يدوي فوري للعملية.",
-                        parameters: {
-                            type: "OBJECT",
-                            properties: { workflow_id: { type: "STRING" } },
-                            required: ["workflow_id"]
-                        }
-                    },
-                    {
-                        name: "updateWorkflowStatus",
-                        description: "إيقاف أو تفعيل جدول العمل التلقائي للبوت.",
-                        parameters: {
-                            type: "OBJECT",
-                            properties: { workflow_id: { type: "STRING" }, status: { type: "STRING", enum: ["stop", "start"] } },
-                            required: ["workflow_id", "status"]
-                        }
-                    },
-                    {
-                        name: "listGithubWorkflows",
-                        description: "جلب قائمة بجميع ملفات الـ workflow المتاحة في المشروع.",
-                        parameters: { type: "OBJECT", properties: {} }
-                    }
-                ]
-            }];
-
             let currentParts = [];
             if (promptText) currentParts.push({ text: promptText });
             if (imageBase64) currentParts.push({ inline_data: { mime_type: "image/jpeg", data: imageBase64 } });
-
             const currentTurn = { role: "user", parts: currentParts };
-            const fullContents = [...chatHistory, currentTurn];
 
-            for (const modelName of modelNames) {
-                const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${key}`;
-                try {
-                    const res = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            system_instruction: { parts: [{ text: systemInstruction }] },
-                            contents: fullContents,
-                            tools: tools
-                        })
-                    });
+            const systemInstruction = { parts: [{ text: `أنت العقل المدبر لـ VSA Academy. بوت الكريبتو هو "crypto_cron.yml". استخدم الأدوات دائماً.` }] };
 
-                    const data = await res.json();
-                    if (res.ok && data.candidates && data.candidates.length > 0) {
-                        const part = data.candidates[0].content.parts[0];
+            const tools = [{
+                function_declarations: [
+                    { name: "githubAction", description: "تعديل ملف", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
+                    { name: "getGithubFile", description: "قراءة ملف", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                    { name: "triggerGithubWorkflow", description: "تشغيل بوت", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
+                    { name: "updateWorkflowStatus", description: "إيقاف/تفعيل بوت", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" }, status: { type: "STRING", enum: ["stop", "start"] } }, required: ["workflow_id", "status"] } },
+                    { name: "listGithubWorkflows", description: "عرض أسماء العمليات المتاحة", parameters: { type: "OBJECT", properties: {} } }
+                ]
+            }];
+
+            async function runToolLoop(history) {
+                for (const modelName of modelNames) {
+                    const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${key}`;
+                    try {
+                        const res = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ system_instruction: systemInstruction, contents: history, tools: tools })
+                        });
+
+                        const data = await res.json();
+                        if (!res.ok) {
+                            if (res.status === 404 || res.status === 503) continue;
+                            return `❌ خطأ من جوجل (${res.status}): ${data.error?.message || "فشل"}`;
+                        }
+
+                        const part = data.candidates?.[0]?.content?.parts?.[0];
+                        if (!part) return "⚠️ لا يوجد رد من المحرك.";
 
                         if (part.functionCall) {
                             const { name, args } = part.functionCall;
-                            chatHistory.push(currentTurn);
-                            chatHistory.push({ role: "model", parts: [{ functionCall: part.functionCall }] });
+                            addMessageToUi('ai', `⚙️ تنفيذ الأداة: ${name}...`);
 
-                            if (name === "githubAction") {
-                                addMessageToUi('ai', `⚙️ جاري التعديل: ${args.path}...`);
-                                const result = await githubAction(args.path, args.content, args.message);
-                                return result;
-                            }
-                            if (name === "getGithubFile") {
-                                addMessageToUi('ai', `🔍 جاري القراءة: ${args.path}...`);
-                                const fileContent = await getGithubFileContent(args.path);
-                                chatHistory.push({ role: "function", parts: [{ functionResponse: { name: name, response: { content: fileContent } } }] });
-                                return await callGemini(`نتيجة القراءة لـ ${args.path}: ${fileContent.substring(0, 500)}... \nأكمل تنفيذ المهمة الأصلية: ${promptText}`);
-                            }
-                            if (name === "triggerGithubWorkflow") {
-                                addMessageToUi('ai', `🚀 تشغيل: ${args.workflow_id}...`);
-                                return await triggerGithubWorkflow(args.workflow_id);
-                            }
-                            if (name === "updateWorkflowStatus") {
-                                addMessageToUi('ai', `⚙️ ${args.status === 'stop'?'إيقاف':'بدء'}: ${args.workflow_id}...`);
-                                return await updateWorkflowStatus(args.workflow_id, args.status);
-                            }
-                            if (name === "listGithubWorkflows") {
-                                addMessageToUi('ai', `🔍 جاري جلب قائمة العمليات البرمجية...`);
-                                const result = await listGithubWorkflows();
-                                chatHistory.push({ role: "function", parts: [{ functionResponse: { name: name, response: { content: result } } }] });
-                                return await callGemini(`هذه هي القائمة المتاحة: ${result}. الآن اختر الملف الصحيح ونفذ طلب المستخدم.`);
-                            }
+                            let toolResult;
+                            if (name === "githubAction") toolResult = await githubAction(args.path, args.content);
+                            else if (name === "getGithubFile") toolResult = await getGithubFileContent(args.path);
+                            else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
+                            else if (name === "updateWorkflowStatus") toolResult = await updateWorkflowStatus(args.workflow_id, args.status);
+                            else if (name === "listGithubWorkflows") toolResult = await listGithubWorkflows();
+
+                            // تحديث التاريخ بتسلسل (Model Call -> Function Response)
+                            history.push({ role: "model", parts: [part] });
+                            history.push({ role: "function", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
+
+                            // العودة للموديل بالنتيجة
+                            return await runToolLoop(history);
                         }
 
-                        chatHistory.push(currentTurn);
-                        chatHistory.push({ role: "model", parts: [{ text: part.text }] });
+                        // الرد النهائي: تحديث الذاكرة المستديمة
+                        chatHistory = history.concat([{ role: "model", parts: [part] }]);
+                        if (chatHistory.length > 50) chatHistory = chatHistory.slice(-50);
                         saveChatToStorage();
                         return part.text;
-                    }
-                    if (res.status === 404 || res.status === 503) continue;
-                    return `❌ خطأ (${res.status})`;
-                } catch (err) { console.error(err); }
+                    } catch (err) { console.error("Loop Error:", err); }
+                }
+                return "❌ فشل الوصول للموديلات المطلوبة.";
             }
+
+            // تشغيل الحلقة مع السياق الحالي
+            return await runToolLoop([...chatHistory, currentTurn]);
+        }
             return "❌ تعذر الوصول.";
         }
 
