@@ -2501,11 +2501,20 @@
             saveChatToStorage(); // حفظ حالة الـ UI
         }
 
+        async function getGithubFileContent(path) {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
+                    headers: { 'Authorization': `token ${githubToken}`, 'Cache-Control': 'no-cache' }
+                });
+                const data = await res.json();
+                if (Array.isArray(data)) return "⚠️ هذا مسار لمجلد وليس ملفاً. يرجى اختيار ملف محدد من داخل المجلد.";
+                return decodeURIComponent(escape(atob(data.content)));
+            } catch (e) { return "❌ فشل في قراءة الملف."; }
+        }
+
         async function callGemini(promptText, imageBase64 = null) {
             const key = geminiApiKey.trim();
             const userModel = document.getElementById('modelSelector').value;
-
-            // ترتيب المحاولة لضمان السرعة: الموديل المختار ثم Flash Lite
             const modelNames = [userModel, 'gemini-3.5-flash-lite', 'gemini-flash-latest'];
 
             const systemInstruction = `
@@ -2519,8 +2528,9 @@
 
                 منهجية العمل الاحترافية:
                 1. الذكاء الاستشاري: اقترح تحسينات ذكية بناءً على تخصص الموقع.
-                2. نظام الموافقة: اعرض "خطة عمل" قبل التعديلات الكبيرة أو تشغيل البوتات.
+                2. نظام الموافقة: اعرض "خطة عمل" قبل التعديلات الكبيرة.
                 3. القراءة الإلزامية: لا تعدل أي ملف دون قراءته أولاً.
+                4. إذا وجدت أن المسار هو مجلد، اطلب من المستخدم تحديد اسم الملف.
             `;
 
             const tools = [{
@@ -2530,17 +2540,13 @@
                         description: "تعديل أو إنشاء ملف في مستودع GitHub.",
                         parameters: {
                             type: "OBJECT",
-                            properties: {
-                                path: { type: "STRING" },
-                                content: { type: "STRING" },
-                                message: { type: "STRING" }
-                            },
+                            properties: { path: { type: "STRING" }, content: { type: "STRING" }, message: { type: "STRING" } },
                             required: ["path", "content"]
                         }
                     },
                     {
                         name: "getGithubFile",
-                        description: "قراءة ملف من GitHub.",
+                        description: "قراءة محتوى ملف من GitHub.",
                         parameters: {
                             type: "OBJECT",
                             properties: { path: { type: "STRING" } },
@@ -2558,32 +2564,25 @@
                     },
                     {
                         name: "updateWorkflowStatus",
-                        description: "إيقاف أو تفعيل جدول العمل التلقائي للبوت (Cron Job).",
+                        description: "إيقاف أو تفعيل جدول العمل التلقائي للبوت.",
                         parameters: {
                             type: "OBJECT",
-                            properties: {
-                                workflow_id: { type: "STRING" },
-                                status: { type: "STRING", enum: ["stop", "start"], description: "إيقاف أو بدء" }
-                            },
+                            properties: { workflow_id: { type: "STRING" }, status: { type: "STRING", enum: ["stop", "start"] } },
                             required: ["workflow_id", "status"]
                         }
                     }
                 ]
             }];
 
-            // بناء محتوى الرسالة الحالية (نص + صورة إن وجدت)
             let currentParts = [];
             if (promptText) currentParts.push({ text: promptText });
-            if (imageBase64) currentParts.push({
-                inline_data: { mime_type: "image/jpeg", data: imageBase64 }
-            });
+            if (imageBase64) currentParts.push({ inline_data: { mime_type: "image/jpeg", data: imageBase64 } });
 
             const currentTurn = { role: "user", parts: currentParts };
             const fullContents = [...chatHistory, currentTurn];
 
             for (const modelName of modelNames) {
                 const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${key}`;
-
                 try {
                     const res = await fetch(url, {
                         method: 'POST',
@@ -2596,68 +2595,46 @@
                     });
 
                     const data = await res.json();
-
                     if (res.ok && data.candidates && data.candidates.length > 0) {
                         const part = data.candidates[0].content.parts[0];
 
                         if (part.functionCall) {
                             const { name, args } = part.functionCall;
-
-                            // إضافة استدعاء الدالة للسياق
                             chatHistory.push(currentTurn);
                             chatHistory.push({ role: "model", parts: [{ functionCall: part.functionCall }] });
 
                             if (name === "githubAction") {
-                                addMessageToUi('ai', `⚙️ جاري تنفيذ التعديل: ${args.path}...`);
+                                addMessageToUi('ai', `⚙️ جاري التعديل: ${args.path}...`);
                                 const result = await githubAction(args.path, args.content, args.message);
-
-                                // إضافة نتيجة الدالة للسياق
-                                chatHistory.push({ role: "function", parts: [{ functionResponse: { name: name, response: { content: result } } }] });
-                                saveChatToStorage();
                                 return result;
                             }
-
                             if (name === "getGithubFile") {
-                                addMessageToUi('ai', `🔍 جاري القراءة الآمنة لـ ${args.path}...`);
-                                const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${args.path}`, {
-                                    headers: { 'Authorization': `token ${githubToken}` }
-                                });
-                                const getData = await getRes.json();
-                                const fileContent = decodeURIComponent(escape(atob(getData.content)));
-
-                                // إضافة النتيجة للسياق
+                                addMessageToUi('ai', `🔍 جاري القراءة: ${args.path}...`);
+                                const fileContent = await getGithubFileContent(args.path);
                                 chatHistory.push({ role: "function", parts: [{ functionResponse: { name: name, response: { content: fileContent } } }] });
-
-                                return await callGemini(`لقد قرأت الملف ${args.path} بنجاح. الآن نفذ طلبي الأصلي: ${promptText}`);
+                                return await callGemini(`نتيجة القراءة لـ ${args.path}: ${fileContent.substring(0, 500)}... \nأكمل تنفيذ المهمة الأصلية: ${promptText}`);
                             }
                             if (name === "triggerGithubWorkflow") {
-                                addMessageToUi('ai', `🚀 جاري تشغيل العملية: ${args.workflow_id}...`);
-                                const result = await triggerGithubWorkflow(args.workflow_id);
-                                return result;
+                                addMessageToUi('ai', `🚀 تشغيل: ${args.workflow_id}...`);
+                                return await triggerGithubWorkflow(args.workflow_id);
                             }
                             if (name === "updateWorkflowStatus") {
-                                addMessageToUi('ai', `⚙️ جاري ${args.status === 'stop' ? 'إيقاف' : 'تفعيل'} البوت: ${args.workflow_id}...`);
-                                const result = await updateWorkflowStatus(args.workflow_id, args.status);
-                                return result;
+                                addMessageToUi('ai', `⚙️ ${args.status === 'stop'?'إيقاف':'بدء'}: ${args.workflow_id}...`);
+                                return await updateWorkflowStatus(args.workflow_id, args.status);
                             }
                         }
 
-                        // حفظ السياق العادي في الذاكرة
                         chatHistory.push(currentTurn);
                         chatHistory.push({ role: "model", parts: [{ text: part.text }] });
                         saveChatToStorage();
-
-                        return part.text;
-
                         return part.text;
                     }
-
                     if (res.status === 404 || res.status === 503) continue;
-                    return `❌ خطأ (${res.status}): ${data.error?.message || "فشل الاتصال"}`;
-                } catch (err) {
-                    console.error("Gemini Error:", err);
-                }
+                    return `❌ خطأ (${res.status})`;
+                } catch (err) { console.error(err); }
             }
+            return "❌ تعذر الوصول.";
+        }
             return "❌ تعذر الوصول للموديلات.";
         }
 
