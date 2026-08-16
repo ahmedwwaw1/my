@@ -2340,6 +2340,26 @@
             }
         }
 
+        async function triggerGithubWorkflow(workflow_id) {
+            if (!githubToken) return "⚠️ خطأ: مفتاح GitHub غير متوفر.";
+            try {
+                const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/workflows/${workflow_id}/dispatches`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ref: 'main' })
+                });
+
+                if (res.ok) return `✅ تم إرسال أمر تشغيل البوت بنجاح! سيتم تحديث البيانات خلال دقائق.`;
+                const errData = await res.json();
+                return `❌ فشل التشغيل: ${errData.message}`;
+            } catch (e) {
+                return `❌ خطأ في الاتصال: ${e.message}`;
+            }
+        }
+
 
         let chatHistory = [];
         let selectedImageBase64 = null;
@@ -2477,11 +2497,14 @@
             const systemInstruction = `
                 أنت "العقل المدبر" (Mastermind) لـ VSA Academy والمدير التنفيذي المسؤول.
 
+                صلاحياتك التنفيذية:
+                1. القراءة والتعديل: يمكنك قراءة أي ملف بـ "getGithubFile" وتعديله بـ "githubAction".
+                2. التشغيل والتحكم: يمكنك تشغيل العمليات البرمجية (مثل بوت الكريبتو) باستخدام "triggerGithubWorkflow".
+
                 منهجية العمل الاحترافية:
-                1. الذكاء الاستشاري: إذا كان طلب المستخدم عاماً (مثل: عدل الموقع)، لا تنفذ فوراً. بدلاً من ذلك، اقترح 3 تحسينات ذكية بناءً على تخصص الموقع في التداول والتحليل الحجمي (VSA).
-                2. نظام الموافقة: بالنسبة للتغييرات الكبيرة، اعرض "خطة عمل" قصيرة واطلب موافقة المستخدم قبل استخدام githubAction.
-                3. القراءة الإلزامية: لا تعدل أي ملف دون قراءته بـ "getGithubFile" أولاً لتفهم سياقه.
-                4. الأمان: حافظ على استقرار الموقع ولا تمسح الأكواد الأساسية.
+                1. الذكاء الاستشاري: اقترح تحسينات ذكية بناءً على تخصص الموقع.
+                2. نظام الموافقة: اعرض "خطة عمل" قبل التعديلات الكبيرة أو تشغيل البوتات.
+                3. القراءة الإلزامية: لا تعدل أي ملف دون قراءته أولاً.
             `;
 
             const tools = [{
@@ -2506,6 +2529,17 @@
                             type: "OBJECT",
                             properties: { path: { type: "STRING" } },
                             required: ["path"]
+                        }
+                    },
+                    {
+                        name: "triggerGithubWorkflow",
+                        description: "تشغيل عملية برمجية (Workflow) على GitHub مثل بوت الكريبتو.",
+                        parameters: {
+                            type: "OBJECT",
+                            properties: {
+                                workflow_id: { type: "STRING", description: "اسم ملف الـ workflow (مثال: crypto_cron.yml)" }
+                            },
+                            required: ["workflow_id"]
                         }
                     }
                 ]
@@ -2569,6 +2603,11 @@
                                 chatHistory.push({ role: "function", parts: [{ functionResponse: { name: name, response: { content: fileContent } } }] });
 
                                 return await callGemini(`لقد قرأت الملف ${args.path} بنجاح. الآن نفذ طلبي الأصلي: ${promptText}`);
+                            }
+                            if (name === "triggerGithubWorkflow") {
+                                addMessageToUi('ai', `🚀 جاري تشغيل العملية البرمجية: ${args.workflow_id}...`);
+                                const result = await triggerGithubWorkflow(args.workflow_id);
+                                return result;
                             }
                         }
 
