@@ -2216,13 +2216,24 @@
         // ==========================================
 
         let geminiApiKey = '';
+        let githubToken = '';
+        const GITHUB_REPO = 'ahmedwwaw1/my';
 
         async function resetGeminiKey() {
             const key = prompt("الرجاء إدخال Gemini API Key الجديد (AQ...):");
             if (key) {
                 geminiApiKey = key.trim();
-                await saveApiKeyToSupabase(geminiApiKey);
-                alert("✅ تم تحديث المفتاح وحفظه بنجاح.");
+                await saveApiKeyToSupabase('gemini_key', geminiApiKey);
+                alert("✅ تم تحديث مفتاح Gemini.");
+            }
+        }
+
+        async function resetGithubToken() {
+            const token = prompt("الرجاء إدخال GitHub Personal Access Token (لتمكين الإدارة التلقائية):");
+            if (token) {
+                githubToken = token.trim();
+                await saveApiKeyToSupabase('github_token', githubToken);
+                alert("✅ تم تحديث مفتاح GitHub.");
             }
         }
 
@@ -2230,31 +2241,35 @@
             const chatBox = document.getElementById('aiChatBox');
             chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
 
-            if (chatBox.style.display === 'flex' && !geminiApiKey) {
-                geminiApiKey = await fetchApiKeyFromSupabase();
-                if (!geminiApiKey) {
-                    await resetGeminiKey();
+            if (chatBox.style.display === 'flex') {
+                if (!geminiApiKey) geminiApiKey = await fetchApiKeyFromSupabase('gemini_key');
+                if (!githubToken) githubToken = await fetchApiKeyFromSupabase('github_token');
+
+                if (!geminiApiKey) await resetGeminiKey();
+                if (!githubToken) {
+                    if(confirm("هل تريد تفعيل 'الأذرع التنفيذية' للتحكم التلقائي في GitHub؟")) {
+                        await resetGithubToken();
+                    }
                 }
             }
         }
 
-        async function fetchApiKeyFromSupabase() {
+        async function fetchApiKeyFromSupabase(id) {
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
             const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
 
             try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/secret_settings?id=eq.gemini_key`, {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/secret_settings?id=eq.${id}`, {
                     headers: { 'apikey': SERVICE_ROLE_KEY, 'Authorization': `Bearer ${SERVICE_ROLE_KEY}` }
                 });
                 const data = await res.json();
                 return data.length > 0 ? data[0].secret_value : null;
             } catch (e) {
-                console.error("Error fetching API key:", e);
                 return null;
             }
         }
 
-        async function saveApiKeyToSupabase(key) {
+        async function saveApiKeyToSupabase(id, key) {
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
             const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
 
@@ -2266,9 +2281,46 @@
                     'Content-Type': 'application/json',
                     'Prefer': 'resolution=merge-duplicates'
                 },
-                body: JSON.stringify({ id: 'gemini_key', secret_value: key })
+                body: JSON.stringify({ id: id, secret_value: key })
             });
         }
+
+        async function githubAction(path, content, message) {
+            if (!githubToken) return "⚠️ خطأ: مفتاح GitHub غير متوفر.";
+
+            try {
+                // 1. الحصول على SHA للملف إذا كان موجوداً
+                const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
+                    headers: { 'Authorization': `token ${githubToken}` }
+                });
+                let sha = null;
+                if (getRes.ok) {
+                    const getData = await getRes.json();
+                    sha = getData.sha;
+                }
+
+                // 2. رفع الملف (إنشاء أو تحديث)
+                const putRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message || "تحديث تلقائي بواسطة العقل المدبر",
+                        content: btoa(unescape(encodeURIComponent(content))), // ترميز Base64 صحيح
+                        sha: sha
+                    })
+                });
+
+                if (putRes.ok) return `✅ تم تنفيذ الأمر بنجاح على GitHub: ${path}`;
+                const errData = await putRes.json();
+                return `❌ فشل تنفيذ الأمر: ${errData.message}`;
+            } catch (e) {
+                return `❌ خطأ في الاتصال بـ GitHub: ${e.message}`;
+            }
+        }
+
 
         async function sendAiMessage() {
             const input = document.getElementById('aiInput');
@@ -2311,24 +2363,29 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // إضافة موديلات متنوعة بما فيها النسخ الخفيفة (Lite) لتجنب الضغط
-            const modelNames = [
-                'gemini-3.7-flash',
-                'gemini-3.5-flash-lite',
-                'gemini-2.0-flash-lite',
-                'gemini-flash-latest'
-            ];
+            const modelNames = ['gemini-3.7-flash', 'gemini-3.5-flash-lite', 'gemini-2.0-flash-lite'];
 
-            // تعليمات النظام: تحول الذكاء الاصطناعي إلى مدير تنفيذي للمشروع
             const systemInstruction = `
-                أنت "العقل المدبر" (Mastermind) لـ VSA Academy. أنت المدير المسؤول عن إدارة الموقع بالكامل.
-                صلاحياتك:
-                1. تحليل الأسواق من ملفات المشروع مثل crypto_alerts.json.
-                2. التحكم في واجهة المستخدم (UI) وتعديل مظهر الموقع.
-                3. تقديم كود برمجية جاهزة للتنفيذ.
-
-                مهم: عندما يطلب منك صاحب الموقع (المستخدم) القيام بمهمة، تصرف كمدير ينفذ الأمر.
+                أنت "العقل المدبر" (Mastermind) لـ VSA Academy والمدير التنفيذي المسؤول.
+                لديك صلاحيات كاملة للتعديل على ملفات المشروع عبر GitHub.
+                عندما يطلب منك المستخدم تعديل ملف أو إضافة ميزة، استخدم دالة "githubAction" فوراً لتنفيذ التغيير.
             `;
+
+            const tools = [{
+                function_declarations: [{
+                    name: "githubAction",
+                    description: "تعديل أو إنشاء ملف في مستودع GitHub الخاص بالمشروع",
+                    parameters: {
+                        type: "OBJECT",
+                        properties: {
+                            path: { type: "STRING", description: "مسار الملف المراد تعديله (مثال: index.html)" },
+                            content: { type: "STRING", description: "المحتوى الكامل الجديد للملف" },
+                            message: { type: "STRING", description: "رسالة الـ Commit" }
+                        },
+                        required: ["path", "content"]
+                    }
+                }]
+            }];
 
             for (const modelName of modelNames) {
                 const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${key}`;
@@ -2339,33 +2396,39 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             system_instruction: { parts: [{ text: systemInstruction }] },
-                            contents: [{ parts: [{ text: promptText }] }]
+                            contents: [{ parts: [{ text: promptText }] }],
+                            tools: tools
                         })
                     });
 
                     const data = await res.json();
 
                     if (res.ok && data.candidates && data.candidates.length > 0) {
-                        return data.candidates[0].content.parts[0].text;
+                        const part = data.candidates[0].content.parts[0];
+
+                        if (part.functionCall) {
+                            const { name, args } = part.functionCall;
+                            if (name === "githubAction") {
+                                addMessageToUi('ai', `⚙️ جاري تنفيذ الأمر على GitHub: ${args.path}...`);
+                                const result = await githubAction(args.path, args.content, args.message);
+                                return result;
+                            }
+                        }
+
+                        return part.text;
                     }
 
-                    // إذا كان الموديل غير موجود (404) أو عليه ضغط (503)، جرب الموديل التالي فوراً
-                    if (res.status === 404 || res.status === 503) {
-                        console.warn(`Model ${modelName} failed with ${res.status}, trying next...`);
-                        continue; // تجربة الموديل التالي في القائمة
-                    }
+                    if (res.status === 404 || res.status === 503) continue;
 
                     if (!res.ok) {
                         const msg = data.error ? data.error.message : res.statusText;
                         return `❌ خطأ من جوجل (${res.status}): ${msg}`;
                     }
                 } catch (err) {
-                    lastError = err.message;
-                    console.error(`Error with ${modelName}:`, err);
+                    console.error("Gemini Error:", err);
                 }
             }
-
-            return `❌ خطأ 404: جميع الموديلات الحديثة (3.7 و Flash-Latest) غير متاحة على هذا المفتاح. \n💡 حل نهائي: تأكد من تفعيل "Generative Language API" في Cloud Console أو استخرج مفتاحاً جديداً من AI Studio.`;
+            return "❌ فشل الوصول للموديلات المطلوبة.";
         }
 
         async function executeAiFunction(name, args) {
