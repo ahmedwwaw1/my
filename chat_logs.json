@@ -36,5 +36,27 @@
         }
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ايقافه موقتا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": ".github/workflows"
+          },
+          "id": "call_1043192"
+        }
+      }
+    ]
   }
 ]
