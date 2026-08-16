@@ -2311,12 +2311,37 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // تطبيق نصيحة جيميناي (الصورة الأخيرة): استخدام gemini-2.0-flash عبر رابط v1beta
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`;
+            // استخدام الموديل الأكثر استقراراً وموثوقية (gemini-1.5-flash) كما في نصيحة جيميناي
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
 
             const requestBody = {
                 contents: [{
-                    parts: [{ text: `أنت مدير موقع تداول. ساعد المستخدم في طلبه التالي باللغة العربية: ${promptText}` }]
+                    parts: [{ text: `أنت مدير موقع متخصص في التداول (VSA ووايكوف). لديك صلاحية الوصول إلى قاعدة بيانات Supabase.
+                    المعلومات الحالية (للعلم فقط): ${JSON.stringify(allData.slice(0, 5).map(d => ({id: d.id, title: d.title})))}
+                    ساعد المستخدم في تنفيذ طلبه عبر الدوال المناسبة.
+                    طلب المستخدم: ${promptText}` }]
+                }],
+                tools: [{
+                    function_declarations: [
+                        {
+                            name: "update_card_description",
+                            description: "تعديل وصف بطاقة محددة",
+                            parameters: {
+                                type: "object",
+                                properties: { card_id: { type: "string" }, new_content: { type: "string" } },
+                                required: ["card_id", "new_content"]
+                            }
+                        },
+                        {
+                            name: "add_new_video",
+                            description: "إضافة فيديو جديد لبطاقة معينة",
+                            parameters: {
+                                type: "object",
+                                properties: { card_id: { type: "string" }, video_title: { type: "string" }, video_url: { type: "string" }, video_id: { type: "string" } },
+                                required: ["card_id", "video_title", "video_url", "video_id"]
+                            }
+                        }
+                    ]
                 }]
             };
 
@@ -2330,25 +2355,27 @@
                 const data = await res.json();
 
                 if (res.ok && data.candidates && data.candidates.length > 0) {
-                    return data.candidates[0].content.parts[0].text;
+                    const part = data.candidates[0].content.parts[0];
+                    if (part.functionCall) {
+                        const { name, args } = part.functionCall;
+                        return await executeAiFunction(name, args);
+                    }
+                    return part.text;
                 }
 
-                // إذا فشل الموديل 2.0، نجرب الموديل 1.5 كمحاولة احتياطية فورية
                 if (!res.ok) {
-                    const fallbackUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
-                    const fallbackRes = await fetch(fallbackUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(requestBody)
-                    });
-                    const fallbackData = await fallbackRes.json();
-                    if (fallbackRes.ok) return fallbackData.candidates[0].content.parts[0].text;
-
                     const errMsg = data.error ? data.error.message : res.statusText;
-                    return `❌ خطأ في التوافق: ${errMsg}. يرجى التأكد من 'إلغاء قيود المفتاح' في Google Cloud.`;
+                    // توضيح المشكلة بناءً على شرح جيميناي في الصورة ee
+                    if (res.status === 403 || errMsg.toLowerCase().includes("restricted") || errMsg.toLowerCase().includes("blocked")) {
+                        return `❌ خطأ في الصلاحيات: ${errMsg}. \n📌 الحل: اذهب لـ Google Cloud Console، اضغط على المفتاح، واجعل Application restrictions هي None.`;
+                    }
+                    if (res.status === 404) {
+                        return "❌ خطأ 404: الموديل غير موجود. تم تحديث الكود لاستخدام الموديل المستقر، يرجى تحديث الصفحة والمحاولة.";
+                    }
+                    return `❌ خطأ في الاتصال بجيميناي: ${errMsg}`;
                 }
 
-                return "⚠️ لم أتمكن من الحصول على رد مفيد.";
+                return "⚠️ لم أتمكن من الحصول على رد مفيد، يرجى التأكد من صحة المفتاح.";
             } catch (err) {
                 console.error("Gemini Error:", err);
                 return `⚠️ فشل الاتصال بالخدمة: ${err.message}`;
