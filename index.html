@@ -2337,15 +2337,56 @@
         }
 
 
-        let chatHistory = []; // مصفوفة لحفظ سياق المحادثة
-        let selectedImageBase64 = null; // لحفظ الصورة المحددة
+        let chatHistory = [];
+        let selectedImageBase64 = null;
+        const CHAT_LOG_PATH = 'chat_logs.json';
 
-        function clearChatHistory() {
-            chatHistory = [];
-            const container = document.getElementById('aiMessages');
-            container.innerHTML = '<div class="msg ai">تم مسح سياق المحادثة. أنا جاهز لبدء مهمة جديدة!</div>';
-            alert("🧹 تم مسح الذاكرة المؤقتة للعقل المدبر.");
+        async function saveChatToStorage() {
+            if (!githubToken) return;
+            // حفظ السياق في ملف JSON على GitHub ليكون متاحاً من أي مكان
+            await githubAction(CHAT_LOG_PATH, JSON.stringify(chatHistory, null, 2), "تحديث سياق المحادثة");
+            // حفظ الـ UI محلياً للسرعة فقط
+            localStorage.setItem('gemini_chat_ui', document.getElementById('aiMessages').innerHTML);
         }
+
+        async function loadChatFromStorage() {
+            // تحميل واجهة المحادثة من التخزين المحلي فوراً لسرعة العرض
+            const savedUi = localStorage.getItem('gemini_chat_ui');
+            if (savedUi) {
+                document.getElementById('aiMessages').innerHTML = savedUi;
+            }
+
+            // ثم تحميل السياق الحقيقي من GitHub لضمان المزامنة بين الأجهزة
+            if (githubToken) {
+                try {
+                    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${CHAT_LOG_PATH}`, {
+                        headers: { 'Authorization': `token ${githubToken}` }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        chatHistory = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+                        console.log("✅ تم تحميل السياق من GitHub");
+                    }
+                } catch (e) { console.error("Error loading chat context:", e); }
+            }
+
+            const container = document.getElementById('aiMessages');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function clearChatHistory() {
+            chatHistory = [];
+            if (githubToken) {
+                await githubAction(CHAT_LOG_PATH, "[]", "تصفير المحادثة");
+            }
+            localStorage.removeItem('gemini_chat_ui');
+            const container = document.getElementById('aiMessages');
+            container.innerHTML = '<div class="msg ai">تم مسح الذاكرة العالمية. أنا جاهز لبدء مهمة جديدة!</div>';
+            alert("🧹 تم تصفير المحادثة في GitHub.");
+        }
+
+        // استدعاء التحميل عند تشغيل السكريبت
+        window.addEventListener('load', loadChatFromStorage);
 
         function handleImageUpload(event) {
             const file = event.target.files[0];
@@ -2388,6 +2429,7 @@
                 const response = await callGemini(msgText, selectedImageBase64);
                 addMessageToUi('ai', response);
                 clearSelectedImage();
+                saveChatToStorage();
             } catch (err) {
                 console.error(err);
                 addMessageToUi('ai', "⚠️ حدث خطأ أثناء الاتصال.");
@@ -2401,6 +2443,7 @@
             div.innerText = text;
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
+            saveChatToStorage(); // حفظ حالة الـ UI
         }
 
         async function callGemini(promptText, imageBase64 = null) {
