@@ -18,5 +18,18 @@
         }
       }
     ]
+  },
+  {
+    "role": "function",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubWorkflows",
+          "response": {
+            "content": "قائمة العمليات المتاحة: crypto_cron.yml, pages-build-deployment"
+          }
+        }
+      }
+    ]
   }
 ]
