@@ -761,7 +761,7 @@
             <div class="ai-header">
                 <div style="display: flex; flex-direction: column; gap: 5px;">
                     <span style="color: #00d4ff; font-weight: bold; font-size: 0.9rem;">🤖 العقل المدبر</span>
-                    <select id="modelSelector" style="background: #121214; color: #fff; border: 1px solid #333; font-size: 0.75rem; border-radius: 4px; padding: 2px;">
+                    <select id="modelSelector" onchange="saveModelSelection()" style="background: #121214; color: #fff; border: 1px solid #333; font-size: 0.75rem; border-radius: 4px; padding: 2px;">
                         <option value="gemini-3.7-flash">Gemini 3.7 Flash (أحدث)</option>
                         <option value="gemini-3.5-flash-lite">Gemini 3.5 Lite (سريع)</option>
                         <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
@@ -2347,6 +2347,12 @@
             await githubAction(CHAT_LOG_PATH, JSON.stringify(chatHistory, null, 2), "تحديث سياق المحادثة");
             // حفظ الـ UI محلياً للسرعة فقط
             localStorage.setItem('gemini_chat_ui', document.getElementById('aiMessages').innerHTML);
+            saveModelSelection();
+        }
+
+        function saveModelSelection() {
+            const selectedModel = document.getElementById('modelSelector').value;
+            localStorage.setItem('gemini_selected_model', selectedModel);
         }
 
         async function loadChatFromStorage() {
@@ -2354,6 +2360,12 @@
             const savedUi = localStorage.getItem('gemini_chat_ui');
             if (savedUi) {
                 document.getElementById('aiMessages').innerHTML = savedUi;
+            }
+
+            // استعادة الموديل المختار
+            const savedModel = localStorage.getItem('gemini_selected_model');
+            if (savedModel) {
+                document.getElementById('modelSelector').value = savedModel;
             }
 
             // ثم تحميل السياق الحقيقي من GitHub لضمان المزامنة بين الأجهزة
