@@ -2311,8 +2311,8 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // تحديث الرابط إلى v1 لضمان التوافق مع مفاتيح Cloud الحديثة
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
+            // تحديث الموديل إلى الإصدار 2.0 لأن 1.5 قديم وتم إيقافه في هذا التاريخ (2026)
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${key}`;
 
             try {
                 const res = await fetch(url, {
