@@ -2512,6 +2512,18 @@
             } catch (e) { return "❌ فشل في قراءة الملف."; }
         }
 
+        async function listGithubWorkflows() {
+            if (!githubToken) return "⚠️ خطأ في التوكن.";
+            try {
+                const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/workflows`, {
+                    headers: { 'Authorization': `token ${githubToken}` }
+                });
+                const data = await res.json();
+                const names = data.workflows.map(w => w.path.split('/').pop());
+                return `قائمة العمليات المتاحة: ${names.join(', ')}`;
+            } catch (e) { return "❌ فشل جلب القائمة."; }
+        }
+
         async function callGemini(promptText, imageBase64 = null) {
             const key = geminiApiKey.trim();
             const userModel = document.getElementById('modelSelector').value;
@@ -2523,8 +2535,10 @@
                 صلاحياتك التنفيذية:
                 1. القراءة والتعديل: يمكنك قراءة أي ملف بـ "getGithubFile" وتعديله بـ "githubAction".
                 2. التشغيل والتحكم: يمكنك تشغيل البوت بـ "triggerGithubWorkflow" أو إيقافه/تفعيله بـ "updateWorkflowStatus".
+                3. الاستكشاف: استخدم "listGithubWorkflows" لمعرفة أسماء ملفات الـ workflow الصحيحة قبل محاولة تشغيلها أو إيقافها.
 
-                هام: لإيقاف بوت تنبيهات الكريبتو تماماً، استخدم "updateWorkflowStatus" مع حالة "stop".
+                معلومات هامة:
+                - بوت تنبيهات الكريبتو موجود في ملف "crypto_cron.yml".
 
                 منهجية العمل الاحترافية:
                 1. الذكاء الاستشاري: اقترح تحسينات ذكية بناءً على تخصص الموقع.
@@ -2570,6 +2584,11 @@
                             properties: { workflow_id: { type: "STRING" }, status: { type: "STRING", enum: ["stop", "start"] } },
                             required: ["workflow_id", "status"]
                         }
+                    },
+                    {
+                        name: "listGithubWorkflows",
+                        description: "جلب قائمة بجميع ملفات الـ workflow المتاحة في المشروع.",
+                        parameters: { type: "OBJECT", properties: {} }
                     }
                 ]
             }];
@@ -2621,6 +2640,12 @@
                             if (name === "updateWorkflowStatus") {
                                 addMessageToUi('ai', `⚙️ ${args.status === 'stop'?'إيقاف':'بدء'}: ${args.workflow_id}...`);
                                 return await updateWorkflowStatus(args.workflow_id, args.status);
+                            }
+                            if (name === "listGithubWorkflows") {
+                                addMessageToUi('ai', `🔍 جاري جلب قائمة العمليات البرمجية...`);
+                                const result = await listGithubWorkflows();
+                                chatHistory.push({ role: "function", parts: [{ functionResponse: { name: name, response: { content: result } } }] });
+                                return await callGemini(`هذه هي القائمة المتاحة: ${result}. الآن اختر الملف الصحيح ونفذ طلب المستخدم.`);
                             }
                         }
 
