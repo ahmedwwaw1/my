@@ -2311,43 +2311,44 @@
 
         async function callGemini(promptText) {
             const key = geminiApiKey.trim();
-            // تحديث الموديل إلى الإصدار 2.0 لأن 1.5 قديم وتم إيقافه في هذا التاريخ (2026)
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${key}`;
+            // قائمة الموديلات المتاحة في أغسطس 2026 حسب تحديثات جوجل الأخيرة
+            const modelNames = ['gemini-3.7-flash', 'gemini-flash-latest', 'gemini-3.5-flash'];
+            let lastError = '';
 
-            try {
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: promptText }] }]
-                    })
-                });
+            for (const modelName of modelNames) {
+                const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${key}`;
 
-                const data = await res.json();
+                try {
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: promptText }] }]
+                        })
+                    });
 
-                if (res.ok && data.candidates && data.candidates.length > 0) {
-                    return data.candidates[0].content.parts[0].text;
-                }
+                    const data = await res.json();
 
-                if (!res.ok) {
-                    const status = res.status;
-                    const msg = data.error ? data.error.message : res.statusText;
-
-                    // تشخيص ذكي بناءً على إعداداتك في الصورة
-                    if (status === 403) {
-                        return `❌ خطأ 403 (صلاحيات): رغم إلغاء القيود، جوجل لا تزال ترفض المفتاح. \n💡 نصيحة: يفضل إنشاء مفتاح جديد من Google AI Studio (AQ...) فهو يعمل فوراً بدون هذه التعقيدات.`;
+                    if (res.ok && data.candidates && data.candidates.length > 0) {
+                        return data.candidates[0].content.parts[0].text;
                     }
-                    if (status === 404) {
-                        return "❌ خطأ 404: الموديل غير موجود في هذا الرابط. جاري تجربة تحديث الرابط تلقائياً...";
-                    }
-                    return `❌ خطأ من جوجل (${status}): ${msg}`;
-                }
 
-                return "⚠️ استلمت رداً فارغاً من المحرك، يرجى المحاولة مرة أخرى.";
-            } catch (err) {
-                console.error("Gemini Error:", err);
-                return `⚠️ فشل الاتصال بالخدمة: ${err.message}. تأكد من تفعيل خدمة Generative Language API في مشروعك.`;
+                    if (res.status === 404) {
+                        console.warn(`Model ${modelName} not found, trying next...`);
+                        continue; // تجربة الموديل التالي في القائمة
+                    }
+
+                    if (!res.ok) {
+                        const msg = data.error ? data.error.message : res.statusText;
+                        return `❌ خطأ من جوجل (${res.status}): ${msg}`;
+                    }
+                } catch (err) {
+                    lastError = err.message;
+                    console.error(`Error with ${modelName}:`, err);
+                }
             }
+
+            return `❌ خطأ 404: جميع الموديلات الحديثة (3.7 و Flash-Latest) غير متاحة على هذا المفتاح. \n💡 حل نهائي: تأكد من تفعيل "Generative Language API" في Cloud Console أو استخرج مفتاحاً جديداً من AI Studio.`;
         }
 
         async function executeAiFunction(name, args) {
