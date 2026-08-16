@@ -2494,12 +2494,11 @@
                             }
                         }
 
-                        // حفظ السياق في الذاكرة النشطة
+                        // حفظ السياق في الذاكرة (بدون حدود كما طلبت لضمان الذكاء الكامل)
                         chatHistory.push(currentTurn);
                         chatHistory.push({ role: "model", parts: [{ text: part.text }] });
 
-                        // زيادة سعة الذاكرة لضمان عدم نسيان الخطوات البرمجية السابقة
-                        if (chatHistory.length > 30) chatHistory = chatHistory.slice(-30);
+                        return part.text;
 
                         return part.text;
                     }
