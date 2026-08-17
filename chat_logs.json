@@ -70,5 +70,51 @@
         "thoughtSignature": "El4KXAERTTIPWnd1eLYyrtbuAz/FPiWZbKIo/aAPCSBTnegvwBPXELzDZwczrDri6yHx4fxFuJpPDHdiBFxOrmml1nj+b3Cf9SnPL3PDWuBXGOC1IzN/gazjqB3cQ02E"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "طيب هل يمكنك الان اعدة تنشيطه"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "updateWorkflowStatus",
+          "args": {
+            "status": "start",
+            "workflow_id": "crypto_cron.yml"
+          },
+          "id": "call_2116540"
+        },
+        "thoughtSignature": "El4KXAERTTIPzXBjc4OHHxTJX65kN2Phc3iMZDgweUD24HfiIRucWyhIxwUS97FuxgZbW5Wdl9Y8LoULyGEYsP3YU/C0g0SVbbkLbQfW+ZS2MmpPwHfYy8Bl7cROcNCd"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "updateWorkflowStatus",
+          "response": {
+            "content": "✅ تم تفعيل البوت (crypto_cron.yml) بنجاح."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "تم إعادة تنشيط بوت تنبيهات الكريبتو (`crypto_cron.yml`) بنجاح! 🚀",
+        "thoughtSignature": "El4KXAERTTIPHE/FlWN97hMCamVkqG0tgj7RIblUXN0kYGqXQ7V9/y9+Do8gd27IHenI/4FMyQ4NtC2wMzP7lOG5mTiYGZEvii0DzeJ81d57H8SUGnEIBy7zbMK6hbSW"
+      }
+    ]
   }
 ]
