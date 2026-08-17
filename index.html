@@ -2428,6 +2428,9 @@
                     }
                 } catch (e) { console.error("Error loading chat context:", e); }
             }
+
+            const container = document.getElementById('aiMessages');
+            container.scrollTop = container.scrollHeight;
         }
 
         // تهيئة المفاتيح والسياق عند تحميل الصفحة
@@ -2571,7 +2574,8 @@
                     { name: "triggerGithubWorkflow", description: "تشغيل بوت", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
                     { name: "updateWorkflowStatus", description: "إيقاف/تفعيل بوت", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" }, status: { type: "STRING", enum: ["stop", "start"] } }, required: ["workflow_id", "status"] } },
                     { name: "listGithubWorkflows", description: "عرض أسماء العمليات المتاحة", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "listGithubFiles", description: "عرض قائمة الملفات في مجلد معين", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "مسار المجلد (اتركه فارغاً للجذر)" } } } }
+                    { name: "listGithubFiles", description: "عرض قائمة الملفات في مجلد معين", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "مسار المجلد (اتركه فارغاً للجذر)" } } } },
+                    { name: "getLiveSiteData", description: "الحصول على البيانات الحية المعروضة حالياً في الموقع (الكروت، التنبيهات، الإحصائيات)", parameters: { type: "OBJECT", properties: {} } }
                 ]
             }];
 
@@ -2605,6 +2609,7 @@
                             else if (name === "updateWorkflowStatus") toolResult = await updateWorkflowStatus(args.workflow_id, args.status);
                             else if (name === "listGithubWorkflows") toolResult = await listGithubWorkflows();
                             else if (name === "listGithubFiles") toolResult = await listGithubFiles(args.path || "");
+                            else if (name === "getLiveSiteData") toolResult = JSON.stringify(allData);
 
                             // تحديث التاريخ بتسلسل (Model Call -> User Response for tool)
                             history.push({ role: "model", parts: [part] });
