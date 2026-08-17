@@ -152,5 +152,22 @@
         "thoughtSignature": "El4KXAERTTIP59ONmGO/xKlLR/xukRS8QHtW4bv1Jz7wgH1pLSuZvk/yFuy+vsHXZt/9EfZCe1/e8VBLBLbeWhdu+f+VYJyJhB8ttQRP8VHJNbqglvF9r9kwxClQ5EVa"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "مرحباً بك مجدداً! بصفتي العقل المدبر لـ **VSA Academy**، أنا هنا دائماً لخدمتك وتطوير المنصة بشكل ذاتي وفوري. \n\nهل ترغب في إجراء أي تعديلات إضافية على التصميم، الألوان، الوظائف، أو إضافة كورسات وأقسام جديدة؟ أمرك مطاع دائماً.",
+        "thoughtSignature": "El4KXAERTTIPf9AWNHT0KDGvWQeK/7oyQqIOLhcU8ifHSHhuRhIgNKzrlyn8KtNyYCk3yyAtV8RHmBpODx/0tnJrKXC6vL4kjcWTva2QqZqdRZu9PXLxIKgWD97nQUnD"
+      }
+    ]
   }
 ]
