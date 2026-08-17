@@ -75,5 +75,22 @@
         "thoughtSignature": "El4KXAERTTIPsGv0q4FddZdoh4vhdWtfHTbs4IUbs8GPkZ3iENijTNhLrU64bd6S1W4TuhVvcesiYPNJfQf9qRGxIpOBKvQk3bdp5qtk1lAnwzyeDlNkaxR8dJX2SBmN"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اجلب لي السادس"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "بناءً على سياق الدردشة الحالي وقائمة تنبيهات الكريبتو التي أضفناها وتحدثنا عنها، فإن **\"السادس\"** يعني تماماً **التنبيه السادس للكريبتو** في القائمة الحية. إليك تفاصيله بدقة:\n\n### 🚨 التنبيه السادس (Crypto Alert #6):\n* **معرف الكارت (ID):** `crypto_BTC/USDT-2026-08-15T13:25:19.916544`\n* **عنوان التنبيه:** 🚨 حركة قوية على زوج: BTC/USDT\n* **التصنيف:** `high_volume` (حجم تداول مرتفع)\n* **السعر الحالي:** `63040 USDT`\n* **حجم التداول:** `62,899,718.25`\n* **نسبة التغيير (خلال 24 ساعة):** `+0.47%`\n* **وقت التنبيه:** `١:٢٥ م - ١٥‏/٨‏/٢٠٢٦`\n\nكيف تجد تطوري السياقي الآن؟ هل ترغب في تحليل هذا التنبيه أو جلب التالي؟",
+        "thoughtSignature": "El4KXAERTTIPDQGCQzZeKl7WtFvJXzVtLT6geEmPV2rHxP0fKp6teDYaTzN0npoi9aVDxSRznxAbqiDY20q/HcVLHvtD2Wdq0k2zGV1A+O4k6w52RzQQCNpecAeTTo4k"
+      }
+    ]
   }
 ]
