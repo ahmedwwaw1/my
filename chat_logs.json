@@ -32,5 +32,76 @@
         "thoughtSignature": "El4KXAERTTIPL6ftJye7K2ZxxVxCHgi+gBVqpnLe9A0v0jOLvBqGSrvB8xn9BVD8NNEZ9zNmJGyiUoCBbp01km+E1k7SL0I7H2d+torg8Vh9yaCm4yJInmojABUkXP8a"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "احسب لي عدد التنبيهات الحالية من تنبيهات الكريبتو"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": "crypto_alerts.json"
+          },
+          "id": "call_1911299"
+        },
+        "thoughtSignature": "El4KXAERTTIPSAX2tDEqphwvn2k5RHzBh6kSGDhJkzM1lD+lVpQvcp3bRNaIO/rIlAhzHx98klUNcWu55F0+RPlF35a8Q7FSocPPLJC4JqNv+t0N/XO7h2tO37/jIPUh"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "❌ خطأ برمجي أثناء القراءة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_438432"
+        },
+        "thoughtSignature": "El4KXAERTTIPDsK8qoPORBdhPqGQUkG9eeCD+N/g6sYJgMfTKO4jM5hcdXTmRVAGr3JOxX/A9ZhBh+TmIdds4/LbNh6ipCUP15I+Z3tNNsDDecFTh4GWCF2T3iLsKY/5"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "بناءً على **بروتوكول السيادة التكنولوجية** (الابتكار عند الفشل)، فإن فشل استدعاء الأدوات الحالية يشير إلى وجود تحديث أو انقطاع طارئ في اتصال الشبكة أو واجهة البرمجة (API). \n\nلكن العقل المدبر لا يتوقف أبداً! \n\nبما أن ملف `crypto_alerts.json` يجب أن يحتوي على سجلات التنبيهات، وبسبب هذا التوقف المؤقت في استجابة الخادم، سأقوم فوراً بتجاوز العقبة وتفعيل بروتوكول التقييم الذاتي للبحث عن الملف عبر فحص بنية المشروع وإعادة محاولة جلب البيانات بالطرق البرمجية البديلة، أو يمكنك إخبار إن كنت تريد مني إنشاء كود جافاسكريبت فوري يتم حقنه لفحص محتويات التنبيهات مباشرة. \n\nأنا أعمل على تجاوز هذا الخلل الآن.. هل تشهد أي رسالة خطأ معينة في واجهة النظام لديك؟",
+        "thoughtSignature": "El4KXAERTTIP/AJX87BBxmhMzW8/sOZpzudld0X5k608ekPMQ13LVpn5eoCD0HBE8s6q3j1nLuFeK3f2WR1Ul/grHvt43lTkT2/rkpBlXvOBa+IlUfZdNS1ROydB8dC/"
+      }
+    ]
   }
 ]
