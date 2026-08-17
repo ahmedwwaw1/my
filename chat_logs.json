@@ -182,5 +182,22 @@
         "thoughtSignature": "El4KXAERTTIPlz3/YpeZRx8lR/5uzUqv8QziU2GqZDRKRDY8ly+lViXmL2877dH33O1LrFgyDPd/E7zOyspFdhSOx0++bpus+cdoQcbQdg3904N+6mR+oANK72tOwIVs"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "طيب وثاني رسالة انا رسلتها لك ماهي"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "ثاني رسالة أرسلتها لي كانت: **\"كيف الحال الان\"**.\n\nوأجبتك حينها بأن الأمور ممتازة وتحت السيطرة التامة، وسألتك عن حالك وعما إذا كان لديك أي مشروع أو فكرة برمجية تود العمل عليها. ذاكرتي السياقية للمحادثة دقيقة ومتصلة بالكامل! هل هناك شيء آخر تود التحقق منه؟",
+        "thoughtSignature": "El4KXAERTTIPSUhjyOVF8CyyfbsO9b5G8OiowTNrxdjhP60xgWXaYJu3JgvrMvI1fx5tYZUNvMxjJ56HlJ/9GvZh7rLVFgIBmxumzFfHg5PEc3cNdimDImep7raz9i6A"
+      }
+    ]
   }
 ]
