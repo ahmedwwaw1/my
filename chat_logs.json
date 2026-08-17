@@ -183,5 +183,22 @@
         "thoughtSignature": "El4KXAERTTIPIjrkBvVlg2dZfE7sHsr5pkwBUdGXAUBS3k4XbO1+MHTK9+ItRbaIlNq31PSfdV7EyR+wIXEM8vGst5bdbdTAgEKG/2WYiLwkhWTXhqqgDAtL9mMyHiwM"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مذا تعني هاذه الرسالة ❌ خطأ من جوجل (429): You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 250000, model: gemini-3.5-flash-lite Please retry in 32.757073813s."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "هذه الرسالة تعني ببساطة: **تم تجاوز الحد المسموح به (Quota Exceeded)** للباقة المجانية (Free Tier) التي تستخدمها مع نموذج الذكاء الاصطناعي (Gemini).\n\n### تفاصيل الخطأ:\n1. **السبب:** لقد استهلكت الحد الأقصى من التوكنز (Tokens / الكلمات المدخلة والمخرجة) المسموح به في الباقة المجانية لنموذج `gemini-2.5-flash-lite` (والذي يقدر بـ 250,000 توكن في الدقيقة أو اليوم حسب الاستهلاك).\n2. **الحل المؤقت:** كما يوضح النظام في نهاية الرسالة: `Please retry in 32.757s` (يرجى إعادة المحاولة بعد حوالي 32 ثانية) ريثما يتم تجديد الـ Quota الخاصة بك.\n3. **الحل الدائم (إذا كنت تطور تطبيقاً أو تربط مفتاح API):** \n   - الترقية إلى باقة مدفوعة (Pay-as-you-go) من منصة Google AI Studio.\n   - أو تقليل عدد الطلبات المرسلة للنموذج في فترة زمنية قصيرة.\n\nأنا هنا معك، هل تحتاج لمساعدتك في أي شي برمجي أو تقني آخر؟",
+        "thoughtSignature": "El4KXAERTTIPdkcCNQagq7EAZUpSGVhAUolxhI51VimSVSEXuZo4AgH38we0Pz/wP1Ipp9gQz8P7JW/jBI2XI4mFhIoCigFHmlxEv3vhAbUaTTU6sMQwrA9Q8lj+RGwa"
+      }
+    ]
   }
 ]
