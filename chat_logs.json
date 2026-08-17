@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "مرحباً بك! أنا **العقل المدبر (Mastermind)** لـ VSA Academy.\n\nأنا جاهز لإدارة النظام، متابعة تنبيهات التداول، إدارة مستودع GitHub، أو تنفيذ أي مهام برمجية وتحليلية تحتاجها. \n\nكيف يمكنني مساعدتك اليوم؟",
+        "thoughtSignature": "Eu8BCuwBARFNMg/Yd2qn1b47xTvIRp2BAc8WIKyBSS+4/6SFsFkHOjT5WStPfd0hNUJv1vVx4SJm6uQKPCVpkaOjd2hGlnFaPyDVWv28MVrMIBbubmhyIW+jvYgGyY+MSLGj9Vt5qF1ktyfGRRHktRTcDp2N0WtC9wG5u6mctGO+YL8m7VJY/5Fc4dQn3MqM9yDtgxHHqICmoYG/sepUC3ahLTttT6toV8ZWgLitr+yVvhSiNhwCBCQjMSxe7gF6MMS4iI11Zphfn0JSl49/z4D9ZtmcToHSRxSECe6A4IFL9Ii4ARiHE3wsNUclDwAG7N4="
+      }
+    ]
+  }
+]
