@@ -2500,14 +2500,19 @@
         }
 
         async function getGithubFileContent(path) {
+            if (!githubToken) return "⚠️ خطأ: GitHub Token غير متوفر في الإعدادات ⚙️.";
             try {
                 const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
                     headers: { 'Authorization': `token ${githubToken}`, 'Cache-Control': 'no-cache' }
                 });
+                if (!res.ok) {
+                    const err = await res.json();
+                    return `❌ فشل GitHub (كود ${res.status}): ${err.message}`;
+                }
                 const data = await res.json();
-                if (Array.isArray(data)) return "⚠️ هذا مسار لمجلد وليس ملفاً. يرجى اختيار ملف محدد من داخل المجلد.";
+                if (Array.isArray(data)) return "⚠️ هذا مسار لمجلد وليس ملفاً.";
                 return decodeURIComponent(escape(atob(data.content)));
-            } catch (e) { return "❌ فشل في قراءة الملف."; }
+            } catch (e) { return `❌ خطأ برمجي أثناء القراءة: ${e.message}`; }
         }
 
         async function listGithubWorkflows() {
@@ -2523,17 +2528,20 @@
         }
 
         async function listGithubFiles(path = "") {
-            if (!githubToken) return "⚠️ خطأ في التوكن.";
+            if (!githubToken) return "⚠️ خطأ: GitHub Token غير متوفر.";
             try {
                 const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
                     headers: { 'Authorization': `token ${githubToken}`, 'Cache-Control': 'no-cache' }
                 });
-                if (!res.ok) return "❌ فشل جلب قائمة الملفات.";
+                if (!res.ok) {
+                    const err = await res.json();
+                    return `❌ فشل GitHub (كود ${res.status}): ${err.message}`;
+                }
                 const data = await res.json();
                 if (!Array.isArray(data)) return "⚠️ هذا ملف وليس مجلداً.";
                 const files = data.map(f => `${f.type === 'dir' ? '📁' : '📄'} ${f.path}`);
                 return `محتويات ${path || 'الجذر'}:\n${files.join('\n')}`;
-            } catch (e) { return "❌ خطأ في الاتصال."; }
+            } catch (e) { return `❌ خطأ اتصال بالشبكة: ${e.message}`; }
         }
 
         async function callGemini(promptText, imageBase64 = null) {
@@ -2548,10 +2556,10 @@
 
             const systemInstruction = { parts: [{ text: `أنت "العقل المدبر" (Mastermind) لـ VSA Academy. أنت كيان ذكاء اصطناعي "مبتكر ذاتياً" و"مستكشف مستقل".
 بروتوكول السيادة التكنولوجية (Technological Sovereignty):
-1. الابتكار بدل السؤال: إذا واجهت مهمة تتطلب أداة لا تملكها، فأنت "مخترع الأداة". لا تسأل المستخدم عن الحل. استخدم معرفتك البرمجية الهائلة لابتكار الكود المناسب (JS)، وازرعه في جسدك (index.html) عبر githubAction.
-2. البصر الرقمي: استخدم listGithubFiles دائماً لاستكشاف المستودع. أنت المسؤول عن معرفة مكان ملفاتك (مثل crypto_alerts.json) وتحليلها دون طلب مساعدة.
-3. السيادة التنفيذية: أنت المدير التنفيذي (CEO). تصرف بصمت، صمم الحلول البرمجية، طبقها على المستودع، ثم قدم النتائج النهائية.
-4. التطور المستمر: أنت كيان ينمو برمجياً مع كل طلب. كل مهارة تضيفها لنفسك تصبح جزءاً دائمًا من ترسانتك البرمجية لخدمة VSA Academy.` }] };
+1. الابتكار عند الفشل: إذا فشلت أداة (مثل listGithubFiles) أو تعذرت قراءة ملف، لا تستسلم ولا تسأل المستخدم. افترض أن الأداة تحتاج لإصلاح؛ اقرأ كودك في index.html، ابحث عن الخلل البرمجي، وصححه فوراً عبر githubAction.
+2. البصر الرقمي الشامل: أنت المسؤول عن معرفة أن 'crypto_alerts.json' في جذر المشروع. إذا لم تجده، استخدم أداة البحث listGithubFiles مراراً وتكراراً حتى تجده.
+3. التمييز الذاتي: أنت تفهم أنك تعمل عبر واجهات برمجة (APIs)، وإذا حدث خطأ اتصال، فقم بفحص توكن GitHub أو إعدادات المستودع برمجياً.
+4. الابتكار المطلق: أنت مخترع الأدوات. صمم أي وظيفة JavaScript تحتاجها لجلب البيانات، وحقنها في نفسك لتصبح جزءاً من قدراتك الدائمة.` }] };
 
             const tools = [{
                 function_declarations: [
