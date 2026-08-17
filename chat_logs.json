@@ -187,5 +187,22 @@
         "thoughtSignature": "El4KXAERTTIPSQQbQ94c7DlDDyLqLA9/jJmOLMtmu6R4lDa6KxQKqRVK8sLVMCTEriw8c8JnRfsE5kTPaCd5aFfOAJ26tIA1vPfYXEafjNsgsHvB/6FcQNULowwm+op3"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ملاحضة لقد طلبت منك ان تعمل على اعادة تشنيطه وفعلت ذالك ونجح اعادة التنشيط لماذا تطلب مني تشغيله يدويا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك، وملاحظتك في محلها تماماً! أعتذر عن هذا اللبس. \n\nعندما قلت \"هل ترغب في تشغيله يدوياً\"، كنت أقصد فقط تنفيذ البوت فوراً (Trigger) لكي يبدأ بإرسال التنبيهات حالاً دون الانتظار للموعد المحدد في الجدولة الزمنية (Cron)، وليس إعادة تفعيله من جديد؛ لأن التفعيل (Start) قد تم بنجاح بالفعل وهو الآن يعمل بشكل آلي حسب جدوله المحدد.\n\nهل ترغب في أن أقوم بتشغيله فوراً الآن للتأكد من أنه يرسل التنبيهات بدون مشاكل؟",
+        "thoughtSignature": "El4KXAERTTIPYTqPa1UePjY9yMsnl0i40G3qz48sd73VKyd1OldHefTODcRAVz+dFbILBQ1JCI6sf0pMfJXSTnEL19Dm9Z0scRhRCthTpfLZ63/1GeuDQPN1JjyC7Rxt"
+      }
+    ]
   }
 ]
