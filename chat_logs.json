@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "كيف الحال"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك! أنا بخير ولله الحمد، ومستعد تماماً لمساعدتك في كل ما تخص أكاديمية VSA Academy وإدارة بوت الكريبتو (`crypto_cron.yml`).\n\nكيف يمكنني خدمتك اليوم؟",
+        "thoughtSignature": "El4KXAERTTIP1k4Jbhd21j0dpX8j3oA+/GFrdMFru8vrjGQvy30xy7Mdv0VvcbioLJRHMR1x+MNAECzsXnzIjeUV8vjFUEK1g7xxg6OBgnK/EwoXm+TIshLME1WSR4Cb"
+      }
+    ]
+  }
+]
