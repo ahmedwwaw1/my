@@ -116,5 +116,76 @@
         "thoughtSignature": "El4KXAERTTIPHE/FlWN97hMCamVkqG0tgj7RIblUXN0kYGqXQ7V9/y9+Do8gd27IHenI/4FMyQ4NtC2wMzP7lOG5mTiYGZEvii0DzeJ81d57H8SUGnEIBy7zbMK6hbSW"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ولاكن هل لا شرحت لي متا تم ايقافه هل البارحة ام في اي وقت تم ايقافه"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": ".github/workflows/crypto_cron.yml"
+          },
+          "id": "call_1971239"
+        },
+        "thoughtSignature": "El4KXAERTTIP/CEo9t0kE1NNju49GaQyBjosW6j/TG9YQvIWPoIiudyVd6jJcjctkRS7uViAxkduavH06a92W+TxB60Y7ipcr5C8XRmF5nF0+ZT/RRFTXZukxMiQnuey"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "❌ فشل في قراءة الملف."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubWorkflows",
+          "args": {},
+          "id": "call_2068858"
+        },
+        "thoughtSignature": "El4KXAERTTIP6EctP4KgF0AoIroULKWODE/a2/B3S4AvZwZUBRWO56aqEvE7/xXWlsW9jlLAn7hHHo/TPss6yvgk9eYK3myWbz0jXud7b2jDTYE9awUpztrRMRLtwhl+"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubWorkflows",
+          "response": {
+            "content": "قائمة العمليات المتاحة: crypto_cron.yml, pages-build-deployment"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "للأسف، لا يمكنني تحديد الوقت الدقيق الذي تم فيه إيقاف البوت بدقة من خلال السجلات المتاحة حالياً، وذلك لأن GitHub لا يوفر طابعاً زمنياً مباشراً يوضح متى تم تعطيل الـ Workflow لأول مرة. \n\nولكن بناءً على رسالة الخطأ التي ظهرت عندما طلبت منك إيقافه في الباب السابق (*\"Unable to disable a workflow that is not active\"* أي أنه متوقف أصلاً)، فهذا يوضح أنه كان متوقفاً قبل طلبك الأول بفترة. \n\nهل ترغب في أن أقوم بتشغيله يدويًا الآن (Trigger) لضمان عمله فوراً؟",
+        "thoughtSignature": "El4KXAERTTIPSQQbQ94c7DlDDyLqLA9/jJmOLMtmu6R4lDa6KxQKqRVK8sLVMCTEriw8c8JnRfsE5kTPaCd5aFfOAJ26tIA1vPfYXEafjNsgsHvB/6FcQNULowwm+op3"
+      }
+    ]
   }
 ]
