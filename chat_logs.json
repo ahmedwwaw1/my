@@ -204,5 +204,50 @@
         "thoughtSignature": "El4KXAERTTIPYTqPa1UePjY9yMsnl0i40G3qz48sd73VKyd1OldHefTODcRAVz+dFbILBQ1JCI6sf0pMfJXSTnEL19Dm9Z0scRhRCthTpfLZ63/1GeuDQPN1JjyC7Rxt"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اجل اضف الان تنبيه اجباري من اجل ان اتكد من عمله فقط تنبيه موقت من اجل هاذ الضرف لكي اتحقق من تشغيله فقط"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "triggerGithubWorkflow",
+          "args": {
+            "workflow_id": "crypto_cron.yml"
+          },
+          "id": "call_1808331"
+        },
+        "thoughtSignature": "El4KXAERTTIPJ6Tuzv+vYXItcRV/Zy7uQ71CS0/NoPVOarHEUn8O6KkSD66WcuV2w7TpGiI89QDp0J/I9F4yNZhmRZGNYik99/P4Y7pzp4rH6LN0R15K8p670xNmg5PH"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "triggerGithubWorkflow",
+          "response": {
+            "content": "✅ تم إرسال أمر تشغيل البوت بنجاح! سيتم تحديث البيانات خلال دقائق."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "تم إرسال أمر التشغيل الفوري (Trigger) لبوت الكريبتو بنجاح! 🚀 \n\nسيعمل البوت الآن على الفور لتنفيذ مهمته وإرسال التنبيه، يمكنك التحقق من وصوله للتاكد من أن كل شيء يعمل بالشكل المطلوب. هل تحتاج إلى أي مساعدة أخرى؟",
+        "thoughtSignature": "El4KXAERTTIPtDlsZwRmpg5GsrLIqhK9AKD4R5EvxVn4JzQrdJL3DihAC+fxphKFofipt7JcHMIkop8MsbJDl7bp0R0nwNjpXBtQa72sgALIjqcrRBqXGAaPVavDQ8RV"
+      }
+    ]
   }
 ]
