@@ -15,5 +15,22 @@
         "thoughtSignature": "El4KXAERTTIP1k4Jbhd21j0dpX8j3oA+/GFrdMFru8vrjGQvy30xy7Mdv0VvcbioLJRHMR1x+MNAECzsXnzIjeUV8vjFUEK1g7xxg6OBgnK/EwoXm+TIshLME1WSR4Cb"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "لماذا هاذه الرسالة خطء"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "عذراً، يبدو أنك نسيت إرفاق الرسالة أو النص الذي يظهر فيه الخطأ! \n\nيرجى إرسال نص الرسالة أو الخطأ الذي تواجهه، وسأقوم بفحصه ومساعدتك في حلّه فوراً.",
+        "thoughtSignature": "El4KXAERTTIPeJh+Sw1K0Emmf5HT9OOc6+FbLzqETZJFQvWOmLAvAvcy4hQp6Z4kwoVF2xsaM5rJH5yjZXhcSYuuVBy5B4TSnlkLgCrGZeaIhU8pEHMUBktN3ZwS2pu8"
+      }
+    ]
   }
 ]
