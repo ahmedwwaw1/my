@@ -32,5 +32,22 @@
         "thoughtSignature": "El4KXAERTTIPeJh+Sw1K0Emmf5HT9OOc6+FbLzqETZJFQvWOmLAvAvcy4hQp6Z4kwoVF2xsaM5rJH5yjZXhcSYuuVBy5B4TSnlkLgCrGZeaIhU8pEHMUBktN3ZwS2pu8"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "❌ خطأ من جوجل (400): Role 'function' is not supported. Please use a valid role: SYSTEM, SYSTEM_1, USER, ASSISTANT, DEVELOPER, CONTEXT, USER_CONTEXT, MODEL, USER."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "هذا الخطأ يظهر لأن واجهة برمجة التطبيقات (API) الخاصة بنموذج الذكاء الاصطناعي الذي تستخدمه لا تقبل دور (Role) يسمى `function` في المحادثة، وتتطلب بدلاً من ذلك استخدام أدوار محددة ومعتمدة مثل:\n`SYSTEM`, `USER`, `ASSISTANT`, `DEVELOPER`, `MODEL`, إلخ.\n\nحسب النظام الذي نعمل به هنا (أو الكود البرمجِي الذي تقوم بتشغيله)، غالباً يتم إرسال رسالة أو رد عبر دور `function` بشكل غير متوافق مع الإصدار الحالي للـ API. \n\nهل تواجه هذا الخطأ في ملف معين ضمن مستودع المشروع (مثل ملف بايثون يتحكم بالبوت أو يتصل بالـ API)؟ أخبرني بأي ملف تتعامل وسأقوم بفحصه وتعديله لك فوراً!",
+        "thoughtSignature": "El4KXAERTTIPPi/H0qNvVZkfdl4LHUArCOOXtCfFtgAFc29CCNTPyv756gPZ3nsuDhsZ6RvIAJL14pmIkam6fCDiErPLqSvTM4iMGWhiJXn0AZCdbWxsRdweQz71u20D"
+      }
+    ]
   }
 ]
