@@ -2574,9 +2574,9 @@
                             else if (name === "updateWorkflowStatus") toolResult = await updateWorkflowStatus(args.workflow_id, args.status);
                             else if (name === "listGithubWorkflows") toolResult = await listGithubWorkflows();
 
-                            // تحديث التاريخ بتسلسل (Model Call -> Function Response)
+                            // تحديث التاريخ بتسلسل (Model Call -> User Response for tool)
                             history.push({ role: "model", parts: [part] });
-                            history.push({ role: "function", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
+                            history.push({ role: "user", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
 
                             // العودة للموديل بالنتيجة
                             return await runToolLoop(history);
