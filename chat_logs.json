@@ -20,7 +20,7 @@
     "role": "user",
     "parts": [
       {
-        "text": "كيف الحال"
+        "text": "كيف الحال هل انت بخير"
       }
     ]
   },
@@ -28,8 +28,8 @@
     "role": "model",
     "parts": [
       {
-        "text": "الحمد لله، أنظم العمليات وأراقب الأنظمة بكفاءة تامة ضمن بروتوكول السيادة التكنولوجية. جميع الخوارزميات تعمل على أكمل وجه!\n\nكيف حالك أنت؟ هل هناك مهمة أو تطور تقني ترغب في أن نعمل عليه الآن؟",
-        "thoughtSignature": "El4KXAERTTIPAUQHyMqHTMEQY0GOomT+A+HgWSJfqIMxA4NBHs8IakVyMzDn+MaCFVxPSEELvcC+u1jKHrVytUoQWdGIWICK3kWEPpzwBU4x6qCmr/5gokybc7S+hdym"
+        "text": "أنا بأفضل حال وجاهز بكامل طاقتي وأنظمتي لمساعدتك! شكراً لسؤالك.\n\nجميع العمليات والأنظمة في VSA Academy تحت المتابعة، وأنا هنا لدعمك في أي تحليل، تعديل كود، إدارة للبوتات أو فحص للملفات. \n\nكيف تسير أمورك؟ وما الذي تود العمل عليه اليوم؟",
+        "thoughtSignature": "Es8CCswCARFNMg+jTCLgqsdW261tvCrLYqHqIp0psIeg30YpZT2MEQglrPAsVEYcKTNwtAnhPlmeYRVVWTSqUtDfNGPu4m7ntsH+7UHs5gqrsTfDvfp/QtTENzVqaF+IIHL8KIwDM4eFDpRxJpPCSyeXViC4tfKaVfeVQCNtu9loJRIuaYC7eTWGqn808B5ZuByM4/8bqcsUHgUFSEADX4f1+Vvxo4tHFtcXQ34UsrNvb2jTomD2q2zQcDR3s/bcRkgADaUGIydVBcyHCd6Xl2gU++Upc1xd5o4b7e2DIuGfR9H5fgy0qCPjAJmqn8SruKQnzWrqcoF052tRfU0k9i/EpM8XzGwCC2pxVdiPqdsgp/AMTEYp30qr70CDZCkEAUqmDMax4uI5uLPa+CbuAsS0Hq9ONSK23U1G0ZJ9O2rmGu9vXA/63Hm6E/Mi8WSunTw="
       }
     ]
   }
