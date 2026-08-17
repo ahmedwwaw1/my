@@ -72,5 +72,22 @@
         "thoughtSignature": "El4KXAERTTIPF+s+7g6CZWiLSnMDaiHjWQ1KJocAS5wJpc1etqVD1WHWzbz8SMiRdfRnuBSONtSdfo9epJO/oxX1T7hxQ/DMQcOpPkFMvgktPibMIyz6KuvjN+r4tROT"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل تشاهد رسالة الخطء"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "نعم، أشاهد رسالة الخطأ بوضوح في الصورة التي أرسلتها:\n\n`❌ خطأ من جوجل (400): Role 'function' is not supported. Please use a valid role: SYSTEM, SYSTEM_1, USER, ASSISTANT, DEVELOPER, CONTEXT, USER_CONTEXT, MODEL, USER.`\n\nهذا الخطأ يحدث في واجهة المستخدم (الـ Frontend أو الـ Widget الظاهرة في الشاشة) عندما تحاول أدوات الذكاء الاصطناعي التفاعل معك وتقوم بإرسال نوع دور `function` غير مدعوم من قبل نموذج Gemini الحالي.\n\nأنا جاهز تماماً لتنفيذ أي أمر يخص بوت الكريبتو (`crypto_cron.yml`) أو فحص الملفات في المشروع. هل تريد مني تشغيل بوت الكريبتو الآن باستخدام الأدوات المتاحة لدي؟",
+        "thoughtSignature": "El4KXAERTTIPNfK4S2MnkRoFHgcY0tD5FDtYCxhqAPwiU200aK3+ar3ahEgv0YgGrxJgaKjfQHi/IklNpxkK/nGuYsB08g5Iy7PwVdtBrNTdu1NJpW/BBeAelM80YPWJ"
+      }
+    ]
   }
 ]
