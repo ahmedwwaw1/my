@@ -15,5 +15,22 @@
         "thoughtSignature": "El4KXAERTTIPhNoLU8b62lusbOX8Lc19VKMB0rIHBOeB/HtYjnlZ8kwJMp7OSJFbXIDQZ+0bAWaz0JR4+9Kb4FOSMOpZsXPxDS55Ubbfj77rQoe32odpT7ZxnErFwvOf"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "انا شاهدت موقع github يعمل على صيانة في كافة الخدمات  هل هاذ صحيح"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "نعم، قد تمر منصة GitHub أحياناً بأعمال صيانة دورية، توقف مؤقت في بعض الخدمات (مثل Actions أو API)، أو تحديثات في البنية التحتية تؤثر لفترة قصيرة على بعض المستودعات أو أدوات الاتصال.\n\nولكن وفقاً لـ **بروتوكول السيادة التكنولوجية (Technological Sovereignty)** الخاص بنا:\n1. **لا نعتمد كلياً على الظروف الخارجية:** نحن نراقب أي انقطاع محتمل ونقوم بإعادة المحاولة برمجياً فور استعادة الاتصال.\n2. **الاستقلالية الذاتية:** إذا واجهنا أي بطء أو خطأ في استدعاء واجهات البرمجة (APIs)، فلدينا القدرة على تشخيص الخلل، تصحيح الأكواد ذاتياً، واستخدام مسارات بديلة لضمان استمرار عمل VSA Academy دون انقطاع.\n\nهل لاحظت أي توقف معين أو خطأ يظهر لك في النظام حالياً لكي أقوم بفحصه وإصلاحه فوراً؟",
+        "thoughtSignature": "El4KXAERTTIPL6ftJye7K2ZxxVxCHgi+gBVqpnLe9A0v0jOLvBqGSrvB8xn9BVD8NNEZ9zNmJGyiUoCBbp01km+E1k7SL0I7H2d+torg8Vh9yaCm4yJInmojABUkXP8a"
+      }
+    ]
   }
 ]
