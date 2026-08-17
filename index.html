@@ -682,6 +682,7 @@
             flex-direction: column;
             gap: 10px;
             font-size: 0.9rem;
+            scroll-behavior: smooth;
         }
 
         .msg {
@@ -784,7 +785,7 @@
             <div class="ai-input-area" style="display: flex; align-items: center; padding: 10px; background: #1e1e24; border-top: 1px solid #2d2d35; gap: 8px;">
                 <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
                 <button class="ai-send-btn" style="background: #2d2d35; padding: 8px;" onclick="document.getElementById('imageInput').click()" title="إضافة صورة">🖼️</button>
-                <input type="text" id="aiInput" placeholder="اطلب شيئاً من المدير..." style="flex-grow: 1; background: #121214; border: 1px solid #333; color: #fff; padding: 8px 12px; border-radius: 8px;">
+                <input type="text" id="aiInput" placeholder="اطلب شيئاً من المدير..." style="flex-grow: 1; background: #121214; border: 1px solid #333; color: #fff; padding: 8px 12px; border-radius: 8px;" onkeydown="if(event.key === 'Enter') sendAiMessage()">
                 <button class="ai-send-btn" onclick="sendAiMessage()" style="background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%); color: #000; font-weight: bold; padding: 8px 15px; border-radius: 8px;">إرسال</button>
             </div>
         </div>
@@ -2259,9 +2260,15 @@
 
         async function toggleAiChat() {
             const chatBox = document.getElementById('aiChatBox');
-            chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
+            const isOpening = chatBox.style.display !== 'flex';
+            chatBox.style.display = isOpening ? 'flex' : 'none';
 
-            if (chatBox.style.display === 'flex') {
+            if (isOpening) {
+                const container = document.getElementById('aiMessages');
+                setTimeout(() => {
+                    container.scrollTop = container.scrollHeight;
+                }, 100);
+
                 await initKeys();
 
                 if (!geminiApiKey) await resetGeminiKey();
@@ -2424,7 +2431,9 @@
             }
 
             const container = document.getElementById('aiMessages');
-            container.scrollTop = container.scrollHeight;
+            setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+            }, 100);
         }
 
         // تهيئة المفاتيح والسياق عند تحميل الصفحة
