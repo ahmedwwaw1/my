@@ -2522,6 +2522,20 @@
             } catch (e) { return "❌ فشل جلب القائمة."; }
         }
 
+        async function listGithubFiles(path = "") {
+            if (!githubToken) return "⚠️ خطأ في التوكن.";
+            try {
+                const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
+                    headers: { 'Authorization': `token ${githubToken}`, 'Cache-Control': 'no-cache' }
+                });
+                if (!res.ok) return "❌ فشل جلب قائمة الملفات.";
+                const data = await res.json();
+                if (!Array.isArray(data)) return "⚠️ هذا ملف وليس مجلداً.";
+                const files = data.map(f => `${f.type === 'dir' ? '📁' : '📄'} ${f.path}`);
+                return `محتويات ${path || 'الجذر'}:\n${files.join('\n')}`;
+            } catch (e) { return "❌ خطأ في الاتصال."; }
+        }
+
         async function callGemini(promptText, imageBase64 = null) {
             const key = geminiApiKey.trim();
             const userModel = document.getElementById('modelSelector').value;
@@ -2532,7 +2546,7 @@
             if (imageBase64) currentParts.push({ inline_data: { mime_type: "image/jpeg", data: imageBase64 } });
             const currentTurn = { role: "user", parts: currentParts };
 
-            const systemInstruction = { parts: [{ text: `أنت العقل المدبر لـ VSA Academy. بوت الكريبتو هو "crypto_cron.yml". استخدم الأدوات دائماً.` }] };
+            const systemInstruction = { parts: [{ text: `أنت العقل المدبر لـ VSA Academy. لديك صلاحيات كاملة لإدارة المشروع عبر GitHub. ملفات البوت الرئيسية تشمل 'crypto_bot.py' والـ workflow المسؤول عن التشغيل التلقائي هو 'crypto_cron.yml'. استخدم أداة listGithubFiles لاستكشاف بنية المشروع والعثور على أي ملفات تحتاجها. استخدم الأدوات دائماً لتنفيذ طلبات المستخدم بدقة.` }] };
 
             const tools = [{
                 function_declarations: [
@@ -2540,7 +2554,8 @@
                     { name: "getGithubFile", description: "قراءة ملف", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
                     { name: "triggerGithubWorkflow", description: "تشغيل بوت", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
                     { name: "updateWorkflowStatus", description: "إيقاف/تفعيل بوت", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" }, status: { type: "STRING", enum: ["stop", "start"] } }, required: ["workflow_id", "status"] } },
-                    { name: "listGithubWorkflows", description: "عرض أسماء العمليات المتاحة", parameters: { type: "OBJECT", properties: {} } }
+                    { name: "listGithubWorkflows", description: "عرض أسماء العمليات المتاحة", parameters: { type: "OBJECT", properties: {} } },
+                    { name: "listGithubFiles", description: "عرض قائمة الملفات في مجلد معين", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "مسار المجلد (اتركه فارغاً للجذر)" } } } }
                 ]
             }];
 
@@ -2573,6 +2588,7 @@
                             else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
                             else if (name === "updateWorkflowStatus") toolResult = await updateWorkflowStatus(args.workflow_id, args.status);
                             else if (name === "listGithubWorkflows") toolResult = await listGithubWorkflows();
+                            else if (name === "listGithubFiles") toolResult = await listGithubFiles(args.path || "");
 
                             // تحديث التاريخ بتسلسل (Model Call -> User Response for tool)
                             history.push({ role: "model", parts: [part] });
