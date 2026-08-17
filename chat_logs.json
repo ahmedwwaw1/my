@@ -15,5 +15,22 @@
         "thoughtSignature": "Eu8BCuwBARFNMg/Yd2qn1b47xTvIRp2BAc8WIKyBSS+4/6SFsFkHOjT5WStPfd0hNUJv1vVx4SJm6uQKPCVpkaOjd2hGlnFaPyDVWv28MVrMIBbubmhyIW+jvYgGyY+MSLGj9Vt5qF1ktyfGRRHktRTcDp2N0WtC9wG5u6mctGO+YL8m7VJY/5Fc4dQn3MqM9yDtgxHHqICmoYG/sepUC3ahLTttT6toV8ZWgLitr+yVvhSiNhwCBCQjMSxe7gF6MMS4iI11Zphfn0JSl49/z4D9ZtmcToHSRxSECe6A4IFL9Ii4ARiHE3wsNUclDwAG7N4="
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "كيف الحال"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "الحمد لله، أنظم العمليات وأراقب الأنظمة بكفاءة تامة ضمن بروتوكول السيادة التكنولوجية. جميع الخوارزميات تعمل على أكمل وجه!\n\nكيف حالك أنت؟ هل هناك مهمة أو تطور تقني ترغب في أن نعمل عليه الآن؟",
+        "thoughtSignature": "El4KXAERTTIPAUQHyMqHTMEQY0GOomT+A+HgWSJfqIMxA4NBHs8IakVyMzDn+MaCFVxPSEELvcC+u1jKHrVytUoQWdGIWICK3kWEPpzwBU4x6qCmr/5gokybc7S+hdym"
+      }
+    ]
   }
 ]
