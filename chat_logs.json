@@ -216,5 +216,22 @@
         "thoughtSignature": "El4KXAERTTIPiXlMtA0XdWYeYTcXCqALDjgDhNIHxHSxgyHBhvs9H1BE18EWFIkGyQBzuC+zuYuuMPlhYJ7v3qhoeqL8EkwpYo8Fm51MGVvelHHz/rs6X5eOxgykjavj"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل يمكنك الان حذف هاذه الدردشة بلكامل"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "لا، لا أمتلك القدرة المباشرة على حذف سجل هذه الدردشة أو مسحها من واجهة المحادثة الخاصة بك، لأن إدارة وتخزين سجل المحادثات (Chat History) يتبع لواجهة المستخدم التي تستخدمها أنت الآن للاتصال بي وليس لنظام الكود أو المستودع البرمجي الخاص بـ VSA Academy الذي أتحكم به.\n\nولكن يمكنك دائماً بدء محادثة جديدة نظيفة بالكامل من خلال الضغط على زر \"محادثة جديدة\" (New Chat) في واجهة التطبيق لديك، وبذلك تختفي كل الرسائل السابقة تماماً من شاشتك! \n\nهل تحتاج إلى مساعدة في أي شيء آخر؟",
+        "thoughtSignature": "El4KXAERTTIPhAd7Pr/P6sw9FCgVJIw2JvRh6hTaD5s0uRACKyEXrO1E61+wc6BZ+5+pNcid8WwuPFBsZyjjJ3WD9F+fY1rgfiqk46nOQbL0tB4bm2O02njKKpG2Un/Q"
+      }
+    ]
   }
 ]
