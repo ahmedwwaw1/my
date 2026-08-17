@@ -1,1 +1,74 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اوقف بوت تنبيهات الكريبتو"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubWorkflows",
+          "args": {},
+          "id": "call_2714514"
+        },
+        "thoughtSignature": "El4KXAERTTIPKg3hCPRHmIk4YdgOahBbxZEVDz+k/JliSjgTIpdv8DuRMQahQr2hB7vSrx0Hae7GO84RaHqPVSjJPD5ibCClFu4Por+ohbZ00qKr2/tnRPtyK8tkGaBS"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubWorkflows",
+          "response": {
+            "content": "قائمة العمليات المتاحة: crypto_cron.yml, pages-build-deployment"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "updateWorkflowStatus",
+          "args": {
+            "workflow_id": "crypto_cron.yml",
+            "status": "stop"
+          },
+          "id": "call_2113638"
+        },
+        "thoughtSignature": "El4KXAERTTIPmKOTHwQK1WEKAOy3bjyvuvHATE8LLfWKDQ+NQyx6cDkjiTcxWrMAQFN95JyPpNZkMDFQHtBxRGUKfouyG8d3zCVhPzpm1F00J5IPf1UVpgfJlNXyYt/Q"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "updateWorkflowStatus",
+          "response": {
+            "content": "❌ فشل تغيير حالة البوت [crypto_cron.yml]: Unable to disable a workflow that is not active.."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "تم محاولة إيقاف بوت تنبيهات الكريبتو (`crypto_cron.yml`)، ولكن يبدو أنه متوقف بالفعل أو غير نشط حالياً.",
+        "thoughtSignature": "El4KXAERTTIPWnd1eLYyrtbuAz/FPiWZbKIo/aAPCSBTnegvwBPXELzDZwczrDri6yHx4fxFuJpPDHdiBFxOrmml1nj+b3Cf9SnPL3PDWuBXGOC1IzN/gazjqB3cQ02E"
+      }
+    ]
+  }
+]
