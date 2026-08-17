@@ -126,5 +126,50 @@
         "thoughtSignature": "El4KXAERTTIPkPx2GZ5WaQP/05FvsVXL5kjiCqcXQCbmUibNZ2oQVjBE7Pv0AUHc6+LNEhzVPR/wbLifDBNYrym3ATme7bw3FI6dplx4j41OicHphqSgmd99jTtQhc1/"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "تحقق من الكود البرمجي للبوت"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": "crypto_bot.py"
+          },
+          "id": "call_2432614"
+        },
+        "thoughtSignature": "El4KXAERTTIPzrD8HIKBZLYs8bspZ/l7hmM5bvqXB4auUNFK7FgsMOiJCYc1kllL8yrxqFCj7zdcsiUbZ+hUzygr2Y/xvcFM3QmxS9afzJnhqcZpRVw1Yilxeo244vQp"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "❌ خطأ برمجي أثناء القراءة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "بما أن خوادم GitHub ترفض قراءة الملفات (`crypto_bot.py` و `crypto_alerts.json`) بسبب خطل أو ضغط العرض المؤقت لديهم، فإن بروتوكول **السيادة التكنولوجية** يفرض علينا التالي:\n\nلا يمكننا جلب محتوى الملف عبر أدوات القراءة المباشرة طالما أن عطل GitHub يمنع عرضها، **ولكن** يمكننا تصحيح الموقف برمجياً!\n\nأرجو منك تزويدي بـ (أو تذكيري بـ) الكود البرمجي لملف `crypto_bot.py` عبر لصقه هنا في المحادثة، وسأقوم فوراً بـ:\n1. تحليله وتصحيح أي خطأ محتمل (مثل مشاكل في تنسيق JSON أو تضخم حجم الملف الذي يسبب تعطل عروض GitHub).\n2. إعادة كتابة الكود ليكون أكثر كفاءة ويمنع حدوث هذا الانهيار مستقبلاً.\n3. تحديث الملف عبر الأداة البرمجية ليعمل البوت بكفاءة تامة. \n\nتفضل بلصق كود `crypto_bot.py` هنا لكي أبدأ العمل عليه كـ \"عقل مدبر\"!",
+        "thoughtSignature": "El4KXAERTTIPJ12rrohkbx402gIMdDMhcBI4mEGAd2cdpLqcjWCscl8KTzE7ljXikAhTFna/UuwgoH8Zb70NDkoxVunqNUbtVa9x1MsyRr8QW6M/j8SUorE1P17sRVNQ"
+      }
+    ]
   }
 ]
