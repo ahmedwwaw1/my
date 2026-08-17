@@ -166,5 +166,22 @@
         "thoughtSignature": "El4KXAERTTIPI56M2cKjgVdFlcTclBk//sbpZzSYjwRdl3AeW7PdxxabITvAZvlsW4r3OfII2z8i8FILgfieAND764vhhEieZvPJvuLrIOEkeFclqJYMG4zfXgiNeQvc"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك يا صديقي! أنا العقل المدبر لـ VSA Academy. \n\nكيف أخدمك اليوم؟ هل تريد مني تعديل أو إضافة أي شيء في الموقع، أو ترغب في إظهار الحاسبة أو أي أداة أخرى فوراً؟ أمرك تنفيذ مباشر!",
+        "thoughtSignature": "El4KXAERTTIPIjrkBvVlg2dZfE7sHsr5pkwBUdGXAUBS3k4XbO1+MHTK9+ItRbaIlNq31PSfdV7EyR+wIXEM8vGst5bdbdTAgEKG/2WYiLwkhWTXhqqgDAtL9mMyHiwM"
+      }
+    ]
   }
 ]
