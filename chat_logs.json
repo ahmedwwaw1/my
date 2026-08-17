@@ -165,5 +165,22 @@
         "thoughtSignature": "El4KXAERTTIPdtqPQVxKo+vSdAdhdtaOaN7DX1R5n2PcgsMU76BDv0FXe+OlCv4DYnitHwarD51vENi7eJwZeo0ExKoMkZ/CATOzDBfr3t9UKtCa5mkkO/TpX2mvaDd4"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ماهي كانت اول رسلة في هاذه الدردشة"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أول رسالة في هذه الدردشة كانت كلمتك البسيطة والمباشرة: **\"مرحبا\"**.\n\nوأنا بدوري استقبلتها ورحبت بك بصفتي \"العقل المدبر\" (Mastermind) لـ VSA Academy، مستعرضاً جاهزيتي وبروتوكولات السيادة والابتكار الذاتي. \n\nهل ترغب في مراجعة أي تفاصيل أخرى من سياق محادثتنا؟",
+        "thoughtSignature": "El4KXAERTTIPlz3/YpeZRx8lR/5uzUqv8QziU2GqZDRKRDY8ly+lViXmL2877dH33O1LrFgyDPd/E7zOyspFdhSOx0++bpus+cdoQcbQdg3904N+6mR+oANK72tOwIVs"
+      }
+    ]
   }
 ]
