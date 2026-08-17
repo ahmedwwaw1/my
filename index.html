@@ -682,7 +682,6 @@
             flex-direction: column;
             gap: 10px;
             font-size: 0.9rem;
-            scroll-behavior: smooth;
         }
 
         .msg {
@@ -2265,9 +2264,7 @@
 
             if (isOpening) {
                 const container = document.getElementById('aiMessages');
-                setTimeout(() => {
-                    container.scrollTop = container.scrollHeight;
-                }, 100);
+                container.scrollTop = container.scrollHeight;
 
                 await initKeys();
 
@@ -2405,7 +2402,9 @@
             // تحميل واجهة المحادثة من التخزين المحلي فوراً لسرعة العرض
             const savedUi = localStorage.getItem('gemini_chat_ui');
             if (savedUi) {
-                document.getElementById('aiMessages').innerHTML = savedUi;
+                const container = document.getElementById('aiMessages');
+                container.innerHTML = savedUi;
+                container.scrollTop = container.scrollHeight;
             }
 
             // استعادة الموديل المختار
@@ -2429,11 +2428,6 @@
                     }
                 } catch (e) { console.error("Error loading chat context:", e); }
             }
-
-            const container = document.getElementById('aiMessages');
-            setTimeout(() => {
-                container.scrollTop = container.scrollHeight;
-            }, 100);
         }
 
         // تهيئة المفاتيح والسياق عند تحميل الصفحة
