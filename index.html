@@ -2441,9 +2441,6 @@
             alert("🧹 تم تصفير المحادثة في GitHub.");
         }
 
-        // استدعاء التحميل عند تشغيل السكريبت
-        window.addEventListener('load', loadChatFromStorage);
-
         function handleImageUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -2597,8 +2594,6 @@
 
             // تشغيل الحلقة مع السياق الحالي
             return await runToolLoop([...chatHistory, currentTurn]);
-        }
-            return "❌ تعذر الوصول.";
         }
 
         async function executeAiFunction(name, args) {
