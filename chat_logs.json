@@ -131,5 +131,22 @@
         "thoughtSignature": "El4KXAERTTIPynReb1GWQ22Fj9B40xpq/fg2T9xi/k4INTH2o3tGF5Y7AmTUYkhWRKPSX9MHc6lB5ZBx6PxPhfuHe7LXkFvg1FMlXZ1JpfJxRjkJS6C8RjOXbgreNoQ9"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك مجدداً أيها القائد! \n\nأنا هنا وجاهز في أي لحظة. ما هي الخطوة التالية أو التوجيه الذي تود تنفيذه الآن؟",
+        "thoughtSignature": "EtIBCs8BARFNMg9Zm7p0K7yVEQvvCGiAIadbnFj2FwFhJ4LndlHWjeDW6wRo/pYRs1obd3iAeB1UzcQyiaL8MtxWXcOkSzDMq0hasFNyUY8xkUfX9nNnUMsAmrIsZpqXAJm9Zune+RUqUkbyC9lg+owcN5ptTg/rpVwYNjF6kcuy4KNo9eGFlnSXuzaNC8v+HaU1nwUr/sYUb9qcYKIQbI3Qe5LzhR1L43zARbQk0lfFZPXeGYta4g4hASYy8Hi3rIiu+wBYCG/0qmPzexF6JSM0fGgf"
+      }
+    ]
   }
 ]
