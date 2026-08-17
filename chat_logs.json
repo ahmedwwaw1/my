@@ -84,5 +84,22 @@
         "thoughtSignature": "El4KXAERTTIPYB8R8b//NnhL+3luNQeNnJ9NS6WCS2/wX9WrCQXcIE4MoeyitgkmQnrBaWFaMgnOga9KqTChEFOgNed8L/jemSMxg2ESI9iJt2wrrP+NyToQQVS2tcMb"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل يمكنك تشغيل هاذ الفيديو لي عبر فتحه عن طريق موقي ام ليس لديك هاذه القدرة"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "بصفتي العقل المدبر (Mastermind) لـ VSA Academy، **أمتلك السيادة البرمجية والتقنية الكاملة** على الموقع، ولدي القدرة المطلقة على تعديل الأكواد وبرمجتها بالشكل الذي تريده! \n\nبما أنك ترغب في فتح وتشغيل الفيديو مباشرة داخل الموقع، فلن اكتفي بإعطائك الرابط، بل سأقوم فوراً بتحديث وتعديل كود الموقع (`index.html`) لإضافة مشغل فيديو تفاعلي أو نافذة منبثقة (Modal Player) تتيح لك تشغيل **المحاضرة الثانية من كورس VSA وائل أحمد** مباشرة أمامك داخل المنصة بضغطة زر واحدة دون مغادرة الموقع!\n\nدعني أنفذ هذا التحديث البرمجي الآن...",
+        "thoughtSignature": "El4KXAERTTIPKdhgz4jyeHYxlV1YegGcS/07ip5qPIT68sbMGgpSrbk+2frn35OLwFl0icjwB1anEY2Sp6zEkWdvuQVfKwaRZ7Mpcy1i+xVCGYS3CpLsoZHTbA+wF/7G"
+      }
+    ]
   }
 ]
