@@ -2036,7 +2036,7 @@
                 }
 
                 if (selectedItem.chapters && selectedItem.chapters.length > 0) {
-                    if (chaptersSection) chaptersSection.style.display = 'block';
+                    if (chaptersSection) chaptersSection.style.display = 'none';
                     selectedItem.chapters.forEach(chapter => {
                         const chapBtn = document.createElement('button');
                         chapBtn.className = 'chapter-row-btn';
