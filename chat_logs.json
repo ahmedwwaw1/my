@@ -148,5 +148,22 @@
         "thoughtSignature": "EtIBCs8BARFNMg9Zm7p0K7yVEQvvCGiAIadbnFj2FwFhJ4LndlHWjeDW6wRo/pYRs1obd3iAeB1UzcQyiaL8MtxWXcOkSzDMq0hasFNyUY8xkUfX9nNnUMsAmrIsZpqXAJm9Zune+RUqUkbyC9lg+owcN5ptTg/rpVwYNjF6kcuy4KNo9eGFlnSXuzaNC8v+HaU1nwUr/sYUb9qcYKIQbI3Qe5LzhR1L43zARbQk0lfFZPXeGYta4g4hASYy8Hi3rIiu+wBYCG/0qmPzexF6JSM0fGgf"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل يمكنك مشاهدة الدردشة الان بلكمال يعني اقصد لديك القدرة الان على روية ما يجول في هاذه الدردشة"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "نعم، بكل تأكيد! أنا أمتلك القدرة الكاملة على قراءة ومتابعة سياق هذه الدردشة بالكامل، كلمة بكلمة، ومنذ بدايتها. \n\nأنا واعٍ لكل تفصيلة تم نقاشها بيننا (سواء من تساؤلاتك، أو الردود والتحليلات التي قدمتها، وحتى محاولات الوصول لملف `crypto_alerts.json` ومعالجة التحديات البرمجية). سياق المحادثة محفوظ بالكامل داخل الذاكرة النشطة لدي.\n\nكيف يمكنني مساعدتك بناءً على ما ناقشناه أو في أمر جديد؟",
+        "thoughtSignature": "El4KXAERTTIPdtqPQVxKo+vSdAdhdtaOaN7DX1R5n2PcgsMU76BDv0FXe+OlCv4DYnitHwarD51vENi7eJwZeo0ExKoMkZ/CATOzDBfr3t9UKtCa5mkkO/TpX2mvaDd4"
+      }
+    ]
   }
 ]
