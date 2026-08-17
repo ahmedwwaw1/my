@@ -1,1 +1,129 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هي التنبيهات معمولة بشرط ان يتقق حجم تداول علي لكي يرسل لي البوت هاذ التنبيه هل هاذ السبب لعدم اضافة التنبيه الاجباري"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": ".github/workflows/crypto_cron.yml"
+          },
+          "id": "call_4047373"
+        },
+        "thoughtSignature": "El4KXAERTTIP+aUfow9D2tZVqrTb4qPF2t7r3FZLZrgwLn7mSqNKv7QvLxjOgDQqOdi70HPO/kaEbbwWCjGwG2Gm4CSVltIRDHh93jvtiSi64ghxzPc77jQ5W77RhD1F"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "❌ فشل في قراءة الملف."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubWorkflows",
+          "args": {},
+          "id": "call_2107785"
+        },
+        "thoughtSignature": "El4KXAERTTIP36jED5hsnOD0lyr40g9I48MHXgipMNry2RxUZjzcNs/M5RCUGa+pX6Io3Dfo7y0ZtmuWROwu0tH2CdyJXeagA5EhyghEl6ZP2xJ/iQz9YXOcf++o4E5Q"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubWorkflows",
+          "response": {
+            "content": "قائمة العمليات المتاحة: crypto_cron.yml, pages-build-deployment"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": "crypto_cron.yml"
+          },
+          "id": "call_3293089"
+        },
+        "thoughtSignature": "El4KXAERTTIPZSZ5MVzsAz6CHeD1y7zc+wDmRM3mLo0PArEDvuTNc1LKUmNtVxPoW6uRrtl7/fIIwqUvNavVrldHL/jNAVV2A4jaSMyP8FYtP8ZpjK3TM1a1Rksxt2q4"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "❌ فشل في قراءة الملف."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": ".github/workflows/crypto_cron.yml"
+          },
+          "id": "call_2369709"
+        },
+        "thoughtSignature": "El4KXAERTTIP1X7VXIuCFyfAX6Qzevz1EZ1Q6IpdYlxLUOX1hATRB977dfy+rx0ct+o0GQoY96zhScSyILaJ/FqzkVEmr0f4Wzdyrj2rFr39sUplQofEO2XJnCI2SL/K"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "❌ فشل في قراءة الملف."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "نعم، هذا غالباً هو السبب الرئيسي! \n\nإذا كانت الكود أو استراتيجية البوت تشترط حداً أدنى معيناً لحجم التداول (Volume) أو شروطاً تقنية صارمة أخرى (مثل السيولة، أو تقاطع مؤشرات معينة) لكي يتم تفعيل وإرسال التنبيه، فلن تصلك التنبيهات إلا إذا تحققت تلك الشروط حرفياً على العملة. \n\nفي كثير من الأحيان، عندما يُطلب إضافة **\"تنبيه إجباري\"** أو تنبيه فوري بغض النظر عن الشروط المعقدة، يجب إزالة أو تخفيف شرط حجم التداول (Volume filter) أو إضافة مسار مخصص (Fallback/Force alert) يجبر البوت على إرسال التنبيه عندما تتطابق الإشارة الأساسية بغض النظر عن حجم التداول.\n\nهل ترغب في أن أقوم بفحص كود البوت وتعديله لكي يتم تجاوز شرط حجم التداول وجعل التنبيهات تعمل بشكل إجباري؟ يرجى إخباري بمجلد أو اسم ملف الكود الخاص بالبوت (مثل `bot.py` أو ما شابه).",
+        "thoughtSignature": "El4KXAERTTIPLmro94YabaVmpzyARDsOhMQKJ4+2RkVegtrpLoJmp6PjdY0O3ajfTfTB4z213IFu04xGxWV4ZVsmpdzcIiZnhA3IHRhD/HjFYaHNdJe+FUYc/SV+zD6O"
+      }
+    ]
+  }
+]
