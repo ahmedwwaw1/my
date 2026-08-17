@@ -32,5 +32,76 @@
         "thoughtSignature": "Es8CCswCARFNMg+jTCLgqsdW261tvCrLYqHqIp0psIeg30YpZT2MEQglrPAsVEYcKTNwtAnhPlmeYRVVWTSqUtDfNGPu4m7ntsH+7UHs5gqrsTfDvfp/QtTENzVqaF+IIHL8KIwDM4eFDpRxJpPCSyeXViC4tfKaVfeVQCNtu9loJRIuaYC7eTWGqn808B5ZuByM4/8bqcsUHgUFSEADX4f1+Vvxo4tHFtcXQ34UsrNvb2jTomD2q2zQcDR3s/bcRkgADaUGIydVBcyHCd6Xl2gU++Upc1xd5o4b7e2DIuGfR9H5fgy0qCPjAJmqn8SruKQnzWrqcoF052tRfU0k9i/EpM8XzGwCC2pxVdiPqdsgp/AMTEYp30qr70CDZCkEAUqmDMax4uI5uLPa+CbuAsS0Hq9ONSK23U1G0ZJ9O2rmGu9vXA/63Hm6E/Mi8WSunTw="
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ماذا يوجد داخل قسم التحليل الفني"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_4104676"
+        },
+        "thoughtSignature": "El4KXAERTTIPAk97hZt320JBKIsHW+z4Dx3XavyPWfMcgqZLbVx8gLQokpJkODJN6ahd+e09w6JohpNV+JJbOkl+nXS9dVFH5L7IKh5gwtEDRp/taRaSkYBwjxoQZsRx"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "محتويات الجذر:\n📁 .artifacts\n📄 .gitattributes\n📁 .github\n📁 .idea\n📁 .vscode\n📄 PDF-images.json\n📄 Time-analysis.json\n📄 chat_logs.json\n📄 check_schema.ps1\n📄 chunk.json\n📄 crypto_alerts.json\n📄 crypto_bot.py\n📄 data.json\n📁 images\n📄 index.html\n📄 migrate.ps1\n📄 migrate.py\n📄 remigrate.ps1\n📄 remigrate.py\n📄 remigrate_final.ps1\n📄 remigrate_final.py\n📄 technical-analysis.json\n📄 temp_chunk.json\n📄 test.json\n📄 test_curl.json\n📄 test_encoding.ps1\n📄 test_final.ps1\n📄 viewer.html\n📄 vsa.json\n📄 vsa1.json"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": "technical-analysis.json"
+          },
+          "id": "call_1860312"
+        },
+        "thoughtSignature": "El4KXAERTTIPk4CKZMej5pbGql68mTGKvTlTIWkEmJfGKJnoSpG8hbCEUSMHQVor8vNMhA/HHo5PlaCPo+MSw60mWzyqC2xg6OacCBiKN65WngOwdJMWAScZBP/gDStN"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "[\n    {\n    \"__comment__\": \"محمد مهدي\",\n    \"id\": \"technical-1\",\n    \"title\": \"كورس التحليل الموجي \",\n    \"category\": \"technical-analysis\",\n    \"content\": \"كورس التحليل الموجي...\",\n    \"image\": \"\",    \n    \"recommendations\": [],\n    \n    \"videos\":[\n      {\n        \"id\": \"Elliot-Yasser-1\",\n        \"title\": \"البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الأولي)\",\n        \"url\": \"https://www.youtube.com/watch?v=Z0PNiNdWLPE&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0\",\n        \"chapters\": []\n      },\n      {\n        \"id\": \"Elliot-Yasser-2\",\n        \"title\": \"البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الثانية)\",\n        \"url\": \"https://www.youtube.com/watch?v=61AOw0-1rjY&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=2\",\n        \"chapters\": []\n      },\n      {\n        \"id\": \"Elliot-Yasser-3\",\n        \"title\": \"البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الثالثة)\",\n        \"url\": \"https://www.youtube.com/watch?v=hxGcLyS9O_A&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=3\",\n        \"chapters\": []\n      },\n      {\n        \"id\": \"Elliot-Yasser-4\",\n        \"title\": \"البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الرابعة)\",\n        \"url\": \"https://www.youtube.com/watch?v=L5qlIwp2MgY&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=4\",\n        \"chapters\": []\n      },\n      {\n        \"id\": \"Elliot-Yasser-5\",\n        \"title\": \"البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الخامسة)\",\n        \"url\": \"https://www.youtube.com/watch?v=0y1ZL_eovAM&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=5\",\n        \"chapters\": []\n      },\n      {\n        \"id\": \"Elliot-Yasser-6\",\n        \"title\": \"البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة السادسة)\",\n        \"url\": \"https://www.youtube.com/watch?v=fQ7y-ffuRng&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=6\",\n        \"chapters\": []\n      },\n      {\n        \"id\": \"Elliot-Yasser-7\",\n        \"title\": \"البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة السابعة)\",\n        \"url\": \"https://www.youtube.com/watch?v=5ZFFT_W79o8&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=7\",\n        \"chapters\": []\n      },\n      {\n        \"id\": \"Elliot-Yasser-8\",\n        \"title\": \"البرنامج المتكامل لاحتراف نظرية موجات إليوت (المحاضرة الثامنة)\",\n        \"url\": \"https://www.youtube.com/watch?v=t7t8gJ83GWk&list=PLwHx_DKDpnWSlCyBQBg_rt_rWwikwjrI0&index=8\",\n        \"chapters\": []\n      }\n\n    ],\n            \"thematic_index\": [\n      {\n        \"topic_name\": \"🔥 سلسلة حجم التداول العالي (High Volume)\",\n        \"chapters\": [\n          { \"video_id\": \"tm-1\", \"time\": \"03:15\", \"text\": \"مفهوم\" },\n          { \"video_id\": \"vw_4\", \"time\": \"05:40\", \"text\": \"أسباب ظهور الحجم العالي المفاجئ\" }\n        ]\n      },\n      {\n        \"topic_name\": \"🔥 vsa (High Volume)\",\n        \"chapters\": [\n          { \"video_id\": \"vw_5\", \"time\": \"03:15\", \"text\": \"مفهوم\" },\n          { \"video_id\": \"vw_6\", \"time\": \"05:40\", \"text\": \"أسباب ظهور الحجم العالي المفاجئ\" },\n          { \n          \"video_id\": \"tm-new\",\"time\": \"05:40\",\"text\": \"هل جان يتوقع المستقبل بهذه الطريقة؟\"\n          }\n          \n           \n        ]\n      }\n    ]\n\n    \n    }\n]\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "وفقاً لملف **`technical-analysis.json`** في النظام، يحتوي قسم **التحليل الفني** حالياً على المحتوى التالي:\n\n1. **كورس التحليل الموجي (بواسطة محمد مهدي / ياسر):**\n   - برنامج متكامل لاحتراف **نظرية موجات إليوت** ويتكون من سلسلة محاضرات شاملة (من المحاضرة الأولى وحتى الثامنة) تغطي تفاصيل وهياكل الموجات.\n\n2. **فهرس المواضيع المتقدمة (Thematic Index):**\n   - **سلسلة حجم التداول العالي (High Volume):** تتناول مفاهيم الحجم العالي وأسباب ظهوره المفاجئ في الشموع والأسواق.\n   - **فهرس VSA:** يتضمن نقاط محددة حول تحليل الحجم والجهد (Volume Spread Analysis) وتطبيقاته مثل توقعات الأسواق والأساليب الزمنية.\n\nهل ترغب في إضافة مواد تعليمية جديدة، تحديث الفهرس، أو تعديل المحتوى الحالي؟",
+        "thoughtSignature": "El4KXAERTTIPMqBVv4xhKUW/ftchEFxU0CxgntPEnyBToImzjIZKHWyWQHAfkJ2r1OAGBZeWRWgLu+OledrvpU1p0Rq0+Z4Dy0R+suGtzjQzatQfBodoRTjHLRfIJtjl"
+      }
+    ]
   }
 ]
