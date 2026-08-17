@@ -103,5 +103,22 @@
         "thoughtSignature": "El4KXAERTTIPMqBVv4xhKUW/ftchEFxU0CxgntPEnyBToImzjIZKHWyWQHAfkJ2r1OAGBZeWRWgLu+OledrvpU1p0Rq0+Z4Dy0R+suGtzjQzatQfBodoRTjHLRfIJtjl"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل يمكنك مسح الدردشة الحالي انا ونت التي تدثنا بها الان"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "بصفتي العقل المدبر، فإن سجل المحادثة الذي تجريه معي الآن يتم عبر واجهة الجلسة الحالية، وهو غير مخزن كملف دائم في مجلدات المستودع (فهو يختلف عن ملف `chat_logs.json` الخاص بالنظام). \n\nبمجرد إغلاق هذه الجلسة أو إعادة تحميل الصفحة، **ستختفي هذه المحادثة بالكامل** ولن يتبقى منها شيء. إذا كنت ترغب في بدء جلسة جديدة نظيفة تماماً الآن، يمكنك ببساطة تحديث (Refresh) المتصفح أو بدء دردشة جديدة، وسأكون في انتظارك بكامل الاستعداد!",
+        "thoughtSignature": "El4KXAERTTIPsi2ink3D9WePEf+xkB+h8fl9OyGdw+sLOX7QQ4kobOjtcyfZx8NSZ3crWL+nfQ16qCXOhV0Ar/vYMgv5U15P95gfhy12UTT+uBUA2BbnKrrYbDHnQa8C"
+      }
+    ]
   }
 ]
