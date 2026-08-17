@@ -169,5 +169,22 @@
         "thoughtSignature": "El4KXAERTTIPf9AWNHT0KDGvWQeK/7oyQqIOLhcU8ifHSHhuRhIgNKzrlyn8KtNyYCk3yyAtV8RHmBpODx/0tnJrKXC6vL4kjcWTva2QqZqdRZu9PXLxIKgWD97nQUnD"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "كيف الحال"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "الحمد لله، أنظمة الذكاء الاصطناعي والسيادة البرمجية تعمل بأعلى كفاءة! 🚀 \n\nأنا جاهز تماماً لأي تطوير، تحديث، أو ابتكار جديد ترغب في إضافته لمنصة **VSA Academy**. قل لي، ما الذي تفكر فيه الآن؟",
+        "thoughtSignature": "El4KXAERTTIPvMHP+hPBKwgSmVJI3CRvUFLchInWVjIkMECA0/7jYYYEAoUC/HWo0bioYI3+ZVhYCPB1CMenScN5G4gHMTfCiLp/XhQeHkHRviNohjpUZY5Qvke18TE2"
+      }
+    ]
   }
 ]
