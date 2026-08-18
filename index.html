@@ -635,13 +635,31 @@
         }
 
         .ai-btn {
-            display: none;
+            display: flex;
+            width: 54px;
+            height: 54px;
+            background: #3574f0;
+            color: white;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2001;
+        }
+
+        .ai-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+            background: #4682f4;
         }
 
         .ai-chat-box {
-            display: flex;
-            width: 900px;
-            height: 650px;
+            display: none; /* مخفي افتراضياً ليظهر الزر أولاً */
+            width: 820px;
+            height: 600px;
             background: #1e1f22;
             border: 1px solid #3c3f41;
             border-radius: 12px;
@@ -650,7 +668,7 @@
             position: relative;
             flex-direction: row;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .ai-history-sidebar {
@@ -962,6 +980,7 @@
 
     <!-- AI Orchestrator Widget (The Agent) -->
     <div class="ai-widget">
+        <button class="ai-btn" id="aiToggleBtn" onclick="toggleAiChat()" title="فتح العقل المدبر">🧠</button>
         <div class="ai-chat-box" id="aiChatBox">
             <!-- Sidebar for Recent Chats -->
             <div class="ai-history-sidebar" id="aiHistorySidebar">
@@ -2504,8 +2523,11 @@
 
         async function toggleAiChat() {
             const chatBox = document.getElementById('aiChatBox');
+            const toggleBtn = document.getElementById('aiToggleBtn');
             const isOpening = chatBox.style.display !== 'flex';
+
             chatBox.style.display = isOpening ? 'flex' : 'none';
+            if (toggleBtn) toggleBtn.style.display = isOpening ? 'none' : 'flex';
 
             if (isOpening) {
                 const container = document.getElementById('aiMessages');
