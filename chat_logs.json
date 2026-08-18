@@ -352,5 +352,22 @@
         "thoughtSignature": "EmcKZQERTTIPysYxxxo3QePrsC1S+rFdxwaT1uNHPcId+6gOAfECa/HK3OjGFpCMEq9LoKIgZ2/rHzKWb8fceidbjlcfORFoF9n2QlaW38rXz1EggO70fH7i3J/oOOQvcHshacuHgxHB"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك مجدداً. بصفتي \"العقل المدبر\"، أنا جاهز دائماً لأي استفسار أو مهام تخص أكاديمية VSA. كيف يمكنني مساعدتك؟",
+        "thoughtSignature": "El4KXAERTTIPgbF4dukVmti0NL6BjMoLwplbhDLpSHGBF18MN0z5K3Alex0CJU8SrrNTDVJeAKe3NQzqN5LRMMVkEQFdDWTXtG5zipBOkUmzya96Adg8NFlYDpg3X28w"
+      }
+    ]
   }
 ]
