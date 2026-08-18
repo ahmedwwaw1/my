@@ -272,5 +272,22 @@
         "thoughtSignature": "EmcKZQERTTIPNA3aK6+WXgM+DzCpRxHHW1EmjdY19i23bKWpHODTZR0R5eU8E3MKUuDSk1Jou2EL76TKq2FUMPzq8+A400DrP8mZ8bdZesJhYKrkEgaxUCpI5WTcwFjroGYVZKMN4ehJ"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اقصد هل اداء او ملفت Workflow موجودة في مجلد موقعي في المستودع"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "**نعم، ملفات الـ Workflow موجودة بالفعل داخل مجلد مستودعك.**\n\nتوجد هذه الملفات في المسار الافتراضي لـ GitHub داخل المستودع، وهو:\n📁 **`.github/workflows/`**\n\n### محتوى هذه الملفات في مستودعك:\nتحتوي على ملفات بتنسيق **YAML** (مثل `crypto_alerts.yml` أو ما يشابهها)، ومهمتها:\n1. **جدولة التشغيل (Cron Scheduling):** لتعمل بشكل دوري وتلقائي على خوادم GitHub Actions.\n2. **تشغيل سكربتات فحص السوق:** جلب أحجام التداول والأسعار لأزواج العملات (BTC, ETH, BNB).\n3. **تحديث البيانات:** دفع التنبيهات المحدثة إلى الموقع دون الحاجة لتدخلك اليدوي.",
+        "thoughtSignature": "EmcKZQERTTIPpnUVTxdN574IPnWuhE9jzYvBsrIJiFH35C+kV3iRPBkkT9BIOT4LmqYsiwvEj3bnMM9KlQnC32Y5O9Nhb2sT0Wsz778RRHNci+I6hTxWcwqy64d6Om3tEg3RFT0Hf67M"
+      }
+    ]
   }
 ]
