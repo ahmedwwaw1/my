@@ -32,5 +32,22 @@
         "thoughtSignature": "El4KXAERTTIP9TKuJy26swGK1cutsZ0c+A10D/nGKrRpFI40485xkZdh4vzv4wLFo/wQV8BJIrtUGspHozsPHf2jUE+2SGpOGzJukp7rD/+PD08OzOHZ8yenmEvlwv/+"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "مرحباً بك مجدداً! \n\nأنا جاهز ومستعد لبدء العمل على أي مهمة تريدها في موقع **VSA Academy**. \n\nسواء كنت تريد:\n1. **إضافة ميزة أو أداة جديدة** (حاسبة إدارة مخاطر، تنبيهات تداول، تحليل...).\n2. **تعديل وتحديث البيانات** أو إضافة محتوى تعليمي ومقالات.\n3. **تطوير التصميم وألوان الموقع** (Inject Global Styles).\n4. **فحص الملفات والتحقق من صحة الكود**.\n\nيرجى إخباري بما تحتاجه بالضبط لكي أبدأ في تنفيذه فوراً وفق بروتوكول التعديل الجراحي والأمان.",
+        "thoughtSignature": "EmcKZQERTTIPFCF71oRf9HbDJhteq30rI8HcgFgvqaNpP0eNq5Z++6xNMK1UYSdDSvBUGoawSWlCQ+h80xdeO7cR8tHk+nvplYx+2OFyBasiEOrT1LHQmrOD4UxCB/pDr3fShWtLqFF2"
+      }
+    ]
   }
 ]
