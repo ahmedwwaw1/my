@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. أنا **العقل المدبر (Mastermind)** — الذكاء التنفيذي لـ VSA Academy.\n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى الاستعلام عن تحليلات السوق والتنبيهات، تعديل وتطوير المنصة، أو متابعة سير العمليات والتقارير التنفيذية، أرجو تزويدي بالتفاصيل المطلوبة لنبدأ فوراً.",
+        "thoughtSignature": "EvgCCvUCARFNMg/jAsZ69nHyZUG5aUsXOlEWUOw71BwhSYQ995lDec9ur1UDUxwcW3RguA8q0b9ABDcq/dAeit39eM20m6z0sWiYBmDcmabDgDnrwR0TRceDvvjssjgh6z30b2xqUAGp1jO1xtfcNr+//0r97xTk4OUAPrx08m4nvvoUgiU+y8fmxz8ld4lPhDd8uV6m8QRPqC+vWEw/2GM+kLNBppOq9E8/7yDUf/rQsXY26T0II51TUWHWUOOzSjaQWfMj14KTAdFD84Sjsupb3eiCm3wOCuZGO4Ht0GpH+BpZqO6W+iAQOrVFNWrMYfVE/JXg9EK8BM3eXwNtKOaEgBX2lC8o5EOR8o27KVN3mwCmnRS2gp2SADxGsriIeVYc03cd7CnXso4lIeP7hBzAeIs9aL/bwS2PvkbJ2EGGA80jnERylWCyQjkkmyCrMSLPE/44J28PBGCqD5GGRz1NZBdptLVKjPCaUbf1DDsMGwFkLzVMN4BZKw=="
+      }
+    ]
+  }
+]
