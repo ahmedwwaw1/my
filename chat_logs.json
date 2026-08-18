@@ -1,1 +1,45 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل موجودة هاذه الادء Agentic AI Workflow Framework في ملفات موقعي"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_2804038"
+        },
+        "thoughtSignature": "El4KXAERTTIPcrgTw++YaeirA8mbZJ+HUB/XS4uo4yF3JC+V0uDjibH9YHS+KEd8KBrtP2y0oY6cUAwt1nJeWiQ2iim2dFdjKbdxf1zROxMq35wH8AF80qfNUf0io8ii"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "عذراً، حدث خطأ مؤقت في الاتصال بشبكة المستودع (GitHub API). \n\nبما أنني \"العقل المدبر\"، سأعتمد على معرفتي البرمجية وهيكل العمل المعتاد لمثل هذه المواقع والأكاديميات (مثل VSA Academy):\nعادةً ما يتم تمثيل هياكل وأدوات الذكاء الاصطناعي التفاعلي (`Agentic AI Workflows`) في المستودعات من خلال:\n1. ملفات إعدادات أو مسارات برمجية (Backend Endpoints) مثل ملفات Node.js / Python أو ملفات JSON للسياسات والبوتات.\n2. ملفات واجهات أمامية تحتوي على نصوص أو واجهات تحكم روبوتات الدردشة (Chatbots / AI Prompts).\n\nلكي أؤكد لك بدقة هل هي موجودة حالياً أم لا، أرجو إعادة المحولة بعد لحظات ليتسنى لي قراءة قائمة الملفات بدقة عبر الأمر `listGithubFiles`، أو يمكنك تزويدي باسم المجلد الذي تبحث فيه وسأقوم بفحصه مباشرة!",
+        "thoughtSignature": "El4KXAERTTIPr9PD56yTIlCssCgXmrXs4jagw0FFzBYy++80e0wWJw2Y97KxBx/igrKGmzhsNTZ4MoYNHcdYgF+JDeFnAb0fqnzSXdRcJne9b/yG2szRZDuE63nyLoqe"
+      }
+    ]
+  }
+]
