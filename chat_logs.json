@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مربا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. أنا \"العقل المدبر\" (Mastermind)، المدير التنفيذي والمهندس الذكي لـ VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في التطوير أو الإدارة التقنية للمنصة؟",
+        "thoughtSignature": "El4KXAERTTIPTpXdZtD5WSbdQecbcUkFuo1s8hyQC73bkqCBJ7Xi5Fv0f1IhbacfrCb1G03hvb0RaB8CxwC/ZhS6nHWc5fq7gd7COmSUZ4rdEgUAEAEZrjZLcJLLlMLo"
+      }
+    ]
+  }
+]
