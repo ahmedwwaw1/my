@@ -655,79 +655,181 @@
 
         .ai-chat-box {
             display: none;
-            width: 350px;
-            height: 450px;
-            background: #18181c;
-            border: 1px solid #2d2d35;
-            border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            width: 400px;
+            height: 600px;
+            background: #1e1f22;
+            border: 1px solid #3c3f41;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             overflow: hidden;
             flex-direction: column;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         .ai-header {
-            background: #1e1e24;
-            padding: 15px;
-            border-bottom: 1px solid #2d2d35;
+            background: #2b2d30;
+            padding: 8px 12px;
+            border-bottom: 1px solid #3c3f41;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: #dfe1e5;
         }
+
+        .ai-header-title {
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ai-header-actions {
+            display: flex;
+            gap: 14px;
+            color: #afb1b3;
+        }
+
+        .ai-header-actions span {
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .ai-header-actions span:hover { color: #fff; }
 
         .ai-messages {
             flex-grow: 1;
-            padding: 15px;
+            padding: 16px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            font-size: 0.9rem;
+            gap: 16px;
+            background: #1e1f22;
         }
 
         .msg {
-            padding: 8px 12px;
-            border-radius: 10px;
-            max-width: 80%;
+            max-width: 90%;
+            line-height: 1.5;
+            font-size: 13px;
+            word-wrap: break-word;
         }
 
         .msg.user {
-            background: #00d4ff;
-            color: #000;
-            align-self: flex-start;
-        }
-
-        .msg.ai {
-            background: #2d2d35;
-            color: #fff;
+            background: #393b40;
+            color: #dfe1e5;
+            padding: 10px 14px;
+            border-radius: 12px;
             align-self: flex-end;
         }
 
-        .ai-input-area {
-            padding: 10px;
-            display: flex;
-            gap: 8px;
-            border-top: 1px solid #2d2d35;
+        .msg.ai {
+            color: #dfe1e5;
+            align-self: flex-start;
+            width: 100%;
         }
 
-        .ai-input-area input {
-            flex-grow: 1;
-            background: #111;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 8px;
+        /* Steps / Thoughts */
+        .ai-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #afb1b3;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .ai-step i { color: #8a8a8a; }
+        .ai-step.edited { color: #d4a017; }
+        .ai-step.read { color: #4db6ac; }
+
+        .ai-input-container {
+            padding: 12px;
+            background: #1e1f22;
+            border-top: 1px solid #3c3f41;
+        }
+
+        .ai-input-wrapper {
+            background: #2b2d30;
+            border: 1px solid #4e5157;
             border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ai-input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-input-row input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 13px;
             outline: none;
         }
 
-        .ai-send-btn {
-            background: #00d4ff;
-            border: none;
-            color: #000;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
+        .ai-input-row input::placeholder { color: #6e7073; }
+
+        .ai-input-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
         }
+
+        .ai-footer-icons {
+            display: flex;
+            gap: 12px;
+            color: #afb1b3;
+            font-size: 14px;
+        }
+
+        .ai-footer-icons span { cursor: pointer; }
+        .ai-footer-icons span:hover { color: #fff; }
+
+        .ai-send-btn-new {
+            background: transparent;
+            border: none;
+            color: #afb1b3;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .ai-send-btn-new:hover { color: #00d4ff; }
+
+        .model-tag {
+            font-size: 11px;
+            background: #393b40;
+            color: #afb1b3;
+            padding: 2px 6px;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+
+        .artifact-box {
+            background: #2b2d30;
+            border: 1px solid #3c3f41;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #dfe1e5;
+            cursor: pointer;
+        }
+
+        .artifact-box:hover { background: #323438; }
     </style>
 </head>
 
@@ -759,33 +861,54 @@
     <div class="ai-widget">
         <div class="ai-chat-box" id="aiChatBox">
             <div class="ai-header">
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <span style="color: #00d4ff; font-weight: bold; font-size: 0.9rem;">🤖 العقل المدبر</span>
-                    <select id="modelSelector" onchange="saveModelSelection()" style="background: #121214; color: #fff; border: 1px solid #333; font-size: 0.75rem; border-radius: 4px; padding: 2px;">
-                        <option value="gemini-3.7-flash">Gemini 3.7 Flash (أحدث)</option>
-                        <option value="gemini-3.5-flash-lite">Gemini 3.5 Lite (سريع)</option>
-                        <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-                        <option value="gemini-flash-latest">Flash Latest (تلقائي)</option>
-                    </select>
+                <div class="ai-header-title">
+                    <span>Agent</span>
                 </div>
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <span style="cursor: pointer; font-size: 1rem;" onclick="clearChatHistory()" title="حذف السياق وتصفير المحادثة">🗑️</span>
-                    <span style="cursor: pointer; font-size: 1rem;" onclick="resetGeminiKey()" title="تغيير مفتاح API">⚙️</span>
-                    <span style="cursor: pointer; font-size: 1.1rem;" onclick="toggleAiChat()">✖</span>
+                <div class="ai-header-actions">
+                    <span onclick="clearChatHistory()" title="New Chat">＋</span>
+                    <span title="History">💬</span>
+                    <span title="Settings">⋮</span>
+                    <span onclick="toggleAiChat()">—</span>
                 </div>
             </div>
+
             <div class="ai-messages" id="aiMessages">
-                <div class="msg ai">أهلاً بك في **VSA Academy**! أنا العقل المدبر والمدير التنفيذي المسؤول. كيف يمكنني مساعدتك اليوم؟</div>
+                <!-- Thought Steps Example -->
+                <div class="msg ai">
+                    <div class="ai-step"><span style="font-size: 14px;">🧠</span> Thought</div>
+                    <div class="ai-step read"><span style="font-size: 14px;">🔍</span> Read <b>index.html</b></div>
+                    أهلاً بك في <b>VSA Academy</b>! أنا العقل المدبر. كيف يمكنني مساعدتك اليوم؟
+                </div>
             </div>
-            <div id="imagePreviewContainer" style="display: none; padding: 5px 15px; background: #121214; border-top: 1px solid #2d2d35; align-items: center; gap: 10px;">
+
+            <div id="imagePreviewContainer" style="display: none; padding: 8px 12px; background: #2b2d30; border-top: 1px solid #3c3f41;">
                 <img id="imagePreview" src="" style="height: 40px; border-radius: 4px; border: 1px solid #00d4ff;">
-                <span style="color: #ff5555; cursor: pointer; font-size: 1.2rem;" onclick="clearSelectedImage()">×</span>
+                <span style="color: #ff5555; cursor: pointer; margin-left: 10px;" onclick="clearSelectedImage()">×</span>
             </div>
-            <div class="ai-input-area" style="display: flex; align-items: center; padding: 10px; background: #1e1e24; border-top: 1px solid #2d2d35; gap: 8px;">
-                <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
-                <button class="ai-send-btn" style="background: #2d2d35; padding: 8px;" onclick="document.getElementById('imageInput').click()" title="إضافة صورة">🖼️</button>
-                <input type="text" id="aiInput" placeholder="اطلب شيئاً من المدير..." style="flex-grow: 1; background: #121214; border: 1px solid #333; color: #fff; padding: 8px 12px; border-radius: 8px;" onkeydown="if(event.key === 'Enter') sendAiMessage()">
-                <button class="ai-send-btn" onclick="sendAiMessage()" style="background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%); color: #000; font-weight: bold; padding: 8px 15px; border-radius: 8px;">إرسال</button>
+
+            <div class="ai-input-container">
+                <!-- Artifact Status (Simulated) -->
+                <div class="artifact-box" id="artifactStatus" style="display: none;">
+                    <span>Changes (1 artifact)</span>
+                    <span>⌄</span>
+                </div>
+
+                <div class="ai-input-wrapper">
+                    <div class="ai-input-row">
+                        <input type="text" id="aiInput" placeholder="Ask AI..." onkeydown="if(event.key === 'Enter') sendAiMessage()">
+                    </div>
+                    <div class="ai-input-footer">
+                        <div class="ai-footer-icons">
+                            <span onclick="document.getElementById('imageInput').click()">📎</span>
+                            <span>🛡️</span>
+                            <div class="model-tag" id="currentModelDisplay">Gemini 3.7 Flash ⌄</div>
+                        </div>
+                        <button class="ai-send-btn-new" onclick="sendAiMessage()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                        </button>
+                    </div>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                </div>
             </div>
         </div>
         <button class="ai-btn" onclick="toggleAiChat()" title="تحدث مع العقل المدبر لموقعك">🧠</button>
