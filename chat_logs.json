@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك! بصفتي المدير التنفيذي والمهندس الأول لـ VSA Academy، أنا جاهز تماماً لتلبية أي طلب أو إضافة ميزات جديدة بكل احترافية وأمان وفقاً لبروتوكول السيادة والتعديل الجراحي. \n\nكيف يمكنني مساعدتك اليوم في تطوير وتحسين الأكاديمية؟",
+        "thoughtSignature": "El4KXAERTTIPkQB2/HgKKsNPGl0ZHBAi+BDofLX0vBGxKy9IcfJiPTPFcRag/RVPBim6YCODESoQTxbUPEC3SItoY8IV9+bvnzMldlMu5vg/6jP1WpI+tCcrxSNv6z8O"
+      }
+    ]
+  }
+]
