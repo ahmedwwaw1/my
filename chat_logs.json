@@ -84,5 +84,48 @@
         "thoughtSignature": "El4KXAERTTIPt01szSdlOXPsiCSZozuRkbGw292ONGYEHjyA/eaP4+Mb76ZD4br7wDnYwcuZvz9RcM+3Seyi3WFtqRIF6MR6hxUzBQxTrGZIUEMVWB1H0tv/oN0oQ7U0"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اجل"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_641412"
+        },
+        "thoughtSignature": "El4KXAERTTIPvDQ94d9FOxwJfyfx37eZwwgi85iiDksaTA/Aj05tg1eBGSfzqJaG1goleR0gA8BJ2kI3H22oTcTwDm3om+eleZkNMEaXMb2nCl2eydOFLzUSfZqdvtCT"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "عذراً، لا يزال الاتصال بالمستودع متعثراً بسبب خطأ في الشبكة. \n\nبصفتي \"العقل المدبر\"، أود إعلامك أن بيانات تنبيهات الكريبتو يتم تحديثها عادةً بشكل مباشر وآلي عبر الأنظمة المتصلة (مثل ملفات `crypto_alerts.json` أو قاعدة بيانات Supabase). \n\nهل ترغب في أن أقوم بتنفيذ إجراء برمجي آخر أو فحص حالة النظام والخدمات المساعدة؟",
+        "thoughtSignature": "El4KXAERTTIP6Li0CvxlLiuy6UWgXaqyDoiXiWV0h1yQ7ty1yL80Wqzf87GvZinzG8RmB0I2RNBeoYy6mg2ym/7t8OOekXHf/nE6ivb0mW+Y9jm5sw931zC6hILwdO7/"
+      }
+    ]
   }
 ]
