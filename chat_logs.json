@@ -49,5 +49,22 @@
         "thoughtSignature": "El4KXAERTTIP/7cWrwIyge1TRVe0rYALYbwcZgnv05MnQWZRv8U3leKVdjZ+Di7OeIkz8u7tMp+cS74ut1E56KTj1bXT7t+WQ6vCXy/Fdl9Sp2ONO9ST5j9lAzaPr067"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ال الأدوات البرمجية التنفيذية (Functions / APIs) هي مملوكة لمنصة جت اب صح"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "**لا، ليس تماماً يا صديقي! دعنا نضبط هذه المعلومة التقنية بدقة:**\n\n1. **GitHub ليس المنصة التي تشغلني أو تملكني:**\n   GitHub هو مجرد **\"مستودع تخزين\" (Storage / Hosting)** لموقعك؛ مثل \"خزانة ملفات رقمية\" أو قرص صلب سحابي نضع فيه ملفات المشروع (HTML، CSS، وغيرها).\n\n2. **من أين تأتي الأدوات البرمجية (Functions/APIs) إذن؟**\n   * الأدوات التي أستخدمها (مثل قراءة الملفات، تعديلها، جلب البيانات) هي مملوكة ومبرمجة بواسطة **\"منصة الذكاء الاصطناعي\"** أو **الشركة المطورة للنموذج والبيئة الوسيطة** التي تشغلني (مثل OpenAI، أو Anthropic، أو البيئة البرمجية التي تربطني بـ GitHub).\n   * عندما أقول لك إنني أستخدم أداة `githubAction`، فهذا يعني أن مطوري الذكاء الاصطناعي قاموا ببرمجة **\"جسر اتصال\" (API Integration)** يسمح لي بالتحدث مع موقعك الموجود على **GitHub** وتعديله.\n\n**الخلاصة:**\n* **GitHub:** مستودع ملفات موقعك (يملكه أنت ومنصة GitHub).\n* **الأدوات التنفيذية (Functions):** قدرات برمجية برمجتها **شركة الذكاء الاصطناعي** التي أنشأتني لأستطيع مساعدتك في إدارة ملفاتك على GitHub.\n\nهل أصبحت الصورة الهندسية واضحة ومترابطة الآن؟",
+        "thoughtSignature": "Em8KbQERTTIPbC5u4BSoBSYuBhwXSwJMTR31eoVE7kOcvlZBG9LauOqkD+VMOGbsi5YhBMeXjPGic/XXIYnwOuebxWG9QOxlnYiQbSjHQHgKuitl7JzJZPOAAOpjNh3EG9mpYznGSQCjq/27AoWbcEo="
+      }
+    ]
   }
 ]
