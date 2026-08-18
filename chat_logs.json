@@ -15,5 +15,74 @@
         "thoughtSignature": "El4KXAERTTIPE5a/BfjOclDpxJLAU0UREykn/zbWPt9IDCMN0BXgWjWgTj2KKNyjqsQ7lmUJw+A2hfxjFPpwma38v6WVV1erv0A+xKw1FsMhmrAY2eFWA9Kj6oRYoDo1"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "كم عدد تنبيهات الكربتو الان"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getSiteContext",
+          "args": {},
+          "id": "call_420474"
+        },
+        "thoughtSignature": "El4KXAERTTIP/QQUI6Dhby5zGI3lxLcUdR+UW1wCHh+j6TnG0huuzNhjuXpsE0tzNFmf9xrzNStJjW+i+iGchL4lRlJhC1kNDfx8+Any8SoBW7oM+jrRf6gnlI8m1wpM"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getSiteContext",
+          "response": {
+            "content": "سياق الموقع: أكاديمية VSA متخصصة في التداول والتحليل الفني والزمني. السياسات: يمنع التلاعب، الأمان هو الأولوية القصوى، جميع البيانات مستمدة من Supabase و GitHub."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_2474348"
+        },
+        "thoughtSignature": "El4KXAERTTIP3ssHOhDXa6ArXjduoBhxILw3UrvcwBwuXIr9IDSln9CykHhOYziKZFinSFRxrGixCoEEIsSB2tgUahTCKMFU05/PSQjK55vQQo+sP3g1691Duu18tH+f"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أعتذر منك، لم أتمكن من جلب بيانات تنبيهات الكريبتو الحالية نظراً لخطأ مؤقت في الاتصال بملفات المستودع أو قاعدة البيانات. هل ترغب في أن أقوم بإعادة محاولة الجلب أو فحص ملفات النظام المرتبطة بالتنبيهات؟",
+        "thoughtSignature": "El4KXAERTTIPt01szSdlOXPsiCSZozuRkbGw292ONGYEHjyA/eaP4+Mb76ZD4br7wDnYwcuZvz9RcM+3Seyi3WFtqRIF6MR6hxUzBQxTrGZIUEMVWB1H0tv/oN0oQ7U0"
+      }
+    ]
   }
 ]
