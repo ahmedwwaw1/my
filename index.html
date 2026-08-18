@@ -645,8 +645,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            transition: transform 0.3s;
+            font-size: 28px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .ai-btn:hover {
@@ -712,6 +712,12 @@
             line-height: 1.5;
             font-size: 13px;
             word-wrap: break-word;
+            animation: fadeInMsg 0.3s ease-out;
+        }
+
+        @keyframes fadeInMsg {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .msg.user {
@@ -787,6 +793,7 @@
             gap: 12px;
             color: #afb1b3;
             font-size: 14px;
+            align-items: center;
         }
 
         .ai-footer-icons span { cursor: pointer; }
@@ -806,14 +813,25 @@
 
         .ai-send-btn-new:hover { color: #00d4ff; }
 
-        .model-tag {
-            font-size: 11px;
+        .model-selector-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        #modelSelector {
             background: #393b40;
             color: #afb1b3;
-            padding: 2px 6px;
+            border: none;
             border-radius: 40px;
+            font-size: 11px;
+            padding: 2px 8px;
             cursor: pointer;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
         }
+
+        #modelSelector:hover { background: #4e5157; color: #fff; }
 
         .artifact-box {
             background: #2b2d30;
@@ -830,6 +848,25 @@
         }
 
         .artifact-box:hover { background: #323438; }
+
+        /* Optimize Card Entrance */
+        .card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardEntrance 0.5s ease forwards;
+        }
+
+        @keyframes cardEntrance {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.15s; }
+        .card:nth-child(4) { animation-delay: 0.2s; }
+        .card:nth-child(5) { animation-delay: 0.25s; }
+        .card:nth-child(6) { animation-delay: 0.3s; }
+
     </style>
 </head>
 
@@ -899,9 +936,19 @@
                     </div>
                     <div class="ai-input-footer">
                         <div class="ai-footer-icons">
-                            <span onclick="document.getElementById('imageInput').click()">📎</span>
-                            <span>🛡️</span>
-                            <div class="model-tag" id="currentModelDisplay">Gemini 3.7 Flash ⌄</div>
+                            <span onclick="document.getElementById('imageInput').click()" title="Attach image">📎</span>
+                            <span title="Safety Protocol Active">🛡️</span>
+                            <div class="model-selector-container">
+                                <select id="modelSelector" onchange="saveModelSelection()" title="Select AI Model">
+                                    <option value="gemini-2.0-flash">Gemini 2.0 Flash (افتراضي)</option>
+                                    <option value="gemini-2.0-flash-lite-preview-02-05">Gemini 2.0 Lite (سريع)</option>
+                                    <option value="gemini-1.5-flash">Gemini 1.5 Flash (مستقر)</option>
+                                    <option value="gemini-2.0-pro-exp-02-05">Gemini 2.0 Pro (احترافي)</option>
+                                    <option value="gemini-3.5-flash-lite">Gemini 3.5 Lite (تجريبي)</option>
+                                    <option value="gemini-3.6-flash">Gemini 3.6 Flash</option>
+                                    <option value="gemini-3-flash-preview">Gemini 3 Flash Preview</option>
+                                </select>
+                            </div>
                         </div>
                         <button class="ai-send-btn-new" onclick="sendAiMessage()">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
@@ -1239,9 +1286,13 @@
             }
             statusMsg.innerText = '';
 
-            dataArray.forEach(item => {
+            const fragment = document.createDocumentFragment();
+
+            dataArray.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = 'card';
+                // Add staggered animation delay
+                card.style.animationDelay = `${index * 0.05}s`;
 
                 card.addEventListener('click', function () {
                     openDetails(item.id);
@@ -1249,9 +1300,9 @@
 
                 let mediaContent = '';
                 if (item.image && item.image.trim() !== '') {
-                    mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}"></div>`;
+                    mediaContent = `<div class="card-media-top"><img src="${item.image}" alt="${item.title || ''}" loading="lazy"></div>`;
                 } else {
-                    mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/360x203/222/0088cc?text=VSA+Academy" alt="VSA"></div>`;
+                    mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/360x203/222/0088cc?text=VSA+Academy" alt="VSA" loading="lazy"></div>`;
                 }
 
                 card.innerHTML = `
@@ -1261,8 +1312,9 @@
                     <div class="card-content">${item.content || ''}</div>
                 </div>
             `;
-                mainGrid.appendChild(card);
+                fragment.appendChild(card);
             });
+            mainGrid.appendChild(fragment);
         }
         // اضافة قسم  دالة التوجه بين الاقسام 
         function handleRoute() {
@@ -2676,7 +2728,8 @@
         async function callGemini(promptText, imageBase64 = null) {
             const key = geminiApiKey.trim();
             const userModel = document.getElementById('modelSelector').value;
-            const modelNames = [userModel, 'gemini-3.5-flash-lite', 'gemini-flash-latest'];
+            // قائمة النماذج الاحتياطية لضمان استمرارية الخدمة في حال فشل أحدها
+            const modelNames = [userModel, 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-2.0-flash-lite-preview-02-05', 'gemini-3-flash-preview'];
 
             let currentParts = [];
             if (promptText) currentParts.push({ text: promptText });
