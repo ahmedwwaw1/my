@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. معك **العقل المدبر (Mastermind)** — الذكاء التنفيذي والمهندس التقني لأكاديمية VSA.\n\nجاهز لمساعدتك في إدارة المنصة، تحديث وتطوير الشيفرة البرمجية، مراقبة التنبيهات، أو تحسين الأنظمة التلقائية. كيف يمكنني خدمتك اليوم؟",
+        "thoughtSignature": "EukCCuYCARFNMg/IFQfwCdDfyKDzZLkNEVMuz7emO/hhsC9jt3+zjOdAzIGPcZ9tvYFs1Csq3digBj828u5RdAie8xxILYANaFdacD3YYlXy6c4ufdDabHr2SZoXzpR2cSbkHkn5Ff0Wi062zgl1skw5Ufi37KLMxzOqd0IwCwg6BJSlFv919x5w8Et1OogbRZA+J394vwfXStF9Nxs/aL45W+mWcdqCNLAxaOpPk5UPBJAlauSjsRY4CAW8cVCcllL3WpLFgfqyERbLm2t8VjuNcFqHxIEFlCv1iNlJ4rXP61k2VRSfzY4MK/CKftqFC7tU+60rAxQkIis3TJc1AUYaJxL9Ehec4vZNHrgZbxi7kDKeQ2H2Zm2CHBdQPU1LK0ZKGC4fpAAPjmGdYLeskIZp1waQz7Xuykl9iUJdadkNJuotXOKl16ZzWWp0Yg/qW+f9OItnHf8yOsgi/n2Fr2QsEWvJ6iPheosJSA=="
+      }
+    ]
+  }
+]
