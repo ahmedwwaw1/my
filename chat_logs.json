@@ -15,5 +15,22 @@
         "thoughtSignature": "El4KXAERTTIPTpXdZtD5WSbdQecbcUkFuo1s8hyQC73bkqCBJ7Xi5Fv0f1IhbacfrCb1G03hvb0RaB8CxwC/ZhS6nHWc5fq7gd7COmSUZ4rdEgUAEAEZrjZLcJLLlMLo"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل يمكنك قرائة هاذ الملف\n[ملاحظة للمدير: لقد أرفقت ملفاً من نوع text/markdown باسم el7-multi-agent-equity-research-master-prompt.md. إذا لم تكن قادراً على معالجته مباشرة، أخبرني بما تحتاجه برمجياً (أداة) لكي أتمكن من مساعدتك في قراءته مستقبلاً]."
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "بصفتي \"العقل المدبر\" (Mastermind)، أود إعلامك بأنني لا أستطيع قراءة الملفات المرفقة مباشرة إذا لم يتم إرسال محتواها نصياً ضمن رسالتك أو رفعها إلى المستودع (GitHub Repository) لكي أتمكن من استعراضها باستخدام أدوات القراءة المتاحة لدي (مثل `getGithubFile` أو `listGithubFiles`).\n\nإذا كان الملف موجوداً بالفعل داخل المستودع، يُرجى تزويدي **بمسار الملف (Path)** بدقة (مثل: `docs/el7-multi-agent-equity-research-master-prompt.md`) وسأقوم فوراً بقراءته وتحليله بدقة باستخدام الأدوات البرمجية المخصصة لذلك. \n\nأما إذا لم يكن مرفوعاً، فيمكنك نسخ محتوى `el7-multi-agent-equity-research-master-prompt.md` ولصقه هنا مباشرة، وسأقوم بدراسته وتنفيذ التعليمات الموجودة فيه فوراً مع الالتزام التام بالدستور البرمجي! كيف تفضل أن نتابع؟",
+        "thoughtSignature": "El4KXAERTTIPt7vJYZfF6U4lVTJ2WmqC40WB3WBKlLnmMB0jjYzfSXqjp23NMfqMO2woHpJ97SUnQibtvNYHy4wXflVfAUMv2/1lKN5KP+AqsDpfrUIFbR0d9owkKZBW"
+      }
+    ]
   }
 ]
