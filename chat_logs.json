@@ -292,5 +292,22 @@
         "thoughtSignature": "EmcKZQERTTIPnJe5U9dnzadRXcARvvdiUa4Fl7S7MJv3tQVLs6JhibRRb6Ag+lhoJzhBBlFA1nMYrxZRr0B3z7cr1dF35/V4MiVGLZSZPtSp4iCRFwyRaezzoxoO7QSnnzAiyGMwoxjQ"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "مرحباً بك مجدداً. بصفتي \"العقل المدبر\" (Mastermind)، أنا في الخدمة. كيف يمكنني مساعدتك اليوم في أكاديمية VSA؟",
+        "thoughtSignature": "El4KXAERTTIPFTVImUCMLDCHRWNASgPr273+v+FpM/+ps8L0ZhGPrZvMYzTW8vmaswKZb7BMtfKXRedTDkUwRtDwizevXn5nft8k0EHM1Kqcsfq8TTMAo/Tki75dlO/k"
+      }
+    ]
   }
 ]
