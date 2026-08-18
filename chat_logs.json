@@ -41,5 +41,22 @@
         "thoughtSignature": "El4KXAERTTIPqGNBd15YifYud7wfuEUQLI3FKNCUjkx6+VVQCMWtQBYiQFHV6gtgwdBSbfEthzIVyT2BvmD8d5NdzXUX90xFSDVCr2744UgTkgX8Aq6UKMiCaJNCI8ub"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اقصد انا فاتح قسم وانا فيه الان هل تعرف انا الان اي قسم"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "عذراً، بصفتي العقل المدبر (Mastermind)، أنا أدير الخلفية البرمجية والتحليلية للموقع وأستعرض قاعدة البيانات، ولكن **لا يمكنني رؤية شاشتك أو الصفحة المحددة التي تقف عليها حالياً في متصفحك** (لأن واجهات المستخدم تتغير بحسب نقراتك المباشرة ولا تُرسل لي إحداثيات التصفح اللحظية).\n\nإذا أردت إخباري بالقسم الذي تراه أمامك (سواء كان كورس VSA، أو وايكوف، أو التحليل الزمني، أو شركات الوساطة، إلخ)، فسأكون سعيداً جداً بتقديم كافة التفاصيل والشروحات المتعلقة به فوراً!",
+        "thoughtSignature": "El4KXAERTTIPRWOqWNKvTqvma/CxL4DlnaMc7HN0gYQyJZhmdfbtdqj7jjyyPCcoG8BcFWfTWEGOeonmr96mQOEM0k7ZjNEy7iJItDn5arBc0RF9WyQdx3LlFcgJ5LX9"
+      }
+    ]
   }
 ]
