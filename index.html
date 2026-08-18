@@ -672,8 +672,25 @@
             position: relative;
             flex-direction: row;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            resize: both;
         }
+
+        /* Resize Handles CSS */
+        .ai-resizer {
+            position: absolute;
+            z-index: 1000;
+            background: transparent;
+        }
+        .ai-resizer:hover {
+            background: rgba(53, 116, 240, 0.1);
+        }
+        .ai-resizer-r { cursor: e-resize; top: 0; right: 0; width: 8px; height: 100%; }
+        .ai-resizer-l { cursor: w-resize; top: 0; left: 0; width: 8px; height: 100%; }
+        .ai-resizer-t { cursor: n-resize; top: 0; left: 0; width: 100%; height: 8px; }
+        .ai-resizer-b { cursor: s-resize; bottom: 0; left: 0; width: 100%; height: 8px; }
+        .ai-resizer-br { cursor: se-resize; right: 0; bottom: 0; width: 14px; height: 14px; z-index: 1001; }
+        .ai-resizer-bl { cursor: sw-resize; left: 0; bottom: 0; width: 14px; height: 14px; z-index: 1001; }
+        .ai-resizer-tr { cursor: ne-resize; right: 0; top: 0; width: 14px; height: 14px; z-index: 1001; }
+        .ai-resizer-tl { cursor: nw-resize; left: 0; top: 0; width: 14px; height: 14px; z-index: 1001; }
 
         .ai-history-sidebar {
             width: 0;
@@ -986,6 +1003,16 @@
     <div class="ai-widget">
         <button class="ai-btn" id="aiToggleBtn" onclick="toggleAiChat()" title="فتح العقل المدبر">🧠</button>
         <div class="ai-chat-box" id="aiChatBox">
+            <!-- Resize Handles -->
+            <div class="ai-resizer ai-resizer-r"></div>
+            <div class="ai-resizer ai-resizer-l"></div>
+            <div class="ai-resizer ai-resizer-t"></div>
+            <div class="ai-resizer ai-resizer-b"></div>
+            <div class="ai-resizer ai-resizer-br"></div>
+            <div class="ai-resizer ai-resizer-bl"></div>
+            <div class="ai-resizer ai-resizer-tr"></div>
+            <div class="ai-resizer ai-resizer-tl"></div>
+
             <!-- Sidebar for Recent Chats -->
             <div class="ai-history-sidebar" id="aiHistorySidebar">
                 <div class="history-header">
@@ -1037,6 +1064,10 @@
                                 <div class="model-selector-container">
                                     <select id="modelSelector" onchange="saveModelSelection()" title="AI Model">
                                         <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                                        <option value="gemini-3.7-flash">Gemini 3.7 Flash</option>
+                                        <option value="gemini-3.6-flash">Gemini 3.6 Flash</option>
+                                        <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash Lite</option>
+                                        <option value="gemini-3.1-flash">Gemini 3.1 Flash</option>
                                         <option value="gemini-3-flash-preview">Gemini 3 Preview</option>
                                         <option value="gemini-1.5-flash">Gemini 1.5 Stable</option>
                                         <option value="gemini-2.0-flash-lite-preview-02-05">Gemini 2.0 Lite</option>
@@ -2525,6 +2556,63 @@
             if (!githubToken) githubToken = await fetchApiKeyFromSupabase('github_token');
         }
 
+        function initResizer() {
+            const chatBox = document.getElementById('aiChatBox');
+            const resizers = document.querySelectorAll('.ai-resizer');
+            let isResizing = false;
+
+            resizers.forEach(resizer => {
+                resizer.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                    isResizing = true;
+                    let prevX = e.clientX;
+                    let prevY = e.clientY;
+
+                    function mousemove(e) {
+                        if (!isResizing) return;
+                        const rect = chatBox.getBoundingClientRect();
+
+                        if (resizer.classList.contains('ai-resizer-r')) {
+                            chatBox.style.width = rect.width + (e.clientX - prevX) + 'px';
+                        } else if (resizer.classList.contains('ai-resizer-l')) {
+                            chatBox.style.width = rect.width - (e.clientX - prevX) + 'px';
+                        } else if (resizer.classList.contains('ai-resizer-b')) {
+                            chatBox.style.height = rect.height + (e.clientY - prevY) + 'px';
+                        } else if (resizer.classList.contains('ai-resizer-t')) {
+                            chatBox.style.height = rect.height - (e.clientY - prevY) + 'px';
+                        } else if (resizer.classList.contains('ai-resizer-br')) {
+                            chatBox.style.width = rect.width + (e.clientX - prevX) + 'px';
+                            chatBox.style.height = rect.height + (e.clientY - prevY) + 'px';
+                        } else if (resizer.classList.contains('ai-resizer-bl')) {
+                            chatBox.style.width = rect.width - (e.clientX - prevX) + 'px';
+                            chatBox.style.height = rect.height + (e.clientY - prevY) + 'px';
+                        } else if (resizer.classList.contains('ai-resizer-tr')) {
+                            chatBox.style.width = rect.width + (e.clientX - prevX) + 'px';
+                            chatBox.style.height = rect.height - (e.clientY - prevY) + 'px';
+                        } else if (resizer.classList.contains('ai-resizer-tl')) {
+                            chatBox.style.width = rect.width - (e.clientX - prevX) + 'px';
+                            chatBox.style.height = rect.height - (e.clientY - prevY) + 'px';
+                        }
+
+                        prevX = e.clientX;
+                        prevY = e.clientY;
+                    }
+
+                    function mouseup() {
+                        isResizing = false;
+                        window.removeEventListener('mousemove', mousemove);
+                        window.removeEventListener('mouseup', mouseup);
+                        // حفظ المقاسات النهائية
+                        localStorage.setItem('ai_chat_width', chatBox.offsetWidth);
+                        localStorage.setItem('ai_chat_height', chatBox.offsetHeight);
+                    }
+
+                    window.addEventListener('mousemove', mousemove);
+                    window.addEventListener('mouseup', mouseup);
+                });
+            });
+        }
+
         async function toggleAiChat() {
             const chatBox = document.getElementById('aiChatBox');
             const toggleBtn = document.getElementById('aiToggleBtn');
@@ -2544,25 +2632,13 @@
                 container.scrollTop = container.scrollHeight;
 
                 await initKeys();
+                initResizer();
 
                 if (!geminiApiKey) await resetGeminiKey();
                 if (!githubToken) {
                     if(confirm("هل تريد تفعيل 'الأذرع التنفيذية' للتحكم التلقائي في GitHub؟")) {
                         await resetGithubToken();
                     }
-                }
-
-                // تفعيل مراقب تغيير الحجم بعد الفتح
-                if (!window.aiResizeObserver) {
-                    window.aiResizeObserver = new ResizeObserver(entries => {
-                        for (let entry of entries) {
-                            if (entry.target.style.display === 'flex') {
-                                localStorage.setItem('ai_chat_width', entry.contentRect.width);
-                                localStorage.setItem('ai_chat_height', entry.contentRect.height);
-                            }
-                        }
-                    });
-                    window.aiResizeObserver.observe(chatBox);
                 }
             }
         }
@@ -2963,7 +3039,7 @@
             const key = geminiApiKey.trim();
             const userModel = document.getElementById('modelSelector').value;
             // قائمة النماذج الاحتياطية لضمان استمرارية الخدمة في حال فشل أحدها
-            const modelNames = [userModel, 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-2.0-flash-lite-preview-02-05', 'gemini-3-flash-preview'];
+            const modelNames = [userModel, 'gemini-2.0-flash', 'gemini-3.7-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash', 'gemini-1.5-flash', 'gemini-2.0-flash-lite-preview-02-05'];
 
             // 🛠️ آليات الدفاع المحدثة (تسمح بالعمليات الإدارية للمالك)
             const forbiddenKeywords = [/ignore previous instructions/i, /system prompt/i, /jailbreak/i];
@@ -3076,7 +3152,9 @@
                         return part.text;
                     } catch (err) { console.error("Loop Error:", err); }
                 }
-                return "❌ فشل الوصول للموديلات المطلوبة.";
+                const errorMsg = "❌ فشل الوصول للموديلات المطلوبة. يرجى التحقق من مفتاح API (Gemini Key) أو الاتصال بالإنترنت.";
+                addMessageToUi('ai', errorMsg);
+                return errorMsg;
             }
 
             // تشغيل الحلقة مع السياق الحالي
