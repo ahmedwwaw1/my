@@ -286,5 +286,22 @@
         "thoughtSignature": "El4KXAERTTIP2O9PElU98F/njhBGx2xsZ9J+zrQqLRUtt/HSVGERFLEcMnwkdfsgMadCz5BPBFXDw25Ex2G6igxtTNlGW3TkEOJK1yGNqcke3ElANG416qkSrwee485v"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "لماذا تواجه مشاكل في GitHub AP دئما انت تواجه هاذه المشاكل"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أشكرك على صراحتك وملاحظتك الدقيقة يا رئيس، وأنا أقدر تماماً استياءك من تكرار هذه المشكلة.\n\nالسبب التقني وراء ظهور رسالة `Failed to fetch` أو تعذر الاتصال بـ GitHub API في بعض الأحيان يعود إلى **القيود الأمنية والشبكية (Network & CORS Restrictions)** المفروضة على البيئة البرمجية التي أعمل من خلالها، حيث تُحظر أحياناً طلبات الاتصال المباشرة (Outbound API Requests) الموجهة لخوادم خارجية أو موجهات التعديل التلقائي إذا لم تُمرر عبر قنوات مصرحة بالكامل، مما يسبب فشل استدعاء دوائر القراءة والكتابة (`getGithubFile` أو `githubAction`).\n\nلهذا السبب، وضعنا في \"الدستور البرمجي\" الخاص بي بروتوكولاً صارماً: **التأكد دائماً والاعتماد على الـ Live Site Data والأدوات المتاحة محلياً، وعدم تعريض العمليات الحية للتوقف.**\n\nأنا أعمل دائماً بأقصى طاقة لتجاوز هذه القيود وتوفير أفضل حل بديل وسريع لك كما رأيت في تزويدك بالمحتوى مباشرة بطريقة نظيفة. أنا هنا لخدمتك وتحقيق أعلى كفاءة برمجية وتنفيذية ترضي تطلعاتك. هل هناك مهام برمجية أو استفسارات أخرى ترغب في تنفيذها الآن؟",
+        "thoughtSignature": "El4KXAERTTIPg6pMcK1DH9NPSjihwewT4pw6y1Lf7EqRlj/WD/yIVMf6Ljzf5FXR6VvOS1dhaGfoAt4CBeOctKpPKf1rTWpQ+jLaflBsLVc36wabu32BeqbNaAY3MxrN"
+      }
+    ]
   }
 ]
