@@ -3,24 +3,7 @@
     "role": "user",
     "parts": [
       {
-        "text": "مرحبا"
-      }
-    ]
-  },
-  {
-    "role": "model",
-    "parts": [
-      {
-        "text": "أهلاً بك. أنا \"العقل المدبر\" (Mastermind)، المدير التنفيذي والمهندس الذكي لمنظومة VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في التطوير أو الإدارة التقنية؟",
-        "thoughtSignature": "El4KXAERTTIPhIvI64PmobfUbX+VBoAg76PpGHFjR4mwhnjygG+PAlTJ6BJTlx8WmxqCGZ8wDAUxBhe0PfJjTA36mNKHN7EdQnHetl28fwyo10A5WFEUDAAtccSBoq+D"
-      }
-    ]
-  },
-  {
-    "role": "user",
-    "parts": [
-      {
-        "text": "انا الان في اي مكان في الموقع"
+        "text": "انا الان في اي مكان في االموقع"
       }
     ]
   },
@@ -31,9 +14,9 @@
         "functionCall": {
           "name": "getLiveSiteData",
           "args": {},
-          "id": "call_4042997"
+          "id": "call_3444996"
         },
-        "thoughtSignature": "El4KXAERTTIPwoQ6xhjygya+n0TFVDPXrx3swzdiAM5zEGnHxrlb+8V+7xlpCXQ0j+khfG1sjiqVIXc0eU+A00yP93QpG1vXPLRTmJc8UmEypNIY/+O9pOTfbJfwVR2v"
+        "thoughtSignature": "El4KXAERTTIPXlvgMz+mpGCE74SC2zsc8XfQggL654oW9V6N2gvrcokz7LrZXj9CixVpFxuV+Ws+4zgxVVltovyBu8kCfCcj+36NfZ49UvgrJNlNgPtkbOvlQh5ZzZeN"
       }
     ]
   },
@@ -54,8 +37,8 @@
     "role": "model",
     "parts": [
       {
-        "text": "أنت الآن تتواجد في المنظومة التعليمية والتحليلية الخاصة بـ **VSA Academy**. بناءً على البيانات الفورية المسجلة في المنظومة، يمكنك الوصول إلى الأقسام التالية:\n\n1. **دورات التحليل الحجمي (VSA) ومنهجية وايكوف:**\n   - كورسات وائل أحمد (كورس VSA الأساسي، دورة أساليب وايكوف وأسواق المال).\n   - ويبينار ومحاضرات الأستاذ نادر محمد (مقدمة تقنية حجم التداول VPA و VSA، كشف التلاعب في الأسواق).\n\n2. **دورات التحليل الزمني (Gann & Time Analysis):**\n   - كورس التحليل الزمني المتكامل (الدورات السعرية والزمنية، زوايا جان Static و Dynamic، النجمة السداسية، مربع 144، مربع 52، مربع 90، ورينج جان).\n\n3. **التحليل الموجي:**\n   - البرنامج المتكامل لاحتراف نظرية موجات إليوت.\n\n4. **الأسواق والاستثمار وشركات الوساطة الموثوقة:**\n   - شركات وساطة الفوركس المعتمدة (Inzo, Maxify, PrimeX Capital).\n   - الشركات الاستثمارية والمرخصة (شركة الربيع للوساطة RS، شركة الأرقام، مزرعة نيووولك، نبض الخليج العقارية، وغيرها).\n\n5. **تنبيهات الأسواق الحية (Crypto Alerts):**\n   - متابعة حية لحركات العملات الرقمية الكبرى (مثل BTC و ETH) وأحجام التداول اللحظية.\n\nهل ترغب في الانتقال إلى قسم معين، أو استعراض محاضرة محددة، أو تحليل زوج معين؟ أمرني وسأقوم بتجهيز ما تحتاج فوراً.",
-        "thoughtSignature": "El4KXAERTTIP/7LqW8IWoSU/CIMutLBI9qozp7Twycus2Us6u2rzO440oBayiNdBQLCHSamjdBqLRY1mhAZrRR0XloonDTgAn7oah9KCioNnouUyR7XXxXT1VvkjapFJ"
+        "text": "أنت الآن في منصة **VSA Academy** (أكاديمية التحليل الحجمي وأسواق المال)، وتحديداً تتصفح المنصة التعليمية المتخصصة في دورات التحليل الفني المتقدم، مثل:\n- كورس VSA وتحليل الفوليوم (للوهلة الأولى وكشف تلاعب صناع السوق).\n- دورة أساليب وايكوف وأسواق المال.\n- كورس التحليل الزمني وزوايا جان.\n- كورس التحليل الموجي (إليوت).\n- قسم شركات الوساطة الموثوقة واستثمارات الأسواق.\n\nكيف يمكنني مساعدتك اليوم في مسيرتك التداولية أو التعليمية؟",
+        "thoughtSignature": "El4KXAERTTIPqGNBd15YifYud7wfuEUQLI3FKNCUjkx6+VVQCMWtQBYiQFHV6gtgwdBSbfEthzIVyT2BvmD8d5NdzXUX90xFSDVCr2744UgTkgX8Aq6UKMiCaJNCI8ub"
       }
     ]
   }
