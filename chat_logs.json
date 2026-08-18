@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اريد ان اسألك فقط هل اداء Persistent Vector Memory موجودة لديك الان"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك.\n\nبصفتي **Mastermind (العقل المدبر)**، أود توضيح أن أداة خاصة مسمّاة **`Persistent Vector Memory`** ليست مدرجة كأداة مستقلة في قائمة الأدوات (Tools) المتاحة حالياً لنظامي.\n\nومع ذلك، يتم التعامل مع استرجاع البيانات والذاكرة الممتدة من خلال:\n1. **أداة `getSiteContext` (نظام RAG)**: لاسترجاع البيانات والسياق العام والسياسات المخزنة.\n2. **الملفات المرجعية الثابتة**: مثل `data.json` و `crypto_alerts.json` للتحقق المباشر والحد من الهلوسة البرمجية.\n\nإذا كنت ترغب في استرجاع أو تحديث أي بيانات أو سياق محدد للموقع، يمكنني القيام بذلك فوراً عبر الأدوات المتاحة.",
+        "thoughtSignature": "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"
+      }
+    ]
+  }
+]
