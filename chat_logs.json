@@ -258,5 +258,22 @@
         "thoughtSignature": "EmcKZQERTTIPU1qpM/B7VuSL4WH1upD+WtA+Q91dCECdDN48Ic7XDCEjgyI01ij0nk30Akk07rIGrVrD38SnbuAOpY1oBXSDjOJHkI7Tc+loOAgM9RMw8A/DWTFZVtjO/BczmXsBQQWJ"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ما اقصده يعني تحسب لي من 1 و2 الى اخر عدد التنبيهات"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "1\n2\n3\n4\n5\n6\n7\n8\n9",
+        "thoughtSignature": "EmcKZQERTTIPHlMnuskp6o43D5DtZNyR3jJFnZcXKlsgoxmbR4vTm2Wo1nF6vOr1RmbQC9n6dlZRppwHdIOonAMFzS+0EPzY8lzLXJW+3jf0Q5I5UUrw2sd+O+2DkWVPiHg4F4elWH6L"
+      }
+    ]
   }
 ]
