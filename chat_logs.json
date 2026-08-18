@@ -438,5 +438,22 @@
         "thoughtSignature": "El4KXAERTTIPtMQv0TGbsZigsTfS/FVUa26MHyGCpl1qB6OR8SYxid5DASejyWmioHjiiZehTxA4X5OcWcWFyVXJJoEZWmzVh8D6M+BLz5ZWYbGQD1hx/jvD7i52I9JV"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اذا System Instructions Framework via JSON/YAML هي افضل صح"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "**نعم، بكل تأكيد لـ \"تعليمات النظام وقواعد العمل الصارمة\" (System Instructions)، صيغة JSON أو YAML هي الخيار الأفضل والأدق!** 🎯\n\nوإليك الأسباب الهندسية لماذا هي ممتازة لهذا الغرض بالذات:\n\n1. **الهيكلة والوضوح (Structured Data):** ملفات JSON أو YAML تفرض نظاماً دقيقاً ومفتاحاً وقيمة (Key-Value)، مما يمنع حدوث أي لبس في فهم التعليمات من قبل الذكاء الاصطناعي.\n2. **الثبات والدحوم (Deterministic):** على عكس الذاكرة المتجهة (التي تبحث باحتماليات التشابه الدلالي)، ملفات الإعدادات تجعل القواعد ثابتة ومطبقة بحذافيرها دون أن تبحث عنها أو تخمنها.\n3. **سهولة التعديل والتحديث (Maintainability):** إذا أردت تعديل قاعدة، أو إضافة بروتوكول جديد، أو تغيير سلوك النظام، يمكنك تعديل سطر واحد فقط داخل ملف التكوين (Config File) دون الحاجة لإعادة ضبط النموذج كاملاً.\n\nلذا، إجابتك صحيحة 100%: **لضبط قواعد النظام والدستور البرمجي، استخدام إطار عمل مبني على JSON/YAML هو الخيار الأبسط والأكثر احترافية!** 🛠️✨",
+        "thoughtSignature": "El4KXAERTTIPqRzNqbeYCdI16ZSDl7plKcG9J9bc9WCMCx0AmBPQhaEu1ABZdL3WLGUwKQEFp6V83Izx7PrWUVPvuVG9mFF1ew/NFMBk8F5ro1V1AcXMSP/faCa+mi8V"
+      }
+    ]
   }
 ]
