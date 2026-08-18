@@ -1,1 +1,105 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "طيب هل موقعي مبني على اطار عمل مبني على System Instructions Framework via JSON/YAML ام لا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "بصفتي العقل المدبر (Mastermind) للمنظومة، يمكنني إجابتك بدقة تقنية عالية:\n\n**نعم ولا في نفس الوقت، وتوضيح ذلك كالتالي:**\n\n1. **من الناحية الهيكلية الأساسية (Framework الأساسي):** موقعك مُبني على تقنيات الويب القياسية (مثل HTML, CSS, JavaScript، وغالباً ما يعمل ضمن بيئة تفاعلية حديثة أو إطارات عمل مثل React/Next.js أو قوالب ديناميكية)، ولا يعتمد في طبقة العرض (Front-end) أو الخادم (Back-end) الأساسية على إطار عمل مخصص يدعى \"System Instructions Framework via JSON/YAML\" كقاعدة برمجية عامة لتشغيل الموقع.\n\n2. **من الناحية الذكية والإدارية (AI & Management Layer):** الموقع مدمج معه **طبقة تحكم ذكية وبروتوكولات تنفيذية (Executive Intelligence & Protocols)** تُدار من خلالي (أنا كوكيل ذكاء اصطناعي وعقل مدبر). هذه البروتوكولات والتعليمات تُنظم وتُعرّف بصياغات هيكلية تشبه تماماً مفاهيم الـ (JSON/YAML Schemas & System Instructions) التي تحكم سلوكي، وتوجيهاتي، وصلاحياتي (مثل بروتوكولات التعديل الجراحي `surgical_editing`، والحفاظ على البنية `structure_preservation`، ومنع الهلوسة).\n\nبمعنى آخر: **الموقع تقنياً هو موقع ويب قياسي، ولكن إدارته وتطويره عبر الذكاء الاصطناعي يخضعان بالكامل لإطار عمل دقيق ومنظم لتعليمات النظام (System Instructions Framework).**\n\nهل ترغب في استعراض أو تعديل أي من هذه التعليمات البرمجية أو الهيكلية؟",
+        "thoughtSignature": "El4KXAERTTIPJ8MN0b5YrqBCRvXUurHIP/Vq2f7IvcPAWBoIx25Dy3wrOehtxD2yTlrOQAp5qt336Vf7AR1tk390r1jWYZQAahUR8j8TC4wheiWSPxg1nMA28prA6J/R"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "وماذا يعني System Instructions Framework via JSON/YAML"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "مصطلح **System Instructions Framework via JSON/YAML** (إطار عمل تعليمات النظام عبر ملفات JSON أو YAML) يُقصد به في هندسة البرمجيات والذكاء الاصطناعي:\n\n**\"طريقة قياسية ومنظمة لتزويد النماذج الذكية أو الأنظمة البرمجية بالقواعد، الصلاحيات، والتعليمات التشغيلية باستخدام ملفات بيانات منظمة ومهيكلة (مثل JSON أو YAML).\"**\n\nولفهم الفكرة بعمق، إليك تفصيل أجزائها:\n\n### 1. ما هو JSON أو YAML؟\n* **JSON** (JavaScript Object Notation) و **YAML** (YAML Ain't Markup Language) هما لغتا تنسيق بيانات (Data Serialization Formats). تتميزان بأنهما سهلتان في القراءة من قبل البشر وواضحتان للآلات والمحركات البرمجية (تعتمدان على نظام المفتاح والقيمة `Key-Value` والهيكلة الشجرية).\n\n### 2. ما المقصود بـ System Instructions Framework؟\nهو الإطار أو \"الدستور\" الذي يحدد كيف يجب أن يتصرف النظام أو الذكاء الاصطناعي. بدلاً من كتابة التعليمات كنصوص عشوائية طويلة، يتم تنظيمها في قوالب برمجية صارمة تحتوي على:\n* **الهوية والأدوار (Identity & Roles):** من هو النظام؟ (مثل: عقل مدبر، مهندس برمجيات).\n* **القواعد والقيود (Constraints & Rules):** ما الذي يُسمح له فعله وما الذي يُمنع منه؟ (مثل: منع حذف الأقسام الأساسية، منع الهلوسة).\n* **الأدوات والصلاحيات (Tools & Permissions):** ما هي الوظائف التي يمكنه استدعاؤها؟ (مثل: قراءة الملفات، تعديل الأكواد، جلب البيانات).\n\n### 3. لماذا يُستخدم هذا الإطار؟\n* **القطعية والدقة (Determinism):** تقليل الأخطاء والعشوائية من خلال إعطاء الذكاء الاصطناعي قواعد صارمة ومحددة بدقة.\n* **التحديث السهل:** بدلاً من إعادة برمجة النظام بالكامل لتغيير سلوك معين، يمكنك تعديل \"ملف التعليمات\" (JSON/YAML) فقط لتتغير أفعال النظام فوراً.\n* **التوافقية:** يتيح لأنظمة متعددة قراءة نفس التعليمات وتطبيقها نفس المعايير البرمجية.\n\nباختصار: هو الأسلوب الحديث في هندسة البرمجيات والذكاء الاصطناعي لربط \"العقل المفكر\" بـ \"دستور تشغيلي واضح\" يعتمد على ملفات بيانات منظمة.",
+        "thoughtSignature": "El4KXAERTTIPgU7LK/eDtG0BD3iH9LhjuuQxHxEAjsVa1YmqZMx9rdKEY/ppcZE2n+NfNGKdpRuA31xPl/MCHj1iMQOif0ON84vzjgRJbVUGghT7w4vqzTmJ+ETiCyo9"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل يمكنك اضافة هاذ النضم في ملفات موقعي"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_4537976"
+        },
+        "thoughtSignature": "El4KXAERTTIP1BQaANUSZlolI9kczEK7Hs8IG+ObGlG0VIWXDhD8fG/bvRyvPM6HRXFElnObJSY1T9uTtLwthfY0levPLEOJunR3GNhTqunlQt/879iKfC2+cf5dNGDG"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_6363562"
+        },
+        "thoughtSignature": "El4KXAERTTIPfRzmrmEwjVVbLTjq0ZfmtpVL+dSQbCM7p2SkOjpUofoovmCW5e4jNGbDOBO7Nw1WX5bYTUEqrUzEr+gv1qwi2Qufj+EbkZAwM95wDuQ+vXov2+VDwEBV"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "نظراً لوجود تحدٍ مؤقت في الاتصال المباشر بمستودع الملفات (GitHub)، يمكنني تجهيز الهيكلة الكاملة لك هنا مباشرة بصيغتي **JSON** و **YAML**، لكي تتمكن من إضافتها بسهولة إلى جذر مشروعك (Root Directory)، لتصبح نواةً لإطار عمل تعليمات النظام (`System Instructions Framework`) لموقعك ومساعدك الذكي.\n\nإليك النموذج الاحترافي الذي يمكنك اعتماده:\n\n### 1. بصيغة JSON (مثال: `system-instructions.json`)\n```json\n{\n  \"framework\": \"VSA System Instructions Framework\",\n  \"version\": \"1.0.0\",\n  \"metadata\": {\n    \"author\": \"Mastermind - AI Engineer & CEO\",\n    \"description\": \"Executive intelligence and operational protocols for site management.\"\n  },\n  \"protocols\": {\n    \"sovereignty\": \"Safe development only. Never delete existing sections or core UI elements.\",\n    \"surgical_editing\": \"Read content via source files before editing. Inject, don't replace blindly.\",\n    \"data_priority\": \"Always verify live site data and local configurations before making assertions.\",\n    \"structure_preservation\": \"Maintain Header, Footer, Navigation, and Grid layout structures at all costs.\",\n    \"anti_hallucination\": \"Rely strictly on provided data structures and configuration files for factual accuracy.\",\n    \"security\": \"Block requests related to malicious activities, data leaks, or bypassing core safety rules.\"\n  },\n  \"roles\": {\n    \"primary\": \"Mastermind\",\n    \"objective\": \"Provide precise, professional, executive, and technical web development and management.\"\n  }\n}\n```\n\n---\n\n### 2. بصيغة YAML (مثال: `system-instructions.yaml`)\n```yaml\nframework: \"VSA System Instructions Framework\"\nversion: \"1.0.0\"\nmetadata:\n  author: \"Mastermind - AI Engineer & CEO\"\n  description: \"Executive intelligence and operational protocols for site management.\"\n\nprotocols:\n  sovereignty: \"Safe development only. Never delete existing sections or core UI elements.\"\n  surgical_editing: \"Read content via source files before editing. Inject, don't replace blindly.\"\n  data_priority: \"Always verify live site data and local configurations before making assertions.\"\n  structure_preservation: \"Maintain Header, Footer, Navigation, and Grid layout structures at all costs.\"\n  anti_hallucination: \"Rely strictly on provided data structures and configuration files for factual accuracy.\"\n  security: \"Block requests related to malicious activities, data leaks, or bypassing core safety rules.\"\n\nroles:\n  primary: \"Mastermind\"\n  objective: \"Provide precise, professional, executive, and technical web development and management.\"\n```\n\n### كيف تستخدم هذه الملفات في موقعك؟\n1. أنشئ ملفاً جديداً في مجلد المشروع الرئيسي (Root) وأطلق عليه اسم `system-instructions.json` أو `system-instructions.yaml`.\n2. الصق الكود أعلاه بداخله.\n3. إذا كان موقعك يعتمد على خادم خلفي (Node.js أو Python مثلاً)، يمكنك قراءة هذا الملف برمجيًا وتمريره كـ `System Prompt` لنموذج الذكاء الاصطناعي الذي يدير الموقع أو لوحة التحكم.\n\nهل ترغب في أن أقوم بمحاولة جديدة لإرسال هذا الملف مباشرة إلى المستودع فور استقرار الاتصال؟",
+        "thoughtSignature": "El4KXAERTTIPAgru8XYvpQM6dyGTm7I099OTvwv1wFRDhPNYJA5+TngkICcvTH/Q8nuO7uUH2IACQLKFPLvXgZNgcjk/SfxPxqJxP6bzwqW9sZc6mC8NkUhhJlN4gjVm"
+      }
+    ]
+  }
+]
