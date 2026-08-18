@@ -41,5 +41,48 @@
         "thoughtSignature": "El4KXAERTTIPuF47OoJ24mGhxgkHlQbUlQ6k4hlHIlqPIvpvRPsHEcYPv3pMIQmOMAOsDUqYWrx29DjJvCwoExsLkYFjIVpxQ6AkwmZ1g31rSTPgsTiWzFxEWHAst9eQ"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اين هي ملفات موقعي في اي مستدع"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_4192320"
+        },
+        "thoughtSignature": "El4KXAERTTIPc2KKXoG6eC2jba9qLyOJso1Hchm0r6+U5rjzeBAHjwq8amNh+j/OJhgpQWy8/or6vx/7lm/RsztCnKU134RIkHyrXDC/DRCsBWpkOLjJwwsK2AuD+Gme"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "عذراً، لا يزال الاتصال بالمستودع يواجه خطأ مؤقتاً في الشبكة (Failed to fetch). \n\nبصفتي \"العقل المدبر\" (Mastermind)، أود إفادتك بأن ملفات موقعك يتم إدارتها عادةً عبر نظام **GitHub** المرتبط بمنصة التشغيل الخاصة بنا هنا. بمجرد استقرار الاتصال بالخادم، يمكنني فحص وتعديل أو جلب أي ملف تحتاجه فوراً باستخدام أدوات التطوير الجراحي (Surgical Editing).\n\nهل هناك ملف معين تبحث عن مساره أو محتواه (مثل ملفات التنسيق CSS، أو JavaScript، أو بيانات الهيكل مثل `data.json`) لكي أساعدك في العثور عليه؟",
+        "thoughtSignature": "El4KXAERTTIP1gxISqC2OYKoT24NicTkCbfaCwqLRE/L6tMtXUCiFzvoi8lWv5bM+gKJMjVXFlH+QGN/+s7kRXYOB0zbsxwxrnwkxDIfzd5morc1A1S0iHojnzkHaVv8"
+      }
+    ]
   }
 ]
