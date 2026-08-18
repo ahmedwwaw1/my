@@ -275,5 +275,22 @@
         "thoughtSignature": "EmcKZQERTTIPHlMnuskp6o43D5DtZNyR3jJFnZcXKlsgoxmbR4vTm2Wo1nF6vOr1RmbQC9n6dlZRppwHdIOonAMFzS+0EPzY8lzLXJW+3jf0Q5I5UUrw2sd+O+2DkWVPiHg4F4elWH6L"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "احسنت"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أحسن الله إليك! خادمك في أي وقت لكل ما يتعلق بإدارة وتطوير أكاديمية VSA.",
+        "thoughtSignature": "EmcKZQERTTIPnJe5U9dnzadRXcARvvdiUa4Fl7S7MJv3tQVLs6JhibRRb6Ag+lhoJzhBBlFA1nMYrxZRr0B3z7cr1dF35/V4MiVGLZSZPtSp4iCRFwyRaezzoxoO7QSnnzAiyGMwoxjQ"
+      }
+    ]
   }
 ]
