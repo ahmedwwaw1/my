@@ -15,5 +15,22 @@
         "thoughtSignature": "El4KXAERTTIPkQB2/HgKKsNPGl0ZHBAi+BDofLX0vBGxKy9IcfJiPTPFcRag/RVPBim6YCODESoQTxbUPEC3SItoY8IV9+bvnzMldlMu5vg/6jP1WpI+tCcrxSNv6z8O"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك مرة أخرى! بصفتي العقل المدبر والمهندس الأول لـ VSA Academy، أنا في خدمتك دائماً. \n\nهل لديك مشروع برمجي جديد، إضافة أداة ذكية، أو تحديث معين ترغب في إجرائه على الموقع؟ تفضل بطرح طلبك وسأقوم بتنفيذه بدقة واحترافية عالية.",
+        "thoughtSignature": "El4KXAERTTIP9TKuJy26swGK1cutsZ0c+A10D/nGKrRpFI40485xkZdh4vzv4wLFo/wQV8BJIrtUGspHozsPHf2jUE+2SGpOGzJukp7rD/+PD08OzOHZ8yenmEvlwv/+"
+      }
+    ]
   }
 ]
