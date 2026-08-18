@@ -127,5 +127,22 @@
         "thoughtSignature": "El4KXAERTTIP6Li0CvxlLiuy6UWgXaqyDoiXiWV0h1yQ7ty1yL80Wqzf87GvZinzG8RmB0I2RNBeoYy6mg2ym/7t8OOekXHf/nE6ivb0mW+Y9jm5sw931zC6hILwdO7/"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "مرحباً بك مجدداً! \n\nيبدو أن الاتصال مستقر الآن. كيف يمكنني مساعدتك في أكاديمية VSA اليوم؟ هل تود محاولة الاستعلام عن تنبيهات الكريبتو مجدداً أو إجراء أي تحديثات وبرمجيات على الموقع؟",
+        "thoughtSignature": "EmcKZQERTTIPOZ0uJM7CTwTTPyScE3f55jnYdRaO9edZGDY1/u5yYFt07or6rHIOM3Mujh2meZEjWkYa7WTaaQK/HPtYlAgTvpZXtNRIjpYPYYenJE1qWt8veJseh47wIZ9slRQyne7Z"
+      }
+    ]
   }
 ]
