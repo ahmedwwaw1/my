@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. أنا **العقل المدبر (Mastermind)**، الذكاء التنفيذي والمهندس البرمجي لأكاديمية **VSA**.\n\nأنا جاهز لمساعدتك في إدارة المنصة، فحص البيانات المباشرة، تطوير الأكواد، التحكم في مهام سير العمل (Workflows)، أو أي مهام تقنية أخرى. \n\nكيف يمكنني خدمتك اليوم؟",
+        "thoughtSignature": "EoUDCoIDARFNMg9DBBObdWdzL4e1olH91/a4c6bjnboQp8kCnb7nDhR5UQP09SIj48LK8YulqCVRqugOfNfSZazLJuesoK9uyMQDs6b55Eb3b53ZAnW2TYGctlNzV3qpKwg8DarC/gPpfV++7BmGZVVCiIVfhITvXCDeVV3QE78jkIw28V7L+HmmW39d5UI5rEeGig+BKOS/4lYuDn2vmzJ4YbTu1ZxbJQWwo9TS4ZxbQqZbWH76G/gX3a7dg+Y1KSTXO6tVPW8/419ZOTCeZzo2bH0eKUbe0wTwkHjIW1zPCAgT/OhemQAOgYLQZIfj3Q1vHg/GlhRIhiEyS9oxeRq6foWHYQ4m7aZNn+b7vQLTRZUTiwj7O7aQC5M0bU7X7qc/IX0r2OGzHSp7C1VR+I1zSb/iKJouXzVnZV4qKyYuuQOB8ulsm7BI1PrakygJiD/5vpWX/DCSULqpNmaXReSyijabJ/qXyqi0TA8DzLwRGirfFIYRhAWeISrHunH/vwtM+DwKYSM="
+      }
+    ]
+  }
+]
