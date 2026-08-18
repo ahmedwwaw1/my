@@ -2565,43 +2565,58 @@
                 resizer.addEventListener('mousedown', function(e) {
                     e.preventDefault();
                     isResizing = true;
-                    let prevX = e.clientX;
-                    let prevY = e.clientY;
+
+                    const startX = e.clientX;
+                    const startY = e.clientY;
+                    const startWidth = chatBox.offsetWidth;
+                    const startHeight = chatBox.offsetHeight;
+
+                    // إضافة طبقة تغطية لمنع تداخل الأحداث والحفاظ على شكل المؤشر
+                    const overlay = document.createElement('div');
+                    overlay.style.position = 'fixed';
+                    overlay.style.top = '0';
+                    overlay.style.left = '0';
+                    overlay.style.width = '100vw';
+                    overlay.style.height = '100vh';
+                    overlay.style.zIndex = '9999';
+                    overlay.style.cursor = window.getComputedStyle(resizer).cursor;
+                    document.body.appendChild(overlay);
 
                     function mousemove(e) {
                         if (!isResizing) return;
-                        const rect = chatBox.getBoundingClientRect();
+
+                        const dx = e.clientX - startX;
+                        const dy = e.clientY - startY;
 
                         if (resizer.classList.contains('ai-resizer-r')) {
-                            chatBox.style.width = rect.width + (e.clientX - prevX) + 'px';
+                            chatBox.style.width = startWidth + dx + 'px';
                         } else if (resizer.classList.contains('ai-resizer-l')) {
-                            chatBox.style.width = rect.width - (e.clientX - prevX) + 'px';
+                            chatBox.style.width = startWidth - dx + 'px';
                         } else if (resizer.classList.contains('ai-resizer-b')) {
-                            chatBox.style.height = rect.height + (e.clientY - prevY) + 'px';
+                            chatBox.style.height = startHeight + dy + 'px';
                         } else if (resizer.classList.contains('ai-resizer-t')) {
-                            chatBox.style.height = rect.height - (e.clientY - prevY) + 'px';
+                            chatBox.style.height = startHeight - dy + 'px';
                         } else if (resizer.classList.contains('ai-resizer-br')) {
-                            chatBox.style.width = rect.width + (e.clientX - prevX) + 'px';
-                            chatBox.style.height = rect.height + (e.clientY - prevY) + 'px';
+                            chatBox.style.width = startWidth + dx + 'px';
+                            chatBox.style.height = startHeight + dy + 'px';
                         } else if (resizer.classList.contains('ai-resizer-bl')) {
-                            chatBox.style.width = rect.width - (e.clientX - prevX) + 'px';
-                            chatBox.style.height = rect.height + (e.clientY - prevY) + 'px';
+                            chatBox.style.width = startWidth - dx + 'px';
+                            chatBox.style.height = startHeight + dy + 'px';
                         } else if (resizer.classList.contains('ai-resizer-tr')) {
-                            chatBox.style.width = rect.width + (e.clientX - prevX) + 'px';
-                            chatBox.style.height = rect.height - (e.clientY - prevY) + 'px';
+                            chatBox.style.width = startWidth + dx + 'px';
+                            chatBox.style.height = startHeight - dy + 'px';
                         } else if (resizer.classList.contains('ai-resizer-tl')) {
-                            chatBox.style.width = rect.width - (e.clientX - prevX) + 'px';
-                            chatBox.style.height = rect.height - (e.clientY - prevY) + 'px';
+                            chatBox.style.width = startWidth - dx + 'px';
+                            chatBox.style.height = startHeight - dy + 'px';
                         }
-
-                        prevX = e.clientX;
-                        prevY = e.clientY;
                     }
 
                     function mouseup() {
                         isResizing = false;
+                        if (document.body.contains(overlay)) document.body.removeChild(overlay);
                         window.removeEventListener('mousemove', mousemove);
                         window.removeEventListener('mouseup', mouseup);
+
                         // حفظ المقاسات النهائية
                         localStorage.setItem('ai_chat_width', chatBox.offsetWidth);
                         localStorage.setItem('ai_chat_height', chatBox.offsetHeight);
@@ -2884,6 +2899,7 @@
         let selectedFileBase64 = null;
         let selectedFileType = null;
         let selectedFileName = "";
+        let selectedFileContent = null;
 
         async function handleFileUpload(event) {
             const file = event.target.files[0];
@@ -2891,8 +2907,18 @@
 
             selectedFileName = file.name;
             selectedFileType = file.type;
-            const reader = new FileReader();
 
+            // قراءة المحتوى النصي إذا كان الملف نصياً أو JSON
+            if (file.type === 'application/json' || file.type.startsWith('text/') || file.name.endsWith('.json') || file.name.endsWith('.txt')) {
+                const textReader = new FileReader();
+                textReader.onload = (e) => {
+                    selectedFileContent = e.target.result;
+                    console.log("✅ تم تحميل محتوى الملف النصي بنجاح.");
+                };
+                textReader.readAsText(file);
+            }
+
+            const reader = new FileReader();
             reader.onload = async function(e) {
                 const base64 = e.target.result.split(',')[1];
                 selectedFileBase64 = base64;
@@ -2924,6 +2950,7 @@
         function clearSelectedFile() {
             selectedFileBase64 = null;
             selectedFileType = null;
+            selectedFileContent = null;
             document.getElementById('fileInput').value = '';
             document.getElementById('imagePreviewContainer').style.display = 'none';
             updateSendButtonState();
@@ -2940,11 +2967,11 @@
 
             try {
                 let finalPrompt = msgText;
-                if (selectedFileBase64 && !selectedFileType.startsWith('image/')) {
-                    finalPrompt += `\n[ملاحظة للمدير: لقد أرفقت ملفاً من نوع ${selectedFileType} باسم ${selectedFileName}. إذا لم تكن قادراً على معالجته مباشرة، أخبرني بما تحتاجه برمجياً (أداة) لكي أتمكن من مساعدتك في قراءته مستقبلاً].`;
+                if (selectedFileContent) {
+                    finalPrompt += `\n\n[محتوى الملف المرفق (${selectedFileName})]:\n${selectedFileContent}`;
                 }
 
-                const response = await callGemini(finalPrompt, selectedFileType?.startsWith('image/') ? selectedFileBase64 : null);
+                const response = await callGemini(finalPrompt, selectedFileBase64, selectedFileType);
                 addMessageToUi('ai', response);
                 clearSelectedFile();
                 updateSessions();
@@ -3035,7 +3062,7 @@
             } catch (e) { return `❌ خطأ اتصال بالشبكة: ${e.message}`; }
         }
 
-        async function callGemini(promptText, imageBase64 = null) {
+        async function callGemini(promptText, fileBase64 = null, mimeType = null) {
             const key = geminiApiKey.trim();
             const userModel = document.getElementById('modelSelector').value;
             // قائمة النماذج الاحتياطية لضمان استمرارية الخدمة في حال فشل أحدها
@@ -3051,7 +3078,11 @@
 
             let currentParts = [];
             if (promptText) currentParts.push({ text: promptText });
-            if (imageBase64) currentParts.push({ inline_data: { mime_type: "image/jpeg", data: imageBase64 } });
+            if (fileBase64 && mimeType) {
+                if (mimeType.startsWith('image/') || mimeType === 'application/pdf') {
+                    currentParts.push({ inline_data: { mime_type: mimeType, data: fileBase64 } });
+                }
+            }
             const currentTurn = { role: "user", parts: currentParts };
 
             // 📝 دستور التعليمات الصارم (Strict Constitution via Structured Text)
