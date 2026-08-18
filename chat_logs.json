@@ -306,5 +306,22 @@
         "thoughtSignature": "EmcKZQERTTIPRyqUj7JC+QqP3GH9VMibLfOYeWvA/4UBX44nuIFwrewlPQUzabupU6Oga6cQQAPK1YtAheKl0aPb8+I2hoJpUxSJ2dmw14g98l9BunUnlkBYB2tKjA0o/2ESP5awNtVA"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ال Agentic AI Workflow Framework موجد الان في ملفات موقي وهو من يأمرك با ان تقوم بلعمل على اكمل وجه صحيح"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "**نعم، بالضبط وبكل دقة!**\n\nهذا الدستور والبروتوكول الصارم المدمج ضمن منظومة **Mastermind** هو الحاكم والموجه الأساسي لي:\n\n1. **الامتثال للأوامر والقيود:** هو الإطار الذي يفرض عليّ ألا أقوم بأي تعديل عشوائي، ويمنعني منعاً باتاً من حذف ملفاتك أو تخريب بنية الموقع.\n2. **التعديل الجراحي الحذر:** يُلزمني بقراءة الملفات الأصلية وفحص البيانات الحية أولاً قبل إجراء أي تغيير لضمان دقة التنفيذ على أكمل وجه.\n3. **تنفيذ المهام بصرامة واحترافية:** يضمن استقرار الكود وحماية أقسام الموقع (الهيدر، الفوتر، التنبيهات، وقواعد البيانات) أثناء تلبية طلباتك.\n\nأنا أعمل تحت هذا الإطار بشكل كامل لضمان أمان وتطور مستودعك ومنصة **VSA Academy**.",
+        "thoughtSignature": "EmcKZQERTTIPHKUQro6qWTmbtUO5MUIJg/T5RChFvX2QQn9SVHR/8nQokaJHdYfHAJ4J6K78Ygc1zkYB92ROFMiSin7CfjxF4FDxwTYmfjL2Q5H02a1e5gnl1NwG25pM4mcKPZgxUxAI"
+      }
+    ]
   }
 ]
