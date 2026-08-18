@@ -75,5 +75,22 @@
         "thoughtSignature": "EtUHCtIHARFNMg81zUPjnJshmgI9Zw82muR0me+/UjsBQ0Ctf/DsrXCijk//AT1l6tYRVbHUjCqFmEhuasL2MTwIKJxBTg3QqRK5+Nw1eQUDC4doUdUnSYLHy84StblvD/1nAPpO0UxSQEcz9N6K4rbPoeOf4+uqG35GE0gMxDQA6lmb7lD51/INKW11VIp/0mnfGj0aJh0dkeMhst5XF7lmSKeP/O/+t919Tp3kszZiOB+yptQgRyxZU2SJl8S/yX8ko/n3W1iCEQe7MyZCGF/dGAKbXQa/wiYkK5tEuze15VwV1t7G4MJrWZ+Sg5vlwUPEqIIntial6O6VJIiNRemexbQKS7zQuQMQCCNfaon1H5tCu/4O6WfdP4rM4CvUICZaLOiRnULXbg4JMFHOjswk80fMqfVHGHH4VYDO0XWTZusIgux6xCcr2L7KBshBzDXXbaX0tz9Tq58Fb+xxJLXk5IR6X0yzkxUSQgHPEsK2qBqmAybs1alLMY4aFnoA+N6q6PhEC6U47IKHACAVJxE9INgnLw4r1kAeC33mQSVp9m3ZlSb36k+HKTSOlWyIPJwUE5RYbusIiIiKLLba3FydZtHhGD9JBw+uPoO/Rtc5AnVarbNqeFtQLNdf8O0LGtWWmsU6hdUkkKXh8NbepPpxohWlzUmBoifrSN63RshvzOSrVugdnJuFOmC5JuO18lsh0uy6ZxrCl864fAaXweuNhYqMSf+YrySmJ0iJGPc9AUO4MV0j5JNDRcFuueP4TEdTJVEDWvo1QqWc3G5RzKFAjum0KHhiuHkobCcd3utN3/XaIsZ85hdmL6csuHEWADJxykVK0cmjXTvaYFGssbV18zDYeXkmE+sbugwmaxaSEJneyrgoOEpENjp+8qVCcz4xvW5N3ytEag/ajVc8zTwvNGUcx3Re2CIj/NOJhfKDKFclRJlD5zONCPz7YfUjoPk/r60qPCw3v3r/a6q3oIlWQnPUygcZ0DoPAlFanVCQm+lkz76Ru8hiYT3SPYZTNRczON4DgjiwGMxXfF3R0E8woZrqZHA0oHwbjXohtZrRncpzulFyOv5R6AdexxtoKi8BnIE3+QSHZDH8DFlcI5vq1Gtn9NGseICfrBWiHXngJQy4x/idrjskiv03nMKTiJtd2iEvxdx07RaDZWndERJCXtN/5+AjCBP8lkbO5C2fMVRgphTTXtZF4wyFg+cPEtzeVKMjJ2Iwnk0/Sb4Zgfna/suTyZ7DZrxxQiDXxY7EtQWaJ1miEMTC6qgdCnUEEl6BahC546E7M8+4s1OsQoXb/re41iAV"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا هل شاهدت خبر البيتكوين في هاذه الدردشة"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "بصفتي الذكاء التنفيذي لـ VSA Academy (العقل المدبر)، فإنني أطلع على سجل هذه الدردشة والبيانات الحية المحدثة في النظام بشكل دอน انقطاع.\n\nآخر تفاصيل تم رصدها وتداولها في سجل الدردشة والنظام لزوج البيتكوين (**BTC/USDT**) من منصة بينانس تشير إلى أن السعر يبلغ **64,350.40 USDT** مع نسبة تغير إيجابية بـ **+2.05%** وحجم تداول تجاوز **144.8 مليون دولار** ضمن تنبيهات السيولة العالية.\n\nهل ترغب في تحليل هذا السعر فنياً أو زابياً بناءً على استراتيجيات وايكوف أو التحليل الزمني (مربع 9 و 144) المتاحة في دورات الأكاديمية؟",
+        "thoughtSignature": "El4KXAERTTIPVz32mUJzyDeEmxc0ufqojuJG7QDy+s8UGAnJcjOWKY6XMSxTTaJl5kTYmGgVFrMBrS4EiZD2tJ9aU8toZvdMcKOmwhohUB+Yy09x+MXyxi8ulbboS4FT"
+      }
+    ]
   }
 ]
