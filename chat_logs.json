@@ -1,1 +1,45 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اي هي ملفات موقعي الان في اي مستودع"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_2941773"
+        },
+        "thoughtSignature": "El4KXAERTTIPvmok+Ahyx6WrJCVYxHaUT9X+mv8zqjZz77Uoq0ZBUkIR+esIx50ZGzD4PBsAKPcWIMezRyPlbKC7aOWx608YIFhMJxb+fzykjBCWWf7nhsVVbyCinyCn"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "عذراً، حدث خطأ في الاتصال بالشبكة أثناء محاولة استعراض ملفات المستودع (Failed to fetch). \n\nهل ترغب في محاولة استعراض الملفات مرة أخرى، أو هل لديك استفسار تقني محدد حول بنية المشروع أو الأكواد الحالية؟ أنا هنا لمساعدتك فوراً.",
+        "thoughtSignature": "El4KXAERTTIPuF47OoJ24mGhxgkHlQbUlQ6k4hlHIlqPIvpvRPsHEcYPv3pMIQmOMAOsDUqYWrx29DjJvCwoExsLkYFjIVpxQ6AkwmZ1g31rSTPgsTiWzFxEWHAst9eQ"
+      }
+    ]
+  }
+]
