@@ -41,5 +41,48 @@
         "thoughtSignature": "El4KXAERTTIPr9PD56yTIlCssCgXmrXs4jagw0FFzBYy++80e0wWJw2Y97KxBx/igrKGmzhsNTZ4MoYNHcdYgF+JDeFnAb0fqnzSXdRcJne9b/yG2szRZDuE63nyLoqe"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "Agentic AI Workflow Framework هي موجودة الان في ملفاتي"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_60411"
+        },
+        "thoughtSignature": "El4KXAERTTIPuf2/uxSXINHaPqxMWGPsiXb15d/upoMZHdfttmLqk0Ia57bCAWp0Ih8qlM+ny08/9U7o9SWW4ttX5QlqacOX7QYMaWXfkR27zruYQsmzqpeqnFUJYEL0"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "عذراً، لا يزال الاتصال بالمستودع يواجه مشكلة مؤقتة (خطأ شبكي عند محاولة قراءة الملفات). \n\nبما أنك تؤكد أنها موجودة الآن في ملفاتك، فهذا ممتاز! هذا يعني أن البنية التحتية لديك مهيأة للعمل مع الـ Agentic AI Workflows والأنظمة الذكية. \n\nإذا كنت تريد مني تنفيذ أي إجراء عليها (مثل: ربطها بـ واجهة المستخدم، تعديل إعداداتها، فحص توافقها مع البروتوكولات، أو تشغيلها)، يرجى تزويدي باسم الملف أو المسار الذي توجد فيه (مثلاً: `agents/` أو داخل ملف معين) لكي أستهدف قراءته مباشرة والتفاعل معه.",
+        "thoughtSignature": "El4KXAERTTIPRLgjyvIXRQVHsyOVCD2g2eRK8DTuFysNSipGZlS0XfYvwS9ruq9Q3MkLSZqtP/JW8yBbh6HJE52y9BVbAYeGanLKO8j6bArdYTnnmKGmpNhoY1vLnyUa"
+      }
+    ]
   }
 ]
