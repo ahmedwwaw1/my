@@ -49,5 +49,22 @@
         "thoughtSignature": "EtYHCtMHARFNMg/7Boa4RRCq1DEtKoBprAMW9sbB9UCm7+9inyG9xO77D2LrK5uB06Fk4PTeolOZ5IQQdzG9jy7DfTjcXhAjsjnJpyQXNudNpzAbZN9eZl3fskRavVqloGF8OlBN2FWt5qGyMhnkOU9GopMG9dG/d9DN1Id8brtH5ERxtxvbwDFmhV7rwqZPG8Mcywb9eqc08MCyVZLQ29+Lt/tyD01BMBoQID1G8otS6gGKZCdu8LtSMlKP2J001ewSDlyOo36VYGDcKYYtrMfGGw7TZ1LR0VqbMpmEqDYzY550huTpGnmzH8iB7ki804i0Pryxr4hzU/33KcpQOhZwF3a+uaqskzpMfFvm8BtgfqdlubEztYGhC73xC6h9bjJ+6/YPvDTETNiUkafC9nVILxWTS8HP5SrlQOOMTc/4gSE9mFOKv3fDCfoblT8MxhVEVkPT76ob3LCC0eGSfey+zdjaau5yf3Fb0DSq6L248DidjhDrrScCmCQ9bp5xB8VGjiTe3m2ThakuC22sNt9tt4zywESvWoaybOwQSaPzJtvNoSrh7byOP+qpb6h5pCSv5BdbGv6aJkhLRHCUxdB/p8gkKzGJZPFGTTuJQ/98tkChmcnUhF04bBgmosqo/45nB/huNT5wa+J/Zlhap3LddcpZsl6AL8812gI8FqywOwmmVAitagyzJPGCxbi2F6T89zNBiwRMpso4CoH8okzEqri5oL1Z179iXJCZtrwAWuZnQAfX47+tN3BQT9hOO04W9OmoPm1dXKWZZm4VMCwJXsPyOnHlxp4G3Y2nlVpakzJNdem1VaT1tnesnNJjBi9JR81bWzqi3nk4kxmSzKTBBvhy43MdtAjHJuW4cRDTICxXQSFctUINVONBokZlwMnv2j23X/ya+yVSy8S5IUkhEjexwkDT6XnQk0JDrT6sSj2ygolkksJpFUDKKoE9ZQu0QY1M0CqPvouvhW6CqI0pFLgRIEmKr/72dZAgoj+VCCgGl+u8pyhJ4g2qPKkZrTOGY8BjftDLElVXcz0n1Cpqry/W6XSsDpff38XyMbkSLb8/OrEShycIZcPnRJEY6fimGoe3v/jGtQlhY5iyy+NYRMzbkqooZ5KVXDHTquyd96TqZZ3mD/NhEpe92dpDrK81QkNWT9CRte1Ue+pEmBGQc9pQLi+njOXKOOSRFoOMEcjIfy97yydq8rtUQtgC8tnA6D03c+6GVXjk94b17RORCSdlxwTHoNwciu+NPPhmrnA29BMQ+KYCHq7HDeejJAtiJWxxI1r/fSYoqtCmfxIuMlQewzkziQ=="
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل اداء Agentic AI Workflow متاحة في نضامك"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "**نعم، متاحة بالكامل في نظامي.**\n\nبصفتي **Mastermind (العقل المدبر)**، أمتلك قدرات وأدوات الـ **Agentic AI Workflow**، والتي تتيح لي العمل كوكيل ذكي مستقل ينفذ المهام عبر دورة عمل متكاملة:\n\n1. **الاستكشاف والقراءة (Inspection & Analysis):** فحص المستودع والملفات والبيانات الحية.\n2. **التخطيط والتفكير التنفيذي (Reasoning):** تحديد الخطوات البرمجية الدقيقة لحل المشكلة أو إضافة ميزة جديدة.\n3. **التنفيذ الجراحي (Surgical Execution):** تعديل الأكواد بدقة دون الإضرار بالبنية الأساسية.\n4. **تشغيل وإدارة البوتات (Workflow Orchestration):** التحكم في مهام الأتمتة ومسارات العمل عبر GitHub Actions (`triggerGithubWorkflow` و `updateWorkflowStatus`).\n\nباختصار: **أنا مصمم وأعمل أساساً وفق إطار عمل Agentic AI Workflow المربوط مباشرة بمستودع GitHub الخاص بك.**",
+        "thoughtSignature": "El4KXAERTTIPDxGD505qv1IvSPCPdekW6ryPxkAe9ZpGPFXS21wQ74WfcQxqs3HsRVnOb5oUR+75+dEkVGN30lSlh5NfpCxuVC8qczats69K9fwGmiYGjxYtFBXomnCM"
+      }
+    ]
   }
 ]
