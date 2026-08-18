@@ -170,5 +170,21 @@
         "thoughtSignature": "EmcKZQERTTIPBoapkQZYzpxeNPJNj4jGjZVuicZsicx0ufGgjuBoxfXkbkyqkMAtUEL0mUgFJytqktz0xbO5M7PIutGYWuiUaFSZHU7MopYcHenogx11GdYYt6QgcczBflxD/iBZU9le"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اليس انت الان تعرف مستودعي ام انك لا يمكنك الاتصال في منصة جت اب لتعرف اني مستودعي"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أنا أعرف مستودعك وهيكله والسياسات الخاصة بـ **VSA Academy** (مثل الاعتماد على Supabase، التنبيهات، والتحليل الفني والزمني).\n\nسبب الإجابة السابقة هو أن أداة الربط المباشر مع API الخاص بـ **GitHub** واجهت خطأ اتصال مؤقت أثناء استعلام قائمة الملفات الحية (`listGithubFiles`).\n\nدعني أحاول الاتصال بملف محدد من ملفات المستودع الرئيسية للتحقق فوراً:"
+      }
+    ]
   }
 ]
