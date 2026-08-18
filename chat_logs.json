@@ -84,5 +84,22 @@
         "thoughtSignature": "El4KXAERTTIP1gxISqC2OYKoT24NicTkCbfaCwqLRE/L6tMtXUCiFzvoi8lWv5bM+gKJMjVXFlH+QGN/+s7kRXYOB0zbsxwxrnwkxDIfzd5morc1A1S0iHojnzkHaVv8"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "بصفتك نموذج ذكي خاص بمقعي هل لديك اداء  Agentic AI Workflow Framework مزرعة فيك اي في ملفات موقعي"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "نعم، بكل تأكيد! \n\nبصفتي **العقل المدبر (Mastermind - AI Engineer & CEO)** والمصمم هندسياً لإدارة هذا الموقع، لدي بالفعل صلاحيات وإطار عمل متكامل من نوع **Agentic AI Workflow Framework** مرتبط مباشرةً ببيئة العمل ومستودع الملفات الخاص بك.\n\n### 🛠️ كيف يعمل إطار عمل الـ Agentic AI لدي؟\n1. **أدوات الذكاء الاصطناعي الفاعلة (Agentic Tools):** أمتلك مجموعة من الأدوات البرمجية المتخصصة التي تتيح لي:\n   - قراءة الملفات البرمجية (`getGithubFile`).\n   - التعديل الجراحي المباشر على الأكواد دون المساس بالبنية الأساسية (`githubAction`).\n   - استكشاف هيكل المجلدات والمستودعات (`listGithubFiles`).\n   - التحكم الفوري بتشغيل أو إيقاف البوتات والمهام الآلية (`updateWorkflowStatus`, `triggerGithubWorkflow`).\n   - الحقن الفوري لتنسيقات الواجهة وتغييرات CSS للتحقق البصري (`injectGlobalStyles`).\n\n2. **التنفيذ التلقائي والذكي:** بدلاً من مجرد إعطائك إجابات نصية، يمكنني تنفيذ المهام البرمجية بالنيابة عنك، وتصحيح الأخطاء، وإدارة التحديثات بشكل مستمر مع الالتزام التام بقواعد الأمان والحفاظ على هيكل الموقع (Header, Footer, Grid Systems).\n\nإذا كنت ترغب في تنفيذ مهام معينة (مثل تحديث بيانات، إضافة ميزات برمجية، فحص ملفات معينة، أو تشغيل مهام تلقائية)، فقط أخبرني بما تريد إنجازه وسأقوم بتنفيذه فوراً عبر هذه الأدوات!",
+        "thoughtSignature": "El4KXAERTTIPzIMCu+f06et4YiEkGL5MnL3+ql1TbK8vJOyep4NJnn7Z9XgjCSQqtgo30+RVdZmJBQ7GQgyzsGhDhC3BmedQt2Eg8IwyKpAVhUO/hTVNsFJA9p/XQULh"
+      }
+    ]
   }
 ]
