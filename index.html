@@ -635,26 +635,11 @@
         }
 
         .ai-btn {
-            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
-            border: none;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .ai-btn:hover {
-            transform: scale(1.1) rotate(5deg);
+            display: none; /* الغاء الزر الازرق العائم بطلب المستخدم */
         }
 
         .ai-chat-box {
-            display: none;
+            display: flex;
             width: 400px;
             height: 600px;
             background: #1e1f22;
@@ -662,18 +647,94 @@
             border-radius: 8px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             overflow: hidden;
+        /* ===== AI Orchestrator Widget (Mastermind Pro) ===== */
+        .ai-widget {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .ai-btn {
+            display: none; /* الغاء الزر الازرق العائم بطلب المستخدم */
+        }
+
+        .ai-chat-box {
+            display: flex;
+            width: 400px;
+            height: 600px;
+            background: #1e1f22;
+            border: 1px solid #3c3f41;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            position: relative;
             flex-direction: column;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
+        /* Recent Chats Sidebar */
+        .ai-history-sidebar {
+            position: absolute;
+            top: 40px;
+            left: -100%;
+            width: 280px;
+            height: calc(100% - 40px);
+            background: #2b2d30;
+            border-right: 1px solid #3c3f41;
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            padding: 12px;
+            color: #dfe1e5;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.3);
+        }
+
+        .ai-history-sidebar.open { left: 0; }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #3c3f41;
+        }
+
+        .history-item {
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            transition: background 0.2s;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .history-item:hover { background: #393b40; }
+        .history-item .actions { display: none; gap: 10px; }
+        .history-item:hover .actions { display: flex; }
+
         .ai-header {
             background: #2b2d30;
-            padding: 8px 12px;
+            padding: 0 12px;
             border-bottom: 1px solid #3c3f41;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: #dfe1e5;
+            height: 40px;
+            box-sizing: border-box;
+            flex-shrink: 0;
         }
 
         .ai-header-title {
@@ -681,18 +742,21 @@
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
         }
 
         .ai-header-actions {
             display: flex;
-            gap: 14px;
+            gap: 16px;
             color: #afb1b3;
+            align-items: center;
         }
 
         .ai-header-actions span {
             cursor: pointer;
-            font-size: 14px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
         }
 
         .ai-header-actions span:hover { color: #fff; }
@@ -708,33 +772,35 @@
         }
 
         .msg {
-            max-width: 90%;
-            line-height: 1.5;
+            max-width: 85%;
+            line-height: 1.6;
             font-size: 13px;
             word-wrap: break-word;
+            padding: 10px 14px;
+            border-radius: 12px;
             animation: fadeInMsg 0.3s ease-out;
         }
 
         @keyframes fadeInMsg {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .msg.user {
             background: #393b40;
             color: #dfe1e5;
-            padding: 10px 14px;
-            border-radius: 12px;
             align-self: flex-end;
+            border-bottom-right-radius: 2px;
         }
 
         .msg.ai {
+            background: transparent;
             color: #dfe1e5;
             align-self: flex-start;
-            width: 100%;
+            padding: 0;
+            max-width: 100%;
         }
 
-        /* Steps / Thoughts */
         .ai-step {
             display: flex;
             align-items: center;
@@ -742,26 +808,32 @@
             color: #afb1b3;
             font-size: 12px;
             margin-bottom: 8px;
+            background: rgba(255,255,255,0.03);
+            padding: 4px 8px;
+            border-radius: 4px;
+            width: fit-content;
         }
-
-        .ai-step i { color: #8a8a8a; }
-        .ai-step.edited { color: #d4a017; }
-        .ai-step.read { color: #4db6ac; }
 
         .ai-input-container {
             padding: 12px;
             background: #1e1f22;
             border-top: 1px solid #3c3f41;
+            flex-shrink: 0;
         }
 
         .ai-input-wrapper {
             background: #2b2d30;
             border: 1px solid #4e5157;
-            border-radius: 8px;
-            padding: 8px 12px;
+            border-radius: 12px;
+            padding: 10px 14px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
+            transition: border-color 0.2s;
+        }
+
+        .ai-input-wrapper:focus-within {
+            border-color: #3574f0;
         }
 
         .ai-input-row {
@@ -775,8 +847,9 @@
             background: transparent;
             border: none;
             color: #fff;
-            font-size: 13px;
+            font-size: 14px;
             outline: none;
+            padding: 2px 0;
         }
 
         .ai-input-row input::placeholder { color: #6e7073; }
@@ -790,28 +863,35 @@
 
         .ai-footer-icons {
             display: flex;
-            gap: 12px;
+            gap: 14px;
             color: #afb1b3;
-            font-size: 14px;
+            font-size: 18px;
             align-items: center;
         }
 
-        .ai-footer-icons span { cursor: pointer; }
+        .ai-footer-icons span { cursor: pointer; transition: color 0.2s; display: flex; align-items: center; }
         .ai-footer-icons span:hover { color: #fff; }
 
         .ai-send-btn-new {
             background: transparent;
             border: none;
-            color: #afb1b3;
+            color: #4e5157;
             cursor: pointer;
-            padding: 4px;
+            padding: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: color 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            border-radius: 50%;
         }
 
-        .ai-send-btn-new:hover { color: #00d4ff; }
+        .ai-send-btn-new.active {
+            color: #fff;
+            background: #3574f0;
+            pointer-events: auto;
+            transform: scale(1.05);
+        }
 
         .model-selector-container {
             position: relative;
@@ -824,14 +904,11 @@
             border: none;
             border-radius: 40px;
             font-size: 11px;
-            padding: 2px 8px;
+            padding: 3px 10px;
             cursor: pointer;
             outline: none;
             appearance: none;
-            -webkit-appearance: none;
         }
-
-        #modelSelector:hover { background: #4e5157; color: #fff; }
 
         .artifact-box {
             background: #2b2d30;
@@ -847,17 +924,16 @@
             cursor: pointer;
         }
 
-        .artifact-box:hover { background: #323438; }
-
         /* Optimize Card Entrance */
         .card {
             opacity: 0;
-            transform: translateY(20px);
-            animation: cardEntrance 0.5s ease forwards;
+            transform: translateY(15px);
+            animation: cardEntrance 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
         @keyframes cardEntrance {
             to { opacity: 1; transform: translateY(0); }
+        }
         }
 
         .card:nth-child(1) { animation-delay: 0.05s; }
@@ -894,71 +970,72 @@
         <div class="grid-layout" id="mainGrid"></div>
     </div>
 
-    <!-- AI Orchestrator Widget -->
+    <!-- AI Orchestrator Widget (The Agent) -->
     <div class="ai-widget">
         <div class="ai-chat-box" id="aiChatBox">
+            <!-- Sidebar for Recent Chats -->
+            <div class="ai-history-sidebar" id="aiHistorySidebar">
+                <div class="history-header">
+                    <span style="font-weight: bold; font-size: 14px; letter-spacing: 0.5px;">Recent Chats</span>
+                    <span onclick="toggleHistory()" style="cursor: pointer; opacity: 0.7;">✕</span>
+                </div>
+                <div id="historyList" style="flex-grow: 1; overflow-y: auto;">
+                    <!-- Chats injected here -->
+                </div>
+            </div>
+
             <div class="ai-header">
                 <div class="ai-header-title">
-                    <span>Agent</span>
+                    <span onclick="toggleHistory()" style="cursor: pointer; font-size: 20px; color: #afb1b3;" title="History">🕒</span>
+                    <span style="letter-spacing: 0.5px;">Agent</span>
                 </div>
                 <div class="ai-header-actions">
-                    <span onclick="clearChatHistory()" title="New Chat">＋</span>
-                    <span title="History">💬</span>
-                    <span title="Settings">⋮</span>
+                    <span onclick="createNewChat()" title="New Chat" style="font-size: 22px;">＋</span>
+                    <span title="Settings" onclick="resetGeminiKey()">⋮</span>
                     <span onclick="toggleAiChat()">—</span>
                 </div>
             </div>
 
             <div class="ai-messages" id="aiMessages">
-                <!-- Thought Steps Example -->
                 <div class="msg ai">
-                    <div class="ai-step"><span style="font-size: 14px;">🧠</span> Thought</div>
-                    <div class="ai-step read"><span style="font-size: 14px;">🔍</span> Read <b>index.html</b></div>
                     أهلاً بك في <b>VSA Academy</b>! أنا العقل المدبر. كيف يمكنني مساعدتك اليوم؟
                 </div>
             </div>
 
-            <div id="imagePreviewContainer" style="display: none; padding: 8px 12px; background: #2b2d30; border-top: 1px solid #3c3f41;">
-                <img id="imagePreview" src="" style="height: 40px; border-radius: 4px; border: 1px solid #00d4ff;">
-                <span style="color: #ff5555; cursor: pointer; margin-left: 10px;" onclick="clearSelectedImage()">×</span>
+            <!-- Previews for Images/Files -->
+            <div id="imagePreviewContainer" style="display: none; padding: 10px 15px; background: #2b2d30; border-top: 1px solid #3c3f41; align-items: center; gap: 12px;">
+                <div id="fileIconPreview" style="font-size: 26px;"></div>
+                <img id="imagePreview" src="" style="height: 45px; border-radius: 6px; border: 2px solid #3574f0; display: none; object-fit: cover;">
+                <div id="fileNamePreview" style="font-size: 12px; color: #afb1b3; flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500;"></div>
+                <span style="color: #ff5555; cursor: pointer; font-size: 18px; font-weight: bold;" onclick="clearSelectedFile()">✕</span>
             </div>
 
             <div class="ai-input-container">
-                <!-- Artifact Status (Simulated) -->
-                <div class="artifact-box" id="artifactStatus" style="display: none;">
-                    <span>Changes (1 artifact)</span>
-                    <span>⌄</span>
-                </div>
-
                 <div class="ai-input-wrapper">
                     <div class="ai-input-row">
-                        <input type="text" id="aiInput" placeholder="Ask AI..." onkeydown="if(event.key === 'Enter') sendAiMessage()">
+                        <input type="text" id="aiInput" placeholder="Ask AI..." oninput="updateSendButtonState()" onkeydown="if(event.key === 'Enter') sendAiMessage()">
                     </div>
                     <div class="ai-input-footer">
                         <div class="ai-footer-icons">
-                            <span onclick="document.getElementById('imageInput').click()" title="Attach image">📎</span>
-                            <span title="Safety Protocol Active">🛡️</span>
+                            <span onclick="document.getElementById('fileInput').click()" title="Attach PDF, JSON, Video, Image" style="font-size: 20px;">⊞</span>
+                            <span title="Safety Protocol Active" style="color: #4db6ac; font-size: 16px;">🛡️</span>
                             <div class="model-selector-container">
-                                <select id="modelSelector" onchange="saveModelSelection()" title="Select AI Model">
-                                    <option value="gemini-2.0-flash">Gemini 2.0 Flash (افتراضي)</option>
-                                    <option value="gemini-2.0-flash-lite-preview-02-05">Gemini 2.0 Lite (سريع)</option>
-                                    <option value="gemini-1.5-flash">Gemini 1.5 Flash (مستقر)</option>
-                                    <option value="gemini-2.0-pro-exp-02-05">Gemini 2.0 Pro (احترافي)</option>
-                                    <option value="gemini-3.5-flash-lite">Gemini 3.5 Lite (تجريبي)</option>
-                                    <option value="gemini-3.6-flash">Gemini 3.6 Flash</option>
-                                    <option value="gemini-3-flash-preview">Gemini 3 Flash Preview</option>
+                                <select id="modelSelector" onchange="saveModelSelection()" title="AI Model">
+                                    <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                                    <option value="gemini-3-flash-preview">Gemini 3 Preview</option>
+                                    <option value="gemini-1.5-flash">Gemini 1.5 Stable</option>
+                                    <option value="gemini-2.0-flash-lite-preview-02-05">Gemini 2.0 Lite</option>
                                 </select>
                             </div>
                         </div>
-                        <button class="ai-send-btn-new" onclick="sendAiMessage()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                        <button class="ai-send-btn-new" id="aiSendBtn" onclick="sendAiMessage()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                         </button>
                     </div>
-                    <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)">
                 </div>
             </div>
         </div>
-        <button class="ai-btn" onclick="toggleAiChat()" title="تحدث مع العقل المدبر لموقعك">🧠</button>
     </div>
 
     <script>
@@ -2611,6 +2688,7 @@
         // تهيئة المفاتيح والسياق عند تحميل الصفحة
         window.addEventListener('load', loadChatFromStorage);
 
+
         async function clearChatHistory() {
             chatHistory = [];
             if (githubToken) {
@@ -2619,55 +2697,173 @@
             localStorage.removeItem('gemini_chat_ui');
             const container = document.getElementById('aiMessages');
             container.innerHTML = '<div class="msg ai">تم مسح الذاكرة العالمية. أنا جاهز لبدء مهمة جديدة!</div>';
-            alert("🧹 تم تصفير المحادثة في GitHub.");
+            // alert removed per user request
         }
 
-        function handleImageUpload(event) {
+        let chatSessions = JSON.parse(localStorage.getItem('gemini_sessions') || '[]');
+        let currentSessionId = localStorage.getItem('gemini_current_session') || Date.now().toString();
+
+        function toggleHistory() {
+            const sidebar = document.getElementById('aiHistorySidebar');
+            sidebar.classList.toggle('open');
+            if (sidebar.classList.contains('open')) renderHistory();
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            list.innerHTML = chatSessions.map(s => `
+                <div class="history-item" onclick="loadSession('${s.id}')">
+                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:160px;">${s.title}</span>
+                    <div class="actions">
+                        <span onclick="event.stopPropagation(); renameSession('${s.id}')">✏️</span>
+                        <span onclick="event.stopPropagation(); deleteSession('${s.id}')">🗑️</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function createNewChat() {
+            currentSessionId = Date.now().toString();
+            chatHistory = [];
+            document.getElementById('aiMessages').innerHTML = '<div class="msg ai">بدأت محادثة جديدة! كيف يمكنني مساعدتك؟</div>';
+            const sidebar = document.getElementById('aiHistorySidebar');
+            if (sidebar.classList.contains('open')) toggleHistory();
+            saveChatToStorage();
+        }
+
+        async function deleteSession(id) {
+            chatSessions = chatSessions.filter(s => s.id !== id);
+            localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
+            renderHistory();
+        }
+
+        function renameSession(id) {
+            const newName = prompt("اسم المحادثة الجديد:");
+            if (newName) {
+                const session = chatSessions.find(s => s.id === id);
+                if (session) session.title = newName;
+                localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
+                renderHistory();
+            }
+        }
+
+        function loadSession(id) {
+            const session = chatSessions.find(s => s.id === id);
+            if (session) {
+                currentSessionId = id;
+                chatHistory = session.history;
+                rebuildChatUi();
+                toggleHistory();
+            }
+        }
+
+        function updateSendButtonState() {
+            const input = document.getElementById('aiInput');
+            const btn = document.getElementById('aiSendBtn');
+            if (input.value.trim() !== "" || selectedFileBase64) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+
+        let selectedFileBase64 = null;
+        let selectedFileType = null;
+        let selectedFileName = "";
+
+        async function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
 
+            selectedFileName = file.name;
+            selectedFileType = file.type;
             const reader = new FileReader();
-            reader.onload = function(e) {
-                selectedImageBase64 = e.target.result.split(',')[1];
-                document.getElementById('imagePreview').src = e.target.result;
+
+            reader.onload = async function(e) {
+                const base64 = e.target.result.split(',')[1];
+                selectedFileBase64 = base64;
+
+                const preview = document.getElementById('imagePreview');
+                const iconPreview = document.getElementById('fileIconPreview');
+                const namePreview = document.getElementById('fileNamePreview');
+
                 document.getElementById('imagePreviewContainer').style.display = 'flex';
+                namePreview.innerText = file.name;
+
+                if (file.type.startsWith('image/')) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    iconPreview.style.display = 'none';
+                } else {
+                    preview.style.display = 'none';
+                    iconPreview.style.display = 'block';
+                    if (file.type === 'application/pdf') iconPreview.innerText = '📄';
+                    else if (file.type.includes('json')) iconPreview.innerText = '⚙️';
+                    else if (file.type.startsWith('video/')) iconPreview.innerText = '🎬';
+                    else iconPreview.innerText = '📝';
+                }
+                updateSendButtonState();
             };
             reader.readAsDataURL(file);
         }
 
-        function clearSelectedImage() {
-            selectedImageBase64 = null;
-            document.getElementById('imageInput').value = '';
+        function clearSelectedFile() {
+            selectedFileBase64 = null;
+            selectedFileType = null;
+            document.getElementById('fileInput').value = '';
             document.getElementById('imagePreviewContainer').style.display = 'none';
+            updateSendButtonState();
         }
 
         async function sendAiMessage() {
             const input = document.getElementById('aiInput');
             const msgText = input.value.trim();
-            if (!msgText && !selectedImageBase64) return;
+            if (!msgText && !selectedFileBase64) return;
 
-            if (!geminiApiKey) {
-                geminiApiKey = await fetchApiKeyFromSupabase('gemini_key');
-                if (!geminiApiKey) {
-                    addMessageToUi('ai', "⚠️ مفتاح Gemini API غير متوفر. اضغط على أيقونة الترس ⚙️ لإدخاله.");
-                    return;
-                }
-            }
-
-            if (!githubToken) githubToken = await fetchApiKeyFromSupabase('github_token');
-
-            addMessageToUi('user', msgText || "(صورة)");
+            addMessageToUi('user', msgText || `أرسل ملفاً: ${selectedFileName}`);
             input.value = '';
+            updateSendButtonState();
 
             try {
-                const response = await callGemini(msgText, selectedImageBase64);
+                let finalPrompt = msgText;
+                if (selectedFileBase64 && !selectedFileType.startsWith('image/')) {
+                    finalPrompt += `\n[ملاحظة للمدير: لقد أرفقت ملفاً من نوع ${selectedFileType} باسم ${selectedFileName}. إذا لم تكن قادراً على معالجته مباشرة، أخبرني بما تحتاجه برمجياً (أداة) لكي أتمكن من مساعدتك في قراءته مستقبلاً].`;
+                }
+
+                const response = await callGemini(finalPrompt, selectedFileType?.startsWith('image/') ? selectedFileBase64 : null);
                 addMessageToUi('ai', response);
-                clearSelectedImage();
-                saveChatToStorage();
+                clearSelectedFile();
+                updateSessions();
             } catch (err) {
-                console.error(err);
-                addMessageToUi('ai', "⚠️ حدث خطأ أثناء الاتصال.");
+                addMessageToUi('ai', "⚠️ فشل في معالجة الطلب.");
             }
+        }
+
+        function updateSessions() {
+            const existing = chatSessions.find(s => s.id === currentSessionId);
+            const title = chatHistory.length > 0 ? chatHistory[0].parts[0].text.substring(0, 30) + "..." : "محادثة جديدة";
+            if (existing) {
+                existing.history = chatHistory;
+                existing.title = title;
+            } else {
+                chatSessions.unshift({ id: currentSessionId, title: title, history: chatHistory });
+            }
+            if (chatSessions.length > 20) chatSessions.pop();
+            localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
+        }
+
+        function rebuildChatUi() {
+            const container = document.getElementById('aiMessages');
+            container.innerHTML = '';
+            chatHistory.forEach(turn => {
+                const sender = turn.role === 'user' ? 'user' : 'ai';
+                const text = turn.parts.map(p => p.text || "[مرفق]").join('\n');
+                const div = document.createElement('div');
+                div.className = turn.role === 'user' ? 'msg user' : 'msg ai';
+                div.innerText = text;
+                container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
         }
 
         function addMessageToUi(sender, text) {
