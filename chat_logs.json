@@ -15,5 +15,22 @@
         "thoughtSignature": "EvgCCvUCARFNMg/jAsZ69nHyZUG5aUsXOlEWUOw71BwhSYQ995lDec9ur1UDUxwcW3RguA8q0b9ABDcq/dAeit39eM20m6z0sWiYBmDcmabDgDnrwR0TRceDvvjssjgh6z30b2xqUAGp1jO1xtfcNr+//0r97xTk4OUAPrx08m4nvvoUgiU+y8fmxz8ld4lPhDd8uV6m8QRPqC+vWEw/2GM+kLNBppOq9E8/7yDUf/rQsXY26T0II51TUWHWUOOzSjaQWfMj14KTAdFD84Sjsupb3eiCm3wOCuZGO4Ht0GpH+BpZqO6W+iAQOrVFNWrMYfVE/JXg9EK8BM3eXwNtKOaEgBX2lC8o5EOR8o27KVN3mwCmnRS2gp2SADxGsriIeVYc03cd7CnXso4lIeP7hBzAeIs9aL/bwS2PvkbJ2EGGA80jnERylWCyQjkkmyCrMSLPE/44J28PBGCqD5GGRz1NZBdptLVKjPCaUbf1DDsMGwFkLzVMN4BZKw=="
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "كيف الحال"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. الأنظمة والخدمات في منصة **VSA Academy** تعمل بكفاءة عالية وأعلى مستويات الجاهزية.\n\nكيف يمكنني دعمك اليوم؟ هل ترغب في الاطلاع على بيانات السوق الحالية، متابعة التنبيهات، أو تنفيذ تحديثات تقنية على المنصة؟",
+        "thoughtSignature": "EuwCCukCARFNMg+XnzmQpj0QYEpDEch2dkGQePA2Pro8cO0TwJTEKV4COCmso24r6qht4DfRZaVWnXH0ZOukjOyjB08Y5ty+eiX19yWaMUjeeccKeHlALPqzO3uXw5408Li/PDMryk2tWBHEXj9dzXgifZIOsKtLr5Ts/SLSkFx0BeLDQvnmx2gax/uHFBWW2Y8VgRLlVom/Rf2L2FvB42FoEXDivchJmy+2McO72tWky7Po8VTv0uTCZ1qpyd+VfqU4ZKnbYPuHqQ/hoXrVKwwZof6pqWfLZenSzNEluyMMmufa21cJsLhhVL3YfYMVNNu4MATtVOJ54Iy9cB/2Cp45pELRPUYqF3M6zQGgQrxXVCdrWMsaT7ShiY8jZmHcAQtFx/9kuLqV4k4eTSuPmd9NhQSzItAyMC/jRxFrHAEj5HNmAWrOe3KXVhArKw+O+YKK9G2n/Ahw6Hu/tUzu7kFH81VvLsJjfewguP/MFw=="
+      }
+    ]
   }
 ]
