@@ -386,5 +386,22 @@
         "thoughtSignature": "El4KXAERTTIPztpn3/TFL1Bn1ldz5nqJ0kJ3Av240dJ4d/sGePcKfA7IMczJNGosUuS12C+SFBRA3olIMKEmC6WmpQBBA4t9Z1MXQL/kZ3FBliARSjSH4Jfz6m6fq1B9"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "مرحباً بك مجدداً! \n\nأنا جاهز ومستعد لمساعدتك في أي استفسار أو مهمة تقنية تخص أكاديمية VSA. تفضل، كيف يمكنني خدمتك اليوم؟",
+        "thoughtSignature": "EmcKZQERTTIPAxR/gSYzL748YjiKfRYnTXWkhOTKiOMPm36Ve0SZZmWjj9t5/fe7AfWeeYutLmbIuLz5UyQxfg6FyK8XLMCIRCRPT5jetxY3eQz+cvo8id+2TG+c+xMHnIMJRK66Y/ZN"
+      }
+    ]
   }
 ]
