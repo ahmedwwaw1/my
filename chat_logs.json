@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا كيف الحال"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. أنا بصحة ممتازة وجاهز تماماً لخدمتك بصفتي \"العقل المدبر\" (Mastermind) والمدير التنفيذي للأنظمة الذكية في أكاديمية VSA. \n\nكيف يمكنني مساعدتك اليوم؟ هل هناك مهام برمجية، تعديلات، أو استفسارات تقنية ترغب في تنفيذها؟",
+        "thoughtSignature": "El4KXAERTTIPidgb+53Vje432EOeMA8eAJuzsMm+//D9UJOplI/3ZIxrxzFJ0XJpRIMp6xjSDRc/Bl3vjo7gR+RqBB0RRXIGeoK5MJP7zblE11caWAUjz8ecSdsmhnQn"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
+  }
+]
