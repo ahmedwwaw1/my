@@ -2710,16 +2710,16 @@
         }
 
         async function githubAction(path, content, message) {
-            if (!githubToken) return "⚠️ خطأ: مفتاح GitHub غير متوفر (Token missing). يرجى التأكد من إعداد التوكن في الإعدادات.";
+            const token = getCleanGithubToken();
+            if (!token) return "⚠️ خطأ: مفتاح GitHub غير متوفر (Token missing). يرجى التأكد من إعداد التوكن في الإعدادات.";
 
             try {
-                const token = githubToken.trim().replace(/^['"]|['"]$/g, ''); // تنظيف التوكن من المسافات وعلامات الاقتباس
                 const apiBase = `https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`;
 
                 // 1. الحصول على SHA للملف إذا كان موجوداً (ضروري للتحديث)
                 const getRes = await fetch(apiBase, {
                     headers: {
-                        'Authorization': `token ${token}`, // استخدام الصيغة التقليدية لضمان التوافق الأوسع
+                        'Authorization': `token ${token}`,
                         'Accept': 'application/vnd.github+json',
                         'Cache-Control': 'no-cache'
                     }
@@ -2758,15 +2758,15 @@
                 return `❌ خطأ شبكة (Network/CORS Error): ${e.message}. يرجى التأكد من اتصال الإنترنت وصلاحيات التوكن.`;
             }
         }
-        }
 
         async function triggerGithubWorkflow(workflow_id) {
-            if (!githubToken) return "⚠️ خطأ: مفتاح GitHub غير متوفر.";
+            const token = getCleanGithubToken();
+            if (!token) return "⚠️ خطأ: مفتاح GitHub غير متوفر.";
             try {
                 const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/workflows/${workflow_id}/dispatches`, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `token ${githubToken}`,
+                        'Authorization': `token ${token}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ ref: 'main' })
@@ -2781,12 +2781,13 @@
         }
 
         async function updateWorkflowStatus(workflow_id, status) {
-            if (!githubToken) return "⚠️ خطأ: مفتاح GitHub غير متوفر.";
+            const token = getCleanGithubToken();
+            if (!token) return "⚠️ خطأ: مفتاح GitHub غير متوفر.";
             const action = status === 'stop' ? 'disable' : 'enable';
             try {
                 const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/workflows/${workflow_id}/${action}`, {
                     method: 'PUT',
-                    headers: { 'Authorization': `token ${githubToken}` }
+                    headers: { 'Authorization': `token ${token}` }
                 });
 
                 if (res.ok) return `✅ تم ${status === 'stop' ? 'إيقاف' : 'تفعيل'} البوت (${workflow_id}) بنجاح.`;
