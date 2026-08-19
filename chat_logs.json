@@ -49,5 +49,22 @@
         "thoughtSignature": "El4KXAERTTIPrrHorKQe5kbTSyv3NXmTvCVgSzXQCLNV+bCCrlfuBkyc1nJYg0SV7tDMvkHKFvpVkbLA2RGzA4aTVe9JnWF9wjVZzJ39Z0mtvPhLMuWHBVBG8CApHdrk"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "مرحباً بك! \n\nأنا **\"العقل المدبر\" (Mastermind)**، في خدمتك وجاهز لمساعدتك في أي استفسار، تحليل بيانات، أو مهمة برمجية وإدارية تخص منصة **VSA Academy**. \n\nكيف يمكنني خدمتك اليوم؟",
+        "thoughtSignature": "EtsCCtgCARFNMg+RQicqDOf8dduJHadzcPyFjCijUtdJCDhOJ0ZysSZ68CI7zuqnLD9zK+OHeFa2zBxOSm/BlrQdwHZkYv0DXkKPz0I1N86dReU1tpqAUu81T6uGFlLSk2YFFODSpk0CIPIhpizXpw60Vc6eSTsu4UJyKJ6Au4srVHDtncklfJ9K5J4Fl3cyaGkp17PZHSxuWpwHCFCD9a3LS77aEt/LkCJhYACJpA/fzDyNabJMPi92SXxpZxunlhHX0ramR58E/q070iCkwjFZJlTxVhucPxeNbUeO0c7TLAiB2vRo2MWIIv4fw8ltWa21DdaNItzH7SmnFZc3fH6JWYprqV1ATOYWeKETikQ8S7J6WXZnIcpQgesI22D48yG9483vp/EJvmtD1wVthRPCqaZIzxG43Bdx9eBJhA/ftbGSCPfv+34bylHdi+Q0V/vWCdzzBuRttSBipHM="
+      }
+    ]
   }
 ]
