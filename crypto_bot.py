@@ -32,7 +32,7 @@ def analyze_crypto_market():
                         "price": price,
                         "volume": round(volume, 2),
                         "change_percent": round(change_percent, 2),
-                        "timestamp": datetime.now().isoformat(),
+                        "timestamp": datetime.utcnow().isoformat() + "Z", # استخدام UTC مع علامة Z
                         "category": "high_volume"
                     }
                     alerts.append(new_alert)

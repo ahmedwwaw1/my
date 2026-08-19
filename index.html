@@ -1378,15 +1378,16 @@
 
                 // دمج تنبيهات الكريبتو
                 cryptoAlerts.forEach(alert => {
+                    // تحويل التوقيت العالمي UTC إلى توقيت المتصفح المحلي
                     const alertDate = new Date(alert.timestamp);
-                    const formattedTime = alertDate.toLocaleTimeString('ar-EG', { hour: 'numeric', minute: '2-digit', hour12: true });
-                    const formattedDate = alertDate.toLocaleDateString('ar-EG');
+                    const formattedTime = alertDate.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
+                    const formattedDate = alertDate.toLocaleDateString(undefined);
 
                     allData.push({
                         id: `crypto-${alert.symbol}-${alert.timestamp}`,
                         title: `🚨 حركة قوية على زوج: ${alert.symbol}`,
                         category: 'high_volume',
-                        content: `💵 السعر الحالي: ${alert.price} USDT\n📊 حجم التداول: ${alert.volume.toLocaleString()}\n📈 نسبة التغيير (24س): ${alert.change_percent}%\n🕒 وقت التنبيه: ${formattedTime} - ${formattedDate}`,
+                        content: `💵 السعر الحالي: ${alert.price} USDT\n📊 حجم التداول: ${alert.volume.toLocaleString()}\n📈 نسبة التغيير (24س): ${alert.change_percent}%\n🕒 وقت التنبيه المحلي: ${formattedTime} - ${formattedDate}`,
                         image: '',
                         videos: null,
                         links: [],
@@ -2885,6 +2886,8 @@
                         const data = await res.json();
                         chatHistory = JSON.parse(decodeURIComponent(escape(atob(data.content))));
                         console.log("✅ تم تحميل سياق المحادثة من GitHub");
+                        // إعادة بناء الواجهة لضمان استمرارية الذاكرة وعدم فقدان السياق
+                        if (chatHistory.length > 0) rebuildChatUi();
                     }
                 } catch (e) { console.error("Error loading chat context:", e); }
             }
@@ -3324,9 +3327,9 @@
                 maxOutputTokens: 2048
             };
 
-            async function runToolLoop(history, activeModel = null) {
-                // إذا كان هناك نموذج نشط (مثلاً بعد استدعاء أداة)، نستخدمه مباشرة ولا نكرر البحث
-                const modelsToTry = activeModel ? [activeModel] : modelNames;
+            async function runToolLoop(history, activeModel = null, retryModels = []) {
+                // استخدام قائمة الموديلات المتاحة مع استثناء الموديلات التي فشلت سابقاً في هذه الدورة
+                const modelsToTry = activeModel ? [activeModel, ...modelNames.filter(m => m !== activeModel && !retryModels.includes(m))] : modelNames;
 
                 for (const modelName of modelsToTry) {
                     const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${key}`;
@@ -3336,18 +3339,20 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 system_instruction: systemInstruction,
-                                contents: history.map(h => ({ role: h.role, parts: h.parts })), // تنظيف السياق من الحقول الإضافية قبل الإرسال لجوجل
+                                contents: history.map(h => ({ role: h.role, parts: h.parts })),
                                 tools: tools,
                                 generationConfig: generationConfig
                             })
                         });
 
                         const data = await res.json();
+
+                        // معالجة الخطأ 429 (Rate Limit) أو 503 عن طريق التبديل للموديل التالي
                         if (!res.ok) {
-                            // إذا كان الخطأ 404 (غير موجود) أو 503 (غير متاح) أو 429 (تجاوز الحد)، ننتقل للنموذج التالي في القائمة
-                            if (!activeModel && (res.status === 404 || res.status === 503 || res.status === 429)) {
-                                console.warn(`⚠️ النموذج ${modelName} غير متاح حالياً (كود: ${res.status}). جاري تجربة النموذج الاحتياطي...`);
-                                continue;
+                            if (res.status === 404 || res.status === 503 || res.status === 429) {
+                                console.warn(`⚠️ النموذج ${modelName} وصل للحد أو غير متاح. جاري التبديل التلقائي...`);
+                                retryModels.push(modelName);
+                                continue; // المحاولة مع الموديل التالي في المصفوفة
                             }
                             return { text: `❌ خطأ من جوجل (${res.status}): ${data.error?.message || "فشل التوصيل"}`, model: modelName };
                         }
@@ -3376,15 +3381,13 @@
                                 toolResult = "✅ تم تطبيق التنسيق الجديد بنجاح.";
                             }
 
-                            // تحديث التاريخ بتسلسل
                             history.push({ role: "model", parts: [part] });
                             history.push({ role: "user", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
 
-                            // العودة للموديل بالنتيجة (مع تثبيت النموذج الحالي)
-                            return await runToolLoop(history, modelName);
+                            // العودة للموديل بالنتيجة (مع إمكانية التبديل إذا فشل الموديل الحالي في الخطوة القادمة)
+                            return await runToolLoop(history, modelName, retryModels);
                         }
 
-                        // الرد النهائي: تحديث الذاكرة المستديمة
                         const finalTurn = { role: "model", parts: [part], model: modelName };
                         chatHistory = history.concat([finalTurn]);
                         if (chatHistory.length > 50) chatHistory = chatHistory.slice(-50);
@@ -3392,12 +3395,11 @@
                         return { text: part.text, model: modelName };
                     } catch (err) {
                         console.error(`Error with ${modelName}:`, err);
-                        if (!activeModel) continue;
-                        return { text: `❌ فشل الاتصال بالنموذج: ${err.message}`, model: modelName };
+                        retryModels.push(modelName);
+                        continue;
                     }
                 }
-                const errorMsg = "❌ فشل الوصول للموديلات المطلوبة. يرجى التحقق من مفتاح API أو استخدام نموذج آخر.";
-                return { text: errorMsg, model: "System Error" };
+                return { text: "❌ فشلت جميع المحاولات مع كافة النماذج المتاحة. يرجى المحاولة لاحقاً.", model: "System Error" };
             }
 
             // تشغيل الحلقة مع السياق الحالي
