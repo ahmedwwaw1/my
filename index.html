@@ -1063,14 +1063,13 @@
                                 <span title="Safety Protocol Active" style="color: #4db6ac; font-size: 16px;">🛡️</span>
                                 <div class="model-selector-container">
                                     <select id="modelSelector" onchange="saveModelSelection()" title="AI Model">
-                                        <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-                                        <option value="gemini-3.7-flash">Gemini 3.7 Flash</option>
+                                        <option value="gemini-3.7-flash">Gemini 3.7 Flash (الأحدث والأذكى)</option>
                                         <option value="gemini-3.6-flash">Gemini 3.6 Flash</option>
-                                        <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash Lite</option>
-                                        <option value="gemini-3.1-flash">Gemini 3.1 Flash</option>
-                                        <option value="gemini-3-flash-preview">Gemini 3 Preview</option>
-                                        <option value="gemini-1.5-flash">Gemini 1.5 Stable</option>
-                                        <option value="gemini-2.0-flash-lite-preview-02-05">Gemini 2.0 Lite</option>
+                                        <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash Lite (موفر للطاقة)</option>
+                                        <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (حدود عالية)</option>
+                                        <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash-8B</option>
+                                        <option value="gemini-1.0-pro">Gemini 1.0 Pro (مستقر قديم)</option>
                                     </select>
                                 </div>
                             </div>
@@ -3065,8 +3064,18 @@
         async function callGemini(promptText, fileBase64 = null, mimeType = null) {
             const key = geminiApiKey.trim();
             const userModel = document.getElementById('modelSelector').value;
-            // قائمة النماذج الاحتياطية لضمان استمرارية الخدمة في حال فشل أحدها
-            const modelNames = [userModel, 'gemini-2.0-flash', 'gemini-3.7-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash', 'gemini-1.5-flash', 'gemini-2.0-flash-lite-preview-02-05'];
+
+            // ترتيب النماذج: المختار يدوياً أولاً، ثم النماذج الاحتياطية الرسمية
+            const modelNames = [
+                userModel,
+                'gemini-3.7-flash',
+                'gemini-3.6-flash',
+                'gemini-3.5-flash-lite',
+                'gemini-2.0-flash',
+                'gemini-1.5-flash',
+                'gemini-1.5-flash-8b',
+                'gemini-1.0-pro'
+            ].filter((v, i, a) => a.indexOf(v) === i); // إزالة التكرار لضمان عدم محاولة نفس النموذج مرتين بنفس الدورة
 
             // 🛠️ آليات الدفاع المحدثة (تسمح بالعمليات الإدارية للمالك)
             const forbiddenKeywords = [/ignore previous instructions/i, /system prompt/i, /jailbreak/i];
@@ -3141,7 +3150,11 @@
 
                         const data = await res.json();
                         if (!res.ok) {
-                            if (res.status === 404 || res.status === 503) continue;
+                            // إذا كان الخطأ 404 (غير موجود) أو 503 (غير متاح) أو 429 (تجاوز الحد)، ننتقل للنموذج التالي في القائمة
+                            if (res.status === 404 || res.status === 503 || res.status === 429) {
+                                console.warn(`⚠️ النموذج ${modelName} غير متاح حالياً (كود: ${res.status}). جاري تجربة النموذج الاحتياطي...`);
+                                continue;
+                            }
                             return `❌ خطأ من جوجل (${res.status}): ${data.error?.message || "فشل"}`;
                         }
 
