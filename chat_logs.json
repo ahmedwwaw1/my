@@ -188,5 +188,103 @@
       }
     ],
     "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ابحث عن ملف تنبيهات الكريبتو"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "searchCode",
+          "args": {
+            "query": "crypto"
+          },
+          "id": "call_510652"
+        },
+        "thoughtSignature": "El4KXAERTTIPhBosq+foC7ipeKXK/R8SJQNGcxqyWbJWp8m6mNHByZpZPgS/E8iQSYehKEgxjj9uxCWyy21av849oR/tXaZANTbDlHrTBH2I4SWtBRbJKPfiKgvF6fhp"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "searchCode",
+          "response": {
+            "content": "❌ فشل الاتصال بالبحث: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "repairSystem",
+          "args": {},
+          "id": "call_552314"
+        },
+        "thoughtSignature": "El4KXAERTTIPVpBf6kkYLebARt0m7y+V8ITzaTfns+gw/mPLfouxVWiU6E+hHV4ha4iXBav4YrVI2vcLX+ktNL/+0aVTg/TjPRRAHTpExDo8boR4r2m66HvwgN7Yq4/Z"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "repairSystem",
+          "response": {
+            "content": "🛡️ نظام الإصلاح الذاتي (Mastermind Healer):\n\n🔄 تم تحديث المفاتيح من قاعدة البيانات المركزية.\n\nالحالة النهائية: healthy\nالتوصية: لا يوجد تدخل يدوي مطلوب."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_215594"
+        },
+        "thoughtSignature": "El4KXAERTTIPYOyrslfwmbodavednHft2pyxS90Kyc6foYr8Y0nwnMZdCsqcDLM9qZcn5ESdhm3pVakU0+MqOThjzX884uVhQKxYfSNQahJurhHLg7dGDDrXp8wIxVhs"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "محتويات الجذر:\n📁 .artifacts\n📄 .gitattributes\n📁 .github\n📁 .idea\n📁 .vscode\n📄 PDF-images.json\n📄 Time-analysis.json\n📁 archive\n📄 chat_logs.json\n📄 crypto_alerts.json\n📄 crypto_bot.py\n📄 data.json\n📁 images\n📄 index.html\n📄 remigrate_final.ps1\n📄 remigrate_final.py\n📄 technical-analysis.json\n📄 viewer.html\n📄 vsa.json"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "بما أن أداة `searchCode` تواجه خطأ مؤقتاً في الاتصال، فقد قمت باستعراض ملفات الجذر مباشرة باستخدام أداة `listGithubFiles`، ووجدت الملف المطلوب بوضوح:\n\n📄 **`crypto_alerts.json`** (ملف تنبيهات الكريبتو).\n\nدعني أقرأ لك محتوى هذا الملف أو جزءاً منه باستخدام `getGithubFile` لنتأكد من التنبيهات الموجودة فيه حالياً. هل ترغب في ذلك؟",
+        "thoughtSignature": "El4KXAERTTIPWzEoo0RNGli7/K1utDmq5J8nhRvx7iOKUDLzaj5gCyjVBnrCWTbBhMCNLTehEe6RM7iOuWSAGy5QangSGkE7KMv0HoOA4Idkx9J7pZkQOWlz77HfXF7/"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
   }
 ]
