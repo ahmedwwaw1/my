@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "كيف الحال"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. أنا بصحة ممتازة وجاهز تماماً لخدمتك بصفتي المهندس التنفيذي والعقل المدبر لمنظومة VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في التطوير أو إدارة النظام البرمجي؟",
+        "thoughtSignature": "El4KXAERTTIPgA1uZAT5q7kgJj0BtjCdUTYPuNM5qvOEfejCiQ08R1vyNxdvcQ8JINVslko+yo3Zgdf2kSru6FbdjQWDQmcFAov/6u77OarUH+kGXPbneqTk99QzIP4r"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
+  }
+]
