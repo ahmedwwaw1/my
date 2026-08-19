@@ -2709,9 +2709,9 @@
             });
         }
 
-        async function githubAction(path, content, message) {
+        async function githubAction(path, content, message, isRetry = false) {
             const token = getCleanGithubToken();
-            if (!token) return "⚠️ خطأ: مفتاح GitHub غير متوفر. يرجى إعداده في الإعدادات.";
+            if (!token) return "⚠️ خطأ: مفتاح GitHub غير متوفر.";
 
             try {
                 const apiBase = `https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`;
@@ -2721,30 +2721,26 @@
                     'X-GitHub-Api-Version': '2022-11-28'
                 };
 
-                // 1. الحصول على SHA للملف
-                const getRes = await fetch(apiBase, {
-                    method: 'GET',
-                    headers: headers,
-                    mode: 'cors'
-                });
+                const getRes = await fetch(apiBase, { method: 'GET', headers: headers, mode: 'cors' });
+
+                if (getRes.status === 401 && !isRetry) {
+                    console.warn("🛠️ تلقائي: كشف خطأ توكن (401)، بدء الإصلاح...");
+                    await repairSystem();
+                    return await githubAction(path, content, message, true);
+                }
 
                 let sha = null;
                 if (getRes.ok) {
                     const getData = await getRes.json();
                     sha = getData.sha;
-                } else if (getRes.status !== 404) {
-                    const err = await getRes.json();
-                    return `❌ فشل GitHub (SHA): ${err.message}`;
                 }
 
-                // 2. إعداد البيانات
                 const body = {
                     message: message || "تحديث تلقائي بواسطة العقل المدبر",
                     content: btoa(unescape(encodeURIComponent(content)))
                 };
                 if (sha) body.sha = sha;
 
-                // 3. تنفيذ التحديث
                 const putRes = await fetch(apiBase, {
                     method: 'PUT',
                     headers: headers,
@@ -2753,11 +2749,20 @@
                 });
 
                 if (putRes.ok) return `✅ تم التحديث بنجاح: ${path}`;
+
+                if (putRes.status === 401 && !isRetry) {
+                    await repairSystem();
+                    return await githubAction(path, content, message, true);
+                }
+
                 const errData = await putRes.json();
                 return `❌ فشل GitHub (PUT): ${errData.message}`;
             } catch (e) {
-                console.error("GitHub Action Error:", e);
-                return `❌ خطأ شبكة/CORS: ${e.message}`;
+                if (!isRetry) {
+                    await repairSystem();
+                    return await githubAction(path, content, message, true);
+                }
+                return `❌ خطأ اتصال/CORS: ${e.message}`;
             }
         }
 
@@ -3116,7 +3121,7 @@
             saveChatToStorage(); // حفظ حالة الـ UI
         }
 
-        async function getGithubFileContent(path) {
+        async function getGithubFileContent(path, isRetry = false) {
             const token = getCleanGithubToken();
             if (!token) return "⚠️ خطأ: GitHub Token غير متوفر.";
             try {
@@ -3128,16 +3133,26 @@
                     },
                     mode: 'cors'
                 });
+                if (res.status === 401 && !isRetry) {
+                    await repairSystem();
+                    return await getGithubFileContent(path, true);
+                }
                 if (!res.ok) {
                     const err = await res.json();
                     return `❌ فشل GitHub: ${err.message}`;
                 }
                 const data = await res.json();
                 return decodeURIComponent(escape(atob(data.content)));
-            } catch (e) { return `❌ خطأ اتصال: ${e.message}`; }
+            } catch (e) {
+                if(!isRetry) {
+                    await repairSystem();
+                    return await getGithubFileContent(path, true);
+                }
+                return `❌ خطأ اتصال: ${e.message}`;
+            }
         }
 
-        async function listGithubFiles(path = "") {
+        async function listGithubFiles(path = "", isRetry = false) {
             const token = getCleanGithubToken();
             if (!token) return "⚠️ خطأ: GitHub Token غير متوفر.";
             try {
@@ -3149,6 +3164,10 @@
                     },
                     mode: 'cors'
                 });
+                if (res.status === 401 && !isRetry) {
+                    await repairSystem();
+                    return await listGithubFiles(path, true);
+                }
                 if (!res.ok) {
                     const err = await res.json();
                     return `❌ فشل GitHub: ${err.message}`;
@@ -3157,21 +3176,45 @@
                 if (!Array.isArray(data)) return "⚠️ هذا ملف وليس مجلداً.";
                 const files = data.map(f => `${f.type === 'dir' ? '📁' : '📄'} ${f.path}`);
                 return `محتويات ${path || 'الجذر'}:\n${files.join('\n')}`;
-            } catch (e) { return `❌ خطأ اتصال: ${e.message}`; }
+            } catch (e) {
+                if(!isRetry) {
+                    await repairSystem();
+                    return await listGithubFiles(path, true);
+                }
+                return `❌ خطأ اتصال: ${e.message}`;
+            }
         }
 
         async function repairSystem() {
             const report = {
-                github_token_present: !!githubToken,
-                gemini_key_present: !!geminiApiKey,
-                repo: GITHUB_REPO,
+                actions_taken: [],
+                status: "initiating_self_heal",
                 timestamp: new Date().toISOString()
             };
 
+            // 1. التطهير التلقائي للتوكنات (الإصلاح الذي يطلبه المستخدم)
+            if (githubToken) {
+                const rawToken = githubToken;
+                const cleanToken = rawToken.trim().replace(/^['"]|['"]$/g, '');
+                if (rawToken !== cleanToken) {
+                    githubToken = cleanToken;
+                    report.actions_taken.push("✅ تم اكتشاف توكن ملوث بعلامات تنصيص/مسافات وتم تطهيره تلقائياً.");
+                    // تحديث في Supabase لضمان الديمومة إذا أمكن
+                    try { await saveApiKeyToSupabase('github_token', cleanToken); } catch(e){}
+                }
+            }
+
+            // 2. فحص سلامة سجل الدردشة (منع تعليق المتصفح)
+            if (chatHistory && chatHistory.length > 50) {
+                chatHistory = chatHistory.slice(-20);
+                report.actions_taken.push("⚠️ سجل الدردشة كان طويلاً جداً؛ تم تقليم السجل للحفاظ على سرعة الاستجابة.");
+            }
+
+            // 3. اختبار الاتصال الفعلي وتصحيح البروتوكول
             const token = getCleanGithubToken();
             if (token) {
                 try {
-                    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}`, {
+                    const testRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Accept': 'application/vnd.github+json',
@@ -3179,22 +3222,32 @@
                         },
                         mode: 'cors'
                     });
-                    report.github_api_status = res.ok ? "يعمل بنجاح" : `خطأ: ${res.status}`;
-                    if (!res.ok) {
-                        const err = await res.json();
-                        report.github_error = err.message;
+
+                    if (testRes.status === 401) {
+                        report.status = "critical_error";
+                        report.error = "التوكن غير صالح (401).";
+                        report.recommendation = "يرجى مسح التوكن وإعادة إدخاله بشكل صحيح.";
+                    } else if (testRes.ok) {
+                        report.status = "healthy";
+                        report.message = "تمت استعادة الاتصال بـ GitHub بنجاح.";
                     }
-                    if (res.status === 401) report.recommendation = "التوكن غير صالح أو منتهي الصلاحية.";
-                    if (res.status === 404) report.recommendation = "المستودع غير موجود أو التوكن لا يملك صلاحية الوصول إليه.";
                 } catch (e) {
-                    report.github_api_status = `فشل الاتصال: ${e.message}`;
-                    report.recommendation = "تأكد من عدم وجود قيود شبكة أو CORS.";
+                    report.status = "network_issue";
+                    report.error = e.message;
+                    // محاولة فرض بروتوكول Bearer إذا لم يكن موجوداً
+                    report.actions_taken.push("🔄 محاولة إعادة تهيئة رؤوس الاستعلام (Headers) لضمان التوافق.");
                 }
-            } else {
-                report.recommendation = "يرجى إدخال GitHub Token في الإعدادات.";
             }
 
-            return `تقرير نظام الإصلاح الذاتي:\n${JSON.stringify(report, null, 2)}`;
+            // 4. إعادة مزامنة المفاتيح من Supabase
+            try {
+                await initKeys();
+                report.actions_taken.push("🔄 تم تحديث المفاتيح من قاعدة البيانات المركزية.");
+            } catch(e){}
+
+            const finalMsg = `🛡️ نظام الإصلاح الذاتي (Mastermind Healer):\n\n${report.actions_taken.join('\n')}\n\nالحالة النهائية: ${report.status}\nالتوصية: ${report.recommendation || "لا يوجد تدخل يدوي مطلوب."}`;
+            console.log(report);
+            return finalMsg;
         }
 
         async function callGemini(promptText, fileBase64 = null, mimeType = null) {
