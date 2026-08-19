@@ -60,5 +60,23 @@
       }
     ],
     "model": "gemini-3.6-flash"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "جيد"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "ممتاز. أنا جاهز لأي توجيهات أو تحديثات جديدة تتطلبها المنظومة.",
+        "thoughtSignature": "EooCCocCARFNMg/QzDzJCqmQYzkezW8moq8laBVi4UzKhXQsK5eX5lQTFkIvMnm29+kntKOJhCkiQcrm5c7yTrclYc+GiuMh+PtiKsVxphYPDE7pqaTxbY5oq53IcrlzfAxnjhCOi/leuZxXUrXYYwqbfHIg3V4ha1HJNDmZsYEO172ml8ufpS5pyD9+54YW3zPWsq9/1kkXilBcpTZQUpHTzssfMinChy6Z7dZRhloM2SPeFXOp8D1XHd6hQhGxDqM50cZMQK0zWAQrAMMvbz1V/2vhTQNQl72TLBFHDZfsT3aVW+2rfMzpzGjIKXNWieUQwVMPGYYAfuvh6++TY5L6df935meMrQnlLMI="
+      }
+    ],
+    "model": "gemini-3.6-flash"
   }
 ]
