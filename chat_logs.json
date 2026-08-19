@@ -89,5 +89,22 @@
         "thoughtSignature": "EqILCp8LARFNMg9CkiZgnQg43aYGOjk5BHF241fM5e2ocrJP0jrWbN+IOjYX9y/6Kz7ne62Oj0rd9YLPV4cvhOHDt48txP4eFSvpJYu8cvTJTpazoQH+YiYp3mHQUWrUmP9SBGU9zmnoDWGMRzhloA6dVjuxrQ/t6P3slJpni/q07wntRaGpzXmizIGgraJP2dDOPGeKk5Kd3iDqFC62lEbWZ1HHC0ElxO3MAbp/JPjdMn4febmcLNM90GnzM359jpU/8IFYPtL5ohImb8GD+y/nmGyr4X54hDadV15u6D80+STsdv+YkqV3MF1XBC8rUmJZdixi7VbSlf9vElw1IlRHUt8nGFc+qqnuUCcfZR8UZz17mZT9LowaIdBDU+DwWjJMGXdB8pMYYdVnX/WuqSP9c6RAk8HyodKztqXaxxWv8Ah73U0APEkPZSnaNJ+EI1WjwFx1yDygFxrI1FLyGSXhwoNm90uMaKwR225mHLwt9vOuI8Ke4eXQ3nAB8Np5wYzRXWbWy2pi0kFj1S80ouaFIE7e1I6urPJvPueEIRpJ2vn9rAaJN/q8m+/UcsqbYykW1ZQGM1ZeNsJZrKfN8y15C2fRLoD+DNi3AY/iR7J+EswRgOEoivXUTx6nyyOCBdXVoIUaevOebhr8Iiu7IFaqrCe8itexY0pTyuwf+/CRhX9Q25zW3QLfLeh3YqxN/WLDbmBAlX+J7NWoZoM7Mv0KTAw0J+3Ky82oXkjNY87WSA36UgLcAbiJFjtMAQGi+fsRvfBAs6vODIa93HR0O+J/qnQLOuHnY4oz4fWnjQmBKu3KBIlVDYLi5y3MU0yHK4j4Mt8kUag/YKahjLfmLiGHgS34ip2pTgDP9pC5dGrU4bDQ1Mupbs1YqcgtnUD2lKSHLKTjmQL6Oui3HqnvL8R1SHu4z9aWy98WWwTcX1diUFJjYj9iqesjKpL7aqkIcaBeyTicUk/UuzvfFJVxEr7D+/piazhZSWjgo6TL65ccQyj78/dBHcBpJMHkmEMEDmX8KV/kepRkBsmGhqTPFonrvl4+8SLXXyQMchEGaShS/9NVtrxTQfw9Vof4ur0t9Jei5tBQC4TOq/azM1sfHlU6U/fCF1hsbx6K5bTm0Pz1r5zy3cuBQ/1SDJTQQW02Im7fJVx9xF7e0FAX6tMumLbia6F43AlpwgvQTGq3R0Otqfa6SQF0Rf1Pwaa9bH6DRObW4LJAt/O0X3ODuuIIf0dJh191Z4XVIy9CfqGuLCvCYD1WSxSkU8tbdgnfhELtC4rLpIxcUcR1cGnYhz+Gn65MKYYNQIGtCPXW0HOA30AhjIGbY6eKHTUQlXRaaFJ6jVp8DsLacpIsi7TBkAanbN7hcaJwcew+wlLrtFKdh59pQjWvZKReaTZNKVKyUTMiLIsRvL99T/nhf441hz+3AFYA6cFpV6de8Dk2PU4nhuT72QxPhGX38HvPra1XkL6WoM0cZ+O6EdpoOJYOzSM+thd59bUrMH+gpwx1kvHKhl1TPNhtQL88nBCBxZjkZD7TpQYgDSQl2jSuvgEOI24hCEh7sKPtCyQ007AEpz8kBV4vJIEk44/h/jh8jCCOdMC3nWfHQ4Wbqm+9IPYFLl0jC11HDGvBTX4nj9J2YrN4dl65HE20Q5Z6ZMPIA1IxJ9cwMYdhdLmJ7hJnAL3oSt7WwozuM7kACHZx6XmEh8OoIPJbf4k9y7cN8GDyM1qMNrWLzMT0q62hW9hDZ6CfdgzMCINNn3EZiXzrOxFw4XV0XsvVSkvXnUYKIPsUE7W1Etg89NRMS5zdcY5wNxKuvJN51BkNP8SQN2E0JjDrTnrXo3shWDw2FrGemdtmrgQEDU2twkMI/VBdrrLS/G/VQwUf/JTf8whr7rhciBIbTTDNB/9BQu79ovzfSf9ukGqNtTzEFs2PtFk="
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل يمكنك مشاهدة مستودعي"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "نعم، بالتأكيد! بصفتي \"العقل المدبر\" (Mastermind)، لدي الصلاحيات والأدوات اللازمة لاستكشاف وقراءة الملفات والمستودعات المرتبطة بالمشروع (مثل استخدام `listGithubFiles` و `getGithubFile`) لضمان تقديم الدعم البرمجي السليم والتعديلات الجراحية الدقيقة.\n\nهل ترغب في أن أستعرض ملفات معينة في مستودعك، أو هل هناك ملف أو ميزة محددة تريد مناقشتها أو تعديلها؟ أخبرني باسم الملف أو المسار لكي أبدأ بالفحص فوراً.",
+        "thoughtSignature": "El4KXAERTTIPwM06AZy6VSUlsf35kh1Dj+wIdrBlAC3W72YBzcWpnEaFhVxaLPG7oZsrX5SDHNCnWE30oMJaa7mx6/RslumQBpvibFRkjcdj3xM2hFdzxutnaXSeh6sC"
+      }
+    ]
   }
 ]
