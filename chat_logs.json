@@ -16,5 +16,23 @@
       }
     ],
     "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "تعرف تحجي عراقي"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "إي نعم، تدلل! أقدر أحجي وياك بالعراقي بكل فصاحة، ومستعد أساعدك بأي شيء تحتاجه؛ سواء كان تطوير كود، تعديل بالمنظومة، أو أي استفسار تقني.\n\nشنو اللي ببالك اليوم؟ أؤمرني!",
+        "thoughtSignature": "Ev0FCvoFARFNMg97D5S/1kXmyagtWNL3SK+PlWdztgicBOlFFEmQsJ0lK9FhFhMSjsxxl3Wpg3bJK6gDxPGg/St4FyIpMWNlw366rahpSoksr9FLUoEeZlaUy8zuwsRX67pn1vWd1SNeKjKqUlPoNxVi14TwZfg7tkwaHnTEig1sh09+i7BqTVtHU2oRTvfObxjx7tr6lDZsw2fq/NafiyHAnjsvvaRWP8P0kH7uxxF9Yx6tuYKRdCnDWM3IZ7+sW0SzdWO8kNPbc2pr14RcYN1DEOC6eZab/hVbXZc99qkS22sqypNAQo4KhxoStJNFEEBkDJUITBk4KX8jw6tNhR0TumbOdGthis1m6oOnd96Rwa6hwEq47QDcm6185GaFfaW5nf6Bp7GGPPX0vP1J1vQlxsXnZdo2ZGvoy+pkXiHM+y6RbHEIqvg21svqsYitsK3sJiRY/QONGQ5rMCOpKBaKrv211o/4Rh5MLvAVq2FLLWLYLwAdjOsKsI0owk1tK9mexHyYkMuA4e/Ytqahrmrjb52YKhZhnAghG75DL3QMctoqpjwDn349BFzhAy1jPQzTvMx2fkBIuCx/VVelG2uNoXzqQtdwZrWOw6hfbgOX8ySRKzZp8QQgfKd3+c3b1f/sQGUNXX+mpU6DFLzFYBedA61dlC0KTt1iRz4DUL1GjeqjG6uocxEPNLzVOdr59TzuvioSm0T/Sj2a7RmWg5x8n2zC8rjWOyGmsJNA1KgIKim7vM56UG/+2DE+kAMUoREct+PTMvw+pywl3Zx4UPqJntxMgwY2l9uKBgw9MNLJrnFnT2Bfckb1v4r8uvLGB1rH5pG+rJw0pU4QKotzcVXyVyl+VCXXsVOjYajO2e+68Gr5+fFbcLxRhrrBK0oQvmR0e8aw+I2Yx2Qv+i8/X5IT4X2t57XrqH0Mg+BZV4/ltOs5MTdID1GjD48Kv5qpLXn35GnkT9pEyyYWau5PN8GzmbJX5M1Xb4fmTAgiddVaD7Hr07JEbAbvWb7GuLoJ"
+      }
+    ],
+    "model": "gemini-3.6-flash"
   }
 ]
