@@ -34,5 +34,23 @@
       }
     ],
     "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "انا اقصد متا اضيفت لك هاذه الاداة"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أعتذر عن سوء الفهم! \n\nتمت إضافة أداة `searchCode` إلى مجموعة الأدوات (Tools) المتاحة لي مؤخراً كجزء من التحديثات التطويرية للنظام والذكاء الاصطناعي الخاص بي (VSA Academy Executive Intelligence)، وذلك لتمكيني من البحث الفوري والسريع داخل ملفات ومستودعات الكود البرمجي بكل كفاءة ودقة.",
+        "thoughtSignature": "El4KXAERTTIPS9PAJS3QmPTXNd2at7G0bwf0TnOYt0lyjzhTrhzSsd9bRtGxk/Pukt2/MMgXdF7ooC2gkwdkO+O0lqs+EWN4M8rdgXA4XHOoWy7M6OFyncO3UJm30Ya4"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
   }
 ]
