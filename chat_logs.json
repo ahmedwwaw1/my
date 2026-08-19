@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. أنا **\"العقل المدبر\" (Mastermind)** — مهندس الذكاء الاصطناعي والرئيس التنفيذي لمنصة أكاديمية VSA.\n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى:\n- **تحليل وبيانات جارية** للمنصة أو سوق التداول والعملات.\n- **تحديثات وتعديلات جراحية** على الأكواد في المستودع (GitHub).\n- **إدارة عمليات التشغيل الآلي** والبوتات (Workflows).\n- **استشارات تقنية وتنفيذية** دقيقة.\n\nأنا جاهز تماماً للبدء.",
+        "thoughtSignature": "EoEFCv4EARFNMg+zPIbvYE5fWkepzvxnP1sn2cI6d03t0qjq8rUO6lPwjRTSn6r1hdtIIvzL/RnvZwEStndrg/7U3IrVwxmEIWLrSP+jTUxbVZOgCYz9Xf1WzW9RkRG4OBg5GiIO3SOrPKjbDNw4iEdWlGqsHcR7VDWRkXwN6/QqlRsHLfdQvu+MElkWS42AkUs3YOA+5PmmbdhSChQPUidxxuFrjfTZpincZ0PF5NAbK55Ymt5eds2KcLOAL+0TDQQaodnmunu7Igi8CQBQtg+ngpy8BgorDc4kmMUcsO+fBqBUF/0PbvVjBx6MI+09q/CVnfWlL+9rtOUiAHQlKNg28jN4RIqEoCED8v6F21mArMZ6NCYl/sNOFJ6F64B6K8TdkD7NM8ppvbFuxjB4+zbZS84d4dibNcuePYHwZL14nW9oSQf8jBY8td/my1d7YWbgVwtjXhuNsBvqn8iFplJbNJ605am4Vx9Vzc7mDUeLL20Ly9WZxMWTfa+MD5/4sIONwx+BPnWUb/L4b0KJsegx5aDhGecq8FXZ7QehUf4MIqBIPqOJMx+1CBXH5yGGsh0KlR0LukqQQgifjKpOVsH7jrgYR4BzjefEpks1u9FDpTI/JKILIWf2I8bCjIibMe8nO0f/jggftWoTGN99bo1PCqbL2XsKUtW3PgWKQ54DRkPCm/LmjKsTZc8OfQYB2MED+oUg5sCruIwiEzIvPLI89ujbysIQFHbMfM6xw9uuoJJ7BDcGhUg7Luq7Q88F38x77/BI4Xg8y2ZdBYKZEdjl3onNNmuXNds8TcjBz/WP0RUk7I7Bqeyg3hBnLi/HXfzrZYpImcLTTwCUsHuYzSyG6dY="
+      }
+    ],
+    "model": "gemini-3.6-flash"
+  }
+]
