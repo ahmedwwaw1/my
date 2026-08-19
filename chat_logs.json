@@ -3,7 +3,33 @@
     "role": "user",
     "parts": [
       {
-        "text": "مرحبا هل يمكنك الان حذف اخر تنبيه في قسم تنبيهات الكريبتو"
+        "text": "هل يمكنك الان حذف اخر تنبيه في قسم تنبيهات الكريبتو"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_448022"
+        },
+        "thoughtSignature": "El4KXAERTTIPDdeXCI38ulE/jucxhAqVVYkh3ONeOFk/iRZMJCHbl6vhxxqNNI3VT2Ebip4oujIgPGADonv+Lpv8h6zJlIKmeblTGO845sW1nJyCf9OcHoqTRRIcdTbs"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
+          }
+        }
       }
     ]
   },
@@ -14,9 +40,9 @@
         "functionCall": {
           "name": "getLiveSiteData",
           "args": {},
-          "id": "call_698981"
+          "id": "call_663975"
         },
-        "thoughtSignature": "EpkGCpYGARFNMg9/zflOSnmz4j+iWP9G2vg2F7JNv5pjAgsHWO6O5unT+aJ6lAbG47FoSVAWQe9R4zmtN8H8w2761KtuHmXzdn83UG4SVNseA/ntlsCch2TMnSCjXnUNlDMkvjJt4LuC9EjyO/i5mVQ3O/rvmQ9/JId6ym6hdnHRPy3c+5QKqTUANqNT1tBrwrLN5W2Utc97cf45zVaW6w85SKD5NL9Q4gTtcobhQv8kGpFWATDrIx6JxJbBtyJ3t47mDoRu1qJdKzdzVht0smPY+gomjM5YqxLgR8jsvBlbTzU+hl0AkDUEJn22wvNXgCJC8896wSbVZX+ARUQw0saDjK5Td2z3UZO7bEpevr3nBP8eOIVC6xZ81ACf4ZhJbDLVdE1+/q6SZbLJYXqZax5AQ8BLyZQInxEiu1eu9txFe6pkcCz0U1Uuw8Z6cAkSmwNcaZAaapFXnF/5L8OWtOzM1gW5o3GY0Ey7DuK9K/yGifZ4S8TS1E65+7IT+AohOcB7Gp3bufTtln3dcYzGnkB6uFLj5UCE9IeXu3L1mMAdZiDvJyQds/jw3y8UkFq7nF5fq9xBW6CkkNssnhEFNtfIG3/pqoBrNnyz7d5VStItiT0oQ5DaFd5wnp99lqthVocYwDioiR0g4zE2ZzCDZsfone90ETKQycqop3DBftDU9Ix5qHDzaxzGels+Ytl4Hp5+H00jiFfH5wacwAZfQK2E9VwkUOUiddstd8LCIZefxBzKF2vbMLXTGmFc6SlRQAc5baA+Ou1oeX1zUFkq0ZVMxi6cro/xgegm/jYmjtCpj91qPi5jul7nyeucFlREO2MPwnEv8hRAdVLF3vxOI8P2E8DnoQ0h61LBuCVZLOSS4pZR703w0iFkgG2t/VUFcXYGQHFCsWg3r8lnK5h0VL6b2O74k/Naux7+6y2PBYUT86P0Q6a/4ZHxtWLKj3rWWM0xDlalitqOYz0XGoS78tOf5kFKLbbklZR/XhiP9etDjXobbAmjNnYjDsz2wpzJHFp4+Bu62e54kjgOCtpAveVEfGoM0Exj5xZHKA=="
+        "thoughtSignature": "El4KXAERTTIP0E8Q1LlSmHIXZtZTnanirtM82JGhoCVx+bNiFxwNpYXUG3SQ+5SJT5638Y1OK66BGQ8gc4qSLTIzaCrwGDHl2fzx4iWLRTBsx3UkFPwHNtF9yeH+AlZO"
       }
     ]
   },
@@ -39,10 +65,12 @@
       {
         "functionCall": {
           "name": "listGithubFiles",
-          "args": {},
-          "id": "call_921"
+          "args": {
+            "path": "data"
+          },
+          "id": "call_801163"
         },
-        "thoughtSignature": "EsEBCr4BARFNMg9O0Y9sZE79Ma10HrpeW4MTv1DB8lz2H4LplDw6LLkUBU3lL2r68btYqr9zvpxUHHCyH5DX5sEVaFPhmikLtwFumHCYW5GEQrpkf6fYfn/i2kr2JYwA/8zXkkrbJM6VJTivYCkje+PCWqLf4F6X1RGRVmF3oHvfg5uHOiCu7apuqk3tTF9XddmsRurvH/OhT8y2bI/FP6XcgR+eZOwgXy8grvQlqyqLnMmewVabOwYIPSzrydfmonBssA=="
+        "thoughtSignature": "El4KXAERTTIPyiqgGZFEYKzeZB550tCu4ojnMRc4+syxxzz42Fv0YBf+AMh/UGOKoQ0X0qTLoA5DkGfjMMnCwFhWRq6xH3L36Rt9khqrwtbhh6gHfJlh0UnuineH/59R"
       }
     ]
   },
@@ -64,13 +92,13 @@
     "parts": [
       {
         "functionCall": {
-          "name": "getGithubFile",
+          "name": "listGithubFiles",
           "args": {
-            "path": "data.json"
+            "path": "."
           },
-          "id": "call_369700"
+          "id": "call_688643"
         },
-        "thoughtSignature": "EsgBCsUBARFNMg+Xggpgaw3Q4SbOKqhzZcCHm0ewFUqMWz+5kXVoKZ/IEmZRB2sKBq1+OBk+qz2e3V7/0q5p2zJ95HegO4R0VDrYsXBAefLnHst1lZ/waOcoq8smVRIMjRNAXnmOGBNenMCMqpAaaAo5oCFHBukHss1u/l3IfOfgc4mz8ua9ddaNZJHKbPmP2eb9/Eq+GCTxpVHSNwHNSTLNin1kGuNDRURVTrZz5R0xr+xCcl0giv/rRrr+iL2o1L/OAvW7XEcaCU8="
+        "thoughtSignature": "El4KXAERTTIPglQuIdh28O5v1VErtz30WbJrQOXyLRZh/CXZdaasiuDp7bn3aK+59x7Onpitfw/+VaQf9mdXfP1wEvyFjCXa88B084BQNAT8a10zlCU3Fw4t8jswQvrF"
       }
     ]
   },
@@ -79,9 +107,9 @@
     "parts": [
       {
         "functionResponse": {
-          "name": "getGithubFile",
+          "name": "listGithubFiles",
           "response": {
-            "content": "❌ خطأ شبكة أثناء القراءة: Failed to fetch"
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
           }
         }
       }
@@ -91,174 +119,10 @@
     "role": "model",
     "parts": [
       {
-        "functionCall": {
-          "name": "getGithubFile",
-          "args": {
-            "path": "crypto_alerts.json"
-          },
-          "id": "call_632702"
-        },
-        "thoughtSignature": "EpQDCpEDARFNMg9VORvsxH+34pNfCC4Opk85eI5mzQW/xE/bXBcf3y7Zh/dh5yOwYFR5zJ6vuOAck3O5YRUa/F5EFDS7jG7KvlSrrrVPT327emdoYovRNRJqsXJUak+MoUGcEEmrRYOTz78jF6yes+3/R8O7xm45sIlDDwSjhXj2xrvWa3NkZKXGnb+6namTzUhUVuXwwYytfUIxFhIS5xV0pjmpInndZ3V48gASXP7x0dcvwfXLE6zAtUAY52aIXiPDtQuPhW7Wft9k2JhsPMfXtaFNLfOTVN57/6d0fYcccNFVaWnEqE2jifeo3rmTPEomDuBrkCPb8nuphYC5EIl0GSVv0m5Xy4/3YAucdm3PWV/OFPYf34NuvbnZLKTv1oM/kbm/18ecvxajzQdaNjBEt51apsL/+HDAXBV2JGJXXAF6GecCtMb4a7KbOR9pGASXup/upBysjPG67b8NLMZI/Lz2xldu08peQNmtN2p8JDasm6bmuLaEVmoM462KMVmYj9DVecoASgPLZKMk0UXaJZCMNYY="
-      }
-    ]
-  },
-  {
-    "role": "user",
-    "parts": [
-      {
-        "functionResponse": {
-          "name": "getGithubFile",
-          "response": {
-            "content": "❌ خطأ شبكة أثناء القراءة: Failed to fetch"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "role": "model",
-    "parts": [
-      {
-        "functionCall": {
-          "name": "getSiteContext",
-          "args": {},
-          "id": "call_513655"
-        },
-        "thoughtSignature": "EuQECuEEARFNMg8GvK3T9gqlVB+afzaY3LLUub1ngx9W0XlyFfOKIrxWbQDIPZhzyYizOnL0yWILI2x50tqpw+xIyt457IxVHXmbqOfiZcp8ppMPyJy7e4X799CE8+MDCXr7YMY8eX/Ds5osrnZbD7H9FRknEiVqcQ+xqxANc7/YvAX8W2sGZQ2KLU1ppN0k/lBdHAkD+6q1+HHxAQOFMlwIxPQTBrOg6itLm6EgwyovkPHOhiHDNesA/a2FY6ZBngHSdQ+kQXA75jXDX9xtMPo1yfNSdwEhf6ESDnhFLOToEJCtlynwVhCNpDNWqhUnp+CTD4aJ4qyuvp4gC7Vu0R63iWVDo328ahFv2S0lkJ6HMWxLCZBbagkdbrFAzFPuABjUndWjt10y/5ogByp5Uan+jcvS8M1WbM/oK9mJKJFSDGuB67I3bwfVKTD1MZZW4ZfB5wE4dJP9udUZJOsu50Mc9537wZxUX6RsCf7FIYhw8btpQxUIBtwdirAKWncQS3ASMyhRFThxgMVIUit6Pul9C7GF5Sq1AGSVN+EQhtA6iMYzckqQaOkvM7DqxXXWQq4fGVRoKuyT46wvvgTwHmWkEbwu+q+vdhAf/xMjWMpNTo8e/xUgRFlBXYAtCXXjxqsEK5GOrzV13N0ZfS2hkYWz/yUoXF7ut6kaAIJVOKcovhORRmBPrNj9p8P4jaaeBP0T3o4JP2VPdf+JWVc3A1l6becuoCqiGsw0heicj+M50N+c1A/6FtFidlPw1x/nYh1qvFH14F7oz/4iB9V6XMfaHhd+FK3pd1H1rZn+ncPHXVVhwuM4"
-      }
-    ]
-  },
-  {
-    "role": "user",
-    "parts": [
-      {
-        "functionResponse": {
-          "name": "getSiteContext",
-          "response": {
-            "content": "سياق الموقع: أكاديمية VSA متخصصة في التداول والتحليل الفني والزمني."
-          }
-        }
-      }
-    ]
-  },
-  {
-    "role": "model",
-    "parts": [
-      {
-        "functionCall": {
-          "name": "getGithubFile",
-          "args": {
-            "path": "data.json"
-          },
-          "id": "call_615484"
-        },
-        "thoughtSignature": "EswKCskKARFNMg/qRN7k4KGaXbg8K4W8qnUyxI57IzaMewwkz0asu3EE+lD1ZYlHYMqpOvAEJ+o9d+/B0mQq0H6M+8Y6mlFz94gbisSQ/APq4CwSWZmmmQXyhazzahm/CXzAut1bk+Jr3d7BG5VarkN1xCd9FqXw9YP7jdCPIWVZjfsPF0mMnTE8vHvRi7KE8Og3BGAq8zV3vprxfn81lItSBKdHpeBpTu3wl424pFiLf6EQHPfpYwukAoO/+PvRrVxfBxEJsXjqYD1jgEeOHto8mtqEXHcWcHmdMfAjC+Y7DNpV84caEQ+7Hxvc/nwnfr6OXwLY0O6vDVPIPuUxcJR/dASxDswRuZ2DlsYM9RzspY7aTOXDK0bV+DcoiZXbnGAT1mo0R+rdlOWcQ2cei6PbZA99WU/VpZP6Y+gdhFA84IirmEjS2e8eXKH9NZ4V/VR/CjGphSKR12sVEvvfmipasp9qvBK6Z29I1dDGhDVM+88rbtwIyk8wTkta3tUwj+WDkfRsR7zuTXWvKS051Zvxu32aN8Vd8eDBPuMefbjvJdT8Hy8xbhL2nO+kqE+ZuA9OaB5vqW7AMmBO8istDyv0EQtjqLOFHdf8rqlFKDm9L0YU5ptlQr5Jdk6e2zbJuShRBj9vHtc4Nvkgnh4LEP1OzZi2tA1285BgSTifyrTnxfDt/Lw9HKqZC16vE9FislJLn3k0Kd4zKsA2gcH09uioofcK+KsUdM2wjjqveZv/ry8m9bTO2FFOwf3lhAdaosXN2VsYy1h613Wzz3fJTg73QjwiMRslIiGGFlFRy1dgAhLOJqJDpn6un9d8n42hDg9jyxL8t0fI6W21aiauE2r4T4CPwGqqRhF+cY0Fr/XtySxE4NVX4MXbMVOCopQsyJ/C8S0R2SgdjLxBktUcvHoFKmo68j/Ikwp9szQNjx/I8gy8ndTgwgxcMr/0kMmSPEVW6rbcdzX7BIoR5yHSadDVxSe+T1Q3bjyVAaiD1gjUPw6bFjW7A8POBjcZJK5V5FqOKkt+UdDbRSxxLgETyhP1tOpOA8ictPwYiOppTQbZOwh19OIC7VQhH9+wFIRId8Xm/HTcJEF/jtf4VKm978WA7G0uIJlhazWswOWPb0leMJ9XPICfPy52up5CzewSGl6EFCZgQGkxlnRXOYHNytTQ3fYtLBoidmOXDUb00DvJlGhllS3MVXG+nubuV//WCFh3RuvmzN7e7nkW7F5oBnGFAy1DeWfmlCrZ9xU/o+YvBFOiCbilE3iZjsCOFozh0fIyDIkxD+0gwMQUwbjO2m4yAn8UDFjGu2UojeeQJQhFm9bSg8GMcm9E4B83czrwLlpSlFkVfRseCIMk2myg8KkWSefSBLnOY7zcHuAUqkF4JUDKqbexIm8M+xZuRWwIdzwZRW/ADnp66YfQUU/+mGal1kELcalt20HT1gJ+2zreIxmFRRs4PwzOxVWvjg+SMqOQd7RbpcPBB7J4YzoE9W3oiXp0LpiEkejN+ksIa8LVk0GeIwUNIZcxCa8DZE4/PaI6hCBIIrCxeqATVurN/I5pb31JrdS5/FrGYAO0yCwp3114NCmT6ihWnoJGWLEdhTu8y6hduY0yqLi6K5dFk2to1iJCXr8vvDMLV4ooafFUvPVk3qRDD9K69MrEeFMI/rNqm6brFTK6D8J0seZvvuHG3TqK58kCy6b6PRwicwVRLcPHJZv+3OUD0yhiKroE7i+vCdqQobJDqxSrYMtdRbXzcdKlS0IhEfjBlzwbxK+8199puP9Yis4McH5MnmKws2qwkPlwBH77SED2ieDc"
-      }
-    ]
-  },
-  {
-    "role": "user",
-    "parts": [
-      {
-        "functionResponse": {
-          "name": "getGithubFile",
-          "response": {
-            "content": "❌ خطأ شبكة أثناء القراءة: Failed to fetch"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "role": "model",
-    "parts": [
-      {
-        "text": "أهلاً بك. \n\nبناءً على البيانات المباشرة للموقع (`getLiveSiteData`)، فإن قسم **تنبيهات الكريبتو** يحتوي على التنبيهات التالية:\n\n1. **أحدث تنبيه (أعلى القائمة):** `ETH/USDT` بتاريخ 19/08/2026 (الساعة 01:17 ص).\n2. **أقدم تنبيه (أدنى القائمة):** `BNB/USDT` بتاريخ 15/08/2026 (الساعة 12:53 ص).\n\n⚠️ **ملاحظة تقنية:**\nوفقاً لبروتوكول التعديل الجراحي، يلزم قراءة ملف المستودع أولاً عبر `getGithubFile` قبل إجراء أي تعديل. حالياً يواجه الاتصال بمستودع GitHub خطأ شبكة مؤقت (`Failed to fetch`).\n\nيرجى توضيح هل تقصد حذف **أحدث تنبيه** (ETH/USDT) أم **أقدم تنبيه في أسفل القائمة** (BNB/USDT)؟ وسأقوم بتنفيذ التعديل فور استقرار الاتصال بالمستودع.",
-        "thoughtSignature": "EowMCokMARFNMg/FD55E1F/ow1ZQEJCVOPhtTlmpK9QWNuWhceAWjlZl/uJHULv715Ekvhd/PtRhBqBccSMSaGBnn9+HtA+oDvEKihpqs+CDOaOLtoOjwBo38GLOB06PogVdTQQA68M2HLO8YiWfudPpJ6tUinpVDx11uwzqYNK2iD4eUt6I9Siul9PXv2uY4GKqWq8pyFXiez8OKhuMHKDi7NWbejKLTWUz7EkZM8LsZZO24dgQQO3v6Ccxys6uNujBZpiKEPs3RUy3txANkFfb6KD+2prdSR7/UIwHHxmxGjMHHG73uBFBcttKCGZQYH6w2KK9Ebo7AWmjHq7vIlS4J/6QM/J0oQVbOLhdYjOC9+/ECOvPcaziPXXNBgqkG4s1bNfJGQS8L3jDhnG9quNR9az6A027aWJdiRDKco7qrJfxmGACY8rJgu8G8VqNBnJVOnHt4/dHrcmU7MK0OhHpnapNJ0pfiRUlZ2BfenewVqhEs2jgZYK8iLW7wbF7847kO6AUU2seUvpkq0HJ7sSwmnd5AHD4zOzZTnz85iqR4NdQW+FcDiK72zdRHYQMSsiBC0tCO37T4KwsfW2dOCjxltDCf/9rrkfdXwewktV2i7rww2hlZRg0HAG7tHpLjJmIwj2tkMTa5ibP+eNUT0Pbuf8RF/GMbMnrnB6sCGXLaFY9lI+lgv3eo4aprvya2TQZqWpEKCMeVYY7x9H5hWQ0s/jfKl31PNBaXmmSOY73QeejjGCicJmesayA+wxbZCfRgy8CTd57K0eqP+hGL2+nbptxEGcGVHzEo0/7kEEHaf4Q8jHtfd5W29ZGpqbwxmqonjTviJraW842Rb3WX+3IL4k/EmsH38/yk/l8FiUZNE9qMb3WWRBonsiuGUU/KH2eJj4jRv3RWTmqhcIF0nsymMcDpb5P+imok+DL3VWkiXvnzY5t3yPhiRl5ZAUqoO2nWdBvfx3Vpa/HZLfJmIz/xwm5IXLEiyD9OVsa4g+lcNfdogHWQFEkV2V731vkbCj61SG/5Zo8DM4+wTg0tFLmA/7VGNiNdLEO1jc3covP1ZjZTX1Z8u6A2G8NIqqgWmzxZTQG6upESaOgtejpdr93BrtrjYXDno9AH9WUJXxOx86kw/CdIzT1j2Fc6ks40ypvZQtj6par8qFbTAK1WmounKLekJpdVmKq6p50/IbIzUhIdVLznKIXB+0KhDzKN12WcNfsoI5o/bc6NN7hQe3MUigW+kKrX9nFxYeux+a4Pb0ziFUl1/cvIOak76mqwNKx44H5qVBldl3NZyAyMcf6ZFQX7XkTquwqO5NsEXu1Fc2D1vKsB7Ijv2T9IdzNxwyKKw6iaezQLIewBjGdF5Ao0eHb4oNbUnIjaUUdegtOIZ1ggNifg5wgdfSHPm8aQKbULbWLz1X6gvvOtLIWFGP3PT0E/q5NLg4nBSo8jQtxpDlKvmYxu6V0Ka9YihrshSO8thJZ3mO1825yIIUFgOAAtMkLqxMeYNqBoOfb+fp7wJqddFEd1XNl6GoFOtZ9Y5c4B2QR7UkmqdMfN1aXWrOmtS5zvKb2GOMOaCfqlEiUesaWXw+dYXuFXRtwS7XXscZKxZ94COOa5wM4mdS5L+Hg4m+LgSMFyZj/VOHaO7FmkOza44/ZU15vGS4ORzy0q3K5GF1T6UMM6ema3kHmNmrsemWi+6t7vFFm9TccEpzxeavzsiZP/PiRwK2bDsT98AWsKGJrx2oYpNooWDJbzfZAXmlyyQrTm3D8OflbzE+xFgBgtWWLda+ZDriHEU7fYZ0a9WrolRfy3rigt/hYXvmeRa3qmqFA4Wqm/0cSOyfE9grEUHbw+j/QvDt59npOjadgEEiaMYvHeXB9QAN6T1qiJdtkqas09czPrnkdfHY0hO+ERPkFfT6Mb4gO72zn5nse96l35Feamtyb5Dvcnr3RjM1rKqTdwzAfuLhV9nAQf6E8hp31wehbd2f6+AMc/gFr0/RoTfKKMhCjar5a4R5MFQ3VPEVtYvR+i/2feV1dvJX+Cecnb17uLEb3ZWiAfu8K0iETw3tKv6XXd0vk"
-      }
-    ],
-    "model": "gemini-3.6-flash"
-  },
-  {
-    "role": "user",
-    "parts": [
-      {
-        "text": "احدث تنبيه على اعلى القائمة"
-      }
-    ]
-  },
-  {
-    "role": "model",
-    "parts": [
-      {
-        "functionCall": {
-          "name": "getGithubFile",
-          "args": {
-            "path": "data.json"
-          },
-          "id": "call_466248"
-        },
-        "thoughtSignature": "El4KXAERTTIP+NTPJlPJUYc4kbSa9QElXLoGU4dgeQJmpcbVcgKAsL5w5rG5F/8GxZAHUHgMlAUsJiqcsOlVY9+2CO/Jng21XRFY/fYz27LEqccOZvN4BH8alIL0EWag"
-      }
-    ]
-  },
-  {
-    "role": "user",
-    "parts": [
-      {
-        "functionResponse": {
-          "name": "getGithubFile",
-          "response": {
-            "content": "❌ خطأ شبكة أثناء القراءة: Failed to fetch"
-          }
-        }
-      }
-    ]
-  },
-  {
-    "role": "model",
-    "parts": [
-      {
-        "text": "أهلاً بك. \n\nحتى اللحظة، لا يزال الاتصال بالمستودع يواجه خطأ في الشبكة (`Failed to fetch`) عند محاولة قراءة ملف البيانات الأساسي (`data.json`) وفقاً للبروتوكول الصارم للتعديل الجراحي (Surgical Editing)، والذي يمنع أي تعديل بدون قراءة الملف أولاً لضمان عدم حدوث أي تضارب أو حذف خاطئ للبيانات.\n\nأنا جاهز تماماً لحذف أحدث تنبيه في أعلى القائمة (`ETH/USDT` بتاريخ 19/08/2026) فور استجابة خادم المستودع وعودة الاتصال. هل ترغب في إعادة محاولة الاتصال الآن؟",
-        "thoughtSignature": "El4KXAERTTIPPq5+TDMoYRB8XVtfA4rsht6fxIP6G5uk3rPeUFq//5+WDa/ZO93VzNGBu39iyZfwzPMzwgyozUq5SmxvaqthgdyC/ayTiAdDgsc3r3Y9V1F40mEybUtv"
+        "text": "عذراً، واجهت مشكلة تقنية في الاتصال المباشر بمستودع الملفات (GitHub API) لتعديل الملف البرمجي أو ملف البيانات (`crypto_alerts.json` / `data.json`) لحذف آخر تنبيه. \n\nبصفتي \"العقل المدبر\"، أود إفادتك بأن آخر تنبيه مسجل حالياً في قسم تنبيهات الكريبتو هو:\n- **العنوان:** 🚨 حركة قوية على زوج: BNB/USDT\n- **التاريخ/الوقت:** ١٢:٥٣ ص - ١٥/٨/٢٠٢٦ (مع المعرف `crypto-BNB/USDT-2026-08-15T00:53:26.209694`).\n\nإذا كان لديك صلاحية التعديل اليدوي أو أردت مني توجيهك للملف المطلوب تعديله في المشروع (مثل دالة جلب تنبيهات الكريبتو أو ملف JSON المسؤول عن التنبيهات)، يرجى تزويدي بمسار الملف أو السماح لي بإعادة المحاولة فور توفر الاتصال السليم.",
+        "thoughtSignature": "El4KXAERTTIPKk3YuDLo11+mvYaHiOEIk28ZpVmoXeIzme7pcjeTt6r0u5B+Syk0MyFQaORpM/hqf2/6r8ouKJzRsJgkg4UxFlsoXQiOlUvsXJCX4afAHH9oT4ndPqxx"
       }
     ],
     "model": "gemini-3.5-flash-lite"
-  },
-  {
-    "role": "user",
-    "parts": [
-      {
-        "text": "اريد ان اسألك فقط هل يمكنك اصلاح Failed to fetch من اجل الاتصال بلمستودع فقط اريد جواب"
-      }
-    ]
-  },
-  {
-    "role": "model",
-    "parts": [
-      {
-        "text": "**لا، لا يمكنني إصلاح خطأ `Failed to fetch` من جانبي.**\n\n**السبب التقني:**\nهذا الخطأ يعود إلى تعذر الاتصال بالشبكة الخارجية أو انقطاع الربط البرمجي (API / Network Gateway) بين بيئة التشغيل الحالية ومستودع GitHub. هذا أمر يتعلق بإعدادات الشبكة والصلاحيات على مستوى خادم البيئة (Server / Environment Host)، وليس أمراً يمكن تعديله أو إصلاحه عبر الأوامر البرمجية المتاحة لي كذكاء اصطناعي.\n\nبمجرد استعادة الاتصال واستقرار الشبكة من قِبل المشرف أو خادم المستودع، سيعمل الاتصال تلقائياً وسأمكن من تنفيذ الحذف مباشرة.",
-        "thoughtSignature": "EvYICvMIARFNMg/dMnFh/0eZ2b4JHUtAGALIasz0qBMgRU+d4Qt3TtNcsj8W87gc82LBaMdL2UHxADMRNlDyVK1IegjDgfEhRwYNVzM74KjoxIYX20+Gx8TNzliHQtmNAvWEgArouiEHiwJTqY6Pg32akR7A++NLDwJOSxGv83vgCBkZnZ/OG864HWA8z69Y/YPr2wvHfCr7BCwBlv5Np/FryIzjPrn1VPRUdLn76Z6uuqkAiO78/TnFsBIOn0P7Te0WxgTX5rDY5lEtXd2cQOapO8M+daicrQ5C+34lRUAkFqh8dMK35qZKA7vF2ggtCE5t9ZramnO0HTW6bZ98HEMUZl9VedDAd0+gjrL31J9XjLp9PcEfF6buLZZkRwYA83LL/UaDX+Xnalw4ADhQ6AVeTuPRYalRRF5mAwbxpaSYecuVOxNUZ/zFM7BITS/kl3QOJsKnKWGD0ibOpIP6VWZQau7EgcFt0IvQAD3to9wwJT1ObgdzhoZ5ELCBmmjb/tUNz6N+v/wthq2lIUHTxjIFq6z+9IYylsUNMBuT1IB2XlBEksn6MJO4DCzvl+1lotBJqOZjvWx1GCrAUqlxp24kFIDwThnt/P9jLG1MINMFtSo7rizXnAu5thImEFS7bTUV6pw2syJsZin6l1eg3DQHQEy5GZQc5s2B5vpeLkUAq+gAuHwAfrL4TDxtMu9gb95QUmiXSCvZQwW/J9CTGEC524mAge99cKSi7OGCUQ745StEke3Cs/ywjg8lLAGnxJXNqsEVM+LwxZp6rSw2v0MXBlsxRGgwni80x+7DTtPbPqjQDgf7IMOTOPh69UFKyRIyy9uNaBbc1dz159+v75yLv5rwAVHU9EaKNKGXXw0CiGb/orMXN3lo0sbfcJ+yT24mi+L/iAazIIMjoi97ZpRArn9gyCVZhCBjQMVFLO2cyWlXj05Hk0idTebtA7P1hno8NspdlSB0PS8zMuKwl2btFc1JSms4xLtDJmc3Gq2U64bP95cTjUgzm9k5A6wT71xPqjsowAaEggQMPnNEtS1FQJhV8Gktu5bNDwHlamwYjMKvch6QrrYG8B0dHlcDaVXacEquYPSHXBfSTplN4zyUSDfToUnYsMKO31sWe8CMhneOq5ae0bZgFHk++A/wcVlJm3+QDYMV2UgD85lIR0d+i3QvVFhJIXUBV0Nh0W2yevAsXKY0v6Ba5ho8hg47gotIeyAAVX4RMdiJOpHunHHlppBdtf9gG1ZP8Hhks0B+VxohbrDOTBaax/3U5VLZ5rcImT+BgDWAtzt4yulk5ZVmH8tw15VLV4LPwTWgDUP+fgpu92s0WW3JSGcpHSrpHMoJmtpaBkOBEtZomAu/PIz/D43QWL09yVPtR1KcqFqUASL97/XSJGH5ogUidg0grA38xjiMpiv21KJcDGHWZ7vF+q+1z4O1g/zhGBIIFQe2kt2tJLTDt3EdCz+1JRKVyq2UkoHdZY14yETT8m0fsxvFW6uceFRod7SiSqJCdpzBoXPfLUeLI30="
-      }
-    ],
-    "model": "gemini-3.6-flash"
-  },
-  {
-    "role": "user",
-    "parts": [
-      {
-        "text": "طيب لماذا لا يمكنك  اصلاح Failed to fetch من جابن اليست هي السبب في فشلك بلتصال بجت هب"
-      }
-    ]
-  },
-  {
-    "role": "model",
-    "parts": [
-      {
-        "text": "سؤالك منطقي ودقيق تقنياً، وإليك التوضيح الهندسي للسبب:\n\n---\n\n### ما هو خطأ `Failed to fetch` بالتحديد؟\nخطأ `Failed to fetch` ليس كوداً برمجياً خاطئاً داخل الموقع لأقوم بتعديله، بل هو **فشل على مستوى طبقة الشبكة ونقل البيانات (Network Transport Layer)**. \n\nيعني ذلك أن الطلب البرمجي عند خروجه لمحاولة الوصول إلى خوادم GitHub API، يفشل قبل أن يصل إليها للأسباب التالية:\n1. **انقطاع اتصال الشبكة أو جدار ناري (Firewall / CORS):** بيئة التشغيل أو الخادم المستضيف للموقع تمنع إجراء طلبات خارجية (Outbound HTTP Requests) إلى `api.github.com`.\n2. **غياب أو انتهاء صلاحية مفتاح الوصول (GitHub Token / Secrets):** الخادم لا يملك المفتاح السري المصرّح للوصول إلى المستودع.\n3. **سياسة العزل الأمني (Sandbox Environment):** كذكاء اصطناعي، أعمل داخل بيئة معزولة ومحمية، ولا أمتلك صلاحيات إدارة الخادم الأساسي (Root / Infrastructure Access) لتغيير إعدادات DNS، فتح منافذ الشبكة، أو إضافة مفاتيح الاتصال.\n\n---\n\n### من يستطيع إصلاحه؟\nالجهة المخولة بإصلاح هذا الخطأ هي **مدير الخادم أو مالك المستودع** عبر:\n* التأكد من صلاحية مفتاح الربط (`GITHUB_TOKEN` أو Personal Access Token) وإعادة ربطه.\n* التأكد من أن السيرفر المستضيف يسمح بالاتصال بخوادم GitHub دون حجب.\n\nبمجرد معالجة إعدادات الشبكة من قِبل مسؤول النظام، سيعود الاتصال تلقائياً للعمل.",
-        "thoughtSignature": "EsELCr4LARFNMg/jpV5+sQlz6wibbI//PsxxZ76RqxjLGktpJNhcYubXs9aPN8fwkKSaN6wLtm6QVDtsCeG2AkoBEuuBBSeFvHTLz5ZElHAZvjAtF13ORQ2FMKo2ZyKZ6MRmcwqt3yLrBW/gzhDeeYaRDhv500QR/LKCTxYEPjOujXYQoSYQEQfUgXf092weUQMgdQh/IgkFnZewn7Y7HsWGGX+4c3+rwbt0DMV7AQQrc82CB7P6MdOnru+frXaWlg09raTISgdpsaBnt0YxPsuqUM/unCgWy8pFABBnJbpQ20pzr40U0ky7IDi1Fo8Z/ljiuCxWRwyVMqI+ms4Y5F74N5xZxPJ9WYm315H1RmHo5smGfSVfQpxvjEzYzJaz9vBnTEIVMpnuBNIaYqCQvWWMj11kImfErb3xipa5dN7pQ1WaJV8orEBMPH0p6yZK28eS3ndmeoFEqrABX8RcI+ArMUcFFFAW0Pt2rc9FX7czLugNZp89cGvNASDkNbnKWfLndUxxG3il7bX23I3TWaRkvAAz5w7Z++wHcthE1x6/+M2EMT0Jp6VO9ANLzO26/kQ/mzaQ+k6T6yu28dq7FIzLVB04nhr7l7mLORNmzHByVvRn++aqkrAPaz+KLpthIt4YAgTgFvSHU5ks64HzQvBlvxZAFAbN67cJAKldEsP/OSqwSbV2XQ5U4IobJtph9h0p36ttGB3Piti8DKEXeeCg4+qThLR7Vb97TGYtaAHKKLrMal1Z7E1JzVds+lYuYZmqw2sE1dwSUzOMIz68wcGFz+oUFYvBKSpHHp8qQJhjYstjG+6J+t/gmi1MRDq1mWZ+ACsYVrn+h/MAT4HgiBXt75FKcDnmow9UaZ/3nWy17Ni3nKke81A4P006umaHvUfRh9jAp8UEQaXvAzCJKg2ZCg/ug+mQY72W8+/8+wDUj+mXjalsaydqHvOPeV210ZqfxDHYJXWpT49DM1UhCsMgVEwNiLZxJ314Zht/mf5Zd8x249OhRWETWe4Mm5+olp/yqAqdapeyme+m+CSrQxebXj06JPPZ4zuAIuNSEVdtkwluDJONhblhWSP87fCoTCOouSfOFL/oivqdvPciRv01mYb6jT8hxAgBtwVeq4CP/961I9zDO+Jk1EKxHp8fxETObH+BmgBVGqVD7kPVMgY3kT53C+S6n4SzEhxMRfGNMJ3EoZvGr0kWeYttFFL0LgrvAhPFnDc1XtScGVCDVkvk7dJxzeI9EoDiVXJ4z/xPVB/dGqSURq45DTKQbR9JVDajFyVxom7Qim4nt5swocjwYcz82YrBYQt0GT7EEWR2N25g/jhyzmB0OwH7sn5gsi9JL2gbHr6wyAPcLIjmzm7etmNRXKs4pz2L/RAz40Z+h/2QmjB7Qad5rhZNozZ1JfKQZYIEpSQNBDLMGk8xgaK2h2gG6bMcC5XNLKB/F01ko/btdLBICeHjxoIEs0v1850g2HMci3ha/ZUvY7/VYKA+bLKVK385aV7zOcs6rB6UA8vK9kyb3O96wKujiGNdhGfnVVJrV/eEDNYSdqulDcMC9QxQOqaHs6vcRqbT7Acrb+OO4Li1yIXgBLKhRNclpDLpqagZ5Vv2lGBvFDy76UtTOUJvwSygGbEk3QK5SHFjR1vCesqHHEamiGXim3L+cYcfAbRHsMlOxDwhlGG+1Mb0nAznSXkX1hcqVzQ9YriaUTNAzrhZM3qZq3fzMPPk/MNGNRFb8bpN3vq7vGS4hIxogVU7WT8NxwjZxM60aUm+ug0b0e1w5LaNtfx9bLSAWKYlUYojVtdY9vUbHmc6mKmz2fFUtXNRcRwbfWQK8opVOSmVI2j7EzW5Uvd+8n3f+OaSS86O3iB83ErHzuEwHQ5thvHCPpIEOQP3osB5deokFUvD4TQ99Kdp4xXPgq+lTWG7Y0Lul3sWyILvGlCYvIQrXZY9vvtCH3VOtnopVuQYIy9T"
-      }
-    ],
-    "model": "gemini-3.7-flash"
   }
 ]
