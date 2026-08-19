@@ -2548,6 +2548,11 @@
         let githubToken = '';
         const GITHUB_REPO = 'ahmedwwaw1/my';
 
+        function getCleanGithubToken() {
+            if (!githubToken) return null;
+            return githubToken.trim().replace(/^['"]|['"]$/g, '');
+        }
+
         async function resetGeminiKey() {
             const key = prompt("الرجاء إدخال Gemini API Key الجديد (AQ...):");
             if (key) {
@@ -3073,9 +3078,9 @@
         }
 
         async function getGithubFileContent(path) {
-            if (!githubToken) return "⚠️ خطأ: GitHub Token غير متوفر في الإعدادات ⚙️.";
+            const token = getCleanGithubToken();
+            if (!token) return "⚠️ خطأ: GitHub Token غير متوفر في الإعدادات ⚙️.";
             try {
-                const token = githubToken.trim().replace(/^['"]|['"]$/g, '');
                 const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
                     headers: {
                         'Authorization': `token ${token}`,
@@ -3097,10 +3102,11 @@
         }
 
         async function listGithubWorkflows() {
-            if (!githubToken) return "⚠️ خطأ في التوكن.";
+            const token = getCleanGithubToken();
+            if (!token) return "⚠️ خطأ في التوكن.";
             try {
                 const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/workflows`, {
-                    headers: { 'Authorization': `token ${githubToken}` }
+                    headers: { 'Authorization': `token ${token}` }
                 });
                 const data = await res.json();
                 const names = data.workflows.map(w => w.path.split('/').pop());
@@ -3109,10 +3115,11 @@
         }
 
         async function listGithubFiles(path = "") {
-            if (!githubToken) return "⚠️ خطأ: GitHub Token غير متوفر.";
+            const token = getCleanGithubToken();
+            if (!token) return "⚠️ خطأ: GitHub Token غير متوفر.";
             try {
                 const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
-                    headers: { 'Authorization': `token ${githubToken}`, 'Cache-Control': 'no-cache' }
+                    headers: { 'Authorization': `token ${token}`, 'Cache-Control': 'no-cache' }
                 });
                 if (!res.ok) {
                     const err = await res.json();
@@ -3123,6 +3130,34 @@
                 const files = data.map(f => `${f.type === 'dir' ? '📁' : '📄'} ${f.path}`);
                 return `محتويات ${path || 'الجذر'}:\n${files.join('\n')}`;
             } catch (e) { return `❌ خطأ اتصال بالشبكة: ${e.message}`; }
+        }
+
+        async function repairSystem() {
+            const report = {
+                github_token: !!githubToken ? "متوفر" : "مفقود",
+                gemini_key: !!geminiApiKey ? "متوفر" : "مفقود",
+                repo: GITHUB_REPO,
+                timestamp: new Date().toISOString()
+            };
+
+            const token = getCleanGithubToken();
+            if (token) {
+                try {
+                    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}`, {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+                    report.github_api_status = res.ok ? "يعمل بنجاح" : `خطأ: ${res.status}`;
+                    if (res.status === 401) report.recommendation = "التوكن غير صالح أو منتهي الصلاحية. يرجى إعادة ضبطه.";
+                    if (res.status === 404) report.recommendation = "المستودع غير موجود أو التوكن لا يملك صلاحية الوصول إليه.";
+                } catch (e) {
+                    report.github_api_status = `فشل الاتصال: ${e.message}`;
+                    report.recommendation = "تأكد من اتصالك بالإنترنت ومن عدم وجود قيود CORS على المتصفح.";
+                }
+            } else {
+                report.recommendation = "يرجى إدخال GitHub Token في الإعدادات لتفعيل الأذرع التنفيذية.";
+            }
+
+            return `تقرير نظام الإصلاح الذاتي:\n${JSON.stringify(report, null, 2)}`;
         }
 
         async function callGemini(promptText, fileBase64 = null, mimeType = null) {
@@ -3187,7 +3222,8 @@
                     { name: "triggerGithubWorkflow", description: "تشغيل عمليات البوتات التلقائية.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
                     { name: "updateWorkflowStatus", description: "إيقاف أو تفعيل البوتات.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" }, status: { type: "STRING", enum: ["stop", "start"] } }, required: ["workflow_id", "status"] } },
                     { name: "listGithubFiles", description: "استكشاف هيكل المجلدات قبل التعديل.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } } } },
-                    { name: "injectGlobalStyles", description: "تغيير واجهة المستخدم CSS فوراً للتحقق البصري.", parameters: { type: "OBJECT", properties: { css_code: { type: "STRING" } }, required: ["css_code"] } }
+                    { name: "injectGlobalStyles", description: "تغيير واجهة المستخدم CSS فوراً للتحقق البصري.", parameters: { type: "OBJECT", properties: { css_code: { type: "STRING" } }, required: ["css_code"] } },
+                    { name: "repairSystem", description: "فحص ذاتي للنظام وإصلاح مشاكل الاتصال والتوكن.", parameters: { type: "OBJECT", properties: {} } }
                 ]
             }];
 
@@ -3240,6 +3276,7 @@
                             else if (name === "listGithubWorkflows") toolResult = await listGithubWorkflows();
                             else if (name === "listGithubFiles") toolResult = await listGithubFiles(args.path || "");
                             else if (name === "getLiveSiteData") toolResult = JSON.stringify(allData);
+                            else if (name === "repairSystem") toolResult = await repairSystem();
                             else if (name === "getSiteContext") toolResult = "سياق الموقع: أكاديمية VSA متخصصة في التداول والتحليل الفني والزمني.";
                             else if (name === "injectGlobalStyles") {
                                 const style = document.createElement('style');
