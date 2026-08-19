@@ -3311,6 +3311,7 @@
                 function_declarations: [
                     { name: "githubAction", description: "تعديل جراحي لملف في المستودع. يتطلب قراءة الملف أولاً.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
                     { name: "getGithubFile", description: "قراءة محتوى ملف حالي لضمان دقة الدمج.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                    { name: "searchCode", description: "البحث عن كلمة أو كود في كامل المستودع دون استهلاك التوكنات. يعيد أسماء الملفات التي تحتوي على الكلمة.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                     { name: "getLiveSiteData", description: "جلب الحقائق المعروضة حالياً لمنع الهلوسة.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "getSiteContext", description: "RAG Tool: جلب السياق العام للموقع والسياسات.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "triggerGithubWorkflow", description: "تشغيل عمليات البوتات التلقائية.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
@@ -3367,6 +3368,23 @@
                             let toolResult;
                             if (name === "githubAction") toolResult = await githubAction(args.path, args.content);
                             else if (name === "getGithubFile") toolResult = await getGithubFileContent(args.path);
+                            else if (name === "searchCode") {
+                                const token = getCleanGithubToken();
+                                if (!token) toolResult = "⚠️ خطأ: توكن GitHub مطلوب للبحث.";
+                                else {
+                                    try {
+                                        const res = await fetch(`https://api.github.com/search/code?q=${args.query}+repo:${GITHUB_REPO}`, {
+                                            headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' },
+                                            mode: 'cors'
+                                        });
+                                        const data = await res.json();
+                                        if (res.ok) {
+                                            const files = data.items.map(f => f.path);
+                                            toolResult = files.length > 0 ? `تم العثور على الكلمة في الملفات التالية: ${files.join(', ')}` : "لم يتم العثور على نتائج.";
+                                        } else toolResult = `❌ خطأ في البحث: ${data.message}`;
+                                    } catch(e) { toolResult = `❌ فشل الاتصال بالبحث: ${e.message}`; }
+                                }
+                            }
                             else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
                             else if (name === "updateWorkflowStatus") toolResult = await updateWorkflowStatus(args.workflow_id, args.status);
                             else if (name === "listGithubWorkflows") toolResult = await listGithubWorkflows();
