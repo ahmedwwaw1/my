@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل لديك ادأة searchCode الان"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "نعم، أمتلك أداة `searchCode` وأستطيع استخدامها للبحث عن أي كلمة أو كود في كامل المستودع بكفاءة ودون استهلاك للوقت أو التوكنات. كيف يمكنني مساعدتك بها اليوم؟",
+        "thoughtSignature": "El4KXAERTTIPNCLjY2Mvxxy7EIYy25Yc+PgAGAu+KbApqc3ZEa5wU1wFHn6m+ErUOAGFoh0sWPmDXgtjkUc4h9szeEE8m/ShhixBjhwnrWKol0l+rmQBlhaYLFyfcMgH"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
+  }
+]
