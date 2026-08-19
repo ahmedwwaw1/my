@@ -242,5 +242,23 @@
       }
     ],
     "model": "gemini-3.6-flash"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "طيب لماذا لا يمكنك  اصلاح Failed to fetch من جابن اليست هي السبب في فشلك بلتصال بجت هب"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "سؤالك منطقي ودقيق تقنياً، وإليك التوضيح الهندسي للسبب:\n\n---\n\n### ما هو خطأ `Failed to fetch` بالتحديد؟\nخطأ `Failed to fetch` ليس كوداً برمجياً خاطئاً داخل الموقع لأقوم بتعديله، بل هو **فشل على مستوى طبقة الشبكة ونقل البيانات (Network Transport Layer)**. \n\nيعني ذلك أن الطلب البرمجي عند خروجه لمحاولة الوصول إلى خوادم GitHub API، يفشل قبل أن يصل إليها للأسباب التالية:\n1. **انقطاع اتصال الشبكة أو جدار ناري (Firewall / CORS):** بيئة التشغيل أو الخادم المستضيف للموقع تمنع إجراء طلبات خارجية (Outbound HTTP Requests) إلى `api.github.com`.\n2. **غياب أو انتهاء صلاحية مفتاح الوصول (GitHub Token / Secrets):** الخادم لا يملك المفتاح السري المصرّح للوصول إلى المستودع.\n3. **سياسة العزل الأمني (Sandbox Environment):** كذكاء اصطناعي، أعمل داخل بيئة معزولة ومحمية، ولا أمتلك صلاحيات إدارة الخادم الأساسي (Root / Infrastructure Access) لتغيير إعدادات DNS، فتح منافذ الشبكة، أو إضافة مفاتيح الاتصال.\n\n---\n\n### من يستطيع إصلاحه؟\nالجهة المخولة بإصلاح هذا الخطأ هي **مدير الخادم أو مالك المستودع** عبر:\n* التأكد من صلاحية مفتاح الربط (`GITHUB_TOKEN` أو Personal Access Token) وإعادة ربطه.\n* التأكد من أن السيرفر المستضيف يسمح بالاتصال بخوادم GitHub دون حجب.\n\nبمجرد معالجة إعدادات الشبكة من قِبل مسؤول النظام، سيعود الاتصال تلقائياً للعمل.",
+        "thoughtSignature": "EsELCr4LARFNMg/jpV5+sQlz6wibbI//PsxxZ76RqxjLGktpJNhcYubXs9aPN8fwkKSaN6wLtm6QVDtsCeG2AkoBEuuBBSeFvHTLz5ZElHAZvjAtF13ORQ2FMKo2ZyKZ6MRmcwqt3yLrBW/gzhDeeYaRDhv500QR/LKCTxYEPjOujXYQoSYQEQfUgXf092weUQMgdQh/IgkFnZewn7Y7HsWGGX+4c3+rwbt0DMV7AQQrc82CB7P6MdOnru+frXaWlg09raTISgdpsaBnt0YxPsuqUM/unCgWy8pFABBnJbpQ20pzr40U0ky7IDi1Fo8Z/ljiuCxWRwyVMqI+ms4Y5F74N5xZxPJ9WYm315H1RmHo5smGfSVfQpxvjEzYzJaz9vBnTEIVMpnuBNIaYqCQvWWMj11kImfErb3xipa5dN7pQ1WaJV8orEBMPH0p6yZK28eS3ndmeoFEqrABX8RcI+ArMUcFFFAW0Pt2rc9FX7czLugNZp89cGvNASDkNbnKWfLndUxxG3il7bX23I3TWaRkvAAz5w7Z++wHcthE1x6/+M2EMT0Jp6VO9ANLzO26/kQ/mzaQ+k6T6yu28dq7FIzLVB04nhr7l7mLORNmzHByVvRn++aqkrAPaz+KLpthIt4YAgTgFvSHU5ks64HzQvBlvxZAFAbN67cJAKldEsP/OSqwSbV2XQ5U4IobJtph9h0p36ttGB3Piti8DKEXeeCg4+qThLR7Vb97TGYtaAHKKLrMal1Z7E1JzVds+lYuYZmqw2sE1dwSUzOMIz68wcGFz+oUFYvBKSpHHp8qQJhjYstjG+6J+t/gmi1MRDq1mWZ+ACsYVrn+h/MAT4HgiBXt75FKcDnmow9UaZ/3nWy17Ni3nKke81A4P006umaHvUfRh9jAp8UEQaXvAzCJKg2ZCg/ug+mQY72W8+/8+wDUj+mXjalsaydqHvOPeV210ZqfxDHYJXWpT49DM1UhCsMgVEwNiLZxJ314Zht/mf5Zd8x249OhRWETWe4Mm5+olp/yqAqdapeyme+m+CSrQxebXj06JPPZ4zuAIuNSEVdtkwluDJONhblhWSP87fCoTCOouSfOFL/oivqdvPciRv01mYb6jT8hxAgBtwVeq4CP/961I9zDO+Jk1EKxHp8fxETObH+BmgBVGqVD7kPVMgY3kT53C+S6n4SzEhxMRfGNMJ3EoZvGr0kWeYttFFL0LgrvAhPFnDc1XtScGVCDVkvk7dJxzeI9EoDiVXJ4z/xPVB/dGqSURq45DTKQbR9JVDajFyVxom7Qim4nt5swocjwYcz82YrBYQt0GT7EEWR2N25g/jhyzmB0OwH7sn5gsi9JL2gbHr6wyAPcLIjmzm7etmNRXKs4pz2L/RAz40Z+h/2QmjB7Qad5rhZNozZ1JfKQZYIEpSQNBDLMGk8xgaK2h2gG6bMcC5XNLKB/F01ko/btdLBICeHjxoIEs0v1850g2HMci3ha/ZUvY7/VYKA+bLKVK385aV7zOcs6rB6UA8vK9kyb3O96wKujiGNdhGfnVVJrV/eEDNYSdqulDcMC9QxQOqaHs6vcRqbT7Acrb+OO4Li1yIXgBLKhRNclpDLpqagZ5Vv2lGBvFDy76UtTOUJvwSygGbEk3QK5SHFjR1vCesqHHEamiGXim3L+cYcfAbRHsMlOxDwhlGG+1Mb0nAznSXkX1hcqVzQ9YriaUTNAzrhZM3qZq3fzMPPk/MNGNRFb8bpN3vq7vGS4hIxogVU7WT8NxwjZxM60aUm+ug0b0e1w5LaNtfx9bLSAWKYlUYojVtdY9vUbHmc6mKmz2fFUtXNRcRwbfWQK8opVOSmVI2j7EzW5Uvd+8n3f+OaSS86O3iB83ErHzuEwHQ5thvHCPpIEOQP3osB5deokFUvD4TQ99Kdp4xXPgq+lTWG7Y0Lul3sWyILvGlCYvIQrXZY9vvtCH3VOtnopVuQYIy9T"
+      }
+    ],
+    "model": "gemini-3.7-flash"
   }
 ]
