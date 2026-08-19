@@ -2986,12 +2986,21 @@
                     finalPrompt += `\n\n[محتوى الملف المرفق (${selectedFileName})]:\n${selectedFileContent}`;
                 }
 
+                addMessageToUi('ai', `🧠 جاري التفكير باستخدام ${document.getElementById('modelSelector').value}...`, 'System');
                 const result = await callGemini(finalPrompt, selectedFileBase64, selectedFileType);
+
+                // إزالة رسالة "جاري التفكير" قبل إضافة الرد الحقيقي
+                const msgs = document.getElementById('aiMessages');
+                if (msgs.lastChild && msgs.lastChild.innerText.includes("جاري التفكير")) {
+                    msgs.removeChild(msgs.lastChild);
+                }
+
                 addMessageToUi('ai', result.text, result.model);
                 clearSelectedFile();
                 updateSessions();
             } catch (err) {
-                addMessageToUi('ai', "⚠️ فشل في معالجة الطلب.");
+                console.error("Chat Error:", err);
+                addMessageToUi('ai', "⚠️ فشل في معالجة الطلب. تأكد من اتصالك بالإنترنت وصحة المفاتيح.");
             }
         }
 
@@ -3165,8 +3174,11 @@
                 maxOutputTokens: 2048
             };
 
-            async function runToolLoop(history) {
-                for (const modelName of modelNames) {
+            async function runToolLoop(history, activeModel = null) {
+                // إذا كان هناك نموذج نشط (مثلاً بعد استدعاء أداة)، نستخدمه مباشرة ولا نكرر البحث
+                const modelsToTry = activeModel ? [activeModel] : modelNames;
+
+                for (const modelName of modelsToTry) {
                     const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${key}`;
                     try {
                         const res = await fetch(url, {
@@ -3183,19 +3195,19 @@
                         const data = await res.json();
                         if (!res.ok) {
                             // إذا كان الخطأ 404 (غير موجود) أو 503 (غير متاح) أو 429 (تجاوز الحد)، ننتقل للنموذج التالي في القائمة
-                            if (res.status === 404 || res.status === 503 || res.status === 429) {
+                            if (!activeModel && (res.status === 404 || res.status === 503 || res.status === 429)) {
                                 console.warn(`⚠️ النموذج ${modelName} غير متاح حالياً (كود: ${res.status}). جاري تجربة النموذج الاحتياطي...`);
                                 continue;
                             }
-                            return `❌ خطأ من جوجل (${res.status}): ${data.error?.message || "فشل"}`;
+                            return { text: `❌ خطأ من جوجل (${res.status}): ${data.error?.message || "فشل التوصيل"}`, model: modelName };
                         }
 
                         const part = data.candidates?.[0]?.content?.parts?.[0];
-                        if (!part) return "⚠️ لا يوجد رد من المحرك.";
+                        if (!part) return { text: "⚠️ لا يوجد رد من المحرك (Response empty).", model: modelName };
 
                         if (part.functionCall) {
                             const { name, args } = part.functionCall;
-                            addMessageToUi('ai', `⚙️ تنفيذ الأداة: ${name}...`);
+                            addMessageToUi('ai', `⚙️ تنفيذ الأداة: ${name}...`, modelName);
 
                             let toolResult;
                             if (name === "githubAction") toolResult = await githubAction(args.path, args.content);
@@ -3205,20 +3217,20 @@
                             else if (name === "listGithubWorkflows") toolResult = await listGithubWorkflows();
                             else if (name === "listGithubFiles") toolResult = await listGithubFiles(args.path || "");
                             else if (name === "getLiveSiteData") toolResult = JSON.stringify(allData);
-                            else if (name === "getSiteContext") toolResult = "سياق الموقع: أكاديمية VSA متخصصة في التداول والتحليل الفني والزمني. السياسات: يمنع التلاعب، الأمان هو الأولوية القصوى، جميع البيانات مستمدة من Supabase و GitHub.";
+                            else if (name === "getSiteContext") toolResult = "سياق الموقع: أكاديمية VSA متخصصة في التداول والتحليل الفني والزمني.";
                             else if (name === "injectGlobalStyles") {
                                 const style = document.createElement('style');
                                 style.textContent = args.css_code;
                                 document.head.appendChild(style);
-                                toolResult = "✅ تم تطبيق التنسيق الجديد بنجاح في المتصفح. تذكر حفظ التعديل في index.html عبر githubAction ليكون دائماً.";
+                                toolResult = "✅ تم تطبيق التنسيق الجديد بنجاح.";
                             }
 
-                            // تحديث التاريخ بتسلسل (Model Call -> User Response for tool)
+                            // تحديث التاريخ بتسلسل
                             history.push({ role: "model", parts: [part] });
                             history.push({ role: "user", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
 
-                            // العودة للموديل بالنتيجة
-                            return await runToolLoop(history);
+                            // العودة للموديل بالنتيجة (مع تثبيت النموذج الحالي)
+                            return await runToolLoop(history, modelName);
                         }
 
                         // الرد النهائي: تحديث الذاكرة المستديمة
@@ -3227,10 +3239,13 @@
                         if (chatHistory.length > 50) chatHistory = chatHistory.slice(-50);
                         saveChatToStorage();
                         return { text: part.text, model: modelName };
-                    } catch (err) { console.error("Loop Error:", err); }
+                    } catch (err) {
+                        console.error(`Error with ${modelName}:`, err);
+                        if (!activeModel) continue;
+                        return { text: `❌ فشل الاتصال بالنموذج: ${err.message}`, model: modelName };
+                    }
                 }
-                const errorMsg = "❌ فشل الوصول للموديلات المطلوبة. يرجى التحقق من مفتاح API (Gemini Key) أو الاتصال بالإنترنت.";
-                addMessageToUi('ai', errorMsg);
+                const errorMsg = "❌ فشل الوصول للموديلات المطلوبة. يرجى التحقق من مفتاح API أو استخدام نموذج آخر.";
                 return { text: errorMsg, model: "System Error" };
             }
 
