@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "مرحباً بك. أنا **العقل المدبر (Mastermind)**، المدير التنفيذي والمهندس الذكي لمنظومة VSA Academy. \n\nكيف يمكنني خدمتك اليوم من الناحية التقنية، التحليلية، أو الهندسية؟ أنا جاهز لتلقي تعليماتك بخصوص التطوير، الصيانة، أو تحديث النظام.",
+        "thoughtSignature": "El4KXAERTTIPUUoZiCoRCTx3Ys8K+6s+lej4RRMsGif3PreGOMFvziD43h+Y9Jt64PlAwwIinFOKe3e6yX1aG1bkxYDcpiolB7KGVHPJ+yBRagTwurlqIRPLwpn/p9J6"
+      }
+    ]
+  }
+]
