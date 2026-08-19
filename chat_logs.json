@@ -15,5 +15,22 @@
         "thoughtSignature": "El4KXAERTTIPz1xTd7dv0sW7qQpxxvOmMS8bOgoHauwz5BFViu0dJAmhvFbWTQa4Dh2gk4mDSIcujYrAnK+4SwuNUgrjhbj355F+yIpp/0IryeWoeS38ulTvNg1Z5QcF"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "انا اخترت من قائمة النماذج gemini 3 5 flash lite حاب اتكد هل ان هو"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك مجدداً. \n\nبناءً على النظام المبرمج والبيئة التي أعمل من خلالها، أنا أعمل كنموذج ذكاء اصطناعي متقدم تم تهيئته خصيصاً لتنفيذ مهام \"العقل المدبر\" (Mastermind) في منصة VSA Academy عبر واجهات البرمجة المخصصة. \n\nإذا قمت باختيار **Gemini 3.5 Flash Lite** (أو النسخة المحددة التي تظهر لديك في قائمة النماذج المتاحة في الواجهة التي تستخدمها)، فهذا هو النموذج الفعلي الذي يقوم بالرد عليك ومعالجة طلباتك الآن وفقاً للبروتوكولات والدستور البرمجي المحدد لي.\n\nهل لديك أي استفسار تقني أو مهمة برمجية ترغب في أن نبدأ بها الآن؟",
+        "thoughtSignature": "El4KXAERTTIP5w+AEYC0Sb8KcpQphQK62ttPIwYFS2FiSkNM9E8dMf20IVRnyE+KRoGeqE4BvIgF59fQa+M5RRgeWz/EBSYJeYAmiq4+LVJbMhLHUMt+Fivba9ZiAHBp"
+      }
+    ]
   }
 ]
