@@ -3266,7 +3266,7 @@
                     { name: "injectGlobalStyles", description: "تغيير واجهة المستخدم CSS فوراً للتحقق البصري.", parameters: { type: "OBJECT", properties: { css_code: { type: "STRING" } }, required: ["css_code"] } },
                     { name: "repairSystem", description: "فحص ذاتي للنظام وإصلاح مشاكل الاتصال والتوكن.", parameters: { type: "OBJECT", properties: {} } }
                 ]
-            }; // end_tools
+            }]; // end_tools
 
             const generationConfig = {
                 temperature: 0, // سلوك حتمي ودقيق
@@ -3352,7 +3352,7 @@
                                     const indexContent = await getGithubFileContent('index.html');
 
                                     // 1. حقن تعريف الأداة في مصفوفة الأدوات
-                                    const toolInsertionPoint = indexContent.indexOf('] }; // end_tools');
+                                    const toolInsertionPoint = indexContent.indexOf('}]; // end_tools');
                                     let updatedContent = indexContent;
 
                                     // إذا لم يجد علامة النهاية، سنستخدم منطقاً ذكياً للدمج
