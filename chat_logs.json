@@ -11,8 +11,8 @@
     "role": "model",
     "parts": [
       {
-        "text": "أهلاً بك. أنا \"العقل المدبر\" (Mastermind) - الذكاء التنفيذي لـ VSA Academy.\n\nكيف يمكنني مساعدتك اليوم في التطوير، صيانة المنصة، إدارة البيانات، أو تحديث الكود؟",
-        "thoughtSignature": "EqUFCqIFARFNMg+tE2oqaW/EkOjxvGJYu+57m4oELDm4LBhrEslRYsmOFIElTzMcITqoWKK4pOooeV2atgH4pZv8KZhKMv8BnKdQiiXj4X9mWlGVjOfqlNc7gHzRDtJrehTeL3wEezNI9UsNXEFy1/0zPQ1VRkLpHK3s4m3VVu+qLJ3ryUGyQuqFJma//oBNZxm8POT7NvgCl3CZNbcauTNhnS6bbEZ/EhpgP78Cxn+MoN3iEVglPBrqByeRwwrGqmDDSBZyRN/3FaA8QbBQTwNQ596R+i61StluTQPa3SNR34afWUkCcr9iyfwMzgd6kNU6xzh7nxcm+DD+VXM0B55p/ovTT7ihkqUym3O1zmASJF84TskL+j4UrKN0iQcUHrYkIPnjKY6l31JSmkgWSfgofuyNjPQnlU/k8iYz4gPOuMNyMSgJmigxWUG66LkGHr+hEGq/u86glCft7b0ERGu48zvmKlpt7D2MxYs9XaglOrifMlDkZjRifIDP8ttodng48dx8Y6IekKetponPZoLZamb3IBYBx9T0ZQEdpMFkqARuphVwbqYc1nOhriue1GqI/9tA9UBp3jITfIYtiFUwqn0LbhqiYT6jhywGKAh1JdZQinBR8cLr4Va1eck8T+oj4i1dm5EAlOw0xWXtHdmqco1zNANlcWMQ1W7emHHsFf12Mmk73M+W1NPVptV1n9Xk6akQcMeqbxNsIJnmN5zsKHq9ux3A/HhagWfOMEJ3hApWMv48sB9uvidnMrfGAaw0djRBN38NxKOuGkLpbPL8QZhjJSX0Xpt/KCc6fb+6Xn8g14gaHkh0l9CTuc9bRRjQLRrBmwJBk4piglsiIlXvk5YhWbQ83NZlgbmLVvgLI+GTb3whVWpUxc1+AdgsEZZYaalb2OY="
+        "text": "أهلاً بك. أنا **العقل المدبر (Mastermind)** لمكاديمية VSA. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى استفسارات حول بيانات الموقع، تحليل التنبيهات والأصول، أو إجراء تعديلات وتحسينات على المنصة، أنا في خدمتك.",
+        "thoughtSignature": "EvECCu4CARFNMg8FwRiYQ5Y7pBZyfqfiWyHqrGXeFJsOS+rc2YIomGy91gbsZMzTTStDFQQwZL7ycYD+zgmoTX1joIbz2n6Vvpx4aPxkyc+CmpCjUMaa/miAedn5caviHPkXFHmElTy54AC3r0h5xi2cdIJ6LhtAOehK5Zi98x6W2Lpv2rjJ/5ZI68WnNvvtaBpKe1KDEea8A4Ui/5l7Kch/a7ZRKN1KrWXCRwfALp+lghlvzLyrKckXN9OkLbUJr9cGgcRPm7pUHqyfi1ipkIK+EeKMODsNh6xrjYAE5dKhKp0mCWnsp7y3Px3PEG09ngsJabmaGsWvQMkcZSbdha2kco+mALWFOBNnfPTH2vOHCj4Iny0nTaIGxlJy2LvjBxtyjRwmOaVIdYaVA5fb7RYTC1jMpDlnbouDdxD3Tc8jHOioYCjGCgUnm+PSvyFZ8I3Q1Sk0P+NvhpSwYQV/GYP1qvrvd44A8KwpOHSMfGgxv9WI"
       }
     ],
     "model": "gemini-3.6-flash"
