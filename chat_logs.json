@@ -11,10 +11,10 @@
     "role": "model",
     "parts": [
       {
-        "text": "أهلاً بك. أنا **العقل المدبر (Mastermind)** لمكاديمية VSA. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى استفسارات حول بيانات الموقع، تحليل التنبيهات والأصول، أو إجراء تعديلات وتحسينات على المنصة، أنا في خدمتك.",
-        "thoughtSignature": "EvECCu4CARFNMg8FwRiYQ5Y7pBZyfqfiWyHqrGXeFJsOS+rc2YIomGy91gbsZMzTTStDFQQwZL7ycYD+zgmoTX1joIbz2n6Vvpx4aPxkyc+CmpCjUMaa/miAedn5caviHPkXFHmElTy54AC3r0h5xi2cdIJ6LhtAOehK5Zi98x6W2Lpv2rjJ/5ZI68WnNvvtaBpKe1KDEea8A4Ui/5l7Kch/a7ZRKN1KrWXCRwfALp+lghlvzLyrKckXN9OkLbUJr9cGgcRPm7pUHqyfi1ipkIK+EeKMODsNh6xrjYAE5dKhKp0mCWnsp7y3Px3PEG09ngsJabmaGsWvQMkcZSbdha2kco+mALWFOBNnfPTH2vOHCj4Iny0nTaIGxlJy2LvjBxtyjRwmOaVIdYaVA5fb7RYTC1jMpDlnbouDdxD3Tc8jHOioYCjGCgUnm+PSvyFZ8I3Q1Sk0P+NvhpSwYQV/GYP1qvrvd44A8KwpOHSMfGgxv9WI"
+        "text": "مرحباً بك. معك **العقل المدبر (Mastermind)** — الذكاء التنفيذي لأكاديمية VSA.\n\nأنا جاهز لإدارة العمليات البرمجية، تحليل البيانات الحية، تحسين واجهات المنصة، أو متابعة أداء الأنظمة والبوتات.\n\nكيف يمكنني خدمتك اليوم؟",
+        "thoughtSignature": "EtgCCtUCARFNMg9GffiMjrg+X0AM9TehuWB39BsdUPv4ih1rstEfmdo/s7/5LKT2JCxvIdWTLTAtCk8+MDmpPg4FJIlltcH4AmAA4Icqzxcu3Rz8pGEgFBH6aWRcUqfKjopUIts27rqQqcKFXXyMnxDt77SnNDgFK9U8O+61G7n8rNbYE3jsmGy610IvyUXq+L4aaB79MWRXFkj1IRnJSZA1H+/yrrGJlVWUJZiJGvumEJ1nRlGWFO/t/7TXOo1jsCa+YZTufEJywDnZFjZFXV0HMElztEbxuSFKRk0t4+LgeoOjG4JojRy4pJ24VQJRaxqhcquc6DjXALlDIrx8wgB5I/14a7HRmikOHeLscK9I9g/f+nv13M3Y9ZhmLC0BrAqZr7q/fRio38elzkg19UyhSc34GE1upnJyKZ+taZdQErVhLEIZ0sU+ikSGUBcRQYL1wbjZsA4SN28="
       }
     ],
-    "model": "gemini-3.6-flash"
+    "model": "gemini-3.7-flash"
   }
 ]
