@@ -15,5 +15,22 @@
         "thoughtSignature": "El4KXAERTTIPUUoZiCoRCTx3Ys8K+6s+lej4RRMsGif3PreGOMFvziD43h+Y9Jt64PlAwwIinFOKe3e6yX1aG1bkxYDcpiolB7KGVHPJ+yBRagTwurlqIRPLwpn/p9J6"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل لديك القدرة على فحص الصور اذا رفعتها لك على هاذه الدردشة"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "نعم، بالطبع! يمكنك رفع الصور مباشرة إلى هذه الدردشة، وسأقوم بتحليلها وفحصها بدقة وفقاً للمهام المطلوبة (سواء كانت تصاميم واجهات مستخدم، أكواد برمجية، رسوم بيانية، أو أي محتوى بصري آخر). \n\nتفضل برفع الصورة وسأبدأ فوراً في تحليلها.",
+        "thoughtSignature": "El4KXAERTTIP5ILB9eDZfz+QxF9R5L+GeRngSt/XXpZW+vgRP5gmPD5J7Hn/a/zJ4jL4JHkTg3yUEsSTRi4Q3x8dSSiJ2mgVwjGfNQD4yce58wAlDvp8aVnzh66o+u5T"
+      }
+    ]
   }
 ]
