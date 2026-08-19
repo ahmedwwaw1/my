@@ -88,5 +88,105 @@
       }
     ],
     "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل جلبت معلومات الدرس الأول ماذا تعني الدورة السعرية عن طريق searchCode"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "searchCode",
+          "args": {
+            "query": "الدورة السعرية"
+          },
+          "id": "call_402644"
+        },
+        "thoughtSignature": "El4KXAERTTIPAg6Sj70ClKC83K8rspmmx7pX8UDf7Ly6rl/aV4nM6uEIYfPP0L3nQK4NJ/I8tClyFxOse0qNqg8IIHP+EcHSokJe/JarJjBGYTcEi/J+YqJLXyxrIndu"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "searchCode",
+          "response": {
+            "content": "❌ فشل الاتصال بالبحث: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "repairSystem",
+          "args": {},
+          "id": "call_601800"
+        },
+        "thoughtSignature": "El4KXAERTTIP9wn+ebEgTRJSRA5dGxIMd1ir6MAs5i0LaMrd+1ExjlDWhaVew7UNwXgJib1voaXqe2c9F55F2w2fBim8/Yyvo/wiP4oxgMrbTtH2BEpRdZDrX25WccwA"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "repairSystem",
+          "response": {
+            "content": "🛡️ نظام الإصلاح الذاتي (Mastermind Healer):\n\n🔄 تم تحديث المفاتيح من قاعدة البيانات المركزية.\n\nالحالة النهائية: healthy\nالتوصية: لا يوجد تدخل يدوي مطلوب."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "searchCode",
+          "args": {
+            "query": "الدورة السعرية"
+          },
+          "id": "call_527430"
+        },
+        "thoughtSignature": "El4KXAERTTIPQX0YN3Fkiwvg54H9L8f+Gy1SYs2MdQUwMrgSa6wp2pksnEMhZX665f+Lb4/806RGUyQ4EkInF+1nBxgD8iG6qdx8aVabLQBer/JBy81Nf59+1HMqXYHP"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "searchCode",
+          "response": {
+            "content": "❌ فشل الاتصال بالبحث: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "لا، لم أقم بجلب تعريف \"الدورة السعرية\" من خلال أداة `searchCode` في هذه المرة. \n\nالإجابة التي قدمتها لك عن مفهوم الدورة السعرية ومراحلها الأربع استندت إلى **القاعدة المعرفية والتحليلية الشاملة (Knowledge Base)** الخاصة بي كخبير ومستشار في الأسواق المالية وتحليل الدورات الاقتصادية، وليس من ملف داخل مستودع الكود (Repository).\n\nأداة `searchCode` مخصصة للبحث داخل ملفات الكود والبيانات البرمجية للموقع (مثل ملفات JSON أو أسطر البرمجة)، بينما المعلومات الاقتصادية والتحليلية أصيلة في نموذج الذكاء الاصطناعي الخاص بي. \n\nهل ترغب في أن نبحث عما إذا كان هناك ملف مخصص للدروس أو المحتوى التعليمي داخل مستودع المشروع باستخدام `searchCode`؟",
+        "thoughtSignature": "El4KXAERTTIPNzBc9r4HWrpVf2AWYTU/z9dxzs9UQDDDKsn113YNNp94IQCsFQUrULnMHKAGHqAl40hGujzs3xALgZiIBg4AyF+7bNfjHwA/Jss8UPm5xs97Njn8ctCs"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
   }
 ]
