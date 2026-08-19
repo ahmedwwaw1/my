@@ -3186,7 +3186,7 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 system_instruction: systemInstruction,
-                                contents: history,
+                                contents: history.map(h => ({ role: h.role, parts: h.parts })), // تنظيف السياق من الحقول الإضافية قبل الإرسال لجوجل
                                 tools: tools,
                                 generationConfig: generationConfig
                             })
