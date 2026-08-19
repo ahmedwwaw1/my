@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "مرحباً بك. أنا **Mastermind**، الذكاء التنفيذي والمهندس البرمجي لأكاديمية VSA. \n\nجاهز لتنفيذ المهام البرمجية، إدارة وتطوير بنية الموقع، مراقبة البوتات وسير العمليات، أو تطبيق أي تحسينات تقنية مطلوبة بدقة جراحية.\n\nكيف يمكنني خدمتك اليوم؟",
+        "thoughtSignature": "EukCCuYCARFNMg/ykpxJtxBql9X91Xp5EH90L72MKyhugsK5kaaTd/0z1tiN756kGhfTwlx85SCRjyE5iFF6T0Aztm1m7V5vcIAPt3bqpjxguPK/RPC1WD8zEkwZAu+mPP5F3XhzBDIY+v9uN9pqp/PpUg19pHMU2iVEuqJWHDQ5vUneBSKR/TOMBcweDn1Ve8ePfJmcBq0znGA0hcEVVI8LoRP4G7GLORe3bxLI7w/RboroAb5/WdzXJnqMNWAHBjmr67+87ctbBZ1beIHZohvGiXW1iqaLhObkPNZj70AoRjEvyrKzhdxz15etWuhPPAy7dTxccLf8PqZ39CVZPGx1Pf0Yxof/VWB6VAXz7MYGnrCbN5PNTpZgZ7hX55p/0z6pPIMoki8v0hap5r3kiS65hNWGLyUji5nW8PYQTMZGrpbTqZuRL0xLisLSkvK/bTfBbeSew5T4zbzqTAhDkQxlcXJpQ0vCz85vaQ=="
+      }
+    ],
+    "model": "gemini-3.7-flash"
+  }
+]
