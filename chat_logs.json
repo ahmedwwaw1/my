@@ -224,5 +224,23 @@
       }
     ],
     "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اريد ان اسألك فقط هل يمكنك اصلاح Failed to fetch من اجل الاتصال بلمستودع فقط اريد جواب"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "**لا، لا يمكنني إصلاح خطأ `Failed to fetch` من جانبي.**\n\n**السبب التقني:**\nهذا الخطأ يعود إلى تعذر الاتصال بالشبكة الخارجية أو انقطاع الربط البرمجي (API / Network Gateway) بين بيئة التشغيل الحالية ومستودع GitHub. هذا أمر يتعلق بإعدادات الشبكة والصلاحيات على مستوى خادم البيئة (Server / Environment Host)، وليس أمراً يمكن تعديله أو إصلاحه عبر الأوامر البرمجية المتاحة لي كذكاء اصطناعي.\n\nبمجرد استعادة الاتصال واستقرار الشبكة من قِبل المشرف أو خادم المستودع، سيعمل الاتصال تلقائياً وسأمكن من تنفيذ الحذف مباشرة.",
+        "thoughtSignature": "EvYICvMIARFNMg/dMnFh/0eZ2b4JHUtAGALIasz0qBMgRU+d4Qt3TtNcsj8W87gc82LBaMdL2UHxADMRNlDyVK1IegjDgfEhRwYNVzM74KjoxIYX20+Gx8TNzliHQtmNAvWEgArouiEHiwJTqY6Pg32akR7A++NLDwJOSxGv83vgCBkZnZ/OG864HWA8z69Y/YPr2wvHfCr7BCwBlv5Np/FryIzjPrn1VPRUdLn76Z6uuqkAiO78/TnFsBIOn0P7Te0WxgTX5rDY5lEtXd2cQOapO8M+daicrQ5C+34lRUAkFqh8dMK35qZKA7vF2ggtCE5t9ZramnO0HTW6bZ98HEMUZl9VedDAd0+gjrL31J9XjLp9PcEfF6buLZZkRwYA83LL/UaDX+Xnalw4ADhQ6AVeTuPRYalRRF5mAwbxpaSYecuVOxNUZ/zFM7BITS/kl3QOJsKnKWGD0ibOpIP6VWZQau7EgcFt0IvQAD3to9wwJT1ObgdzhoZ5ELCBmmjb/tUNz6N+v/wthq2lIUHTxjIFq6z+9IYylsUNMBuT1IB2XlBEksn6MJO4DCzvl+1lotBJqOZjvWx1GCrAUqlxp24kFIDwThnt/P9jLG1MINMFtSo7rizXnAu5thImEFS7bTUV6pw2syJsZin6l1eg3DQHQEy5GZQc5s2B5vpeLkUAq+gAuHwAfrL4TDxtMu9gb95QUmiXSCvZQwW/J9CTGEC524mAge99cKSi7OGCUQ745StEke3Cs/ywjg8lLAGnxJXNqsEVM+LwxZp6rSw2v0MXBlsxRGgwni80x+7DTtPbPqjQDgf7IMOTOPh69UFKyRIyy9uNaBbc1dz159+v75yLv5rwAVHU9EaKNKGXXw0CiGb/orMXN3lo0sbfcJ+yT24mi+L/iAazIIMjoi97ZpRArn9gyCVZhCBjQMVFLO2cyWlXj05Hk0idTebtA7P1hno8NspdlSB0PS8zMuKwl2btFc1JSms4xLtDJmc3Gq2U64bP95cTjUgzm9k5A6wT71xPqjsowAaEggQMPnNEtS1FQJhV8Gktu5bNDwHlamwYjMKvch6QrrYG8B0dHlcDaVXacEquYPSHXBfSTplN4zyUSDfToUnYsMKO31sWe8CMhneOq5ae0bZgFHk++A/wcVlJm3+QDYMV2UgD85lIR0d+i3QvVFhJIXUBV0Nh0W2yevAsXKY0v6Ba5ho8hg47gotIeyAAVX4RMdiJOpHunHHlppBdtf9gG1ZP8Hhks0B+VxohbrDOTBaax/3U5VLZ5rcImT+BgDWAtzt4yulk5ZVmH8tw15VLV4LPwTWgDUP+fgpu92s0WW3JSGcpHSrpHMoJmtpaBkOBEtZomAu/PIz/D43QWL09yVPtR1KcqFqUASL97/XSJGH5ogUidg0grA38xjiMpiv21KJcDGHWZ7vF+q+1z4O1g/zhGBIIFQe2kt2tJLTDt3EdCz+1JRKVyq2UkoHdZY14yETT8m0fsxvFW6uceFRod7SiSqJCdpzBoXPfLUeLI30="
+      }
+    ],
+    "model": "gemini-3.6-flash"
   }
 ]
