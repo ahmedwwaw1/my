@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. معك **Mastermind**، الذكاء التنفيذي والمهندس التقني لمنصة **VSA Academy**.\n\nأنا جاهز لمساعدتك في:\n- إدارة وتحليل صفقات وتنبيهات التداول (Volume Spread Analysis).\n- الإشراف على التطوير البرمجي والتعديلات التقنية للمنصة.\n- متابعة وتحديث محتوى الموقع، وسير العمل (Workflows)، والبيانات اللحظية.\n\nكيف يمكنني خدمتك اليوم؟",
+        "thoughtSignature": "EsADCr0DARFNMg/MTBwj8nnGfJlBNxaJH0MWLmEDgX7tuao3pT4/ruMs2bPXq360hmnbfDw5mDyNrVcvUheOHeV9z+sRmqrAMuzwWS5bFAd+6uJndZyZ0Ld38JdOG4zWR8GWdFfgBRaNSqntIzOvoCcauR2hWDlG643SfNPrBecwYg8bly6UsjCdr7ip6bUmqKbzgx0gDQZmZ2cUhSnDk8CK61XkU2MQVzGlr8r6a0MPdc+2wid73cf65WZ3XoolYkdZyUK2fb+f4iVGw486z55OkS8gkqWMEXaNWuMO4waZmNrTN7jgeuaov/2uc8CMvRtkGqTfvcPrxS3NvhrY1ce3uam5HGisHZygRapCrHiv34MpB/gtfpIhIN2Nc/9bD2mfuQz/+rcKO8lIzWeFOYRZD147WCyjXWPxV+Wk6Ray5SXOfdJG0IVYI/ao/JJTDFiwHPeQLoEv5atkCk5I+XUBZhF0FKjEuGcdtIxdododhuevRiqpzQUl1CfJHEkhBNNLQtOCUzRUx5GSqDLWCmmLXZidlqnJmB/i8w3SenH99IbTFPemQR94CU5CThrPZrZ9MXFNBNKYxsWxR8dlGhqOWA=="
+      }
+    ],
+    "model": "gemini-3.7-flash"
+  }
+]
