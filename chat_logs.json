@@ -99,5 +99,80 @@
       }
     ],
     "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "تمام والان احذف لي اول تنبيه"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": "crypto_alerts.json"
+          },
+          "id": "call_106715"
+        },
+        "thoughtSignature": "El4KXAERTTIPL+OiSh1STm1TBmB+7EUA876SL2WoRmBykaLUoVgVM5XKd2whLnPh5Fm1OAoViBhpM1fqxeuquUsmckNSz/NNNaQzd975//1r/YGNHCTeMX9n72ezIQuM"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "[\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 1915.11,\n    \"volume\": 77373136.9,\n    \"change_percent\": 0.39,\n    \"timestamp\": \"2026-08-19T01:17:28.529428\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 64497.2,\n    \"volume\": 91971836.74,\n    \"change_percent\": 0.25,\n    \"timestamp\": \"2026-08-19T01:17:28.369521\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 1908.47,\n    \"volume\": 77645511.73,\n    \"change_percent\": 1.0,\n    \"timestamp\": \"2026-08-18T01:15:55.386400\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 64350.4,\n    \"volume\": 144816401.43,\n    \"change_percent\": 2.05,\n    \"timestamp\": \"2026-08-18T01:15:55.197754\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 1876.53,\n    \"volume\": 30830858.19,\n    \"change_percent\": -0.32,\n    \"timestamp\": \"2026-08-17T00:54:13.515826\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 62887.2,\n    \"volume\": 44504807.06,\n    \"change_percent\": -0.28,\n    \"timestamp\": \"2026-08-17T00:54:13.349263\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 1882.33,\n    \"volume\": 22594644.58,\n    \"change_percent\": 0.01,\n    \"timestamp\": \"2026-08-16T00:56:31.072591\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 63068.5,\n    \"volume\": 42098862.27,\n    \"change_percent\": 0.11,\n    \"timestamp\": \"2026-08-16T00:56:30.906801\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 1883.0,\n    \"volume\": 36771868.62,\n    \"change_percent\": 0.68,\n    \"timestamp\": \"2026-08-15T13:25:20.037845\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 63040.0,\n    \"volume\": 62899718.25,\n    \"change_percent\": 0.47,\n    \"timestamp\": \"2026-08-15T13:25:19.916544\",\n    \"category\": \"high_volume\"\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "githubAction",
+          "args": {
+            "content": "[\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 64497.2,\n    \"volume\": 91971836.74,\n    \"change_percent\": 0.25,\n    \"timestamp\": \"2026-08-19T01:17:28.369521\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 1908.47,\n    \"volume\": 77645511.73,\n    \"change_percent\": 1.0,\n    \"timestamp\": \"2026-08-18T01:15:55.386400\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 64350.4,\n    \"volume\": 144816401.43,\n    \"change_percent\": 2.05,\n    \"timestamp\": \"2026-08-18T01:15:55.197754\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 1876.53,\n    \"volume\": 30830858.19,\n    \"change_percent\": -0.32,\n    \"timestamp\": \"2026-08-17T00:54:13.515826\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 62887.2,\n    \"volume\": 44504807.06,\n    \"change_percent\": -0.28,\n    \"timestamp\": \"2026-08-17T00:54:13.349263\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 1882.33,\n    \"volume\": 22594644.58,\n    \"change_percent\": 0.01,\n    \"timestamp\": \"2026-08-16T00:56:31.072591\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 63068.5,\n    \"volume\": 42098862.27,\n    \"change_percent\": 0.11,\n    \"timestamp\": \"2026-08-16T00:56:30.906801\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 1883.0,\n    \"volume\": 36771868.62,\n    \"change_percent\": 0.68,\n    \"timestamp\": \"2026-08-15T13:25:20.037845\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 63040.0,\n    \"volume\": 62899718.25,\n    \"change_percent\": 0.47,\n    \"timestamp\": \"2026-08-15T13:25:19.916544\",\n    \"category\": \"high_volume\"\n  }\n]",
+            "path": "crypto_alerts.json"
+          },
+          "id": "call_157498"
+        },
+        "thoughtSignature": "El4KXAERTTIPnUNrUjsNYpXoG/61vDlQidiSNaJxQ4xy48Rdzce/I3EmqApro6pFpZvU2TCH56ityfk3+GgYjdYoeWVR71qO9AAi5vbFlN/UR1q+k6I+zVXFXSZvWb5l"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "githubAction",
+          "response": {
+            "content": "✅ تم التحديث بنجاح: crypto_alerts.json"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "تم حذف أول تنبيه في قسم تنبيهات الكريبتو بنجاح (والذي كان لعملة ETH/USDT بتاريخ 2026-08-19). \n\nهل ترغب في أي عمليات أخرى؟",
+        "thoughtSignature": "El4KXAERTTIPkvHFGkWxg5AKOcm5YfWmnPl6tP8NHHgDAladWjnM0epsrbHnVT9yxpywCEN8ajZfE3om3aIfEucK5/ho+OsOY8oNulD/Wa/cCg5WUlGLnGcneZOpfzBk"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
   }
 ]
