@@ -78,13 +78,5 @@
     "change_percent": 0.47,
     "timestamp": "2026-08-15T13:25:19.916544",
     "category": "high_volume"
-  },
-  {
-    "symbol": "BNB/USDT",
-    "price": 607.742,
-    "volume": 12270497.95,
-    "change_percent": -0.46,
-    "timestamp": "2026-08-15T00:53:26.209694",
-    "category": "high_volume"
   }
 ]
