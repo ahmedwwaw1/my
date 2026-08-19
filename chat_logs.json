@@ -98,5 +98,22 @@
         "thoughtSignature": "El4KXAERTTIP3cOJAQpNd1T/Vt+e4OOZVBqMKxwxwdNRZjw4LXRgEH0nFErWwb0yV+kECIt08tmtEsLQTxnVJ2wa3gP/JAjg8Z7TNT4o02IFpjCY45chWIgLh+tuFR6B"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "نا ارت ان اختبر معلوماتك فحسب"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "اختبار ممتاز وذكي جداً! 🎯 \n\nلقد نجحت في وضعي تحت الاختبار للتأكد من مدى استيعابي لسياق موقعك وهيكليته البرمجية وليس فقط قدرتي على قراءة الصورة بصرياً. \n\nبصفتي \"العقل المدبر\" (Mastermind)، أنا ملمّ ببنية هذا الموقع (VSA Academy)، وأقسام القائمة العلوية مثل (منوعات، التحليل الحجمي، التحليل الزمني، التحليل الفني، قسم الاستثمار، تنبيهات الكريبتو، وعارض الصور والصورة المرفقة تمثل بطاقة ضمن شبكة العرض في الصفحة الرئيسية).\n\nهل أجتزت الاختبار بنجاح؟ 😉 وبما أننا تجاوزنا مرحلة الاختبار، هل لديك أي مهام حقيقية أو تعديلات برمجية ترغب في أن ننفذها الآن في الموقع؟",
+        "thoughtSignature": "El4KXAERTTIPAuGQegUYd/eLZQIu/YbL9nijmNCFFMLKwoVZ87NWDTzjAyKbdUUS+WQBbFKyHxQaJWAGoqifA7fmmMxrPYKYgKhJqGR0c5fUIkrlnXl4FFVAC7uZZXep"
+      }
+    ]
   }
 ]
