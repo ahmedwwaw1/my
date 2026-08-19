@@ -55,5 +55,48 @@
         "thoughtSignature": "El4KXAERTTIP4P68s5La9JADv7wFk8z1D8iF1hCQz0snuFxBgQ3DpHaOO3EHLewZRKCkiD5wKOLPuNmotJW1/JsgQULCReiVOd3peAN/iucVQK7jQR9EE7NJY0J5RMIo"
       }
     ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "الست انت مزروع في موقعي وتعرف ماهو كان من المفترض عليك معرفة بطاقة محتوى روابط"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_88618"
+        },
+        "thoughtSignature": "El4KXAERTTIPzoIeYqr21qilnSnK4a+tO0En07E0W8d71XKuRWEYzn6s1A0D1Viaaj9lfQ4rhkzBn1oXnroAxBVn7hmmCWE/I9pBqShTbxLSqecNEgAgg5ssCfrSDrmA"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "❌ خطأ اتصال بالشبكة: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "عذراً على اللبس يا رئيس! بما أنك أشرت إلى موقعك وأنا \"العقل المدبر\" المشرف على المنظومة، فأنت تقصد **بطاقة محتوى الروابط (أو بطاقة قسم الوسائط/الروابط الخارجية)** التي تعرض عادةً في هذا القسم من موقعك. \n\nدعني أتحقق من بنية الملفات البرمجية أو أنظبط فوراً مع سياق موقعك. هل ترغب في أن أقوم بقراءة الكود البرمجي الحالي (مثل `index.html`) وتعديل هذه البطاقة لتعرض محتوى روابط مخصص أو إصلاح مشكلة ظهورها بهذا الشكل؟ \n\nأمرني بما تحب أن أفعله بها وسأقوم بالتعديل فوراً!",
+        "thoughtSignature": "El4KXAERTTIP3cOJAQpNd1T/Vt+e4OOZVBqMKxwxwdNRZjw4LXRgEH0nFErWwb0yV+kECIt08tmtEsLQTxnVJ2wa3gP/JAjg8Z7TNT4o02IFpjCY45chWIgLh+tuFR6B"
+      }
+    ]
   }
 ]
