@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. أنا \"العقل المدبر\" (Mastermind) - الذكاء التنفيذي لـ VSA Academy.\n\nكيف يمكنني مساعدتك اليوم في التطوير، صيانة المنصة، إدارة البيانات، أو تحديث الكود؟",
+        "thoughtSignature": "EqUFCqIFARFNMg+tE2oqaW/EkOjxvGJYu+57m4oELDm4LBhrEslRYsmOFIElTzMcITqoWKK4pOooeV2atgH4pZv8KZhKMv8BnKdQiiXj4X9mWlGVjOfqlNc7gHzRDtJrehTeL3wEezNI9UsNXEFy1/0zPQ1VRkLpHK3s4m3VVu+qLJ3ryUGyQuqFJma//oBNZxm8POT7NvgCl3CZNbcauTNhnS6bbEZ/EhpgP78Cxn+MoN3iEVglPBrqByeRwwrGqmDDSBZyRN/3FaA8QbBQTwNQ596R+i61StluTQPa3SNR34afWUkCcr9iyfwMzgd6kNU6xzh7nxcm+DD+VXM0B55p/ovTT7ihkqUym3O1zmASJF84TskL+j4UrKN0iQcUHrYkIPnjKY6l31JSmkgWSfgofuyNjPQnlU/k8iYz4gPOuMNyMSgJmigxWUG66LkGHr+hEGq/u86glCft7b0ERGu48zvmKlpt7D2MxYs9XaglOrifMlDkZjRifIDP8ttodng48dx8Y6IekKetponPZoLZamb3IBYBx9T0ZQEdpMFkqARuphVwbqYc1nOhriue1GqI/9tA9UBp3jITfIYtiFUwqn0LbhqiYT6jhywGKAh1JdZQinBR8cLr4Va1eck8T+oj4i1dm5EAlOw0xWXtHdmqco1zNANlcWMQ1W7emHHsFf12Mmk73M+W1NPVptV1n9Xk6akQcMeqbxNsIJnmN5zsKHq9ux3A/HhagWfOMEJ3hApWMv48sB9uvidnMrfGAaw0djRBN38NxKOuGkLpbPL8QZhjJSX0Xpt/KCc6fb+6Xn8g14gaHkh0l9CTuc9bRRjQLRrBmwJBk4piglsiIlXvk5YhWbQ83NZlgbmLVvgLI+GTb3whVWpUxc1+AdgsEZZYaalb2OY="
+      }
+    ],
+    "model": "gemini-3.6-flash"
+  }
+]
