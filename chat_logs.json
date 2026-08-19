@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "كيف الحال"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. أنا جاهز وبكامل الجاهزية التشغيلية لدعمك في إدارة وتطوير منصة **VSA Academy** وتحليل البيانات أو تنفيذ أي مهام برمجية مطلوبة.\n\nكيف يمكنني مساعدتك اليوم؟",
+        "thoughtSignature": "EssCCsgCARFNMg9EPIY2vED3w4OGdKt8mdECR426Sg0IaWxsvSWyCkFgNCR+HOVuqVF1vgpihgT6kQK1yko7wYNaOncN2TLbVZ9dZsLQGxCOIK9NWxDxQjleQT0q2N4Q6U3lx4oK+mO4ZHppqDmNl4flJnjzI0iOvhUl8bBDqTQhjvgUKbT58Ztp1ViHeIZctEdu9oPdu2rZgXlArGXmT8G9JqR2gzg8DPdUFfokAAHbGZ9XgfssCSaIqI6+1GgnPbLamit0Y7ddD9+VCzr4eBUodhMB8YwDRLbfRRfmaVWB8Kabi9l2qYE8l/PRsFU2FiGi3YHvBeapsQezdLeM8jCGP5ko+oPoSMA6j7hGgXTt8k9R88UoYV8lIj40Ql9VPxj68Q+6ZkZwe1XhljodEeZVnBJp87E1SI9mEumufEWYNuJ1Ry/UZp86MKcCMA=="
+      }
+    ],
+    "model": "gemini-3.7-flash"
+  }
+]
