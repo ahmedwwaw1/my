@@ -2705,18 +2705,18 @@
         }
 
         async function githubAction(path, content, message) {
-            if (!githubToken) return "⚠️ خطأ: مفتاح GitHub غير متوفر (Token missing).";
+            if (!githubToken) return "⚠️ خطأ: مفتاح GitHub غير متوفر (Token missing). يرجى التأكد من إعداد التوكن في الإعدادات.";
 
             try {
-                const token = githubToken.trim();
+                const token = githubToken.trim().replace(/^['"]|['"]$/g, ''); // تنظيف التوكن من المسافات وعلامات الاقتباس
                 const apiBase = `https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`;
 
-                // 1. الحصول على SHA للملف إذا كان موجوداً
+                // 1. الحصول على SHA للملف إذا كان موجوداً (ضروري للتحديث)
                 const getRes = await fetch(apiBase, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': `token ${token}`, // استخدام الصيغة التقليدية لضمان التوافق الأوسع
                         'Accept': 'application/vnd.github+json',
-                        'X-GitHub-Api-Version': '2022-11-28'
+                        'Cache-Control': 'no-cache'
                     }
                 });
 
@@ -2726,29 +2726,33 @@
                     sha = getData.sha;
                 }
 
-                // 2. رفع الملف (إنشاء أو تحديث)
+                // 2. إعداد البيانات للإرسال
+                const body = {
+                    message: message || "تحديث تلقائي بواسطة العقل المدبر",
+                    content: btoa(unescape(encodeURIComponent(content)))
+                };
+                if (sha) body.sha = sha;
+
+                // 3. تنفيذ طلب التحديث أو الإنشاء
                 const putRes = await fetch(apiBase, {
                     method: 'PUT',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': `token ${token}`,
                         'Accept': 'application/vnd.github+json',
-                        'X-GitHub-Api-Version': '2022-11-28',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        message: message || "تحديث تلقائي بواسطة العقل المدبر",
-                        content: btoa(unescape(encodeURIComponent(content))),
-                        sha: sha
-                    })
+                    body: JSON.stringify(body)
                 });
 
                 if (putRes.ok) return `✅ تم تنفيذ الأمر بنجاح على GitHub: ${path}`;
+
                 const errData = await putRes.json();
-                return `❌ فشل GitHub: ${errData.message || 'خطأ غير معروف'}`;
+                return `❌ فشل GitHub (كود ${putRes.status}): ${errData.message || 'خطأ غير معروف'}`;
             } catch (e) {
                 console.error("GitHub Action Error:", e);
-                return `❌ خطأ شبكة (CORS أو اتصال): ${e.message}. تأكد من صلاحيات الـ Token ومن أن الموقع يعمل على HTTPS.`;
+                return `❌ خطأ شبكة (Network/CORS Error): ${e.message}. يرجى التأكد من اتصال الإنترنت وصلاحيات التوكن.`;
             }
+        }
         }
 
         async function triggerGithubWorkflow(workflow_id) {
@@ -3071,12 +3075,11 @@
         async function getGithubFileContent(path) {
             if (!githubToken) return "⚠️ خطأ: GitHub Token غير متوفر في الإعدادات ⚙️.";
             try {
-                const token = githubToken.trim();
+                const token = githubToken.trim().replace(/^['"]|['"]$/g, '');
                 const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': `token ${token}`,
                         'Accept': 'application/vnd.github+json',
-                        'X-GitHub-Api-Version': '2022-11-28',
                         'Cache-Control': 'no-cache'
                     }
                 });
