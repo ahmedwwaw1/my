@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "symbol": "ETH/USDT",
+    "price": 2087.52,
+    "volume": 173160670.26,
+    "change_percent": 8.96,
+    "timestamp": "2026-08-19T18:36:32.315970",
+    "category": "high_volume"
+  },
+  {
+    "symbol": "BTC/USDT",
+    "price": 68289.0,
+    "volume": 221934696.31,
+    "change_percent": 5.4,
+    "timestamp": "2026-08-19T18:36:32.140718",
+    "category": "high_volume"
+  }
+]
