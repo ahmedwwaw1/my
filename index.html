@@ -828,6 +828,22 @@
             align-self: flex-start;
             border-bottom-left-radius: 2px;
             border: 1px solid #3c3f41;
+            position: relative;
+            padding-bottom: 24px;
+        }
+
+        .model-badge {
+            position: absolute;
+            bottom: 4px;
+            left: 12px;
+            font-size: 9px;
+            color: #afb1b3;
+            background: rgba(255,255,255,0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.1);
+            pointer-events: none;
+            letter-spacing: 0.3px;
         }
 
         .ai-step {
@@ -2970,8 +2986,8 @@
                     finalPrompt += `\n\n[محتوى الملف المرفق (${selectedFileName})]:\n${selectedFileContent}`;
                 }
 
-                const response = await callGemini(finalPrompt, selectedFileBase64, selectedFileType);
-                addMessageToUi('ai', response);
+                const result = await callGemini(finalPrompt, selectedFileBase64, selectedFileType);
+                addMessageToUi('ai', result.text, result.model);
                 clearSelectedFile();
                 updateSessions();
             } catch (err) {
@@ -3001,16 +3017,32 @@
                 const div = document.createElement('div');
                 div.className = turn.role === 'user' ? 'msg user' : 'msg ai';
                 div.innerText = text;
+
+                if (turn.role === 'model' && turn.model) {
+                    const badge = document.createElement('div');
+                    badge.className = 'model-badge';
+                    badge.innerText = turn.model;
+                    div.appendChild(badge);
+                }
+
                 container.appendChild(div);
             });
             container.scrollTop = container.scrollHeight;
         }
 
-        function addMessageToUi(sender, text) {
+        function addMessageToUi(sender, text, modelName = null) {
             const container = document.getElementById('aiMessages');
             const div = document.createElement('div');
             div.className = `msg ${sender}`;
             div.innerText = text;
+
+            if (sender === 'ai' && modelName) {
+                const badge = document.createElement('div');
+                badge.className = 'model-badge';
+                badge.innerText = modelName;
+                div.appendChild(badge);
+            }
+
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
             saveChatToStorage(); // حفظ حالة الـ UI
@@ -3190,15 +3222,16 @@
                         }
 
                         // الرد النهائي: تحديث الذاكرة المستديمة
-                        chatHistory = history.concat([{ role: "model", parts: [part] }]);
+                        const finalTurn = { role: "model", parts: [part], model: modelName };
+                        chatHistory = history.concat([finalTurn]);
                         if (chatHistory.length > 50) chatHistory = chatHistory.slice(-50);
                         saveChatToStorage();
-                        return part.text;
+                        return { text: part.text, model: modelName };
                     } catch (err) { console.error("Loop Error:", err); }
                 }
                 const errorMsg = "❌ فشل الوصول للموديلات المطلوبة. يرجى التحقق من مفتاح API (Gemini Key) أو الاتصال بالإنترنت.";
                 addMessageToUi('ai', errorMsg);
-                return errorMsg;
+                return { text: errorMsg, model: "System Error" };
             }
 
             // تشغيل الحلقة مع السياق الحالي
