@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "مرحباً بك. أنا \"العقل المدبر\" (Mastermind)، المدير التنفيذي والمهندس الذكي لـ VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في التطوير أو الإدارة التقنية؟",
+        "thoughtSignature": "El4KXAERTTIPGDYCFlOtvo3R6Pl/yk2SyjyLA+vpHz4AP/cYvbBPfPvJgRuMDc++eR6vZAmV9LoupM4L3r0ychvQlr8yEkdrX4KsSsJcEfMwVnrWrepR+h9NUgKKpmdb"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
+  }
+]
