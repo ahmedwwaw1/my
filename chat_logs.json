@@ -34,5 +34,23 @@
       }
     ],
     "model": "gemini-3.6-flash"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "دعنى نتكلم عربي افضل"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": " بكل سرور. سنتواصل باللغة العربية الفصحى.\n\nبصفتي \"العقل المدبر\" (Mastermind)، أنا في خدمتك لتنفيذ أي مهام برمجية، تطوير الأنظمة، إجراء تعديلات جراحية على الأكواد، أو الإجابة عن أي استفسار تقني بدقة متناهية.\n\nتفضل، كيف يمكنني مساعدتك اليوم؟",
+        "thoughtSignature": "El4KXAERTTIPay1Z0whK9D7YmKl4w6j/cl4hTillcP7iWmwtGYXfVjTWGuyw5SqYZBCEOA2tXN9oC4AKH0daUa1WNnpGpYr8Okb3kZwtNkmHfxdbdw/+dfJJb/y7n+fD"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
   }
 ]
