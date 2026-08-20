@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "مرحبا"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. بصفتي العقل المدبر والمدير التنفيذي لـ VSA Academy، أنا جاهز تماماً لتنفيذ أي مهام برمجية، تطويرية، أو تحليلية ترغب بها. \n\nكيف يمكنني مساعدتك اليوم؟",
+        "thoughtSignature": "El4KXAERTTIPwfmoUZ+lP1kOq0ne6BVZGZMBJZiiFKtiySmOxOn5F7IiWR16Zz8bb+pbl8iZg1JXhDZxTHPqc10NAvOs0V4/LzcZNxh8uRWgAvjXRLfUYRKl5I4zXAYU"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
+  }
+]
