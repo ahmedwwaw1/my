@@ -5,14 +5,14 @@ from datetime import datetime
 
 def analyze_crypto_market():
     """
-    جلب بيانات العملات وتحديث ملف crypto_alerts.json
+    جلب بيانات العملات وتحديث ملف crypto_alerts.json مع دعم إضافي لتحليل التقلب (Volatility)
     """
     try:
         # استخدام منصة KuCoin لتجنب الحظر الجغرافي لـ GitHub الأمريكي
         exchange = ccxt.kucoin()
         
-        # العملات المراد مراقبتها
-        symbols = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT']
+        # العملات المراد مراقبتها (تمتقيع سولانا SOL لزيادة نطاق التغطية)
+        symbols = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'SOL/USDT']
         
         alerts = []
         
@@ -24,6 +24,11 @@ def analyze_crypto_market():
                 volume = ticker['quoteVolume']  # حجم التداول بالـ USDT
                 price = ticker['last']  # السعر الحالي
                 change_percent = ticker['percentage']  # نسبة التغيير
+                high_24h = ticker.get('high', price)
+                low_24h = ticker.get('low', price)
+                
+                # حساب مؤشر التقلب البسيط (نطاق التغير خلال 24 ساعة)
+                volatility = round(((high_24h - low_24h) / price) * 100, 2) if price > 0 else 0
                 
                 # الشرط: إذا كان حجم التداول أكثر من 10 مليون
                 if volume > 10000000:
@@ -32,11 +37,12 @@ def analyze_crypto_market():
                         "price": price,
                         "volume": round(volume, 2),
                         "change_percent": round(change_percent, 2),
+                        "volatility": volatility,
                         "timestamp": datetime.utcnow().isoformat() + "Z", # استخدام UTC مع علامة Z
-                        "category": "high_volume"
+                        "category": "high_volume_with_analytics"
                     }
                     alerts.append(new_alert)
-                    print(f"✅ تنبيه: {symbol} - السعر: {price} - الحجم: {volume}")
+                    print(f"✅ تنبيه مطور: {symbol} - السعر: {price} - التقلب: {volatility}%")
             except Exception as e:
                 print(f"⚠️ خطأ في جلب بيانات {symbol}: {e}")
                 continue
