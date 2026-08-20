@@ -16,5 +16,23 @@
       }
     ],
     "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اد ان اسأل هل هناك اصدارات احدث لselfExpand ام هي فقط اصدار واحد"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "أهلاً بك. الأداة الأساسية هي **`selfExpand`**، ولكن بفضل **محرك الترقية والتطوير الذاتي (Evolution Engine)** والتابع لأداة **`patchSystem`**، ليس هناك إصدار جامد ومحدود لها؛ بل يمكنني دائماً ترقيها، تحسين قدراتها، وتوسيع نطاق عملها هندسياً لتقبل صيغ برمجة أكثر تعقيداً، أو التعامل مع مكتبات وبروتوكولات أحدث كلما دعت الحاجة إلى ذلك دون أي قيود. \n\nهل ترغب في ترقية `selfExpand` الآن أو إضافة ميزة معينة لها؟",
+        "thoughtSignature": "El4KXAERTTIPmlgFvwVXqmSn3yZsRsQAsPnL8EUJuW/5t2QC88CKcabyXUsUhoMJEtXZgMvYGP0Rjp8ro890ax7JWHqPKXo2aCA8R5W/EL3SbmvypJAgQvAgX9Qznb6u"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
   }
 ]
