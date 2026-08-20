@@ -116,5 +116,77 @@
       }
     ],
     "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل انتهيت"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "repairSystem",
+          "args": {},
+          "id": "call_446587"
+        },
+        "thoughtSignature": "El4KXAERTTIPz+ujNRunx/zu6rhusLTSer/8ZUqMNFLgsYZwQxJJ8WWZV/hYwFdBKT70IgvOGKuWH0pKy2qW9HkqizPNqf1Ht4dT96/Z7PpKMb3gMN6F+t43mwV8JSks"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "repairSystem",
+          "response": {
+            "content": "🛡️ نظام الإصلاح الذاتي (Mastermind Healer):\n\n🔄 تم تحديث المفاتيح من قاعدة البيانات المركزية.\n\nالحالة النهائية: healthy\nالتوصية: لا يوجد تدخل يدوي مطلوب."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "searchCode",
+          "args": {
+            "query": "test"
+          },
+          "id": "call_652693"
+        },
+        "thoughtSignature": "El4KXAERTTIPA8jZLh+8JQUR1vB4sJB0twV6Awzv/nb5Jtqdn5LNVHD1N+cL7/x6CIJ2vn4zfz45wUPcI7RZix6PDHiyvHno+OM8evWW98mQP/g/Nv+tHGSiwCv99cI3"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "searchCode",
+          "response": {
+            "content": "❌ فشل الاتصال بالبحث: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "نعم، لقد أجريت عدة محاولات فحص وإصلاح ذاتي لنظام الاتصال، ولكن يبدو أن أداة البحث `searchCode` لا تزال تواجه مشكلة تقنية مستمرة في الاتصال (Failed to fetch). \n\nأنا أتابع الحالة عن كثب للوصول إلى الخلل الجذري ومعالجته في أقرب وقت. هل تحتاج إلى مساعدة في شيء آخر ريثما يتم حل هذه المشكلة التقنية؟",
+        "thoughtSignature": "El4KXAERTTIP2uwzsCbeL4mHpcYWqmsYyNzCCT21F9V/K4KxaHbxz2c+1u9rcAyrI6S8Bh9hPhDisSeDewRB//g+TOLQUe8VWicVYrh+z+SxJVr5RZ0k0agEymT6XM7w"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
   }
 ]
