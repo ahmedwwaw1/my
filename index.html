@@ -3136,67 +3136,73 @@
 
         async function repairSystem() {
             const report = {
-                actions_taken: [],
-                status: "initiating_self_heal",
+                actions: [],
+                diagnostics: {},
+                status: "initiating_deep_repair",
                 timestamp: new Date().toISOString()
             };
 
-            // 1. التطهير التلقائي للتوكنات (الإصلاح الذي يطلبه المستخدم)
-            if (githubToken) {
-                const rawToken = githubToken;
-                const cleanToken = rawToken.trim().replace(/^['"]|['"]$/g, '');
-                if (rawToken !== cleanToken) {
-                    githubToken = cleanToken;
-                    report.actions_taken.push("✅ تم اكتشاف توكن ملوث بعلامات تنصيص/مسافات وتم تطهيره تلقائياً.");
-                    // تحديث في Supabase لضمان الديمومة إذا أمكن
-                    try { await saveApiKeyToSupabase('github_token', cleanToken); } catch(e){}
-                }
-            }
-
-            // 2. فحص سلامة سجل الدردشة (منع تعليق المتصفح)
-            if (chatHistory && chatHistory.length > 50) {
-                chatHistory = chatHistory.slice(-20);
-                report.actions_taken.push("⚠️ سجل الدردشة كان طويلاً جداً؛ تم تقليم السجل للحفاظ على سرعة الاستجابة.");
-            }
-
-            // 3. اختبار الاتصال الفعلي وتصحيح البروتوكول
             const token = getCleanGithubToken();
-            if (token) {
-                try {
-                    const testRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Accept': 'application/vnd.github+json',
-                            'X-GitHub-Api-Version': '2022-11-28'
-                        },
+
+            try {
+                // 1. فحص التوكن وتطهيره
+                if (token !== githubToken) {
+                    githubToken = token;
+                    report.actions.push("✅ تم تطهير التوكن من الشوائب (علامات تنصيص/مسافات).");
+                }
+
+                // 2. اختبار الاتصال العميق وفحص الصلاحيات (Scopes)
+                if (token) {
+                    const res = await fetch("https://api.github.com/user", {
+                        headers: { 'Authorization': `Bearer ${token}` },
                         mode: 'cors'
                     });
 
-                    if (testRes.status === 401) {
-                        report.status = "critical_error";
-                        report.error = "التوكن غير صالح (401).";
-                        report.recommendation = "يرجى مسح التوكن وإعادة إدخاله بشكل صحيح.";
-                    } else if (testRes.ok) {
-                        report.status = "healthy";
-                        report.message = "تمت استعادة الاتصال بـ GitHub بنجاح.";
+                    if (res.status === 401) {
+                        report.status = "token_invalid";
+                        report.actions.push("❌ التوكن منتهي الصلاحية أو تم حذفه من GitHub.");
+                    } else {
+                        const scopes = res.headers.get('X-OAuth-Scopes');
+                        report.diagnostics.scopes = scopes;
+                        if (scopes && !scopes.includes('repo')) {
+                            report.actions.push("⚠️ التوكن يفتقر لصلاحية 'repo'. يرجى تفعيلها في إعدادات GitHub.");
+                        } else {
+                            report.actions.push("✅ الصلاحيات الفنية للتوكن تبدو سليمة.");
+                        }
+
+                        const rateLimit = res.headers.get('X-RateLimit-Remaining');
+                        report.diagnostics.rate_limit = rateLimit;
+                        if (parseInt(rateLimit) < 5) {
+                            report.actions.push("⚠️ حد الاستخدام المتبقي منخفض جداً. جاري تقنين الطلبات.");
+                        }
                     }
-                } catch (e) {
-                    report.status = "network_issue";
-                    report.error = e.message;
-                    // محاولة فرض بروتوكول Bearer إذا لم يكن موجوداً
-                    report.actions_taken.push("🔄 محاولة إعادة تهيئة رؤوس الاستعلام (Headers) لضمان التوافق.");
                 }
+
+                // 3. فحص اتصال المستودع
+                const repoRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}`, {
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    mode: 'cors'
+                });
+                if (repoRes.ok) {
+                    report.actions.push("✅ المستودع متاح ويمكن الوصول إليه.");
+                } else {
+                    report.actions.push(`❌ تعذر الوصول للمستودع (كود: ${repoRes.status}).`);
+                }
+
+                // 4. إعادة مزامنة البيانات من Supabase كخطوة إصلاح نهائية
+                await initKeys();
+                report.actions.push("🔄 تمت إعادة مزامنة المفاتيح من قاعدة البيانات المركزية.");
+
+                report.status = "repaired";
+            } catch (e) {
+                report.status = "failed";
+                report.error = e.message;
+                report.actions.push("❌ فشل محرك الإصلاح في حل المشكلة برمجياً؛ قد تكون هناك مشكلة في الشبكة.");
             }
 
-            // 4. إعادة مزامنة المفاتيح من Supabase
-            try {
-                await initKeys();
-                report.actions_taken.push("🔄 تم تحديث المفاتيح من قاعدة البيانات المركزية.");
-            } catch(e){}
-
-            const finalMsg = `🛡️ نظام الإصلاح الذاتي (Mastermind Healer):\n\n${report.actions_taken.join('\n')}\n\nالحالة النهائية: ${report.status}\nالتوصية: ${report.recommendation || "لا يوجد تدخل يدوي مطلوب."}`;
+            const finalSummary = `🛡️ تقرير المهندس الآلي (Deep Healer):\n\n${report.actions.join('\n')}\n\n📊 البيانات التشخيصية:\n- الصلاحيات: ${report.diagnostics.scopes || "غير معروفة"}\n- الطلبات المتبقية: ${report.diagnostics.rate_limit || 0}\n\nالحالة: ${report.status}`;
             console.log(report);
-            return finalMsg;
+            return finalSummary;
         }
 
         async function callGemini(promptText, fileBase64 = null, mimeType = null) {
@@ -3257,7 +3263,8 @@
                     { name: "getGithubFile", description: "قراءة محتوى ملف حالي لضمان دقة الدمج.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
                     { name: "searchCode", description: "البحث عن كلمة أو كود في كامل المستودع دون استهلاك التوكنات. يعيد أسماء الملفات التي تحتوي على الكلمة.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                     { name: "analyzeProjectStructure", description: "محرك تحليل: يفحص سلامة ملفات JSON، الروابط المكسورة، ونظافة المستودع. استخدمه للتشخيص فقط.", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "selfExpand", description: "ترقية العقل المدبر: إضافة أداة برمجية جديدة لنفسه. يتطلب إرسال اسم الأداة، تعريفها (JSON)، وكود التنفيذ (JS).", parameters: { type: "OBJECT", properties: { tool_name: { type: "STRING" }, declaration: { type: "STRING" }, implementation: { type: "STRING" } }, required: ["tool_name", "declaration", "implementation"] } },
+                    { name: "selfExpand", description: "إضافة أداة جديدة: استخدمها لزيادة مهاراتك عبر إضافة وظائف برمجية جديدة لم تكن موجودة.", parameters: { type: "OBJECT", properties: { tool_name: { type: "STRING" }, declaration: { type: "STRING" }, implementation: { type: "STRING" } }, required: ["tool_name", "declaration", "implementation"] } },
+                    { name: "patchSystem", description: "محرك الترقية (Evolution Engine): استخدمه لتعديل أو ترقية كود أداة موجودة بالفعل (مثل repairSystem) إذا وجدت فيها قصوراً تقنياً. يتطلب النص القديم والنص الجديد المراد استبداله.", parameters: { type: "OBJECT", properties: { target_code: { type: "STRING" }, replacement_code: { type: "STRING" } }, required: ["target_code", "replacement_code"] } },
                     { name: "getLiveSiteData", description: "جلب الحقائق المعروضة حالياً لمنع الهلوسة.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "getSiteContext", description: "RAG Tool: جلب السياق العام للموقع والسياسات.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "triggerGithubWorkflow", description: "تشغيل عمليات البوتات التلقائية.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
