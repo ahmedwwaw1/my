@@ -1,1 +1,187 @@
-[]
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "ممكن حذف تنبيهات الكريبتو كلها"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "searchCode",
+          "args": {
+            "query": "crypto"
+          },
+          "id": "call_871555"
+        },
+        "thoughtSignature": "El4KXAERTTIPXiP6GSRZV4WpMjWvIEfOOWarxu2KTDs/sUs+PnXsLd+YVqUNiq8BQXuELj6lSMfWXPkWFWftBmlESEgHQYjRjzWu42HGrCS8NQMnf8ctv7Ibawm3N3kd"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "searchCode",
+          "response": {
+            "content": "❌ فشل الاتصال بالبحث: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "repairSystem",
+          "args": {},
+          "id": "call_1358049"
+        },
+        "thoughtSignature": "El4KXAERTTIP4q9dVsUARuLm07AHigyst98wTqt4Azgeivhn5i3cuu/4LIeFAhXEXY6t+hoDBDutBvINVYuWgaggujlv6Zp4zNQyI+KQIzSJedT1ifQzlc0jUehWCrgx"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "repairSystem",
+          "response": {
+            "content": "🛡️ نظام الإصلاح الذاتي (Mastermind Healer):\n\n🔄 تم تحديث المفاتيح من قاعدة البيانات المركزية.\n\nالحالة النهائية: healthy\nالتوصية: لا يوجد تدخل يدوي مطلوب."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "searchCode",
+          "args": {
+            "query": "crypto"
+          },
+          "id": "call_1004045"
+        },
+        "thoughtSignature": "El4KXAERTTIPS98fl1TREXXfylt/4bgq7UzJ1M/j4B064J0Q7hLIA/buiNBWSReLKN0b1HU9dC1+yWK5U+0coSVYyCgppY7VVp6WlE2cHxZKnnQHe7NoovMb9+AsdKLL"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "searchCode",
+          "response": {
+            "content": "❌ فشل الاتصال بالبحث: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {
+            "path": ""
+          },
+          "id": "call_1118487"
+        },
+        "thoughtSignature": "El4KXAERTTIPd/A6/InKyaI6HQ4Am5G8lymt69FAwClq967q+amDecO5+XVRt08FFwBRl0G8MjvBV9AsEuunPCHtBO/KbSshfjk13IipSG/78CHCApNzlU0cKdh1Yp4m"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "محتويات الجذر:\n📁 .artifacts\n📄 .gitattributes\n📁 .github\n📁 .idea\n📁 .vscode\n📄 PDF-images.json\n📄 Time-analysis.json\n📁 archive\n📄 chat_logs.json\n📄 crypto_alerts.json\n📄 crypto_bot.py\n📄 data.json\n📁 images\n📄 index.html\n📄 remigrate_final.ps1\n📄 remigrate_final.py\n📄 technical-analysis.json\n📄 viewer.html\n📄 vsa.json"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": "crypto_alerts.json"
+          },
+          "id": "call_884540"
+        },
+        "thoughtSignature": "El4KXAERTTIPIatkHsuNiPx+ctu09/nfCdKsQSCf385d+RXR4TPVb+9ndzvn3aynEHRuGVCst9Lw06UJOCcpBlen3C4obkjVHc2cxGNysdQwzenSTEUxeJddk4C5t89R"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "[\n  {\n    \"symbol\": \"BNB/USDT\",\n    \"price\": 625.866,\n    \"volume\": 10060389.83,\n    \"change_percent\": 3.62,\n    \"timestamp\": \"2026-08-20T01:16:47.239634Z\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 2254.19,\n    \"volume\": 312393453.18,\n    \"change_percent\": 17.67,\n    \"timestamp\": \"2026-08-20T01:16:47.051883Z\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 69291.9,\n    \"volume\": 293908772.08,\n    \"change_percent\": 7.4,\n    \"timestamp\": \"2026-08-20T01:16:46.851345Z\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 2087.52,\n    \"volume\": 173160670.26,\n    \"change_percent\": 8.96,\n    \"timestamp\": \"2026-08-19T18:36:32.315970\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 68289.0,\n    \"volume\": 221934696.31,\n    \"change_percent\": 5.4,\n    \"timestamp\": \"2026-08-19T18:36:32.140718\",\n    \"category\": \"high_volume\"\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "githubAction",
+          "args": {
+            "content": "[]",
+            "path": "crypto_alerts.json"
+          },
+          "id": "call_1147529"
+        },
+        "thoughtSignature": "El4KXAERTTIP00kNu3zSkg/86gMOE1j7axiva58OLCr81urTXtuHvDsWTaZD31dYEuZ6qbCRNmj1JTkWa06M6x7qGOXqhlFGQIHqqicKOkpoQDM/xFIK7euoawCjzGH8"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "githubAction",
+          "response": {
+            "content": "✅ تم التحديث بنجاح: crypto_alerts.json"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "تم بنجاح حذف جميع تنبيهات الكريبتو وتفريغ ملف `crypto_alerts.json` بالكامل. \n\nإذا كنت ترغب في إيقاف تشغيل بوت التنبيهات الخاص بالكريبتو (`crypto_bot.py`) أيضاً لمنع إنشاء تنبيهات جديدة، يمكنك إخباري بذلك وسأقوم بإيقافه فوراً.",
+        "thoughtSignature": "El4KXAERTTIPrqZnnY2k/4hI56hqtZiIScU4Pp/qAt5zML8mwGej4+dIBNld0RVWXxULh4MKb763jGWxlQNJNDXO9RLjfKGVF5VBgz3I1Uv3Bu9w8KdaYFLiNfzcBBDT"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
+  }
+]
