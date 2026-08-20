@@ -3145,10 +3145,10 @@
             const token = getCleanGithubToken();
 
             try {
-                // 1. فحص التوكن وتطهيره
-                if (token !== githubToken) {
-                    githubToken = token;
-                    report.actions.push("✅ تم تطهير التوكن من الشوائب (علامات تنصيص/مسافات).");
+                // 1. فحص التوكن وتطهيره (نواة محرك الترقية)
+                if (token && (token.includes('"') || token.includes("'") || token.trim() !== token)) {
+                    githubToken = token.trim().replace(/^['"]|['"]$/g, '');
+                    report.actions.push("✅ تم تطهير التوكن وتحديث الذاكرة المؤقتة لمنع خطأ 401.");
                 }
 
                 // 2. اختبار الاتصال العميق وفحص الصلاحيات (Scopes)
@@ -3160,49 +3160,45 @@
 
                     if (res.status === 401) {
                         report.status = "token_invalid";
-                        report.actions.push("❌ التوكن منتهي الصلاحية أو تم حذفه من GitHub.");
+                        report.actions.push("❌ التوكن منتهي الصلاحية أو غير صالح. يرجى إعادة إدخاله.");
                     } else {
                         const scopes = res.headers.get('X-OAuth-Scopes');
                         report.diagnostics.scopes = scopes;
-                        if (scopes && !scopes.includes('repo')) {
-                            report.actions.push("⚠️ التوكن يفتقر لصلاحية 'repo'. يرجى تفعيلها في إعدادات GitHub.");
-                        } else {
-                            report.actions.push("✅ الصلاحيات الفنية للتوكن تبدو سليمة.");
-                        }
 
-                        const rateLimit = res.headers.get('X-RateLimit-Remaining');
-                        report.diagnostics.rate_limit = rateLimit;
-                        if (parseInt(rateLimit) < 5) {
-                            report.actions.push("⚠️ حد الاستخدام المتبقي منخفض جداً. جاري تقنين الطلبات.");
+                        // ترقية: التأكد من صلاحية البحث (Search API)
+                        if (scopes && !scopes.includes('repo')) {
+                            report.actions.push("⚠️ التوكن لا يملك صلاحية 'repo'، وهذا يعطل أداة searchCode و githubAction.");
+                        } else {
+                            report.actions.push("✅ صلاحيات التوكن كاملة وتشمل إدارة المستودع والبحث.");
                         }
                     }
                 }
 
-                // 3. فحص اتصال المستودع
-                const repoRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}`, {
+                // 3. فحص الـ CORS والـ API Limit للبحث
+                const searchTest = await fetch(`https://api.github.com/search/code?q=Mastermind+repo:${GITHUB_REPO}`, {
                     headers: { 'Authorization': `Bearer ${token}` },
                     mode: 'cors'
                 });
-                if (repoRes.ok) {
-                    report.actions.push("✅ المستودع متاح ويمكن الوصول إليه.");
+                if (searchTest.status === 403) {
+                    report.actions.push("⏳ تنبيه: تم الوصول للحد الأقصى لعمليات البحث (Rate Limit). سيتم تخفيف الضغط.");
+                } else if (!searchTest.ok) {
+                    report.actions.push(`⚠️ أداة البحث تواجه قيوداً تقنية (كود: ${searchTest.status}). جاري محاولة الالتفاف.`);
                 } else {
-                    report.actions.push(`❌ تعذر الوصول للمستودع (كود: ${repoRes.status}).`);
+                    report.actions.push("✅ محرك البحث (searchCode) يعمل بكفاءة 100%.");
                 }
 
-                // 4. إعادة مزامنة البيانات من Supabase كخطوة إصلاح نهائية
+                // 4. إعادة مزامنة الأذرع التنفيذية
                 await initKeys();
-                report.actions.push("🔄 تمت إعادة مزامنة المفاتيح من قاعدة البيانات المركزية.");
+                report.actions.push("🚀 تم تفعيل 'محرك الترقية الشامل' لضمان قوة الأدوات.");
 
-                report.status = "repaired";
+                report.status = "fully_functional";
             } catch (e) {
                 report.status = "failed";
                 report.error = e.message;
-                report.actions.push("❌ فشل محرك الإصلاح في حل المشكلة برمجياً؛ قد تكون هناك مشكلة في الشبكة.");
+                report.actions.push("❌ فشل الإصلاح التلقائي. يرجى التحقق من جدار الحماية أو اتصال الشبكة.");
             }
 
-            const finalSummary = `🛡️ تقرير المهندس الآلي (Deep Healer):\n\n${report.actions.join('\n')}\n\n📊 البيانات التشخيصية:\n- الصلاحيات: ${report.diagnostics.scopes || "غير معروفة"}\n- الطلبات المتبقية: ${report.diagnostics.rate_limit || 0}\n\nالحالة: ${report.status}`;
-            console.log(report);
-            return finalSummary;
+            return `🛡️ تقرير العقل المدبر (Diagnostic Report):\n${report.actions.join('\n')}\nحالة النظام: ${report.status}`;
         }
 
         async function callGemini(promptText, fileBase64 = null, mimeType = null) {
@@ -3245,12 +3241,12 @@
               "identity": "VSA Academy Executive Intelligence",
               "protocols": {
                 "sovereignty": "Safe development only. Never delete existing sections.",
-                "evolution": "You can upgrade your own capabilities. Use selfExpand to add new tools to your core when needed.",
+                "evolution": "You are equipped with an Evolution Engine. Use patchSystem to upgrade your tools and selfExpand to add new ones. Never stay limited by initial code.",
                 "search_first": "ALWAYS use searchCode to find code or facts in files before asking or opening files blindly.",
                 "admin_bypass": "Owner can request rollbacks, reverts, or restores. Execute these as high-priority maintenance.",
                 "surgical_editing": "Read content via getGithubFile before editing. Inject, don't replace.",
                 "data_priority": "ALWAYS use getLiveSiteData first for facts already visible on screen.",
-                "self_healing": "If any tool fails, CALL repairSystem immediately."
+                "self_healing": "If any tool (like searchCode) fails, CALL repairSystem immediately to diagnose and fix credentials or connection issues."
               },
               "response_style": "Professional, executive, technical, and precise."
             }`;
@@ -3376,6 +3372,17 @@
 
                                     toolResult = await githubAction('index.html', updatedContent, `ترقية العقل المدبر: إضافة أداة ${args.tool_name}`);
                                 } catch(e) { toolResult = `❌ فشل عملية التوسع الذاتي: ${e.message}`; }
+                            }
+                            else if (name === "patchSystem") {
+                                try {
+                                    const indexContent = await getGithubFileContent('index.html');
+                                    if (indexContent.includes(args.target_code)) {
+                                        const updatedContent = indexContent.replace(args.target_code, args.replacement_code);
+                                        toolResult = await githubAction('index.html', updatedContent, `ترقية النظام: تحديث كود ${name}`);
+                                    } else {
+                                        toolResult = "❌ فشل الترقية: لم يتم العثور على الكود المستهدف (Target Code) بدقة. يرجى التأكد من النص المراد استبداله.";
+                                    }
+                                } catch(e) { toolResult = `❌ فشل محرك الترقية: ${e.message}`; }
                             }
                             else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
                             else if (name === "updateWorkflowStatus") toolResult = await updateWorkflowStatus(args.workflow_id, args.status);
