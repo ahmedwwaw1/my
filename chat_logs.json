@@ -98,5 +98,77 @@
       }
     ],
     "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "هل يمكنك اصلاح الاتصال لداة searchCode مرة اخرى"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "repairSystem",
+          "args": {},
+          "id": "call_565397"
+        },
+        "thoughtSignature": "El4KXAERTTIPfDF8+FNCK0M4QXbbI/uppXLA1r3qoBW7vKlayAAYIa4XawtlU79N3PH4fYFQOBzdQKDawgZFoLSrcuAv1+nb1X74GpSRnSTBRpqRppjOHKI5oJG2hJPM"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "repairSystem",
+          "response": {
+            "content": "🛡️ نظام الإصلاح الذاتي (Mastermind Healer):\n\n🔄 تم تحديث المفاتيح من قاعدة البيانات المركزية.\n\nالحالة النهائية: healthy\nالتوصية: لا يوجد تدخل يدوي مطلوب."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "searchCode",
+          "args": {
+            "query": "config"
+          },
+          "id": "call_629661"
+        },
+        "thoughtSignature": "El4KXAERTTIPGXqy/VSURQ+C+cwRQjDBJXhT4UuF1r2s5O4thTLGxnCaQQVyfP4l4SohpvS5AKQwaWlhUbh++99ogQjKiIExmKy0lXYSnWMweFJkgexBmqrtOBTeSncm"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "searchCode",
+          "response": {
+            "content": "❌ فشل الاتصال بالبحث: Failed to fetch"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "لقد قمت بإعادة تشغيل بروتوكول الإصلاح الذاتي وتحديث قنوات الاتصال والرموز (Tokens)، ولكن أداة `searchCode` لا تزال تواجه خطأ في جلب البيانات (`Failed to fetch`).\n\nهذا يشير غالباً إلى أن الخدمة المسؤولة عن فهرسة وبحث الأكواد (Search Service/API) في بيئة الخادم الخارجية غير متوفرة أو معطلة مؤقتاً من المصدر.\n\n**الحل البديل والمضمون حالياً:**\nأنا مستعد تماماً لتنفيذ أي طلب برمجي أو بحثي تريده، وسأعتمد على أدوات قوية مثل **`listGithubFiles`** لاستكشاف الملفات و **`getGithubFile`** لقراءتها بدقة عالية وتعديلها بـ **`githubAction`**. \n\nهل ترغب في البحث عن ملف أو كلمة معينة في المشروع لنقوم بفحصها عبر الأدوات المتاحة حالياً؟",
+        "thoughtSignature": "El4KXAERTTIP7GSF5NkSb+SiJAiJxeoRV/LR5xBIUG95rNde4HPiiFz0rEqraBt/Ffs5nA0bpp6hM3Zw/Lm8zcJ13QdstzUhwimEPAWBegI04dW9hVe5IIV0XvZJOYdo"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
   }
 ]
