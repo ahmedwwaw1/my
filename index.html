@@ -1337,7 +1337,7 @@
             }
         }
         // اضافة ملف json
-        // دالة جلب ومعالجة البيانات من Supabase مع دمج تنبيهات الكريبتو المحلية
+        // دالة جلب ومعالجة البيانات مع نظام استرداد احتياطي (Fallback) للعمل على GitHub
         async function loadWebsiteData() {
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
             const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
@@ -1347,8 +1347,30 @@
                 'Authorization': `Bearer ${SERVICE_ROLE_KEY}`
             };
 
+            const processCryptoAlerts = async () => {
+                let cryptoAlerts = [];
+                try {
+                    const cryptoRes = await fetch('crypto_alerts.json?v=' + new Date().getTime());
+                    if (cryptoRes.ok) {
+                        cryptoAlerts = await cryptoRes.json();
+                        cryptoAlerts.forEach(alert => {
+                            const alertDate = new Date(alert.timestamp);
+                            const formattedTime = alertDate.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
+                            const formattedDate = alertDate.toLocaleDateString(undefined);
+                            allData.push({
+                                id: `crypto-${alert.symbol}-${alert.timestamp}`,
+                                title: `🚨 حركة قوية على زوج: ${alert.symbol}`,
+                                category: 'high_volume',
+                                content: `💵 السعر الحالي: ${alert.price} USDT\n📊 حجم التداول: ${alert.volume.toLocaleString()}\n📈 نسبة التغيير (24س): ${alert.change_percent}%\n🕒 وقت التنبيه المحلي: ${formattedTime} - ${formattedDate}`,
+                                image: '', videos: null, links: [], images: null, pdfs: null, recommendations: [], thematic_index: null
+                            });
+                        });
+                    }
+                } catch (e) { console.warn("Could not load crypto_alerts.json"); }
+            };
+
             try {
-                // جلب البيانات من Supabase
+                // محاولة جلب البيانات من Supabase
                 const [cardsRes, videosRes, chaptersRes, assetsRes] = await Promise.all([
                     fetch(`${SUPABASE_URL}/rest/v1/cards?select=*`, { headers }),
                     fetch(`${SUPABASE_URL}/rest/v1/videos?select=*&order=order_index`, { headers }),
@@ -1356,23 +1378,13 @@
                     fetch(`${SUPABASE_URL}/rest/v1/card_assets?select=*`, { headers })
                 ]);
 
-                // محاولة جلب التنبيهات المحلية
-                let cryptoAlerts = [];
-                try {
-                    const cryptoRes = await fetch('crypto_alerts.json?v=' + new Date().getTime());
-                    if (cryptoRes.ok) {
-                        cryptoAlerts = await cryptoRes.json();
-                    }
-                } catch (e) { console.warn("Could not load crypto_alerts.json"); }
-
-                if (!cardsRes.ok) throw new Error("فشل تحميل البيانات من Supabase");
+                if (!cardsRes.ok) throw new Error("Supabase returned error status");
 
                 const cards = await cardsRes.json();
                 const videos = await videosRes.json();
                 const chapters = await chaptersRes.json();
                 const assets = await assetsRes.json();
 
-                // إعادة بناء هيكل البيانات من Supabase
                 allData = cards.map(card => {
                     const cardVideos = videos.filter(v => v.card_id === card.id).map(v => ({
                         ...v,
@@ -1381,57 +1393,45 @@
                             text: ch.chapter_text
                         }))
                     }));
-
                     const cardAssets = assets.filter(a => a.card_id === card.id);
-
                     return {
-                        id: card.id,
-                        title: card.title,
-                        category: card.category,
-                        content: card.content,
-                        image: card.image_url,
+                        id: card.id, title: card.title, category: card.category, content: card.content, image: card.image_url,
                         videos: cardVideos.length > 0 ? cardVideos : null,
                         links: cardAssets.filter(a => a.asset_type === null || a.asset_type === 'link').map(a => ({ text: a.title, url: a.url })),
                         images: cardAssets.filter(a => a.asset_type === 'image').map(a => ({ title: a.title, url: a.url })),
                         pdfs: cardAssets.filter(a => a.asset_type === 'pdf').map(a => ({ title: a.title, url: a.url })),
-                        recommendations: [],
-                        thematic_index: null
+                        recommendations: [], thematic_index: null
                     };
                 });
 
-                // دمج تنبيهات الكريبتو
-                cryptoAlerts.forEach(alert => {
-                    // تحويل التوقيت العالمي UTC إلى توقيت المتصفح المحلي
-                    const alertDate = new Date(alert.timestamp);
-                    const formattedTime = alertDate.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
-                    const formattedDate = alertDate.toLocaleDateString(undefined);
-
-                    allData.push({
-                        id: `crypto-${alert.symbol}-${alert.timestamp}`,
-                        title: `🚨 حركة قوية على زوج: ${alert.symbol}`,
-                        category: 'high_volume',
-                        content: `💵 السعر الحالي: ${alert.price} USDT\n📊 حجم التداول: ${alert.volume.toLocaleString()}\n📈 نسبة التغيير (24س): ${alert.change_percent}%\n🕒 وقت التنبيه المحلي: ${formattedTime} - ${formattedDate}`,
-                        image: '',
-                        videos: null,
-                        links: [],
-                        images: null,
-                        pdfs: null,
-                        recommendations: [],
-                        thematic_index: null
-                    });
-                });
-
+                await processCryptoAlerts();
                 isDataLoaded = true;
                 render(allData);
-                console.log("تم تحميل البيانات بنجاح 🚀");
-
-                if (typeof handleRoute === 'function') {
-                    handleRoute();
-                }
+                console.log("✅ تم تحميل البيانات من Supabase بنجاح.");
+                if (typeof handleRoute === 'function') handleRoute();
 
             } catch (error) {
-                console.error("❌ خطأ في تحميل البيانات:", error);
-                statusMsg.innerText = "عذراً، حدث خلل أثناء جلب البيانات.";
+                console.warn("⚠️ فشل جلب البيانات من Supabase (CORS أو خلل اتصال). بدء نظام الاسترداد المحلي...", error);
+                try {
+                    // نظام الاسترداد من ملفات JSON المحلية المتاحة في المشروع
+                    const localFiles = ['vsa.json', 'data.json', 'technical-analysis.json', 'Time-analysis.json'];
+                    const fetchPromises = localFiles.map(file =>
+                        fetch(file + '?v=' + new Date().getTime()).then(res => res.ok ? res.json() : []).catch(() => [])
+                    );
+
+                    const results = await Promise.all(fetchPromises);
+                    allData = results.flat();
+
+                    await processCryptoAlerts();
+
+                    isDataLoaded = true;
+                    render(allData);
+                    console.log("🚀 تم تفعيل وضع البيانات المحلية (Local Fallback Mode) بنجاح.");
+                    if (typeof handleRoute === 'function') handleRoute();
+                } catch (fallbackError) {
+                    console.error("❌ فشل النظام تماماً في تحميل أي بيانات:", fallbackError);
+                    statusMsg.innerText = "عذراً، حدث خلل في الاتصال بالبيانات.";
+                }
             }
         }
 
