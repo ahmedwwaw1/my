@@ -126,5 +126,134 @@
       }
     ],
     "model": "gemini-3.5-flash-lite"
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "اجل"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "listGithubFiles",
+          "args": {},
+          "id": "call_1272028"
+        },
+        "thoughtSignature": "Em8KbQERTTIPsruWg7zMlLRG9uIYp+rVy0HsQ3ehDdIuexY1N0ISzdq47kSnbCTqoyTemIl5TD2TxTxH+3Bkb63FuZ3O67fEDY9q/2eiYm7qKr9UH7NDMi6B8GqtvKXvGasQ69QMbgGujc9UiX4Xw7c="
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "listGithubFiles",
+          "response": {
+            "content": "محتويات الجذر:\n📁 .artifacts\n📄 .gitattributes\n📁 .github\n📁 .idea\n📁 .vscode\n📄 PDF-images.json\n📄 Time-analysis.json\n📁 archive\n📄 chat_logs.json\n📄 crypto_alerts.json\n📄 crypto_bot.py\n📄 data.json\n📁 images\n📄 index.html\n📄 remigrate_final.ps1\n📄 remigrate_final.py\n📄 steps.jsonl\n📄 technical-analysis.json\n📄 viewer.html\n📄 vsa.json"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": "crypto_bot.py"
+          },
+          "id": "call_827506"
+        },
+        "thoughtSignature": "El4KXAERTTIPGf4/fDiWxkJFxp7ZK08EdAQRd0+hLPx99GL2Qx1upktZwY8ZzpcPJjXmA0S+RYd9jwzBcRGYfX9jRPFVxE0fIeCOuhbHjy95E7CLQ9E0LBUVcWqne54n"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "import ccxt\nimport json\nimport os\nfrom datetime import datetime\n\ndef analyze_crypto_market():\n    \"\"\"\n    جلب بيانات العملات وتحديث ملف crypto_alerts.json\n    \"\"\"\n    try:\n        # استخدام منصة KuCoin لتجنب الحظر الجغرافي لـ GitHub الأمريكي\n        exchange = ccxt.kucoin()\n        \n        # العملات المراد مراقبتها\n        symbols = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT']\n        \n        alerts = []\n        \n        for symbol in symbols:\n            try:\n                # جلب البيانات الأخيرة\n                ticker = exchange.fetch_ticker(symbol)\n                \n                volume = ticker['quoteVolume']  # حجم التداول بالـ USDT\n                price = ticker['last']  # السعر الحالي\n                change_percent = ticker['percentage']  # نسبة التغيير\n                \n                # الشرط: إذا كان حجم التداول أكثر من 10 مليون\n                if volume > 10000000:\n                    new_alert = {\n                        \"symbol\": symbol,\n                        \"price\": price,\n                        \"volume\": round(volume, 2),\n                        \"change_percent\": round(change_percent, 2),\n                        \"timestamp\": datetime.utcnow().isoformat() + \"Z\", # استخدام UTC مع علامة Z\n                        \"category\": \"high_volume\"\n                    }\n                    alerts.append(new_alert)\n                    print(f\"✅ تنبيه: {symbol} - السعر: {price} - الحجم: {volume}\")\n            except Exception as e:\n                print(f\"⚠️ خطأ في جلب بيانات {symbol}: {e}\")\n                continue\n        \n        # استدعاء دالة الحفظ في حال وجود تنبيهات\n        if alerts:\n            save_alerts(alerts)\n        else:\n            print(\"ℹ️ لم يتم العثور على أي عملة حققت شرط الحجم المطلق حالياً.\")\n            \n    except Exception as e:\n        print(f\"❌ خطأ في تحليل السوق: {e}\")\n\ndef save_alerts(new_alerts):\n    \"\"\"\n    حفظ التنبيهات الجديدة في crypto_alerts.json مع تجنب التكرار اليومي\n    \"\"\"\n    file_name = 'crypto_alerts.json'\n    existing_data = []\n    \n    # قراءة البيانات القديمة إن وجدت\n    if os.path.exists(file_name):\n        with open(file_name, 'r', encoding='utf-8') as f:\n            try:\n                existing_data = json.load(f)\n            except json.JSONDecodeError:\n                existing_data = []\n    \n    today_date = datetime.now().strftime('%Y-%m-%d')\n    \n    # إضافة التنبيهات الجديدة مع منع التكرار لكل عملة في نفس اليوم\n    for alert in new_alerts:\n        # التحقق مما إذا كانت العملة قد أُضيفت بالفعل اليوم\n        is_already_added_today = any(\n            item.get('symbol') == alert['symbol'] and \n            item.get('timestamp', '').startswith(today_date)\n            for item in existing_data\n        )\n        \n        if not is_already_added_today:\n            existing_data.insert(0, alert)\n            print(f\"✅ تم إضافة تنبيه جديد لـ {alert['symbol']} اليوم.\")\n        else:\n            print(f\"ℹ️ تنبيه {alert['symbol']} موجود بالفعل لتاريخ اليوم {today_date}. تخطي الإضافة.\")\n    \n    # الاحتفاظ بآخر 50 تنبيه فقط ليبقى الملف خفيفاً ومناسباً للموقع\n    existing_data = existing_data[:50]\n    \n    # كتابة وحفظ الملف بنظام الترميز العام ليعرض اللغة العربية والرموز بشكل صحيح\n    with open(file_name, 'w', encoding='utf-8') as f:\n        json.dump(existing_data, f, ensure_ascii=False, indent=2)\n\n# 🚀 السطرين السحريين لتشغيل البوت فوراً عند استدعاء الملف\nif __name__ == '__main__':\n    analyze_crypto_market()\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "getGithubFile",
+          "args": {
+            "path": "crypto_alerts.json"
+          },
+          "id": "call_767683"
+        },
+        "thoughtSignature": "El4KXAERTTIPC6y6Itm060aMEbRljA+olX6yrIjEglpec0Y/p20EL6EYu1r/LUYw7yilaxi8ZLeUKJKufAsiUymwaZ3w+SVDdKVKj4DhI6FUyjWDQQBUk4Rgw2sfdSu+"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "getGithubFile",
+          "response": {
+            "content": "[\n  {\n    \"symbol\": \"BNB/USDT\",\n    \"price\": 642.697,\n    \"volume\": 15797114.92,\n    \"change_percent\": 6.73,\n    \"timestamp\": \"2026-08-20T10:31:22.826821Z\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"ETH/USDT\",\n    \"price\": 2284.13,\n    \"volume\": 351169355.29,\n    \"change_percent\": 19.11,\n    \"timestamp\": \"2026-08-20T10:31:22.617020Z\",\n    \"category\": \"high_volume\"\n  },\n  {\n    \"symbol\": \"BTC/USDT\",\n    \"price\": 71925.3,\n    \"volume\": 382573659.58,\n    \"change_percent\": 11.72,\n    \"timestamp\": \"2026-08-20T10:31:22.413831Z\",\n    \"category\": \"high_volume\"\n  }\n]"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "functionCall": {
+          "name": "githubAction",
+          "args": {
+            "path": "crypto_bot.py",
+            "content": "import ccxt\nimport json\nimport os\nfrom datetime import datetime\n\ndef analyze_crypto_market():\n    \"\"\"\n    جلب بيانات العملات وتحديث ملف crypto_alerts.json مع دعم إضافي لتحليل التقلب (Volatility)\n    \"\"\"\n    try:\n        # استخدام منصة KuCoin لتجنب الحظر الجغرافي لـ GitHub الأمريكي\n        exchange = ccxt.kucoin()\n        \n        # العملات المراد مراقبتها (تمتقيع سولانا SOL لزيادة نطاق التغطية)\n        symbols = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'SOL/USDT']\n        \n        alerts = []\n        \n        for symbol in symbols:\n            try:\n                # جلب البيانات الأخيرة\n                ticker = exchange.fetch_ticker(symbol)\n                \n                volume = ticker['quoteVolume']  # حجم التداول بالـ USDT\n                price = ticker['last']  # السعر الحالي\n                change_percent = ticker['percentage']  # نسبة التغيير\n                high_24h = ticker.get('high', price)\n                low_24h = ticker.get('low', price)\n                \n                # حساب مؤشر التقلب البسيط (نطاق التغير خلال 24 ساعة)\n                volatility = round(((high_24h - low_24h) / price) * 100, 2) if price > 0 else 0\n                \n                # الشرط: إذا كان حجم التداول أكثر من 10 مليون\n                if volume > 10000000:\n                    new_alert = {\n                        \"symbol\": symbol,\n                        \"price\": price,\n                        \"volume\": round(volume, 2),\n                        \"change_percent\": round(change_percent, 2),\n                        \"volatility\": volatility,\n                        \"timestamp\": datetime.utcnow().isoformat() + \"Z\", # استخدام UTC مع علامة Z\n                        \"category\": \"high_volume_with_analytics\"\n                    }\n                    alerts.append(new_alert)\n                    print(f\"✅ تنبيه مطور: {symbol} - السعر: {price} - التقلب: {volatility}%\")\n            except Exception as e:\n                print(f\"⚠️ خطأ في جلب بيانات {symbol}: {e}\")\n                continue\n        \n        # استدعاء دالة الحفظ في حال وجود تنبيهات\n        if alerts:\n            save_alerts(alerts)\n        else:\n            print(\"ℹ️ لم يتم العثور على أي عملة حققت شرط الحجم المطلق حالياً.\")\n            \n    except Exception as e:\n        print(f\"❌ خطأ في تحليل السوق: {e}\")\n\ndef save_alerts(new_alerts):\n    \"\"\"\n    حفظ التنبيهات الجديدة في crypto_alerts.json مع تجنب التكرار اليومي\n    \"\"\"\n    file_name = 'crypto_alerts.json'\n    existing_data = []\n    \n    # قراءة البيانات القديمة إن وجدت\n    if os.path.exists(file_name):\n        with open(file_name, 'r', encoding='utf-8') as f:\n            try:\n                existing_data = json.load(f)\n            except json.JSONDecodeError:\n                existing_data = []\n    \n    today_date = datetime.now().strftime('%Y-%m-%d')\n    \n    # إضافة التنبيهات الجديدة مع منع التكرار لكل عملة في نفس اليوم\n    for alert in new_alerts:\n        # التحقق مما إذا كانت العملة قد أُضيفت بالفعل اليوم\n        is_already_added_today = any(\n            item.get('symbol') == alert['symbol'] and \n            item.get('timestamp', '').startswith(today_date)\n            for item in existing_data\n        )\n        \n        if not is_already_added_today:\n            existing_data.insert(0, alert)\n            print(f\"✅ تم إضافة تنبيه جديد لـ {alert['symbol']} اليوم.\")\n        else:\n            print(f\"ℹ️ تنبيه {alert['symbol']} موجود بالفعل لتاريخ اليوم {today_date}. تخطي الإضافة.\")\n    \n    # الاحتفاظ بآخر 50 تنبيه فقط ليبقى الملف خفيفاً ومناسباً للموقع\n    existing_data = existing_data[:50]\n    \n    # كتابة وحفظ الملف بنظام الترميز العام ليعرض اللغة العربية والرموز بشكل صحيح\n    with open(file_name, 'w', encoding='utf-8') as f:\n        json.dump(existing_data, f, ensure_ascii=False, indent=2)\n\n# 🚀 السطرين السحريين لتشغيل البوت فوراً عند استدعاء الملف\nif __name__ == '__main__':\n    analyze_crypto_market()\n"
+          },
+          "id": "call_1017896"
+        },
+        "thoughtSignature": "El4KXAERTTIP/fytXXXBLpzuKrliFRp7BTsC6O79ftEkO0W9DLAXTr7G5we7RwMMEtbOmyoGRlLgrEBkIOTw9PIz+VsG1rIgWKHahtm0dsxQIyYfd5JwtVEKhPSATZpO"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "functionResponse": {
+          "name": "githubAction",
+          "response": {
+            "content": "✅ تم التحديث بنجاح: crypto_bot.py"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "لقد قمت بقراءة ملف `crypto_bot.py` الحالي والتأكد من بنيته، ثم قمت بتحديثه وتطويره بشكل احترافي مع الالتزام التام بمعايير الأمان (Surgical Editing):\n\n**ما تم إضافته وترقيته في البوت:**\n1. **توسيع نطاق المراقبة:** تمت إضافة عملة **SOL/USDT (سولانا)** بجانب Bitcoin و Ethereum و BNB.\n2. **حساب مؤشر التقلب (Volatility Index):** أضفت معادلة دقيقة لحساب نسبة التقلب اليومية بناءً على أعلى وأدنى سعر خلال 24 ساعة (`high_24h` و `low_24h`).\n3. **تحسين البيانات المسجلة:** أصبح التنبيه الناتج يحتوي الآن على حقل إضافي للتقلب (`volatility`) وفئة محسنة (`high_volume_with_analytics`).\n4. **التوافق التام مع GitHub:** تمت عملية التحديث عبر قراءة الملف أولاً ثم حقن التعديل بشكل نظيف، مما جعل النظام يقبل التحديث فوراً دون أي مشاكل في المزامنة.\n\nهل ترغب في أن نقوم باختبار أو تطوير جزء آخر من المنصة؟",
+        "thoughtSignature": "El4KXAERTTIPXdfdug0H0fFgOihptErz1gNNO4hJWlehKg5sOkUEaj+W8BUi1xDzfS9Z72ODzbBP+C7cXXaNa57nr23nrlJfEVY2knpdhqN41o470lhXqaMyk4inpSvC"
+      }
+    ],
+    "model": "gemini-3.5-flash-lite"
   }
 ]
