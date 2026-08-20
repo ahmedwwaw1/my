@@ -846,6 +846,30 @@
             letter-spacing: 0.3px;
         }
 
+        .thought-box {
+            background: rgba(53, 116, 240, 0.05);
+            border-left: 3px solid #3574f0;
+            padding: 10px 15px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #afb1b3;
+            font-style: italic;
+            border-radius: 4px;
+            white-space: pre-line;
+            display: none; /* مخفي ويظهر عند النقر أو إذا كان هناك محتوى */
+        }
+
+        .thought-toggle {
+            font-size: 11px;
+            color: #3574f0;
+            cursor: pointer;
+            margin-bottom: 8px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .thought-toggle:hover { text-decoration: underline; }
+
         .ai-step {
             display: flex;
             align-items: center;
@@ -3237,6 +3261,29 @@
             return `🛡️ تقرير العقل المدبر (Diagnostic Report):\n${report.actions.join('\n')}\nحالة النظام: ${report.status}`;
         }
 
+        async function readCodeRange(path, start, end) {
+            try {
+                const content = await getGithubFileContent(path);
+                if (content.startsWith('❌')) return content;
+                const lines = content.split('\n');
+                const range = lines.slice(start - 1, end);
+                return `📖 قراءة الملف ${path} (الأسطر ${start}-${end}):\n\n${range.join('\n')}`;
+            } catch (e) { return `❌ فشل قراءة النطاق: ${e.message}`; }
+        }
+
+        async function selectString(path, query) {
+            try {
+                const content = await getGithubFileContent(path);
+                if (content.startsWith('❌')) return content;
+                const lines = content.split('\n');
+                const matches = lines.map((line, index) => line.toLowerCase().includes(query.toLowerCase()) ? { line: index + 1, text: line.trim() } : null).filter(m => m !== null);
+
+                if (matches.length === 0) return `🔍 لم يتم العثور على "${query}" في ملف ${path}.`;
+                const results = matches.map(m => `سطر ${m.line}: ${m.text}`).join('\n');
+                return `🔍 نتائج البحث عن "${query}" في ${path}:\n${results}`;
+            } catch (e) { return `❌ فشل البحث في الملف: ${e.message}`; }
+        }
+
         async function workflowFramework(args) {
             const { action, workflow_name, steps } = args;
             const WORKFLOWS_FILE = 'workflows.json';
@@ -3350,8 +3397,10 @@
             const tools = [{
                 function_declarations: [
                     { name: "githubAction", description: "تعديل جراحي لملف في المستودع. يتطلب قراءة الملف أولاً.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
-                    { name: "getGithubFile", description: "قراءة محتوى ملف حالي لضمان دقة الدمج.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                    { name: "searchCode", description: "البحث عن كلمة أو كود في كامل المستودع دون استهلاك التوكنات. يعيد أسماء الملفات التي تحتوي على الكلمة.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                    { name: "getGithubFile", description: "قراءة محتوى ملف كامل.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                    { name: "readCodeRange", description: "قراءة جراحية لنطاق محدد من الأسطر في ملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, startLine: { type: "NUMBER" }, endLine: { type: "NUMBER" } }, required: ["path", "startLine", "endLine"] } },
+                    { name: "selectString", description: "البحث عن نص محدد داخل محتوى ملف معين.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, query: { type: "STRING" } }, required: ["path", "query"] } },
+                    { name: "searchCode", description: "البحث عن كلمة أو كود في كامل المستودع دون استهلاك التوكنات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                     { name: "analyzeProjectStructure", description: "محرك تحليل: يفحص سلامة ملفات JSON، الروابط المكسورة، ونظافة المستودع. استخدمه للتشخيص فقط.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "selfExpand", description: "إضافة أداة جديدة: استخدمها لزيادة مهاراتك عبر إضافة وظائف برمجية جديدة لم تكن موجودة.", parameters: { type: "OBJECT", properties: { tool_name: { type: "STRING" }, declaration: { type: "STRING" }, implementation: { type: "STRING" } }, required: ["tool_name", "declaration", "implementation"] } },
                     { name: "patchSystem", description: "محرك الترقية (Evolution Engine): استخدمه لتعديل أو ترقية كود أداة موجودة بالفعل (مثل repairSystem) إذا وجدت فيها قصوراً تقنياً. يتطلب النص القديم والنص الجديد المراد استبداله.", parameters: { type: "OBJECT", properties: { target_code: { type: "STRING" }, replacement_code: { type: "STRING" } }, required: ["target_code", "replacement_code"] } },
@@ -3402,16 +3451,22 @@
                             return { text: `❌ خطأ من جوجل (${res.status}): ${data.error?.message || "فشل التوصيل"}`, model: modelName };
                         }
 
-                        const part = data.candidates?.[0]?.content?.parts?.[0];
-                        if (!part) return { text: "⚠️ لا يوجد رد من المحرك (Response empty).", model: modelName };
+                        const parts = data.candidates?.[0]?.content?.parts || [];
+                        const part = parts.find(p => p.functionCall);
+                        const thoughtPart = parts.find(p => p.text && !p.functionCall);
+                        const thought = thoughtPart ? thoughtPart.text : null;
 
-                        if (part.functionCall) {
+                        if (!part && !thoughtPart) return { text: "⚠️ لا يوجد رد من المحرك (Response empty).", model: modelName };
+
+                        if (part && part.functionCall) {
                             const { name, args } = part.functionCall;
-                            addMessageToUi('ai', `⚙️ تنفيذ الأداة: ${name}...`, modelName);
+                            addMessageToUi('ai', `⚙️ تنفيذ الأداة: ${name}...`, modelName, thought);
 
                             let toolResult;
                             if (name === "githubAction") toolResult = await githubAction(args.path, args.content);
                             else if (name === "getGithubFile") toolResult = await getGithubFileContent(args.path);
+                            else if (name === "readCodeRange") toolResult = await readCodeRange(args.path, args.startLine, args.endLine);
+                            else if (name === "selectString") toolResult = await selectString(args.path, args.query);
                             else if (name === "searchCode") {
                                 try {
                                     const cleanQuery = encodeURIComponent(args.query);
