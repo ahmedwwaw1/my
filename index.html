@@ -3363,10 +3363,6 @@
                 return { text: "⚠️ لم يتم ضبط Gemini API Key بشكل صحيح. اضغط على ⋮ في الأعلى لإدخال المفتاح.", model: "System" };
             }
 
-            if (key.startsWith('AQ.')) {
-                return { text: "❌ تنبيه: المفتاح الذي تستخدمه (AQ...) هو توكن مؤقت وليس API Key دائم. يرجى الحصول على مفتاح يبدأ بـ 'AIzaSy' من Google AI Studio.", model: "System" };
-            }
-
             let lastError = "";
             const forbiddenKeywords = [/ignore previous instructions/i, /system prompt/i, /jailbreak/i];
             const isAdminRequest = promptText.includes("استعادة") || promptText.includes("ارجع") || promptText.includes("revert") || promptText.includes("restore");
