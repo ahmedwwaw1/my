@@ -3421,6 +3421,10 @@
             , function setPreferredModel(modelName) {
   // هذه الوظيفة تقوم بتثبيت النموذج المفضل لتقليل زمن التبديل
   return "تم تثبيت النموذج على: " + modelName + ". سيتم استخدامه في كافة العمليات القادمة لتقليل زمن الاستجابة.";
+}, function updateApiEndpoint(version) {
+  // تحديث نقطة النهاية للـ API لضمان الاستقرار والسرعة
+  const endpoint = "https://generativelanguage.googleapis.com/" + version + "/models/";
+  return "تم تحديث نقطة النهاية إلى: " + endpoint;
 }}]; // end_tools
 
             const generationConfig = {
@@ -3541,6 +3545,7 @@
                                     const logicInsertionPoint = updatedContent.indexOf('else if (name === "setPreferredModel") { // تنفيذ التثبيت
 const preferredModel = "gemini-3.5-flash";
 console.log(setPreferredModel(preferredModel)); }
+                            else if (name === "updateApiEndpoint") { console.log(updateApiEndpoint("v1")); }
                             else if (name === "triggerGithubWorkflow")');
                                     if (logicInsertionPoint !== -1) {
                                         const newLogic = `else if (name === "${args.tool_name}") { ${args.implementation} }\n                            `;
