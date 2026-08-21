@@ -3424,7 +3424,7 @@
                     { name: "updateApiEndpoint", description: "تحديث نقطة النهاية للـ API لضمان الاستقرار والسرعة.", parameters: { type: "OBJECT", properties: { version: { type: "STRING" } }, required: ["version"] } },
                     { name: "pingModel", description: "قياس زمن الاستجابة للنظام.", parameters: { type: "OBJECT", properties: {} } }
                 ]
-            , validateCodeIntegrity(path: string): string}]; // end_tools
+            }]; // end_tools
 
             const generationConfig = {
                 temperature: 0, // سلوك حتمي ودقيق
@@ -3541,31 +3541,7 @@
                                     }
 
                                     // 2. حقن منطق التنفيذ في حلقة runToolLoop
-                                    const logicInsertionPoint = updatedContent.indexOf('else if (name === "validateCodeIntegrity") { 
-function validateCodeIntegrity(path) {
-    const fs = require('fs');
-    const content = fs.readFileSync(path, 'utf8');
-    
-    // فحص الأقواس المتوازنة
-    const stack = [];
-    const pairs = { '{': '}', '[': ']', '(': ')' };
-    for (let char of content) {
-        if (pairs[char]) stack.push(char);
-        else if (Object.values(pairs).includes(char)) {
-            if (stack.length === 0 || pairs[stack.pop()] !== char) {
-                return `خطأ في بناء الجملة: قوس غير متوازن عند الرمز '${char}'`;
-            }
-        }
-    }
-    
-    // فحص بسيط لوسوم HTML غير مغلقة (مثال أساسي)
-    const unclosedTags = content.match(/<([a-z]+)([^<]+)*(?<!\/)>/gi);
-    // هذا مجرد فحص أولي، يمكن تطويره لاحقاً
-    
-    return stack.length === 0 ? "الكود سليم" : "خطأ: أقواس غير مغلقة";
-}
- }
-                            else if (name === "thought")');
+                                    const logicInsertionPoint = updatedContent.indexOf('else if (name === "thought")');
                                     if (logicInsertionPoint !== -1) {
                                         const newLogic = `else if (name === "${args.tool_name}") { ${args.implementation} }\n                            `;
                                         updatedContent = updatedContent.slice(0, logicInsertionPoint) + newLogic + updatedContent.slice(logicInsertionPoint);
