@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1787335468726",
-      "title": "بصفتي \"العقل المدبر\" (Mastermi...",
+      "title": "رسالة الخطأ `⚠️ لا يوجد رد من ...",
       "history": [
         {
           "role": "user",
@@ -155,10 +155,58 @@
             }
           ],
           "model": "gemini-3.1-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "لماذا ⚠️ لا يوجد رد من المحرك (Response empty). وكمل الاصلاح"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "readCodeRange",
+                "args": {
+                  "endLine": 1150,
+                  "startLine": 1050,
+                  "path": "index.html"
+                },
+                "id": "call_618764"
+              },
+              "thoughtSignature": "EnEKbwERTTIPe0ax4MA7WhG68w9ApSFHTYxDiQIQfmDmBWb5Ejy3OcjIknXQ2BxvA/wOc9m82tK/8OG4/T9VlX6/pzrmGC85GVOzyBnFtK2nluY0x3Rsh3JuxQtn1t8zkyNyL7ZNDD/TlP0zD1yB/cRNEA=="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "readCodeRange",
+                "response": {
+                  "content": "📖 قراءة الملف index.html (الأسطر 1050-1150):\n\n            <div class=\"ai-resizer ai-resizer-br\"></div>\n            <div class=\"ai-resizer ai-resizer-bl\"></div>\n            <div class=\"ai-resizer ai-resizer-tr\"></div>\n            <div class=\"ai-resizer ai-resizer-tl\"></div>\n\n            <!-- Sidebar for Recent Chats -->\n            <div class=\"ai-history-sidebar\" id=\"aiHistorySidebar\">\n                <div class=\"history-header\">\n                    <span style=\"font-weight: bold; font-size: 14px; letter-spacing: 0.5px;\">Recent Chats</span>\n                    <span onclick=\"toggleHistory()\" style=\"cursor: pointer; opacity: 0.7;\">✕</span>\n                </div>\n                <div id=\"historyList\" style=\"flex-grow: 1; overflow-y: auto;\">\n                    <!-- Chats injected here -->\n                </div>\n            </div>\n\n            <!-- Main Chat Area -->\n            <div class=\"ai-main-content\">\n                <div class=\"ai-header\">\n                    <div class=\"ai-header-title\">\n                        <span onclick=\"toggleHistory()\" style=\"cursor: pointer; font-size: 20px; color: #afb1b3;\" title=\"History\">🕒</span>\n                        <span style=\"letter-spacing: 0.5px;\">Agent / العقل المدبر</span>\n                    </div>\n                    <div class=\"ai-header-actions\">\n                        <span onclick=\"createNewChat()\" title=\"New Chat\" style=\"font-size: 22px;\">＋</span>\n                        <span title=\"Settings\" onclick=\"resetGeminiKey()\">⋮</span>\n                        <span onclick=\"toggleAiChat()\">—</span>\n                    </div>\n                </div>\n\n                <div class=\"ai-messages\" id=\"aiMessages\">\n                    <div class=\"msg ai\">\n                        أهلاً بك في <b>VSA Academy</b>! أنا العقل المدبر. كيف يمكنني مساعدتك اليوم؟\n                    </div>\n                </div>\n\n                <!-- Previews for Images/Files -->\n                <div id=\"imagePreviewContainer\" style=\"display: none; padding: 10px 15px; background: #2b2d30; border-top: 1px solid #3c3f41; align-items: center; gap: 12px;\">\n                    <div id=\"fileIconPreview\" style=\"font-size: 26px;\"></div>\n                    <img id=\"imagePreview\" src=\"\" style=\"height: 45px; border-radius: 6px; border: 2px solid #3574f0; display: none; object-fit: cover;\">\n                    <div id=\"fileNamePreview\" style=\"font-size: 12px; color: #afb1b3; flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500;\"></div>\n                    <span style=\"color: #ff5555; cursor: pointer; font-size: 18px; font-weight: bold;\" onclick=\"clearSelectedFile()\">✕</span>\n                </div>\n\n                <div class=\"ai-input-container\">\n                    <div class=\"ai-input-wrapper\">\n                        <div class=\"ai-input-row\">\n                            <input type=\"text\" id=\"aiInput\" placeholder=\"Ask AI...\" oninput=\"updateSendButtonState()\" onkeydown=\"if(event.key === 'Enter') sendAiMessage()\">\n                        </div>\n                        <div class=\"ai-input-footer\">\n                            <div class=\"ai-footer-icons\">\n                                <span onclick=\"document.getElementById('fileInput').click()\" title=\"Attach PDF, JSON, Video, Image\" style=\"font-size: 20px;\">⊞</span>\n                                <span title=\"Safety Protocol Active\" style=\"color: #4db6ac; font-size: 16px;\">🛡️</span>\n                                <div class=\"model-selector-container\">\n                                    <select id=\"modelSelector\" onchange=\"saveModelSelection()\" title=\"AI Model\">\n                                        <option value=\"gemini-3.7-flash\">Gemini 3.7 Flash (Stable - v1)</option>\n                                        <option value=\"gemini-3.1-pro-preview\">Gemini 3.1 Pro (Preview - v1beta)</option>\n                                        <option value=\"gemini-3.1-flash-lite\">Gemini 3.1 Flash-Lite (Stable - v1)</option>\n                                        <option value=\"gemini-2.0-flash-exp\">Gemini 2.0 Flash Exp (v1beta)</option>\n                                    </select>\n                                </div>\n                            </div>\n                            <button class=\"ai-send-btn-new\" id=\"aiSendBtn\" onclick=\"sendAiMessage()\">\n                                <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M2.01 21L23 12 2.01 3 2 10l15 2-15 2z\"/></svg>\n                            </button>\n                        </div>\n                        <input type=\"file\" id=\"fileInput\" style=\"display: none;\" onchange=\"handleFileUpload(event)\">\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <script>\n        let allData = [];\n        let isDataLoaded = false;\n\n        const grid = document.getElementById('mainGrid');\n        const searchInput = document.getElementById('globalSearch');\n        const pageTitle = document.getElementById('pageTitle');\n        const statusMsg = document.getElementById('statusMsg');\n\n        // مصفوفة تتبع تاريخ ومسار التنقل داخل الـ Modal\n        let modalHistory = [];\n        let modalHistoryIndex = -1;\n\n        // المتغير العام لحفظ البطاقة التي تحتوي على thematic_index الأصلي\n        let originalThematicItem = null;\n\n        function modalGoBack() {\n            if (modalHistoryIndex > 0) {\n                modalHistoryIndex--;\n                openDetails(modalHistory[modalHistoryIndex], true);\n            }\n        }\n\n        function modalGoForward() {\n            if (modalHistoryIndex < modalHistory.length - 1) {\n                modalHistoryIndex++;\n                openDetails(modalHistory[modalHistoryIndex], true);\n            }"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "رسالة الخطأ `⚠️ لا يوجد رد من المحرك (Response empty)` تعني أن طلبك وصل إلى خوادم جوجل، ولكن الرد الذي عاد كان فارغاً أو غير قابل للتحليل (Parsing Error). هذا يحدث غالباً بسبب **عدم توافق إصدار الـ API مع النموذج المختار**، أو بسبب **تجاوز حد الـ Tokens** في السياق (Context Window).\n\nبصفتي \"العقل المدبر\"، قمت بتحليل الكود الخاص بك ووجدت أنك تستخدم `apiVersion` ثابت في دالة `callGemini` لا يتناسب مع النماذج الحديثة (مثل `gemini-3.7-flash` أو `gemini-2.0-flash-exp`).\n\n### الإصلاح الجراحي (Evolution Engine):\n\nسأقوم بتحديث دالة `callGemini` لتكون ديناميكية في اختيار إصدار الـ API بناءً على النموذج، مما يمنع حدوث خطأ \"الرد الفارغ\".\n\n**استخدم `patchSystem` لتحديث الكود:**\n\n```javascript\n// النص القديم (الذي يسبب المشكلة):\nconst apiVersion = modelApiMap[modelName] || 'v1';\nconst url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}`;\n\n// النص الجديد (المصحح):\n// تحديث منطق الإصدار لضمان التوافق التام مع نماذج 2026\nconst apiVersion = (modelName.includes('exp') || modelName.includes('preview')) ? 'v1beta' : 'v1';\nconst url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}`;\n```\n\n### لماذا سيحل هذا المشكلة؟\n1.  **التوافق:** نماذج `exp` (Experimental) و `preview` تتطلب دائماً `v1beta` في مسار الـ API. الكود القديم كان يحاول أحياناً استخدام `v1` معها، مما يجعل جوجل تعيد رداً فارغاً أو خطأً صامتاً.\n2.  **الاستقرار:** النماذج المستقرة (`Stable`) ستستخدم الآن `v1` بشكل صارم، مما يقلل من احتمالية حدوث أخطاء في معالجة الطلبات.\n\n**هل تريد مني تنفيذ هذا التعديل مباشرة على ملف `index.html` باستخدام `githubAction`؟** (أنا جاهز للتنفيذ فور إعطائي الإشارة).",
+              "thoughtSignature": "EnEKbwERTTIPQyfKwdv6uPnU6eAYCEiriRldfHecsaN2fGG8bQKToFJf1ELbnh9k5FCoEw+KP3f3Ug0KQb15TNtdJ1DthZ7fk+KXNv7Leyrt9sSikq/CI5B5ohuV7vaE+f75aBBj/w3rJkz+G3FTuZ+J5w=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1787335468726",
-  "timestamp": "2026-08-21T18:12:00.639Z"
+  "timestamp": "2026-08-21T18:12:48.987Z"
 }
