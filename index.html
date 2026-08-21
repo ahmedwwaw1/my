@@ -3852,6 +3852,132 @@
         </div>
     </div>
 
+    <div id="emergencyOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:100000; color:white; font-family:sans-serif; direction:rtl; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(10px);">
+        <div style="background:#121212; border:2px solid #ff3d00; padding:30px; border-radius:15px; max-width:500px; text-align:center; box-shadow:0 0 30px rgba(255,61,0,0.4);">
+            <div style="font-size:50px; margin-bottom:10px;">🚨</div>
+            <h2 style="color:#ff3d00; margin:0 0 15px 0;">لوحة إصلاح الطوارئ</h2>
+            <p style="color:#ccc; font-size:15px;">تم استدعاء هذا النظام لتجاوز عطل في الواجهة الأساسية أو خطأ برمي حرج.</p>
+
+            <div id="emergencyStatus" style="margin:20px 0; padding:15px; background:rgba(255,61,0,0.1); border-radius:8px; color:#ff8a50; font-size:14px; min-height:40px; border:1px solid rgba(255,61,0,0.2);">
+                الحالة: جاهز لتنفيذ أوامر الإنقاذ...
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <button onclick="emergencyRepair()" style="background:#ff3d00; color:white; border:none; padding:15px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:16px; transition:0.3s;" onmouseover="this.style.background='#ff6333'" onmouseout="this.style.background='#ff3d00'">
+                    🛠️ إصلاح الموقع فوراً (استعادة النسخة السليمة)
+                </button>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <button onclick="location.reload()" style="background:#333; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">🔄 إعادة تحميل</button>
+                    <button onclick="document.getElementById('emergencyOverlay').style.display='none'" style="background:#222; color:#777; border:none; padding:10px; border-radius:8px; cursor:pointer;">إغلاق اللوحة</button>
+                </div>
+            </div>
+
+            <div style="margin-top:25px; font-size:12px; color:#444; border-top:1px solid #222; padding-top:15px;">
+                يمكنك فتح هذه اللوحة دائماً عبر: <span style="color:#888; background:#222; padding:2px 6px; border-radius:4px;">Ctrl + Shift + E</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🚨 نظام الإنقاذ المستقل (Independent Emergency Core)
+        (function() {
+            const overlay = document.getElementById('emergencyOverlay');
+            const status = document.getElementById('emergencyStatus');
+
+            // 1. التشغيل التلقائي عند اكتشاف انهيار (بعد 5 ثوان من عدم استجابة الصفحة)
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    if (!document.body.innerHTML.includes('ai-widget') || typeof allData === 'undefined') {
+                        showEmergencyUI("تنبيه: تم اكتشاف فشل في تحميل مكونات النظام الأساسية.");
+                    }
+                }, 5000);
+            });
+
+            // 2. مراقبة الأخطاء القاتلة
+            window.onerror = function(msg, url, lineNo, columnNo, error) {
+                if (performance.now() < 10000) { // فقط في أول 10 ثوان
+                    showEmergencyUI("خطأ برمي حرج: " + msg);
+                }
+                return false;
+            };
+
+            // 3. اختصار لوحة المفاتيح
+            window.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.shiftKey && e.code === 'KeyE') {
+                    e.preventDefault();
+                    showEmergencyUI("وضع الإصلاح اليدوي مفعل.");
+                }
+            });
+
+            function showEmergencyUI(msg) {
+                overlay.style.display = 'flex';
+                status.innerText = "🚨 " + msg;
+            }
+
+            window.emergencyRepair = async function() {
+                status.innerText = "⏳ جاري الاتصال بـ GitHub ومزامنة التوكن...";
+                try {
+                    const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
+                    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
+
+                    const res = await fetch(`${SUPABASE_URL}/rest/v1/secret_settings?id=eq.github_token`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    });
+                    const data = await res.json();
+                    const token = data.length > 0 ? data[0].secret_value.trim().replace(/^['"]|['"]$/g, '') : null;
+
+                    if (!token) throw new Error("لم يتم العثور على GitHub Token. يرجى إدخاله يدوياً.");
+
+                    status.innerText = "🔍 جاري البحث عن آخر نسخة سليمة (Rollback point)...";
+
+                    const commitsRes = await fetch(`https://api.github.com/repos/ahmedwwaw1/my/commits?path=index.html&per_page=5`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const commits = await commitsRes.json();
+
+                    if (commits.length < 2) throw new Error("لا توجد نسخ سابقة للعودة إليها.");
+
+                    const prevCommitSha = commits[1].sha;
+                    status.innerText = `📦 تم العثور على نسخة سليمة (${prevCommitSha.substring(0,7)}). جاري الاستعادة...`;
+
+                    const contentRes = await fetch(`https://api.github.com/repos/ahmedwwaw1/my/contents/index.html?ref=${prevCommitSha}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const contentData = await contentRes.json();
+                    const safeContent = decodeURIComponent(escape(atob(contentData.content)));
+
+                    status.innerText = "🚀 جاري إعادة الكتابة على GitHub... يرجى الانتظار.";
+
+                    const currentFileRes = await fetch(`https://api.github.com/repos/ahmedwwaw1/my/contents/index.html`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const currentFileData = await currentFileRes.json();
+
+                    const finalUpdate = await fetch(`https://api.github.com/repos/ahmedwwaw1/my/contents/index.html`, {
+                        method: 'PUT',
+                        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            message: "🚨 استعادة الطوارئ: العودة لآخر نسخة سليمة قبل العطل",
+                            content: btoa(unescape(encodeURIComponent(safeContent))),
+                            sha: currentFileData.sha
+                        })
+                    });
+
+                    if (finalUpdate.ok) {
+                        status.innerText = "✅ تمت عملية الإصلاح بنجاح! سيتم إعادة تشغيل الموقع الآن...";
+                        setTimeout(() => window.location.reload(), 2000);
+                    } else {
+                        throw new Error("فشل تحديث الملف. تأكد من صلاحيات التوكن.");
+                    }
+
+                } catch (err) {
+                    status.innerText = `❌ خطأ في الإصلاح: ${err.message}`;
+                    status.style.color = "#ff3d00";
+                }
+            };
+        })();
+    </script>
 </body>
 
 </html>
