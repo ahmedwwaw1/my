@@ -1102,10 +1102,10 @@
                                 <span title="Safety Protocol Active" style="color: #4db6ac; font-size: 16px;">🛡️</span>
                                 <div class="model-selector-container">
                                     <select id="modelSelector" onchange="saveModelSelection()" title="AI Model">
-                                        <option value="gemini-2.0-flash">Gemini 2.0 Flash (الأحدث)</option>
-                                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (سريع)</option>
-                                        <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash-8B (خفيف)</option>
-                                        <option value="gemini-1.5-pro">Gemini 1.5 Pro (قوي)</option>
+                                        <option value="gemini-3.7-flash">Gemini 3.7 Flash (الأحدث)</option>
+                                        <option value="gemini-3.1-pro">Gemini 3.1 Pro (مستقر)</option>
+                                        <option value="gemini-2.5-flash">Gemini 2.5 Flash (سريع)</option>
+                                        <option value="gemini-2.5-pro">Gemini 2.5 Pro (قوي)</option>
                                     </select>
                                 </div>
                             </div>
@@ -3349,13 +3349,13 @@
             const key = geminiApiKey.trim();
             const userModel = document.getElementById('modelSelector').value;
 
-            // قائمة النماذج المعتمدة رسمياً من جوجل
+            // قائمة النماذج المعتمدة رسمياً من جوجل لعام 2026
             const modelNames = [
                 userModel,
-                'gemini-2.0-flash',
-                'gemini-1.5-flash',
-                'gemini-1.5-flash-8b',
-                'gemini-1.5-pro'
+                'gemini-3.7-flash',
+                'gemini-3.1-pro',
+                'gemini-2.5-flash',
+                'gemini-2.5-pro'
             ].filter((v, i, a) => a.indexOf(v) === i);
 
             if (!key || key.length < 10) {
