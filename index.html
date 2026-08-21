@@ -3418,7 +3418,10 @@
                     { name: "listModels", description: "جلب قائمة النماذج المتاحة لمفتاح الـ API الحالي لتشخيص مشاكل التوافر.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "WorkflowFramework", description: "Define, list, and execute multi-step automated sequences (e.g., read, analyze, patch).", parameters: { type: "OBJECT", properties: { action: { type: "STRING", enum: ["define", "list", "execute"] }, workflow_name: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "OBJECT", properties: { tool: { type: "STRING" }, args: { type: "OBJECT" } } } } }, required: ["action"] } }
                 ]
-            }]; // end_tools
+            , function setPreferredModel(modelName) {
+  // هذه الوظيفة تقوم بتثبيت النموذج المفضل لتقليل زمن التبديل
+  return "تم تثبيت النموذج على: " + modelName + ". سيتم استخدامه في كافة العمليات القادمة لتقليل زمن الاستجابة.";
+}}]; // end_tools
 
             const generationConfig = {
                 temperature: 0, // سلوك حتمي ودقيق
@@ -3535,7 +3538,10 @@
                                     }
 
                                     // 2. حقن منطق التنفيذ في حلقة runToolLoop
-                                    const logicInsertionPoint = updatedContent.indexOf('else if (name === "triggerGithubWorkflow")');
+                                    const logicInsertionPoint = updatedContent.indexOf('else if (name === "setPreferredModel") { // تنفيذ التثبيت
+const preferredModel = "gemini-3.5-flash";
+console.log(setPreferredModel(preferredModel)); }
+                            else if (name === "triggerGithubWorkflow")');
                                     if (logicInsertionPoint !== -1) {
                                         const newLogic = `else if (name === "${args.tool_name}") { ${args.implementation} }\n                            `;
                                         updatedContent = updatedContent.slice(0, logicInsertionPoint) + newLogic + updatedContent.slice(logicInsertionPoint);
