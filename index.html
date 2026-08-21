@@ -2717,14 +2717,6 @@
                 initResizer();
 
                 if (!geminiApiKey) await resetGeminiKey();
-
-                // 🚀 استئناف تلقائي وصامت للمهام المنقطعة (بدون شريط أصفر)
-                const pending = localStorage.getItem('gemini_pending_history');
-                const isWorking = document.getElementById('aiSendBtn').classList.contains('working');
-                if (pending && !isWorking) {
-                    console.log("🚀 استئناف تلقائي للمهمة المعلقة...");
-                    resumePendingTask();
-                }
             }
         }
 
@@ -2991,6 +2983,16 @@
         // تهيئة المفاتيح والسياق عند تحميل الصفحة
         window.addEventListener('load', () => {
             loadChatFromStorage();
+
+            // 🚀 استئناف العمل التلقائي فور دخول الموقع (حتى والنافذة مغلقة)
+            setTimeout(() => {
+                const pending = localStorage.getItem('gemini_pending_history');
+                const sendBtn = document.getElementById('aiSendBtn');
+                if (pending && sendBtn && !sendBtn.classList.contains('working')) {
+                    console.log("🤖 المحرك المستقل: تم اكتشاف مهمة معلقة، بدء التنفيذ في الخلفية...");
+                    resumePendingTask();
+                }
+            }, 2000);
 
             // ⏰ تشغيل العداد الزمني (Live Clock)
             setInterval(() => {
