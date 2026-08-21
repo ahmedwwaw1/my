@@ -2790,12 +2790,28 @@
 
         async function githubAction(path, content, message) {
             try {
-                // 🛡️ فحص السلامة الهيكلية لمنع تعطل الموقع (Structural Integrity Check)
-                if (path.endsWith('.html')) {
+                // 🛡️ درع الحماية الثلاثي: فحص التوازن البرمجي (Syntax Balancer)
+                function validateCode(code) {
+                    const stack = [];
+                    const pairs = { '(': ')', '{': '}', '[': ']' };
+                    for (let char of code) {
+                        if (pairs[char]) stack.push(pairs[char]);
+                        else if (char === ')' || char === '}' || char === ']') {
+                            if (stack.pop() !== char) return false;
+                        }
+                    }
+                    return stack.length === 0;
+                }
+
+                if (path.endsWith('.html') || path.endsWith('.js')) {
+                    // 1. فحص الأقواس والتوازن
+                    if (!validateCode(content)) {
+                        return "❌ فشل بروتوكول الأمان: تم اكتشاف أقواس غير متوازنة (قوس ناقص). تم إلغاء الحفظ لحماية الموقع.";
+                    }
+                    // 2. فحص الهيكل الأساسي
                     const isComplete = content.includes('</html>') && content.includes('</body>');
                     if (!isComplete) {
-                        console.error("🛡️ رفض الحفظ: الكود المولد ناقص. تم تفعيل بروتوكول الحماية.");
-                        return "❌ فشل بروتوكول الأمان: الكود المولد يبدو ناقصاً (نهاية الملف مفقودة). تم إلغاء العملية لمنع تعطل الموقع. يرجى الطلب من العقل المدبر إعادة المحاولة.";
+                        return "❌ فشل بروتوكول الأمان: نهاية الملف مفقودة. تم إلغاء الحفظ.";
                     }
                 }
 
@@ -2882,6 +2898,7 @@
                 const globalContext = {
                     sessions: chatSessions,
                     activeSessionId: currentSessionId,
+                    pendingHistory: localStorage.getItem('gemini_pending_history'), // مزامنة المهمة المعلقة للسحاب
                     timestamp: new Date().toISOString()
                 };
                 await githubAction(CHAT_LOG_PATH, JSON.stringify(globalContext, null, 2), "تحديث الذاكرة الشاملة للعقل المدبر");
@@ -2930,6 +2947,12 @@
                         if (content.sessions) {
                             chatSessions = content.sessions;
                             currentSessionId = content.activeSessionId || currentSessionId;
+
+                            // استرداد المهمة المعلقة من السحاب في حال ضياع الذاكرة المحلية
+                            if (content.pendingHistory) {
+                                localStorage.setItem('gemini_pending_history', content.pendingHistory);
+                            }
+
                             localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
                             localStorage.setItem('gemini_current_session', currentSessionId);
 
@@ -3471,6 +3494,15 @@
             async function runToolLoop(history, activeModel = null, retryModels = []) {
                 // 💾 حفظ حالة المحادثة الحالية للاسترداد عند الانقطاع
                 localStorage.setItem('gemini_pending_history', JSON.stringify(history));
+
+                // 🔄 إذا فشلت جميع النماذج، انتظر ثم أعد المحاولة من البداية (Deep Retry)
+                if (retryModels.length >= modelNames.length) {
+                    console.log("🔄 جميع النماذج وصلت لحد الاستخدام. بدء دورة الانتظار العميقة...");
+                    addMessageToUi('ai', `⏳ جميع النماذج مشغولة حالياً. سأنتظر 30 ثانية ثم أعيد المحاولة تلقائياً لتكملة المهمة...`, 'System');
+                    await new Promise(r => setTimeout(r, 30000));
+                    return await runToolLoop(history, null, []); // إعادة المحاولة من الصفر
+                }
+
                 // استخدام قائمة الموديلات المتاحة مع استثناء الموديلات التي فشلت سابقاً في هذه الدورة
                 const modelsToTry = activeModel ? [activeModel, ...modelNames.filter(m => m !== activeModel && !retryModels.includes(m))] : modelNames;
 
@@ -3523,7 +3555,12 @@
                         const textPart = parts.find(p => p.text);
                         const thought = textPart ? textPart.text : null;
 
-                        if (!part && !textPart) return { text: "⚠️ لا يوجد رد من المحرك (Response empty).", model: modelName };
+                        // 🛡️ معالجة الرد الفارغ كحالة فشل تتطلب إعادة المحاولة (Retryable)
+                        if (!part && !textPart) {
+                            console.warn(`⚠️ رد فارغ من ${modelName}. محاولة نموذج آخر...`);
+                            retryModels.push(modelName);
+                            continue;
+                        }
 
                         if (part && part.functionCall) {
                             const { name, args } = part.functionCall;
