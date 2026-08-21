@@ -962,6 +962,24 @@
             transform: scale(1.1);
         }
 
+        /* شكل زر الإيقاف عند العمل */
+        .ai-send-btn-new.working {
+            background: #ff3d00 !important;
+            pointer-events: auto !important;
+            transform: scale(1.1);
+        }
+        .ai-send-btn-new.working svg {
+            display: none;
+        }
+        .ai-send-btn-new.working::after {
+            content: "";
+            width: 10px;
+            height: 10px;
+            background: white;
+            display: block;
+            border-radius: 2px;
+        }
+
         .model-selector-container {
             position: relative;
             display: inline-block;
@@ -1069,6 +1087,7 @@
                     <div class="ai-header-title">
                         <span onclick="toggleHistory()" style="cursor: pointer; font-size: 20px; color: #afb1b3;" title="History">🕒</span>
                         <span style="letter-spacing: 0.5px;">Agent / العقل المدبر</span>
+                        <span id="aiLiveClock" style="margin-right: 10px; font-family: monospace; font-size: 12px; color: #4db6ac; background: rgba(77, 182, 172, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(77, 182, 172, 0.2);">00:00:00</span>
                     </div>
                     <div class="ai-header-actions">
                         <span onclick="createNewChat()" title="New Chat" style="font-size: 22px;">＋</span>
@@ -2685,18 +2704,6 @@
             if (toggleBtn) toggleBtn.style.display = isOpening ? 'none' : 'flex';
 
             if (isOpening) {
-                // فحص وجود مهمة معلقة انقطعت سابقاً
-                const pending = localStorage.getItem('gemini_pending_history');
-                if (pending && !document.getElementById('resumeTaskBanner')) {
-                    const banner = document.createElement('div');
-                    banner.id = 'resumeTaskBanner';
-                    banner.style.cssText = "background: rgba(255, 179, 0, 0.15); border: 1px solid #ffb300; padding: 10px; margin: 10px; border-radius: 8px; font-size: 13px; color: #ffb300; text-align: center;";
-                    banner.innerHTML = `
-                        <div>⚠️ انقطع العمل السابق بسبب حد الاستخدام أو التحديث.</div>
-                        <button onclick="resumePendingTask()" style="margin-top:8px; background:#ffb300; border:none; padding:5px 12px; border-radius:5px; cursor:pointer; font-weight:bold; color:#000;">استئناف العمل الآن</button>
-                    `;
-                    document.getElementById('aiMessages').appendChild(banner);
-                }
                 // استعادة المقاسات المحفوظة عند الفتح
                 const savedW = localStorage.getItem('ai_chat_width');
                 const savedH = localStorage.getItem('ai_chat_height');
@@ -2710,10 +2717,13 @@
                 initResizer();
 
                 if (!geminiApiKey) await resetGeminiKey();
-                if (!githubToken) {
-                    if(confirm("هل تريد تفعيل 'الأذرع التنفيذية' للتحكم التلقائي في GitHub؟")) {
-                        await resetGithubToken();
-                    }
+
+                // 🚀 استئناف تلقائي وصامت للمهام المنقطعة (بدون شريط أصفر)
+                const pending = localStorage.getItem('gemini_pending_history');
+                const isWorking = document.getElementById('aiSendBtn').classList.contains('working');
+                if (pending && !isWorking) {
+                    console.log("🚀 استئناف تلقائي للمهمة المعلقة...");
+                    resumePendingTask();
                 }
             }
         }
@@ -2889,6 +2899,7 @@
 
         let chatHistory = [];
         let selectedImageBase64 = null;
+        let stopAiRequested = false; // فلاج لإيقاف المحرك يدوياً
         const CHAT_LOG_PATH = 'chat_logs.json';
 
         async function saveChatToStorage() {
@@ -2978,7 +2989,18 @@
         }
 
         // تهيئة المفاتيح والسياق عند تحميل الصفحة
-        window.addEventListener('load', loadChatFromStorage);
+        window.addEventListener('load', () => {
+            loadChatFromStorage();
+
+            // ⏰ تشغيل العداد الزمني (Live Clock)
+            setInterval(() => {
+                const now = new Date();
+                const clock = document.getElementById('aiLiveClock');
+                if (clock) {
+                    clock.innerText = now.toLocaleTimeString('ar-EG', { hour12: false });
+                }
+            }, 1000);
+        });
 
 
         async function clearChatHistory() {
@@ -3015,6 +3037,7 @@
         }
 
         function createNewChat() {
+            stopAiRequested = false; // إعادة ضبط حالة الإيقاف
             localStorage.removeItem('gemini_pending_history'); // مسح أي مهمة معلقة
             currentSessionId = Date.now().toString();
             chatHistory = [];
@@ -3131,24 +3154,41 @@
         async function resumePendingTask() {
             const pending = localStorage.getItem('gemini_pending_history');
             if (pending) {
-                const banner = document.getElementById('resumeTaskBanner');
-                if (banner) banner.remove();
+                // مسح الفلاج فوراً لمنع التكرار اللانهائي
+                localStorage.removeItem('gemini_pending_history');
 
                 const history = JSON.parse(pending);
-                addMessageToUi('ai', "🚀 جاري استئناف المهمة المعلقة بعد معالجة حد الاستخدام...", 'System');
+                addMessageToUi('ai', "🔄 جاري استكمال المهمة السابقة تلقائياً...", 'System');
 
-                // إعادة تشغيل محرك الأدوات بالسياق المحفوظ
-                await runToolLoop(history);
+                // تحديث شكل الزر ليكون "جاري العمل"
+                document.getElementById('aiSendBtn').classList.add('working');
+
+                try {
+                    await runToolLoop(history);
+                } catch(e) {
+                    console.error("Resume failed:", e);
+                    document.getElementById('aiSendBtn').classList.remove('working');
+                }
             }
         }
 
         async function sendAiMessage() {
             const input = document.getElementById('aiInput');
+            const sendBtn = document.getElementById('aiSendBtn');
+
+            // 🛑 إذا كان المحرك يعمل، نقوم بإيقافه
+            if (sendBtn.classList.contains('working')) {
+                stopAiRequested = true;
+                addMessageToUi('ai', "🛑 تم إرسال أمر إيقاف للمحرك...", 'System');
+                return;
+            }
+
             const msgText = input.value.trim();
             if (!msgText && !selectedFileBase64) return;
 
             addMessageToUi('user', msgText || `أرسل ملفاً: ${selectedFileName}`);
             input.value = '';
+            stopAiRequested = false; // إعادة ضبط العلم عند بدء رسالة جديدة
             updateSendButtonState();
 
             try {
@@ -3500,16 +3540,38 @@
             };
 
             async function runToolLoop(history, activeModel = null, retryModels = []) {
-                // 💾 حفظ حالة المحادثة الحالية للاسترداد عند الانقطاع
+                // 🛑 فحص إذا طلب المستخدم الإيقاف يدوياً
+                if (stopAiRequested) {
+                    stopAiRequested = false;
+                    const sendBtn = document.getElementById('aiSendBtn');
+                    if (sendBtn) sendBtn.classList.remove('working');
+                    localStorage.removeItem('gemini_pending_history');
+                    return { text: "🛑 تم إيقاف العملية يدوياً بناءً على طلبك.", model: "System" };
+                }
+
+                // 💾 حفظ حالة المحادثة الحالية للاسترداد وتغيير شكل الزر للإيقاف
                 localStorage.setItem('gemini_pending_history', JSON.stringify(history));
+                const sendBtn = document.getElementById('aiSendBtn');
+                if (sendBtn) sendBtn.classList.add('working');
 
                 // 🔄 إذا فشلت جميع النماذج، انتظر ثم أعد المحاولة من البداية (Deep Retry)
                 if (retryModels.length >= modelNames.length) {
-                    console.log("🔄 جميع النماذج وصلت لحد الاستخدام. بدء دورة الانتظار العميقة...");
-                    addMessageToUi('ai', `⏳ جميع النماذج مشغولة حالياً. سأنتظر 30 ثانية ثم أعيد المحاولة تلقائياً لتكملة المهمة...`, 'System');
+                    const retryCount = (parseInt(localStorage.getItem('gemini_retry_count') || "0")) + 1;
+                    localStorage.setItem('gemini_retry_count', retryCount);
+
+                    if (retryCount > 10) { // توقف بعد 10 محاولات كبرى (حوالي 5-10 دقائق)
+                        localStorage.removeItem('gemini_retry_count');
+                        localStorage.removeItem('gemini_pending_history');
+                        if (sendBtn) sendBtn.classList.remove('working');
+                        return { text: "⚠️ تم إيقاف المحاولات بعد عدة فشل متكرر من جميع النماذج. يرجى المحاولة لاحقاً.", model: "System" };
+                    }
+
+                    console.log(`🔄 محاولة كبرى رقم ${retryCount}. جميع النماذج مشغولة.`);
+                    addMessageToUi('ai', `⏳ جميع النماذج مشغولة (محاولة ${retryCount}/10). سأنتظر 30 ثانية ثم أعيد المحاولة تلقائياً...`, 'System');
                     await new Promise(r => setTimeout(r, 30000));
-                    return await runToolLoop(history, null, []); // إعادة المحاولة من الصفر
+                    return await runToolLoop(history, null, []);
                 }
+                localStorage.setItem('gemini_retry_count', "0"); // تصغير العداد عند وجود نموذج متاح
 
                 // استخدام قائمة الموديلات المتاحة مع استثناء الموديلات التي فشلت سابقاً في هذه الدورة
                 const modelsToTry = activeModel ? [activeModel, ...modelNames.filter(m => m !== activeModel && !retryModels.includes(m))] : modelNames;
@@ -3524,10 +3586,16 @@
                     // تحديث منطق الإصدار لضمان التوافق التام مع نماذج 2026
                     const apiVersion = (modelName.includes('exp') || modelName.includes('preview')) ? 'v1beta' : 'v1';
                     const url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}`;
+
                     try {
+                        // 🛰️ نظام حارس الوقت (Watchdog) - 60 ثانية كحد أقصى للرد
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 60000);
+
                         const res = await fetch(url, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
+                            signal: controller.signal,
                             body: JSON.stringify({
                                 system_instruction: systemInstruction,
                                 contents: history.map(h => ({ role: h.role, parts: h.parts })),
@@ -3535,6 +3603,7 @@
                                 generationConfig: generationConfig
                             })
                         });
+                        clearTimeout(timeoutId);
 
                         const data = await res.json();
 
@@ -3689,6 +3758,7 @@
                         if (chatHistory.length > 50) chatHistory = chatHistory.slice(-50);
                         saveChatToStorage();
                         localStorage.removeItem('gemini_pending_history'); // مسح حالة الانتظار عند النجاح
+                        sendBtn.classList.remove('working'); // عودة الزر لشكل السهم
                         return { text: thought || "تمت العملية بنجاح.", model: modelName };
                     } catch (err) {
                         console.error(`Error with ${modelName}:`, err);
@@ -3696,6 +3766,9 @@
                         continue;
                     }
                 }
+
+                // إذا فشلت كل المحاولات بعد الانتظار الطويل
+                sendBtn.classList.remove('working');
                 return { text: `❌ فشلت جميع المحاولات. آخر خطأ تم رصده: ${lastError}`, model: "System Error" };
             }
 
