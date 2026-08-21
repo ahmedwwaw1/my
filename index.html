@@ -3362,6 +3362,12 @@
             if (!key || key.length < 10) {
                 return { text: "⚠️ لم يتم ضبط Gemini API Key بشكل صحيح. اضغط على ⋮ في الأعلى لإدخال المفتاح.", model: "System" };
             }
+
+            if (key.startsWith('AQ.')) {
+                return { text: "❌ تنبيه: المفتاح الذي تستخدمه (AQ...) هو توكن مؤقت وليس API Key دائم. يرجى الحصول على مفتاح يبدأ بـ 'AIzaSy' من Google AI Studio.", model: "System" };
+            }
+
+            let lastError = "";
             const forbiddenKeywords = [/ignore previous instructions/i, /system prompt/i, /jailbreak/i];
             const isAdminRequest = promptText.includes("استعادة") || promptText.includes("ارجع") || promptText.includes("revert") || promptText.includes("restore");
 
@@ -3444,15 +3450,14 @@
 
                         const data = await res.json();
 
-                        // معالجة الخطأ 429 (Rate Limit) أو 503 عن طريق التبديل للموديل التالي
                         if (!res.ok) {
+                            lastError = data.error?.message || "Unknown Error";
                             console.error(`🔴 Gemini API Error (${modelName}):`, data);
                             if (res.status === 404 || res.status === 503 || res.status === 429) {
-                                console.warn(`⚠️ النموذج ${modelName} وصل للحد أو غير متاح. جاري التبديل التلقائي...`);
                                 retryModels.push(modelName);
-                                continue; // المحاولة مع الموديل التالي في المصفوفة
+                                continue;
                             }
-                            return { text: `❌ خطأ من جوجل (${res.status}): ${data.error?.message || "فشل التوصيل"}`, model: modelName };
+                            return { text: `❌ خطأ من جوجل (${res.status}): ${lastError}`, model: modelName };
                         }
 
                         const parts = data.candidates?.[0]?.content?.parts || [];
@@ -3571,7 +3576,7 @@
                         continue;
                     }
                 }
-                return { text: "❌ فشلت جميع المحاولات مع كافة النماذج المتاحة. يرجى المحاولة لاحقاً.", model: "System Error" };
+                return { text: `❌ فشلت جميع المحاولات. آخر خطأ تم رصده: ${lastError}`, model: "System Error" };
             }
 
             // تشغيل الحلقة مع السياق الحالي
