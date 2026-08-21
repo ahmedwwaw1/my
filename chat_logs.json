@@ -1,48 +1,5 @@
 {
-  "sessions": [
-    {
-      "id": "1787334310847",
-      "title": "أنا في انتظار استكمال سؤالك. ت...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك. أنا العقل المدبر (Mastermind) في أكاديمية VSA.\n\nأنا في حالة استعداد تام للعمليات البرمجية، التحليل التقني، أو تطوير الأنظمة. ما هي المهمة المطلوبة حالياً؟",
-              "thoughtSignature": "EnEKbwERTTIPhKHzntowpO6s3VfmQBo7PZHW73GYyRvo7juo/Bm1BvcxVK3XYTD9PlfTI5mJkMgDA0phg+IuXdmK/unfnFv7do2Y1Uenut1DftWEKtr+k1PILSfWrexELxIqCtOk+zXVOY31uvsVayRAbQ=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "هل"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أنا في انتظار استكمال سؤالك. تفضل بطرحه، وسأقوم بمعالجته فوراً وفقاً للبروتوكولات المحددة.",
-              "thoughtSignature": "EnEKbwERTTIPn8OSfFk/prtVxqCZu4+GXSwMPhgUcRX7/F19YjD/s5A52rruOS5vGz91U39lxSFDAAfiUmpMx3qo6m4j1aG3qR3wgdXyiYrnO41vMhXxAL9tIFgBSmKds9U8T4MZRjm/lhILA5NU77ILaA=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        }
-      ]
-    }
-  ],
-  "activeSessionId": "1787330386959",
-  "timestamp": "2026-08-21T18:04:18.735Z"
+  "sessions": [],
+  "activeSessionId": "1787335468726",
+  "timestamp": "2026-08-21T18:04:28.726Z"
 }
