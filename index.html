@@ -1102,9 +1102,10 @@
                                 <span title="Safety Protocol Active" style="color: #4db6ac; font-size: 16px;">🛡️</span>
                                 <div class="model-selector-container">
                                     <select id="modelSelector" onchange="saveModelSelection()" title="AI Model">
-                                        <option value="gemini-3.7-flash">Gemini 3.7 Flash (الأحدث والأقوى)</option>
-                                        <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro (موصى به للأدوات)</option>
-                                        <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (الأسرع)</option>
+                                        <option value="gemini-3.7-flash">Gemini 3.7 Flash (الأحدث)</option>
+                                        <option value="gemini-3.6-flash">Gemini 3.6 Flash (سريع)</option>
+                                        <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (خفيف)</option>
+                                        <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro (للمهام المعقدة)</option>
                                     </select>
                                 </div>
                             </div>
@@ -2921,10 +2922,12 @@
                         rebuildChatUi();
                         renderHistory();
                     }
-                    if (container.contains(syncBadge)) container.removeChild(syncBadge);
                 } catch (e) {
                     console.error("Error loading chat context:", e);
-                    if (container && syncBadge && container.contains(syncBadge)) container.removeChild(syncBadge);
+                } finally {
+                    if (container && syncBadge && container.contains(syncBadge)) {
+                        container.removeChild(syncBadge);
+                    }
                 }
             }
 
@@ -3347,10 +3350,11 @@
             const key = geminiApiKey.trim();
             const userModel = document.getElementById('modelSelector').value;
 
-            // قائمة النماذج المعتمدة رسمياً من جوجل لعام 2026 (المتوافقة مع الأدوات)
+            // قائمة النماذج المعتمدة رسمياً من جوجل لعام 2026 (استخدام v1beta لدعم كافة الميزات)
             const modelNames = [
                 userModel,
                 'gemini-3.7-flash',
+                'gemini-3.6-flash',
                 'gemini-3.1-pro-preview',
                 'gemini-3.5-flash-lite'
             ].filter((v, i, a) => a.indexOf(v) === i);
@@ -3427,7 +3431,8 @@
                 const modelsToTry = activeModel ? [activeModel, ...modelNames.filter(m => m !== activeModel && !retryModels.includes(m))] : modelNames;
 
                 for (const modelName of modelsToTry) {
-                    const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${key}`;
+                    // التبديل إلى إصدار v1beta لضمان دعم نماذج 3.1 و 3.6 و 3.7 والمعاينات (Previews)
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}`;
                     try {
                         const res = await fetch(url, {
                             method: 'POST',
