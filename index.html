@@ -3160,18 +3160,26 @@
                 addMessageToUi('ai', `🧠 جاري التفكير باستخدام ${document.getElementById('modelSelector').value}...`, 'System');
                 const result = await callGemini(finalPrompt, selectedFileBase64, selectedFileType);
 
-                // إزالة رسالة "جاري التفكير" قبل إضافة الرد الحقيقي
+                // إزالة رسالة "جاري التفكير"
                 const msgs = document.getElementById('aiMessages');
                 if (msgs.lastChild && msgs.lastChild.innerText.includes("جاري التفكير")) {
                     msgs.removeChild(msgs.lastChild);
                 }
 
-                addMessageToUi('ai', result.text, result.model);
+                // فحص إذا كان الرد يحتوي على خطأ في الـ API
+                if (result.text && result.text.includes("API_KEY_INVALID")) {
+                    addMessageToUi('ai', "❌ خطأ حرج: مفتاح Gemini API غير صالح أو منتهي الصلاحية. يرجى الضغط على النقاط الثلاث (⋮) في الأعلى وإدخال مفتاح جديد.", 'System');
+                } else if (result.text && result.text.includes("quota")) {
+                    addMessageToUi('ai', "⚠️ تم استهلاك حصة الاستخدام المجانية بالكامل. يرجى الانتظار قليلاً أو استخدام مفتاح API آخر.", 'System');
+                } else {
+                    addMessageToUi('ai', result.text, result.model);
+                }
+
                 clearSelectedFile();
                 updateSessions();
             } catch (err) {
                 console.error("Chat Error:", err);
-                addMessageToUi('ai', "⚠️ فشل في معالجة الطلب. تأكد من اتصالك بالإنترنت وصحة المفاتيح.");
+                addMessageToUi('ai', "⚠️ عطل فني: تعذر الاتصال بمحرك الذكاء الاصطناعي. تأكد من أن مفتاح الـ API صحيح ومن اتصال الإنترنت.");
             }
         }
 
