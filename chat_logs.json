@@ -1,5 +1,30 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1787340016175",
+      "title": "أهلاً بك. أنا \"العقل المدبر\" (...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. أنا \"العقل المدبر\" (Mastermind)، جاهز للعمليات التقنية والتطويرية.\n\nكيف يمكنني مساعدتك في إدارة المستودع أو تنفيذ المهام البرمجية اليوم؟",
+              "thoughtSignature": "EnEKbwERTTIPPn0sxox99ZS4LRJZpDkN5y2rma7a9NriQfnAD+DYK6IXllu9lbmqzzaZbcxGSoKP+zX4rkZvK02LSBl5503+3LPSa2/KQm3tEuvS7NZp5ahNlLbg9kflfoHpY86t9tv4O9HHqqkNJVHaeg=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1787340016175",
-  "timestamp": "2026-08-21T19:20:27.920Z"
+  "timestamp": "2026-08-21T19:22:33.894Z"
 }
