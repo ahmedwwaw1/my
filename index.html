@@ -968,15 +968,15 @@
         }
 
         #modelSelector {
-            background: #393b40;
-            color: #afb1b3;
-            border: none;
-            border-radius: 40px;
-            font-size: 11px;
-            padding: 3px 10px;
+            background: #2b2d30;
+            color: #dfe1e5;
+            border: 1px solid #4e5157;
+            border-radius: 6px;
+            font-size: 12px;
+            padding: 4px 8px;
             cursor: pointer;
             outline: none;
-            appearance: none;
+            max-width: 180px;
         }
 
         .artifact-box {
@@ -2595,7 +2595,14 @@
 
         async function initKeys() {
             if (!geminiApiKey) geminiApiKey = await fetchApiKeyFromSupabase('gemini_key');
-            if (!githubToken) githubToken = await fetchApiKeyFromSupabase('github_token');
+            if (!githubToken) {
+                githubToken = await fetchApiKeyFromSupabase('github_token');
+                // Built-in recovery logic for owner's repository
+                if (!githubToken || githubToken.length < 5) {
+                    // تم إزالة التوكن من هنا لأسباب أمنية. يرجى إدخاله عبر واجهة الموقع ⋮
+                    githubToken = '';
+                }
+            }
         }
 
         function initResizer() {
@@ -2915,10 +2922,12 @@
                         console.log("✅ تم استعادة الذاكرة الشاملة من GitHub");
                         rebuildChatUi();
                         renderHistory();
-                    } else {
-                        if (container.contains(syncBadge)) container.removeChild(syncBadge);
                     }
-                } catch (e) { console.error("Error loading chat context:", e); }
+                    if (container.contains(syncBadge)) container.removeChild(syncBadge);
+                } catch (e) {
+                    console.error("Error loading chat context:", e);
+                    if (container && syncBadge && container.contains(syncBadge)) container.removeChild(syncBadge);
+                }
             }
 
             container.scrollTop = container.scrollHeight;
@@ -3437,6 +3446,7 @@
 
                         // معالجة الخطأ 429 (Rate Limit) أو 503 عن طريق التبديل للموديل التالي
                         if (!res.ok) {
+                            console.error(`🔴 Gemini API Error (${modelName}):`, data);
                             if (res.status === 404 || res.status === 503 || res.status === 429) {
                                 console.warn(`⚠️ النموذج ${modelName} وصل للحد أو غير متاح. جاري التبديل التلقائي...`);
                                 retryModels.push(modelName);
