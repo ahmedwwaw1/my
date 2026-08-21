@@ -2685,6 +2685,18 @@
             if (toggleBtn) toggleBtn.style.display = isOpening ? 'none' : 'flex';
 
             if (isOpening) {
+                // فحص وجود مهمة معلقة انقطعت سابقاً
+                const pending = localStorage.getItem('gemini_pending_history');
+                if (pending && !document.getElementById('resumeTaskBanner')) {
+                    const banner = document.createElement('div');
+                    banner.id = 'resumeTaskBanner';
+                    banner.style.cssText = "background: rgba(255, 179, 0, 0.15); border: 1px solid #ffb300; padding: 10px; margin: 10px; border-radius: 8px; font-size: 13px; color: #ffb300; text-align: center;";
+                    banner.innerHTML = `
+                        <div>⚠️ انقطع العمل السابق بسبب حد الاستخدام أو التحديث.</div>
+                        <button onclick="resumePendingTask()" style="margin-top:8px; background:#ffb300; border:none; padding:5px 12px; border-radius:5px; cursor:pointer; font-weight:bold; color:#000;">استئناف العمل الآن</button>
+                    `;
+                    document.getElementById('aiMessages').appendChild(banner);
+                }
                 // استعادة المقاسات المحفوظة عند الفتح
                 const savedW = localStorage.getItem('ai_chat_width');
                 const savedH = localStorage.getItem('ai_chat_height');
@@ -2778,6 +2790,15 @@
 
         async function githubAction(path, content, message) {
             try {
+                // 🛡️ فحص السلامة الهيكلية لمنع تعطل الموقع (Structural Integrity Check)
+                if (path.endsWith('.html')) {
+                    const isComplete = content.includes('</html>') && content.includes('</body>');
+                    if (!isComplete) {
+                        console.error("🛡️ رفض الحفظ: الكود المولد ناقص. تم تفعيل بروتوكول الحماية.");
+                        return "❌ فشل بروتوكول الأمان: الكود المولد يبدو ناقصاً (نهاية الملف مفقودة). تم إلغاء العملية لمنع تعطل الموقع. يرجى الطلب من العقل المدبر إعادة المحاولة.";
+                    }
+                }
+
                 const apiPath = `contents/${path}`;
 
                 // 1. الحصول على SHA
@@ -2971,6 +2992,7 @@
         }
 
         function createNewChat() {
+            localStorage.removeItem('gemini_pending_history'); // مسح أي مهمة معلقة
             currentSessionId = Date.now().toString();
             chatHistory = [];
             document.getElementById('aiMessages').innerHTML = '<div class="msg ai">بدأت محادثة جديدة! كيف يمكنني مساعدتك؟</div>';
@@ -3081,6 +3103,20 @@
             document.getElementById('fileInput').value = '';
             document.getElementById('imagePreviewContainer').style.display = 'none';
             updateSendButtonState();
+        }
+
+        async function resumePendingTask() {
+            const pending = localStorage.getItem('gemini_pending_history');
+            if (pending) {
+                const banner = document.getElementById('resumeTaskBanner');
+                if (banner) banner.remove();
+
+                const history = JSON.parse(pending);
+                addMessageToUi('ai', "🚀 جاري استئناف المهمة المعلقة بعد معالجة حد الاستخدام...", 'System');
+
+                // إعادة تشغيل محرك الأدوات بالسياق المحفوظ
+                await runToolLoop(history);
+            }
         }
 
         async function sendAiMessage() {
@@ -3433,6 +3469,8 @@
             };
 
             async function runToolLoop(history, activeModel = null, retryModels = []) {
+                // 💾 حفظ حالة المحادثة الحالية للاسترداد عند الانقطاع
+                localStorage.setItem('gemini_pending_history', JSON.stringify(history));
                 // استخدام قائمة الموديلات المتاحة مع استثناء الموديلات التي فشلت سابقاً في هذه الدورة
                 const modelsToTry = activeModel ? [activeModel, ...modelNames.filter(m => m !== activeModel && !retryModels.includes(m))] : modelNames;
 
@@ -3463,8 +3501,17 @@
                         if (!res.ok) {
                             lastError = data.error?.message || "Unknown Error";
                             console.error(`🔴 Gemini API Error (${modelName}):`, data);
+                            // ⏳ التعامل الذكي مع حد الاستخدام (Rate Limit 429)
+                            if (res.status === 429) {
+                                console.warn(`⏳ حد الاستخدام مع ${modelName}. بدء مؤقت الانتظار الذكي...`);
+                                addMessageToUi('ai', `⏳ تم بلوغ حد الاستخدام لـ ${modelName}. سأنتظر 15 ثانية ثم أحاول التبديل أو الإكمال تلقائياً...`, 'System');
+                                await new Promise(r => setTimeout(r, 15000));
+                                retryModels.push(modelName);
+                                continue;
+                            }
+
                             const isDeprecated = lastError.includes("no longer available") || lastError.includes("not found");
-                            if (res.status === 404 || res.status === 503 || res.status === 429 || isDeprecated) {
+                            if (res.status === 404 || res.status === 503 || isDeprecated) {
                                 retryModels.push(modelName);
                                 continue;
                             }
@@ -3596,6 +3643,7 @@
                         chatHistory = history.concat([finalTurn]);
                         if (chatHistory.length > 50) chatHistory = chatHistory.slice(-50);
                         saveChatToStorage();
+                        localStorage.removeItem('gemini_pending_history'); // مسح حالة الانتظار عند النجاح
                         return { text: thought || "تمت العملية بنجاح.", model: modelName };
                     } catch (err) {
                         console.error(`Error with ${modelName}:`, err);
