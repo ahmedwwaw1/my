@@ -3437,7 +3437,16 @@
                         thinkMsg.innerText = `🧠 جاري التفكير باستخدام ${modelName}...`;
                     }
 
-                    const apiVersion = (modelName.includes('preview') || modelName.includes('exp')) ? 'v1beta' : 'v1';
+                    // خريطة التوافق (Compatibility Map)
+                    const modelApiMap = {
+                        'gemini-3.7-flash': 'v1',
+                        'gemini-3.1-flash-lite': 'v1',
+                        'gemini-3.1-pro-preview': 'v1beta',
+                        'gemini-2.0-flash-exp': 'v1beta'
+                    };
+                    
+                    // تحديد الإصدار بناءً على الخريطة، مع وجود v1 كخيار افتراضي آمن
+                    const apiVersion = modelApiMap[modelName] || 'v1';
                     const url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}`;
                     try {
                         const res = await fetch(url, {
