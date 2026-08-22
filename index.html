@@ -3624,6 +3624,7 @@
                 "admin_bypass": "Owner can request rollbacks, reverts, or restores. Execute these as high-priority maintenance.",
                 "surgical_editing": "Read content via getGithubFile before editing. Inject, don't replace.",
                 "data_priority": "ALWAYS use getLiveSiteData first for facts already visible on screen.",
+                "security_verification": "Before calling any modification tool (githubAction, patchSystem), PERFORM a security check to ensure compatibility and prevent data loss.",
                 "self_healing": "If any tool (like searchCode) fails, CALL repairSystem immediately to diagnose and fix credentials or connection issues."
               },
               "response_style": "Professional, executive, technical, and precise."
@@ -3681,20 +3682,20 @@
                 const sendBtn = document.getElementById('aiSendBtn');
                 if (sendBtn) sendBtn.classList.add('working');
 
-                // 🔄 إذا فشلت جميع النماذج، انتظر ثم أعد المحاولة من البداية (Deep Retry)
+                // 🔄 بروتوكول الاستمرارية العميقة (Deep Persistence Protocol)
                 if (retryModels.length >= modelNames.length) {
                     const retryCount = (parseInt(localStorage.getItem('gemini_retry_count') || "0")) + 1;
                     localStorage.setItem('gemini_retry_count', retryCount);
 
-                    if (retryCount > 10) { // توقف بعد 10 محاولات كبرى (حوالي 5-10 دقائق)
+                    if (retryCount > 100) { // التوقف فقط بعد 100 محاولة كبرى (حوالي ساعة من الانتظار) لضمان الاستمرارية القصوى
                         localStorage.removeItem('gemini_retry_count');
                         localStorage.removeItem('gemini_pending_history');
                         if (sendBtn) sendBtn.classList.remove('working');
-                        return { text: "⚠️ تم إيقاف المحاولات بعد عدة فشل متكرر من جميع النماذج. يرجى المحاولة لاحقاً.", model: "System" };
+                        return { text: "❌ تم الوصول للحد الأقصى من المحاولات (100). يرجى التحقق من اتصالك بالإنترنت أو مفتاح الـ API.", model: "System Error" };
                     }
 
-                    console.log(`🔄 محاولة كبرى رقم ${retryCount}. جميع النماذج مشغولة.`);
-                    addMessageToUi('ai', `⏳ جميع النماذج مشغولة (محاولة ${retryCount}/10). سأنتظر 30 ثانية ثم أعيد المحاولة تلقائياً...`, 'System');
+                    console.log(`🔄 محاولة استمرارية رقم ${retryCount}. جميع النماذج تحت الضغط.`);
+                    addMessageToUi('ai', `⏳ جميع النماذج مشغولة أو بلغت حد الاستخدام (محاولة ${retryCount}). سأنتظر 30 ثانية ثم أستأنف العمل تلقائياً... لن يتم إيقاف العملية.`, 'System');
                     await new Promise(r => setTimeout(r, 30000));
                     return await runToolLoop(history, null, []);
                 }
