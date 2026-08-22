@@ -1,6 +1,6 @@
 {
   "sessions": [],
   "activeSessionId": "1787416728834",
-  "pendingHistory": null,
-  "timestamp": "2026-08-22T17:21:36.670Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"\\\"اطلب من المهندس في الـ IDE عرض قائمة الملفات في المجلد الحالي باستخدام الأمر dir عبر الجسر.\\\"\"}]}]",
+  "timestamp": "2026-08-22T17:21:38.303Z"
 }
