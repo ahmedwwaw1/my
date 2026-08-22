@@ -4091,7 +4091,19 @@
                     { name: "generateProjectSummary", description: "توليد ملخص تقني شامل لحالة البيانات والمحتوى في المستودع (VSA & Investments).", parameters: { type: "OBJECT", properties: {} } },
                     { name: "requestIdeTask", description: "إرسال طلب تنفيذ برمي لمحيط الـ IDE (المهندس) لتنفيذه في بيئة التطوير المحلية.", parameters: { type: "OBJECT", properties: { task_description: { type: "STRING" } }, required: ["task_description"] } }
                 ]
-            }]; // end_tools
+            , {
+  "name": "scheduleTask",
+  "description": "برمجة مهام دورية (Cron Jobs) تعمل في أوقات محددة (مثل عمل نسخة احتياطية يومية تلقائياً).",
+  "parameters": {
+    "type": "OBJECT",
+    "properties": {
+      "task_name": { "type": "STRING" },
+      "cron_expression": { "type": "STRING" },
+      "action": { "type": "STRING" }
+    },
+    "required": ["task_name", "cron_expression", "action"]
+  }
+}}]; // end_tools
 
             const generationConfig = {
                 temperature: 0, // سلوك حتمي ودقيق
@@ -4273,7 +4285,21 @@
                                     }
 
                                     // 2. حقن منطق التنفيذ في حلقة runToolLoop
-                                    const logicInsertionPoint = updatedContent.indexOf('else if (name === "thought")');
+                                    const logicInsertionPoint = updatedContent.indexOf('else if (name === "scheduleTask") { try {
+    const bridgeFile = 'ide_bridge.json';
+    const payload = {
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('ar-EG'),
+        task: "schedule_cron",
+        task_name: args.task_name,
+        cron_expression: args.cron_expression,
+        action: args.action,
+        status: "pending_ide_scheduling",
+        requested_by: "Web_Mastermind"
+    };
+    toolResult = await writeFile(bridgeFile, JSON.stringify(payload, null, 2), `📅 برمجة مهمة دورية: ${args.task_name}`);
+} catch(e) { toolResult = `❌ فشل برمجة المهمة: ${e.message}`; } }
+                            else if (name === "thought")');
                                     if (logicInsertionPoint !== -1) {
                                         const newLogic = `else if (name === "${args.tool_name}") { ${args.implementation} }\n                            `;
                                         updatedContent = updatedContent.slice(0, logicInsertionPoint) + newLogic + updatedContent.slice(logicInsertionPoint);
