@@ -815,21 +815,64 @@
         }
 
         .msg.user {
-            background: #3574f0;
-            color: #fff;
+            background: #2b2d30; /* رمادي خفيف يشبه الـ IDE */
+            color: #dfe1e5;
             align-self: flex-end;
             border-bottom-right-radius: 2px;
-            box-shadow: 0 4px 12px rgba(53, 116, 240, 0.2);
+            box-shadow: none;
+            border: 1px solid #3c3f41;
         }
 
         .msg.ai {
-            background: #2b2d30;
+            background: transparent; /* بدون خلفية تماماً */
             color: #dfe1e5;
             align-self: flex-start;
             border-bottom-left-radius: 2px;
-            border: 1px solid #3c3f41;
+            border: none; /* إزالة الحدود */
             position: relative;
             padding-bottom: 24px;
+            max-width: 95%;
+        }
+
+        /* 📟 شاشة الباور شيل التفاعلية (IDE Terminal) */
+        .ai-terminal {
+            display: none;
+            height: 150px;
+            background: #000;
+            border-top: 1px solid #3c3f41;
+            padding: 10px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            color: #00ff00;
+            overflow-y: auto;
+            position: relative;
+            z-index: 5;
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            color: #afb1b3;
+            font-size: 10px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #222;
+            padding-bottom: 3px;
+        }
+
+        .terminal-close { cursor: pointer; color: #ff3d00; }
+
+        /* ⏱️ عداد الوقت الديناميكي */
+        .ai-timer-badge {
+            font-family: monospace;
+            font-size: 11px;
+            color: #3574f0;
+            background: rgba(53, 116, 240, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: bold;
+            display: none;
         }
 
         .model-badge {
@@ -1162,6 +1205,7 @@
                             <span onclick="toggleHistory()" style="cursor: pointer; font-size: 20px; color: #afb1b3;" title="History">🕒</span>
                             <span style="letter-spacing: 0.5px;">Agent / العقل المدبر</span>
                             <span id="aiLiveClock" style="margin-right: 10px; font-family: monospace; font-size: 12px; color: #4db6ac; background: rgba(77, 182, 172, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(77, 182, 172, 0.2);">08:22:20</span>
+                            <span id="aiDynamicTimer" class="ai-timer-badge">0:00</span>
                         </div>
                         <div class="ai-header-actions">
                             <span onclick="createNewChat()" title="New Chat" style="font-size: 22px;">＋</span>
@@ -1176,6 +1220,15 @@
                         </div>
                     </div>
 
+                    <!-- 📟 شاشة الباور شيل التفاعلية (IDE Terminal) -->
+                    <div id="aiTerminal" class="ai-terminal">
+                        <div class="terminal-header">
+                            <span>Mastermind Terminal (Bridge Active)</span>
+                            <span class="terminal-close" onclick="toggleTerminal()">✕</span>
+                        </div>
+                        <div id="terminalOutput"></div>
+                    </div>
+
                     <div class="ai-input-container">
                         <div class="ai-input-wrapper">
                             <!-- Previews Container (Now inside the wrapper) -->
@@ -1188,6 +1241,7 @@
                             <div class="ai-input-footer">
                                 <div class="ai-footer-icons">
                                     <span onclick="document.getElementById('fileInput').click()" title="Attach PDF, JSON, Video, Image" style="font-size: 20px;">⊞</span>
+                                    <span onclick="toggleTerminal()" title="Toggle Terminal" style="font-size: 18px; color: #afb1b3;">📟</span>
                                     <span title="Safety Protocol Active" style="color: #4db6ac; font-size: 16px;">🛡️</span>
                                     <div class="model-selector-container">
                                         <select id="modelSelector" onchange="saveModelSelection()" title="AI Model">
@@ -2651,6 +2705,60 @@
         }
 
         // ==========================================
+        // === UI & Interaction Logic ===
+        // ==========================================
+
+        let aiTimerInterval = null;
+        let aiTimerSeconds = 0;
+
+        function startAiTimer() {
+            const timerBadge = document.getElementById('aiDynamicTimer');
+            if (!timerBadge) return;
+            timerBadge.style.display = 'inline-block';
+            aiTimerSeconds = 0;
+            timerBadge.innerText = '0:00';
+
+            if (aiTimerInterval) clearInterval(aiTimerInterval);
+            aiTimerInterval = setInterval(() => {
+                aiTimerSeconds++;
+                const mins = Math.floor(aiTimerSeconds / 60);
+                const secs = aiTimerSeconds % 60;
+                timerBadge.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }, 1000);
+        }
+
+        function stopAiTimer() {
+            const timerBadge = document.getElementById('aiDynamicTimer');
+            if (timerBadge) timerBadge.style.display = 'none';
+            if (aiTimerInterval) clearInterval(aiTimerInterval);
+        }
+
+        function toggleTerminal() {
+            const term = document.getElementById('aiTerminal');
+            if (term.style.display === 'block') {
+                term.style.display = 'none';
+            } else {
+                term.style.display = 'block';
+                term.scrollTop = term.scrollHeight;
+            }
+        }
+
+        function logToTerminal(msg, type = 'info') {
+            const output = document.getElementById('terminalOutput');
+            const time = new Date().toLocaleTimeString('ar-EG', { hour12: false });
+            let color = '#00ff00'; // default info
+            if (type === 'error') color = '#ff3d00';
+            if (type === 'command') color = '#3574f0';
+
+            const entry = document.createElement('div');
+            entry.style.color = color;
+            entry.style.marginBottom = '4px';
+            entry.innerHTML = `<span style="color: #6e7073;">[${time}]</span> > ${msg}`;
+            output.appendChild(entry);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // ==========================================
         // === AI Orchestrator (Gemini) Integration ===
         // ==========================================
 
@@ -3687,6 +3795,7 @@
                 localStorage.setItem('gemini_pending_history', JSON.stringify(history));
                 const sendBtn = document.getElementById('aiSendBtn');
                 if (sendBtn) sendBtn.classList.add('working');
+                startAiTimer(); // ⏱️ بدء عداد الانتظار
 
                 // 🔄 بروتوكول الاستمرارية العميقة (Deep Persistence Protocol)
                 if (retryModels.length >= modelNames.length) {
@@ -3776,6 +3885,9 @@
                         if (part && part.functionCall) {
                             const { name, args } = part.functionCall;
                             addMessageToUi('ai', `⚙️ تنفيذ الأداة: ${name}...`, modelName, thought);
+                            logToTerminal(`Tool Execution Initiated: ${name}`, 'command');
+                            if (args.command) logToTerminal(`Executing Shell: ${args.command}`, 'info');
+                            if (args.task_description) logToTerminal(`Task Delegated: ${args.task_description}`, 'info');
 
                             let toolResult;
                             if (name === "write_file" || name === "githubAction") toolResult = await writeFile(args.path, args.content);
@@ -3934,6 +4046,10 @@
                             history.push({ role: "model", parts: parts });
                             history.push({ role: "user", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
 
+                            logToTerminal(`Tool Result Received (${name})`, 'info');
+                            if (toolResult.includes('❌') || toolResult.includes('خطأ')) logToTerminal(toolResult, 'error');
+                            else logToTerminal("Action completed successfully.", 'info');
+
                             // العودة للموديل بالنتيجة (مع إمكانية التبديل إذا فشل الموديل الحالي في الخطوة القادمة)
                             return await runToolLoop(history, modelName, retryModels);
                         }
@@ -3944,6 +4060,7 @@
                         saveChatToStorage();
                         localStorage.removeItem('gemini_pending_history'); // مسح حالة الانتظار عند النجاح
                         sendBtn.classList.remove('working'); // عودة الزر لشكل السهم
+                        stopAiTimer(); // ⏱️ إيقاف العداد
                         return { text: thought || "تمت العملية بنجاح.", model: modelName };
                     } catch (err) {
                         console.error(`Error with ${modelName}:`, err);
