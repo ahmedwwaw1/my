@@ -3,6 +3,22 @@ import json
 import os
 from datetime import datetime
 
+# أهداف سعرية تجريبية (يمكن نقلها لملف إعدادات لاحقاً)
+PRICE_TARGETS = {
+    'BTC/USDT': 80000,
+    'ETH/USDT': 2600,
+    'BNB/USDT': 700,
+    'SOL/USDT': 100
+}
+
+def check_price_targets(symbol, current_price):
+    """مقارنة السعر الحالي مع الأهداف المحددة"""
+    target = PRICE_TARGETS.get(symbol)
+    if target and current_price >= target:
+        print(f"🚨 تنبيه هدف سعري: {symbol} وصل إلى {current_price} (الهدف: {target})")
+        return True
+    return False
+
 def analyze_crypto_market():
     """
     جلب بيانات العملات وتحديث ملف crypto_alerts.json مع دعم إضافي لتحليل التقلب (Volatility)
@@ -26,6 +42,9 @@ def analyze_crypto_market():
                 change_percent = ticker['percentage']  # نسبة التغيير
                 high_24h = ticker.get('high', price)
                 low_24h = ticker.get('low', price)
+                
+                # التحقق من الأهداف السعرية
+                check_price_targets(symbol, price)
                 
                 # حساب مؤشر التقلب البسيط (نطاق التغير خلال 24 ساعة)
                 volatility = round(((high_24h - low_24h) / price) * 100, 2) if price > 0 else 0
