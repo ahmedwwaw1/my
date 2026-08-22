@@ -1,6 +1,6 @@
 {
   "sessions": [],
   "activeSessionId": "1787410238926",
-  "pendingHistory": null,
-  "timestamp": "2026-08-22T14:54:16.319Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"\\\"استخدم أداة runPowerShell عبر الجسر لتنفيذ الأمر python --version للتأكد من جاهزية بيئة البايثون في جهاز المهندس.\\\"\"}]}]",
+  "timestamp": "2026-08-22T14:54:18.213Z"
 }
