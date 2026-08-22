@@ -1,8 +1,8 @@
 {
-  "id": 1787419302871,
-  "timestamp": "٢٢‏/٨‏/٢٠٢٦، ٨:٢١:٤٢ م",
-  "command": "status",
-  "tool": "executeGitCommand",
+  "id": 1787419304451,
+  "timestamp": "٢٢‏/٨‏/٢٠٢٦، ٨:٢١:٤٤ م",
+  "command": "dir",
+  "tool": "runPowerShell",
   "status": "pending_ide_execution",
   "requested_by": "Web_Mastermind"
 }
