@@ -1,7 +1,7 @@
 {
-  "id": 1787428850423,
-  "timestamp": "٢٢‏/٨‏/٢٠٢٦، ١١:٠٠:٥٠ م",
-  "command": "Get-ChildItem -Recurse",
+  "id": 1787429018408,
+  "timestamp": "٢٢‏/٨‏/٢٠٢٦، ١١:٠٣:٣٨ م",
+  "command": "Get-ChildItem -Recurse | Select-Object FullName",
   "tool": "runPowerShell",
   "status": "pending_ide_execution",
   "requested_by": "Web_Mastermind"
