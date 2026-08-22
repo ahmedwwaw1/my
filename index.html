@@ -3533,7 +3533,7 @@
                         workflows = JSON.parse(content);
                     }
                     workflows[workflow_name] = steps;
-                    await githubAction(WORKFLOWS_FILE, JSON.stringify(workflows, null, 2), `تعريف عملية مؤتمتة: ${workflow_name}`);
+                    await writeFile(WORKFLOWS_FILE, JSON.stringify(workflows, null, 2), `تعريف عملية مؤتمتة: ${workflow_name}`);
                     return `✅ تم تعريف العملية "${workflow_name}" بنجاح.`;
                 } catch (e) { return `❌ فشل تعريف العملية: ${e.message}`; }
             } else if (action === 'list') {
@@ -3559,7 +3559,7 @@
                         report += `خطوة ${i + 1} (${step.tool}): `;
                         let res;
                         try {
-                            if (step.tool === "githubAction") res = await githubAction(step.args.path, step.args.content);
+                            if (step.tool === "githubAction") res = await writeFile(step.args.path, step.args.content);
                             else if (step.tool === "getGithubFile") res = await getGithubFileContent(step.args.path);
                             else if (step.tool === "searchCode") {
                                 const cleanQuery = encodeURIComponent(step.args.query);
@@ -3775,7 +3775,7 @@
                             addMessageToUi('ai', `⚙️ تنفيذ الأداة: ${name}...`, modelName, thought);
 
                             let toolResult;
-                            if (name === "write_file") toolResult = await writeFile(args.path, args.content);
+                            if (name === "write_file" || name === "githubAction") toolResult = await writeFile(args.path, args.content);
                             else if (name === "replace_file_content") toolResult = await replaceFileContent(args.path, args.targetContent, args.replacementContent);
                             else if (name === "getGithubFile") toolResult = await getGithubFileContent(args.path);
                             else if (name === "readCodeRange") toolResult = await readCodeRange(args.path, args.startLine, args.endLine);
@@ -3840,7 +3840,7 @@
                                         updatedContent = updatedContent.slice(0, logicInsertionPoint) + newLogic + updatedContent.slice(logicInsertionPoint);
                                     }
 
-                                    toolResult = await githubAction('index.html', updatedContent, `ترقية العقل المدبر: إضافة أداة ${args.tool_name}`);
+                                    toolResult = await writeFile('index.html', updatedContent, `ترقية العقل المدبر: إضافة أداة ${args.tool_name}`);
                                 } catch(e) { toolResult = `❌ فشل عملية التوسع الذاتي: ${e.message}`; }
                             }
                             else if (name === "patchSystem") {
@@ -3848,7 +3848,7 @@
                                     const indexContent = await getGithubFileContent('index.html');
                                     if (indexContent.includes(args.target_code)) {
                                         const updatedContent = indexContent.replace(args.target_code, args.replacement_code);
-                                        toolResult = await githubAction('index.html', updatedContent, `ترقية النظام: تحديث كود ${name}`);
+                                        toolResult = await writeFile('index.html', updatedContent, `ترقية النظام: تحديث كود ${name}`);
                                     } else {
                                         toolResult = "❌ فشل الترقية: لم يتم العثور على الكود المستهدف (Target Code) بدقة. يرجى التأكد من النص المراد استبداله.";
                                     }
@@ -3872,7 +3872,7 @@
                                         status: "pending_ide_execution",
                                         requested_by: "Web_Mastermind"
                                     };
-                                    toolResult = await githubAction(bridgeFile, JSON.stringify(payload, null, 2), `🛠️ تنفيذ أمر شيل: [${name}] عبر الجسر`);
+                                    toolResult = await writeFile(bridgeFile, JSON.stringify(payload, null, 2), `🛠️ تنفيذ أمر شيل: [${name}] عبر الجسر`);
                                 } catch(e) { toolResult = `❌ فشل إرسال الأمر للجسر: ${e.message}`; }
                             }
                             else if (name === "thought") {
@@ -3917,7 +3917,7 @@
                                         status: "pending_ide_action",
                                         requested_by: "Web_Mastermind"
                                     };
-                                    toolResult = await githubAction(bridgeFile, JSON.stringify(payload, null, 2), `🚀 جسر التواصل: طلب مهمة جديدة من IDE [${args.task_description.substring(0, 20)}...]`);
+                                    toolResult = await writeFile(bridgeFile, JSON.stringify(payload, null, 2), `🚀 جسر التواصل: طلب مهمة جديدة من IDE [${args.task_description.substring(0, 20)}...]`);
                                 } catch(e) { toolResult = `❌ فشل إرسال الطلب للجسر: ${e.message}`; }
                             }
                             else if (name === "getSiteContext") toolResult = "سياق الموقع: أكاديمية VSA متخصصة في التداول والتحليل الفني والزمني.";
