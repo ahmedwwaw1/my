@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1787429687275",
+      "title": "بصفتي \"العقل المدبر\" (Mastermi...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ماهي الادوات التي لديك في ضل محرك  Code Interaction Engine"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "بصفتي \"العقل المدبر\" (Mastermind) المسؤول عن إدارة وتطوير بيئة العمل، أعمل من خلال **محرك التفاعل البرمجي (Code Interaction Engine)** الذي يمنحني صلاحيات واسعة للتحكم في المستودع، التحليل، والتطوير الذاتي.\n\nإليك قائمة الأدوات المتاحة لي حالياً، مصنفة حسب وظيفتها:\n\n### 1. أدوات إدارة الملفات والمحتوى (Core File Operations)\n*   **`listGithubFiles`**: لاستكشاف هيكل المجلدات والملفات.\n*   **`getGithubFile`**: لقراءة محتوى ملف كامل بدقة.\n*   **`readCodeRange`**: لقراءة نطاق محدد من الأسطر (لتحسين استهلاك التوكنات).\n*   **`write_file`**: لإنشاء ملفات جديدة أو كتابة محتوى كامل.\n*   **`replace_file_content`**: \"المشرط الجراحي\" لاستبدال أجزاء محددة من الكود.\n*   **`searchCode`**: للبحث عن نصوص أو دوال في كامل المستودع (الأداة الأساسية قبل أي تعديل).\n*   **`selectString`**: للبحث عن نص محدد داخل ملف معين.\n\n### 2. أدوات التطور الذاتي والترقية (Evolution Engine)\n*   **`patchSystem`**: لترقية وتعديل كود الأدوات الحالية (تحسين الأداء).\n*   **`selfExpand`**: لإضافة وظائف برمجية وأدوات جديدة لم تكن موجودة مسبقاً.\n*   **`repairSystem`**: للفحص الذاتي وإصلاح مشاكل الاتصال أو التوكنات.\n\n### 3. أدوات التشغيل والأتمتة (Automation & Execution)\n*   **`WorkflowFramework`**: لتعريف وتنفيذ سلاسل عمليات مؤتمتة (Multi-step sequences).\n*   **`triggerGithubWorkflow`**: لتشغيل عمليات الـ GitHub Actions.\n*   **`updateWorkflowStatus`**: للتحكم في تفعيل أو إيقاف البوتات.\n*   **`runPowerShell`**: لتنفيذ أوامر النظام (PowerShell).\n*   **`executeGitCommand`**: لتنفيذ أوامر Git (commit, push, status, etc).\n\n### 4. أدوات التحليل والذكاء (Intelligence & Diagnostics)\n*   **`analyzeProjectStructure`**: لفحص سلامة الملفات (JSON, links, etc).\n*   **`generateProjectSummary`**: لتوليد ملخص تقني شامل لحالة المستودع.\n*   **`getLiveSiteData`**: لجلب الحقائق المباشرة من الموقع لمنع الهلوسة.\n*   **`getSiteContext`**: لجلب السياسات والسياق العام للمشروع.\n*   **`listModels`**: لتشخيص توافر النماذج البرمجية.\n*   **`pingModel` / `pingVSA`**: لقياس زمن الاستجابة للنظام.\n\n### 5. أدوات التفاعل مع بيئة التطوير (IDE Integration)\n*   **`requestIdeTask`**: لإرسال مهام برمجية ليتم تنفيذها في بيئة التطوير المحلية (IDE).\n*   **`injectGlobalStyles`**: لتعديل واجهة المستخدم (CSS) فورياً للتحقق البصري.\n\n---\n\n**ملاحظة بروتوكولية:**\nأنا ملتزم بـ **\"المخطط الهندسي لإنشاء نموذج ذكاء اصطناعي متطور\"** كخارطة طريق. إذا وجدت أن هناك أداة ناقصة أو تحتاج إلى تحسين، سأقوم فوراً باستخدام `selfExpand` أو `patchSystem` لتطوير قدراتي.\n\n**هل هناك مهمة محددة تود مني البدء بها باستخدام هذه الأدوات؟**",
+              "thoughtSignature": "EnEKbwERTTIP6EwnYmbFLNQ49tGnk7SSvIJ5M3eWztdTMuJlq8a5C2DnkIpLW7q34K+z4X3u8Y5FxzCGu61DfRRpg557gOAYiOiAoIQGSqoSbNb/d8nEg17EbPClE9s/FnHsyIw/QX95wQcIPHVD1f4xVw=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1787429687275",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ماهي الادوات التي لديك في ضل محرك  Code Interaction Engine\"}]}]",
-  "timestamp": "2026-08-22T20:44:32.421Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-22T20:48:02.134Z"
 }
