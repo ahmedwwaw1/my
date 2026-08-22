@@ -1,6 +1,6 @@
 {
   "sessions": [],
   "activeSessionId": "1787392561340",
-  "pendingHistory": null,
-  "timestamp": "2026-08-22T10:23:59.500Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل لديك نظام المطابقة الصارم (Exact Match Protocol):\"}]}]",
+  "timestamp": "2026-08-22T10:24:01.535Z"
 }
