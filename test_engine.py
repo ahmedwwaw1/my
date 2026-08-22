@@ -7,6 +7,7 @@ def log_to_memory(action, details):
         data['history'].append({"timestamp": str(datetime.now()), "action": action, "details": details})
         f.seek(0)
         json.dump(data, f, indent=2)
+        f.truncate()
 
 def system_health_check():
     try:
