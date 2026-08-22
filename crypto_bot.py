@@ -3,7 +3,7 @@ import json
 import os
 from datetime import datetime
 
-# إعدادات الأهداف السعرية (Price Targets)
+# إعدادات الأهداف السعرية المحددة (Price Targets)
 PRICE_TARGETS = {
     'BTC/USDT': {'target': 80000.0, 'side': 'above'},
     'ETH/USDT': {'target': 3000.0, 'side': 'above'},
@@ -35,12 +35,14 @@ def analyze_crypto_market():
                 change_percent = ticker['percentage']  # نسبة التغيير
                 high_24h = ticker.get('high', price)
                 low_24h = ticker.get('low', price)
-                
-                # حساب مؤشر التقلب البسيط
+
+                # حساب مؤشر التقلب البسيط (نطاق التغير خلال 24 ساعة)
                 volatility = round(((high_24h - low_24h) / price) * 100, 2) if price > 0 else 0
                 
                 # 🎯 فحص الأهداف السعرية
                 target_info = PRICE_TARGETS.get(symbol)
+                category = None
+
                 if target_info:
                     target_price = target_info['target']
                     side = target_info['side']
@@ -53,9 +55,9 @@ def analyze_crypto_market():
 
                     if hit:
                         print(f"🚀 تم الوصول للهدف السعري! {symbol}: {price} (الهدف: {target_price})")
-                        # إضافة تصنيف خاص للتنبيهات التي حققت الهدف
                         category = "price_target_hit"
                     else:
+                        # إذا لم يضرب الهدف، نتحقق من حجم التداول كشرط بديل
                         category = "high_volume_with_analytics" if volume > 10000000 else None
 
                 # الشرط: إذا كان حجم التداول أكثر من 10 مليون أو تم ضرب الهدف
