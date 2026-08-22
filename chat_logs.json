@@ -348,6 +348,6 @@
     }
   ],
   "activeSessionId": "1787416728834",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"\\\"اطلب من المهندس في الـ IDE تشغيل بوت الكريبتو crypto_bot.py الآن وإرسال تقرير بالنتائج فوراً.\\\"\"}]}]",
-  "timestamp": "2026-08-22T17:57:31.179Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"\\\"اطلب من المهندس في الـ IDE تشغيل بوت الكريبتو crypto_bot.py الآن وإرسال تقرير بالنتائج فوراً.\\\"\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"سأقوم بالتحقق من وجود الملف أولاً، ثم سأطلب من المهندس تشغيله عبر IDE.\"},\"id\":\"call_1336322\"},\"thoughtSignature\":\"EnEKbwERTTIP44878WS6fLY4OtKMKTlQxKUB0+GldzwbRHCLLkGLJGp3DZAKlhnIXajRRvXDI3ImqL+6KEOzSvk4fkimJldcEZ4UbhLggk54Ud06HEmqpouqpiHlcPDwfKoRrEuFA8O43k47fnVoTcwwLw==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":\"✅ استوعبت الفكرة: سأقوم بالتحقق من وجود الملف أولاً، ثم سأطلب من الم...\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\"crypto_bot.py\"},\"id\":\"call_970625\"},\"thoughtSignature\":\"EnEKbwERTTIPMiTu1rRGEbtH3zSVOcuU6bYci7w/bL+xvr2e8Bq8svRxrKJiGQ3v84jbgRYcGNnIW9vmLbgTzmd0/HTvDFxHVs9cTSmvDIl5ABhDopvbhNCQjrPUJK+vg8vfWqbtcUXCbUD7DyQ9+NPZ+A==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"searchCode\",\"response\":{\"content\":\"❌ فشل الاتصال بالبحث: Failed to fetch\"}}}]}]",
+  "timestamp": "2026-08-22T17:57:33.833Z"
 }
