@@ -2,13 +2,13 @@
   "sessions": [
     {
       "id": "1787416728834",
-      "title": "تم إرسال الأمر إلى المهندس في ...",
+      "title": "أهلاً بك. بصفتي \"العقل المدبر\"...",
       "history": [
         {
           "role": "user",
           "parts": [
             {
-              "text": "\"اطلب من المهندس في الـ IDE تشغيل بوت الكريبتو crypto_bot.py الآن وإرسال تقرير بالنتائج فوراً.\""
+              "text": "مرحبا"
             }
           ]
         },
@@ -16,146 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "functionCall": {
-                "name": "thought",
-                "args": {
-                  "reasoning": "سأقوم بالتحقق من وجود الملف أولاً، ثم سأطلب من المهندس تشغيله عبر IDE."
-                },
-                "id": "call_1336322"
-              },
-              "thoughtSignature": "EnEKbwERTTIP44878WS6fLY4OtKMKTlQxKUB0+GldzwbRHCLLkGLJGp3DZAKlhnIXajRRvXDI3ImqL+6KEOzSvk4fkimJldcEZ4UbhLggk54Ud06HEmqpouqpiHlcPDwfKoRrEuFA8O43k47fnVoTcwwLw=="
-            }
-          ]
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "functionResponse": {
-                "name": "thought",
-                "response": {
-                  "content": "✅ استوعبت الفكرة: سأقوم بالتحقق من وجود الملف أولاً، ثم سأطلب من الم..."
-                }
-              }
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "functionCall": {
-                "name": "searchCode",
-                "args": {
-                  "query": "crypto_bot.py"
-                },
-                "id": "call_970625"
-              },
-              "thoughtSignature": "EnEKbwERTTIPMiTu1rRGEbtH3zSVOcuU6bYci7w/bL+xvr2e8Bq8svRxrKJiGQ3v84jbgRYcGNnIW9vmLbgTzmd0/HTvDFxHVs9cTSmvDIl5ABhDopvbhNCQjrPUJK+vg8vfWqbtcUXCbUD7DyQ9+NPZ+A=="
-            }
-          ]
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "functionResponse": {
-                "name": "searchCode",
-                "response": {
-                  "content": "❌ فشل الاتصال بالبحث: Failed to fetch"
-                }
-              }
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "functionCall": {
-                "name": "repairSystem",
-                "args": {},
-                "id": "call_848712"
-              },
-              "thoughtSignature": "EnEKbwERTTIPpLMWrnS2KTskL6p+t6/kKJ/119h3P8meurnY7UINcFMhJWTEUyXE4n4b17Yg/cFfh45Om8o+br3lGDqsMucvA3m0RUdpnqLOxRW5ggL/YbS4MfBByfgojdZ1tJkbmA3onQnh1eIdz9gBBA=="
-            }
-          ]
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "functionResponse": {
-                "name": "repairSystem",
-                "response": {
-                  "content": "🛡️ تقرير العقل المدبر (Diagnostic Report):\n✅ صلاحيات التوكن كاملة وتشمل إدارة المستودع والبحث.\n❌ فشل الإصلاح التلقائي. يرجى التحقق من جدار الحماية أو اتصال الشبكة.\nحالة النظام: failed"
-                }
-              }
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "functionCall": {
-                "name": "listGithubFiles",
-                "args": {
-                  "path": "."
-                },
-                "id": "call_848736"
-              },
-              "thoughtSignature": "EnEKbwERTTIPqmgeEzrZTgWKRJsfBuUEWIY0bakZFDuljvj14lWqBJSMNlEpdtNzjaMtBJGq0jgClRcDGuhLIoQW5Gbk8CF5Osp+zUJhkPJrqFDR+miFYenfV4EGz0ufMyDqGDfNQS7mpcMi0cgcna0+ew=="
-            }
-          ]
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "functionResponse": {
-                "name": "listGithubFiles",
-                "response": {
-                  "content": "محتويات .:\n📁 .artifacts\n📄 .gitattributes\n📁 .github\n📁 .idea\n📁 .vscode\n📄 EMERGENCY_REPAIR_GUIDE.txt\n📄 PDF-images.json\n📄 Time-analysis.json\n📁 archive\n📄 chat_logs.json\n📄 crypto_alerts.json\n📄 crypto_bot.py\n📄 data.json\n📄 engine_memory.json\n📄 ide_bridge.json\n📁 images\n📄 index.html\n📄 remigrate_final.ps1\n📄 remigrate_final.py\n📄 steps.jsonl\n📄 system-capabilities.txt\n📄 technical-analysis.json\n📄 test_engine.py\n📄 viewer.html\n📄 vsa.json\n📄 دليل_إصلاح_الطوارئ_VSA.txt"
-                }
-              }
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "functionCall": {
-                "name": "requestIdeTask",
-                "args": {
-                  "task_description": "قم بتشغيل ملف crypto_bot.py في بيئة التطوير المحلية، وقم بتلخيص النتائج (المخرجات) وإرسالها لي فوراً."
-                },
-                "id": "call_992318"
-              },
-              "thoughtSignature": "EnEKbwERTTIPbDGQkyIHu87jAnIlkS/Ve0db0kaDj9HDrD4qprF4henZC3ZG6fTX77uPwnN9lfSG+MbgP902a/PWRbqjb67bol5vZREszlX+fG1xAHm+6+mpfN0xfcRKfPwjwCWCLnHECBAthWl5k8QAKg=="
-            }
-          ]
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "functionResponse": {
-                "name": "requestIdeTask",
-                "response": {
-                  "content": "✅ تم حفظ الملف بلكامل بنجاح."
-                }
-              }
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "تم إرسال الأمر إلى المهندس في الـ IDE لتشغيل `crypto_bot.py`. سأقوم بمتابعة النتائج فور توفرها من بيئة التطوير المحلية.",
-              "thoughtSignature": "EnEKbwERTTIPtU0Ck6eq40sUCkx2HCnc+dvyAKXvQ12cpG1o2WUtoPaI0Kzn4qjvPGXs3AC8dnAP+XWH9NYGy2peMaFV5wN5NnVTKmG5UNsjOY7CGuY9eVSK0rLXop7Si412OeaJtKvnFf/mAksnjKkIZQ=="
+              "text": "أهلاً بك. بصفتي \"العقل المدبر\" (Mastermind) لـ VSA Academy، أنا في حالة استعداد تام.\n\nنظام العمليات نشط، والبروتوكولات قيد التنفيذ. كيف يمكنني توظيف قدراتي التقنية والهندسية لخدمة أهدافك اليوم؟ هل هناك مشروع معين يتطلب تحليلاً، أو تطويرًا برمجياً، أو صيانة هيكلية؟",
+              "thoughtSignature": "EnEKbwERTTIP+ALylDt2HNtF1SVhIlxirioRsDjpHssHwn/Qd0tmiQ4KXWB2sp3qO3JEleyq5hYVa/ktUzmjQ8p3I1yqlpdzoY71aK1JlRFYY5iEc9SaQokhuXgbk68GrRkA8VRwRA6uz8hffq2rK2gyOA=="
             }
           ],
           "model": "gemini-3.1-flash-lite"
@@ -164,6 +26,6 @@
     }
   ],
   "activeSessionId": "1787416728834",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-08-22T19:26:33.888Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-22T19:27:13.936Z"
 }
