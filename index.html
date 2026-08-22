@@ -1081,61 +1081,57 @@
                 </div>
             </div>
 
-            <!-- Main Chat Area -->
-            <div class="ai-main-content">
-                <div class="ai-header">
-                    <div class="ai-header-title">
-                        <span onclick="toggleHistory()" style="cursor: pointer; font-size: 20px; color: #afb1b3;" title="History">🕒</span>
-                        <span style="letter-spacing: 0.5px;">Agent / العقل المدبر</span>
-                        <span id="aiLiveClock" style="margin-right: 10px; font-family: monospace; font-size: 12px; color: #4db6ac; background: rgba(77, 182, 172, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(77, 182, 172, 0.2);">00:00:00</span>
-                    </div>
-                    <div class="ai-header-actions">
-                        <span onclick="createNewChat()" title="New Chat" style="font-size: 22px;">＋</span>
-                        <span title="Settings" onclick="resetGeminiKey()">⋮</span>
-                        <span onclick="toggleAiChat()">—</span>
-                    </div>
-                </div>
-
-                <div class="ai-messages" id="aiMessages">
-                    <div class="msg ai">
-                        أهلاً بك في <b>VSA Academy</b>! أنا العقل المدبر. كيف يمكنني مساعدتك اليوم؟
-                    </div>
-                </div>
-
-                <!-- Previews for Images/Files -->
-                <div id="imagePreviewContainer" style="display: none; padding: 10px 15px; background: #2b2d30; border-top: 1px solid #3c3f41; align-items: center; gap: 12px;">
-                    <div id="fileIconPreview" style="font-size: 26px;"></div>
-                    <img id="imagePreview" src="" style="height: 45px; border-radius: 6px; border: 2px solid #3574f0; display: none; object-fit: cover;">
-                    <div id="fileNamePreview" style="font-size: 12px; color: #afb1b3; flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500;"></div>
-                    <span style="color: #ff5555; cursor: pointer; font-size: 18px; font-weight: bold;" onclick="clearSelectedFile()">✕</span>
-                </div>
-
-                <div class="ai-input-container">
-                    <div class="ai-input-wrapper">
-                        <div class="ai-input-row">
-                            <input type="text" id="aiInput" placeholder="Ask AI..." oninput="updateSendButtonState()" onkeydown="if(event.key === 'Enter') sendAiMessage()">
+                <!-- Main Chat Area -->
+                <div class="ai-main-content">
+                    <div class="ai-header">
+                        <div class="ai-header-title">
+                            <span onclick="toggleHistory()" style="cursor: pointer; font-size: 20px; color: #afb1b3;" title="History">🕒</span>
+                            <span style="letter-spacing: 0.5px;">Agent / العقل المدبر</span>
+                            <span id="aiLiveClock" style="margin-right: 10px; font-family: monospace; font-size: 12px; color: #4db6ac; background: rgba(77, 182, 172, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(77, 182, 172, 0.2);">08:22:20</span>
                         </div>
-                        <div class="ai-input-footer">
-                            <div class="ai-footer-icons">
-                                <span onclick="document.getElementById('fileInput').click()" title="Attach PDF, JSON, Video, Image" style="font-size: 20px;">⊞</span>
-                                <span title="Safety Protocol Active" style="color: #4db6ac; font-size: 16px;">🛡️</span>
-                                <div class="model-selector-container">
-                                    <select id="modelSelector" onchange="saveModelSelection()" title="AI Model">
-                                        <option value="gemini-3.7-flash">Gemini 3.7 Flash (Stable - v1)</option>
-                                        <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro (Preview - v1beta)</option>
-                                        <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite (Stable - v1)</option>
-                                        <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash Exp (v1beta)</option>
-                                    </select>
-                                </div>
+                        <div class="ai-header-actions">
+                            <span onclick="createNewChat()" title="New Chat" style="font-size: 22px;">＋</span>
+                            <span title="Settings" onclick="resetGeminiKey()">⋮</span>
+                            <span onclick="toggleAiChat()">—</span>
+                        </div>
+                    </div>
+
+                    <div class="ai-messages" id="aiMessages">
+                        <div class="msg ai">
+                            أهلاً بك في <b>VSA Academy</b>! أنا العقل المدبر. كيف يمكنني مساعدتك اليوم؟
+                        </div>
+                    </div>
+
+                    <div class="ai-input-container">
+                        <div class="ai-input-wrapper">
+                            <!-- Previews Container (Now inside the wrapper) -->
+                            <div id="imagePreviewContainer"></div>
+
+                            <div class="ai-input-row">
+                                <textarea id="aiInput" placeholder="Ask AI..." rows="1" oninput="autoResizeInput(); updateSendButtonState()" onkeydown="handleKeydown(event)"></textarea>
                             </div>
-                            <button class="ai-send-btn-new" id="aiSendBtn" onclick="sendAiMessage()">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-                            </button>
+
+                            <div class="ai-input-footer">
+                                <div class="ai-footer-icons">
+                                    <span onclick="document.getElementById('fileInput').click()" title="Attach PDF, JSON, Video, Image" style="font-size: 20px;">⊞</span>
+                                    <span title="Safety Protocol Active" style="color: #4db6ac; font-size: 16px;">🛡️</span>
+                                    <div class="model-selector-container">
+                                        <select id="modelSelector" onchange="saveModelSelection()" title="AI Model">
+                                            <option value="gemini-3.7-flash">Gemini 3.7 Flash (Stable - v1)</option>
+                                            <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro (Preview - v1beta)</option>
+                                            <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite (Stable - v1)</option>
+                                            <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash Exp (v1beta)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button class="ai-send-btn-new" id="aiSendBtn" onclick="sendAiMessage()">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                                </button>
+                            </div>
+                            <input type="file" id="fileInput" style="display: none;" multiple onchange="handleFileUpload(event)">
                         </div>
-                        <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)">
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 
