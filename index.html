@@ -2860,67 +2860,55 @@
             }
         }
 
-        async function githubAction(path, targetContent, replacementContent) {
+        // 🟢 أداة الكتابة الكاملة (Write Full File)
+        async function writeFile(path, content, message = "تحديث ملف بواسطة العقل المدبر") {
             try {
-                // 🚀 محرك التفاعل مع الكود (Full Interaction Engine)
+                const apiPath = `contents/${path}`;
+                const res = await safeGithubFetch(apiPath);
+                let sha = null;
+                if (res.ok) {
+                    const data = await res.json();
+                    sha = data.sha;
+                }
+                const body = { message, content: btoa(unescape(encodeURIComponent(content))) };
+                if (sha) body.sha = sha;
+                const putRes = await safeGithubFetch(apiPath, { method: 'PUT', body: JSON.stringify(body) });
+                return putRes.ok ? "✅ تم حفظ الملف بلكامل بنجاح." : "❌ فشل حفظ الملف.";
+            } catch (e) { return `❌ خطأ: ${e.message}`; }
+        }
+
+        // 🔴 أداة التعديل الجراحي (Surgical Edit - Code Interaction Engine)
+        async function replaceFileContent(path, targetContent, replacementContent) {
+            try {
                 const apiPath = `contents/${path}`;
                 const res = await safeGithubFetch(apiPath);
                 if (!res.ok) return "❌ فشل الوصول للملف للتحقق.";
-
                 const data = await res.json();
                 const currentContent = decodeURIComponent(escape(atob(data.content)));
 
-                // 1. نظام المطابقة الصارم (Exact Match)
                 if (!currentContent.includes(targetContent)) {
-                    // 🔍 البحث عن أقرب مطابقة (Conflict Resolution)
                     const lines = currentContent.split('\n');
                     const snippet = targetContent.substring(0, 30);
                     const suggestedLine = lines.find(l => l.includes(snippet));
-
-                    return `❌ خطأ في المطابقة (Conflict Detected): النص الذي قدمته لا يتطابق مع الملف الحالي.
-                            هل تقصد هذا النص الموجود في الملف: "${suggestedLine ? suggestedLine.trim() : 'لم يتم العثور على تشابه'}"؟
-                            يرجى قراءة الملف مرة أخرى وإرسال النص القديم بدقة.`;
+                    return `❌ خطأ في المطابقة: النص القديم غير موجود بدقة. هل تقصد: "${suggestedLine ? suggestedLine.trim() : 'لا يوجد تشابه'}"؟`;
                 }
 
-                // 2. التنفيذ الجراحي (Atomic Replacement)
                 const updatedFullContent = currentContent.replace(targetContent, replacementContent);
 
-                // 3. درع الحماية الثلاثي (Syntax & Integrity Check)
-                function validateCode(code) {
-                    const stack = [];
-                    const pairs = { '(': ')', '{': '}', '[': ']' };
-                    for (let char of code) {
-                        if (pairs[char]) stack.push(pairs[char]);
-                        else if (char === ')' || char === '}' || char === ']') {
-                            if (stack.pop() !== char) return false;
-                        }
-                    }
-                    return stack.length === 0;
+                if (path.endsWith('.html')) {
+                    if (!updatedFullContent.includes('</html>')) return "❌ فشل بروتوكول الأمان: الكود الناتج ناقص.";
                 }
-
-                if (path.endsWith('.html') || path.endsWith('.js')) {
-                    if (!validateCode(updatedFullContent)) return "❌ فشل بروتوكول الأمان: التعديل سيؤدي إلى أقواس غير متوازنة. تم إلغاء العملية.";
-                    if (!updatedFullContent.includes('</html>')) return "❌ فشل بروتوكول الأمان: التعديل سيؤدي إلى كود ناقص. تم إلغاء العملية.";
-                }
-
-                // 4. الحفظ النهائي على GitHub
-                const body = {
-                    message: "🛠️ تعديل جراحي بواسطة محرك التفاعل الذكي",
-                    content: btoa(unescape(encodeURIComponent(updatedFullContent))),
-                    sha: data.sha
-                };
 
                 const putRes = await safeGithubFetch(apiPath, {
                     method: 'PUT',
-                    body: JSON.stringify(body)
+                    body: JSON.stringify({
+                        message: "🛠️ تعديل جراحي فائق الدقة (Code Interaction Engine)",
+                        content: btoa(unescape(encodeURIComponent(updatedFullContent))),
+                        sha: data.sha
+                    })
                 });
-
-                if (putRes.ok) return "✅ تم التعديل الجراحي بنجاح وبمطابقة 100%.";
-                return "❌ فشل الحفظ النهائي على GitHub.";
-
-            } catch (e) {
-                return `❌ خطأ في محرك التفاعل: ${e.message}`;
-            }
+                return putRes.ok ? "✅ تم التعديل الجراحي بمطابقة 100%." : "❌ فشل الحفظ.";
+            } catch (e) { return `❌ خطأ في المحرك: ${e.message}`; }
         }
 
         async function listGithubWorkflows() {
@@ -2980,7 +2968,7 @@
                     pendingHistory: localStorage.getItem('gemini_pending_history'), // مزامنة المهمة المعلقة للسحاب
                     timestamp: new Date().toISOString()
                 };
-                await githubAction(CHAT_LOG_PATH, JSON.stringify(globalContext, null, 2), "تحديث الذاكرة الشاملة للعقل المدبر");
+                await writeFile(CHAT_LOG_PATH, JSON.stringify(globalContext, null, 2), "تحديث الذاكرة الشاملة للعقل المدبر");
                 localStorage.setItem('gemini_chat_ui', document.getElementById('aiMessages').innerHTML);
                 saveModelSelection();
             } catch (e) {
@@ -3084,7 +3072,7 @@
         async function clearChatHistory() {
             chatHistory = [];
             if (githubToken) {
-                await githubAction(CHAT_LOG_PATH, "[]", "تصفير المحادثة");
+                await writeFile(CHAT_LOG_PATH, "[]", "تصفير المحادثة");
             }
             localStorage.removeItem('gemini_chat_ui');
             const container = document.getElementById('aiMessages');
@@ -3645,7 +3633,8 @@
 
             const tools = [{
                 function_declarations: [
-                    { name: "githubAction", description: "تعديل جراحي فائق الدقة. يتطلب: 1- النص القديم المراد استبداله (targetContent) 2- النص الجديد (replacementContent). المحرك سيتحقق من المطابقة التامة قبل التنفيذ.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["path", "targetContent", "replacementContent"] } },
+                    { name: "write_file", description: "كتابة ملف كامل أو إنشاء ملف جديد. استخدمها للملفات الصغيرة أو ملفات الإعدادات.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
+                    { name: "replace_file_content", description: "المشرط الجراحي: استبدال قطعة كود محددة بقطعة أخرى. يتطلب النص القديم بدقة (targetContent) والنص الجديد (replacementContent).", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["path", "targetContent", "replacementContent"] } },
                     { name: "getGithubFile", description: "قراءة محتوى ملف كامل.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
                     { name: "readCodeRange", description: "قراءة جراحية لنطاق محدد من الأسطر في ملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, startLine: { type: "NUMBER" }, endLine: { type: "NUMBER" } }, required: ["path", "startLine", "endLine"] } },
                     { name: "selectString", description: "البحث عن نص محدد داخل محتوى ملف معين.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, query: { type: "STRING" } }, required: ["path", "query"] } },
@@ -3782,7 +3771,8 @@
                             addMessageToUi('ai', `⚙️ تنفيذ الأداة: ${name}...`, modelName, thought);
 
                             let toolResult;
-                            if (name === "githubAction") toolResult = await githubAction(args.path, args.targetContent, args.replacementContent);
+                            if (name === "write_file") toolResult = await writeFile(args.path, args.content);
+                            else if (name === "replace_file_content") toolResult = await replaceFileContent(args.path, args.targetContent, args.replacementContent);
                             else if (name === "getGithubFile") toolResult = await getGithubFileContent(args.path);
                             else if (name === "readCodeRange") toolResult = await readCodeRange(args.path, args.startLine, args.endLine);
                             else if (name === "selectString") toolResult = await selectString(args.path, args.query);
