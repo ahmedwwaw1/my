@@ -1,8 +1,7 @@
 {
-  "id": 1787419304451,
-  "timestamp": "٢٢‏/٨‏/٢٠٢٦، ٨:٢١:٤٤ م",
-  "command": "dir",
-  "tool": "runPowerShell",
-  "status": "pending_ide_execution",
+  "id": 1787420655085,
+  "timestamp": "٢٢‏/٨‏/٢٠٢٦، ٨:٤٤:١٥ م",
+  "task": "قم بتشغيل ملف 'crypto_bot.py' باستخدام بايثون، وقم بتزويدي بمخرجات التشغيل (التقرير) فور الانتهاء.",
+  "status": "pending_ide_action",
   "requested_by": "Web_Mastermind"
 }
