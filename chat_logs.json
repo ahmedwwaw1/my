@@ -244,6 +244,6 @@
     }
   ],
   "activeSessionId": "1787394714636",
-  "pendingHistory": null,
-  "timestamp": "2026-08-22T11:53:12.914Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مذا تقصد بمجرد أن يقرر النظام هل نضام محرك التفاعل مع الكود (Code Interaction Engine)\\n تقصد\"}]}]",
+  "timestamp": "2026-08-22T11:53:17.373Z"
 }
