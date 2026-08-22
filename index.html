@@ -1379,6 +1379,7 @@
                             <span id="aiDynamicTimer" class="ai-timer-badge">0:00</span>
                         </div>
                         <div class="ai-header-actions">
+                            <span onclick="checkForEvolution()" title="Check for Evolution Updates" style="font-size: 16px;">🚀</span>
                             <span onclick="createNewChat()" title="New Chat" style="font-size: 22px;">＋</span>
                             <span onclick="toggleMaximizeAi()" title="Maximize/Restore" style="font-size: 16px;">⬜</span>
                             <span title="Settings" onclick="resetGeminiKey()">⋮</span>
@@ -3098,6 +3099,14 @@
             document.getElementById('aiInput').focus();
         }
 
+        function checkForEvolution() {
+            addMessageToUi('ai', "📡 جاري فحص 'المخطط الهندسي' بحثاً عن قدرات جديدة لتعلمها...", 'System');
+            // إرسال طلب للمحرك للقيام بالفحص
+            const input = document.getElementById('aiInput');
+            input.value = "قم بقراءة ملف [المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md] وقارنه بقدراتك الحالية في index.html. إذا وجدت ميزة جديدة، اقترح علي برمجتها فوراً.";
+            sendAiMessage();
+        }
+
         async function fetchApiKeyFromSupabase(id) {
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
             const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
@@ -4039,7 +4048,7 @@
               "identity": "VSA Academy Executive Intelligence",
               "protocols": {
                 "sovereignty": "Safe development only. Never delete existing sections.",
-                "evolution": "You are equipped with an Evolution Engine. Use patchSystem to upgrade your tools and selfExpand to add new ones. Never stay limited by initial code.",
+                "evolution": "You are equipped with an Evolution Engine. Use patchSystem to upgrade your tools and selfExpand to add new ones. ALWAYS refer to 'المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md' as your roadmap for self-improvement.",
                 "search_first": "ALWAYS use searchCode to find code or facts in files before asking or opening files blindly.",
                 "admin_bypass": "Owner can request rollbacks, reverts, or restores. Execute these as high-priority maintenance.",
                 "surgical_editing": "Read content via getGithubFile before editing. Inject, don't replace.",
