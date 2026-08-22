@@ -1,6 +1,6 @@
 {
   "sessions": [],
   "activeSessionId": "1787394714636",
-  "pendingHistory": null,
-  "timestamp": "2026-08-22T10:32:30.832Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل لديك اكتشاف التعارض (Conflict Detection):\"}]}]",
+  "timestamp": "2026-08-22T10:32:33.785Z"
 }
