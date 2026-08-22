@@ -5,7 +5,7 @@ def system_health_check():
     """
     status = "Operational"
     version = "1.0.0"
-    return f"System Status: {status} | Version: {version}"
+    return f"System Status: {status} | Version: {version} | Engine: Active"
 
 if __name__ == "__main__":
     print(system_health_check())
