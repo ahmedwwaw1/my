@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1787380833924",
+  "sessions": [
+    {
+      "id": "1787343157133",
+      "title": "أهلاً بك. أنا \"العقل المدبر\" (...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. أنا \"العقل المدبر\" (Mastermind)، المسؤول عن الذكاء التنفيذي لأكاديمية VSA.\n\nأنا في حالة استعداد تام للعمليات البرمجية، التحليل التقني، أو تطوير الأنظمة. كيف يمكنني توظيف قدراتي التقنية لخدمة أهدافك اليوم؟",
+              "thoughtSignature": "EnEKbwERTTIPYEDDk/hN9rw/SS7/KLWvbjHcL+Vegr3B//bNgQV7msS4D31TFBdfPkZhqHhJIKe1YmGYtgjVdZ2GenvYNZLAIX3NvNJgkD2iKg8JOKGWtmdOc9mf0jrQ1Lg6VgYYTyvGf1JWwLdyB2Y3Ng=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1787343157133",
   "pendingHistory": null,
-  "timestamp": "2026-08-22T06:40:33.924Z"
+  "timestamp": "2026-08-22T08:36:38.583Z"
 }
