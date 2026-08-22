@@ -3861,8 +3861,20 @@
                             else if (name === "getLiveSiteData") toolResult = JSON.stringify(allData);
                             else if (name === "repairSystem") toolResult = await repairSystem();
                             else if (name === "WorkflowFramework") toolResult = await workflowFramework(args);
-                            else if (name === "runPowerShell") toolResult = `🚀 [PowerShell]: ${args.command}\n(Executed via System Interface)`;
-                            else if (name === "executeGitCommand") toolResult = `🗂️ [Git]: ${args.command}\n(Executed via Repository Manager)`;
+                            else if (name === "runPowerShell" || name === "executeGitCommand") {
+                                try {
+                                    const bridgeFile = 'ide_bridge.json';
+                                    const payload = {
+                                        id: Date.now(),
+                                        timestamp: new Date().toLocaleString('ar-EG'),
+                                        command: args.command,
+                                        tool: name,
+                                        status: "pending_ide_execution",
+                                        requested_by: "Web_Mastermind"
+                                    };
+                                    toolResult = await githubAction(bridgeFile, JSON.stringify(payload, null, 2), `🛠️ تنفيذ أمر شيل: [${name}] عبر الجسر`);
+                                } catch(e) { toolResult = `❌ فشل إرسال الأمر للجسر: ${e.message}`; }
+                            }
                             else if (name === "thought") {
                                 console.log("🧠 Mastermind Thought:", args.reasoning);
                                 toolResult = `✅ استوعبت الفكرة: ${args.reasoning.substring(0, 50)}...`;
