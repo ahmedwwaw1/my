@@ -3100,10 +3100,15 @@
         }
 
         function checkForEvolution() {
+            if (document.getElementById('aiSendBtn').classList.contains('working')) {
+                addMessageToUi('ai', "⚠️ المحرك مشغول حالياً. يرجى الانتظار حتى انتهاء المهمة الحالية.", 'System');
+                return;
+            }
             addMessageToUi('ai', "📡 جاري فحص 'المخطط الهندسي' بحثاً عن قدرات جديدة لتعلمها...", 'System');
-            // إرسال طلب للمحرك للقيام بالفحص
             const input = document.getElementById('aiInput');
             input.value = "قم بقراءة ملف [المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md] وقارنه بقدراتك الحالية في index.html. إذا وجدت ميزة جديدة، اقترح علي برمجتها فوراً.";
+            autoResizeInput();
+            updateSendButtonState();
             sendAiMessage();
         }
 
@@ -3597,7 +3602,9 @@
                     await runToolLoop(history);
                 } catch(e) {
                     console.error("Resume failed:", e);
+                } finally {
                     if (sendBtn) sendBtn.classList.remove('working');
+                    updateSendButtonState();
                 }
             }
         }
@@ -3628,6 +3635,10 @@
             stopAiRequested = false;
 
             try {
+                sendBtn.classList.add('working');
+                // إضافة تأخير بسيط للتأكد من أن الـ UI استوعب الحالة
+                await new Promise(r => setTimeout(r, 50));
+
                 let finalPrompt = msgText;
                 let lastFileBase64 = null;
                 let lastFileType = null;
@@ -3646,11 +3657,12 @@
                 addMessageToUi('ai', `🧠 جاري التفكير باستخدام ${document.getElementById('modelSelector').value}...`, 'System');
                 const result = await callGemini(finalPrompt, lastFileBase64, lastFileType);
 
-                // إزالة رسالة "جاري التفكير"
+                // إزالة أي رسالة تفكير متبقية بالبحث في آخر 3 رسائل
                 const msgs = document.getElementById('aiMessages');
-                if (msgs.lastChild && msgs.lastChild.innerText.includes("جاري التفكير")) {
-                    msgs.removeChild(msgs.lastChild);
-                }
+                const lastMessages = Array.from(msgs.children).slice(-3);
+                lastMessages.forEach(m => {
+                    if (m.innerText.includes("جاري التفكير")) msgs.removeChild(m);
+                });
 
                 // فحص إذا كان الرد يحتوي على خطأ في الـ API
                 if (result.text && result.text.includes("API_KEY_INVALID")) {
@@ -3666,6 +3678,14 @@
             } catch (err) {
                 console.error("Chat Error:", err);
                 addMessageToUi('ai', "⚠️ عطل فني: تعذر الاتصال بمحرك الذكاء الاصطناعي. تأكد من أن مفتاح الـ API صحيح ومن اتصال الإنترنت.");
+            } finally {
+                console.log("AI Engine: Finished task.");
+                sendBtn.classList.remove('working');
+                // التأكد من أن الزر استعاد حالته الطبيعية
+                setTimeout(() => {
+                    sendBtn.classList.remove('working');
+                    updateSendButtonState();
+                }, 100);
             }
         }
 
@@ -4103,16 +4123,12 @@
                 // 🛑 فحص إذا طلب المستخدم الإيقاف يدوياً
                 if (stopAiRequested) {
                     stopAiRequested = false;
-                    const sendBtn = document.getElementById('aiSendBtn');
-                    if (sendBtn) sendBtn.classList.remove('working');
                     localStorage.removeItem('gemini_pending_history');
                     return { text: "🛑 تم إيقاف العملية يدوياً بناءً على طلبك.", model: "System" };
                 }
 
-                // 💾 حفظ حالة المحادثة الحالية للاسترداد وتغيير شكل الزر للإيقاف
+                // 💾 حفظ حالة المحادثة الحالية للاسترداد
                 localStorage.setItem('gemini_pending_history', JSON.stringify(history));
-                const sendBtn = document.getElementById('aiSendBtn');
-                if (sendBtn) sendBtn.classList.add('working');
                 startAiTimer(); // ⏱️ بدء عداد الانتظار
 
                 // 🔄 بروتوكول الاستمرارية العميقة (Deep Persistence Protocol)
@@ -4123,7 +4139,6 @@
                     if (retryCount > 100) { // التوقف فقط بعد 100 محاولة كبرى (حوالي ساعة من الانتظار) لضمان الاستمرارية القصوى
                         localStorage.removeItem('gemini_retry_count');
                         localStorage.removeItem('gemini_pending_history');
-                        if (sendBtn) sendBtn.classList.remove('working');
                         return { text: "❌ تم الوصول للحد الأقصى من المحاولات (100). يرجى التحقق من اتصالك بالإنترنت أو مفتاح الـ API.", model: "System Error" };
                     }
 
@@ -4385,7 +4400,6 @@
                         if (chatHistory.length > 50) chatHistory = chatHistory.slice(-50);
                         saveChatToStorage();
                         localStorage.removeItem('gemini_pending_history'); // مسح حالة الانتظار عند النجاح
-                        sendBtn.classList.remove('working'); // عودة الزر لشكل السهم
                         stopAiTimer(); // ⏱️ إيقاف العداد
                         return { text: thought || "تمت العملية بنجاح.", model: modelName };
                     } catch (err) {
@@ -4396,7 +4410,6 @@
                 }
 
                 // إذا فشلت كل المحاولات بعد الانتظار الطويل
-                sendBtn.classList.remove('working');
                 return { text: `❌ فشلت جميع المحاولات. آخر خطأ تم رصده: ${lastError}`, model: "System Error" };
             }
 
