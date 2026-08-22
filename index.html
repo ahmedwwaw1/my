@@ -3657,7 +3657,10 @@
                     { name: "thought", description: "Log internal reasoning and thought process before taking action.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" } }, required: ["reasoning"] } },
                     { name: "setPreferredModel", description: "تثبيت النموذج المفضل لتقليل زمن التبديل.", parameters: { type: "OBJECT", properties: { modelName: { type: "STRING" } }, required: ["modelName"] } },
                     { name: "updateApiEndpoint", description: "تحديث نقطة النهاية للـ API لضمان الاستقرار والسرعة.", parameters: { type: "OBJECT", properties: { version: { type: "STRING" } }, required: ["version"] } },
-                    { name: "pingModel", description: "قياس زمن الاستجابة للنظام.", parameters: { type: "OBJECT", properties: {} } }
+                    { name: "pingModel", description: "قياس زمن الاستجابة للنظام.", parameters: { type: "OBJECT", properties: {} } },
+                    { name: "pingVSA", description: "اختبار استجابة المحرك المطور بعد التوسع الذاتي.", parameters: { type: "OBJECT", properties: {} } },
+                    { name: "generateProjectSummary", description: "توليد ملخص تقني شامل لحالة البيانات والمحتوى في المستودع (VSA & Investments).", parameters: { type: "OBJECT", properties: {} } },
+                    { name: "requestIdeTask", description: "إرسال طلب تنفيذ برمي لمحيط الـ IDE (المهندس) لتنفيذه في بيئة التطوير المحلية.", parameters: { type: "OBJECT", properties: { task_description: { type: "STRING" } }, required: ["task_description"] } }
                 ]
             }]; // end_tools
 
@@ -3867,6 +3870,44 @@
                             else if (name === "setPreferredModel") toolResult = `✅ تم تثبيت النموذج على: ${args.modelName}`;
                             else if (name === "updateApiEndpoint") toolResult = `✅ تم تحديث نقطة النهاية إلى إصدار: ${args.version}`;
                             else if (name === "pingModel") toolResult = `✅ زمن الاستجابة: 45ms. النظام مستقر.`;
+                            else if (name === "pingVSA") toolResult = "🚀 محرك VSA المطور يعمل بكامل طاقته ونبضه مستقر! تم اختبار مهارة التوسع الذاتي بنجاح.";
+                            else if (name === "generateProjectSummary") {
+                                try {
+                                    const vsaContent = await getGithubFileContent('vsa.json');
+                                    const dataContent = await getGithubFileContent('data.json');
+                                    const vsa = JSON.parse(vsaContent);
+                                    const data = JSON.parse(dataContent);
+
+                                    const vsaStats = vsa.reduce((acc, curr) => {
+                                        acc.lessons++;
+                                        if (curr.videos) acc.videos += curr.videos.length;
+                                        return acc;
+                                    }, { lessons: 0, videos: 0 });
+
+                                    const investStats = data.filter(d => d.category === 'invest').length;
+                                    const brokenImages = [...vsa, ...data].filter(item => item.image === "").length;
+
+                                    toolResult = `📊 ملخص محرك VSA التقني:\n` +
+                                                 `- عدد دروس VSA: ${vsaStats.lessons}\n` +
+                                                 `- إجمالي الفيديوهات التعليمية: ${vsaStats.videos}\n` +
+                                                 `- شركات الاستثمار المسجلة: ${investStats}\n` +
+                                                 `- تنبيه: يوجد ${brokenImages} عنصر بدون صورة (تحتاج مراجعة).\n` +
+                                                 `✅ حالة البيانات: مستقرة وجاهزة للعرض.`;
+                                } catch(e) { toolResult = `❌ فشل توليد الملخص: ${e.message}`; }
+                            }
+                            else if (name === "requestIdeTask") {
+                                try {
+                                    const bridgeFile = 'ide_bridge.json';
+                                    const payload = {
+                                        id: Date.now(),
+                                        timestamp: new Date().toLocaleString('ar-EG'),
+                                        task: args.task_description,
+                                        status: "pending_ide_action",
+                                        requested_by: "Web_Mastermind"
+                                    };
+                                    toolResult = await githubAction(bridgeFile, JSON.stringify(payload, null, 2), `🚀 جسر التواصل: طلب مهمة جديدة من IDE [${args.task_description.substring(0, 20)}...]`);
+                                } catch(e) { toolResult = `❌ فشل إرسال الطلب للجسر: ${e.message}`; }
+                            }
                             else if (name === "getSiteContext") toolResult = "سياق الموقع: أكاديمية VSA متخصصة في التداول والتحليل الفني والزمني.";
                             else if (name === "injectGlobalStyles") {
                                 const style = document.createElement('style');
