@@ -3,16 +3,25 @@ import json
 import os
 from datetime import datetime
 
+# إعدادات الأهداف السعرية (Price Targets)
+PRICE_TARGETS = {
+    'BTC/USDT': {'target': 80000.0, 'side': 'above'},
+    'ETH/USDT': {'target': 3000.0, 'side': 'above'},
+    'SOL/USDT': {'target': 100.0, 'side': 'above'},
+    'BNB/USDT': {'target': 700.0, 'side': 'above'}
+}
+
 def analyze_crypto_market():
     """
     جلب بيانات العملات وتحديث ملف crypto_alerts.json مع دعم إضافي لتحليل التقلب (Volatility)
+    وفحص الأهداف السعرية المحددة.
     """
     try:
         # استخدام منصة KuCoin لتجنب الحظر الجغرافي لـ GitHub الأمريكي
         exchange = ccxt.kucoin()
         
-        # العملات المراد مراقبتها (تمتقيع سولانا SOL لزيادة نطاق التغطية)
-        symbols = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'SOL/USDT']
+        # العملات المراد مراقبتها
+        symbols = list(PRICE_TARGETS.keys())
         
         alerts = []
         
@@ -27,22 +36,42 @@ def analyze_crypto_market():
                 high_24h = ticker.get('high', price)
                 low_24h = ticker.get('low', price)
                 
-                # حساب مؤشر التقلب البسيط (نطاق التغير خلال 24 ساعة)
+                # حساب مؤشر التقلب البسيط
                 volatility = round(((high_24h - low_24h) / price) * 100, 2) if price > 0 else 0
                 
-                # الشرط: إذا كان حجم التداول أكثر من 10 مليون
-                if volume > 10000000:
+                # 🎯 فحص الأهداف السعرية
+                target_info = PRICE_TARGETS.get(symbol)
+                if target_info:
+                    target_price = target_info['target']
+                    side = target_info['side']
+
+                    hit = False
+                    if side == 'above' and price >= target_price:
+                        hit = True
+                    elif side == 'below' and price <= target_price:
+                        hit = True
+
+                    if hit:
+                        print(f"🚀 تم الوصول للهدف السعري! {symbol}: {price} (الهدف: {target_price})")
+                        # إضافة تصنيف خاص للتنبيهات التي حققت الهدف
+                        category = "price_target_hit"
+                    else:
+                        category = "high_volume_with_analytics" if volume > 10000000 else None
+
+                # الشرط: إذا كان حجم التداول أكثر من 10 مليون أو تم ضرب الهدف
+                if category:
                     new_alert = {
                         "symbol": symbol,
                         "price": price,
                         "volume": round(volume, 2),
                         "change_percent": round(change_percent, 2),
                         "volatility": volatility,
-                        "timestamp": datetime.utcnow().isoformat() + "Z", # استخدام UTC مع علامة Z
-                        "category": "high_volume_with_analytics"
+                        "timestamp": datetime.utcnow().isoformat() + "Z",
+                        "category": category,
+                        "target_hit": (category == "price_target_hit")
                     }
                     alerts.append(new_alert)
-                    print(f"✅ تنبيه مطور: {symbol} - السعر: {price} - التقلب: {volatility}%")
+                    print(f"✅ تنبيه مطور: {symbol} - السعر: {price} - الفئة: {category}")
             except Exception as e:
                 print(f"⚠️ خطأ في جلب بيانات {symbol}: {e}")
                 continue
