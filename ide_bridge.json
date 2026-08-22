@@ -1,0 +1,8 @@
+{
+  "id": 1787416746062,
+  "timestamp": "٢٢‏/٨‏/٢٠٢٦، ٧:٣٩:٠٦ م",
+  "command": "python --version",
+  "tool": "runPowerShell",
+  "status": "pending_ide_execution",
+  "requested_by": "Web_Mastermind"
+}
