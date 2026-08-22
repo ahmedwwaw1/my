@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My website</title>
+    <!-- Marked for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         /* Modal Cinema Styling */
         .modal {
@@ -672,6 +674,17 @@
             position: relative;
             flex-direction: row;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ai-chat-box.maximized {
+            width: 98vw !important;
+            height: 98vh !important;
+            max-width: 98vw !important;
+            max-height: 98vh !important;
+            border-radius: 0;
+            top: 1vh !important;
+            left: 1vw !important;
         }
 
         /* Resize Handles CSS */
@@ -890,40 +903,144 @@
         }
 
         .thought-box {
-            background: rgba(53, 116, 240, 0.05);
-            border-left: 3px solid #3574f0;
-            padding: 10px 15px;
-            margin-bottom: 12px;
+            background: #2b2d30;
+            border: 1px solid #3c3f41;
+            padding: 12px;
+            margin: 8px 0;
             font-size: 13px;
-            color: #afb1b3;
-            font-style: italic;
-            border-radius: 4px;
-            white-space: pre-line;
-            display: none; /* مخفي ويظهر عند النقر أو إذا كان هناك محتوى */
+            color: #dfe1e5;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.5;
         }
 
         .thought-toggle {
-            font-size: 11px;
-            color: #3574f0;
+            font-size: 12px;
+            color: #afb1b3;
             cursor: pointer;
-            margin-bottom: 8px;
-            display: inline-block;
-            font-weight: bold;
+            padding: 4px 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #3c3f41;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            margin-bottom: 5px;
         }
 
-        .thought-toggle:hover { text-decoration: underline; }
+        .thought-toggle:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
 
-        .ai-step {
+        .thought-toggle::before {
+            content: "▶";
+            font-size: 8px;
+            transition: transform 0.2s;
+        }
+
+        .thought-toggle.open::before {
+            transform: rotate(90deg);
+        }
+
+        /* 🛠️ IDE Style Tool Steps */
+        .ai-step-container {
+            margin: 5px 0;
+            border: 1px solid #3c3f41;
+            border-radius: 8px;
+            background: #2b2d30;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .ai-step-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            color: #afb1b3;
+            gap: 10px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #dfe1e5;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .ai-step-header:hover {
+            background: #393b40;
+        }
+
+        .ai-step-icon {
+            font-size: 14px;
+            width: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-step-status {
+            margin-left: auto;
             font-size: 12px;
-            margin-bottom: 10px;
-            background: rgba(255,255,255,0.03);
-            padding: 5px 10px;
-            border-radius: 6px;
-            width: fit-content;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-spinner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-top: 2px solid #3574f0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .status-done { color: #4db6ac; }
+        .status-error { color: #ff3d00; }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ai-step-details {
+            display: none;
+            padding: 10px 12px;
+            background: #1e1f22;
+            border-top: 1px solid #3c3f41;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 12px;
+            color: #afb1b3;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .ai-step-details pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .ai-step-args {
+            color: #d7ba7d; /* IDE style argument color */
+            font-size: 11px;
+            margin-bottom: 8px;
+            display: block;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 5px;
+        }
+
+        .ai-messages pre code {
+            background: #2b2d30 !important;
+            padding: 15px !important;
+            border-radius: 8px !important;
+            border: 1px solid #3c3f41 !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            display: block;
+            overflow-x: auto;
         }
 
         .ai-input-container {
@@ -1209,6 +1326,7 @@
                         </div>
                         <div class="ai-header-actions">
                             <span onclick="createNewChat()" title="New Chat" style="font-size: 22px;">＋</span>
+                            <span onclick="toggleMaximizeAi()" title="Maximize/Restore" style="font-size: 16px;">⬜</span>
                             <span title="Settings" onclick="resetGeminiKey()">⋮</span>
                             <span onclick="toggleAiChat()">—</span>
                         </div>
@@ -2898,6 +3016,13 @@
             }
         }
 
+        function toggleMaximizeAi() {
+            const chatBox = document.getElementById('aiChatBox');
+            chatBox.classList.toggle('maximized');
+            // ضبط التركيز التلقائي
+            document.getElementById('aiInput').focus();
+        }
+
         async function fetchApiKeyFromSupabase(id) {
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
             const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
@@ -3483,7 +3608,15 @@
                 const text = turn.parts.map(p => p.text || "[مرفق]").join('\n');
                 const div = document.createElement('div');
                 div.className = turn.role === 'user' ? 'msg user' : 'msg ai';
-                div.innerText = text;
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'msg-content';
+                if (typeof marked !== 'undefined' && sender !== 'user') {
+                    contentDiv.innerHTML = marked.parse(text);
+                } else {
+                    contentDiv.innerText = text;
+                }
+                div.appendChild(contentDiv);
 
                 if (turn.role === 'model' && turn.model) {
                     const badge = document.createElement('div');
@@ -3497,11 +3630,37 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        function addMessageToUi(sender, text, modelName = null) {
+        function addMessageToUi(sender, text, modelName = null, thought = null) {
             const container = document.getElementById('aiMessages');
             const div = document.createElement('div');
             div.className = `msg ${sender}`;
-            div.innerText = text;
+
+            // إضافة Thought Box إذا وجد
+            if (sender === 'ai' && thought) {
+                const toggle = document.createElement('div');
+                toggle.className = 'thought-toggle';
+                toggle.innerText = "Thought Process";
+                toggle.onclick = () => {
+                    const box = toggle.nextElementSibling;
+                    box.style.display = box.style.display === 'block' ? 'none' : 'block';
+                    toggle.classList.toggle('open');
+                };
+                div.appendChild(toggle);
+
+                const box = document.createElement('div');
+                box.className = 'thought-box';
+                box.innerText = thought;
+                div.appendChild(box);
+            }
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'msg-content';
+            if (typeof marked !== 'undefined' && sender !== 'user') {
+                contentDiv.innerHTML = marked.parse(text);
+            } else {
+                contentDiv.innerText = text;
+            }
+            div.appendChild(contentDiv);
 
             if (sender === 'ai' && modelName) {
                 const badge = document.createElement('div');
@@ -3513,6 +3672,81 @@
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
             saveChatToStorage(); // حفظ حالة الـ UI
+        }
+
+        function addToolStepToUi(toolName, args) {
+            const container = document.getElementById('aiMessages');
+            const stepId = 'step-' + Date.now();
+
+            const stepContainer = document.createElement('div');
+            stepContainer.className = 'ai-step-container';
+            stepContainer.id = stepId;
+
+            const header = document.createElement('div');
+            header.className = 'ai-step-header';
+            header.onclick = () => {
+                const details = header.nextElementSibling;
+                details.style.display = details.style.display === 'block' ? 'none' : 'block';
+            };
+
+            const icon = document.createElement('span');
+            icon.className = 'ai-step-icon';
+            icon.innerText = getToolIcon(toolName);
+
+            const nameSpan = document.createElement('span');
+            nameSpan.innerText = toolName;
+
+            const status = document.createElement('div');
+            status.className = 'ai-step-status';
+            status.innerHTML = '<div class="status-spinner"></div><span>Running...</span>';
+
+            header.appendChild(icon);
+            header.appendChild(nameSpan);
+            header.appendChild(status);
+
+            const details = document.createElement('div');
+            details.className = 'ai-step-details';
+
+            const argsSpan = document.createElement('span');
+            argsSpan.className = 'ai-step-args';
+            argsSpan.innerText = `Arguments: ${JSON.stringify(args, null, 2)}`;
+
+            const outputPre = document.createElement('pre');
+            outputPre.innerText = "Waiting for output...";
+
+            details.appendChild(argsSpan);
+            details.appendChild(outputPre);
+
+            stepContainer.appendChild(header);
+            stepContainer.appendChild(details);
+            container.appendChild(stepContainer);
+            container.scrollTop = container.scrollHeight;
+
+            return stepId;
+        }
+
+        function updateToolStepStatus(stepId, success, output) {
+            const step = document.getElementById(stepId);
+            if (!step) return;
+
+            const status = step.querySelector('.ai-step-status');
+            if (success) {
+                status.innerHTML = '<span class="status-done">✅ Done</span>';
+            } else {
+                status.innerHTML = '<span class="status-error">❌ Error</span>';
+            }
+
+            const outputPre = step.querySelector('.ai-step-details pre');
+            outputPre.innerText = typeof output === 'string' ? output : JSON.stringify(output, null, 2);
+        }
+
+        function getToolIcon(name) {
+            if (name.includes('read') || name.includes('get')) return '🔍';
+            if (name.includes('write') || name.includes('replace') || name.includes('patch')) return '📝';
+            if (name.includes('search')) return '📡';
+            if (name.includes('run') || name.includes('execute')) return '⚡';
+            if (name.includes('repair')) return '🛠️';
+            return '⚙️';
         }
 
         async function getGithubFileContent(path) {
@@ -3884,7 +4118,13 @@
 
                         if (part && part.functionCall) {
                             const { name, args } = part.functionCall;
-                            addMessageToUi('ai', `⚙️ تنفيذ الأداة: ${name}...`, modelName, thought);
+
+                            // عرض Thought إذا وجد في نفس الرد
+                            if (thought) {
+                                addMessageToUi('ai', '', modelName, thought);
+                            }
+
+                            const stepId = addToolStepToUi(name, args);
                             logToTerminal(`Tool Execution Initiated: ${name}`, 'command');
                             if (args.command) logToTerminal(`Executing Shell: ${args.command}`, 'info');
                             if (args.task_description) logToTerminal(`Task Delegated: ${args.task_description}`, 'info');
@@ -3992,7 +4232,7 @@
                             }
                             else if (name === "thought") {
                                 console.log("🧠 Mastermind Thought:", args.reasoning);
-                                toolResult = `✅ استوعبت الفكرة: ${args.reasoning.substring(0, 50)}...`;
+                                toolResult = args.reasoning;
                             }
                             else if (name === "setPreferredModel") toolResult = `✅ تم تثبيت النموذج على: ${args.modelName}`;
                             else if (name === "updateApiEndpoint") toolResult = `✅ تم تحديث نقطة النهاية إلى إصدار: ${args.version}`;
@@ -4042,6 +4282,8 @@
                                 document.head.appendChild(style);
                                 toolResult = "✅ تم تطبيق التنسيق الجديد بنجاح.";
                             }
+
+                            updateToolStepStatus(stepId, !String(toolResult).includes('❌') && !String(toolResult).includes('خطأ'), toolResult);
 
                             history.push({ role: "model", parts: parts });
                             history.push({ role: "user", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
