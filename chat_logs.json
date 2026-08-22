@@ -1,6 +1,59 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1787412986986",
+      "title": "بصفتي \"العقل المدبر\" (Mastermi...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ممكن تعمل لي قائمة كاملة عن الادوات التي تعمل تحت ضل محرك التفاعل مع الكود (Code Interaction Engine) الموجودي الان في بيأتي"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "سأقوم بسرد الأدوات المتاحة حالياً في بيئة العمل الخاصة بي (Code Interaction Engine) بناءً على التعريفات البرمجية المتاحة لي، لتزويد المستخدم بقائمة دقيقة وشاملة."
+                },
+                "id": "call_1300806"
+              },
+              "thoughtSignature": "EnEKbwERTTIPj79iz/V2IqAY3mi2yE3sbrlTbgxHo8OYH1JHomAeqrZVZQZ9AdIFxi1dU/PjUmB5PfkRK0fQwuvE6VBUCl2t6y5T9HE83BiFqWka16VtDdsv5c0AGtdsovrJYTvLEufpVUX0CZvynEFxGw=="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": "✅ استوعبت الفكرة: سأقوم بسرد الأدوات المتاحة حالياً في بيئة العمل ال..."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "بصفتي \"العقل المدبر\" (Mastermind)، إليك قائمة شاملة بالأدوات المتاحة حالياً ضمن \"محرك التفاعل مع الكود\" (Code Interaction Engine) الخاص بي، مصنفة حسب وظائفها التشغيلية:\n\n### 1. أدوات إدارة الملفات والمحتوى (File & Content Management)\n*   **`write_file`**: لإنشاء ملفات جديدة أو كتابة محتوى كامل في ملف.\n*   **`getGithubFile`**: لقراءة محتوى ملف كامل من المستودع.\n*   **`readCodeRange`**: لقراءة نطاق محدد من الأسطر (قراءة جراحية) لتقليل استهلاك التوكنات.\n*   **`replace_file_content`**: المشرط الجراحي لاستبدال نص محدد بنص آخر داخل ملف.\n*   **`listGithubFiles`**: لاستكشاف هيكل المجلدات والملفات.\n\n### 2. أدوات البحث والتحليل (Search & Analysis)\n*   **`searchCode`**: البحث عن كلمة أو كود في كامل المستودع (أداة أساسية للبحث السريع).\n*   **`selectString`**: البحث عن نص محدد داخل ملف معين.\n*   **`analyzeProjectStructure`**: فحص سلامة الملفات (JSON، الروابط المكسورة) ونظافة المستودع.\n*   **`generateProjectSummary`**: توليد ملخص تقني شامل لحالة البيانات والمحتوى.\n\n### 3. أدوات التطور الذاتي والصيانة (Evolution & Maintenance)\n*   **`patchSystem`**: محرك الترقية (Evolution Engine) لتعديل أو ترقية كود أداة موجودة.\n*   **`selfExpand`**: إضافة أداة جديدة تماماً للمحرك (توسيع القدرات).\n*   **`repairSystem`**: فحص ذاتي للنظام وإصلاح مشاكل الاتصال أو التوكن.\n\n### 4. أدوات التنفيذ والتشغيل (Execution & Workflow)\n*   **`WorkflowFramework`**: تعريف، سرد، وتنفيذ سلاسل عمليات مؤتمتة (Multi-step sequences).\n*   **`runPowerShell`**: تنفيذ أوامر PowerShell (محاكاة أو عبر سير العمل).\n*   **`executeGitCommand`**: تنفيذ أوامر Git (add, commit, push, status).\n*   **`triggerGithubWorkflow`**: تشغيل عمليات البوتات التلقائية.\n*   **`updateWorkflowStatus`**: إيقاف أو تفعيل البوتات.\n\n### 5. أدوات السياق والبيانات الحية (Context & Live Data)\n*   **`getLiveSiteData`**: جلب الحقائق المعروضة حالياً لمنع الهلوسة.\n*   **`getSiteContext`**: جلب السياق العام للموقع والسياسات (RAG Tool).\n*   **`listModels`**: جلب قائمة النماذج المتاحة لتشخيص مشاكل التوافر.\n*   **`pingModel`**: قياس زمن استجابة النظام.\n*   **`pingVSA`**: اختبار استجابة المحرك المطور.\n\n### 6. أدوات الواجهة والتفاعل (UI & IDE Integration)\n*   **`injectGlobalStyles`**: تغيير واجهة المستخدم (CSS) فوراً للتحقق البصري.\n*   **`requestIdeTask`**: إرسال مهام برمجية لمحيط الـ IDE (المهندس) للتنفيذ المحلي.\n*   **`thought`**: تسجيل التفكير المنطقي الداخلي قبل اتخاذ أي إجراء.\n*   **`setPreferredModel`**: تثبيت النموذج المفضل لتقليل زمن التبديل.\n*   **`updateApiEndpoint`**: تحديث نقطة النهاية للـ API لضمان الاستقرار.\n\nهذه الأدوات تشكل \"الجهاز العصبي\" لعملياتي، وأنا في حالة استعداد دائم لاستخدامها أو توسيعها عبر `selfExpand` إذا تطلبت المهمة ذلك. هل هناك أداة معينة تود مني استخدامها الآن؟",
+              "thoughtSignature": "EnEKbwERTTIPud7ToOM2JVQVPuSDhQeJSssPJnseRX5XPk00GbzxADfGqBw+qUzoLfl8mZ4pwbw3Z+144YRplzZlVwHh6LAjhJ6UlJgY09Ro9Ky34B8wOXQfwYHRKCnDjwYohOmkFoJKIJjYYA8Wr6c9HQ=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1787412986986",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ممكن تعمل لي قائمة كاملة عن الادوات التي تعمل تحت ضل محرك التفاعل مع الكود (Code Interaction Engine) الموجودي الان في بيأتي\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"سأقوم بسرد الأدوات المتاحة حالياً في بيئة العمل الخاصة بي (Code Interaction Engine) بناءً على التعريفات البرمجية المتاحة لي، لتزويد المستخدم بقائمة دقيقة وشاملة.\"},\"id\":\"call_1300806\"},\"thoughtSignature\":\"EnEKbwERTTIPj79iz/V2IqAY3mi2yE3sbrlTbgxHo8OYH1JHomAeqrZVZQZ9AdIFxi1dU/PjUmB5PfkRK0fQwuvE6VBUCl2t6y5T9HE83BiFqWka16VtDdsv5c0AGtdsovrJYTvLEufpVUX0CZvynEFxGw==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":\"✅ استوعبت الفكرة: سأقوم بسرد الأدوات المتاحة حالياً في بيئة العمل ال...\"}}}]}]",
-  "timestamp": "2026-08-22T15:37:45.159Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-22T15:38:27.975Z"
 }
