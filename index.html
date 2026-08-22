@@ -901,33 +901,107 @@
             transition: all 0.2s;
         }
 
+        /* 🎨 واجهة الإدخال المتطورة (Gemini Style) */
+        .ai-input-container {
+            padding: 15px;
+            background: #1e1f22;
+            border-top: 1px solid #2b2d30;
+        }
+
+        .ai-input-wrapper {
+            background: #2b2d30;
+            border: 1px solid #4e5157;
+            border-radius: 20px;
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: border-color 0.2s;
+        }
+
         .ai-input-wrapper:focus-within {
             border-color: #3574f0;
-            box-shadow: 0 0 0 2px rgba(53, 116, 240, 0.1);
+        }
+
+        /* حاوية المعاينة داخل الصندوق */
+        #imagePreviewContainer {
+            display: none;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid #3c3f41;
+            margin-bottom: 5px;
+        }
+
+        .preview-item {
+            position: relative;
+            width: 55px;
+            height: 55px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #4e5157;
+            background: #1e1f22;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-item .file-icon {
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .preview-item .remove-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
         }
 
         .ai-input-row {
             display: flex;
-            align-items: center;
-            gap: 12px;
+            align-items: flex-end;
+            gap: 10px;
         }
 
-        .ai-input-row input {
+        #aiInput {
             flex-grow: 1;
             background: transparent;
             border: none;
-            color: #fff;
+            color: #dfe1e5;
             font-size: 15px;
+            line-height: 1.6;
+            padding: 5px 0;
             outline: none;
-            padding: 4px 0;
+            resize: none;
+            max-height: 250px;
+            min-height: 24px;
+            font-family: inherit;
         }
 
-        .ai-input-row input::placeholder { color: #6e7073; }
+        #aiInput::placeholder { color: #6e7073; }
 
         .ai-input-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding-top: 5px;
         }
 
         .ai-footer-icons {
@@ -3082,70 +3156,113 @@
         function updateSendButtonState() {
             const input = document.getElementById('aiInput');
             const btn = document.getElementById('aiSendBtn');
-            if (input.value.trim() !== "" || selectedFileBase64) {
+            const hasFiles = selectedFiles.length > 0;
+            if (input.value.trim() !== "" || hasFiles) {
                 btn.classList.add('active');
             } else {
                 btn.classList.remove('active');
             }
         }
 
-        let selectedFileBase64 = null;
-        let selectedFileType = null;
-        let selectedFileName = "";
-        let selectedFileContent = null;
+        // 📏 التوسع التلقائي لصندوق الكتابة
+        function autoResizeInput() {
+            const input = document.getElementById('aiInput');
+            input.style.height = 'auto';
+            input.style.height = (input.scrollHeight) + 'px';
+        }
+
+        // ⌨️ معالجة لوحة المفاتيح
+        function handleKeydown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendAiMessage();
+            }
+        }
+
+        let selectedFiles = [];
 
         async function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+            const files = Array.from(event.target.files);
+            if (files.length === 0) return;
 
-            selectedFileName = file.name;
-            selectedFileType = file.type;
+            const container = document.getElementById('imagePreviewContainer');
+            container.style.display = 'flex';
 
-            // قراءة المحتوى النصي إذا كان الملف نصياً أو JSON
-            if (file.type === 'application/json' || file.type.startsWith('text/') || file.name.endsWith('.json') || file.name.endsWith('.txt')) {
-                const textReader = new FileReader();
-                textReader.onload = (e) => {
-                    selectedFileContent = e.target.result;
-                    console.log("✅ تم تحميل محتوى الملف النصي بنجاح.");
+            for (const file of files) {
+                const fileId = Date.now() + Math.random();
+                const reader = new FileReader();
+
+                reader.onload = (e) => {
+                    const base64 = e.target.result.split(',')[1];
+                    const fileObj = {
+                        id: fileId,
+                        name: file.name,
+                        type: file.type,
+                        base64: base64,
+                        content: null
+                    };
+
+                    if (file.type === 'application/json' || file.type.startsWith('text/') || file.name.endsWith('.json') || file.name.endsWith('.txt')) {
+                        const textReader = new FileReader();
+                        textReader.onload = (te) => { fileObj.content = te.target.result; };
+                        textReader.readAsText(file);
+                    }
+
+                    selectedFiles.push(fileObj);
+                    renderPreviews();
+                    updateSendButtonState();
                 };
-                textReader.readAsText(file);
+                reader.readAsDataURL(file);
+            }
+            event.target.value = '';
+        }
+
+        function renderPreviews() {
+            const container = document.getElementById('imagePreviewContainer');
+            container.innerHTML = '';
+
+            if (selectedFiles.length === 0) {
+                container.style.display = 'none';
+                return;
+            } else {
+                container.style.display = 'flex';
             }
 
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                const base64 = e.target.result.split(',')[1];
-                selectedFileBase64 = base64;
-
-                const preview = document.getElementById('imagePreview');
-                const iconPreview = document.getElementById('fileIconPreview');
-                const namePreview = document.getElementById('fileNamePreview');
-
-                document.getElementById('imagePreviewContainer').style.display = 'flex';
-                namePreview.innerText = file.name;
+            selectedFiles.forEach(file => {
+                const item = document.createElement('div');
+                item.className = 'preview-item';
 
                 if (file.type.startsWith('image/')) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                    iconPreview.style.display = 'none';
+                    item.innerHTML = `<img src="data:${file.type};base64,${file.base64}">`;
                 } else {
-                    preview.style.display = 'none';
-                    iconPreview.style.display = 'block';
-                    if (file.type === 'application/pdf') iconPreview.innerText = '📄';
-                    else if (file.type.includes('json')) iconPreview.innerText = '⚙️';
-                    else if (file.type.startsWith('video/')) iconPreview.innerText = '🎬';
-                    else iconPreview.innerText = '📝';
+                    let icon = '📝';
+                    if (file.type === 'application/pdf') icon = '📄';
+                    else if (file.type.includes('json')) icon = '⚙️';
+                    item.innerHTML = `<div class="file-icon">${icon}</div>`;
                 }
-                updateSendButtonState();
-            };
-            reader.readAsDataURL(file);
+
+                const removeBtn = document.createElement('div');
+                removeBtn.className = 'remove-btn';
+                removeBtn.innerText = '✕';
+                removeBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    removeFile(file.id);
+                };
+
+                item.appendChild(removeBtn);
+                container.appendChild(item);
+            });
+        }
+
+        function removeFile(id) {
+            selectedFiles = selectedFiles.filter(f => f.id !== id);
+            renderPreviews();
+            updateSendButtonState();
         }
 
         function clearSelectedFile() {
-            selectedFileBase64 = null;
-            selectedFileType = null;
-            selectedFileContent = null;
-            document.getElementById('fileInput').value = '';
-            document.getElementById('imagePreviewContainer').style.display = 'none';
+            selectedFiles = [];
+            renderPreviews();
             updateSendButtonState();
         }
 
@@ -3159,13 +3276,14 @@
                 addMessageToUi('ai', "🔄 جاري استكمال المهمة السابقة تلقائياً...", 'System');
 
                 // تحديث شكل الزر ليكون "جاري العمل"
-                document.getElementById('aiSendBtn').classList.add('working');
+                const sendBtn = document.getElementById('aiSendBtn');
+                if (sendBtn) sendBtn.classList.add('working');
 
                 try {
                     await runToolLoop(history);
                 } catch(e) {
                     console.error("Resume failed:", e);
-                    document.getElementById('aiSendBtn').classList.remove('working');
+                    if (sendBtn) sendBtn.classList.remove('working');
                 }
             }
         }
@@ -3182,21 +3300,37 @@
             }
 
             const msgText = input.value.trim();
-            if (!msgText && !selectedFileBase64) return;
+            if (!msgText && selectedFiles.length === 0) return;
 
-            addMessageToUi('user', msgText || `أرسل ملفاً: ${selectedFileName}`);
+            // عرض الرسالة في الواجهة
+            let userMsg = msgText;
+            if (selectedFiles.length > 0) {
+                userMsg += `\n📎 [مرفق ${selectedFiles.length} ملفات]`;
+            }
+            addMessageToUi('user', userMsg);
+
             input.value = '';
-            stopAiRequested = false; // إعادة ضبط العلم عند بدء رسالة جديدة
-            updateSendButtonState();
+            autoResizeInput();
+            stopAiRequested = false;
 
             try {
                 let finalPrompt = msgText;
-                if (selectedFileContent) {
-                    finalPrompt += `\n\n[محتوى الملف المرفق (${selectedFileName})]:\n${selectedFileContent}`;
-                }
+                let lastFileBase64 = null;
+                let lastFileType = null;
+
+                // دمج محتوى الملفات النصية في الطلب
+                selectedFiles.forEach(f => {
+                    if (f.content) {
+                        finalPrompt += `\n\n[محتوى الملف المرفق (${f.name})]:\n${f.content}`;
+                    }
+                    if (f.type.startsWith('image/') || f.type === 'application/pdf') {
+                        lastFileBase64 = f.base64;
+                        lastFileType = f.type;
+                    }
+                });
 
                 addMessageToUi('ai', `🧠 جاري التفكير باستخدام ${document.getElementById('modelSelector').value}...`, 'System');
-                const result = await callGemini(finalPrompt, selectedFileBase64, selectedFileType);
+                const result = await callGemini(finalPrompt, lastFileBase64, lastFileType);
 
                 // إزالة رسالة "جاري التفكير"
                 const msgs = document.getElementById('aiMessages');
