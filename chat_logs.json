@@ -1,6 +1,6 @@
 {
   "sessions": [],
   "activeSessionId": "1787412986986",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ممكن تعمل لي قائمة كاملة عن الادوات التي تعمل تحت ضل محرك التفاعل مع الكود (Code Interaction Engine) الموجودي الان في بيأتي\"}]}]",
-  "timestamp": "2026-08-22T15:37:41.713Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ممكن تعمل لي قائمة كاملة عن الادوات التي تعمل تحت ضل محرك التفاعل مع الكود (Code Interaction Engine) الموجودي الان في بيأتي\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"سأقوم بسرد الأدوات المتاحة حالياً في بيئة العمل الخاصة بي (Code Interaction Engine) بناءً على التعريفات البرمجية المتاحة لي، لتزويد المستخدم بقائمة دقيقة وشاملة.\"},\"id\":\"call_1300806\"},\"thoughtSignature\":\"EnEKbwERTTIPj79iz/V2IqAY3mi2yE3sbrlTbgxHo8OYH1JHomAeqrZVZQZ9AdIFxi1dU/PjUmB5PfkRK0fQwuvE6VBUCl2t6y5T9HE83BiFqWka16VtDdsv5c0AGtdsovrJYTvLEufpVUX0CZvynEFxGw==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":\"✅ استوعبت الفكرة: سأقوم بسرد الأدوات المتاحة حالياً في بيئة العمل ال...\"}}}]}]",
+  "timestamp": "2026-08-22T15:37:45.159Z"
 }
