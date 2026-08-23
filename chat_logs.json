@@ -1,31 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1787341233837",
-      "title": "أهلاً بك. بصفتي \"العقل المدبر\"...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك. بصفتي \"العقل المدبر\" (Mastermind) لـ VSA Academy، أنا في حالة استعداد تام للعمليات التقنية والتطويرية.\n\nنظامي يعمل بكامل طاقته، وبروتوكولات التطور الذاتي (Evolution Engine) مفعلة. كيف يمكنني مساعدتك في المخطط الهندسي أو العمليات البرمجية اليوم؟",
-              "thoughtSignature": "EnEKbwERTTIPrk0moZIb390iDp+WY33XjKouq//rMukz2xqBnCpLPPeN6t9buqgFrotwWWsQQzA31SacSlxgrPj+XuJXzfNsRaAKljBr+FnGJYAH9+dGPPIW/vbKObOqvyTLi59NxIR1TJoD1YSC59hxxA=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1787341233837",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"افحص ملفاتي في المستودع\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"listGithubFiles\",\"args\":{\"path\":\".\"},\"id\":\"call_2201494\"},\"thoughtSignature\":\"EnEKbwERTTIPug1IhyC0Q4XcPu46RpH0+SktTaXLMKHZGLR5QFFFjZry7Mdfd2YkByaqg4XNsBD/esKDwLjYeykhaKkCRurIUX4eRwYDQ+LyYUtw/o5+Yl1++kN3lbD72Kd52uMHMdUHerI8ZFSlnudZMw==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"listGithubFiles\",\"response\":{\"content\":\"أداة غير مدعومة.\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"runPowerShell\",\"args\":{\"command\":\"ls -R\"},\"id\":\"call_1499796\"},\"thoughtSignature\":\"EnEKbwERTTIPizTCgNsftHtwDd/AOQiTrNWFlpjru0sBkctnhC5CVJtFeKbcJWA6BQ50XJy4d31n3qv7Oz53i5ZMKciWQ54UaSpMlTyYJQQsNnDinzEqooVD56thT4M+Gm2NLgzfQnrJ/nV1GboMU7sVsg==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"runPowerShell\",\"response\":{\"content\":\"⚠️ لم يصل الرد خلال 15 ثانية.\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"repairSystem\",\"args\":{},\"id\":\"call_3455852\"},\"thoughtSignature\":\"EnEKbwERTTIPL6IAjEhdck9NhUU9f64hRkSfJt+KOtsQKolQqjEVLYf6pxWDaqZyg1r9jc2YweZ9gjHKecmo4FY+wn8t8l8ptABEqYytDwc6tur+8wv09Hkeb30DfL1MJYYWg/70hxqjhryfCg5buRbaWA==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"repairSystem\",\"response\":{\"content\":\"🛡️ تقرير العقل المدبر (Diagnostic Report):\\n✅ صلاحيات التوكن كاملة وتشمل إدارة المستودع والبحث.\\n✅ محرك البحث (searchCode) يعمل بكفاءة 100%.\\n🚀 تم تفعيل 'محرك الترقية الشامل' لضمان قوة الأدوات.\\nحالة النظام: fully_functional\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\".\"},\"id\":\"call_1520038\"},\"thoughtSignature\":\"EnEKbwERTTIPltQ4fD1a3mVUKFGTgImkLuynhW+sFmFipNB2hNt+VyCpnjpXn7SvfGEnB43Ffukp+bA7vf9KEAKhQe08r4t6ndVv12f0yY8Ejci+J+1gmM9DMUSO43VNBt5jIZU/mg4YGi03HzNbygxplQ==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"searchCode\",\"response\":{\"content\":\".artifacts/implementation_plan.artifact.md, crypto_bot.py, EMERGENCY_REPAIR_GUIDE.txt, remigrate_final.py, archive/migrate.py, archive/migrate.ps1, remigrate_final.ps1, archive/remigrate.py, archive/remigrate.ps1, دليل_إصلاح_الطوارئ_VSA.txt, .artifacts/b1f1131f-c5b9-439e-abc4-481c49c1bcf8/walkthrough.artifact.md, technical-analysis.json, المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md, vsa.json, Time-analysis.json, archive/chunk.json, system-capabilities.txt, archive/check_schema.ps1, viewer.html, data.json, index.html, chat_logs.json, PDF-images.json, crypto_alerts.json, archive/temp_chunk.json, archive/test_encoding.ps1, test_engine.py, archive/test_final.ps1, archive/test.json, .gitattributes\"}}}]}]",
-  "timestamp": "2026-08-23T17:32:15.779Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-23T17:32:27.669Z"
 }
