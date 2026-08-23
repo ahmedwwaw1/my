@@ -26,6 +26,6 @@
     }
   ],
   "activeSessionId": "1787471997817",
-  "pendingHistory": null,
-  "timestamp": "2026-08-23T08:27:23.695Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ماذا تقصد في الخيار الرابع\"}]}]",
+  "timestamp": "2026-08-23T08:27:26.885Z"
 }
