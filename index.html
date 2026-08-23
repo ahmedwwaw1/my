@@ -4407,9 +4407,46 @@
                             else if (name === "WorkflowFramework") toolResult = await workflowFramework(args);
                             else if (name === "runPowerShell" || name === "executeGitCommand") {
                                 try {
-                                    const payload = { id: Date.now(), command: args.command, tool: name, status: "pending" };
-                                    toolResult = await writeFile('ide_bridge.json', JSON.stringify(payload, null, 2));
-                                } catch(e) { toolResult = `Bridge Error: ${e.message}`; }
+                                    const commandId = Date.now();
+                                    const payload = {
+                                        id: commandId,
+                                        timestamp: new Date().toLocaleString('ar-EG'),
+                                        command: args.command,
+                                        tool: name,
+                                        status: "pending_ide_execution",
+                                        requested_by: "Web_Mastermind"
+                                    };
+
+                                    // 1. إرسال الطلب عبر الجسر
+                                    await writeFile('ide_bridge.json', JSON.stringify(payload, null, 2), `🛠️ تنفيذ أمر: [${args.command}]`);
+
+                                    logToTerminal(`Command sent to local bridge. Waiting for output...`, 'info');
+
+                                    // 2. محرك الانتظار الذكي (Smart Polling Loop)
+                                    // سننتظر حتى 15 ثانية لاستقبال النتيجة
+                                    let attempts = 0;
+                                    let outputFound = false;
+                                    while (attempts < 15 && !outputFound) {
+                                        await new Promise(r => setTimeout(r, 1000)); // انتظار ثانية
+                                        try {
+                                            const bridgeContent = await getGithubFileContent('ide_bridge.json');
+                                            const bridgeData = JSON.parse(bridgeContent);
+
+                                            if (bridgeData.id === commandId && bridgeData.status === "completed") {
+                                                toolResult = bridgeData.output || "✅ تم التنفيذ بنجاح (لا توجد مخرجات نصية).";
+                                                outputFound = true;
+                                            } else if (bridgeData.id === commandId && bridgeData.status === "failed") {
+                                                toolResult = `❌ فشل التنفيذ: ${bridgeData.error || 'خطأ غير معروف'}`;
+                                                outputFound = true;
+                                            }
+                                        } catch(e) { /* استمرار المحاولة */ }
+                                        attempts++;
+                                    }
+
+                                    if (!outputFound) {
+                                        toolResult = `⚠️ تم إرسال الأمر [${args.command}] ولكن لم يصل الرد من الجهاز المحلي خلال 15 ثانية. يرجى التأكد من تشغيل "بوت الاستجابة" على جهازك.`;
+                                    }
+                                } catch(e) { toolResult = `❌ فشل إرسال الأمر للجسر: ${e.message}`; }
                             }
                             else if (name === "thought") toolResult = args.reasoning;
                             else if (name === "requestIdeTask") {
