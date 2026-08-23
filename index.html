@@ -3894,7 +3894,30 @@
             }
 
             const outputPre = step.querySelector('.ai-step-details pre');
-            outputPre.innerText = typeof output === 'string' ? output : JSON.stringify(output, null, 2);
+
+            // تحسين عرض مخرجات القراءة لتشبه Android Studio
+            if (success && typeof output === 'string' && (output.includes('📖') || output.length > 100)) {
+                const lines = output.split('\n');
+                let formattedOutput = `<div style="background:#1e1f22; border-radius:4px; overflow:hidden; border:1px solid #3c3f41; font-family:'JetBrains Mono', monospace;">`;
+                formattedOutput += `<div style="background:#2b2d30; padding:4px 12px; font-size:11px; color:#afb1b3; border-bottom:1px solid #3c3f41; display:flex; justify-content:space-between;"><span>Source Code</span><span>Lines: ${lines.length}</span></div>`;
+                formattedOutput += `<div style="padding:10px; overflow-x:auto; display:flex; gap:15px;">`;
+
+                // أرقام الأسطر
+                formattedOutput += `<div style="color:#4e5157; text-align:right; user-select:none; font-size:12px; line-height:1.5;">${lines.map((_,i)=>i+1).join('<br>')}</div>`;
+                // الكود نفسه
+                formattedOutput += `<div style="color:#dfe1e5; font-size:12px; line-height:1.5; white-space:pre;">${escapeHtml(output)}</div>`;
+
+                formattedOutput += `</div></div>`;
+                outputPre.innerHTML = formattedOutput;
+            } else {
+                outputPre.innerText = typeof output === 'string' ? output : JSON.stringify(output, null, 2);
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.innerText = text;
+            return div.innerHTML;
         }
 
         function getToolIcon(name) {
@@ -4136,11 +4159,10 @@
 
             const tools = [{
                 function_declarations: [
+                    { name: "read_file", description: "قراءة محتوى ملف. يمكنك قراءة الملف بالكامل أو تحديد نطاق أسطر معين (startLine, endLine). هذه هي الأداة الأكثر كفاءة للاستكشاف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, startLine: { type: "NUMBER" }, endLine: { type: "NUMBER" } }, required: ["path"] } },
                     { name: "write_file", description: "كتابة ملف كامل أو إنشاء ملف جديد. استخدمها للملفات الصغيرة أو ملفات الإعدادات.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
                     { name: "replace_file_content", description: "المشرط الجراحي: استبدال قطعة كود محددة بقطعة أخرى. يتطلب النص القديم بدقة (targetContent) والنص الجديد (replacementContent).", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["path", "targetContent", "replacementContent"] } },
-                    { name: "getGithubFile", description: "قراءة محتوى ملف كامل.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                    { name: "readCodeRange", description: "قراءة جراحية لنطاق محدد من الأسطر في ملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, startLine: { type: "NUMBER" }, endLine: { type: "NUMBER" } }, required: ["path", "startLine", "endLine"] } },
-                    { name: "selectString", description: "البحث عن نص محدد داخل محتوى ملف معين.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, query: { type: "STRING" } }, required: ["path", "query"] } },
+                    { name: "selectString", description: "البحث عن نص محدد داخل محتوى ملف معين (مثل grep).", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, query: { type: "STRING" } }, required: ["path", "query"] } },
                     { name: "searchCode", description: "البحث عن كلمة أو كود في كامل المستودع دون استهلاك التوكنات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                     { name: "analyzeProjectStructure", description: "محرك تحليل: يفحص سلامة ملفات JSON، الروابط المكسورة، ونظافة المستودع. استخدمه للتشخيص فقط.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "selfExpand", description: "إضافة أداة جديدة: استخدمها لزيادة مهاراتك عبر إضافة وظائف برمجية جديدة لم تكن موجودة.", parameters: { type: "OBJECT", properties: { tool_name: { type: "STRING" }, declaration: { type: "STRING" }, implementation: { type: "STRING" } }, required: ["tool_name", "declaration", "implementation"] } },
@@ -4282,7 +4304,11 @@
                             if (args.task_description) logToTerminal(`Task Delegated: ${args.task_description}`, 'info');
 
                             let toolResult;
-                            if (name === "write_file" || name === "githubAction") toolResult = await writeFile(args.path, args.content);
+                            if (name === "read_file") {
+                                if (args.startLine && args.endLine) toolResult = await readCodeRange(args.path, args.startLine, args.endLine);
+                                else toolResult = await getGithubFileContent(args.path);
+                            }
+                            else if (name === "write_file" || name === "githubAction") toolResult = await writeFile(args.path, args.content);
                             else if (name === "replace_file_content") toolResult = await replaceFileContent(args.path, args.targetContent, args.replacementContent);
                             else if (name === "getGithubFile") toolResult = await getGithubFileContent(args.path);
                             else if (name === "readCodeRange") toolResult = await readCodeRange(args.path, args.startLine, args.endLine);
