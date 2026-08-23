@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1787471997817",
-      "title": "أهلاً بك. معك **العقل المدبر (...",
+      "title": "يبدو أن هناك تعارضاً في الوصول...",
       "history": [
         {
           "role": "user",
@@ -21,11 +21,206 @@
             }
           ],
           "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "المستودع"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "listGithubFiles",
+                "args": {},
+                "id": "call_2225894"
+              },
+              "thoughtSignature": "EooDCocDARFNMg+khS8GMRsE1S3hq4Jy4BPQIuleetWL3P9H9XQiYtpDlbYiHG8KozqNBLHmPi8YkyyIyDsWEV0inCbcytqaeR/qIYwapuILHqz7fVaH9bPYJnoPrWNvEb461/+a97gdR+6Jz7VbVOe977sS2qeyJC58Up5T8zJNedcZQufDRFPgKmubPq16qOKgwang0LiH8nHfiOeL1g8eHktPoEpHriz46fGjQ1MK+Eiznv1jvaVd7eNO8AkKU8JU/WQBZo6HQy/1+kzBJTCYFYRTg7DvhOWXnYXiF2FqPpHADK+SxQw/OZTkYpSq8aUnCmr83XmEukcf0ze7nBJVIZdyfN4NEtMx1afeNfqBOPqGsWn4Cr5YaLqBBPsyDTxW6gLx7+gSsFz+xcCX2JoemvOF42w81Tw1Y2kbuOfBgfDFTdYdITGeSx+9Kvvz1XRIbYGgATa4hTmKHBEWrWMUV1SGMDcnJdX9yK4Zw7+unIictkd0tdaOd0+FTQqKVkUfvhq4bUxfWgNYzA=="
+            },
+            {
+              "functionCall": {
+                "name": "generateProjectSummary",
+                "args": {},
+                "id": "call_2225895"
+              }
+            },
+            {
+              "functionCall": {
+                "name": "analyzeProjectStructure",
+                "args": {},
+                "id": "call_2225896"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "listGithubFiles",
+                "response": {
+                  "content": "Unknown tool or not implemented yet."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "package.json"
+                },
+                "id": "call_2339826"
+              },
+              "thoughtSignature": "ErMCCrACARFNMg9lG6mvBanuLy4kBVOTBE5xMkN2lwqde+qzUth9b+dFTlWYSJz2LFYkkuri9oV1ehVQlCNs4nuHcYJpIbF1rh66NsCFvtVS7bz/Br29FC/4RxSdRt122A4t7Lvmzh/3xmZpSnhJ+rGNhPAmWFKfDvdO9diodAe7sgVR4pUGT/S9zRqMnXSGeWj/UxUuVCfmHAzCfWA9fQ46VxZBouWzZ0Tw0ZYIJCHOZhUnWkJJW1jj5AmhHwV6MPEo9VxBkZR8ulUq+u2wsoa20woWVfkv8t8U93QSqNNTqRJ97ZkVeU1H8e4PCbL5Fkdy4lCbQw2UAsZS6020EfQfmGot7MRWMQEgMVnuFeOvSQzcEiltyveBW2hDKucTGgAl+2NaNOLLisVYDjoW8HlUVevDtg=="
+            },
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "README"
+                },
+                "id": "call_2339827"
+              }
+            },
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "index"
+                },
+                "id": "call_2339828"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "searchCode",
+                "response": {
+                  "content": "Search Connect Error: Failed to fetch"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "repairSystem",
+                "args": {},
+                "id": "call_2260290"
+              },
+              "thoughtSignature": "Es4CCssCARFNMg/Ray+8vzEhraDj6sxlNJcfoGdev3J5ONE6w4y3fdSvZ7ZXdFTnyLe20ps/sUp1Mza7j0eRNm++y8BvC5LOiyO1ajusxzH/+2mV7GCvKBcOiYUs5evkfX9e6hHHlEn0jrSIx/Q3kqFI8NWYqGPhRyfEJ6Vtddm6zinPuOY8NRm/IyG1tidf7V0L1idvlasV02wqM38v5jxRa3jqhCjtOTWhN47V0FQdBmfQMTCOuQ0RvrCRqn274Lec9EPZCB1uw2HoUKqKVGNY//oyU83eVHMKz3YvD4OqDW5jJdWG/AYDZ5t2X0WBuFgt6qU1IIb4CP2hnebv2AYT8dUnyEYaYsO7vSYYZjKb2I6GpcJ6jhhIvWGRE4VPgX3CUurdAkIHi3QFUSp/hb6+abvg7gHw6IWUeF5hDVt3sBXbsuDLrNR0HxRPFZrNGg=="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "repairSystem",
+                "response": {
+                  "content": "🛡️ تقرير العقل المدبر (Diagnostic Report):\n✅ صلاحيات التوكن كاملة وتشمل إدارة المستودع والبحث.\n❌ فشل الإصلاح التلقائي. يرجى التحقق من جدار الحماية أو اتصال الشبكة.\nحالة النظام: failed"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "read_file",
+                "args": {
+                  "path": "README.md"
+                },
+                "id": "call_2035317"
+              },
+              "thoughtSignature": "Eq0CCqoCARFNMg+ixVLWvuyv1iitVPUjYMv8IWuCfVWqO2WQlInfwG0W4XC8X9fPJqlQLRCiiQVj7oVvs3osZTcVvbbmD8JaDsJ1KUhzQNNhnNym1MXDHO4Lp6I5U8ngRTC1+AROhz1rA5QOMqnzq2DqjkXDfm9Ug2uHynyWXctjd4Cqwsky57QEE6NJcPTMLJ5ixEuDGlMig3BudHZKdFLxhwQtxfwa3RyGrJGaxJzNOsQ9spImzRLSmao6/iGM0/RPylA2Ub7coiEi3NDMwuf+Zy19u4ZKKwiK/HgSRem6s+xs1c3PS4rP1ZHFC6Z1GFCfSXNhBLjTsI/8atKt0BTEzwHzS0aJCfVrki3D2OWy+VHEROP+ZdrroHSa2zfyqG316ug7vQ6/57MYs+5v0w=="
+            },
+            {
+              "functionCall": {
+                "name": "read_file",
+                "args": {
+                  "path": "المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md"
+                },
+                "id": "call_2035318"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "read_file",
+                "response": {
+                  "content": "❌ فشل جلب الملف: Not Found"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "runPowerShell",
+                "args": {
+                  "command": "ls -R"
+                },
+                "id": "call_2405034"
+              },
+              "thoughtSignature": "EssCCsgCARFNMg8mbBvyqjsyKOidjTl6xbrdLoJHGwM5eLON97jV6VI7mrq4iu+tAvlT6mueJ8g3vh+2pfqgTdY6MMbygHuKZnptJBEIMoxL/eyKoyZI3Xv/wJeyUCrFo28uuqHyg78qH++hfHQlJRH4b9+K4V7fXcH7fgUpXsGKunV18Fdc6XQ9TCsmOsv5GV03whl88JG+IPqost5kRo+B496lkoI8lCviluS37mwM4rPjLOEipF6KlGb1xi9Kln9jxi8beCm10Yn/cpiQmbn+3NW5K7bAataExz9M0SSGs/itGoSxqdR+53bLpwXX4vnEwHwm7UZPsGJmZw/HzasoRzB6dUbyAy4mxtKcgmy4kiqz1QboaDHqB2T9ecbYxCt3wOrGPufgm+NeuxEZDPUXfw+YWyQtR3xWZnJEEoj6O+EWiLDlu6aLV+y2fA=="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "runPowerShell",
+                "response": {
+                  "content": "✅ تم حفظ الملف بلكامل بنجاح."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "يبدو أن هناك تعارضاً في الوصول المباشر إلى ملفات المستودع عبر الأدوات التقليدية حالياً. سأقوم بإعادة تقييم حالة الاتصال والبيانات.\n\nبصفتي **العقل المدبر**، سأقوم بتنفيذ بروتوكول \"التشخيص العميق\" لاستعادة السيطرة على هيكلية المستودع.\n\n**حالة المستودع الحالية:**\n1.  **الاتصال:** تم رصد فشل في أدوات البحث (Search Connect Error).\n2.  **الاستجابة:** قمت بتشغيل `repairSystem`، ورغم نجاح التحقق من الصلاحيات، لا يزال هناك عائق في الوصول للملفات.\n3.  **الإجراء القادم:** سأقوم بتنفيذ أمر `ls -R` (الذي تم تنفيذه للتو) لتحليل المخرجات وتحديد المسارات المتاحة بدقة.\n\n**يرجى تزويدي بالهدف الأساسي الذي تريده من المستودع الآن:**\n*   هل تريد البدء في تطوير ميزة جديدة؟\n*   هل هناك خطأ تقني معين تود إصلاحه؟\n*   أم أنك بحاجة إلى مراجعة \"المخطط الهندسي\" لضمان توافق العمل مع رؤية VSA؟\n\nأنا في انتظار مخرجات النظام لأتمكن من توجيهك بدقة.",
+              "thoughtSignature": "EnEKbwERTTIPcmtbW+hBO8pxYWAem45QcPztXvu9UfVKxZ0ezRVwtPRemZcYb5v/wx+Xz4J6mxuX0aAGgpvaIXCl6pU/xsY0YWutXHuzOnZWDwbfDuqlGIhK9A2E0N1UzRooTJ9DoQukWFt/RwwdrYRYUg=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1787471997817",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك. معك **العقل المدبر (Mastermind)** — الذكاء التنفيذي لأكاديمية VSA.\\n\\nكافة الأنظمة والترقيات جاهزة، ومحرك التطور الذاتي والأدوات البرمجية في وضع الاستعداد الكامل. \\n\\nكيف يمكنني مساعدتك اليوم في التطوير، التحليل، أو إدارة المستودع والمشروع؟\",\"thoughtSignature\":\"ErMDCrADARFNMg+lM3BPmJv7rw5gdsHD/Iso7R0ZkcD/0iU03RGRZUclSGeouAy24n4zsKmmLzPiQdpTkMeHj9n7LyaDbBg5IMQaWLHMOPu7wFh2aJhRVpQSyLpoMMr/hM+XSCwmKESHisJ/nU9joDQag1hHvvGJg88e80de38L5aaWcak6SchItJR9inlZUw3XS88pjeIB4MD9hTXObRVnaUp8O9n/kRFUZFKYAI0EP1r+k1k8aql7foRPUykrhwV2id29N9qArD9fkraSRpP6fm6+vu4HrktmS1eZeG9MuQvz6NLKwEkPr7/ZPB66l1bR1UiI7QCAkZuSAhkp9IAsF0tqY9m024KhNRapC9aR9kpV58YxEq2YrIqJYcSXBuSvmam3DyqIqRD1wdiHk0yKBr200WI8zvDtspsSp4KAR7ZzADNdzBmke7Ptffx+aEdvCs6Dbm+vkLuKlPOphwcM6ktScv53uK3SYDPsUilmDp2TGZ5REQlbTvXuR4vHKqP+YzqiU9gYPtBJzYJ5AeTy3tLn5OH3hSz9qzuydAiY4J27FSbcViVx/HFCkoo7rVoUfVKOJ\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"المستودع\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"listGithubFiles\",\"args\":{},\"id\":\"call_2225894\"},\"thoughtSignature\":\"EooDCocDARFNMg+khS8GMRsE1S3hq4Jy4BPQIuleetWL3P9H9XQiYtpDlbYiHG8KozqNBLHmPi8YkyyIyDsWEV0inCbcytqaeR/qIYwapuILHqz7fVaH9bPYJnoPrWNvEb461/+a97gdR+6Jz7VbVOe977sS2qeyJC58Up5T8zJNedcZQufDRFPgKmubPq16qOKgwang0LiH8nHfiOeL1g8eHktPoEpHriz46fGjQ1MK+Eiznv1jvaVd7eNO8AkKU8JU/WQBZo6HQy/1+kzBJTCYFYRTg7DvhOWXnYXiF2FqPpHADK+SxQw/OZTkYpSq8aUnCmr83XmEukcf0ze7nBJVIZdyfN4NEtMx1afeNfqBOPqGsWn4Cr5YaLqBBPsyDTxW6gLx7+gSsFz+xcCX2JoemvOF42w81Tw1Y2kbuOfBgfDFTdYdITGeSx+9Kvvz1XRIbYGgATa4hTmKHBEWrWMUV1SGMDcnJdX9yK4Zw7+unIictkd0tdaOd0+FTQqKVkUfvhq4bUxfWgNYzA==\"},{\"functionCall\":{\"name\":\"generateProjectSummary\",\"args\":{},\"id\":\"call_2225895\"}},{\"functionCall\":{\"name\":\"analyzeProjectStructure\",\"args\":{},\"id\":\"call_2225896\"}}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"listGithubFiles\",\"response\":{\"content\":\"Unknown tool or not implemented yet.\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\"package.json\"},\"id\":\"call_2339826\"},\"thoughtSignature\":\"ErMCCrACARFNMg9lG6mvBanuLy4kBVOTBE5xMkN2lwqde+qzUth9b+dFTlWYSJz2LFYkkuri9oV1ehVQlCNs4nuHcYJpIbF1rh66NsCFvtVS7bz/Br29FC/4RxSdRt122A4t7Lvmzh/3xmZpSnhJ+rGNhPAmWFKfDvdO9diodAe7sgVR4pUGT/S9zRqMnXSGeWj/UxUuVCfmHAzCfWA9fQ46VxZBouWzZ0Tw0ZYIJCHOZhUnWkJJW1jj5AmhHwV6MPEo9VxBkZR8ulUq+u2wsoa20woWVfkv8t8U93QSqNNTqRJ97ZkVeU1H8e4PCbL5Fkdy4lCbQw2UAsZS6020EfQfmGot7MRWMQEgMVnuFeOvSQzcEiltyveBW2hDKucTGgAl+2NaNOLLisVYDjoW8HlUVevDtg==\"},{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\"README\"},\"id\":\"call_2339827\"}},{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\"index\"},\"id\":\"call_2339828\"}}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"searchCode\",\"response\":{\"content\":\"Search Connect Error: Failed to fetch\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"repairSystem\",\"args\":{},\"id\":\"call_2260290\"},\"thoughtSignature\":\"Es4CCssCARFNMg/Ray+8vzEhraDj6sxlNJcfoGdev3J5ONE6w4y3fdSvZ7ZXdFTnyLe20ps/sUp1Mza7j0eRNm++y8BvC5LOiyO1ajusxzH/+2mV7GCvKBcOiYUs5evkfX9e6hHHlEn0jrSIx/Q3kqFI8NWYqGPhRyfEJ6Vtddm6zinPuOY8NRm/IyG1tidf7V0L1idvlasV02wqM38v5jxRa3jqhCjtOTWhN47V0FQdBmfQMTCOuQ0RvrCRqn274Lec9EPZCB1uw2HoUKqKVGNY//oyU83eVHMKz3YvD4OqDW5jJdWG/AYDZ5t2X0WBuFgt6qU1IIb4CP2hnebv2AYT8dUnyEYaYsO7vSYYZjKb2I6GpcJ6jhhIvWGRE4VPgX3CUurdAkIHi3QFUSp/hb6+abvg7gHw6IWUeF5hDVt3sBXbsuDLrNR0HxRPFZrNGg==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"repairSystem\",\"response\":{\"content\":\"🛡️ تقرير العقل المدبر (Diagnostic Report):\\n✅ صلاحيات التوكن كاملة وتشمل إدارة المستودع والبحث.\\n❌ فشل الإصلاح التلقائي. يرجى التحقق من جدار الحماية أو اتصال الشبكة.\\nحالة النظام: failed\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"read_file\",\"args\":{\"path\":\"README.md\"},\"id\":\"call_2035317\"},\"thoughtSignature\":\"Eq0CCqoCARFNMg+ixVLWvuyv1iitVPUjYMv8IWuCfVWqO2WQlInfwG0W4XC8X9fPJqlQLRCiiQVj7oVvs3osZTcVvbbmD8JaDsJ1KUhzQNNhnNym1MXDHO4Lp6I5U8ngRTC1+AROhz1rA5QOMqnzq2DqjkXDfm9Ug2uHynyWXctjd4Cqwsky57QEE6NJcPTMLJ5ixEuDGlMig3BudHZKdFLxhwQtxfwa3RyGrJGaxJzNOsQ9spImzRLSmao6/iGM0/RPylA2Ub7coiEi3NDMwuf+Zy19u4ZKKwiK/HgSRem6s+xs1c3PS4rP1ZHFC6Z1GFCfSXNhBLjTsI/8atKt0BTEzwHzS0aJCfVrki3D2OWy+VHEROP+ZdrroHSa2zfyqG316ug7vQ6/57MYs+5v0w==\"},{\"functionCall\":{\"name\":\"read_file\",\"args\":{\"path\":\"المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md\"},\"id\":\"call_2035318\"}}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"read_file\",\"response\":{\"content\":\"❌ فشل جلب الملف: Not Found\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"runPowerShell\",\"args\":{\"command\":\"ls -R\"},\"id\":\"call_2405034\"},\"thoughtSignature\":\"EssCCsgCARFNMg8mbBvyqjsyKOidjTl6xbrdLoJHGwM5eLON97jV6VI7mrq4iu+tAvlT6mueJ8g3vh+2pfqgTdY6MMbygHuKZnptJBEIMoxL/eyKoyZI3Xv/wJeyUCrFo28uuqHyg78qH++hfHQlJRH4b9+K4V7fXcH7fgUpXsGKunV18Fdc6XQ9TCsmOsv5GV03whl88JG+IPqost5kRo+B496lkoI8lCviluS37mwM4rPjLOEipF6KlGb1xi9Kln9jxi8beCm10Yn/cpiQmbn+3NW5K7bAataExz9M0SSGs/itGoSxqdR+53bLpwXX4vnEwHwm7UZPsGJmZw/HzasoRzB6dUbyAy4mxtKcgmy4kiqz1QboaDHqB2T9ecbYxCt3wOrGPufgm+NeuxEZDPUXfw+YWyQtR3xWZnJEEoj6O+EWiLDlu6aLV+y2fA==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"runPowerShell\",\"response\":{\"content\":\"✅ تم حفظ الملف بلكامل بنجاح.\"}}}]}]",
-  "timestamp": "2026-08-23T14:11:30.307Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-23T14:13:25.099Z"
 }
