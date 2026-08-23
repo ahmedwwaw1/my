@@ -3267,9 +3267,24 @@
                 addMessageToUi('ai', "⚠️ المحرك مشغول حالياً. يرجى الانتظار حتى انتهاء المهمة الحالية.", 'System');
                 return;
             }
-            addMessageToUi('ai', "📡 جاري فحص 'المخطط الهندسي' بحثاً عن قدرات جديدة لتعلمها...", 'System');
+
+            // 🚀 تفعيل بروتوكول التطور (Engine 3 Protocol)
+            addMessageToUi('ai', "🚀 تم تفعيل 'محرك التطور الذاتي' (Evolution Engine)... جاري تحليل الفجوات البرمجية.", 'System');
+            logToTerminal("INITIATING SELF-EVOLUTION PROTOCOL...", "command");
+
+            const evolutionPrompt = `
+            [EVOLUTION MODE ACTIVE]
+            المهمة: فحص ذاتي شامل للترقية.
+            الخطوات المطلوبة:
+            1. قراءة 'المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md' لفهم القدرات المستهدفة.
+            2. قراءة الأجزاء الحيوية من 'index.html' لمقارنة القدرات الحالية.
+            3. تحديد الميزات المفقودة (مثل: محرك الذاكرة الطويلة، المهام المجدولة، أو تحسينات الحماية).
+            4. تقديم اقتراح تقني محدد لترقية الكود باستخدام أداة 'patchSystem' أو إضافة أدوات جديدة عبر 'selfExpand'.
+
+            ابدأ بالبحث عن الفجوات الآن وأخبرني بالنتائج.`;
+
             const input = document.getElementById('aiInput');
-            input.value = "قم بقراءة ملف [المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md] وقارنه بقدراتك الحالية في index.html. إذا وجدت ميزة جديدة، اقترح علي برمجتها فوراً.";
+            input.value = evolutionPrompt;
             autoResizeInput();
             updateSendButtonState();
             sendAiMessage();
