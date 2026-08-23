@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1787471997817",
+      "title": "أهلاً بك. معك **العقل المدبر (...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. معك **العقل المدبر (Mastermind)** — الذكاء التنفيذي لأكاديمية VSA.\n\nكافة الأنظمة والترقيات جاهزة، ومحرك التطور الذاتي والأدوات البرمجية في وضع الاستعداد الكامل. \n\nكيف يمكنني مساعدتك اليوم في التطوير، التحليل، أو إدارة المستودع والمشروع؟",
+              "thoughtSignature": "ErMDCrADARFNMg+lM3BPmJv7rw5gdsHD/Iso7R0ZkcD/0iU03RGRZUclSGeouAy24n4zsKmmLzPiQdpTkMeHj9n7LyaDbBg5IMQaWLHMOPu7wFh2aJhRVpQSyLpoMMr/hM+XSCwmKESHisJ/nU9joDQag1hHvvGJg88e80de38L5aaWcak6SchItJR9inlZUw3XS88pjeIB4MD9hTXObRVnaUp8O9n/kRFUZFKYAI0EP1r+k1k8aql7foRPUykrhwV2id29N9qArD9fkraSRpP6fm6+vu4HrktmS1eZeG9MuQvz6NLKwEkPr7/ZPB66l1bR1UiI7QCAkZuSAhkp9IAsF0tqY9m024KhNRapC9aR9kpV58YxEq2YrIqJYcSXBuSvmam3DyqIqRD1wdiHk0yKBr200WI8zvDtspsSp4KAR7ZzADNdzBmke7Ptffx+aEdvCs6Dbm+vkLuKlPOphwcM6ktScv53uK3SYDPsUilmDp2TGZ5REQlbTvXuR4vHKqP+YzqiU9gYPtBJzYJ5AeTy3tLn5OH3hSz9qzuydAiY4J27FSbcViVx/HFCkoo7rVoUfVKOJ"
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1787471997817",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-08-23T14:10:25.145Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-23T14:10:49.356Z"
 }
