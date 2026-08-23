@@ -1552,8 +1552,8 @@
                                                 <option value="gpt-4-turbo">GPT-4 Turbo</option>
                                             </optgroup>
                                             <optgroup label="DeepSeek (Pro Coder)">
-                                                <option value="deepseek-coder">DeepSeek V3 (Coder)</option>
-                                                <option value="deepseek-chat">DeepSeek Chat</option>
+                                                <option value="deepseek-chat">DeepSeek V3 (Chat/Coder)</option>
+                                                <option value="deepseek-reasoner">DeepSeek R1 (Reasoning)</option>
                                             </optgroup>
                                         </select>
                                     </div>
@@ -4311,15 +4311,13 @@
                 return { text: `⚠️ لم يتم ضبط مفتاح الـ API لـ ${provider.toUpperCase()} بشكل صحيح. اضغط على ⋮ في الأعلى لإدخاله.`, model: "System" };
             }
 
-            // قائمة النماذج المعتمدة رسمياً لعام 2026 (تجنب النماذج التجريبية المنتهية)
+            // قائمة النماذج المعتمدة لعام 2026 (الاستقرار الفائق)
             const modelNames = [
                 userModel,
-                'gemini-2.0-flash-001',
-                'gemini-1.5-pro',
                 'gemini-1.5-flash',
-                'gemini-3.7-flash',
-                'gemini-3.1-pro-preview',
-                'gemini-3.1-flash-lite'
+                'gemini-1.5-pro',
+                'gemini-3.1-flash-lite',
+                'deepseek-chat'
             ].filter((v, i, a) => a.indexOf(v) === i);
 
             let lastError = "";
