@@ -3089,6 +3089,7 @@
         let openaiApiKey = '';
         let claudeApiKey = '';
         let deepseekApiKey = '';
+        let mastermindProxyUrl = ''; // رابط الجسر الوسيط لتجاوز الـ CORS
         let githubToken = '';
         const GITHUB_REPO = 'ahmedwwaw1/my';
 
@@ -3100,28 +3101,37 @@
         async function resetGeminiKey() {
             const currentModel = document.getElementById('modelSelector').value;
             let keyName = 'gemini_key';
+            let providerName = 'Google Gemini';
             let promptText = 'الرجاء إدخال Gemini API Key الجديد (AIza...):';
 
             if (currentModel.includes('claude')) {
                 keyName = 'claude_key';
-                promptText = 'الرجاء إدخال Anthropic (Claude) API Key الجديد (sk-ant-...):';
+                providerName = 'Anthropic Claude';
+                promptText = 'الرجاء إدخال Claude API Key الجديد (sk-ant-...):';
             } else if (currentModel.includes('gpt')) {
                 keyName = 'openai_key';
+                providerName = 'OpenAI GPT';
                 promptText = 'الرجاء إدخال OpenAI API Key الجديد (sk-proj-...):';
             } else if (currentModel.includes('deepseek')) {
                 keyName = 'deepseek_key';
+                providerName = 'DeepSeek';
                 promptText = 'الرجاء إدخال DeepSeek API Key الجديد (sk-...):';
             }
 
             const key = prompt(promptText);
-            if (key) {
-                if (keyName === 'gemini_key') geminiApiKey = key.trim();
-                else if (keyName === 'claude_key') claudeApiKey = key.trim();
-                else if (keyName === 'openai_key') openaiApiKey = key.trim();
-                else if (keyName === 'deepseek_key') deepseekApiKey = key.trim();
+            if (key !== null) {
+                const trimmedKey = key.trim();
+                if (keyName === 'gemini_key') geminiApiKey = trimmedKey;
+                else if (keyName === 'claude_key') claudeApiKey = trimmedKey;
+                else if (keyName === 'openai_key') openaiApiKey = trimmedKey;
+                else if (keyName === 'deepseek_key') deepseekApiKey = trimmedKey;
 
-                await saveApiKeyToSupabase(keyName, key.trim());
-                alert(`✅ تم تحديث مفتاح ${keyName.replace('_', ' ').toUpperCase()}.`);
+                if (trimmedKey) {
+                    await saveApiKeyToSupabase(keyName, trimmedKey);
+                    alert(`✅ تم تحديث مفتاح ${providerName} بنجاح.`);
+                } else {
+                    alert(`⚠️ تم إلغاء العملية أو إدخال مفتاح فارغ.`);
+                }
             }
         }
 
@@ -3151,6 +3161,7 @@
             if (!openaiApiKey) openaiApiKey = await fetchApiKeyFromSupabase('openai_key');
             if (!claudeApiKey) claudeApiKey = await fetchApiKeyFromSupabase('claude_key');
             if (!deepseekApiKey) deepseekApiKey = await fetchApiKeyFromSupabase('deepseek_key');
+            if (!mastermindProxyUrl) mastermindProxyUrl = await fetchApiKeyFromSupabase('proxy_url');
 
             // Built-in recovery logic for owner's repository
             if (!githubToken || githubToken.length < 5) {
@@ -4405,15 +4416,21 @@
                     }
 
                     let url = '';
-                    if (provider === 'google') {
-                        const apiVersion = (modelName.includes('exp') || modelName.includes('preview')) ? 'v1beta' : 'v1';
-                        url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}`;
-                    } else if (provider === 'openai') {
-                        url = 'https://api.openai.com/v1/chat/completions';
-                    } else if (provider === 'anthropic') {
-                        url = 'https://api.anthropic.com/v1/messages';
-                    } else if (provider === 'deepseek') {
-                        url = 'https://api.deepseek.com/v1/chat/completions';
+                    let useProxy = (provider !== 'google' && mastermindProxyUrl); // استخدام الجسر للشركات التي تحجب المتصفح
+
+                    if (useProxy) {
+                        url = mastermindProxyUrl;
+                    } else {
+                        if (provider === 'google') {
+                            const apiVersion = (modelName.includes('exp') || modelName.includes('preview')) ? 'v1beta' : 'v1';
+                            url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}`;
+                        } else if (provider === 'openai') {
+                            url = 'https://api.openai.com/v1/chat/completions';
+                        } else if (provider === 'anthropic') {
+                            url = 'https://api.anthropic.com/v1/messages';
+                        } else if (provider === 'deepseek') {
+                            url = 'https://api.deepseek.com/v1/chat/completions';
+                        }
                     }
 
                     try {
@@ -4425,6 +4442,13 @@
                             headers: { 'Content-Type': 'application/json' },
                             signal: controller.signal
                         };
+
+                        // إذا كنا نستخدم بروكسي، نرسل الهدف الحقيقي في الهيدر أو البودي
+                        if (useProxy) {
+                            fetchOptions.headers['x-target-url'] = (provider === 'anthropic') ? 'https://api.anthropic.com/v1/messages' :
+                                                                  (provider === 'openai') ? 'https://api.openai.com/v1/chat/completions' :
+                                                                  'https://api.deepseek.com/v1/chat/completions';
+                        }
 
                         let body = {};
                         if (provider === 'google') {
@@ -4451,7 +4475,13 @@
 
                         const data = await res.json();
                         if (!res.ok) {
-                            lastError = data.error?.message || data.error || "Unknown Error";
+                            lastError = data.error?.message || data.error || JSON.stringify(data);
+                            console.error(`🔴 API Error (${modelName}):`, lastError);
+
+                            // تحسين رسالة الخطأ للمستخدم
+                            if (lastError.includes('CORS') || res.status === 0) {
+                                return { text: `🛡️ <b>تنبيه أمني (CORS):</b> المتصفح حجب الاتصال بـ ${provider.toUpperCase()}. هذه الشركات لا تسمح بالاتصال المباشر من المتصفح.<br>يرجى استخدام <b>Google Gemini</b> حالياً، أو تفعيل إضافة 'Allow CORS' في متصفحك.`, model: "System" };
+                            }
                             if (res.status === 429 || res.status === 404) {
                                 retryModels.push(modelName);
                                 continue;
