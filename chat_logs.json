@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1787471997817",
+      "title": "أهلاً بك. بصفتي \"العقل المدبر\"...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. بصفتي \"العقل المدبر\" (Mastermind) لـ VSA Academy، أنا في حالة استعداد تام للعمليات التقنية والتطويرية.\n\nنظامي يعمل بكامل طاقته، وأنا ملتزم ببروتوكولات السيادة، التطور، والدقة الجراحية في التعامل مع المستودع.\n\n**كيف يمكنني مساعدتك اليوم؟**\n*   هل هناك مهمة برمجية محددة تتطلب تدخلاً؟\n*   هل نحتاج إلى مراجعة \"المخطط الهندسي لإنشاء نموذج ذكاء اصطناعي متطور\" للبدء في مرحلة تطويرية جديدة؟\n*   هل هناك حاجة لتشخيص أو صيانة لأحد الأنظمة الحالية؟\n\nأنا بانتظار توجيهاتك.",
+              "thoughtSignature": "EnEKbwERTTIP7Pn3oKq3ACtZhoZmpzoLn00dUjQbma9iwsIysVX7BmLPhhaiwSu9PXovGFUjE8rnV9SWv2XCu2wcJ43U9DIHZ9/VPC3m02JqFPCxq9HEAjIC01X1cwvv3T3tcUWWqP52VZRJpZm7mJQkjg=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1787471997817",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-08-23T08:00:04.620Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-23T08:00:13.762Z"
 }
