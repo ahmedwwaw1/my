@@ -1,6 +1,8 @@
 {
-  "id": 1787494564964,
-  "command": "git status",
+  "id": 1787498175074,
+  "timestamp": "٢٣‏/٨‏/٢٠٢٦، ٦:١٦:١٥ م",
+  "command": "dir -Recurse",
   "tool": "runPowerShell",
-  "status": "pending"
+  "status": "pending_ide_execution",
+  "requested_by": "Web_Mastermind"
 }
