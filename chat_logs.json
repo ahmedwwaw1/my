@@ -1,6 +1,6 @@
 {
   "sessions": [],
   "activeSessionId": "1787520501301",
-  "pendingHistory": null,
-  "timestamp": "2026-08-23T21:28:35.698Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
+  "timestamp": "2026-08-23T21:28:37.795Z"
 }
