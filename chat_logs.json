@@ -1,31 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1787520501301",
-      "title": "أهلاً بك. بصفتي \"العقل المدبر\"...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك. بصفتي \"العقل المدبر\" (Mastermind) لـ VSA Academy، أنا في حالة استعداد تام للعمليات التقنية والتطويرية.\n\nنحن نعمل وفق بروتوكولات صارمة تضمن السيادة البرمجية، التطور المستمر، والدقة الجراحية في التعديلات.\n\n**ما هي المهمة الهندسية أو الاستراتيجية المطلوبة حالياً؟**\n*   هل نحتاج إلى فحص هيكلي للمستودع؟\n*   هل هناك تحديث مطلوب على \"المخطط الهندسي\"؟\n*   أم أن هناك مهمة برمجية محددة تتطلب استخدام أدوات التطوير المتاحة؟\n\nأنا بانتظار توجيهاتك.",
-              "thoughtSignature": "EnEKbwERTTIPtRx6FE6FbUO4IA6qBWGq8+MiYjs432Q9KfkNfObSJVDi3YccstxDKliAaIoAgzjL/8peQPGpiS1DLXpKSNfjQS2F6Q9FQWuZ0yf3fcHT+nbrulcEfoEqqqwrpclrHI9D6hFZM8bjJJFtvg=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1787520520364",
   "pendingHistory": null,
-  "timestamp": "2026-08-23T21:28:40.364Z"
+  "timestamp": "2026-08-23T21:28:42.814Z"
 }
