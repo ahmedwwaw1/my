@@ -1,6 +1,6 @@
 {
   "sessions": [],
   "activeSessionId": "1787504285079",
-  "pendingHistory": null,
-  "timestamp": "2026-08-23T19:09:07.646Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ماهي عملية ال Fine-Tuning\"}]}]",
+  "timestamp": "2026-08-23T19:09:12.823Z"
 }
