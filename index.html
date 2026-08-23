@@ -1334,6 +1334,106 @@
         .card:nth-child(5) { animation-delay: 0.25s; }
         .card:nth-child(6) { animation-delay: 0.3s; }
 
+        /* 📟 Mastermind Professional Step Tracer Styling */
+        .ai-step-container {
+            background: #1e1f22;
+            border: 1px solid #3c3f41;
+            border-radius: 8px;
+            margin: 12px 0;
+            overflow: hidden;
+            font-family: 'JetBrains Mono', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .ai-step-header {
+            background: #2b2d30;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #3c3f41;
+            user-select: none;
+        }
+
+        .ai-step-header:hover { background: #32353a; }
+
+        .ai-step-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .ai-step-name {
+            color: #dfe1e5;
+            font-weight: 600;
+            font-size: 13px;
+            flex-grow: 1;
+            letter-spacing: 0.3px;
+        }
+
+        .ai-step-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .status-spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(77, 182, 172, 0.2);
+            border-top: 2px solid #4db6ac;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .status-done { color: #81c784; font-weight: bold; }
+        .status-error { color: #e57373; font-weight: bold; }
+
+        .ai-step-details {
+            padding: 0;
+            display: none;
+            background: #1e1f22;
+        }
+
+        .ai-step-args {
+            padding: 10px 15px;
+            background: #262629;
+            color: #afb1b3;
+            font-size: 11px;
+            border-bottom: 1px solid #3c3f41;
+            white-space: pre-wrap;
+        }
+
+        .code-viewer-ui {
+            background: #1e1f22;
+            display: flex;
+            padding: 15px;
+            gap: 20px;
+            overflow-x: auto;
+        }
+
+        .line-numbers {
+            color: #4e5157;
+            text-align: right;
+            user-select: none;
+            font-size: 12px;
+            line-height: 1.6;
+            border-right: 1px solid #3c3f41;
+            padding-right: 15px;
+        }
+
+        .code-content {
+            color: #dfe1e5;
+            font-size: 12px;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 
@@ -3893,11 +3993,12 @@
             icon.innerText = getToolIcon(toolName);
 
             const nameSpan = document.createElement('span');
-            nameSpan.innerText = toolName;
+            nameSpan.className = 'ai-step-name';
+            nameSpan.innerText = toolName.toUpperCase();
 
             const status = document.createElement('div');
             status.className = 'ai-step-status';
-            status.innerHTML = '<div class="status-spinner"></div><span>Running...</span>';
+            status.innerHTML = '<div class="status-spinner"></div><span style="color:#afb1b3">Executing...</span>';
 
             header.appendChild(icon);
             header.appendChild(nameSpan);
@@ -3906,15 +4007,16 @@
             const details = document.createElement('div');
             details.className = 'ai-step-details';
 
-            const argsSpan = document.createElement('span');
-            argsSpan.className = 'ai-step-args';
-            argsSpan.innerText = `Arguments: ${JSON.stringify(args, null, 2)}`;
+            const argsDiv = document.createElement('div');
+            argsDiv.className = 'ai-step-args';
+            argsDiv.innerText = `Arguments: ${JSON.stringify(args, null, 2)}`;
 
-            const outputPre = document.createElement('pre');
-            outputPre.innerText = "Waiting for output...";
+            const outputDiv = document.createElement('div');
+            outputDiv.className = 'step-output-area';
+            outputDiv.innerHTML = '<div style="padding:15px; color:#666; font-size:12px;">Waiting for output from bridge...</div>';
 
-            details.appendChild(argsSpan);
-            details.appendChild(outputPre);
+            details.appendChild(argsDiv);
+            details.appendChild(outputDiv);
 
             stepContainer.appendChild(header);
             stepContainer.appendChild(details);
@@ -3930,30 +4032,28 @@
 
             const status = step.querySelector('.ai-step-status');
             if (success) {
-                status.innerHTML = '<span class="status-done">✅ Done</span>';
+                status.innerHTML = '<span class="status-done">✅ COMPLETED</span>';
             } else {
-                status.innerHTML = '<span class="status-error">❌ Error</span>';
+                status.innerHTML = '<span class="status-error">❌ FAILED</span>';
             }
 
-            const outputPre = step.querySelector('.ai-step-details pre');
+            const outputArea = step.querySelector('.step-output-area');
+            const textOutput = String(output);
 
-            // تحسين عرض مخرجات القراءة لتشبه Android Studio
-            if (success && typeof output === 'string' && (output.includes('📖') || output.length > 100)) {
-                const lines = output.split('\n');
-                let formattedOutput = `<div style="background:#1e1f22; border-radius:4px; overflow:hidden; border:1px solid #3c3f41; font-family:'JetBrains Mono', monospace;">`;
-                formattedOutput += `<div style="background:#2b2d30; padding:4px 12px; font-size:11px; color:#afb1b3; border-bottom:1px solid #3c3f41; display:flex; justify-content:space-between;"><span>Source Code</span><span>Lines: ${lines.length}</span></div>`;
-                formattedOutput += `<div style="padding:10px; overflow-x:auto; display:flex; gap:15px;">`;
-
-                // أرقام الأسطر
-                formattedOutput += `<div style="color:#4e5157; text-align:right; user-select:none; font-size:12px; line-height:1.5;">${lines.map((_,i)=>i+1).join('<br>')}</div>`;
-                // الكود نفسه
-                formattedOutput += `<div style="color:#dfe1e5; font-size:12px; line-height:1.5; white-space:pre;">${escapeHtml(output)}</div>`;
-
-                formattedOutput += `</div></div>`;
-                outputPre.innerHTML = formattedOutput;
+            // تحويل المخرجات الطويلة إلى نافذة كود احترافية
+            if (textOutput.length > 50 || textOutput.includes('\n')) {
+                const lines = textOutput.split('\n');
+                let html = `<div class="code-viewer-ui">`;
+                html += `<div class="line-numbers">${lines.map((_, i) => i + 1).join('<br>')}</div>`;
+                html += `<div class="code-content">${escapeHtml(textOutput)}</div>`;
+                html += `</div>`;
+                outputArea.innerHTML = html;
             } else {
-                outputPre.innerText = typeof output === 'string' ? output : JSON.stringify(output, null, 2);
+                outputArea.innerHTML = `<div style="padding:15px; color:#dfe1e5; font-size:13px;">${escapeHtml(textOutput)}</div>`;
             }
+
+            // فتح التفاصيل تلقائياً عند الاكتمال
+            step.querySelector('.ai-step-details').style.display = 'block';
         }
 
         function escapeHtml(text) {
