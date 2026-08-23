@@ -4459,7 +4459,7 @@
                         if (useProxy) {
                             fetchOptions.headers['x-target-url'] = (provider === 'anthropic') ? 'https://api.anthropic.com/v1/messages' :
                                                                   (provider === 'openai') ? 'https://api.openai.com/v1/chat/completions' :
-                                                                  'https://api.deepseek.com/v1/chat/completions';
+                                                                  'https://api.deepseek.com/chat/completions';
                         }
 
                         let body = {};
@@ -4491,8 +4491,8 @@
                             console.error(`🔴 API Error (${modelName}):`, lastError);
 
                             // تحسين رسالة الخطأ للمستخدم
-                            if (lastError.includes('CORS') || res.status === 0) {
-                                return { text: `🛡️ <b>تنبيه أمني (CORS):</b> المتصفح حجب الاتصال بـ ${provider.toUpperCase()}. هذه الشركات لا تسمح بالاتصال المباشر من المتصفح.<br>يرجى استخدام <b>Google Gemini</b> حالياً، أو تفعيل إضافة 'Allow CORS' في متصفحك.`, model: "System" };
+                            if (res.status === 0 || lastError.includes('TypeError')) {
+                                return { text: `🛡️ <b>خطأ في الجسر (Proxy Error):</b> تعذر الاتصال بـ Cloudflare.<br>يرجى التأكد من تحديث كود الـ Worker في Cloudflare ومراجعة الرابط في الإعدادات.`, model: "System" };
                             }
                             if (res.status === 429 || res.status === 404) {
                                 retryModels.push(modelName);
