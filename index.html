@@ -3278,7 +3278,7 @@
             الخطوات المطلوبة:
             1. قراءة 'المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md' لفهم القدرات المستهدفة.
             2. قراءة الأجزاء الحيوية من 'index.html' لمقارنة القدرات الحالية.
-            3. تحديد الميزات المفقودة (مثل: محرك الذاكرة الطويلة، المهام المجدولة، أو تحسينات الحماية).
+            3. تحديد الميزات المفقودة (مثل: محرك الذاكرة الطويلة، تحسين سرعة الاستجابة، أو تعزيز بروتوكولات الحماية).
             4. تقديم اقتراح تقني محدد لترقية الكود باستخدام أداة 'patchSystem' أو إضافة أدوات جديدة عبر 'selfExpand'.
 
             ابدأ بالبحث عن الفجوات الآن وأخبرني بالنتائج.`;
@@ -3516,10 +3516,15 @@
 
                         if (content.sessions) {
                             chatSessions = content.sessions;
-                            // التأكد من استعادة آخر جلسة نشطة بدلاً من إنشاء واحدة جديدة
                             if (content.activeSessionId) {
                                 currentSessionId = content.activeSessionId;
                                 localStorage.setItem('gemini_current_session', currentSessionId);
+                            }
+
+                            // استعادة حالة المهمة المعلقة من السحاب (Cross-Device Persistence)
+                            if (content.pendingHistory && !localStorage.getItem('gemini_pending_history')) {
+                                localStorage.setItem('gemini_pending_history', content.pendingHistory);
+                                console.log("🔄 تم استرداد مهمة معلقة من السحابة.");
                             }
 
                             localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
@@ -3542,6 +3547,9 @@
                         console.log("✅ تم استعادة الذاكرة الشاملة بنجاح.");
                         rebuildChatUi();
                         renderHistory();
+
+                        // 🚀 تفعيل الاستئناف التلقائي فور المزامنة
+                        setTimeout(resumePendingTask, 500);
                     }
                 } catch (e) {
                     console.error("Error loading chat context:", e);
@@ -3797,21 +3805,26 @@
 
         async function resumePendingTask() {
             const pending = localStorage.getItem('gemini_pending_history');
-            if (pending) {
-                // مسح الفلاج فوراً لمنع التكرار اللانهائي
+            if (pending && !stopAiRequested) {
+                const history = JSON.parse(pending);
+                if (history.length === 0) return;
+
+                // منع التكرار اللانهائي عبر مسح الفلاج
                 localStorage.removeItem('gemini_pending_history');
 
-                const history = JSON.parse(pending);
-                addMessageToUi('ai', "🔄 جاري استكمال المهمة السابقة تلقائياً...", 'System');
+                const lastUserMsg = history[history.length - 1].parts[0].text || "المهمة السابقة";
+                addMessageToUi('ai', `🔄 <b>بروتوكول الاستئناف التلقائي:</b><br>لقد اكتشفت مهمة لم تكتمل: "${lastUserMsg.substring(0, 50)}..."<br>جاري المتابعة الآن من حيث توقفت...`, 'System');
 
-                // تحديث شكل الزر ليكون "جاري العمل"
                 const sendBtn = document.getElementById('aiSendBtn');
                 if (sendBtn) sendBtn.classList.add('working');
 
                 try {
+                    // مزامنة حالة الحذف مع السحاب أيضاً لمنع الاستعادة المتكررة من أجهزة أخرى
+                    await saveChatToStorage();
                     await runToolLoop(history);
                 } catch(e) {
                     console.error("Resume failed:", e);
+                    addMessageToUi('ai', `❌ فشل الاستئناف التلقائي: ${e.message}`, 'System');
                 } finally {
                     if (sendBtn) sendBtn.classList.remove('working');
                     updateSendButtonState();
@@ -4348,7 +4361,8 @@
                     { name: "pingModel", description: "قياس زمن الاستجابة للنظام.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "pingVSA", description: "اختبار استجابة المحرك المطور بعد التوسع الذاتي.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "generateProjectSummary", description: "توليد ملخص تقني شامل لحالة البيانات والمحتوى في المستودع (VSA & Investments).", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "requestIdeTask", description: "إرسال طلب تنفيذ برمي لمحيط الـ IDE (المهندس) لتنفيذه في بيئة التطوير المحلية.", parameters: { type: "OBJECT", properties: { task_description: { type: "STRING" } }, required: ["task_description"] } }
+                    { name: "requestIdeTask", description: "إرسال طلب تنفيذ برمي لمحيط الـ IDE (المهندس) لتنفيذه في بيئة التطوير المحلية.", parameters: { type: "OBJECT", properties: { task_description: { type: "STRING" } }, required: ["task_description"] } },
+                    { name: "saveExecutionProgress", description: "حفظ حالة التقدم في المهمة الحالية لضمان إمكانية الاستئناف بعد الانقطاع.", parameters: { type: "OBJECT", properties: { task_id: { type: "STRING" }, step_data: { type: "OBJECT" } }, required: ["task_id", "step_data"] } }
                 ]
             }]; // end_tools
 
@@ -4527,6 +4541,14 @@
                             else if (name === "injectGlobalStyles") {
                                 const st = document.createElement('style'); st.textContent = args.css_code;
                                 document.head.appendChild(st); toolResult = "تم التطبيق.";
+                            }
+                            else if (name === "saveExecutionProgress") {
+                                try {
+                                    let progress = JSON.parse(localStorage.getItem('mastermind_task_progress') || "{}");
+                                    progress[args.task_id] = args.step_data;
+                                    localStorage.setItem('mastermind_task_progress', JSON.stringify(progress));
+                                    toolResult = `✅ تم حفظ تقدم المهمة [${args.task_id}] سحابياً ولحظياً.`;
+                                } catch(e) { toolResult = `❌ فشل الحفظ: ${e.message}`; }
                             }
                             else { toolResult = "أداة غير مدعومة."; }
 
