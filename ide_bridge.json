@@ -1,8 +1,6 @@
 {
-  "id": 1787429701059,
-  "timestamp": "٢٢‏/٨‏/٢٠٢٦، ١١:١٥:٠١ م",
-  "command": "Get-ChildItem -Recurse",
+  "id": 1787494286716,
+  "command": "ls -R",
   "tool": "runPowerShell",
-  "status": "pending_ide_execution",
-  "requested_by": "Web_Mastermind"
+  "status": "pending"
 }
