@@ -1,7 +1,7 @@
 {
-  "id": 1787506458923,
-  "timestamp": "٢٣‏/٨‏/٢٠٢٦، ٨:٣٤:١٨ م",
-  "command": "dir -Recurse",
+  "id": 1787512274108,
+  "timestamp": "٢٣‏/٨‏/٢٠٢٦، ١٠:١١:١٤ م",
+  "command": "ls -R",
   "tool": "runPowerShell",
   "status": "pending_ide_execution",
   "requested_by": "Web_Mastermind"
