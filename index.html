@@ -3290,6 +3290,35 @@
             sendAiMessage();
         }
 
+        // 🔄 محرك الأتمتة المجدولة (Autonomous Maintenance Loop)
+        // يعمل في الخلفية كل دقيقة لتفقد المهام المجدولة
+        setInterval(async () => {
+            let tasks = JSON.parse(localStorage.getItem('mastermind_scheduled_tasks') || "[]");
+            if (tasks.length === 0) return;
+
+            let now = Date.now();
+            let changed = false;
+
+            for (let task of tasks) {
+                if (now - task.last_run > (task.interval * 60000)) {
+                    console.log(`🚀 Mastermind Background: Running [${task.name}]`);
+                    logToTerminal(`AUTO-MAINTENANCE: Executing [${task.name}]...`, 'command');
+
+                    task.last_run = now;
+                    changed = true;
+
+                    // تنفيذ المهمة عبر محرك الأوركسترا بصمت
+                    try {
+                        const silentResult = await callAiBrain(`[BACKGROUND_TASK] قم بتنفيذ الأداة المجدولة: ${task.tool} مع المعاملات: ${JSON.stringify(task.args)}`);
+                        logToTerminal(`Task [${task.name}] Result: ${silentResult.text.substring(0, 50)}...`, 'info');
+                    } catch(e) {
+                        logToTerminal(`Task [${task.name}] Failed: ${e.message}`, 'error');
+                    }
+                }
+            }
+            if (changed) localStorage.setItem('mastermind_scheduled_tasks', JSON.stringify(tasks));
+        }, 60000);
+
         async function fetchApiKeyFromSupabase(id) {
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
             const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
@@ -4348,7 +4377,8 @@
                     { name: "pingModel", description: "قياس زمن الاستجابة للنظام.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "pingVSA", description: "اختبار استجابة المحرك المطور بعد التوسع الذاتي.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "generateProjectSummary", description: "توليد ملخص تقني شامل لحالة البيانات والمحتوى في المستودع (VSA & Investments).", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "requestIdeTask", description: "إرسال طلب تنفيذ برمي لمحيط الـ IDE (المهندس) لتنفيذه في بيئة التطوير المحلية.", parameters: { type: "OBJECT", properties: { task_description: { type: "STRING" } }, required: ["task_description"] } }
+                    { name: "requestIdeTask", description: "إرسال طلب تنفيذ برمي لمحيط الـ IDE (المهندس) لتنفيذه في بيئة التطوير المحلية.", parameters: { type: "OBJECT", properties: { task_description: { type: "STRING" } }, required: ["task_description"] } },
+                    { name: "scheduleTask", description: "جدولة مهمة برمجية لتعمل في الخلفية بشكل دوري (مثلاً: كل ساعة).", parameters: { type: "OBJECT", properties: { task_name: { type: "STRING" }, interval_minutes: { type: "NUMBER" }, tool_to_call: { type: "STRING" }, tool_args: { type: "OBJECT" } }, required: ["task_name", "interval_minutes", "tool_to_call"] } }
                 ]
             }]; // end_tools
 
@@ -4527,6 +4557,21 @@
                             else if (name === "injectGlobalStyles") {
                                 const st = document.createElement('style'); st.textContent = args.css_code;
                                 document.head.appendChild(st); toolResult = "تم التطبيق.";
+                            }
+                            else if (name === "scheduleTask") {
+                                try {
+                                    let tasks = JSON.parse(localStorage.getItem('mastermind_scheduled_tasks') || "[]");
+                                    tasks.push({
+                                        id: Date.now(),
+                                        name: args.task_name,
+                                        interval: args.interval_minutes,
+                                        tool: args.tool_to_call,
+                                        args: args.tool_args,
+                                        last_run: 0
+                                    });
+                                    localStorage.setItem('mastermind_scheduled_tasks', JSON.stringify(tasks));
+                                    toolResult = `✅ تم جدولة المهمة [${args.task_name}] لتعمل كل ${args.interval_minutes} دقيقة بنجاح.`;
+                                } catch(e) { toolResult = `❌ فشل الجدولة: ${e.message}`; }
                             }
                             else { toolResult = "أداة غير مدعومة."; }
 
