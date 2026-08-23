@@ -3099,39 +3099,53 @@
         }
 
         async function resetGeminiKey() {
-            const currentModel = document.getElementById('modelSelector').value;
-            let keyName = 'gemini_key';
-            let providerName = 'Google Gemini';
-            let promptText = 'الرجاء إدخال Gemini API Key الجديد (AIza...):';
+            const choice = prompt("⚙️ إعدادات العقل المدبر:\n1. تعديل مفتاح API للنموذج الحالي\n2. تعديل رابط الجسر (Proxy URL) لتجاوز CORS\n3. تعديل مفتاح GitHub\n\nأدخل رقم الخيار (1-3):");
 
-            if (currentModel.includes('claude')) {
-                keyName = 'claude_key';
-                providerName = 'Anthropic Claude';
-                promptText = 'الرجاء إدخال Claude API Key الجديد (sk-ant-...):';
-            } else if (currentModel.includes('gpt')) {
-                keyName = 'openai_key';
-                providerName = 'OpenAI GPT';
-                promptText = 'الرجاء إدخال OpenAI API Key الجديد (sk-proj-...):';
-            } else if (currentModel.includes('deepseek')) {
-                keyName = 'deepseek_key';
-                providerName = 'DeepSeek';
-                promptText = 'الرجاء إدخال DeepSeek API Key الجديد (sk-...):';
-            }
+            if (choice === "1") {
+                const currentModel = document.getElementById('modelSelector').value;
+                let keyName = 'gemini_key';
+                let providerName = 'Google Gemini';
+                let promptText = 'الرجاء إدخال Gemini API Key الجديد (AIza...):';
 
-            const key = prompt(promptText);
-            if (key !== null) {
-                const trimmedKey = key.trim();
-                if (keyName === 'gemini_key') geminiApiKey = trimmedKey;
-                else if (keyName === 'claude_key') claudeApiKey = trimmedKey;
-                else if (keyName === 'openai_key') openaiApiKey = trimmedKey;
-                else if (keyName === 'deepseek_key') deepseekApiKey = trimmedKey;
-
-                if (trimmedKey) {
-                    await saveApiKeyToSupabase(keyName, trimmedKey);
-                    alert(`✅ تم تحديث مفتاح ${providerName} بنجاح.`);
-                } else {
-                    alert(`⚠️ تم إلغاء العملية أو إدخال مفتاح فارغ.`);
+                if (currentModel.includes('claude')) {
+                    keyName = 'claude_key';
+                    providerName = 'Anthropic Claude';
+                    promptText = 'الرجاء إدخال Claude API Key الجديد (sk-ant-...):';
+                } else if (currentModel.includes('gpt')) {
+                    keyName = 'openai_key';
+                    providerName = 'OpenAI GPT';
+                    promptText = 'الرجاء إدخال OpenAI API Key الجديد (sk-proj-...):';
+                } else if (currentModel.includes('deepseek')) {
+                    keyName = 'deepseek_key';
+                    providerName = 'DeepSeek';
+                    promptText = 'الرجاء إدخال DeepSeek API Key الجديد (sk-...):';
                 }
+
+                const key = prompt(promptText);
+                if (key !== null) {
+                    const trimmedKey = key.trim();
+                    if (keyName === 'gemini_key') geminiApiKey = trimmedKey;
+                    else if (keyName === 'claude_key') claudeApiKey = trimmedKey;
+                    else if (keyName === 'openai_key') openaiApiKey = trimmedKey;
+                    else if (keyName === 'deepseek_key') deepseekApiKey = trimmedKey;
+
+                    if (trimmedKey) {
+                        await saveApiKeyToSupabase(keyName, trimmedKey);
+                        alert(`✅ تم تحديث مفتاح ${providerName} بنجاح.`);
+                    }
+                }
+            } else if (choice === "2") {
+                const url = prompt("🔗 أدخل رابط الجسر السيادي (Cloudflare Worker URL):", mastermindProxyUrl);
+                if (url !== null) {
+                    const trimmedUrl = url.trim();
+                    mastermindProxyUrl = trimmedUrl;
+                    await saveApiKeyToSupabase('proxy_url', trimmedUrl);
+                    alert("✅ تم تحديث رابط الجسر بنجاح! نماذج DeepSeek و Claude ستعمل الآن.");
+                }
+            } else if (choice === "3") {
+                await resetGithubToken();
+            } else if (choice !== null) {
+                alert("⚠️ خيار غير صحيح.");
             }
         }
 
