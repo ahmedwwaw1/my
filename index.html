@@ -3830,26 +3830,22 @@
 
         async function resumePendingTask() {
             const pending = localStorage.getItem('gemini_pending_history');
-            if (pending && !stopAiRequested) {
+            if (pending && !stopAiRequested && typeof runToolLoop === 'function') {
                 const history = JSON.parse(pending);
                 if (history.length === 0) return;
 
-                // منع التكرار اللانهائي عبر مسح الفلاج
                 localStorage.removeItem('gemini_pending_history');
-
                 const lastUserMsg = history[history.length - 1].parts[0].text || "المهمة السابقة";
-                addMessageToUi('ai', `🔄 <b>بروتوكول الاستئناف التلقائي:</b><br>لقد اكتشفت مهمة لم تكتمل: "${lastUserMsg.substring(0, 50)}..."<br>جاري المتابعة الآن من حيث توقفت...`, 'System');
+                addMessageToUi('ai', `🔄 <b>بروتوكول الاستئناف التلقائي:</b> جاري المتابعة...`, 'System');
 
                 const sendBtn = document.getElementById('aiSendBtn');
                 if (sendBtn) sendBtn.classList.add('working');
 
                 try {
-                    // مزامنة حالة الحذف مع السحاب أيضاً لمنع الاستعادة المتكررة من أجهزة أخرى
                     await saveChatToStorage();
                     await runToolLoop(history);
                 } catch(e) {
                     console.error("Resume failed:", e);
-                    addMessageToUi('ai', `❌ فشل الاستئناف التلقائي: ${e.message}`, 'System');
                 } finally {
                     if (sendBtn) sendBtn.classList.remove('working');
                     updateSendButtonState();
