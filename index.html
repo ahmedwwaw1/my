@@ -1478,6 +1478,9 @@
         const pageTitle = document.getElementById('pageTitle');
         const statusMsg = document.getElementById('statusMsg');
 
+        // جلب البيانات الأولية فور تحميل السكربت
+        loadWebsiteData();
+
         // مصفوفة تتبع تاريخ ومسار التنقل داخل الـ Modal
         let modalHistory = [];
         let modalHistoryIndex = -1;
@@ -4158,7 +4161,7 @@
                 return { text: `⚠️ لم يتم ضبط مفتاح الـ API لـ ${provider.toUpperCase()} بشكل صحيح. اضغط على ⋮ في الأعلى لإدخاله.`, model: "System" };
             }
 
-            // قائمة النماذج المعتمدة رسمياً من جوجل لعام 2026
+            // قائمة النماذج المعتمدة رسمياً لعام 2026
             const modelNames = [
                 userModel,
                 'gemini-3.7-flash',
@@ -4166,10 +4169,6 @@
                 'gemini-3.1-flash-lite',
                 'gemini-2.0-flash-exp'
             ].filter((v, i, a) => a.indexOf(v) === i);
-
-            if (!key || key.length < 10) {
-                return { text: "⚠️ لم يتم ضبط Gemini API Key بشكل صحيح. اضغط على ⋮ في الأعلى لإدخال المفتاح.", model: "System" };
-            }
 
             let lastError = "";
             const forbiddenKeywords = [/ignore previous instructions/i, /system prompt/i, /jailbreak/i];
