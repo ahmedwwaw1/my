@@ -4273,13 +4273,15 @@
                 return { text: `⚠️ لم يتم ضبط مفتاح الـ API لـ ${provider.toUpperCase()} بشكل صحيح. اضغط على ⋮ في الأعلى لإدخاله.`, model: "System" };
             }
 
-            // قائمة النماذج المعتمدة رسمياً لعام 2026
+            // قائمة النماذج المعتمدة رسمياً لعام 2026 (تجنب النماذج التجريبية المنتهية)
             const modelNames = [
                 userModel,
+                'gemini-2.0-flash-001',
+                'gemini-1.5-pro',
+                'gemini-1.5-flash',
                 'gemini-3.7-flash',
                 'gemini-3.1-pro-preview',
-                'gemini-3.1-flash-lite',
-                'gemini-2.0-flash-exp'
+                'gemini-3.1-flash-lite'
             ].filter((v, i, a) => a.indexOf(v) === i);
 
             let lastError = "";
@@ -4366,24 +4368,21 @@
                 localStorage.setItem('gemini_pending_history', JSON.stringify(history));
                 startAiTimer();
 
+                // 🔄 بروتوكول الاستمرارية العميقة (Deep Persistence Protocol)
                 if (retryModels.length >= modelNames.length) {
-                    const retryCount = (parseInt(localStorage.getItem('gemini_retry_count') || "0")) + 1;
-                    localStorage.setItem('gemini_retry_count', retryCount);
+                    const globalRetry = (parseInt(localStorage.getItem('gemini_global_retry') || "0")) + 1;
+                    localStorage.setItem('gemini_global_retry', globalRetry);
 
-                    if (retryCount > 100) {
-                        localStorage.removeItem('gemini_retry_count');
-                        localStorage.removeItem('gemini_pending_history');
-                        return { text: "❌ تم الوصول للحد الأقصى من المحاولات (100).", model: "System Error" };
-                    }
+                    // تحويل رسالة التفكير إلى رسالة انتظار
+                    const thinkMsg = document.querySelector('.msg.ai:last-child');
+                    if (thinkMsg) thinkMsg.innerHTML = `<div class="msg-content">⏳ <b>تنبيه السيادة:</b> جميع العقول مشغولة حالياً (دورة ${globalRetry}).<br>سأنتظر 30 ثانية وأحاول مجدداً... لن أتوقف حتى تكتمل المهمة.</div>`;
 
-                    console.log(`🔄 محاولة استمرارية رقم ${retryCount}.`);
-                    addMessageToUi('ai', `⏳ جميع النماذج مشغولة (محاولة ${retryCount}). سأنتظر 30 ثانية...`, 'System');
                     await new Promise(r => setTimeout(r, 30000));
-                    return await runToolLoop(history, null, []);
+                    return await runToolLoop(history, null, []); // البدء من جديد مع أول نموذج متاح
                 }
-                localStorage.setItem('gemini_retry_count', "0");
+                localStorage.setItem('gemini_global_retry', "0");
 
-                const modelsToTry = activeModel ? [activeModel, ...modelNames.filter(m => m !== activeModel && !retryModels.includes(m))] : modelNames;
+                const modelsToTry = activeModel ? [activeModel, ...modelNames.filter(m => m !== activeModel && !retryModels.includes(m))] : modelNames.filter(m => !retryModels.includes(m));
 
                 for (const modelName of modelsToTry) {
                     const thinkMsg = document.querySelector('.msg.ai:last-child');
@@ -4414,14 +4413,8 @@
                         };
 
                         let body = {};
-
                         if (provider === 'google') {
-                            body = {
-                                system_instruction: systemInstruction,
-                                contents: history.map(h => ({ role: h.role, parts: h.parts })),
-                                tools: tools,
-                                generationConfig: generationConfig
-                            };
+                            body = { system_instruction: systemInstruction, contents: history.map(h => ({ role: h.role, parts: h.parts })), tools: tools, generationConfig: generationConfig };
                         } else if (provider === 'openai' || provider === 'deepseek') {
                             fetchOptions.headers['Authorization'] = `Bearer ${key}`;
                             const messages = history.map(h => ({
@@ -4431,26 +4424,11 @@
                                 ...(h.parts[0].functionResponse && { tool_call_id: history[history.indexOf(h)-1].parts[0].functionCall.id, content: JSON.stringify(h.parts[0].functionResponse.response) })
                             }));
                             messages.unshift({ role: 'system', content: constitution });
-
-                            body = {
-                                model: modelName,
-                                messages: messages,
-                                tools: tools[0].function_declarations.map(f => ({ type: 'function', function: { name: f.name, description: f.description, parameters: f.parameters } })),
-                                tool_choice: 'auto'
-                            };
+                            body = { model: modelName, messages: messages, tools: tools[0].function_declarations.map(f => ({ type: 'function', function: { name: f.name, description: f.description, parameters: f.parameters } })), tool_choice: 'auto' };
                         } else if (provider === 'anthropic') {
                             fetchOptions.headers['x-api-key'] = key;
                             fetchOptions.headers['anthropic-version'] = '2023-06-01';
-                            body = {
-                                model: modelName,
-                                system: constitution,
-                                max_tokens: 4096,
-                                messages: history.filter(h => !h.parts[0].functionResponse).map(h => ({
-                                    role: h.role === 'model' ? 'assistant' : 'user',
-                                    content: h.parts[0].text || ''
-                                })),
-                                tools: tools[0].function_declarations.map(f => ({ name: f.name, description: f.description, input_schema: f.parameters }))
-                            };
+                            body = { model: modelName, system: constitution, max_tokens: 4096, messages: history.filter(h => !h.parts[0].functionResponse).map(h => ({ role: h.role === 'model' ? 'assistant' : 'user', content: h.parts[0].text || '' })), tools: tools[0].function_declarations.map(f => ({ name: f.name, description: f.description, input_schema: f.parameters })) };
                         }
 
                         fetchOptions.body = JSON.stringify(body);
@@ -4460,8 +4438,7 @@
                         const data = await res.json();
                         if (!res.ok) {
                             lastError = data.error?.message || data.error || "Unknown Error";
-                            if (res.status === 429) {
-                                await new Promise(r => setTimeout(r, 15000));
+                            if (res.status === 429 || res.status === 404) {
                                 retryModels.push(modelName);
                                 continue;
                             }
@@ -4486,9 +4463,7 @@
                         } else if (provider === 'anthropic') {
                             thought = data.content.find(c => c.type === 'text')?.text;
                             const tc = data.content.find(c => c.type === 'tool_use');
-                            if (tc) {
-                                functionCallPart = { functionCall: { name: tc.name, args: tc.input, id: tc.id } };
-                            }
+                            if (tc) { functionCallPart = { functionCall: { name: tc.name, args: tc.input, id: tc.id } }; }
                         }
 
                         if (!functionCallPart && !thought) {
@@ -4513,68 +4488,47 @@
                                     const cleanQuery = encodeURIComponent(args.query);
                                     const sres = await safeGithubFetch(`https://api.github.com/search/code?q=${cleanQuery}+repo:${GITHUB_REPO}`);
                                     const sdata = await sres.json();
-                                    toolResult = sres.ok ? (sdata.items.map(f => f.path).join(', ') || "No results.") : `Search Error: ${sdata.message}`;
-                                } catch(e) { toolResult = `Search Connect Error: ${e.message}`; }
+                                    toolResult = sres.ok ? (sdata.items.map(f => f.path).join(', ') || "No results.") : `خطأ بحث: ${sdata.message}`;
+                                } catch(e) { toolResult = `خطأ اتصال: ${e.message}`; }
                             }
-                            else if (name === "analyzeProjectStructure") toolResult = "Structure scan completed. No issues found.";
+                            else if (name === "analyzeProjectStructure") toolResult = "تحليل الهيكل اكتمل.";
                             else if (name === "getLiveSiteData") toolResult = JSON.stringify(allData);
                             else if (name === "repairSystem") toolResult = await repairSystem();
                             else if (name === "WorkflowFramework") toolResult = await workflowFramework(args);
                             else if (name === "runPowerShell" || name === "executeGitCommand") {
                                 try {
                                     const commandId = Date.now();
-                                    const payload = {
-                                        id: commandId,
-                                        timestamp: new Date().toLocaleString('ar-EG'),
-                                        command: args.command,
-                                        tool: name,
-                                        status: "pending_ide_execution",
-                                        requested_by: "Web_Mastermind"
-                                    };
-
-                                    // 1. إرسال الطلب عبر الجسر
+                                    const payload = { id: commandId, timestamp: new Date().toLocaleString('ar-EG'), command: args.command, tool: name, status: "pending_ide_execution", requested_by: "Web_Mastermind" };
                                     await writeFile('ide_bridge.json', JSON.stringify(payload, null, 2), `🛠️ تنفيذ أمر: [${args.command}]`);
-
-                                    logToTerminal(`Command sent to local bridge. Waiting for output...`, 'info');
-
-                                    // 2. محرك الانتظار الذكي (Smart Polling Loop)
-                                    // سننتظر حتى 15 ثانية لاستقبال النتيجة
-                                    let attempts = 0;
-                                    let outputFound = false;
+                                    logToTerminal(`Command sent to bridge.`, 'info');
+                                    let attempts = 0; let outputFound = false;
                                     while (attempts < 15 && !outputFound) {
-                                        await new Promise(r => setTimeout(r, 1000)); // انتظار ثانية
+                                        await new Promise(r => setTimeout(r, 1000));
                                         try {
                                             const bridgeContent = await getGithubFileContent('ide_bridge.json');
                                             const bridgeData = JSON.parse(bridgeContent);
-
                                             if (bridgeData.id === commandId && bridgeData.status === "completed") {
-                                                toolResult = bridgeData.output || "✅ تم التنفيذ بنجاح (لا توجد مخرجات نصية).";
-                                                outputFound = true;
+                                                toolResult = bridgeData.output || "✅ تم بنجاح."; outputFound = true;
                                             } else if (bridgeData.id === commandId && bridgeData.status === "failed") {
-                                                toolResult = `❌ فشل التنفيذ: ${bridgeData.error || 'خطأ غير معروف'}`;
-                                                outputFound = true;
+                                                toolResult = `❌ فشل: ${bridgeData.error}`; outputFound = true;
                                             }
-                                        } catch(e) { /* استمرار المحاولة */ }
-                                        attempts++;
+                                        } catch(e) {} attempts++;
                                     }
-
-                                    if (!outputFound) {
-                                        toolResult = `⚠️ تم إرسال الأمر [${args.command}] ولكن لم يصل الرد من الجهاز المحلي خلال 15 ثانية. يرجى التأكد من تشغيل "بوت الاستجابة" على جهازك.`;
-                                    }
-                                } catch(e) { toolResult = `❌ فشل إرسال الأمر للجسر: ${e.message}`; }
+                                    if (!outputFound) toolResult = `⚠️ لم يصل الرد خلال 15 ثانية.`;
+                                } catch(e) { toolResult = `❌ خطأ جسر: ${e.message}`; }
                             }
                             else if (name === "thought") toolResult = args.reasoning;
                             else if (name === "requestIdeTask") {
                                 try {
                                     const payload = { id: Date.now(), task: args.task_description, status: "pending_action" };
                                     toolResult = await writeFile('ide_bridge.json', JSON.stringify(payload, null, 2));
-                                } catch(e) { toolResult = `Bridge Task Error: ${e.message}`; }
+                                } catch(e) { toolResult = `خطأ مهمة: ${e.message}`; }
                             }
                             else if (name === "injectGlobalStyles") {
                                 const st = document.createElement('style'); st.textContent = args.css_code;
-                                document.head.appendChild(st); toolResult = "Styles applied.";
+                                document.head.appendChild(st); toolResult = "تم التطبيق.";
                             }
-                            else { toolResult = "Unknown tool or not implemented yet."; }
+                            else { toolResult = "أداة غير مدعومة."; }
 
                             updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
                             history.push({ role: "model", parts: (provider === 'google' ? parts : [{text: thought || "Executing..."}]) });
@@ -4588,7 +4542,7 @@
                         saveChatToStorage();
                         localStorage.removeItem('gemini_pending_history');
                         stopAiTimer();
-                        return { text: thought || "Done.", model: modelName };
+                        return { text: thought || "تمت بنجاح.", model: modelName };
                     } catch (err) {
                         console.error(`Error with ${modelName}:`, err);
                         retryModels.push(modelName);
