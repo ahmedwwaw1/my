@@ -1438,10 +1438,23 @@
                                     <span title="Safety Protocol Active" style="color: #4db6ac; font-size: 16px;">🛡️</span>
                                     <div class="model-selector-container">
                                         <select id="modelSelector" onchange="saveModelSelection()" title="AI Model">
-                                            <option value="gemini-3.7-flash">Gemini 3.7 Flash (Stable - v1)</option>
-                                            <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro (Preview - v1beta)</option>
-                                            <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite (Stable - v1)</option>
-                                            <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash Exp (v1beta)</option>
+                                            <optgroup label="Google Gemini">
+                                                <option value="gemini-3.7-flash">Gemini 3.7 Flash</option>
+                                                <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro</option>
+                                                <option value="gemini-3.1-flash-lite" selected>Gemini 3.1 Flash-Lite</option>
+                                            </optgroup>
+                                            <optgroup label="Anthropic (Claude)">
+                                                <option value="claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+                                                <option value="claude-3-opus">Claude 3 Opus</option>
+                                            </optgroup>
+                                            <optgroup label="OpenAI (GPT)">
+                                                <option value="gpt-4o">GPT-4o (Omni)</option>
+                                                <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                                            </optgroup>
+                                            <optgroup label="DeepSeek (Pro Coder)">
+                                                <option value="deepseek-coder">DeepSeek V3 (Coder)</option>
+                                                <option value="deepseek-chat">DeepSeek Chat</option>
+                                            </optgroup>
                                         </select>
                                     </div>
                                 </div>
@@ -2968,6 +2981,9 @@
         // ==========================================
 
         let geminiApiKey = '';
+        let openaiApiKey = '';
+        let claudeApiKey = '';
+        let deepseekApiKey = '';
         let githubToken = '';
         const GITHUB_REPO = 'ahmedwwaw1/my';
 
@@ -2977,11 +2993,30 @@
         }
 
         async function resetGeminiKey() {
-            const key = prompt("الرجاء إدخال Gemini API Key الجديد (AQ...):");
+            const currentModel = document.getElementById('modelSelector').value;
+            let keyName = 'gemini_key';
+            let promptText = 'الرجاء إدخال Gemini API Key الجديد (AIza...):';
+
+            if (currentModel.includes('claude')) {
+                keyName = 'claude_key';
+                promptText = 'الرجاء إدخال Anthropic (Claude) API Key الجديد (sk-ant-...):';
+            } else if (currentModel.includes('gpt')) {
+                keyName = 'openai_key';
+                promptText = 'الرجاء إدخال OpenAI API Key الجديد (sk-proj-...):';
+            } else if (currentModel.includes('deepseek')) {
+                keyName = 'deepseek_key';
+                promptText = 'الرجاء إدخال DeepSeek API Key الجديد (sk-...):';
+            }
+
+            const key = prompt(promptText);
             if (key) {
-                geminiApiKey = key.trim();
-                await saveApiKeyToSupabase('gemini_key', geminiApiKey);
-                alert("✅ تم تحديث مفتاح Gemini.");
+                if (keyName === 'gemini_key') geminiApiKey = key.trim();
+                else if (keyName === 'claude_key') claudeApiKey = key.trim();
+                else if (keyName === 'openai_key') openaiApiKey = key.trim();
+                else if (keyName === 'deepseek_key') deepseekApiKey = key.trim();
+
+                await saveApiKeyToSupabase(keyName, key.trim());
+                alert(`✅ تم تحديث مفتاح ${keyName.replace('_', ' ').toUpperCase()}.`);
             }
         }
 
@@ -3005,6 +3040,13 @@
                 closeBtn.onclick = toggleTerminal;
                 term.appendChild(closeBtn);
             }
+
+            if (!githubToken) githubToken = await fetchApiKeyFromSupabase('github_token');
+            if (!geminiApiKey) geminiApiKey = await fetchApiKeyFromSupabase('gemini_key');
+            if (!openaiApiKey) openaiApiKey = await fetchApiKeyFromSupabase('openai_key');
+            if (!claudeApiKey) claudeApiKey = await fetchApiKeyFromSupabase('claude_key');
+            if (!deepseekApiKey) deepseekApiKey = await fetchApiKeyFromSupabase('deepseek_key');
+        }
             if (!geminiApiKey) geminiApiKey = await fetchApiKeyFromSupabase('gemini_key');
             if (!githubToken) {
                 githubToken = await fetchApiKeyFromSupabase('github_token');
@@ -3708,7 +3750,7 @@
                 });
 
                 addMessageToUi('ai', `🧠 جاري التفكير باستخدام ${document.getElementById('modelSelector').value}...`, 'System');
-                const result = await callGemini(finalPrompt, lastFileBase64, lastFileType);
+                const result = await callAiBrain(finalPrompt, lastFileBase64, lastFileType);
 
                 // إزالة أي رسالة تفكير متبقية بالبحث في آخر 3 رسائل
                 const msgs = document.getElementById('aiMessages');
@@ -4103,9 +4145,18 @@
             return "❌ إجراء غير صالح.";
         }
 
-        async function callGemini(promptText, fileBase64 = null, mimeType = null) {
-            const key = geminiApiKey.trim();
+        async function callAiBrain(promptText, fileBase64 = null, mimeType = null) {
             const userModel = document.getElementById('modelSelector').value;
+            let key = geminiApiKey.trim();
+            let provider = 'google';
+
+            if (userModel.includes('claude')) { provider = 'anthropic'; key = claudeApiKey.trim(); }
+            else if (userModel.includes('gpt')) { provider = 'openai'; key = openaiApiKey.trim(); }
+            else if (userModel.includes('deepseek')) { provider = 'deepseek'; key = deepseekApiKey.trim(); }
+
+            if (!key || key.length < 10) {
+                return { text: `⚠️ لم يتم ضبط مفتاح الـ API لـ ${provider.toUpperCase()} بشكل صحيح. اضغط على ⋮ في الأعلى لإدخاله.`, model: "System" };
+            }
 
             // قائمة النماذج المعتمدة رسمياً من جوجل لعام 2026
             const modelNames = [
