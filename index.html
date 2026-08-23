@@ -1538,14 +1538,14 @@
                                     <span title="Safety Protocol Active" style="color: #4db6ac; font-size: 16px;">🛡️</span>
                                     <div class="model-selector-container">
                                         <select id="modelSelector" onchange="saveModelSelection()" title="AI Model">
-                                            <optgroup label="Google Gemini (Stable)">
-                                                <option value="gemini-2.0-flash" selected>Gemini 2.0 Flash</option>
-                                                <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash-Lite</option>
-                                                <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
-                                                <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                                            <optgroup label="Google Gemini (Elite Tier)">
+                                                <option value="gemini-3.7-flash" selected>Gemini 3.7 Flash (SOTA)</option>
+                                                <option value="gemini-3.6-flash">Gemini 3.6 Flash (Efficient)</option>
+                                                <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (Fast)</option>
                                             </optgroup>
-                                            <optgroup label="Google Gemini (Experimental)">
-                                                <option value="gemini-2.0-pro-exp">Gemini 2.0 Pro (Experimental)</option>
+                                            <optgroup label="Google Gemini (Stable Legacy)">
+                                                <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                                                <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
                                             </optgroup>
                                             <optgroup label="DeepSeek (Proxy Bridge)">
                                                 <option value="deepseek-chat">DeepSeek V3 (Chat/Coder)</option>
@@ -4303,13 +4303,13 @@
                 return { text: `⚠️ لم يتم ضبط مفتاح الـ API لـ ${provider.toUpperCase()} بشكل صحيح. اضغط على ⋮ في الأعلى لإدخاله.`, model: "System" };
             }
 
-            // قائمة النماذج المعتمدة (التي تعمل فعلياً ببروتوكول جوجل الموحد)
+            // قائمة العقول المفكرة (ترتيب الأولوية للنماذج الأحدث لعام 2026)
             const modelNames = [
                 userModel,
-                'gemini-2.0-flash',
-                'gemini-2.0-flash-lite',
-                'gemini-1.5-pro',
-                'gemini-1.5-flash'
+                'gemini-3.7-flash',
+                'gemini-3.6-flash',
+                'gemini-3.5-flash-lite',
+                'gemini-2.0-flash'
             ].filter((v, i, a) => a.indexOf(v) === i);
 
             let lastError = "";
