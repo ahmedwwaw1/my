@@ -1,6 +1,6 @@
 {
-  "id": 1787494286716,
-  "command": "ls -R",
+  "id": 1787494432523,
+  "command": "dir",
   "tool": "runPowerShell",
   "status": "pending"
 }
