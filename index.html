@@ -857,7 +857,7 @@
         /* 📟 شاشة الباور شيل التفاعلية (IDE Terminal - Android Studio Style) */
         .ai-terminal {
             display: none;
-            height: 200px;
+            height: 180px;
             background: #1e1f22;
             border-top: 1px solid #3c3f41;
             font-family: 'JetBrains Mono', 'Consolas', monospace;
@@ -866,7 +866,6 @@
             overflow: hidden;
             position: relative;
             z-index: 5;
-            display: flex;
             flex-direction: column;
         }
 
@@ -1151,9 +1150,18 @@
             display: none;
             flex-wrap: wrap;
             gap: 10px;
-            padding: 5px 0;
+            padding: 0;
+            border-bottom: none;
+            margin-bottom: 0;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        #imagePreviewContainer:not(:empty) {
+            padding: 10px 0;
             border-bottom: 1px solid #3c3f41;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            display: flex;
         }
 
         .preview-item {
@@ -1270,11 +1278,11 @@
         }
         .ai-send-btn-new.working::after {
             content: "";
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background: white;
             display: block;
-            border-radius: 2px;
+            border-radius: 1px;
         }
 
         .model-selector-container {
@@ -1402,14 +1410,8 @@
                         </div>
                     </div>
 
-                    <!-- 📟 شاشة الباور شيل التفاعلية (IDE Terminal - Android Studio Style) -->
+                    <!-- 📟 شاشة الباور شيل التفاعلية (Clean Minimal Terminal) -->
                     <div id="aiTerminal" class="ai-terminal">
-                        <div class="terminal-header">
-                            <div class="terminal-tab">Terminal</div>
-                            <div class="terminal-tab" style="background: transparent; border: none; opacity: 0.5;">Local</div>
-                            <div style="flex-grow: 1;"></div>
-                            <span class="terminal-close" onclick="toggleTerminal()" style="cursor: pointer; color: #afb1b3;">✕</span>
-                        </div>
                         <div class="terminal-content-wrapper">
                             <div class="terminal-toolbar">
                                 <span class="terminal-tool" title="Rerun">🔄</span>
@@ -2993,6 +2995,16 @@
         }
 
         async function initKeys() {
+            // إضافة زر إغلاق التيرمينال يدوياً إذا لم يكن موجوداً
+            const term = document.getElementById('aiTerminal');
+            if (term && !term.querySelector('.terminal-close-btn')) {
+                const closeBtn = document.createElement('div');
+                closeBtn.className = 'terminal-close-btn';
+                closeBtn.innerHTML = '✕';
+                closeBtn.style.cssText = "position:absolute; top:5px; right:10px; color:#afb1b3; cursor:pointer; z-index:10;";
+                closeBtn.onclick = toggleTerminal;
+                term.appendChild(closeBtn);
+            }
             if (!geminiApiKey) geminiApiKey = await fetchApiKeyFromSupabase('gemini_key');
             if (!githubToken) {
                 githubToken = await fetchApiKeyFromSupabase('github_token');
@@ -3336,8 +3348,8 @@
                 try {
                     const syncBadge = document.createElement('div');
                     syncBadge.id = 'cloudSyncBadge';
-                    syncBadge.style.cssText = "font-size:10px; color:#afb1b3; text-align:center; padding:5px; opacity:0.6;";
-                    syncBadge.innerText = "🔄 جاري مزامنة الذاكرة السحابية...";
+                    syncBadge.style.cssText = "font-size:10px; color:#4db6ac; text-align:center; padding:5px; background:rgba(77,182,172,0.05); border-radius:4px; margin:10px auto; width:fit-content;";
+                    syncBadge.innerText = "🛡️ جاري استعادة الذاكرة العميقة من GitHub...";
                     container.appendChild(syncBadge);
 
                     const res = await safeGithubFetch(CHAT_LOG_PATH, { headers: { 'Cache-Control': 'no-cache' } });
@@ -3347,23 +3359,30 @@
 
                         if (content.sessions) {
                             chatSessions = content.sessions;
-                            currentSessionId = content.activeSessionId || currentSessionId;
-
-                            // استرداد المهمة المعلقة من السحاب في حال ضياع الذاكرة المحلية
-                            if (content.pendingHistory) {
-                                localStorage.setItem('gemini_pending_history', content.pendingHistory);
+                            // التأكد من استعادة آخر جلسة نشطة بدلاً من إنشاء واحدة جديدة
+                            if (content.activeSessionId) {
+                                currentSessionId = content.activeSessionId;
+                                localStorage.setItem('gemini_current_session', currentSessionId);
                             }
 
                             localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
-                            localStorage.setItem('gemini_current_session', currentSessionId);
 
                             const active = chatSessions.find(s => s.id === currentSessionId);
-                            chatHistory = active ? active.history : [];
-                        } else {
+                            if (active) {
+                                chatHistory = active.history || [];
+                                console.log("✅ تم العثور على الجلسة النشطة واستعادتها.");
+                            } else if (chatSessions.length > 0) {
+                                // إذا لم يجد الجلسة الحالية، يأخذ آخر جلسة كانت مفتوحة بدلاً من البدء من الصفر
+                                currentSessionId = chatSessions[0].id;
+                                chatHistory = chatSessions[0].history || [];
+                                localStorage.setItem('gemini_current_session', currentSessionId);
+                                console.log("⚠️ تم استعادة آخر جلسة مسجلة بدلاً من الجلسة المفقودة.");
+                            }
+                        } else if (Array.isArray(content)) {
                             chatHistory = content;
                         }
 
-                        console.log("✅ تم استعادة الذاكرة الشاملة من GitHub");
+                        console.log("✅ تم استعادة الذاكرة الشاملة بنجاح.");
                         rebuildChatUi();
                         renderHistory();
                     }
@@ -3425,8 +3444,12 @@
 
         function renderHistory() {
             const list = document.getElementById('historyList');
-            list.innerHTML = chatSessions.map(s => `
-                <div class="history-item" onclick="loadSession('${s.id}')">
+            list.innerHTML = `
+                <div style="padding: 10px; border-bottom: 1px solid #3c3f41; margin-bottom: 10px;">
+                    <button onclick="manualHistoryImport()" style="width:100%; background:#4db6ac; color:white; border:none; padding:8px; border-radius:4px; font-size:12px; cursor:pointer;">📥 استيراد سجل خارجي (JSON)</button>
+                </div>
+            ` + chatSessions.map(s => `
+                <div class="history-item ${s.id === currentSessionId ? 'active' : ''}" onclick="loadSession('${s.id}')">
                     <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:160px;">${s.title}</span>
                     <div class="actions">
                         <span onclick="event.stopPropagation(); renameSession('${s.id}')">✏️</span>
@@ -3434,6 +3457,24 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        async function manualHistoryImport() {
+            const json = prompt("قم بلصق محتوى ملف chat_logs.json هنا:");
+            if (!json) return;
+            try {
+                const data = JSON.parse(json);
+                if (data.sessions) {
+                    chatSessions = data.sessions;
+                    currentSessionId = data.activeSessionId || currentSessionId;
+                    localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
+                    localStorage.setItem('gemini_current_session', currentSessionId);
+                    loadChatFromStorage(); // إعادة التحميل لتحديث الواجهة
+                    addMessageToUi('ai', "✅ تم استيراد السجل يدوياً بنجاح. يمكنك الآن متابعة الحديث.", 'System');
+                }
+            } catch(e) {
+                alert("❌ خطأ في تنسيق JSON: " + e.message);
+            }
         }
 
         function createNewChat() {
