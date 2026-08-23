@@ -4283,33 +4283,82 @@
                         thinkMsg.innerText = `🧠 جاري التفكير باستخدام ${modelName}...`;
                     }
 
-                    // تحديث منطق الإصدار لضمان التوافق التام مع نماذج 2026
-                    const apiVersion = (modelName.includes('exp') || modelName.includes('preview')) ? 'v1beta' : 'v1';
-                    const url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}`;
+                    // تحديث منطق الإصدار والنقطة النهائية
+                    let url = '';
+                    if (provider === 'google') {
+                        const apiVersion = (modelName.includes('exp') || modelName.includes('preview')) ? 'v1beta' : 'v1';
+                        url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}`;
+                    } else if (provider === 'openai') {
+                        url = 'https://api.openai.com/v1/chat/completions';
+                    } else if (provider === 'anthropic') {
+                        url = 'https://api.anthropic.com/v1/messages';
+                    } else if (provider === 'deepseek') {
+                        url = 'https://api.deepseek.com/v1/chat/completions';
+                    }
 
                     try {
                         // 🛰️ نظام حارس الوقت (Watchdog) - 60 ثانية كحد أقصى للرد
                         const controller = new AbortController();
                         const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-                        const res = await fetch(url, {
+                        let fetchOptions = {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            signal: controller.signal,
-                            body: JSON.stringify({
+                            signal: controller.signal
+                        };
+
+                        let body = {};
+
+                        if (provider === 'google') {
+                            body = {
                                 system_instruction: systemInstruction,
                                 contents: history.map(h => ({ role: h.role, parts: h.parts })),
                                 tools: tools,
                                 generationConfig: generationConfig
-                            })
-                        });
+                            };
+                        } else if (provider === 'openai' || provider === 'deepseek') {
+                            fetchOptions.headers['Authorization'] = `Bearer ${key}`;
+                            // تحويل التنسيق لـ OpenAI
+                            const messages = history.map(h => ({
+                                role: h.role === 'model' ? 'assistant' : (h.role === 'user' ? (h.parts[0].functionResponse ? 'tool' : 'user') : 'system'),
+                                content: h.parts[0].text || '',
+                                ...(h.parts[0].functionCall && { tool_calls: [{ id: h.parts[0].functionCall.id || 'call_'+Date.now(), type: 'function', function: { name: h.parts[0].functionCall.name, arguments: JSON.stringify(h.parts[0].functionCall.args) } }] }),
+                                ...(h.parts[0].functionResponse && { tool_call_id: history[history.indexOf(h)-1].parts[0].functionCall.id, content: JSON.stringify(h.parts[0].functionResponse.response) })
+                            }));
+                            // إضافة التعليمات البرمجية كرسالة نظام
+                            messages.unshift({ role: 'system', content: constitution });
+
+                            body = {
+                                model: modelName,
+                                messages: messages,
+                                tools: tools[0].function_declarations.map(f => ({ type: 'function', function: { name: f.name, description: f.description, parameters: f.parameters } })),
+                                tool_choice: 'auto'
+                            };
+                        } else if (provider === 'anthropic') {
+                            fetchOptions.headers['x-api-key'] = key;
+                            fetchOptions.headers['anthropic-version'] = '2023-06-01';
+
+                            body = {
+                                model: modelName,
+                                system: constitution,
+                                max_tokens: 4096,
+                                messages: history.filter(h => !h.parts[0].functionResponse).map(h => ({
+                                    role: h.role === 'model' ? 'assistant' : 'user',
+                                    content: h.parts[0].text || ''
+                                })),
+                                tools: tools[0].function_declarations.map(f => ({ name: f.name, description: f.description, input_schema: f.parameters }))
+                            };
+                        }
+
+                        fetchOptions.body = JSON.stringify(body);
+                        const res = await fetch(url, fetchOptions);
                         clearTimeout(timeoutId);
 
                         const data = await res.json();
 
                         if (!res.ok) {
-                            lastError = data.error?.message || "Unknown Error";
-                            console.error(`🔴 Gemini API Error (${modelName}):`, data);
+                            lastError = data.error?.message || data.error || "Unknown Error";
+                            console.error(`🔴 API Error (${modelName}):`, data);
                             // ⏳ التعامل الذكي مع حد الاستخدام (Rate Limit 429)
                             if (res.status === 429) {
                                 console.warn(`⏳ حد الاستخدام مع ${modelName}. بدء مؤقت الانتظار الذكي...`);
@@ -4327,20 +4376,38 @@
                             return { text: `❌ خطأ من جوجل (${res.status}): ${lastError}`, model: modelName };
                         }
 
-                        const parts = data.candidates?.[0]?.content?.parts || [];
-                        const part = parts.find(p => p.functionCall);
-                        const textPart = parts.find(p => p.text);
-                        const thought = textPart ? textPart.text : null;
+                        const parts = (provider === 'google') ? (data.candidates?.[0]?.content?.parts || []) : [];
+                        let thought = null;
+                        let functionCallPart = null;
+
+                        if (provider === 'google') {
+                            functionCallPart = parts.find(p => p.functionCall);
+                            thought = parts.find(p => p.text)?.text;
+                        } else if (provider === 'openai' || provider === 'deepseek') {
+                            const choice = data.choices?.[0]?.message;
+                            thought = choice?.content;
+                            if (choice?.tool_calls) {
+                                const tc = choice.tool_calls[0].function;
+                                functionCallPart = { functionCall: { name: tc.name, args: JSON.parse(tc.arguments) } };
+                            }
+                        } else if (provider === 'anthropic') {
+                            thought = data.content.find(c => c.type === 'text')?.text;
+                            const tc = data.content.find(c => c.type === 'tool_use');
+                            if (tc) {
+                                functionCallPart = { functionCall: { name: tc.name, args: tc.input, id: tc.id } };
+                            }
+                        }
 
                         // 🛡️ معالجة الرد الفارغ كحالة فشل تتطلب إعادة المحاولة (Retryable)
-                        if (!part && !textPart) {
+                        if (!functionCallPart && !thought) {
                             console.warn(`⚠️ رد فارغ من ${modelName}. محاولة نموذج آخر...`);
                             retryModels.push(modelName);
                             continue;
                         }
 
-                        if (part && part.functionCall) {
-                            const { name, args } = part.functionCall;
+                        if (functionCallPart && functionCallPart.functionCall) {
+                            const { name, args } = functionCallPart.functionCall;
+                            const callId = functionCallPart.functionCall.id;
 
                             // عرض Thought إذا وجد في نفس الرد
                             if (thought) {
