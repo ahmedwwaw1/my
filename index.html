@@ -435,36 +435,32 @@
             padding: 0 20px;
         }
 
+        /* 🔍 Android Studio Style Search Engine */
         .search-container {
             position: relative;
             width: 100%;
-            max-width: 690px;
-            margin: 30px auto;
-            box-sizing: border-box;
+            max-width: 650px;
+            margin: 40px auto;
+            z-index: 2000;
+            transition: transform 0.3s ease;
         }
 
         #globalSearch {
             width: 100%;
-            padding: 14px 24px;
-            font-size: 16px;
-            background-color: #202124;
-            border: 1px solid #3c4043;
-            border-radius: 28px;
-            color: #e8eaed;
+            padding: 12px 18px 12px 45px;
+            font-size: 15px;
+            background-color: #1e1f22;
+            border: 1px solid #4b4d4d;
+            border-radius: 6px;
+            color: #dfe1e5;
             outline: none;
-            transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
-            box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        #globalSearch::placeholder {
-            color: #9aa0a6;
-        }
-
-        #globalSearch:hover,
         #globalSearch:focus {
-            background-color: #303134;
-            border-color: #5f6368;
-            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+            border-color: #3574f0; /* Android Studio Blue */
+            background-color: #2b2d30;
         }
 
         #searchDropdown {
@@ -472,32 +468,40 @@
             top: 100%;
             left: 0;
             right: 0;
-            background-color: #303134;
-            border: 1px solid #5f6368;
-            border-radius: 16px;
-            margin-top: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-            z-index: 999;
-            overflow: hidden;
+            background-color: #2b2d30;
+            border: 1px solid #3c3f41;
+            border-radius: 0 0 8px 8px;
+            margin-top: 2px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+            z-index: 2001;
+            max-height: 450px;
+            overflow-y: auto;
             display: none;
+            border-top: none;
         }
 
         .search-item {
-            padding: 12px 20px;
-            color: #e8eaed !important;
+            padding: 10px 15px;
+            color: #afb1b3 !important;
             cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.2s;
-            border-bottom: 1px solid #3c4043;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #32353a;
             text-align: right;
-        }
-
-        .search-item:last-child {
-            border-bottom: none;
+            transition: all 0.2s;
         }
 
         .search-item:hover {
-            background-color: #3c4043 !important;
+            background-color: #2675bf !important;
+            color: #ffffff !important;
+        }
+
+        .search-item-icon {
+            font-size: 16px;
+            opacity: 0.8;
+        }
             color: #ffffff !important;
         }
 
@@ -2112,7 +2116,15 @@
                 function createDropdownItem(displayText, itemId, directUrl = null, videoIdx = null, imageIdx = null, pdfIdx = null, chapterTime = null, thematicVideoId = null) {
                     const div = document.createElement('div');
                     div.className = 'search-item';
-                    div.innerText = displayText;
+
+                    let icon = '📄';
+                    if (displayText.includes('🎥') || displayText.includes('📺')) icon = '🎬';
+                    else if (displayText.includes('🖼️')) icon = '🖼️';
+                    else if (displayText.includes('🔗')) icon = '🔗';
+                    else if (displayText.includes('📌') || displayText.includes('⏱️')) icon = '🎯';
+
+                    div.innerHTML = `<span class="search-item-icon">${icon}</span> <span>${displayText}</span>`;
+
                     currentDropdownItems.push({ itemId, directUrl, videoIdx, imageIdx, pdfIdx, chapterTime, thematicVideoId });
                     div.addEventListener('click', () => {
                         executeSearchAction(itemId, directUrl, videoIdx, imageIdx, pdfIdx, chapterTime, thematicVideoId);
@@ -4402,12 +4414,26 @@
                     const globalRetry = (parseInt(localStorage.getItem('gemini_global_retry') || "0")) + 1;
                     localStorage.setItem('gemini_global_retry', globalRetry);
 
-                    // تحويل رسالة التفكير إلى رسالة انتظار
                     const thinkMsg = document.querySelector('.msg.ai:last-child');
-                    if (thinkMsg) thinkMsg.innerHTML = `<div class="msg-content">⏳ <b>تنبيه السيادة:</b> جميع العقول مشغولة حالياً (دورة ${globalRetry}).<br>سأنتظر 30 ثانية وأحاول مجدداً... لن أتوقف حتى تكتمل المهمة.</div>`;
+                    if (thinkMsg) thinkMsg.innerHTML = `<div class="msg-content">⏳ <b>موجه الاستمرارية:</b> ننتظر تبريد العقول (دورة ${globalRetry}). المهمة محفوظة ولن تضيع...</div>`;
 
                     await new Promise(r => setTimeout(r, 30000));
-                    return await runToolLoop(history, null, []); // البدء من جديد مع أول نموذج متاح
+                    return await runToolLoop(history, null, []);
+                }
+
+                // 🏅 منطق الموجه (The Mediator Logic):
+                // إذا كان هناك عقل سابق قد بدأ المهمة، نقوم بتنبيه العقل الجديد بوضوح لضمان الدقة ومنع التخريب
+                if (retryModels.length > 0) {
+                    const lastStep = history.filter(h => h.parts[0].functionCall).pop();
+                    const taskSummary = lastStep ? `آخر أداة نفذت هي [${lastStep.parts[0].functionCall.name}]` : "المهمة في بدايتها";
+
+                    const mediatorNote = {
+                        role: "user",
+                        parts: [{ text: `[SYSTEM MEDIATOR]: تنبيه أمني وبرمجي! لقد تم تحويلك لإكمال مهمة زميلك. ${taskSummary}.
+                        قاعدة ذهبية: التزم بدقة جراحية ولا تغير أي أحجام أو تنسيقات (CSS) شاملة للموقع. أكمل المهمة المطلوبة فقط بنسبة 100%.` }]
+                    };
+                    // حقن الموجه في التاريخ لضمان قراءته من العقل الجديد
+                    history.push(mediatorNote);
                 }
                 localStorage.setItem('gemini_global_retry', "0");
 
