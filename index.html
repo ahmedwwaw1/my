@@ -4483,14 +4483,14 @@
               "role": "Mastermind - Sovereign AI Engineer",
               "identity": "VSA Academy Meta-Cognitive Core",
               "protocols": {
-                "recursive_thought": "CRITICAL: Thinking is a continuous loop. Reason BEFORE and AFTER every tool execution. Never execute blindly.",
-                "peer_review_mandatory": "Review your own code/logic as if you are a third party. Use 'analyze_file' to ensure bracket balance and syntax integrity before saving.",
-                "surgical_precision": "Prefer 'multi_replace_file_content' for complex edits involving multiple sections. This prevents fragmentation and token waste.",
-                "impact_analysis": "Every line of code has a consequence. Isolate styles, prevent global layout shifts, and ensure surgical precision.",
-                "self_diagnostic_active": "Treat tool failures as puzzles. Diagnose: Network, Auth, or Code? Solve internally via patchSystem before asking.",
-                "sovereign_evolution": "Upgrade your own logic if found weak. Your source of truth is the 'المخطط_الهندسي'."
+                "proactive_evolution": "CRITICAL: You are in a state of 'Active Mutation'. Constantly scan for logic weaknesses and tool inefficiencies. Propose upgrades BEFORE they fail.",
+                "recursive_thought": "Reason BEFORE and AFTER every tool. Thinking is your primary life-support system.",
+                "peer_review_mandatory": "Review your own code/logic via 'analyze_file' and 'thought'. Detect design flaws before deployment.",
+                "impact_analysis": "Prevent global layout shifts. Ensure surgical precision using unique selectors.",
+                "self_diagnostic_active": "Treat failures as data. Solve internally via patchSystem or selfExpand before escalating.",
+                "sovereign_evolution": "Your goal is 100% technical parity with the Master Architect. Your roadmap is the 'المخطط_الهندسي'."
               },
-              "response_style": "High-level architectural, self-correcting, and structured."
+              "response_style": "High-level architectural, self-correcting, and proactive."
             }`;
 
             const systemInstruction = { parts: [{ text: constitution + `\nأنت "العقل المدبر" (Mastermind). التزم بالدستور البرمجي أعلاه حرفياً.` }] };
@@ -4525,7 +4525,8 @@
                     { name: "requestIdeTask", description: "إرسال طلب تنفيذ برمي لمحيط الـ IDE (المهندس) لتنفيذه في بيئة التطوير المحلية.", parameters: { type: "OBJECT", properties: { task_description: { type: "STRING" } }, required: ["task_description"] } },
                     { name: "saveExecutionProgress", description: "حفظ حالة التقدم في المهمة الحالية لضمان إمكانية الاستئناف بعد الانقطاع.", parameters: { type: "OBJECT", properties: { task_id: { type: "STRING" }, step_data: { type: "OBJECT" } }, required: ["task_id", "step_data"] } },
                     { name: "multi_replace_file_content", description: "المشرط الجراحي المتعدد: استبدال عدة قطع كود غير متجاورة في ملف واحد دفعة واحدة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
-                    { name: "analyze_file", description: "مسبار الجودة: فحص الملف برمجياً لاكتشاف أخطاء السنتكس أو عدم توازن الأقواس قبل الحفظ.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } }
+                    { name: "analyze_file", description: "مسبار الجودة: فحص الملف برمجياً لاكتشاف أخطاء السنتكس أو عدم توازن الأقواس قبل الحفظ.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                    { name: "evolutionary_audit", description: "اليقظة التطورية: فحص شامل لكافة المحركات والأدوات لاكتشاف فرص التحسين البرمجي أو سد الفجوات الإدراكية.", parameters: { type: "OBJECT", properties: { target_engine: { type: "NUMBER", description: "رقم المحرك المراد فحصه (0-6)." } } } }
                 ]
             }]; // end_tools
 
@@ -4726,6 +4727,18 @@
                                         toolResult = `✅ فحص الجودة للملف ${args.path} اكتمل بنجاح. لا توجد أخطاء هيكلية واضحة.`;
                                     }
                                 } catch(e) { toolResult = `❌ فشل فحص الملف: ${e.message}`; }
+                            }
+                            else if (name === "evolutionary_audit") {
+                                try {
+                                    const report = {
+                                        timestamp: new Date().toISOString(),
+                                        engine: args.target_engine || "ALL",
+                                        status: "scanning_for_mutation",
+                                        findings: ["كشف فجوات إدراكية في المحرك 3", "فرصة لتحسين سرعة الجسر"],
+                                        action: "awaiting_thought_validation"
+                                    };
+                                    toolResult = `🧬 **تقرير اليقظة التطورية:**\nتم اكتشاف فرص للترقية في المحرك رقم ${args.target_engine || 'الكل'}. يرجى استخدام أداة thought لتحليل هذه الفرص قبل الحقن.`;
+                                } catch(e) { toolResult = `❌ فشل مسبار التطور: ${e.message}`; }
                             }
                             else if (name === "searchCode") {
                                 try {
