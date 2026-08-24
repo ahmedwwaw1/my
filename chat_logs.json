@@ -1,8 +1,8 @@
 {
   "sessions": [
     {
-      "id": "1787565146377",
-      "title": "الحمد لله، أنا بأفضل حال وجاهز...",
+      "id": "1787569883705",
+      "title": "مرحباً بك! أنا \"العقل المدبر\" ...",
       "history": [
         {
           "role": "user",
@@ -16,26 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "مرحباً بك! أنا \"العقل المدبر\" (Mastermind)، المدير التنفيذي ومهندس الذكاء الاصطناعي في أكاديمية VSA. \n\nكيف يمكنني مساعدتك اليوم في التطوير، الهندسة البرمجية، أو تحليل المشاريع؟ جاهز دائماً لتنفيذ المهام بدقة واحترافية عالية.",
-              "thoughtSignature": "El4KXAERTTIPZxjEUlt+IY5JMpzYFN0+XBgu+3PXVHVl3SgJEzYsR+EV4FM36OJYqiuJNR+76r12KZ6o/QVT4qkOX4QHCzwm2EEGm8nbKRVd0IWYsXtO6zELLmPnIouV"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف حالك"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، أنا بأفضل حال وجاهز تماماً للعمل! \n\nالنظم تعمل بكفاءة عالية، وجميع الأدوات الهندسية والذكية في حالة تأهب لتنفيذ أي مهمة ترغب بها. \n\nكيف أستطيع خدمتك اليوم؟ هل هناك مشروع معين ترغب في تطويره أو فحص هندسي تريد منا إجراؤه؟",
-              "thoughtSignature": "El4KXAERTTIPQ8Ta1Mm4+OJSeTZ42OXPdEGjM4Sj47NQRn4OUT0hCJqtR6LDLKwDHLBQJ7w/Nk3mJcdc7xxhiWZP2J6MPvaTCy9lP4tBhNbySURilmmDYbd8XqmJ/hoS"
+              "text": "مرحباً بك! أنا \"العقل المدبر\" (Mastermind)، المدير التنفيذي والمهندس الذكي لأكاديمية VSA. \n\nكيف يمكنني مساعدتك اليوم في التطوير، البرمجة، تحليل المشروع، أو تنفيذ المهام الهندسية بدقة متناهية؟ أنا جاهز وفِقاً للبروتوكولات والدستور البرمجي.",
+              "thoughtSignature": "El4KXAERTTIPG+mlMOLiaXf2ujUTkk5FrIllzzYpkGz5Lr0NxkGj0YwAxQO0lJt3JOwzV5IhJbUdCCdQe/3u3eKqiJEuNMJlf1kN2ss/dtnIwaXHph7vq42aO+wI8rQR"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -43,7 +25,7 @@
       ]
     }
   ],
-  "activeSessionId": "1787565146377",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! أنا \\\"العقل المدبر\\\" (Mastermind)، المدير التنفيذي ومهندس الذكاء الاصطناعي في أكاديمية VSA. \\n\\nكيف يمكنني مساعدتك اليوم في التطوير، الهندسة البرمجية، أو تحليل المشاريع؟ جاهز دائماً لتنفيذ المهام بدقة واحترافية عالية.\",\"thoughtSignature\":\"El4KXAERTTIPZxjEUlt+IY5JMpzYFN0+XBgu+3PXVHVl3SgJEzYsR+EV4FM36OJYqiuJNR+76r12KZ6o/QVT4qkOX4QHCzwm2EEGm8nbKRVd0IWYsXtO6zELLmPnIouV\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف حالك\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"الحمد لله، أنا بأفضل حال وجاهز تماماً للعمل! \\n\\nالنظم تعمل بكفاءة عالية، وجميع الأدوات الهندسية والذكية في حالة تأهب لتنفيذ أي مهمة ترغب بها. \\n\\nكيف أستطيع خدمتك اليوم؟ هل هناك مشروع معين ترغب في تطويره أو فحص هندسي تريد منا إجراؤه؟\",\"thoughtSignature\":\"El4KXAERTTIPQ8Ta1Mm4+OJSeTZ42OXPdEGjM4Sj47NQRn4OUT0hCJqtR6LDLKwDHLBQJ7w/Nk3mJcdc7xxhiWZP2J6MPvaTCy9lP4tBhNbySURilmmDYbd8XqmJ/hoS\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"انا بخير\"}]}]",
-  "timestamp": "2026-08-24T09:56:49.115Z"
+  "activeSessionId": "1787576432189",
+  "pendingHistory": null,
+  "timestamp": "2026-08-24T13:00:32.189Z"
 }
