@@ -1377,109 +1377,150 @@
         .status-error .status-dot { background: #ff3d00; box-shadow: 0 0 5px #ff3d00; }
         .status-error { color: #ff3d00; border-color: rgba(255, 61, 0, 0.2); background: rgba(255, 61, 0, 0.05); }
 
-        /* 📟 Mastermind Professional Step Tracer Styling */
+        /* 💎 Elite Mastermind UI/UX Engine 6.0 - Advanced Styling */
+        :root {
+            --ide-bg: #1e1f22;
+            --ide-header: #2b2d30;
+            --ide-border: #3c3f41;
+            --ide-accent: #3574f0;
+            --ide-text: #dfe1e5;
+            --ide-muted: #afb1b3;
+            --ide-success: #59a869;
+            --ide-error: #f98a94;
+            --ide-warning: #ebc40d;
+        }
+
         .ai-step-container {
-            background: #2b2d30;
-            border: 1px solid #3c3f41;
+            background: var(--ide-bg);
+            border: 1px solid var(--ide-border);
             border-radius: 8px;
             margin: 15px 0;
             overflow: hidden;
             font-family: 'JetBrains Mono', monospace;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            transition: transform 0.2s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: slideIn 0.3s ease-out;
         }
 
         .ai-step-header {
-            background: #3c3f41;
-            padding: 8px 15px;
+            background: var(--ide-header);
+            padding: 10px 16px;
             display: flex;
             align-items: center;
             gap: 12px;
             cursor: pointer;
+            border-bottom: 1px solid var(--ide-border);
             user-select: none;
-            border-bottom: 1px solid #4e5157;
         }
 
-        .ai-step-header:hover { background: #4b4d4d; }
+        .ai-step-header:hover { background: #32353a; }
 
         .ai-step-icon {
-            font-size: 16px;
+            font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
         }
 
         .ai-step-name {
-            color: #dfe1e5;
-            font-weight: bold;
+            color: var(--ide-text);
+            font-weight: 600;
             font-size: 12px;
             flex-grow: 1;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .ai-step-status {
-            font-size: 11px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            font-size: 11px;
         }
 
         .status-spinner {
-            width: 12px;
-            height: 12px;
-            border: 2px solid rgba(77, 182, 172, 0.2);
-            border-top: 2px solid #4db6ac;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(53, 116, 240, 0.2);
+            border-top: 2px solid var(--ide-accent);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
 
-        .status-done { color: #81c784; font-weight: bold; }
-        .status-error { color: #f44336; font-weight: bold; }
+        .status-done { color: var(--ide-success); font-weight: bold; }
+        .status-error { color: var(--ide-error); font-weight: bold; }
 
         .ai-step-details {
-            background: #1e1f22;
-            padding: 0;
-            display: none; /* يتم فتحه عند اكتمال الأداة أو الضغط */
+            background: #141517;
+            display: none;
         }
 
         .ai-step-args {
-            padding: 8px 15px;
-            background: rgba(255,255,255,0.02);
+            padding: 8px 16px;
+            background: #212226;
             color: #d7ba7d;
-            font-size: 10px;
-            border-bottom: 1px solid #2b2d30;
+            font-size: 11px;
+            border-bottom: 1px solid var(--ide-border);
+            white-space: pre-wrap;
         }
 
         .step-output-area {
-            padding: 12px 15px;
-            max-height: 400px;
+            padding: 15px;
+            max-height: 500px;
             overflow-y: auto;
         }
 
         .code-viewer-ui {
             display: flex;
             gap: 15px;
+            line-height: 1.6;
         }
 
         .line-numbers {
             color: #4e5157;
             text-align: right;
-            font-size: 12px;
-            line-height: 1.6;
-            border-right: 1px solid #3c3f41;
-            padding-right: 10px;
             user-select: none;
+            font-size: 12px;
+            padding-right: 15px;
+            border-right: 1px solid var(--ide-border);
         }
 
         .code-content {
-            color: #dfe1e5;
+            color: var(--ide-text);
             font-size: 12px;
-            line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-all;
         }
 
+        /* 🧠 Thought Process Elite Box */
+        .thought-container {
+            background: rgba(53, 116, 240, 0.03);
+            border: 1px solid rgba(53, 116, 240, 0.2);
+            border-left: 4px solid var(--ide-accent);
+            border-radius: 4px 8px 8px 4px;
+            padding: 12px 18px;
+            margin: 15px 0;
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+        }
+
+        .thought-container::before {
+            content: 'THOUGHT PROCESS';
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: #1e1f22;
+            padding: 0 8px;
+            font-size: 9px;
+            color: var(--ide-accent);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
     </style>
