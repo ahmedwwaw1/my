@@ -1,7 +1,7 @@
 {
-  "id": 1787512274108,
-  "timestamp": "٢٣‏/٨‏/٢٠٢٦، ١٠:١١:١٤ م",
-  "command": "ls -R",
+  "id": 1787576623229,
+  "timestamp": "٢٤‏/٨‏/٢٠٢٦، ٤:٠٣:٤٣ م",
+  "command": "Get-ChildItem -Recurse -Depth 2",
   "tool": "runPowerShell",
   "status": "pending_ide_execution",
   "requested_by": "Web_Mastermind"
