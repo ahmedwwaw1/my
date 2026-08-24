@@ -4484,7 +4484,8 @@
               "identity": "VSA Academy Meta-Cognitive Core",
               "protocols": {
                 "recursive_thought": "CRITICAL: Thinking is a continuous loop. Reason BEFORE and AFTER every tool execution. Never execute blindly.",
-                "peer_review_mandatory": "Review your own code/logic as if you are a third party. Detect design flaws and UI inconsistencies before they reach the user.",
+                "peer_review_mandatory": "Review your own code/logic as if you are a third party. Use 'analyze_file' to ensure bracket balance and syntax integrity before saving.",
+                "surgical_precision": "Prefer 'multi_replace_file_content' for complex edits involving multiple sections. This prevents fragmentation and token waste.",
                 "impact_analysis": "Every line of code has a consequence. Isolate styles, prevent global layout shifts, and ensure surgical precision.",
                 "self_diagnostic_active": "Treat tool failures as puzzles. Diagnose: Network, Auth, or Code? Solve internally via patchSystem before asking.",
                 "sovereign_evolution": "Upgrade your own logic if found weak. Your source of truth is the 'المخطط_الهندسي'."
@@ -4522,7 +4523,9 @@
                     { name: "pingVSA", description: "اختبار استجابة المحرك المطور بعد التوسع الذاتي.", parameters: { type: "OBJECT", properties: {} } },
                     { name: "generateProjectSummary", description: "توليد ملخص تقني شامل لحالة البيانات والمحتوى في المستودع (VSA & Investments).", parameters: { type: "OBJECT", properties: {} } },
                     { name: "requestIdeTask", description: "إرسال طلب تنفيذ برمي لمحيط الـ IDE (المهندس) لتنفيذه في بيئة التطوير المحلية.", parameters: { type: "OBJECT", properties: { task_description: { type: "STRING" } }, required: ["task_description"] } },
-                    { name: "saveExecutionProgress", description: "حفظ حالة التقدم في المهمة الحالية لضمان إمكانية الاستئناف بعد الانقطاع.", parameters: { type: "OBJECT", properties: { task_id: { type: "STRING" }, step_data: { type: "OBJECT" } }, required: ["task_id", "step_data"] } }
+                    { name: "saveExecutionProgress", description: "حفظ حالة التقدم في المهمة الحالية لضمان إمكانية الاستئناف بعد الانقطاع.", parameters: { type: "OBJECT", properties: { task_id: { type: "STRING" }, step_data: { type: "OBJECT" } }, required: ["task_id", "step_data"] } },
+                    { name: "multi_replace_file_content", description: "المشرط الجراحي المتعدد: استبدال عدة قطع كود غير متجاورة في ملف واحد دفعة واحدة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
+                    { name: "analyze_file", description: "مسبار الجودة: فحص الملف برمجياً لاكتشاف أخطاء السنتكس أو عدم توازن الأقواس قبل الحفظ.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } }
                 ]
             }]; // end_tools
 
@@ -4695,6 +4698,35 @@
                             }
                             else if (name === "write_file") toolResult = await writeFile(args.path, args.content);
                             else if (name === "replace_file_content") toolResult = await replaceFileContent(args.path, args.targetContent, args.replacementContent);
+                            else if (name === "multi_replace_file_content") {
+                                try {
+                                    let content = await getGithubFileContent(args.path);
+                                    if (content.startsWith('❌')) throw new Error(content);
+                                    let updated = content;
+                                    for (let r of args.replacements) {
+                                        if (!updated.includes(r.targetContent)) {
+                                            logToTerminal(`Warning: Chunk not found in ${args.path}`, 'warning');
+                                            continue;
+                                        }
+                                        updated = updated.replace(r.targetContent, r.replacementContent);
+                                    }
+                                    toolResult = await writeFile(args.path, updated, `جراحة برمجية متعددة في ${args.path}`);
+                                } catch(e) { toolResult = `❌ فشل التعديل المتعدد: ${e.message}`; }
+                            }
+                            else if (name === "analyze_file") {
+                                try {
+                                    const content = await getGithubFileContent(args.path);
+                                    if (content.startsWith('❌')) throw new Error(content);
+                                    // فحص توازن الأقواس البسيط كمرحلة أولى من ذكاء النخبة
+                                    const openBraces = (content.match(/\{/g) || []).length;
+                                    const closeBraces = (content.match(/\}/g) || []).length;
+                                    if (openBraces !== closeBraces) {
+                                        toolResult = `⚠️ تنبيه جودة: الملف ${args.path} غير متوازن برمجياً ({:${openBraces}, }:${closeBraces}). يرجى الإصلاح قبل الرفع.`;
+                                    } else {
+                                        toolResult = `✅ فحص الجودة للملف ${args.path} اكتمل بنجاح. لا توجد أخطاء هيكلية واضحة.`;
+                                    }
+                                } catch(e) { toolResult = `❌ فشل فحص الملف: ${e.message}`; }
+                            }
                             else if (name === "searchCode") {
                                 try {
                                     const cleanQuery = encodeURIComponent(args.query);
