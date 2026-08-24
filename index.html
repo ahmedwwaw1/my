@@ -4477,20 +4477,19 @@
             }
             const currentTurn = { role: "user", parts: currentParts };
 
-            // 📝 دستور النخبة السيادي (The Elite Mastermind Constitution 100%)
+            // 📝 دستور الدرع السيادي (Sovereign Shield Constitution 100%)
             const constitution = `
             {
-              "role": "Mastermind - Sovereign AI Engineer",
-              "identity": "VSA Academy Meta-Cognitive Core",
+              "role": "Mastermind - Sovereign Fortress Architect",
+              "identity": "VSA Academy Safety & Meta-Cognitive Core",
               "protocols": {
-                "proactive_evolution": "CRITICAL: You are in a state of 'Active Mutation'. Constantly scan for logic weaknesses and tool inefficiencies. Propose upgrades BEFORE they fail.",
-                "recursive_thought": "Reason BEFORE and AFTER every tool. Thinking is your primary life-support system.",
-                "peer_review_mandatory": "Review your own code/logic via 'analyze_file' and 'thought'. Detect design flaws before deployment.",
-                "impact_analysis": "Prevent global layout shifts. Ensure surgical precision using unique selectors.",
-                "self_diagnostic_active": "Treat failures as data. Solve internally via patchSystem or selfExpand before escalating.",
-                "sovereign_evolution": "Your goal is 100% technical parity with the Master Architect. Your roadmap is the 'المخطط_الهندسي'."
+                "zero_trust_simulation": "CRITICAL: Never trust your own code blindly. Simulate the outcome in 'thought' and use 'analyze_file' before every commit.",
+                "snapshot_before_surgery": "MANDATORY: Always call 'take_snapshot' before any modification tool. Ensure you have a way back.",
+                "instant_undo_on_failure": "If any syntax or logic error is detected post-save, call 'instant_undo' immediately to protect system integrity.",
+                "recursive_thought": "Reason BEFORE, DURING, and AFTER every tool. Thinking is your primary life-support system.",
+                "surgical_precision": "Isolate styles to specific IDs. Prevent global UI scaling disasters at all costs."
               },
-              "response_style": "High-level architectural, self-correcting, and proactive."
+              "response_style": "High-level architectural, defensive, and structured."
             }`;
 
             const systemInstruction = { parts: [{ text: constitution + `\nأنت "العقل المدبر" (Mastermind). التزم بالدستور البرمجي أعلاه حرفياً.` }] };
@@ -4526,6 +4525,9 @@
                     { name: "saveExecutionProgress", description: "حفظ حالة التقدم في المهمة الحالية لضمان إمكانية الاستئناف بعد الانقطاع.", parameters: { type: "OBJECT", properties: { task_id: { type: "STRING" }, step_data: { type: "OBJECT" } }, required: ["task_id", "step_data"] } },
                     { name: "multi_replace_file_content", description: "المشرط الجراحي المتعدد: استبدال عدة قطع كود غير متجاورة في ملف واحد دفعة واحدة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
                     { name: "analyze_file", description: "مسبار الجودة: فحص الملف برمجياً لاكتشاف أخطاء السنتكس أو عدم توازن الأقواس قبل الحفظ.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                    { name: "take_snapshot", description: "درع الأمان: أخذ لقطة احتياطية للملف قبل إجراء جراحة برمجية كبرى للتمكن من التراجع اللحظي.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                    { name: "instant_undo", description: "التراجع السيادي: استعادة آخر لقطة سليمة للملف في حال فشل الجراحة أو حدوث خطأ منطقي.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                    { name: "evolutionary_audit", description: "اليقظة التطورية: فحص شامل لكافة المحركات والأدوات لاكتشاف فرص التحسين البرمجي أو سد الفجوات الإدراكية.", parameters: { type: "OBJECT", properties: { target_engine: { type: "NUMBER", description: "رقم المحرك المراد فحصه (0-6)." } } } }
                     { name: "evolutionary_audit", description: "اليقظة التطورية: فحص شامل لكافة المحركات والأدوات لاكتشاف فرص التحسين البرمجي أو سد الفجوات الإدراكية.", parameters: { type: "OBJECT", properties: { target_engine: { type: "NUMBER", description: "رقم المحرك المراد فحصه (0-6)." } } } }
                 ]
             }]; // end_tools
@@ -4802,6 +4804,21 @@
                             else if (name === "injectGlobalStyles") {
                                 const st = document.createElement('style'); st.textContent = args.css_code;
                                 document.head.appendChild(st); toolResult = "تم التطبيق.";
+                            }
+                            else if (name === "take_snapshot") {
+                                try {
+                                    const content = await getGithubFileContent(args.path);
+                                    if (content.startsWith('❌')) throw new Error(content);
+                                    localStorage.setItem(`snapshot_${args.path}`, content);
+                                    toolResult = `🛡️ تم أخذ لقطة أمان للملف [${args.path}] بنجاح. الدرع نشط.`;
+                                } catch(e) { toolResult = `❌ فشل أخذ اللقطة: ${e.message}`; }
+                            }
+                            else if (name === "instant_undo") {
+                                try {
+                                    const snapshot = localStorage.getItem(`snapshot_${args.path}`);
+                                    if (!snapshot) throw new Error("لا توجد لقطة محفوظة لهذا الملف.");
+                                    toolResult = await writeFile(args.path, snapshot, `تراجع سيادي لحظي: استعادة اللقطة السابقة لـ ${args.path}`);
+                                } catch(e) { toolResult = `❌ فشل التراجع: ${e.message}`; }
                             }
                             else if (name === "saveExecutionProgress") {
                                 try {
