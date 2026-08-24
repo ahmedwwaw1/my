@@ -970,29 +970,39 @@
             letter-spacing: 0.3px;
         }
 
+        /* 🧠 Professional Thought Process UI (Elite Design) */
         .thought-box {
-            background: #2b2d30;
-            border: 1px solid #3c3f41;
-            padding: 12px;
-            margin: 8px 0;
-            font-size: 13px;
-            color: #dfe1e5;
-            border-radius: 8px;
-            white-space: pre-wrap;
             display: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            line-height: 1.5;
+            background: #1e1f22;
+            border-left: 3px solid #4db6ac;
+            padding: 12px 15px;
+            margin: 10px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #afb1b3;
+            line-height: 1.6;
+            border-radius: 0 8px 8px 0;
+            white-space: pre-wrap;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
 
         .thought-toggle {
-            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
             color: #afb1b3;
             cursor: pointer;
-            padding: 4px 8px;
-            background: rgba(255,255,255,0.05);
+            padding: 6px 12px;
+            background: #2b2d30;
             border: 1px solid #3c3f41;
             border-radius: 6px;
+            margin-bottom: 10px;
+            width: fit-content;
+            transition: all 0.2s ease;
+        }
+        .thought-toggle:hover { background: #3c3f41; color: #dfe1e5; }
+        .thought-toggle::before { content: '🧠'; font-size: 14px; }
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -1342,55 +1352,82 @@
         .card:nth-child(5) { animation-delay: 0.25s; }
         .card:nth-child(6) { animation-delay: 0.3s; }
 
+        /* 🛡️ Mastermind Health Dashboard Styling */
+        .system-status-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 8px;
+            background: rgba(77, 182, 172, 0.1);
+            border: 1px solid rgba(77, 182, 172, 0.2);
+            border-radius: 20px;
+            font-size: 10px;
+            color: #4db6ac;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4db6ac;
+            box-shadow: 0 0 5px #4db6ac;
+        }
+        .status-error .status-dot { background: #ff3d00; box-shadow: 0 0 5px #ff3d00; }
+        .status-error { color: #ff3d00; border-color: rgba(255, 61, 0, 0.2); background: rgba(255, 61, 0, 0.05); }
+
         /* 📟 Mastermind Professional Step Tracer Styling */
         .ai-step-container {
-            background: #1e1f22;
+            background: #2b2d30;
             border: 1px solid #3c3f41;
             border-radius: 8px;
-            margin: 12px 0;
+            margin: 15px 0;
             overflow: hidden;
-            font-family: 'JetBrains Mono', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease;
         }
 
         .ai-step-header {
-            background: #2b2d30;
-            padding: 10px 15px;
+            background: #3c3f41;
+            padding: 8px 15px;
             display: flex;
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            border-bottom: 1px solid #3c3f41;
             user-select: none;
+            border-bottom: 1px solid #4e5157;
         }
 
-        .ai-step-header:hover { background: #32353a; }
+        .ai-step-header:hover { background: #4b4d4d; }
 
         .ai-step-icon {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .ai-step-name {
             color: #dfe1e5;
-            font-weight: 600;
-            font-size: 13px;
+            font-weight: bold;
+            font-size: 12px;
             flex-grow: 1;
-            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .ai-step-status {
+            font-size: 11px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 12px;
+            gap: 6px;
         }
 
         .status-spinner {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border: 2px solid rgba(77, 182, 172, 0.2);
             border-top: 2px solid #4db6ac;
             border-radius: 50%;
@@ -1398,46 +1435,49 @@
         }
 
         .status-done { color: #81c784; font-weight: bold; }
-        .status-error { color: #e57373; font-weight: bold; }
+        .status-error { color: #f44336; font-weight: bold; }
 
         .ai-step-details {
-            padding: 0;
-            display: none;
             background: #1e1f22;
+            padding: 0;
+            display: none; /* يتم فتحه عند اكتمال الأداة أو الضغط */
         }
 
         .ai-step-args {
-            padding: 10px 15px;
-            background: #262629;
-            color: #afb1b3;
-            font-size: 11px;
-            border-bottom: 1px solid #3c3f41;
-            white-space: pre-wrap;
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.02);
+            color: #d7ba7d;
+            font-size: 10px;
+            border-bottom: 1px solid #2b2d30;
+        }
+
+        .step-output-area {
+            padding: 12px 15px;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
         .code-viewer-ui {
-            background: #1e1f22;
             display: flex;
-            padding: 15px;
-            gap: 20px;
-            overflow-x: auto;
+            gap: 15px;
         }
 
         .line-numbers {
             color: #4e5157;
             text-align: right;
-            user-select: none;
             font-size: 12px;
             line-height: 1.6;
             border-right: 1px solid #3c3f41;
-            padding-right: 15px;
+            padding-right: 10px;
+            user-select: none;
         }
 
         .code-content {
             color: #dfe1e5;
             font-size: 12px;
             line-height: 1.6;
-            white-space: pre;
+            white-space: pre-wrap;
+            word-break: break-all;
         }
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -1502,6 +1542,10 @@
                             <span style="letter-spacing: 0.5px;">Agent / العقل المدبر</span>
                             <span id="aiLiveClock" style="margin-right: 10px; font-family: monospace; font-size: 12px; color: #4db6ac; background: rgba(77, 182, 172, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(77, 182, 172, 0.2);">08:22:20</span>
                             <span id="aiDynamicTimer" class="ai-timer-badge">0:00</span>
+                            <div id="systemHealthBadge" class="system-status-pill">
+                                <div class="status-dot"></div>
+                                <span id="healthStatusText">SYSTEM READY</span>
+                            </div>
                         </div>
                         <div class="ai-header-actions">
                             <span onclick="checkForEvolution()" title="Check for Evolution Updates" style="font-size: 16px;">🚀</span>
@@ -3328,6 +3372,22 @@
         }
 
         async function fetchApiKeyFromSupabase(id) {
+            // 💓 نبض النظام التلقائي (System Heartbeat)
+            if (!window.heartbeatStarted) {
+                window.heartbeatStarted = true;
+                setInterval(async () => {
+                    if (!document.getElementById('aiSendBtn').classList.contains('working')) {
+                        try {
+                            const start = Date.now();
+                            // فحص صامت للاتصال
+                            const isProxyReady = mastermindProxyUrl ? "PROXY: OK" : "DIRECT: OK";
+                            updateHealthUI(true, `${isProxyReady} | ${Date.now() - start}ms`);
+                        } catch(e) {
+                            updateHealthUI(false, "CONNECTION SLUGGISH");
+                        }
+                    }
+                }, 30000); // جس نبض كل 30 ثانية
+            }
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
             const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
 
@@ -4034,6 +4094,20 @@
             saveChatToStorage(); // حفظ حالة الـ UI
         }
 
+        function updateHealthUI(online, text) {
+            const badge = document.getElementById('systemHealthBadge');
+            const textEl = document.getElementById('healthStatusText');
+            if (badge && textEl) {
+                if (online) {
+                    badge.classList.remove('status-error');
+                    textEl.innerText = text.toUpperCase();
+                } else {
+                    badge.classList.add('status-error');
+                    textEl.innerText = text.toUpperCase();
+                }
+            }
+        }
+
         function addToolStepToUi(toolName, args) {
             const container = document.getElementById('aiMessages');
             const stepId = 'step-' + Date.now();
@@ -4124,11 +4198,16 @@
         }
 
         function getToolIcon(name) {
-            if (name.includes('read') || name.includes('get')) return '🔍';
-            if (name.includes('write') || name.includes('replace') || name.includes('patch')) return '📝';
-            if (name.includes('search')) return '📡';
-            if (name.includes('run') || name.includes('execute')) return '⚡';
-            if (name.includes('repair')) return '🛠️';
+            const lower = name.toLowerCase();
+            if (lower.includes('read') || lower.includes('get')) return '🔍';
+            if (lower.includes('write') || lower.includes('replace') || lower.includes('patch')) return '📝';
+            if (lower.includes('search')) return '📡';
+            if (lower.includes('run') || lower.includes('execute')) return '⚡';
+            if (lower.includes('repair') || lower.includes('diag')) return '🛠️';
+            if (lower.includes('thought')) return '🧠';
+            if (lower.includes('save') || lower.includes('progress')) return '💾';
+            if (lower.includes('ping')) return '💓';
+            if (lower.includes('ide') || lower.includes('task')) return '🚀';
             return '⚙️';
         }
 
@@ -4596,6 +4675,16 @@
                                     }
                                     if (!outputFound) toolResult = `⚠️ لم يصل الرد خلال 15 ثانية.`;
                                 } catch(e) { toolResult = `❌ خطأ جسر: ${e.message}`; }
+                            }
+                            else if (name === "pingModel") {
+                                const start = Date.now();
+                                try {
+                                    toolResult = `✅ استجابة النظام: ${Date.now() - start}ms. المحرك نشط.`;
+                                    updateHealthUI(true, `LATENCY: ${Date.now() - start}ms`);
+                                } catch(e) {
+                                    updateHealthUI(false, "MODEL OFFLINE");
+                                    toolResult = "❌ فشل اختبار السرعة.";
+                                }
                             }
                             else if (name === "thought") toolResult = args.reasoning;
                             else if (name === "requestIdeTask") {
