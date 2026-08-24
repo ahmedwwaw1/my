@@ -26,6 +26,6 @@
     }
   ],
   "activeSessionId": "1787565146377",
-  "pendingHistory": null,
-  "timestamp": "2026-08-24T09:53:55.196Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! أنا \\\"العقل المدبر\\\" (Mastermind)، المدير التنفيذي ومهندس الذكاء الاصطناعي في أكاديمية VSA. \\n\\nكيف يمكنني مساعدتك اليوم في التطوير، الهندسة البرمجية، أو تحليل المشاريع؟ جاهز دائماً لتنفيذ المهام بدقة واحترافية عالية.\",\"thoughtSignature\":\"El4KXAERTTIPZxjEUlt+IY5JMpzYFN0+XBgu+3PXVHVl3SgJEzYsR+EV4FM36OJYqiuJNR+76r12KZ6o/QVT4qkOX4QHCzwm2EEGm8nbKRVd0IWYsXtO6zELLmPnIouV\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف حالك\"}]}]",
+  "timestamp": "2026-08-24T09:54:19.891Z"
 }
