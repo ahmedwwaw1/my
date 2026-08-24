@@ -360,6 +360,6 @@
     }
   ],
   "activeSessionId": "1787523602781",
-  "pendingHistory": null,
-  "timestamp": "2026-08-24T08:52:39.029Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل لديك اداة searchCode\"}]}]",
+  "timestamp": "2026-08-24T08:53:42.025Z"
 }
