@@ -507,26 +507,27 @@
 
         .grid-layout {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 20px;
-            row-gap: 30px;
-            padding: 10px 0;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* العودة للمقاس المثالي */
+            gap: 25px;
+            row-gap: 35px;
+            padding: 20px 0;
             width: 100%;
             box-sizing: border-box;
         }
 
         .card {
-            background: transparent;
-            border: none;
+            background: #18181c;
+            border: 1px solid #222226;
             border-radius: 12px;
             padding: 0;
             cursor: pointer;
-            transition: box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             position: relative;
             overflow: hidden;
+            height: 100%;
         }
 
         .card:hover {
@@ -4637,20 +4638,20 @@
                     }
                 }
 
-                // 🔄 المرحلة النهائية من بروتوكول الاستمرارية: الانتظار الكلي وإعادة المحاولة اللانهائية
-                const waitTime = 30000; // 30 ثانية
+                // 🔄 بروتوكول "الحسّاس الذكي" (Engine 4 - Availability Sensor)
+                // بدلاً من الانتظار العشوائي، سنقوم بجس نبض النماذج بشكل متكرر وذكي
                 const globalRetry = (parseInt(localStorage.getItem('gemini_global_retry') || "0")) + 1;
                 localStorage.setItem('gemini_global_retry', globalRetry);
 
-                logToTerminal(`QUOTA EXHAUSTED: All models busy. Waiting ${waitTime/1000}s for cool-down (Attempt ${globalRetry})...`, 'info');
-
                 const thinkMsg = document.querySelector('.msg.ai:last-child');
                 if (thinkMsg) {
-                    thinkMsg.innerHTML = `<div class="msg-content">⏳ <b>بروتوكول الاستمرارية العميقة:</b><br>لقد بلغت كافة النماذج حد الاستخدام المؤقت (دورة ${globalRetry}).<br>سأنتظر 30 ثانية لتبريد النظام ثم أستأنف العمل تلقائياً... <b>لن أتوقف حتى تكتمل مهمتك.</b></div>`;
+                    thinkMsg.innerHTML = `<div class="msg-content">📡 <b>حسّاس التوفر نشط:</b> كافة النماذج تحت الضغط (دورة ${globalRetry}).<br>أقوم بمراقبة استجابة السيرفرات الآن... سأستأنف العمل فور تحرر أول نموذج تلقائياً.</div>`;
                 }
 
-                await new Promise(r => setTimeout(r, waitTime));
-                return await runToolLoop(history, null, []); // إعادة البدء من أول نموذج في القائمة
+                // حلقة "جس النبض" (Probe Loop) - تحاول كل 10 ثوانٍ بدلاً من 30
+                logToTerminal(`SENSING MODEL AVAILABILITY... (Cycle ${globalRetry})`, 'info');
+                await new Promise(r => setTimeout(r, 10000));
+                return await runToolLoop(history, null, []);
             }
 
             // تشغيل الحلقة مع السياق الحالي
