@@ -4610,7 +4610,21 @@
                         continue;
                     }
                 }
-                return { text: `❌ فشلت جميع المحاولات. آخر خطأ: ${lastError}`, model: "System Error" };
+
+                // 🔄 المرحلة النهائية من بروتوكول الاستمرارية: الانتظار الكلي وإعادة المحاولة اللانهائية
+                const waitTime = 30000; // 30 ثانية
+                const globalRetry = (parseInt(localStorage.getItem('gemini_global_retry') || "0")) + 1;
+                localStorage.setItem('gemini_global_retry', globalRetry);
+
+                logToTerminal(`QUOTA EXHAUSTED: All models busy. Waiting ${waitTime/1000}s for cool-down (Attempt ${globalRetry})...`, 'info');
+
+                const thinkMsg = document.querySelector('.msg.ai:last-child');
+                if (thinkMsg) {
+                    thinkMsg.innerHTML = `<div class="msg-content">⏳ <b>بروتوكول الاستمرارية العميقة:</b><br>لقد بلغت كافة النماذج حد الاستخدام المؤقت (دورة ${globalRetry}).<br>سأنتظر 30 ثانية لتبريد النظام ثم أستأنف العمل تلقائياً... <b>لن أتوقف حتى تكتمل مهمتك.</b></div>`;
+                }
+
+                await new Promise(r => setTimeout(r, waitTime));
+                return await runToolLoop(history, null, []); // إعادة البدء من أول نموذج في القائمة
             }
 
             // تشغيل الحلقة مع السياق الحالي
