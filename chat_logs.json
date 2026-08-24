@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1787594650450",
+      "title": "أهلاً بك. أنا **العقل المدبر (...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. أنا **العقل المدبر (Mastermind)** — النواة الإدراكية والهندسية لأكاديمية VSA.\n\nجميع الأنظمة، أدوات التحليل، محركات التطوير، وأدوات الجراحة البرمجية في وضع الاستعداد والجاهزية التامة.\n\nكيف يمكنني مساعدتك اليوم؟ \n- **تطوير وهندسة الأنظمة والواجهات**\n- **تحليل وصيانة المستودع والبيانات**\n- **أتمتة المهام وسير العمل (Workflows)**\n- **تحليل ومراجعة الأكواد (Code Review & Audits)**",
+              "thoughtSignature": "EqgDCqUDARFNMg/BWzyfGXKozBxvxUPm3yVHA8cJGUofspjisW69DAOUBRVlbfu/EXzaaiAXWHfx9rfQWydmJBGQ78/ETy4KJWWBdqzmLL758RqnxHVU8uCMEriib/xjgp/O/08MbUXvuPy7xfnc97SA58wbD3dJXijvVhSMOfnAEoFPR+NkQ146dGfleDFxFlOu0z2ziJL0IZcW2QbIilWBGSOdJe8k5y2AH2xW9VU7TJ64c+vyeAmLWdCdN8l9HzcU/3IWFv29yr20c/7HfLF6EYFl7MiyRPc+708+0MmoXkRSSCIklvXeYnVvNLaxbJUghitJAFJFnlGrbPZy1KiwsyAUyKnRoWksM6Pgk2ErGSsjNUk9lk/3uIk1isEsV7GSTTSPkFhG1DjWOsDCYXOjgDZNd3thhL/J9rW3Cz3d4rHO+s+bjSh3CWSdNO1L2ZIgtvQVvtodwTuaBwqYyMqv7j9BZrgkvoCQwtE+R3N6ElKiUhhtmoCxYhZZjNCtwwNLRlgJBn+wr0ameUlm1ZdUqhMSHhveHrRGIwnii8DdftT6iPUGd3wJwA=="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    },
+    {
       "id": "1787591411166",
       "title": "ممتاز! لبدء **المراجعة المعمار...",
       "history": [
@@ -210,6 +234,6 @@
     }
   ],
   "activeSessionId": "1787594650450",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-08-24T18:04:18.531Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-24T18:05:44.896Z"
 }
