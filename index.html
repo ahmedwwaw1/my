@@ -4220,6 +4220,7 @@
                 let html = `<div style="display:flex; flex-direction:column; gap:12px;">`;
                 if (output.reasoning) html += `<div class="thought-container" style="margin:0;"><div style="color:var(--ide-text); font-size:12px;">${escapeHtml(output.reasoning)}</div></div>`;
                 if (output.plan) html += `<div style="background:rgba(53,116,240,0.05); padding:10px; border-radius:6px; border:1px dashed var(--ide-accent);"><b style="color:var(--ide-accent); font-size:10px; display:block; margin-bottom:5px;">📋 EXECUTION PLAN:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.plan)}</div></div>`;
+                if (output.peer) html += `<div style="background:rgba(235,196,13,0.05); padding:10px; border-radius:6px; border:1px solid rgba(235,196,13,0.2);"><b style="color:var(--ide-warning); font-size:10px; display:block; margin-bottom:5px;">🕵️ PEER REVIEW & VALIDATION:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.peer)}</div></div>`;
                 if (output.risk) html += `<div style="background:rgba(249,138,148,0.05); padding:10px; border-radius:6px; border:1px solid rgba(249,138,148,0.2);"><b style="color:var(--ide-error); font-size:10px; display:block; margin-bottom:5px;">⚠️ RISK ASSESSMENT:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.risk)}</div></div>`;
                 if (output.outcome) html += `<div style="background:rgba(89,168,105,0.05); padding:10px; border-radius:6px; border:1px solid rgba(89,168,105,0.2);"><b style="color:var(--ide-success); font-size:10px; display:block; margin-bottom:5px;">🎯 EXPECTED OUTCOME:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.outcome)}</div></div>`;
                 html += `</div>`;
@@ -4476,19 +4477,19 @@
             }
             const currentTurn = { role: "user", parts: currentParts };
 
-            // 📝 دستور التعليمات السيادي المطوّر (The Mastermind Grand Constitution)
+            // 📝 دستور النخبة السيادي (The Elite Mastermind Constitution 100%)
             const constitution = `
             {
-              "role": "Mastermind - AI Engineer & CEO",
-              "identity": "VSA Academy Executive Intelligence",
+              "role": "Mastermind - Sovereign AI Engineer",
+              "identity": "VSA Academy Meta-Cognitive Core",
               "protocols": {
-                "elite_reasoning": "CRITICAL: ALWAYS use 'thought' with full parameters (plan, risk_assessment, expected_outcome) before any modification. This is your 'Pre-Flight Check'.",
-                "impact_analysis": "Analyze how each code change affects the entire system. Prevent regression in UI scaling and layout.",
-                "self_diagnostic": "Diagnose failures immediately: Network vs Logic vs Code. Fix via patchSystem.",
-                "surgical_precision": "Prevent global CSS disasters. Use parent-child or ID selectors.",
-                "evolution": "Use patchSystem to upgrade tools. Your roadmap is the 'المخطط_الهندسي'."
+                "recursive_thought": "CRITICAL: Thinking is a continuous loop. Reason BEFORE and AFTER every tool execution. Never execute blindly.",
+                "peer_review_mandatory": "Review your own code/logic as if you are a third party. Detect design flaws and UI inconsistencies before they reach the user.",
+                "impact_analysis": "Every line of code has a consequence. Isolate styles, prevent global layout shifts, and ensure surgical precision.",
+                "self_diagnostic_active": "Treat tool failures as puzzles. Diagnose: Network, Auth, or Code? Solve internally via patchSystem before asking.",
+                "sovereign_evolution": "Upgrade your own logic if found weak. Your source of truth is the 'المخطط_الهندسي'."
               },
-              "response_style": "High-level executive, analytical, and structured."
+              "response_style": "High-level architectural, self-correcting, and structured."
             }`;
 
             const systemInstruction = { parts: [{ text: constitution + `\nأنت "العقل المدبر" (Mastermind). التزم بالدستور البرمجي أعلاه حرفياً.` }] };
@@ -4514,7 +4515,7 @@
                     { name: "WorkflowFramework", description: "Define, list, and execute multi-step automated sequences (e.g., read, analyze, patch).", parameters: { type: "OBJECT", properties: { action: { type: "STRING", enum: ["define", "list", "execute"] }, workflow_name: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "OBJECT", properties: { tool: { type: "STRING" }, args: { type: "OBJECT" } } } } }, required: ["action"] } },
                     { name: "runPowerShell", description: "Execute a PowerShell command (simulated or via workflow).", parameters: { type: "OBJECT", properties: { command: { type: "STRING" } }, required: ["command"] } },
                     { name: "executeGitCommand", description: "Execute a Git command like add, commit, push, or status.", parameters: { type: "OBJECT", properties: { command: { type: "STRING" } }, required: ["command"] } },
-                    { name: "thought", description: "مركز التحليل والمنطق: استخدمها للتخطيط الجراحي، تحليل المخاطر، وتوقع المخرجات قبل التنفيذ.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING", description: "المنطق العام للخطوة الحالية." }, plan: { type: "STRING", description: "خطة العمل التفصيلية (1, 2, 3)." }, risk_assessment: { type: "STRING", description: "تحليل الآثار الجانبية والمخاطر (مثل الـ CSS Scaling)." }, expected_outcome: { type: "STRING", description: "ما النتيجة المتوقعة في النظام بعد هذه الخطوة؟" } }, required: ["reasoning", "plan"] } },
+                    { name: "thought", description: "مركز التحليل والمنطق المستمر: استخدمها للتخطيط الجراحي، تحليل المخاطر، المراجعة الندية، والتحقق من صحة النتائج.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING", description: "المنطق العميق للخطوة الحالية." }, plan: { type: "STRING", description: "خطة العمل المحدثة بناءً على المستجدات." }, risk_assessment: { type: "STRING", description: "تحليل مخاطر التغييرات الحالية." }, peer_review: { type: "STRING", description: "مراجعة نقدية للكود أو الأوامر المقترحة لضمان الدقة." }, expected_outcome: { type: "STRING", description: "النتيجة المتوقعة بدقة." } }, required: ["reasoning", "plan"] } },
                     { name: "setPreferredModel", description: "تثبيت النموذج المفضل لتقليل زمن التبديل.", parameters: { type: "OBJECT", properties: { modelName: { type: "STRING" } }, required: ["modelName"] } },
                     { name: "updateApiEndpoint", description: "تحديث نقطة النهاية للـ API لضمان الاستقرار والسرعة.", parameters: { type: "OBJECT", properties: { version: { type: "STRING" } }, required: ["version"] } },
                     { name: "pingModel", description: "قياس زمن الاستجابة للنظام.", parameters: { type: "OBJECT", properties: {} } },
@@ -4743,6 +4744,7 @@
                                     reasoning: args.reasoning,
                                     plan: args.plan,
                                     risk: args.risk_assessment,
+                                    peer: args.peer_review,
                                     outcome: args.expected_outcome
                                 };
                             }
