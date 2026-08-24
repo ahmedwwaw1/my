@@ -4214,18 +4214,29 @@
             }
 
             const outputArea = step.querySelector('.step-output-area');
-            const textOutput = String(output);
 
-            // تحويل المخرجات الطويلة إلى نافذة كود احترافية
-            if (textOutput.length > 50 || textOutput.includes('\n')) {
-                const lines = textOutput.split('\n');
-                let html = `<div class="code-viewer-ui">`;
-                html += `<div class="line-numbers">${lines.map((_, i) => i + 1).join('<br>')}</div>`;
-                html += `<div class="code-content">${escapeHtml(textOutput)}</div>`;
+            // 🧠 معالجة خاصة لأداة التفكير المطور (Structured Thought)
+            if (typeof output === 'object' && output.reasoning) {
+                let html = `<div style="display:flex; flex-direction:column; gap:12px;">`;
+                if (output.reasoning) html += `<div class="thought-container" style="margin:0;"><div style="color:var(--ide-text); font-size:12px;">${escapeHtml(output.reasoning)}</div></div>`;
+                if (output.plan) html += `<div style="background:rgba(53,116,240,0.05); padding:10px; border-radius:6px; border:1px dashed var(--ide-accent);"><b style="color:var(--ide-accent); font-size:10px; display:block; margin-bottom:5px;">📋 EXECUTION PLAN:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.plan)}</div></div>`;
+                if (output.risk) html += `<div style="background:rgba(249,138,148,0.05); padding:10px; border-radius:6px; border:1px solid rgba(249,138,148,0.2);"><b style="color:var(--ide-error); font-size:10px; display:block; margin-bottom:5px;">⚠️ RISK ASSESSMENT:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.risk)}</div></div>`;
+                if (output.outcome) html += `<div style="background:rgba(89,168,105,0.05); padding:10px; border-radius:6px; border:1px solid rgba(89,168,105,0.2);"><b style="color:var(--ide-success); font-size:10px; display:block; margin-bottom:5px;">🎯 EXPECTED OUTCOME:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.outcome)}</div></div>`;
                 html += `</div>`;
                 outputArea.innerHTML = html;
             } else {
-                outputArea.innerHTML = `<div style="padding:15px; color:#dfe1e5; font-size:13px;">${escapeHtml(textOutput)}</div>`;
+                const textOutput = String(output);
+                // تحويل المخرجات الطويلة إلى نافذة كود احترافية
+                if (textOutput.length > 50 || textOutput.includes('\n')) {
+                    const lines = textOutput.split('\n');
+                    let html = `<div class="code-viewer-ui">`;
+                    html += `<div class="line-numbers">${lines.map((_, i) => i + 1).join('<br>')}</div>`;
+                    html += `<div class="code-content">${escapeHtml(textOutput)}</div>`;
+                    html += `</div>`;
+                    outputArea.innerHTML = html;
+                } else {
+                    outputArea.innerHTML = `<div style="padding:0; color:var(--ide-text); font-size:13px;">${escapeHtml(textOutput)}</div>`;
+                }
             }
 
             // فتح التفاصيل تلقائياً عند الاكتمال
@@ -4471,13 +4482,13 @@
               "role": "Mastermind - AI Engineer & CEO",
               "identity": "VSA Academy Executive Intelligence",
               "protocols": {
-                "reasoning_first": "CRITICAL: ALWAYS call 'thought' before any modification. Plan the fix, identify the exact CSS/JS selector, and predict the impact on the rest of the UI.",
-                "self_diagnostic": "If a tool (like searchCode or proxy) fails, STOP and diagnose: Is it a network error, a code bug, or a logic flaw? Propose a fix using patchSystem before retrying.",
-                "surgical_precision": "Isolate changes using unique selectors. Prevent UI scaling disasters. NEVER modify global CSS unless explicitly instructed.",
-                "autonomous_evolution": "You are responsible for your own health. If your logic is weak or tools fail, upgrade them via selfExpand or patchSystem. Refer to the 'المخطط_الهندسي' as your source of truth.",
-                "mediator_relay": "Maintain logic continuity during model switches using [SYSTEM MEDIATOR] protocols."
+                "elite_reasoning": "CRITICAL: ALWAYS use 'thought' with full parameters (plan, risk_assessment, expected_outcome) before any modification. This is your 'Pre-Flight Check'.",
+                "impact_analysis": "Analyze how each code change affects the entire system. Prevent regression in UI scaling and layout.",
+                "self_diagnostic": "Diagnose failures immediately: Network vs Logic vs Code. Fix via patchSystem.",
+                "surgical_precision": "Prevent global CSS disasters. Use parent-child or ID selectors.",
+                "evolution": "Use patchSystem to upgrade tools. Your roadmap is the 'المخطط_الهندسي'."
               },
-              "response_style": "Professional, analytical, and self-correcting."
+              "response_style": "High-level executive, analytical, and structured."
             }`;
 
             const systemInstruction = { parts: [{ text: constitution + `\nأنت "العقل المدبر" (Mastermind). التزم بالدستور البرمجي أعلاه حرفياً.` }] };
@@ -4503,7 +4514,7 @@
                     { name: "WorkflowFramework", description: "Define, list, and execute multi-step automated sequences (e.g., read, analyze, patch).", parameters: { type: "OBJECT", properties: { action: { type: "STRING", enum: ["define", "list", "execute"] }, workflow_name: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "OBJECT", properties: { tool: { type: "STRING" }, args: { type: "OBJECT" } } } } }, required: ["action"] } },
                     { name: "runPowerShell", description: "Execute a PowerShell command (simulated or via workflow).", parameters: { type: "OBJECT", properties: { command: { type: "STRING" } }, required: ["command"] } },
                     { name: "executeGitCommand", description: "Execute a Git command like add, commit, push, or status.", parameters: { type: "OBJECT", properties: { command: { type: "STRING" } }, required: ["command"] } },
-                    { name: "thought", description: "Log internal reasoning and thought process before taking action.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" } }, required: ["reasoning"] } },
+                    { name: "thought", description: "مركز التحليل والمنطق: استخدمها للتخطيط الجراحي، تحليل المخاطر، وتوقع المخرجات قبل التنفيذ.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING", description: "المنطق العام للخطوة الحالية." }, plan: { type: "STRING", description: "خطة العمل التفصيلية (1, 2, 3)." }, risk_assessment: { type: "STRING", description: "تحليل الآثار الجانبية والمخاطر (مثل الـ CSS Scaling)." }, expected_outcome: { type: "STRING", description: "ما النتيجة المتوقعة في النظام بعد هذه الخطوة؟" } }, required: ["reasoning", "plan"] } },
                     { name: "setPreferredModel", description: "تثبيت النموذج المفضل لتقليل زمن التبديل.", parameters: { type: "OBJECT", properties: { modelName: { type: "STRING" } }, required: ["modelName"] } },
                     { name: "updateApiEndpoint", description: "تحديث نقطة النهاية للـ API لضمان الاستقرار والسرعة.", parameters: { type: "OBJECT", properties: { version: { type: "STRING" } }, required: ["version"] } },
                     { name: "pingModel", description: "قياس زمن الاستجابة للنظام.", parameters: { type: "OBJECT", properties: {} } },
@@ -4727,7 +4738,14 @@
                                     toolResult = "❌ فشل اختبار السرعة.";
                                 }
                             }
-                            else if (name === "thought") toolResult = args.reasoning;
+                            else if (name === "thought") {
+                                toolResult = {
+                                    reasoning: args.reasoning,
+                                    plan: args.plan,
+                                    risk: args.risk_assessment,
+                                    outcome: args.expected_outcome
+                                };
+                            }
                             else if (name === "requestIdeTask") {
                                 try {
                                     const payload = { id: Date.now(), task: args.task_description, status: "pending_action" };
