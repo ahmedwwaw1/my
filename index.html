@@ -1003,145 +1003,8 @@
         }
         .thought-toggle:hover { background: #3c3f41; color: #dfe1e5; }
         .thought-toggle::before { content: '🧠'; font-size: 14px; }
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-            margin-bottom: 5px;
-        }
 
-        .thought-toggle:hover {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-        }
-
-        .thought-toggle::before {
-            content: "▶";
-            font-size: 8px;
-            transition: transform 0.2s;
-        }
-
-        .thought-toggle.open::before {
-            transform: rotate(90deg);
-        }
-
-        /* 🛠️ IDE Style Tool Steps */
-        .ai-step-container {
-            margin: 5px 0;
-            border: 1px solid #3c3f41;
-            border-radius: 8px;
-            background: #2b2d30;
-            overflow: hidden;
-            transition: all 0.2s;
-        }
-
-        .ai-step-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 13px;
-            color: #dfe1e5;
-            user-select: none;
-            transition: background 0.2s;
-        }
-
-        .ai-step-header:hover {
-            background: #393b40;
-        }
-
-        .ai-step-icon {
-            font-size: 14px;
-            width: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .ai-step-status {
-            margin-left: auto;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            min-width: 80px;
-            justify-content: flex-end;
-        }
-        
-        .status-spinner {
-            width: 12px;
-            height: 12px;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-top: 2px solid #3574f0;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        .status-done { color: #4db6ac; }
-        .status-error { color: #ff3d00; }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .ai-step-details {
-            display: none;
-            padding: 10px 12px;
-            background: #1e1f22;
-            border-top: 1px solid #3c3f41;
-            font-family: 'JetBrains Mono', 'Consolas', monospace;
-            font-size: 12px;
-            color: #afb1b3;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .ai-step-details pre {
-            margin: 0;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-
-        .ai-step-args {
-            color: #d7ba7d; /* IDE style argument color */
-            font-size: 11px;
-            margin-bottom: 8px;
-            display: block;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 5px;
-        }
-
-        .ai-messages pre code {
-            background: #2b2d30 !important;
-            padding: 15px !important;
-            border-radius: 8px !important;
-            border: 1px solid #3c3f41 !important;
-            font-family: 'JetBrains Mono', monospace !important;
-            display: block;
-            overflow-x: auto;
-        }
-
-        .ai-input-container {
-            padding: 16px;
-            background: #1e1f22;
-            border-top: 1px solid #3c3f41;
-            flex-shrink: 0;
-        }
-
-        .ai-input-wrapper {
-            background: #2b2d30;
-            border: 1px solid #4e5157;
-            border-radius: 14px;
-            padding: 12px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            transition: all 0.2s;
-        }
-
-        /* 🎨 واجهة الإدخال المتطورة (Gemini Style) */
+        /* 📟 Mastermind Terminal & Input Interface */
         .ai-input-container {
             padding: 15px;
             background: #1e1f22;
@@ -1159,27 +1022,15 @@
             transition: border-color 0.2s;
         }
 
-        .ai-input-wrapper:focus-within {
-            border-color: #3574f0;
-        }
-
-        /* حاوية المعاينة داخل الصندوق */
-        #imagePreviewContainer {
-            display: none;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 0;
-            border-bottom: none;
-            margin-bottom: 0;
-            max-height: 120px;
-            overflow-y: auto;
-        }
+        .ai-input-wrapper:focus-within { border-color: #3574f0; }
 
         #imagePreviewContainer:not(:empty) {
             padding: 10px 0;
             border-bottom: 1px solid #3c3f41;
             margin-bottom: 10px;
             display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .preview-item {
@@ -1192,42 +1043,7 @@
             background: #1e1f22;
         }
 
-        .preview-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .preview-item .file-icon {
-            font-size: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
-
-        .preview-item .remove-btn {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .ai-input-row {
-            display: flex;
-            align-items: flex-end;
-            gap: 10px;
-        }
+        .preview-item img { width: 100%; height: 100%; object-fit: cover; }
 
         #aiInput {
             flex-grow: 1;
@@ -1243,26 +1059,6 @@
             min-height: 24px;
             font-family: inherit;
         }
-
-        #aiInput::placeholder { color: #6e7073; }
-
-        .ai-input-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 5px;
-        }
-
-        .ai-footer-icons {
-            display: flex;
-            gap: 16px;
-            color: #afb1b3;
-            font-size: 20px;
-            align-items: center;
-        }
-
-        .ai-footer-icons span { cursor: pointer; transition: color 0.2s; display: flex; align-items: center; }
-        .ai-footer-icons span:hover { color: #fff; }
 
         .ai-send-btn-new {
             background: transparent;
@@ -1285,74 +1081,13 @@
             transform: scale(1.1);
         }
 
-        /* شكل زر الإيقاف عند العمل */
         .ai-send-btn-new.working {
             background: #ff3d00 !important;
             pointer-events: auto !important;
             transform: scale(1.1);
         }
-        .ai-send-btn-new.working svg {
-            display: none;
-        }
-        .ai-send-btn-new.working::after {
-            content: "";
-            width: 8px;
-            height: 8px;
-            background: white;
-            display: block;
-            border-radius: 1px;
-        }
 
-        .model-selector-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        #modelSelector {
-            background: #2b2d30;
-            color: #dfe1e5;
-            border: 1px solid #4e5157;
-            border-radius: 6px;
-            font-size: 12px;
-            padding: 4px 8px;
-            cursor: pointer;
-            outline: none;
-            max-width: 180px;
-        }
-
-        .artifact-box {
-            background: #2b2d30;
-            border: 1px solid #3c3f41;
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            color: #dfe1e5;
-            cursor: pointer;
-        }
-
-        /* Optimize Card Entrance */
-        .card {
-            opacity: 0;
-            transform: translateY(15px);
-            animation: cardEntrance 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
-
-        @keyframes cardEntrance {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card:nth-child(1) { animation-delay: 0.05s; }
-        .card:nth-child(2) { animation-delay: 0.1s; }
-        .card:nth-child(3) { animation-delay: 0.15s; }
-        .card:nth-child(4) { animation-delay: 0.2s; }
-        .card:nth-child(5) { animation-delay: 0.25s; }
-        .card:nth-child(6) { animation-delay: 0.3s; }
-
-        /* 🛡️ Mastermind Health Dashboard Styling */
+        /* 🛡️ Mastermind Health & Analytics */
         .system-status-pill {
             display: flex;
             align-items: center;
@@ -1364,20 +1099,13 @@
             font-size: 10px;
             color: #4db6ac;
             font-weight: 600;
-            transition: all 0.3s ease;
             margin-right: 10px;
         }
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #4db6ac;
-            box-shadow: 0 0 5px #4db6ac;
-        }
-        .status-error .status-dot { background: #ff3d00; box-shadow: 0 0 5px #ff3d00; }
-        .status-error { color: #ff3d00; border-color: rgba(255, 61, 0, 0.2); background: rgba(255, 61, 0, 0.05); }
 
-        /* 💎 Elite Mastermind UI/UX Engine 6.0 - Advanced Styling */
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #4db6ac; box-shadow: 0 0 5px #4db6ac; }
+        .status-error .status-dot { background: #ff3d00; box-shadow: 0 0 5px #ff3d00; }
+
+        /* 💎 Elite Mastermind UI/UX Engine 6.0 - Step Tracer */
         :root {
             --ide-bg: #1e1f22;
             --ide-header: #2b2d30;
@@ -1387,7 +1115,6 @@
             --ide-muted: #afb1b3;
             --ide-success: #59a869;
             --ide-error: #f98a94;
-            --ide-warning: #ebc40d;
         }
 
         .ai-step-container {
@@ -1409,93 +1136,24 @@
             gap: 12px;
             cursor: pointer;
             border-bottom: 1px solid var(--ide-border);
-            user-select: none;
         }
 
-        .ai-step-header:hover { background: #32353a; }
+        .ai-step-icon { font-size: 18px; width: 24px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border-radius: 4px; }
+        .ai-step-name { color: var(--ide-text); font-weight: 600; font-size: 12px; flex-grow: 1; text-transform: uppercase; letter-spacing: 1px; }
 
-        .ai-step-icon {
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 4px;
-        }
-
-        .ai-step-name {
-            color: var(--ide-text);
-            font-weight: 600;
-            font-size: 12px;
-            flex-grow: 1;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .ai-step-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-        }
-
-        .status-spinner {
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(53, 116, 240, 0.2);
-            border-top: 2px solid var(--ide-accent);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
+        .status-spinner { width: 14px; height: 14px; border: 2px solid rgba(53, 116, 240, 0.2); border-top: 2px solid var(--ide-accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
         .status-done { color: var(--ide-success); font-weight: bold; }
         .status-error { color: var(--ide-error); font-weight: bold; }
 
-        .ai-step-details {
-            background: #141517;
-            display: none;
-        }
+        .ai-step-details { background: #141517; display: none; }
+        .ai-step-args { padding: 8px 16px; background: #212226; color: #d7ba7d; font-size: 11px; border-bottom: 1px solid var(--ide-border); white-space: pre-wrap; }
+        .step-output-area { padding: 15px; max-height: 500px; overflow-y: auto; }
 
-        .ai-step-args {
-            padding: 8px 16px;
-            background: #212226;
-            color: #d7ba7d;
-            font-size: 11px;
-            border-bottom: 1px solid var(--ide-border);
-            white-space: pre-wrap;
-        }
+        .code-viewer-ui { display: flex; gap: 15px; line-height: 1.6; }
+        .line-numbers { color: #4e5157; text-align: right; user-select: none; font-size: 12px; padding-right: 15px; border-right: 1px solid var(--ide-border); }
+        .code-content { color: var(--ide-text); font-size: 12px; white-space: pre-wrap; word-break: break-all; }
 
-        .step-output-area {
-            padding: 15px;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .code-viewer-ui {
-            display: flex;
-            gap: 15px;
-            line-height: 1.6;
-        }
-
-        .line-numbers {
-            color: #4e5157;
-            text-align: right;
-            user-select: none;
-            font-size: 12px;
-            padding-right: 15px;
-            border-right: 1px solid var(--ide-border);
-        }
-
-        .code-content {
-            color: var(--ide-text);
-            font-size: 12px;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-
-        /* 🧠 Thought Process Elite Box */
+        /* 🧠 Thought Process Elite Box (Final) */
         .thought-container {
             background: rgba(53, 116, 240, 0.03);
             border: 1px solid rgba(53, 116, 240, 0.2);
@@ -4537,7 +4195,6 @@
                     { name: "instant_undo", description: "التراجع السيادي: استعادة آخر لقطة سليمة للملف في حال فشل الجراحة أو حدوث خطأ منطقي.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
                     { name: "web_search", description: "رادار الاستكشاف العالمي: البحث في الإنترنت عن حلول تقنية، توثيقات، أو معلومات عامة غائبة عن الملفات المحلية.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                     { name: "read_url", description: "الراديو المعرفي: الدخول إلى رابط URL خارجي وقراءة محتواه وفهمه برمجياً.", parameters: { type: "OBJECT", properties: { url: { type: "STRING" } }, required: ["url"] } },
-                    { name: "evolutionary_audit", description: "اليقظة التطورية: فحص شامل لكافة المحركات والأدوات لاكتشاف فرص التحسين البرمجي أو سد الفجوات الإدراكية.", parameters: { type: "OBJECT", properties: { target_engine: { type: "NUMBER", description: "رقم المحرك المراد فحصه (0-6)." } } } }
                     { name: "evolutionary_audit", description: "اليقظة التطورية: فحص شامل لكافة المحركات والأدوات لاكتشاف فرص التحسين البرمجي أو سد الفجوات الإدراكية.", parameters: { type: "OBJECT", properties: { target_engine: { type: "NUMBER", description: "رقم المحرك المراد فحصه (0-6)." } } } }
                 ]
             }]; // end_tools
