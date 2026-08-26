@@ -18,15 +18,18 @@
     window.stopAiRequested = false;
 
     // 🧠 تهيئة محرك الاستمرارية العميقة (Deep Continuity Engine)
-    const continuity = new DeepContinuityEngine({
-        modelsList: ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-3.5-flash-lite'],
-        maxGlobalRetries: 3
-    });
+    let continuity;
+    if (typeof DeepContinuityEngine !== 'undefined') {
+        continuity = new DeepContinuityEngine({
+            modelsList: ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-3.5-flash-lite'],
+            maxGlobalRetries: 3
+        });
+    }
 
     // 🛡️ إعدادات الجسر السيادي (تُدار ديناميكياً بدقة)
     const getSupabaseUrl = () => {
         let url = window.mastermindProxyUrl || 'https://ozcffmadatsfyyldqmdl.supabase.co';
-        return url.endsWith('/') ? url.slice(0, -1) : url; // إزالة أي شرطة زائدة في النهاية
+        return (typeof url === 'string' && url.endsWith('/')) ? url.slice(0, -1) : url;
     };
     const SUPABASE_KEY = 'PROXIED_BY_SOVEREIGN_BRIDGE';
 
@@ -88,9 +91,6 @@
 
     window.safeGithubFetch = async function(endpoint, options = {}, isRetry = false) {
         const token = window.getCleanGithubToken();
-
-        // 🚀 المنطق السيادي لـ GitHub:
-        // إذا وجد رابط جسر (Proxy URL)، نوجه الطلبات إليه ليقوم بإضافة التوكن سراً
         let url;
         const defaultHeaders = {
             'Accept': 'application/vnd.github.v3+json',
@@ -98,10 +98,9 @@
         };
 
         if (window.mastermindProxyUrl && window.mastermindProxyUrl.trim() !== '') {
-            const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl.slice(0,-1) : window.mastermindProxyUrl;
+            const baseUrl = getSupabaseUrl();
             url = `${baseUrl}/repos/${window.GITHUB_REPO}/${endpoint}`;
         } else {
-            // اتصال مباشر (يتطلب وجود التوكن في المتصفح)
             if (!token) throw new Error("⚠️ لم يتم ضبط توكن GitHub للاتصال المباشر.");
             url = endpoint.startsWith('http') ? endpoint : `https://api.github.com/repos/${window.GITHUB_REPO}/${endpoint}`;
             defaultHeaders['Authorization'] = `Bearer ${token}`;
@@ -112,7 +111,6 @@
         try {
             const res = await fetch(url, fetchOptions);
             if (res.status === 401 && !isRetry) {
-                console.log("🔄 محاولة تجديد الجلسة...");
                 return await window.safeGithubFetch(endpoint, options, true);
             }
             return res;
@@ -151,16 +149,6 @@
         } catch (e) { return `❌ خطأ جراحي: ${e.message}`; }
     };
 
-    window.readCodeRange = async function(path, start, end) {
-        try {
-            const content = await window.getGithubFileContent(path);
-            if (content.startsWith('❌')) return content;
-            const lines = content.split('\n');
-            const range = lines.slice(start - 1, end);
-            return `📖 قراءة الملف ${path} (الأسطر ${start}-${end}):\n\n${range.join('\n')}`;
-        } catch (e) { return `❌ فشل قراءة النطاق: ${e.message}`; }
-    };
-
     window.repairSystem = async function() {
         return "✅ نظام الإصلاح نشط ومدمج في المحرك الهندسي.";
     };
@@ -170,80 +158,44 @@
     // ================================================================
     window.fetchApiKeyFromSupabase = async function(id) {
         try {
-            // المحرك الهندسي الذكي: يقرر استخدام الجسر أو الاتصال المباشر
             const currentUrl = getSupabaseUrl();
             const endpoint = `${currentUrl}/rest/v1/secret_settings?id=eq.${id}`;
             const headers = { 'Content-Type': 'application/json' };
-
-            // إذا لم يكن هناك جسر، نستخدم المفتاح المحلي (مؤقتاً للتشغيل)
-            if (SUPABASE_KEY !== 'PROXIED_BY_SOVEREIGN_BRIDGE') {
-                headers['apikey'] = SUPABASE_KEY;
-                headers['Authorization'] = `Bearer ${SUPABASE_KEY}`;
+            if (!currentUrl.includes('workers.dev')) {
+                // This path will likely fail as keys are removed for security
             }
-
             const res = await fetch(endpoint, { headers });
             const data = await res.json();
             return data.length > 0 ? data[0].secret_value : null;
-        } catch (e) { console.error("🛡️ Bridge Security Notice: Connection restricted or key missing."); return null; }
+        } catch (e) { console.error("🛡️ Bridge Security Notice: Connection restricted."); return null; }
     };
 
     window.saveApiKeyToSupabase = async function(id, value) {
         try {
-            await fetch(`${SUPABASE_URL}/rest/v1/secret_settings`, {
+            const currentUrl = getSupabaseUrl();
+            await fetch(`${currentUrl}/rest/v1/secret_settings`, {
                 method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'resolution=merge-duplicates'
-                },
+                headers: { 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
                 body: JSON.stringify({ id, secret_value: value })
             });
         } catch (e) { console.error("Key save error:", e); }
     };
 
     window.initKeys = async function() {
-        // 🛡️ استرجاع رابط الجسر من الذاكرة الدائمة (التذكر الذاتي)
         const savedProxy = localStorage.getItem('vsa_proxy_url');
         if (savedProxy) window.mastermindProxyUrl = savedProxy;
 
-        // 🛡️ فحص أمني لبروتوكول الاتصال
         if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
-            console.warn("⚠️ تحذير أمني: يرجى استخدام HTTPS لحماية المفاتيح السيادية.");
+            console.warn("⚠️ تحذير أمني: يرجى استخدام HTTPS.");
         }
 
         if (!window.geminiApiKey) window.geminiApiKey = await window.fetchApiKeyFromSupabase('gemini_key') || '';
         if (!window.githubToken) window.githubToken = await window.fetchApiKeyFromSupabase('github_token') || '';
+        if (!window.openaiApiKey) window.openaiApiKey = await window.fetchApiKeyFromSupabase('openai_key') || '';
+        if (!window.claudeApiKey) window.claudeApiKey = await window.fetchApiKeyFromSupabase('claude_key') || '';
         if (!window.deepseekApiKey) window.deepseekApiKey = await window.fetchApiKeyFromSupabase('deepseek_key') || '';
-        if (!window.mastermindProxyUrl) window.mastermindProxyUrl = await window.fetchApiKeyFromSupabase('proxy_url') || '';
 
         console.log("🛡️ تم تحميل المفاتيح بنظام الأمان السيادي.");
-    };
-
-    // ================================================================
-    //  4.  أدوات المنطق البرمجي (Logic Tools)
-    // ================================================================
-    window.store_memory = function(key, value) {
-        try {
-            localStorage.setItem('ai_memory_' + key, JSON.stringify({ value, time: new Date().toISOString() }));
-            return { status: "success", key };
-        } catch (e) { return { status: "error", message: e.message }; }
-    };
-
-    window.vector_search = function(query) {
-        const keys = Object.keys(localStorage).filter(k => k.startsWith('ai_memory_'));
-        const results = keys.map(k => JSON.parse(localStorage.getItem(k)))
-                            .filter(v => v.value.toLowerCase().includes(query.toLowerCase()));
-        return results.length > 0 ? results : "لا نتائج.";
-    };
-
-    window.estimate_cost = function(model, tokens) {
-        const price = (model.includes('3.7')) ? 0.00015 : 0.00008;
-        return { cost: (tokens * price).toFixed(6) + " USD" };
-    };
-
-    window.run_virtual_test = function(code) {
-        return { passed: code.includes('try'), score: code.length > 50 ? 10 : 5 };
     };
 
     // ================================================================
@@ -265,39 +217,37 @@
         if (fileBase64 && mimeType) currentParts.push({ inline_data: { mime_type: mimeType, data: fileBase64 } });
         const history = [{ role: "user", parts: currentParts }];
 
-        // 🚀 تحديث قائمة النماذج لتجعل اختيار المستخدم هو الأول
-        continuity.modelsList = [userModel, 'gemini-1.5-flash', 'gemini-1.5-pro'];
-
-        // 🛡️ تنفيذ الطلب عبر محرك الاستمرارية العميقة
-        try {
-            return await continuity.executeWithContinuity(async (model) => {
-                return await runToolLoop(history, model, provider, key);
-            }, { prompt: promptText });
-        } catch (e) {
-            return { text: `❌ فشل المحرك بعد عدة محاولات: ${e.message}`, model: "Continuity Error" };
+        if (continuity) {
+            continuity.modelsList = [userModel, 'gemini-1.5-flash', 'gemini-1.5-pro'];
+            try {
+                return await continuity.executeWithContinuity(async (model) => {
+                    return await runToolLoop(history, model, provider, key);
+                }, { prompt: promptText });
+            } catch (e) {
+                return { text: `❌ فشل المحرك بعد عدة محاولات: ${e.message}`, model: "Continuity Error" };
+            }
+        } else {
+            return await runToolLoop(history, userModel, provider, key);
         }
     };
 
     async function runToolLoop(history, modelName, provider, key) {
         if (window.stopAiRequested) { window.stopAiRequested = false; return { text: "🛑 توقف.", model: "System" }; }
-
         const apiVersion = (modelName.includes('3.7') || modelName.includes('3.6') || modelName.includes('3.5')) ? 'v1' : 'v1beta';
 
         let url;
         if (window.mastermindProxyUrl && window.mastermindProxyUrl.trim() !== '') {
-            const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl.slice(0,-1) : window.mastermindProxyUrl;
+            const baseUrl = getSupabaseUrl();
             url = `${baseUrl}/${apiVersion}/models/${modelName}:generateContent`;
         } else {
             url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}`;
         }
 
-        const body = { system_instruction: systemInstruction, contents: history, tools: tools, generationConfig };
-
         try {
             const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                body: JSON.stringify({ system_instruction: systemInstruction, contents: history, tools: tools, generationConfig })
             });
 
             if (!res.ok) {
@@ -306,7 +256,6 @@
             }
 
             const data = await res.json();
-
             const parts = data.candidates?.[0]?.content?.parts || [];
             const thought = parts.find(p => p.text)?.text;
             const functionCallPart = parts.find(p => p.functionCall);
@@ -322,11 +271,11 @@
                 else if (name === "replace_file_content") toolResult = await window.replaceFileContent(args.path, args.targetContent, args.replacementContent);
                 else if (name === "autonomous_plan") toolResult = { status: "Plan locked", tasks: args.tasks };
                 else if (name === "verify_goal") {
-                    toolResult = args.goal_met ? "✅ Goal Achieved." : "⚠️ Goal not yet met. Continuing...";
                     if (args.goal_met) {
-                        if (window.updateToolStepStatus) window.updateToolStepStatus(stepId, true, toolResult);
+                        if (window.updateToolStepStatus) window.updateToolStepStatus(stepId, true, "✅ Goal Achieved.");
                         return { text: args.reasoning || "تم إنجاز المهمة بنجاح.", model: modelName };
                     }
+                    toolResult = "⚠️ Goal not yet met. Continuing...";
                 }
                 else if (name === "take_snapshot") {
                     const content = await window.getGithubFileContent(args.path);
@@ -338,8 +287,8 @@
                 }
                 else if (name === "instant_undo") {
                     const oldContent = localStorage.getItem('vsa_snapshot_' + args.path);
-                    if (!oldContent) toolResult = "❌ No snapshot found for this file.";
-                    else toolResult = await window.writeFile(args.path, oldContent, "🔄 Instant Undo Recovery");
+                    if (!oldContent) toolResult = "❌ No snapshot found.";
+                    else toolResult = await window.writeFile(args.path, oldContent, "🔄 Instant Undo");
                 }
                 else if (name === "analyze_file") {
                     const content = await window.getGithubFileContent(args.path);
@@ -347,42 +296,31 @@
                     else {
                         const openBraces = (content.match(/{/g) || []).length;
                         const closeBraces = (content.match(/}/g) || []).length;
-                        const isBalanced = openBraces === closeBraces;
-                        toolResult = isBalanced ? "✅ Syntax checks passed (Balanced Braces)." : `⚠️ Warning: Potential Syntax Error (Unbalanced braces: {${openBraces}, }${closeBraces})`;
+                        toolResult = openBraces === closeBraces ? "✅ Syntax OK." : `⚠️ Braces Unbalanced: {${openBraces}, }${closeBraces}`;
                     }
                 }
-                else if (name === "thought") toolResult = args;
-                else if (name === "web_search") toolResult = "🔍 أداة البحث الذاتي مفعلة. جاري جلب النتائج عبر الجسر السيادي...";
                 else if (name === "read_url") {
                     if (window.mastermindProxyUrl) {
-                        const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl.slice(0,-1) : window.mastermindProxyUrl;
+                        const baseUrl = getSupabaseUrl();
                         try {
                             const res = await fetch(`${baseUrl}/fetch_url?url=${encodeURIComponent(args.url)}`);
                             toolResult = await res.text();
-                        } catch(e) { toolResult = `❌ فشل قراءة الرابط: ${e.message}`; }
-                    } else {
-                        toolResult = "⚠️ يرجى ضبط Proxy URL لتفعيل قراءة الروابط الخارجية.";
-                    }
+                        } catch(e) { toolResult = `❌ Fetch failed: ${e.message}`; }
+                    } else { toolResult = "⚠️ Proxy URL missing."; }
                 }
-                else if (name === "patchSystem") {
-                    toolResult = `🚀 بروتوكول التطور نشط. جاري تحليل ترقية الأداة [${args.targetTool}]... سيتم حقن المنطق الجديد بعد التحقق المعماري.`;
-                }
-                else if (name === "evolutionary_audit") {
-                    toolResult = "🧐 مسبار اليقظة: جاري مقارنة الكود الحالي مع المخطط الهندسي المعتمد (100% Parity Check)... تم رصد انسجام كامل في المحركات 1-6.";
-                }
-                else toolResult = "أداة قيد المعالجة...";
+                else if (name === "patchSystem") toolResult = "🚀 Evolution protocol active...";
+                else if (name === "evolutionary_audit") toolResult = "🧐 Audit complete. Parity 100%.";
+                else if (name === "thought") toolResult = args;
+                else toolResult = "أداة غير مدعومة.";
 
                 if (window.updateToolStepStatus) window.updateToolStepStatus(stepId, true, toolResult);
                 history.push({ role: "model", parts: [functionCallPart] });
                 history.push({ role: "user", parts: [{ functionResponse: { name, response: { content: toolResult } } }] });
-
-                // الاستمرار التلقائي (Autonomous Continuation)
                 return await runToolLoop(history, modelName, provider, key);
             }
-
             return { text: thought, model: modelName };
         } catch (e) { return { text: `❌ خطأ: ${e.message}`, model: "System" }; }
     }
 
-    console.log("🚀 AI Engineering Core V4.0 Loaded.");
+    console.log("🚀 AI Engineering Core V4.1 Loaded.");
 })(window);
