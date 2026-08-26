@@ -199,6 +199,10 @@
     };
 
     window.initKeys = async function() {
+        // 🛡️ استرجاع رابط الجسر من الذاكرة الدائمة (التذكر الذاتي)
+        const savedProxy = localStorage.getItem('vsa_proxy_url');
+        if (savedProxy) window.mastermindProxyUrl = savedProxy;
+
         // 🛡️ فحص أمني لبروتوكول الاتصال
         if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
             console.warn("⚠️ تحذير أمني: يرجى استخدام HTTPS لحماية المفاتيح السيادية.");
@@ -206,8 +210,9 @@
 
         if (!window.geminiApiKey) window.geminiApiKey = await window.fetchApiKeyFromSupabase('gemini_key') || '';
         if (!window.githubToken) window.githubToken = await window.fetchApiKeyFromSupabase('github_token') || '';
-        if (!window.openaiApiKey) window.openaiApiKey = await window.fetchApiKeyFromSupabase('openai_key') || '';
-        if (!window.claudeApiKey) window.claudeApiKey = await window.fetchApiKeyFromSupabase('claude_key') || '';
+
+        console.log("🛡️ تم تحميل المفاتيح بنظام الأمان السيادي.");
+    };
         if (!window.deepseekApiKey) window.deepseekApiKey = await window.fetchApiKeyFromSupabase('deepseek_key') || '';
         if (!window.mastermindProxyUrl) window.mastermindProxyUrl = await window.fetchApiKeyFromSupabase('proxy_url') || '';
 

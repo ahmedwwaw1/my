@@ -316,9 +316,12 @@
         } else if (choice === "2") {
             const url = prompt("🔗 أدخل رابط الجسر السيادي (Cloudflare URL):", window.mastermindProxyUrl);
             if (url) {
-                window.mastermindProxyUrl = url.trim();
-                if (window.saveApiKeyToSupabase) await window.saveApiKeyToSupabase('proxy_url', url);
-                alert("✅ تم ربط الجسر بنجاح! النظام الآن مؤمن بالكامل.");
+                const cleanUrl = url.trim();
+                window.mastermindProxyUrl = cleanUrl;
+                localStorage.setItem('vsa_proxy_url', cleanUrl); // 🛡️ حفظ دائم
+                if (window.saveApiKeyToSupabase) await window.saveApiKeyToSupabase('proxy_url', cleanUrl);
+                alert("✅ تم ربط الجسر وحفظه في الذاكرة الدائمة.");
+                location.reload();
             }
         } else if (choice === "3") {
             const token = prompt("أدخل GitHub Token:");
