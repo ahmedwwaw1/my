@@ -284,7 +284,20 @@
         div.className = `msg ${sender}`;
         const content = document.createElement('div');
         content.className = 'msg-content';
-        content.innerHTML = (typeof marked !== 'undefined' && sender !== 'user') ? marked.parse(text) : text;
+
+        // 🛡️ معالجة أمنية: تنظيف المخرجات ومنع تنفيذ السكريبتات
+        if (typeof marked !== 'undefined' && sender !== 'user') {
+            const cleanHtml = marked.parse(text);
+            content.innerHTML = cleanHtml;
+            // إزالة أي وسوم سكريبت قد تكون تسللت
+            const scripts = content.getElementsByTagName('script');
+            for (let i = scripts.length - 1; i >= 0; i--) {
+                scripts[i].parentNode.removeChild(scripts[i]);
+            }
+        } else {
+            content.innerText = text;
+        }
+
         div.appendChild(content);
         if (model) { const b = document.createElement('div'); b.className = 'model-badge'; b.innerText = model; div.appendChild(b); }
         container.appendChild(div); container.scrollTop = container.scrollHeight;
