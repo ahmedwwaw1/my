@@ -337,6 +337,18 @@
                     }
                 }
                 else if (name === "thought") toolResult = args;
+                else if (name === "web_search") toolResult = "🔍 أداة البحث الذاتي مفعلة. جاري جلب النتائج عبر الجسر السيادي...";
+                else if (name === "read_url") {
+                    if (window.mastermindProxyUrl) {
+                        const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl.slice(0,-1) : window.mastermindProxyUrl;
+                        try {
+                            const res = await fetch(`${baseUrl}/fetch_url?url=${encodeURIComponent(args.url)}`);
+                            toolResult = await res.text();
+                        } catch(e) { toolResult = `❌ فشل قراءة الرابط: ${e.message}`; }
+                    } else {
+                        toolResult = "⚠️ يرجى ضبط Proxy URL لتفعيل قراءة الروابط الخارجية.";
+                    }
+                }
                 else toolResult = "أداة قيد المعالجة...";
 
                 if (window.updateToolStepStatus) window.updateToolStepStatus(stepId, true, toolResult);
