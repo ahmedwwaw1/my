@@ -337,7 +337,10 @@
         const container = document.getElementById('aiMessages');
         if (!container) return;
         const div = document.createElement('div');
-        div.className = `msg ${sender}`;
+
+        // 🚀 إصلاح حرج: ضمان المحاذاة الصحيحة (User=Right, AI=Left)
+        div.className = `msg ${sender === 'user' ? 'user' : 'ai'}`;
+
         const content = document.createElement('div');
         content.className = 'msg-content';
 

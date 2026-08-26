@@ -286,9 +286,6 @@
 
         const apiVersion = (modelName.includes('3.7') || modelName.includes('3.6') || modelName.includes('3.5')) ? 'v1' : 'v1beta';
 
-        // 🚀 المنطق السيادي الموحد:
-        // إذا وجد رابط جسر (Proxy URL)، نستخدمه لكل شيء (الدردشة والبيانات)
-        // إذا لم يوجد، نحاول الاتصال المباشر بجوجل
         let url;
         if (window.mastermindProxyUrl && window.mastermindProxyUrl.trim() !== '') {
             const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl.slice(0,-1) : window.mastermindProxyUrl;
@@ -300,9 +297,18 @@
         const body = { system_instruction: systemInstruction, contents: history, tools: tools, generationConfig };
 
         try {
-            const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (!res.ok) {
+                const errorData = await res.text();
+                throw new Error(`[Server ${res.status}]: ${errorData.substring(0, 100)}`);
+            }
+
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error?.message || "API Error");
 
             const parts = data.candidates?.[0]?.content?.parts || [];
             const thought = parts.find(p => p.text)?.text;
