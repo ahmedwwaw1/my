@@ -271,7 +271,8 @@
             const res = await window.callAiBrain(text);
             window.addMessageToUi('ai', res.text, res.model);
         } catch (e) {
-            window.addMessageToUi('ai', "⚠️ تعذر الاتصال بالمحرك الهندسي الذاتي.");
+            console.error("Critical AI Error:", e);
+            window.addMessageToUi('ai', `⚠️ تعذر الاتصال: ${e.message || "خطأ في الجسر"}`);
         } finally {
             btn.classList.remove('working');
             if (statusBadge) statusBadge.innerText = "SYSTEM READY";

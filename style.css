@@ -643,9 +643,30 @@ nav a.active {
 .msg-content p { margin: 0 0 10px 0; }
 .msg-content p:last-child { margin-bottom: 0; }
 
-.msg.user { background: #2b2d30; color: #dfe1e5; align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: none; border: 1px solid #3c3f41; }
+.msg.user {
+    background: #2b2d30;
+    color: #dfe1e5;
+    align-self: flex-end !important;
+    margin-left: auto;
+    border-bottom-right-radius: 2px;
+    border: 1px solid #3c3f41;
+    direction: rtl;
+    text-align: right;
+}
 
-.msg.ai { background: transparent; color: #dfe1e5; align-self: flex-start; border-bottom-left-radius: 2px; border: none; position: relative; padding-bottom: 24px; max-width: 95%; }
+.msg.ai {
+    background: transparent;
+    color: #dfe1e5;
+    align-self: flex-start !important;
+    margin-right: auto;
+    border-bottom-left-radius: 2px;
+    border: none;
+    position: relative;
+    padding-bottom: 24px;
+    max-width: 95%;
+    direction: rtl;
+    text-align: right;
+}
 
 .ai-terminal { display: none; height: 180px; background: #1e1f22; border-top: 1px solid #3c3f41; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 13px; color: #dfe1e5; overflow: hidden; position: relative; z-index: 5; flex-direction: column; }
 
