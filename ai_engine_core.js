@@ -17,6 +17,15 @@
     window.GITHUB_REPO = 'ahmedwwaw1/my';
     window.stopAiRequested = false;
 
+    // 🧠 تهيئة محرك الاستمرارية العميقة (Deep Continuity Engine)
+    const continuity = new DeepContinuityEngine({
+        modelsList: ['gemini-2.0-flash-exp', 'gemini-1.5-flash', 'gemini-1.5-pro'],
+        maxGlobalRetries: 5
+    });
+
+    const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
+
     const generationConfig = {
         temperature: 0,
         topP: 0.1,
@@ -139,6 +148,44 @@
     };
 
     // ================================================================
+    //  4.  إدارة المفاتيح والأمان (Key Management)
+    // ================================================================
+    window.fetchApiKeyFromSupabase = async function(id) {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/secret_settings?id=eq.${id}`, {
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+            const data = await res.json();
+            return data.length > 0 ? data[0].secret_value : null;
+        } catch (e) { console.error("Key fetch error:", e); return null; }
+    };
+
+    window.saveApiKeyToSupabase = async function(id, value) {
+        try {
+            await fetch(`${SUPABASE_URL}/rest/v1/secret_settings`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'resolution=merge-duplicates'
+                },
+                body: JSON.stringify({ id, secret_value: value })
+            });
+        } catch (e) { console.error("Key save error:", e); }
+    };
+
+    window.initKeys = async function() {
+        if (!window.geminiApiKey) window.geminiApiKey = await window.fetchApiKeyFromSupabase('gemini_key') || '';
+        if (!window.githubToken) window.githubToken = await window.fetchApiKeyFromSupabase('github_token') || '';
+        if (!window.openaiApiKey) window.openaiApiKey = await window.fetchApiKeyFromSupabase('openai_key') || '';
+        if (!window.claudeApiKey) window.claudeApiKey = await window.fetchApiKeyFromSupabase('claude_key') || '';
+        if (!window.deepseekApiKey) window.deepseekApiKey = await window.fetchApiKeyFromSupabase('deepseek_key') || '';
+        if (!window.mastermindProxyUrl) window.mastermindProxyUrl = await window.fetchApiKeyFromSupabase('proxy_url') || '';
+        console.log("🔑 Keys initialized from Supabase.");
+    };
+
+    // ================================================================
     //  4.  أدوات المنطق البرمجي (Logic Tools)
     // ================================================================
     window.store_memory = function(key, value) {
@@ -168,7 +215,7 @@
     //  5.  محرك الاتصال بـ AI (AI Brain Engine)
     // ================================================================
     window.callAiBrain = async function(promptText, fileBase64 = null, mimeType = null) {
-        const userModel = document.getElementById('modelSelector').value;
+        const userModel = document.getElementById('modelSelector')?.value || 'gemini-2.0-flash-exp';
         let key = '';
         let provider = 'google';
 
@@ -183,7 +230,14 @@
         if (fileBase64 && mimeType) currentParts.push({ inline_data: { mime_type: mimeType, data: fileBase64 } });
         const history = [{ role: "user", parts: currentParts }];
 
-        return await runToolLoop(history, userModel, provider, key);
+        // 🛡️ تنفيذ الطلب عبر محرك الاستمرارية العميقة
+        try {
+            return await continuity.executeWithContinuity(async (model) => {
+                return await runToolLoop(history, model, provider, key);
+            }, { prompt: promptText });
+        } catch (e) {
+            return { text: `❌ فشل المحرك بعد عدة محاولات: ${e.message}`, model: "Continuity Error" };
+        }
     };
 
     async function runToolLoop(history, modelName, provider, key) {
