@@ -23,8 +23,11 @@
         maxGlobalRetries: 3
     });
 
-    // 🛡️ إعدادات الجسر السيادي (تُدار ديناميكياً)
-    const getSupabaseUrl = () => window.mastermindProxyUrl || 'https://ozcffmadatsfyyldqmdl.supabase.co';
+    // 🛡️ إعدادات الجسر السيادي (تُدار ديناميكياً بدقة)
+    const getSupabaseUrl = () => {
+        let url = window.mastermindProxyUrl || 'https://ozcffmadatsfyyldqmdl.supabase.co';
+        return url.endsWith('/') ? url.slice(0, -1) : url; // إزالة أي شرطة زائدة في النهاية
+    };
     const SUPABASE_KEY = 'PROXIED_BY_SOVEREIGN_BRIDGE';
 
     const generationConfig = {

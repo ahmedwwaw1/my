@@ -1,12 +1,13 @@
 /**
- * 🛡️ UNIVERSAL SOVEREIGN BRIDGE (V4.0)
- * Handles Supabase, Gemini AI, GitHub, and Omni-URL Fetching.
+ * 🛡️ UNIVERSAL SOVEREIGN BRIDGE (V4.1 - Robust Edition)
+ * Handles Supabase, Gemini AI, GitHub, and Omni-URL Fetching with Auto-Cleaning.
  */
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const path = url.pathname;
+    // تنظيف المسار من أي تكرار للشرطات (// -> /)
+    const path = url.pathname.replace(/\/+/g, '/');
 
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
@@ -20,13 +21,12 @@ export default {
     if (path === "/fetch_url") {
       const targetUrl = url.searchParams.get("url");
       if (!targetUrl) return new Response("Missing URL", { status: 400 });
-
       try {
         const response = await fetch(targetUrl);
         const text = await response.text();
         return new Response(text, { status: 200, headers: corsHeaders });
       } catch (e) {
-        return new Response(`Error fetching URL: ${e.message}`, { status: 500, headers: corsHeaders });
+        return new Response(`Error: ${e.message}`, { status: 500, headers: corsHeaders });
       }
     }
 
@@ -53,7 +53,7 @@ export default {
       return await forwardRequest(targetUrl, request, authHeaders, corsHeaders);
     }
 
-    return new Response("🛡️ VSA Universal Bridge V4 Active.", { status: 200, headers: corsHeaders });
+    return new Response("🛡️ VSA Universal Bridge Active.", { status: 200, headers: corsHeaders });
   }
 };
 
@@ -62,10 +62,13 @@ async function forwardRequest(url, originalRequest, customAuth, corsHeaders) {
   if (typeof customAuth === 'string') newHeaders.set("Authorization", customAuth);
   else if (customAuth && typeof customAuth === 'object') Object.keys(customAuth).forEach(k => newHeaders.set(k, customAuth[k]));
 
+  // حماية: لا يمكن إرسال body مع طلبات GET أو HEAD
+  const hasBody = !["GET", "HEAD"].includes(originalRequest.method);
+
   const modifiedRequest = new Request(url, {
     method: originalRequest.method,
     headers: newHeaders,
-    body: originalRequest.body
+    body: hasBody ? await originalRequest.clone().arrayBuffer() : null
   });
 
   const response = await fetch(modifiedRequest);
