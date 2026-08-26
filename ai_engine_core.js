@@ -23,8 +23,8 @@
         maxGlobalRetries: 3
     });
 
-    // 🛡️ إعدادات الجسر السيادي (تُجلب من الإعدادات أو يتم تجاوزها عبر الوكيل)
-    const SUPABASE_URL = window.mastermindProxyUrl || 'https://ozcffmadatsfyyldqmdl.supabase.co';
+    // 🛡️ إعدادات الجسر السيادي (تُدار ديناميكياً)
+    const getSupabaseUrl = () => window.mastermindProxyUrl || 'https://ozcffmadatsfyyldqmdl.supabase.co';
     const SUPABASE_KEY = 'PROXIED_BY_SOVEREIGN_BRIDGE';
 
     const generationConfig = {
@@ -168,7 +168,8 @@
     window.fetchApiKeyFromSupabase = async function(id) {
         try {
             // المحرك الهندسي الذكي: يقرر استخدام الجسر أو الاتصال المباشر
-            const endpoint = `${SUPABASE_URL}/rest/v1/secret_settings?id=eq.${id}`;
+            const currentUrl = getSupabaseUrl();
+            const endpoint = `${currentUrl}/rest/v1/secret_settings?id=eq.${id}`;
             const headers = { 'Content-Type': 'application/json' };
 
             // إذا لم يكن هناك جسر، نستخدم المفتاح المحلي (مؤقتاً للتشغيل)
