@@ -1,12 +1,12 @@
 /**
- * 🛡️ UNIVERSAL SOVEREIGN BRIDGE (V4.6 - Ultimate Resilience)
- * Handles Gemini, GitHub, and Supabase with optimized stream handling.
+ * 🛡️ UNIVERSAL SOVEREIGN BRIDGE (V3.0 - Stable Edition)
+ * Handles Supabase, Gemini AI, and GitHub API Traffic.
  */
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const path = url.pathname.replace(/\/+/g, '/');
+    const path = url.pathname;
 
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
@@ -16,47 +16,51 @@ export default {
 
     if (request.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
-    try {
-      let targetUrl = "";
-      let newHeaders = new Headers(request.headers);
-
-      if (path.includes("/models/")) {
-        targetUrl = `https://generativelanguage.googleapis.com${path}${url.search ? url.search + '&' : '?'}key=${env.GEMINI_API_KEY}`;
-      } else if (path.startsWith("/repos/")) {
-        targetUrl = `https://api.github.com${path}${url.search}`;
-        newHeaders.set("Authorization", `Bearer ${env.GITHUB_TOKEN}`);
-      } else if (path.startsWith("/rest/v1/")) {
-        targetUrl = `${env.SUPABASE_URL}${path}${url.search}`;
-        newHeaders.set("apikey", env.SUPABASE_KEY);
-        newHeaders.set("Authorization", `Bearer ${env.SUPABASE_KEY}`);
-      } else if (path === "/fetch_url") {
-        const extUrl = url.searchParams.get("url");
-        const res = await fetch(extUrl);
-        return new Response(await res.text(), { headers: corsHeaders });
-      }
-
-      if (!targetUrl) return new Response("Not Found", { status: 404 });
-
-      // معالجة البيانات للجسر لضمان الاستقرار
-      const body = (["GET", "HEAD"].includes(request.method)) ? null : await request.clone().arrayBuffer();
-
-      const response = await fetch(targetUrl, {
-        method: request.method,
-        headers: newHeaders,
-        body: body,
-        redirect: "follow"
-      });
-
-      const resBody = await response.arrayBuffer();
-      const finalResponse = new Response(resBody, {
-        status: response.status,
-        headers: { ...Object.fromEntries(response.headers), ...corsHeaders }
-      });
-
-      return finalResponse;
-
-    } catch (e) {
-      return new Response(`❌ Bridge Error: ${e.message}`, { status: 500, headers: corsHeaders });
+    // 1. طلبات Gemini AI
+    if (path.includes("/models/")) {
+      const targetUrl = `https://generativelanguage.googleapis.com${path}${url.search ? url.search + '&' : '?'}key=${env.GEMINI_API_KEY}`;
+      return await forwardRequest(targetUrl, request, null, corsHeaders);
     }
+
+    // 2. طلبات GitHub API
+    if (path.startsWith("/repos/")) {
+      const targetUrl = `https://api.github.com${path}${url.search}`;
+      const authHeader = `Bearer ${env.GITHUB_TOKEN}`;
+      return await forwardRequest(targetUrl, request, authHeader, corsHeaders);
+    }
+
+    // 3. طلبات Supabase
+    if (path.startsWith("/rest/v1/")) {
+      const targetUrl = `${env.SUPABASE_URL}${path}${url.search}`;
+      const authHeaders = {
+        "apikey": env.SUPABASE_KEY,
+        "Authorization": `Bearer ${env.SUPABASE_KEY}`
+      };
+      return await forwardRequest(targetUrl, request, authHeaders, corsHeaders);
+    }
+
+    return new Response("🛡️ VSA Universal Bridge V3 Active.", { status: 200, headers: corsHeaders });
   }
 };
+
+async function forwardRequest(url, originalRequest, customAuth, corsHeaders) {
+  const newHeaders = new Headers(originalRequest.headers);
+
+  if (typeof customAuth === 'string') {
+    newHeaders.set("Authorization", customAuth);
+  } else if (customAuth && typeof customAuth === 'object') {
+    Object.keys(customAuth).forEach(k => newHeaders.set(k, customAuth[k]));
+  }
+
+  const modifiedRequest = new Request(url, {
+    method: originalRequest.method,
+    headers: newHeaders,
+    body: originalRequest.body,
+    redirect: "follow"
+  });
+
+  const response = await fetch(modifiedRequest);
+  const newResponse = new Response(response.body, response);
+  Object.keys(corsHeaders).forEach(k => newResponse.headers.set(k, corsHeaders[k]));
+  return newResponse;
+}
