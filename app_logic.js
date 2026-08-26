@@ -380,7 +380,26 @@
         }
     });
 
-    window.addEventListener('load', window.loadWebsiteData);
+    // 🚀 دعم زر Enter وربط زر الإعدادات
+    window.addEventListener('load', () => {
+        window.loadWebsiteData();
+
+        const aiInput = document.getElementById('aiInput');
+        if (aiInput) {
+            aiInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    window.sendAiMessage();
+                }
+            });
+        }
+
+        const settingsBtn = document.getElementById('aiSettingsBtn');
+        if (settingsBtn) {
+            settingsBtn.onclick = window.resetGeminiKey;
+        }
+    });
+
     window.addEventListener('hashchange', window.handleRoute);
 
     console.log("🚀 VSA Academy App Logic V3.0 (Comprehensive) Loaded.");
