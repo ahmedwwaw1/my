@@ -1,6 +1,6 @@
 /**
- * 🛡️ UNIVERSAL SOVEREIGN BRIDGE (V2.0)
- * Handles both Supabase Data and Gemini AI Traffic.
+ * 🛡️ UNIVERSAL SOVEREIGN BRIDGE (V3.0)
+ * Handles Supabase, Gemini AI, and GitHub API Traffic.
  */
 
 export default {
@@ -18,40 +18,48 @@ export default {
 
     // 1. طلبات Gemini AI
     if (path.includes("/models/")) {
-      // إعادة بناء الرابط ليوجه إلى جوجل مع إضافة المفتاح من بيئة Cloudflare
       const targetUrl = `https://generativelanguage.googleapis.com${path}${url.search ? url.search + '&' : '?'}key=${env.GEMINI_API_KEY}`;
-
-      const modifiedRequest = new Request(targetUrl, {
-        method: request.method,
-        headers: request.headers,
-        body: request.body
-      });
-
-      const response = await fetch(modifiedRequest);
-      const newResponse = new Response(response.body, response);
-      Object.keys(corsHeaders).forEach(k => newResponse.headers.set(k, corsHeaders[k]));
-      return newResponse;
+      return await forwardRequest(targetUrl, request, null, corsHeaders);
     }
 
-    // 2. طلبات Supabase (قاعدة البيانات)
+    // 2. طلبات GitHub API
+    if (path.startsWith("/repos/")) {
+      const targetUrl = `https://api.github.com${path}${url.search}`;
+      const authHeader = `Bearer ${env.GITHUB_TOKEN}`;
+      return await forwardRequest(targetUrl, request, authHeader, corsHeaders);
+    }
+
+    // 3. طلبات Supabase
     if (path.startsWith("/rest/v1/")) {
       const targetUrl = `${env.SUPABASE_URL}${path}${url.search}`;
-      const newHeaders = new Headers(request.headers);
-      newHeaders.set("apikey", env.SUPABASE_KEY);
-      newHeaders.set("Authorization", `Bearer ${env.SUPABASE_KEY}`);
-
-      const modifiedRequest = new Request(targetUrl, {
-        method: request.method,
-        headers: newHeaders,
-        body: request.body
-      });
-
-      const response = await fetch(modifiedRequest);
-      const newResponse = new Response(response.body, response);
-      Object.keys(corsHeaders).forEach(k => newResponse.headers.set(k, corsHeaders[k]));
-      return newResponse;
+      const authHeaders = {
+        "apikey": env.SUPABASE_KEY,
+        "Authorization": `Bearer ${env.SUPABASE_KEY}`
+      };
+      return await forwardRequest(targetUrl, request, authHeaders, corsHeaders);
     }
 
-    return new Response("🛡️ VSA Universal Bridge Active.", { status: 200, headers: corsHeaders });
+    return new Response("🛡️ VSA Universal Bridge V3 Active.", { status: 200, headers: corsHeaders });
   }
 };
+
+async function forwardRequest(url, originalRequest, customAuth, corsHeaders) {
+  const newHeaders = new Headers(originalRequest.headers);
+
+  if (typeof customAuth === 'string') {
+    newHeaders.set("Authorization", customAuth);
+  } else if (customAuth && typeof customAuth === 'object') {
+    Object.keys(customAuth).forEach(k => newHeaders.set(k, customAuth[k]));
+  }
+
+  const modifiedRequest = new Request(url, {
+    method: originalRequest.method,
+    headers: newHeaders,
+    body: originalRequest.body
+  });
+
+  const response = await fetch(modifiedRequest);
+  const newResponse = new Response(response.body, response);
+  Object.keys(corsHeaders).forEach(k => newResponse.headers.set(k, corsHeaders[k]));
+  return newResponse;
+}

@@ -82,14 +82,24 @@
 
     window.safeGithubFetch = async function(endpoint, options = {}, isRetry = false) {
         const token = window.getCleanGithubToken();
-        if (!token) throw new Error("⚠️ لم يتم ضبط توكن GitHub.");
 
-        const url = endpoint.startsWith('http') ? endpoint : `https://api.github.com/repos/${window.GITHUB_REPO}/${endpoint}`;
+        // 🚀 المنطق السيادي لـ GitHub:
+        // إذا وجد رابط جسر (Proxy URL)، نوجه الطلبات إليه ليقوم بإضافة التوكن سراً
+        let url;
         const defaultHeaders = {
-            'Authorization': `Bearer ${token}`,
             'Accept': 'application/vnd.github.v3+json',
             'Content-Type': 'application/json'
         };
+
+        if (window.mastermindProxyUrl && window.mastermindProxyUrl.trim() !== '') {
+            const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl.slice(0,-1) : window.mastermindProxyUrl;
+            url = `${baseUrl}/repos/${window.GITHUB_REPO}/${endpoint}`;
+        } else {
+            // اتصال مباشر (يتطلب وجود التوكن في المتصفح)
+            if (!token) throw new Error("⚠️ لم يتم ضبط توكن GitHub للاتصال المباشر.");
+            url = endpoint.startsWith('http') ? endpoint : `https://api.github.com/repos/${window.GITHUB_REPO}/${endpoint}`;
+            defaultHeaders['Authorization'] = `Bearer ${token}`;
+        }
 
         const fetchOptions = { ...options, headers: { ...defaultHeaders, ...options.headers }, mode: 'cors' };
 
