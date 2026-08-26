@@ -265,6 +265,7 @@
         window.addMessageToUi('user', text);
         input.value = ''; btn.classList.add('working');
         if (statusBadge) statusBadge.innerText = "AUTONOMOUS AGENT ACTIVE";
+        window.startAiTimer();
 
         try {
             const res = await window.callAiBrain(text);
@@ -274,6 +275,58 @@
         } finally {
             btn.classList.remove('working');
             if (statusBadge) statusBadge.innerText = "SYSTEM READY";
+            window.stopAiTimer();
+        }
+    };
+
+    // ================================================================
+    //  4.  إعدادات المحرك والوقت (AI Settings & Timer)
+    // ================================================================
+    let aiTimerInterval = null;
+    let aiTimerSeconds = 0;
+
+    window.startAiTimer = function() {
+        const timerBadge = document.getElementById('aiDynamicTimer');
+        if (!timerBadge) return;
+        timerBadge.style.display = 'inline-block';
+        aiTimerSeconds = 0;
+        if (aiTimerInterval) clearInterval(aiTimerInterval);
+        aiTimerInterval = setInterval(() => {
+            aiTimerSeconds++;
+            const mins = Math.floor(aiTimerSeconds / 60);
+            const secs = aiTimerSeconds % 60;
+            timerBadge.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }, 1000);
+    };
+
+    window.stopAiTimer = function() {
+        if (aiTimerInterval) clearInterval(aiTimerInterval);
+    };
+
+    window.resetGeminiKey = async function() {
+        const choice = prompt("⚙️ إعدادات المحرك السيادي:\n1. تعديل مفتاح API\n2. تعديل رابط الجسر (Proxy URL)\n3. تعديل مفتاح GitHub\n\nأدخل رقم الخيار (1-3):");
+
+        if (choice === "1") {
+            const key = prompt("أدخل مفتاح API الجديد:");
+            if (key) {
+                window.geminiApiKey = key.trim();
+                if (window.saveApiKeyToSupabase) await window.saveApiKeyToSupabase('gemini_key', key);
+                alert("✅ تم تحديث المفتاح.");
+            }
+        } else if (choice === "2") {
+            const url = prompt("🔗 أدخل رابط الجسر السيادي (Cloudflare URL):", window.mastermindProxyUrl);
+            if (url) {
+                window.mastermindProxyUrl = url.trim();
+                if (window.saveApiKeyToSupabase) await window.saveApiKeyToSupabase('proxy_url', url);
+                alert("✅ تم ربط الجسر بنجاح! النظام الآن مؤمن بالكامل.");
+            }
+        } else if (choice === "3") {
+            const token = prompt("أدخل GitHub Token:");
+            if (token) {
+                window.githubToken = token.trim();
+                if (window.saveApiKeyToSupabase) await window.saveApiKeyToSupabase('github_token', token);
+                alert("✅ تم تحديث توكن GitHub.");
+            }
         }
     };
 
