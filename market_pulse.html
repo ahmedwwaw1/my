@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نبض السوق - VSA Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
+        .stat-card { background: #1e1e24; border: 1px solid #2d2d35; border-radius: 12px; padding: 20px; text-align: center; }
+        .stat-value { font-size: 2.5rem; font-weight: bold; color: var(--accent-color); }
+        .alert-item { background: rgba(255, 255, 255, 0.05); margin-bottom: 10px; padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent-color); display: flex; justify-content: space-between; }
+        .negative { color: #ff3d00; }
+        .positive { color: #00ff88; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="index.html#/crypto">تنبيهات الكريبتو</a>
+        <a href="market_pulse.html" class="active">نبض السوق</a>
+    </nav>
+
+    <div class="container">
+        <h1 style="text-align: center; color: var(--accent-color);">📊 نبض السوق الذكي</h1>
+
+        <div class="dashboard-container">
+            <div class="stat-card">
+                <h3>إجمالي دروس VSA</h3>
+                <div id="vsaCount" class="stat-value">--</div>
+            </div>
+            <div class="stat-card">
+                <h3>تنبيهات الكريبتو النشطة</h3>
+                <div id="alertCount" class="stat-value">--</div>
+            </div>
+            <div class="stat-card">
+                <h3>متوسط التقلب</h3>
+                <div id="avgVolatility" class="stat-value">--</div>
+            </div>
+        </div>
+
+        <div class="details-section">
+            <h3>🔴 آخر تنبيهات العملات</h3>
+            <div id="recentAlerts">جاري التحميل...</div>
+        </div>
+    </div>
+
+    <script>
+        async function loadDashboard() {
+            try {
+                const [vsaRes, cryptoRes] = await Promise.all([
+                    fetch('vsa.json').then(r => r.json()),
+                    fetch('crypto_alerts.json').then(r => r.json())
+                ]);
+
+                // إحصائيات VSA
+                document.getElementById('vsaCount').innerText = vsaRes.length;
+
+                // إحصائيات الكريبتو
+                document.getElementById('alertCount').innerText = cryptoRes.length;
+
+                const avgVol = (cryptoRes.reduce((acc, curr) => acc + (curr.volatility || 0), 0) / cryptoRes.length).toFixed(2);
+                document.getElementById('avgVolatility').innerText = avgVol + '%';
+
+                // قائمة التنبيهات الأخيرة
+                const recentList = document.getElementById('recentAlerts');
+                recentList.innerHTML = '';
+                cryptoRes.slice(0, 10).forEach(alert => {
+                    const div = document.createElement('div');
+                    div.className = 'alert-item';
+                    const changeClass = alert.change_percent >= 0 ? 'positive' : 'negative';
+                    div.innerHTML = `
+                        <span><b>${alert.symbol}</b></span>
+                        <span class="${changeClass}">${alert.change_percent}%</span>
+                        <span>$${alert.price}</span>
+                    `;
+                    recentList.appendChild(div);
+                });
+
+            } catch (e) {
+                console.error("Dashboard error:", e);
+            }
+        }
+        window.onload = loadDashboard;
+    </script>
+</body>
+</html>
