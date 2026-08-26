@@ -19,8 +19,8 @@
 
     // 🧠 تهيئة محرك الاستمرارية العميقة (Deep Continuity Engine)
     const continuity = new DeepContinuityEngine({
-        modelsList: ['gemini-2.0-flash-exp', 'gemini-1.5-flash', 'gemini-1.5-pro'],
-        maxGlobalRetries: 5
+        modelsList: ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-3.5-flash-lite'],
+        maxGlobalRetries: 3
     });
 
     // 🛡️ إعدادات الجسر السيادي (تُجلب من الإعدادات أو يتم تجاوزها عبر الوكيل)
@@ -231,7 +231,7 @@
     //  5.  محرك الاتصال بـ AI (AI Brain Engine)
     // ================================================================
     window.callAiBrain = async function(promptText, fileBase64 = null, mimeType = null) {
-        const userModel = document.getElementById('modelSelector')?.value || 'gemini-2.0-flash-exp';
+        const userModel = document.getElementById('modelSelector')?.value || 'gemini-1.5-flash';
         let key = '';
         let provider = 'google';
 
@@ -246,6 +246,9 @@
         if (fileBase64 && mimeType) currentParts.push({ inline_data: { mime_type: mimeType, data: fileBase64 } });
         const history = [{ role: "user", parts: currentParts }];
 
+        // 🚀 تحديث قائمة النماذج لتجعل اختيار المستخدم هو الأول
+        continuity.modelsList = [userModel, 'gemini-1.5-flash', 'gemini-1.5-pro'];
+
         // 🛡️ تنفيذ الطلب عبر محرك الاستمرارية العميقة
         try {
             return await continuity.executeWithContinuity(async (model) => {
@@ -259,8 +262,12 @@
     async function runToolLoop(history, modelName, provider, key) {
         if (window.stopAiRequested) { window.stopAiRequested = false; return { text: "🛑 توقف.", model: "System" }; }
 
+        // 🛡️ اختيار إصدار الـ API المناسب ديناميكياً
+        // النماذج الجديدة تستخدم v1، والنماذج القديمة أو الميزات التجريبية تستخدم v1beta
+        const apiVersion = (modelName.includes('3.7') || modelName.includes('3.6') || modelName.includes('3.5')) ? 'v1' : 'v1beta';
+
         let url = (provider === 'google') ?
-            `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}` :
+            `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}` :
             window.mastermindProxyUrl;
 
         const body = { system_instruction: systemInstruction, contents: history, tools: tools, generationConfig };
