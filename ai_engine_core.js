@@ -214,9 +214,6 @@
 
         if (!window.geminiApiKey) window.geminiApiKey = await window.fetchApiKeyFromSupabase('gemini_key') || '';
         if (!window.githubToken) window.githubToken = await window.fetchApiKeyFromSupabase('github_token') || '';
-
-        console.log("🛡️ تم تحميل المفاتيح بنظام الأمان السيادي.");
-    };
         if (!window.deepseekApiKey) window.deepseekApiKey = await window.fetchApiKeyFromSupabase('deepseek_key') || '';
         if (!window.mastermindProxyUrl) window.mastermindProxyUrl = await window.fetchApiKeyFromSupabase('proxy_url') || '';
 
