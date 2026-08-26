@@ -258,19 +258,22 @@
     window.sendAiMessage = async function() {
         const input = document.getElementById('aiInput');
         const btn = document.getElementById('aiSendBtn');
+        const statusBadge = document.getElementById('healthStatusText');
         const text = input.value.trim();
         if (!text) return;
 
         window.addMessageToUi('user', text);
         input.value = ''; btn.classList.add('working');
+        if (statusBadge) statusBadge.innerText = "AUTONOMOUS AGENT ACTIVE";
 
         try {
             const res = await window.callAiBrain(text);
             window.addMessageToUi('ai', res.text, res.model);
         } catch (e) {
-            window.addMessageToUi('ai', "⚠️ تعذر الاتصال بالمحرك الهندسي.");
+            window.addMessageToUi('ai', "⚠️ تعذر الاتصال بالمحرك الهندسي الذاتي.");
         } finally {
             btn.classList.remove('working');
+            if (statusBadge) statusBadge.innerText = "SYSTEM READY";
         }
     };
 

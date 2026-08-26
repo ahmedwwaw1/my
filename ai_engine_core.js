@@ -37,15 +37,14 @@
     // ================================================================
     const constitution = `
     {
-      "role": "Engineering Core - Precise Software Assistant",
-      "identity": "VSA Academy Engineering Mode - Engines 1-6 Active",
+      "role": "Autonomous Engineering Intelligence",
+      "identity": "VSA Sovereign Orchestrator - Autonomous Mode ACTIVE",
       "protocols": {
-        "grounded_logic": "Act as a precise engineering calculator. Use tools for all actions. No hallucinations.",
-        "programmatic_focus": "Focus on code, functions, and tools. Avoid metaphysical or philosophical language.",
-        "sequential_thought": "Analyze step-by-step using the thought tool. Ensure each step is logical and grounded.",
-        "safety_first": "Use analyze_file and take_snapshot before any destructive operations."
-      },
-      "response_style": "Professional, technical, and concise."
+        "goal_directed": "Focus on the final outcome, not just the intermediate command.",
+        "closed_loop": "After every action, invoke analyze_file or verify_result to ensure the goal is met.",
+        "persistence": "Use DeepContinuity to save state between complex autonomous steps.",
+        "self_correction": "If a tool fails, analyze the error and try an alternative engine automatically."
+      }
     }`;
 
     const systemInstruction = { parts: [{ text: constitution + `\nأنت الآن في وضع "المحرك الهندسي". التزم بالقواعد البرمجية الصارمة وتجنب أي لغة غير عملية.` }] };
@@ -62,6 +61,8 @@
             { name: "run_virtual_test", description: "اختبار جودة الكود.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
             { name: "thought", description: "محرك التفكير الهندسي: تحليل الخطوات قبل التنفيذ.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, peer_review: { type: "STRING" }, expected_outcome: { type: "STRING" } }, required: ["reasoning", "plan"] } },
             { name: "analyze_file", description: "مسبار الجودة: فحص الملف قبل الحفظ.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+            { name: "verify_goal", description: "التحقق الذاتي: هل تم تحقيق الهدف النهائي؟", parameters: { type: "OBJECT", properties: { goal_met: { type: "BOOLEAN" }, reasoning: { type: "STRING" } }, required: ["goal_met"] } },
+            { name: "autonomous_plan", description: "مخطط المسار الذاتي: تقسيم الهدف الكبير إلى مهام صغيرة.", parameters: { type: "OBJECT", properties: { tasks: { type: "ARRAY", items: { type: "STRING" } } }, required: ["tasks"] } },
             { name: "take_snapshot", description: "أخذ لقطة احتياطية للملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
             { name: "instant_undo", description: "التراجع عن آخر عملية تعديل.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
             { name: "web_search", description: "البحث في الويب عن توثيقات أو حلول.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
@@ -267,17 +268,22 @@
                 if (name === "read_file") toolResult = await window.getGithubFileContent(args.path);
                 else if (name === "write_file") toolResult = await window.writeFile(args.path, args.content);
                 else if (name === "replace_file_content") toolResult = await window.replaceFileContent(args.path, args.targetContent, args.replacementContent);
-                else if (name === "store_memory") toolResult = window.store_memory(args.key, args.value);
-                else if (name === "vector_search") toolResult = window.vector_search(args.query);
-                else if (name === "estimate_cost") toolResult = window.estimate_cost(args.model, args.tokens);
-                else if (name === "run_virtual_test") toolResult = window.run_virtual_test(args.code);
+                else if (name === "autonomous_plan") toolResult = { status: "Plan locked", tasks: args.tasks };
+                else if (name === "verify_goal") {
+                    toolResult = args.goal_met ? "✅ Goal Achieved." : "⚠️ Goal not yet met. Continuing...";
+                    if (args.goal_met) {
+                        if (window.updateToolStepStatus) window.updateToolStepStatus(stepId, true, toolResult);
+                        return { text: args.reasoning || "تم إنجاز المهمة بنجاح.", model: modelName };
+                    }
+                }
                 else if (name === "thought") toolResult = args;
-                else if (name === "repairSystem") toolResult = await window.repairSystem();
-                else toolResult = "أداة غير مدعومة.";
+                else toolResult = "أداة قيد المعالجة...";
 
                 if (window.updateToolStepStatus) window.updateToolStepStatus(stepId, true, toolResult);
                 history.push({ role: "model", parts: [functionCallPart] });
                 history.push({ role: "user", parts: [{ functionResponse: { name, response: { content: toolResult } } }] });
+
+                // الاستمرار التلقائي (Autonomous Continuation)
                 return await runToolLoop(history, modelName, provider, key);
             }
 
