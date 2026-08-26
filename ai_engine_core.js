@@ -262,13 +262,18 @@
     async function runToolLoop(history, modelName, provider, key) {
         if (window.stopAiRequested) { window.stopAiRequested = false; return { text: "🛑 توقف.", model: "System" }; }
 
-        // 🛡️ اختيار إصدار الـ API المناسب ديناميكياً
-        // النماذج الجديدة تستخدم v1، والنماذج القديمة أو الميزات التجريبية تستخدم v1beta
         const apiVersion = (modelName.includes('3.7') || modelName.includes('3.6') || modelName.includes('3.5')) ? 'v1' : 'v1beta';
 
-        let url = (provider === 'google') ?
-            `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}` :
-            window.mastermindProxyUrl;
+        // 🚀 المنطق السيادي الموحد:
+        // إذا وجد رابط جسر (Proxy URL)، نستخدمه لكل شيء (الدردشة والبيانات)
+        // إذا لم يوجد، نحاول الاتصال المباشر بجوجل
+        let url;
+        if (window.mastermindProxyUrl && window.mastermindProxyUrl.trim() !== '') {
+            const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl.slice(0,-1) : window.mastermindProxyUrl;
+            url = `${baseUrl}/${apiVersion}/models/${modelName}:generateContent`;
+        } else {
+            url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}`;
+        }
 
         const body = { system_instruction: systemInstruction, contents: history, tools: tools, generationConfig };
 
