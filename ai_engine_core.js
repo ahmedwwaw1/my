@@ -60,8 +60,8 @@
             { name: "vector_search", description: "البحث في الذاكرة المخزنة سابقاً.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
             { name: "estimate_cost", description: "حساب تكلفة العمليات البرمجية.", parameters: { type: "OBJECT", properties: { model: { type: "STRING" }, tokens: { type: "NUMBER" } }, required: ["model", "tokens"] } },
             { name: "run_virtual_test", description: "اختبار جودة الكود.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
-            { name: "thought", description: "محرك التفكير الهندسي: تحليل الخطوات قبل التنفيذ.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, peer_review: { type: "STRING" }, expected_outcome: { type: "STRING" } }, required: ["reasoning", "plan"] } },
-            { name: "analyze_file", description: "مسبار الجودة: فحص الملف قبل الحفظ.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+            { name: "thought", description: "محرك التفكير الهندسي: تحليل الخطوات قبل التنفيذ.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, risk_assessment: { type: "STRING" }, peer_review: { type: "STRING" }, expected_outcome: { type: "STRING" } }, required: ["reasoning", "plan"] } },
+            { name: "analyze_file", description: "مسبار الجودة: فحص الملف برمجياً.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
             { name: "verify_goal", description: "التحقق الذاتي: هل تم تحقيق الهدف النهائي؟", parameters: { type: "OBJECT", properties: { goal_met: { type: "BOOLEAN" }, reasoning: { type: "STRING" } }, required: ["goal_met"] } },
             { name: "autonomous_plan", description: "مخطط المسار الذاتي: تقسيم الهدف الكبير إلى مهام صغيرة.", parameters: { type: "OBJECT", properties: { tasks: { type: "ARRAY", items: { type: "STRING" } } }, required: ["tasks"] } },
             { name: "take_snapshot", description: "أخذ لقطة احتياطية للملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
@@ -311,6 +311,29 @@
                     if (args.goal_met) {
                         if (window.updateToolStepStatus) window.updateToolStepStatus(stepId, true, toolResult);
                         return { text: args.reasoning || "تم إنجاز المهمة بنجاح.", model: modelName };
+                    }
+                }
+                else if (name === "take_snapshot") {
+                    const content = await window.getGithubFileContent(args.path);
+                    if (content.startsWith('❌')) toolResult = content;
+                    else {
+                        localStorage.setItem('vsa_snapshot_' + args.path, content);
+                        toolResult = `📸 Snapshot saved for ${args.path}`;
+                    }
+                }
+                else if (name === "instant_undo") {
+                    const oldContent = localStorage.getItem('vsa_snapshot_' + args.path);
+                    if (!oldContent) toolResult = "❌ No snapshot found for this file.";
+                    else toolResult = await window.writeFile(args.path, oldContent, "🔄 Instant Undo Recovery");
+                }
+                else if (name === "analyze_file") {
+                    const content = await window.getGithubFileContent(args.path);
+                    if (content.startsWith('❌')) toolResult = content;
+                    else {
+                        const openBraces = (content.match(/{/g) || []).length;
+                        const closeBraces = (content.match(/}/g) || []).length;
+                        const isBalanced = openBraces === closeBraces;
+                        toolResult = isBalanced ? "✅ Syntax checks passed (Balanced Braces)." : `⚠️ Warning: Potential Syntax Error (Unbalanced braces: {${openBraces}, }${closeBraces})`;
                     }
                 }
                 else if (name === "thought") toolResult = args;
