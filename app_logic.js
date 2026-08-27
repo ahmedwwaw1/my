@@ -2,6 +2,7 @@
 //  🖥️  APP LOGIC - UI Interface for VSA Academy
 //  المسؤول عن: الأزرار، المحادثة، عرض البطاقات، والبحث.
 //  يعتمد على: ai_engine_core.js (المحرك الرئيسي)
+//  تم التعديل: جعل ملفات JSON المحلية المصدر الأساسي للبيانات.
 // ================================================================
 
 (function() {
@@ -21,10 +22,63 @@
     let chatHistory = [];
 
     // ============================================================
-    //  2.  دوال تحميل البيانات وعرضها
+    //  2.  دوال تحميل البيانات وعرضها (مُعدلة لجعل JSON هو المصدر الأساسي)
     // ============================================================
 
     async function loadWebsiteData() {
+        // محاولة تحميل البيانات من ملفات JSON المحلية أولاً (الأسرع والأكثر استقراراً على GitHub)
+        try {
+            // قائمة الملفات التي تحتوي على البيانات (حسب تصنيفاتك)
+            const jsonFiles = [
+                'vsa.json',
+                'technical-analysis.json',
+                'Time-analysis.json',
+                'rw.json',
+                'investment.json',
+                'crypto_alerts.json'
+            ];
+
+            let allLocalData = [];
+
+            // تحميل كل ملف JSON ومحاولة دمج البيانات
+            for (const file of jsonFiles) {
+                try {
+                    const response = await fetch(file + '?v=' + Date.now()); // منع التخزين المؤقت
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (Array.isArray(data)) {
+                            allLocalData = allLocalData.concat(data);
+                            console.log(`✅ تم تحميل ${file} بنجاح (${data.length} عنصر).`);
+                        } else {
+                            console.warn(`⚠️ الملف ${file} ليس مصفوفة، تم تخطيه.`);
+                        }
+                    } else {
+                        console.warn(`⚠️ الملف ${file} غير موجود (${response.status}).`);
+                    }
+                } catch (e) {
+                    console.warn(`⚠️ فشل تحميل ${file}: ${e.message}`);
+                }
+            }
+
+            // إذا تم تحميل بيانات من الملفات المحلية
+            if (allLocalData.length > 0) {
+                allData = allLocalData;
+                isDataLoaded = true;
+                render(allData);
+                handleRoute();
+                document.getElementById('statusMsg').innerText = `✅ تم تحميل ${allData.length} بطاقة من الملفات المحلية.`;
+                console.log("🚀 تم تحميل البيانات من JSON المحلية بنجاح.");
+                return; // نخرج من الدالة لأن البيانات جاهزة
+            } else {
+                console.warn("⚠️ لم يتم العثور على بيانات في الملفات المحلية. سنحاول Supabase.");
+            }
+        } catch (e) {
+            console.warn("⚠️ فشل تحميل البيانات من الملفات المحلية، سننتقل إلى Supabase.", e);
+        }
+
+        // ==========================================================
+        //  الخيار الاحتياطي: محاولة جلب البيانات من Supabase
+        // ==========================================================
         const headers = { 'apikey': SERVICE_ROLE_KEY, 'Authorization': `Bearer ${SERVICE_ROLE_KEY}` };
         try {
             const [cardsRes, videosRes, chaptersRes, assetsRes] = await Promise.all([
@@ -68,19 +122,14 @@
             isDataLoaded = true;
             render(allData);
             handleRoute();
-            document.getElementById('statusMsg').innerText = '✅ تم تحميل البيانات بنجاح.';
+            document.getElementById('statusMsg').innerText = '✅ تم تحميل البيانات من Supabase بنجاح.';
+            console.log("✅ تم تحميل البيانات من Supabase بنجاح.");
         } catch (e) {
-            console.warn("Fallback to local JSON", e);
-            try {
-                const localData = await fetch('vsa.json?v=' + Date.now()).then(r => r.json()).catch(() => []);
-                allData = localData;
-                isDataLoaded = true;
-                render(allData);
-                handleRoute();
-                document.getElementById('statusMsg').innerText = '✅ تم تحميل البيانات من الملف المحلي.';
-            } catch (e2) {
-                document.getElementById('statusMsg').innerText = '❌ فشل تحميل البيانات.';
-            }
+            console.error("❌ فشل تحميل البيانات من Supabase أيضاً:", e);
+            document.getElementById('statusMsg').innerText = '❌ فشل تحميل البيانات من جميع المصادر. تأكد من وجود ملفات JSON أو اتصال Supabase.';
+            // عرض بعض البطاقات التجريبية إن أمكن
+            allData = [];
+            render(allData);
         }
     }
 
