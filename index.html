@@ -56,16 +56,22 @@
                             <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite</option>
                             <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
                             <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                            <option value="deepseek-chat">DeepSeek V3</option>
                         </select>
                         <span id="aiSettingsBtn" style="cursor:pointer; font-size:18px; margin: 0 5px;" title="الإعدادات السيادية">⋮</span>
                         <span onclick="toggleAiChat()" style="cursor:pointer;">✕</span>
                     </div>
                 </div>
-                <div id="aiMessages" class="ai-messages"></div>
+                <div id="aiMessages" class="ai-messages">
+                    <div class="msg ai">مرحباً بك في المحرك الهندسي. كيف يمكنني مساعدتك اليوم؟</div>
+                </div>
                 <div class="ai-input-container">
                     <div class="ai-input-wrapper">
-                        <textarea id="aiInput" placeholder="اسأل المحرك الهندسي عن أي شيء..."></textarea>
-                        <button id="aiSendBtn" class="ai-btn" style="width: 40px; height: 40px; font-size: 18px;" onclick="sendAiMessage()">🚀</button>
+                        <!-- تم إضافة onkeydown لالتقاط Enter و event.preventDefault لمنع الإرسال المزدوج -->
+                        <textarea id="aiInput" placeholder="اسأل المحرك الهندسي عن أي شيء..." rows="1" 
+                            onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); document.getElementById('aiSendBtn').click();}" 
+                            style="flex:1; background:transparent; border:none; color:#dfe1e5; font-size:14px; resize:none; outline:none; padding:5px;"></textarea>
+                        <button id="aiSendBtn" class="ai-send-btn-new" onclick="sendAiMessage()">🚀</button>
                     </div>
                 </div>
             </div>
@@ -121,7 +127,6 @@
         </div>
     </div>
 
-    <!-- External JS Scripts -->
     <!-- ===== السكربتات الأساسية (المصدر الوحيد للحقيقة) ===== -->
     <!-- المحرك الهندسي الرئيسي (يحتوي على المحركات 7-12 والدستور) -->
     <script src="ai_engine_core.js"></script>

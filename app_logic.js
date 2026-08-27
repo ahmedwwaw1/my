@@ -1,27 +1,31 @@
 // ================================================================
-//  🌐  APP LOGIC - VSA Academy UI & Interaction (Full Version)
-//  الوظيفة: إدارة البيانات، مشغل الفيديو، البحث، المودال، والذكاء الاصطناعي.
+//  🖥️  APP LOGIC - UI Interface for VSA Academy
+//  المسؤول عن: الأزرار، المحادثة، عرض البطاقات، والبحث.
+//  يعتمد على: ai_engine_core.js (المحرك الرئيسي)
 // ================================================================
 
-(function(window) {
+(function() {
+    "use strict";
+
+    // ============================================================
+    //  1.  إعدادات واجهة المستخدم
+    // ============================================================
+    const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
+    const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
+
     let allData = [];
     let isDataLoaded = false;
     let modalHistory = [];
     let modalHistoryIndex = -1;
-    let originalThematicItem = null;
     let selectedFiles = [];
     let chatHistory = [];
-    let chatSessions = [];
-    let currentSessionId = Date.now().toString();
 
-    // ================================================================
-    //  1.  إدارة البيانات وجلبها (Data Management)
-    // ================================================================
-    window.loadWebsiteData = async function() {
-        const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-        const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
+    // ============================================================
+    //  2.  دوال تحميل البيانات وعرضها
+    // ============================================================
+
+    async function loadWebsiteData() {
         const headers = { 'apikey': SERVICE_ROLE_KEY, 'Authorization': `Bearer ${SERVICE_ROLE_KEY}` };
-
         try {
             const [cardsRes, videosRes, chaptersRes, assetsRes] = await Promise.all([
                 fetch(`${SUPABASE_URL}/rest/v1/cards?select=*`, { headers }),
@@ -30,398 +34,590 @@
                 fetch(`${SUPABASE_URL}/rest/v1/card_assets?select=*`, { headers })
             ]);
 
-            if (!cardsRes.ok) throw new Error("Supabase Error");
+            if (!cardsRes.ok) throw new Error("Supabase error");
 
             const cards = await cardsRes.json();
             const videos = await videosRes.json();
             const chapters = await chaptersRes.json();
             const assets = await assetsRes.json();
 
-            window.allData = cards.map(card => {
+            allData = cards.map(card => {
                 const cardVideos = videos.filter(v => v.card_id === card.id).map(v => ({
                     ...v,
-                    chapters: chapters.filter(ch => ch.video_id === v.id).map(ch => ({ time: ch.chapter_time, text: ch.chapter_text }))
+                    chapters: chapters.filter(ch => ch.video_id === v.id).map(ch => ({
+                        time: ch.chapter_time,
+                        text: ch.chapter_text
+                    }))
                 }));
                 const cardAssets = assets.filter(a => a.card_id === card.id);
                 return {
-                    id: card.id, title: card.title, category: card.category, content: card.content, image: card.image_url,
+                    id: card.id,
+                    title: card.title,
+                    category: card.category,
+                    content: card.content,
+                    image: card.image_url,
                     videos: cardVideos.length > 0 ? cardVideos : null,
-                    links: cardAssets.filter(a => a.asset_type === null || a.asset_type === 'link').map(a => ({ text: a.title, url: a.url })),
+                    links: cardAssets.filter(a => a.asset_type === 'link' || !a.asset_type).map(a => ({ text: a.title, url: a.url })),
                     images: cardAssets.filter(a => a.asset_type === 'image').map(a => ({ title: a.title, url: a.url })),
                     pdfs: cardAssets.filter(a => a.asset_type === 'pdf').map(a => ({ title: a.title, url: a.url })),
-                    recommendations: [], thematic_index: null
+                    recommendations: [],
+                    thematic_index: null
                 };
             });
 
-            window.isDataLoaded = true;
-            window.render(window.allData);
-            window.handleRoute();
-        } catch (error) {
-            console.warn("Fallback to Local Mode...");
-            const localFiles = ['vsa.json', 'data.json', 'technical-analysis.json', 'Time-analysis.json'];
-            const results = await Promise.all(localFiles.map(file => fetch(file).then(res => res.ok ? res.json() : []).catch(() => [])));
-            window.allData = results.flat();
-            window.isDataLoaded = true;
-            window.render(window.allData);
-            window.handleRoute();
+            isDataLoaded = true;
+            render(allData);
+            handleRoute();
+            document.getElementById('statusMsg').innerText = '✅ تم تحميل البيانات بنجاح.';
+        } catch (e) {
+            console.warn("Fallback to local JSON", e);
+            try {
+                const localData = await fetch('vsa.json?v=' + Date.now()).then(r => r.json()).catch(() => []);
+                allData = localData;
+                isDataLoaded = true;
+                render(allData);
+                handleRoute();
+                document.getElementById('statusMsg').innerText = '✅ تم تحميل البيانات من الملف المحلي.';
+            } catch (e2) {
+                document.getElementById('statusMsg').innerText = '❌ فشل تحميل البيانات.';
+            }
         }
-    };
+    }
 
-    window.render = function(dataArray) {
-        const grid = document.getElementById('mainGrid');
-        const statusMsg = document.getElementById('statusMsg');
-        if (!grid) return;
-        grid.innerHTML = '';
-        if (dataArray.length === 0) { if (window.isDataLoaded) statusMsg.innerText = "لا توجد نتائج."; return; }
-        statusMsg.innerText = '';
+    function render(dataArray) {
+        const mainGrid = document.getElementById('mainGrid');
+        if (!mainGrid) return;
+        mainGrid.innerHTML = '';
+        if (dataArray.length === 0) {
+            document.getElementById('statusMsg').innerText = 'لا توجد بطاقات معروضة في هذا القسم.';
+            return;
+        }
+        document.getElementById('statusMsg').innerText = '';
 
         dataArray.forEach((item, index) => {
             const card = document.createElement('div');
             card.className = 'card';
-            card.onclick = () => window.openDetails(item.id);
-            const img = item.image || 'https://via.placeholder.com/360x203/222/0088cc?text=VSA+Academy';
-            card.innerHTML = `<div class="card-media-top"><img src="${img}" loading="lazy"></div><div class="card-body-container"><h3>${item.title || 'بدون عنوان'}</h3><div class="card-content">${item.content || ''}</div></div>`;
-            grid.appendChild(card);
+            card.style.animationDelay = `${index * 0.05}s`;
+            card.addEventListener('click', () => openDetails(item.id));
+
+            let mediaContent = item.image ?
+                `<div class="card-media-top"><img src="${item.image}" alt="${item.title}" loading="lazy"></div>` :
+                `<div class="card-media-top"><img src="https://via.placeholder.com/360x203/222/0088cc?text=VSA" loading="lazy"></div>`;
+
+            card.innerHTML = `
+                ${mediaContent}
+                <div class="card-body-container">
+                    <h3>${item.title || 'بدون عنوان'}</h3>
+                    <div class="card-content">${item.content || ''}</div>
+                </div>
+            `;
+            mainGrid.appendChild(card);
         });
-    };
+    }
 
-    window.handleRoute = function() {
+    // ============================================================
+    //  3.  دوال التنقل والبحث
+    // ============================================================
+
+    function handleRoute() {
         const hash = window.location.hash || '#/';
-        const pageTitle = document.getElementById('pageTitle');
-        let filtered = window.allData;
-        if (hash === '#/investment') { filtered = window.allData.filter(d => d.category === 'invest'); pageTitle.innerText = 'دليل الاستثمار'; }
-        else if (hash === '#/time-analysis') { filtered = window.allData.filter(d => d.category === 'time-analysis'); pageTitle.innerText = 'التحليل الزمني'; }
-        else if (hash === '#/rw') { filtered = window.allData.filter(d => d.category === 'rw'); pageTitle.innerText = 'مكتبة وايكوف'; }
-        else if (hash === '#/technical-analysis') { filtered = window.allData.filter(d => d.category === 'technical-analysis'); pageTitle.innerText = 'التحليل الفني'; }
-        else if (hash === '#/crypto') { filtered = window.allData.filter(d => d.category === 'high_volume'); pageTitle.innerText = 'تنبيهات الكريبتو'; }
-        else { filtered = window.allData.filter(d => d.category === 'vsa'); pageTitle.innerText = 'أكاديمية VSA'; }
+        const searchInput = document.getElementById('globalSearch');
+        if (searchInput) searchInput.value = '';
 
-        window.render(filtered);
+        let filtered = [];
+        let title = 'أكاديمية VSA';
+
+        if (hash === '#/investment') {
+            filtered = allData.filter(d => d.category === 'invest');
+            title = 'دليل الاستثمار في العراق';
+        } else if (hash === '#/time-analysis') {
+            filtered = allData.filter(d => d.category === 'time-analysis');
+            title = 'التحليل الزمني';
+        } else if (hash === '#/rw') {
+            filtered = allData.filter(d => d.category === 'rw');
+            title = 'مكتبة وايكوف';
+        } else if (hash === '#/technical-analysis') {
+            filtered = allData.filter(d => d.category === 'technical-analysis');
+            title = 'مدارس التحليل الفني';
+        } else if (hash === '#/crypto') {
+            filtered = allData.filter(d => d.category === 'high_volume');
+            title = '🤖 تنبيهات بث حي لحركة العملات الرقمية';
+        } else {
+            filtered = allData.filter(d => d.category === 'vsa');
+            title = 'أكاديمية VSA والتداول';
+        }
+
+        document.getElementById('pageTitle').innerText = title;
+        render(filtered);
+        setActiveNav(hash);
+    }
+
+    function setActiveNav(hash) {
+        const map = {
+            '#/': 'btn-vsa',
+            '#/investment': 'btn-invest',
+            '#/time-analysis': 'btn-time-analysis',
+            '#/rw': 'btn-rw',
+            '#/technical-analysis': 'btn-technical-analysis',
+            '#/crypto': 'btn-crypto'
+        };
+        const id = map[hash] || 'btn-vsa';
         document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-        const activeLink = document.querySelector(`nav a[href="${hash}"]`) || document.getElementById('btn-vsa');
-        if (activeLink) activeLink.classList.add('active');
-    };
+        const el = document.getElementById(id);
+        if (el) el.classList.add('active');
+    }
 
-    // ================================================================
-    //  2.  مشغل الفيديو والمودال المتطور (Unified Player & Modal)
-    // ================================================================
-    window.UnifiedPlayer = {
-        currentType: null, element: null,
-        init: async function(container, url, telegramUrl = null) {
-            this.cleanup();
-            if (!url) return;
-            container.style.display = 'block';
+    // ============================================================
+    //  4.  دوال البحث
+    // ============================================================
 
-            // التعامل مع فيديوهات يوتيوب
-            if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                const ytid = this.getYTId(url);
-                container.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytid}?autoplay=1" style="width:100%;height:100%;border:none;" allow="autoplay;fullscreen"></iframe>`;
-            }
-            // التعامل مع الصور كبديل للفيديو
-            else if (url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/) || url.includes('type=image')) {
-                container.innerHTML = `<img src="${url}" style="width:100%; height:100%; object-fit:contain; border-radius:12px;">`;
-            }
-            // التعامل مع ملفات PDF
-            else if (url.endsWith('.pdf') || url.includes('.pdf?') || url.includes('type=pdf')) {
-                container.innerHTML = `<iframe src="${url}" style="width:100%;height:100%;border:none;"></iframe>`;
-            }
-            // التعامل مع الفيديوهات المباشرة
-            else {
-                const video = document.createElement('video');
-                video.src = url; video.controls = true; video.autoplay = true;
-                video.style.width = "100%"; video.style.height = "100%";
-                container.innerHTML = ''; container.appendChild(video);
-                this.element = video;
-            }
-        },
-        getYTId: function(url) { const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/); return (match && match[2].length === 11) ? match[2] : null; },
-        seekTo: function(sec) { if (this.element) this.element.currentTime = sec; },
-        cleanup: function() { if (this.element) { this.element.pause(); this.element.src = ""; } }
-    };
+    function setupSearch() {
+        const input = document.getElementById('globalSearch');
+        const dropdown = document.getElementById('searchDropdown');
+        if (!input || !dropdown) return;
 
-    window.openDetails = function(id) {
-        const item = window.allData.find(d => String(d.id) === String(id));
+        let currentItems = [];
+
+        input.addEventListener('input', function() {
+            const term = this.value.toLowerCase().trim();
+            if (term === '') { dropdown.style.display = 'none'; return; }
+
+            dropdown.innerHTML = '';
+            currentItems = [];
+            let hasResults = false;
+
+            allData.forEach(item => {
+                // البحث في العنوان والمحتوى
+                if ((item.title && item.title.toLowerCase().includes(term)) ||
+                    (item.content && item.content.toLowerCase().includes(term))) {
+                    hasResults = true;
+                    addSearchItem(`📄 ${item.title}`, item.id);
+                }
+
+                // البحث في الفيديوهات
+                if (item.videos) {
+                    item.videos.forEach(vid => {
+                        if (vid.title && vid.title.toLowerCase().includes(term)) {
+                            hasResults = true;
+                            addSearchItem(`🎥 ${vid.title}`, item.id, vid.id);
+                        }
+                        if (vid.chapters) {
+                            vid.chapters.forEach(ch => {
+                                if (ch.text && ch.text.toLowerCase().includes(term)) {
+                                    hasResults = true;
+                                    addSearchItem(`⏱️ ${ch.text} (${vid.title})`, item.id, vid.id, ch.time);
+                                }
+                            });
+                        }
+                    });
+                }
+
+                // البحث في الصور
+                if (item.images) {
+                    item.images.forEach(img => {
+                        if (img.title && img.title.toLowerCase().includes(term)) {
+                            hasResults = true;
+                            addSearchItem(`🖼️ ${img.title}`, item.id, null, null, 'image', img.url);
+                        }
+                    });
+                }
+
+                // البحث في PDF
+                if (item.pdfs) {
+                    item.pdfs.forEach(pdf => {
+                        if (pdf.title && pdf.title.toLowerCase().includes(term)) {
+                            hasResults = true;
+                            addSearchItem(`📄 ${pdf.title}`, item.id, null, null, 'pdf', pdf.url);
+                        }
+                    });
+                }
+
+                // البحث في الروابط
+                if (item.links) {
+                    item.links.forEach(link => {
+                        if (link.text && link.text.toLowerCase().includes(term)) {
+                            hasResults = true;
+                            addSearchItem(`🔗 ${link.text}`, item.id, null, null, 'link', link.url);
+                        }
+                    });
+                }
+            });
+
+            function addSearchItem(text, itemId, videoId = null, time = null, type = null, url = null) {
+                const div = document.createElement('div');
+                div.className = 'search-item';
+                div.innerHTML = text;
+                div.addEventListener('click', () => {
+                    if (url) {
+                        window.open(url, '_blank');
+                    } else if (videoId) {
+                        openDetails(itemId);
+                        setTimeout(() => {
+                            const item = allData.find(d => String(d.id) === String(itemId));
+                            if (item) playSpecificVideo(item, videoId, parseTimeToSeconds(time));
+                        }, 500);
+                    } else {
+                        openDetails(itemId);
+                    }
+                    dropdown.style.display = 'none';
+                    input.value = '';
+                });
+                dropdown.appendChild(div);
+                currentItems.push(div);
+            }
+
+            if (hasResults) {
+                dropdown.style.display = 'block';
+            } else {
+                dropdown.innerHTML = '<div class="search-item" style="color:#aaa; cursor:default;">عذراً، لم يتم العثور على نتائج.</div>';
+                dropdown.style.display = 'block';
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    }
+
+    // ============================================================
+    //  5.  دوال المودال (عرض التفاصيل)
+    // ============================================================
+
+    function openDetails(id, isHistory = false) {
+        const item = allData.find(d => String(d.id) === String(id));
         if (!item) return;
 
-        // تعيين العناصر الأساسية
-        document.getElementById('modalTitle').innerText = item.title;
-        document.getElementById('modalContent').innerText = item.content;
+        if (!isHistory) {
+            modalHistory = modalHistory.slice(0, modalHistoryIndex + 1);
+            modalHistory.push(String(id));
+            modalHistoryIndex = modalHistory.length - 1;
+        }
+
+        document.getElementById('modalTitle').innerText = item.title || '';
+        document.getElementById('modalContent').innerText = item.content || '';
 
         const videoContainer = document.getElementById('popupVideoContainer');
         const linksContainer = document.getElementById('popupLinksContainer');
-        const playlistContainer = document.getElementById('playlistContainer');
         const playlistSection = document.getElementById('playlistSection');
-        const chaptersContainer = document.getElementById('chaptersContainer');
+        const playlistContainer = document.getElementById('playlistContainer');
         const chaptersSection = document.getElementById('chaptersSection');
+        const chaptersContainer = document.getElementById('chaptersContainer');
         const imagesSection = document.getElementById('imagesSection');
         const imagesContainer = document.getElementById('imagesContainer');
         const pdfsSection = document.getElementById('pdfsSection');
         const pdfsContainer = document.getElementById('pdfsContainer');
-        const thematicSection = document.getElementById('thematicSection');
-        const thematicContainer = document.getElementById('thematicContainer');
 
-        // تصفير الحاويات
-        videoContainer.innerHTML = ''; videoContainer.style.display = 'none';
+        // تنظيف
+        videoContainer.style.display = 'none';
+        videoContainer.innerHTML = '';
         linksContainer.innerHTML = '';
-        if (playlistContainer) playlistContainer.innerHTML = '';
-        if (playlistSection) playlistSection.style.display = 'none';
-        if (chaptersContainer) chaptersContainer.innerHTML = '';
-        if (chaptersSection) chaptersSection.style.display = 'none';
-        if (imagesSection) imagesSection.style.display = 'none';
-        if (pdfsSection) pdfsSection.style.display = 'none';
-        if (thematicSection) thematicSection.style.display = 'none';
+        playlistSection.style.display = 'none';
+        playlistContainer.innerHTML = '';
+        chaptersSection.style.display = 'none';
+        chaptersContainer.innerHTML = '';
+        imagesSection.style.display = 'none';
+        imagesContainer.innerHTML = '';
+        pdfsSection.style.display = 'none';
+        pdfsContainer.innerHTML = '';
 
-        // روابط الأزرار
-        if (item.links) {
-            item.links.forEach(link => {
-                const btn = document.createElement('a');
-                btn.href = link.url; btn.target = '_blank'; btn.innerText = link.text;
-                btn.className = 'nav-arrow-btn'; btn.style.margin = '5px';
-                linksContainer.appendChild(btn);
-            });
-        }
-
-        // معالجة قائمة التشغيل (Videos)
+        // تشغيل الفيديو
         if (item.videos && item.videos.length > 0) {
             playlistSection.style.display = 'block';
             item.videos.forEach((vid, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'chapter-row-btn';
-                btn.innerHTML = `<span>▶️ ${vid.title || `الدرس ${idx+1}`}</span>`;
-                btn.onclick = () => window.playSpecificVideo(item, idx);
+                btn.innerHTML = `▶️ ${vid.title || `الدرس ${idx + 1}`}`;
+                btn.addEventListener('click', () => playSpecificVideo(item, idx));
                 playlistContainer.appendChild(btn);
             });
-            window.playSpecificVideo(item, 0);
-        } else if (item.image) {
-            window.UnifiedPlayer.init(videoContainer, item.image);
+            // تشغيل الأول تلقائياً
+            playSpecificVideo(item, 0);
+        } else if (item.videoUrl) {
+            videoContainer.style.display = 'block';
+            videoContainer.innerHTML = `<video src="${item.videoUrl}" controls autoplay style="width:100%; height:100%;"></video>`;
         }
 
-        // معرض الصور
+        // عرض الفصول
+        if (item.chapters && item.chapters.length > 0) {
+            chaptersSection.style.display = 'block';
+            item.chapters.forEach(ch => {
+                const btn = document.createElement('button');
+                btn.className = 'chapter-row-btn';
+                btn.innerHTML = `<span>${ch.text}</span><span class="chapter-time-badge">${ch.time}</span>`;
+                btn.addEventListener('click', () => {
+                    const player = document.querySelector('#popupVideoContainer video');
+                    if (player) {
+                        const secs = parseTimeToSeconds(ch.time);
+                        player.currentTime = secs;
+                        player.play();
+                    }
+                });
+                chaptersContainer.appendChild(btn);
+            });
+        }
+
+        // عرض الصور
         if (item.images && item.images.length > 0) {
             imagesSection.style.display = 'block';
             item.images.forEach(img => {
                 const card = document.createElement('div');
                 card.className = 'gallery-card';
-                card.innerHTML = `<img src="${img.url || img}" class="gallery-thumb">`;
-                card.onclick = () => window.UnifiedPlayer.init(videoContainer, img.url || img);
+                card.innerHTML = `
+                    <img src="${img.url}" class="gallery-thumb" alt="${img.title}">
+                    <span class="gallery-card-title">${img.title}</span>
+                `;
+                card.addEventListener('click', () => {
+                    videoContainer.style.display = 'block';
+                    videoContainer.innerHTML = `<img src="${img.url}" style="width:100%; height:100%; object-fit:contain;">`;
+                });
                 imagesContainer.appendChild(card);
             });
         }
 
-        document.getElementById('myModal').style.display = "block";
-    };
+        // عرض PDF
+        if (item.pdfs && item.pdfs.length > 0) {
+            pdfsSection.style.display = 'block';
+            item.pdfs.forEach(pdf => {
+                const btn = document.createElement('button');
+                btn.className = 'pdf-list-item';
+                btn.innerHTML = `<span>📄 ${pdf.title}</span>`;
+                btn.addEventListener('click', () => {
+                    window.open(pdf.url, '_blank');
+                });
+                pdfsContainer.appendChild(btn);
+            });
+        }
 
-    window.playSpecificVideo = function(item, index) {
-        const vid = item.videos[index];
+        // عرض الروابط
+        if (item.links && item.links.length > 0) {
+            item.links.forEach(link => {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.target = '_blank';
+                a.className = 'dynamic-link-btn';
+                a.innerText = link.text || 'رابط';
+                a.style.cssText = 'display:inline-block; padding:8px 16px; background:#2b2d30; color:#dfe1e5; border-radius:8px; margin:4px; text-decoration:none;';
+                linksContainer.appendChild(a);
+            });
+        }
+
+        document.getElementById('myModal').style.display = 'block';
+        updateModalNavButtons();
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+        const video = document.querySelector('#popupVideoContainer video');
+        if (video) video.pause();
+        modalHistory = [];
+        modalHistoryIndex = -1;
+    }
+
+    function playSpecificVideo(item, videoIndex, seekSeconds = 0) {
         const container = document.getElementById('popupVideoContainer');
-        window.UnifiedPlayer.init(container, vid.url || vid.videoDirectUrl);
+        const vid = item.videos[videoIndex];
+        if (!vid) return;
 
-        // عرض الفصول لهذا الفيديو
-        const chaptersContainer = document.getElementById('chaptersContainer');
+        container.style.display = 'block';
+        if (vid.videoDirectUrl || vid.url) {
+            const url = vid.videoDirectUrl || vid.url;
+            if (url.includes('youtube')) {
+                container.innerHTML = `<iframe src="${url.replace('watch?v=', 'embed/')}" style="width:100%; height:100%; border:none;" allowfullscreen></iframe>`;
+            } else {
+                container.innerHTML = `<video src="${url}" controls autoplay style="width:100%; height:100%;"></video>`;
+                if (seekSeconds > 0) {
+                    setTimeout(() => {
+                        const player = container.querySelector('video');
+                        if (player) player.currentTime = seekSeconds;
+                    }, 500);
+                }
+            }
+        }
+        // تحديث الفصول الخاصة بالفيديو
         const chaptersSection = document.getElementById('chaptersSection');
-        chaptersContainer.innerHTML = '';
+        const chaptersContainer = document.getElementById('chaptersContainer');
         if (vid.chapters && vid.chapters.length > 0) {
             chaptersSection.style.display = 'block';
+            chaptersContainer.innerHTML = '';
             vid.chapters.forEach(ch => {
                 const btn = document.createElement('button');
                 btn.className = 'chapter-row-btn';
                 btn.innerHTML = `<span>${ch.text}</span><span class="chapter-time-badge">${ch.time}</span>`;
-                btn.onclick = () => window.UnifiedPlayer.seekTo(window.parseTimeToSeconds(ch.time));
+                btn.addEventListener('click', () => {
+                    const player = container.querySelector('video');
+                    if (player) {
+                        const secs = parseTimeToSeconds(ch.time);
+                        player.currentTime = secs;
+                        player.play();
+                    }
+                });
                 chaptersContainer.appendChild(btn);
             });
+        } else {
+            chaptersSection.style.display = 'none';
         }
-    };
+        // تحديث playlist highlight
+        document.querySelectorAll('#playlistContainer .chapter-row-btn').forEach((b, idx) => {
+            b.classList.toggle('active', idx === videoIndex);
+        });
+    }
 
-    window.closeModal = function() {
-        document.getElementById('myModal').style.display = "none";
-        window.UnifiedPlayer.cleanup();
-    };
-
-    window.parseTimeToSeconds = function(time) {
-        const parts = time.split(':').map(Number);
+    function parseTimeToSeconds(timeStr) {
+        if (!timeStr) return 0;
+        const parts = timeStr.split(':').map(Number);
+        if (parts.length === 2) return parts[0] * 60 + parts[1];
         if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
-        return parts[0] * 60 + parts[1];
-    };
+        return parseFloat(timeStr) || 0;
+    }
 
-    // ================================================================
-    //  3.  منطق البحث والذكاء الاصطناعي (Search & AI Chat)
-    // ================================================================
-    window.toggleAiChat = async function() {
-        const chatBox = document.getElementById('aiChatBox');
-        const toggleBtn = document.getElementById('aiToggleBtn');
-        const isOpening = chatBox.style.display !== 'flex';
-        chatBox.style.display = isOpening ? 'flex' : 'none';
-        if (toggleBtn) toggleBtn.style.display = isOpening ? 'none' : 'flex';
-        if (isOpening && window.initKeys) await window.initKeys();
-    };
+    function modalGoBack() {
+        if (modalHistoryIndex > 0) {
+            modalHistoryIndex--;
+            openDetails(modalHistory[modalHistoryIndex], true);
+        }
+    }
 
+    function modalGoForward() {
+        if (modalHistoryIndex < modalHistory.length - 1) {
+            modalHistoryIndex++;
+            openDetails(modalHistory[modalHistoryIndex], true);
+        }
+    }
+
+    function updateModalNavButtons() {
+        const back = document.getElementById('modalBackBtn');
+        const forward = document.getElementById('modalForwardBtn');
+        if (back) back.disabled = (modalHistoryIndex <= 0);
+        if (forward) forward.disabled = (modalHistoryIndex >= modalHistory.length - 1);
+    }
+
+    // ============================================================
+    //  6.  دوال المحادثة (AI Chat Interface) - المُصلحة
+    // ============================================================
+
+    // دالة عامة لتوسيع مربع النص تلقائياً
+    function autoResizeInput() {
+        const input = document.getElementById('aiInput');
+        if (input) {
+            input.style.height = 'auto';
+            input.style.height = (input.scrollHeight) + 'px';
+        }
+    }
+
+    // دالة عامة لإظهار/إخفاء واجهة المحادثة
+    function toggleAiChat() {
+        const box = document.getElementById('aiChatBox');
+        const btn = document.getElementById('aiToggleBtn');
+        if (box.style.display === 'flex') {
+            box.style.display = 'none';
+            btn.style.display = 'flex';
+        } else {
+            box.style.display = 'flex';
+            btn.style.display = 'none';
+            document.getElementById('aiInput').focus();
+        }
+    }
+
+    // دالة عامة لإرسال الرسالة (يتم استدعاؤها من الزر ومن حدث Enter)
     window.sendAiMessage = async function() {
         const input = document.getElementById('aiInput');
         const btn = document.getElementById('aiSendBtn');
-        const statusBadge = document.getElementById('healthStatusText');
-        const text = input.value.trim();
-        if (!text) return;
+        const msg = input.value.trim();
+        if (!msg) return;
 
-        window.addMessageToUi('user', text);
-        input.value = ''; btn.classList.add('working');
-        if (statusBadge) statusBadge.innerText = "AUTONOMOUS AGENT ACTIVE";
-        window.startAiTimer();
-
-        // 🛠️ [DeepSeek Fix] - Local Routing Check
-        if (window.processLocalCommand) {
-            const local = window.processLocalCommand(text);
-            if (local) {
-                const resultText = typeof local.result === 'object' ? JSON.stringify(local.result, null, 2) : local.result;
-                const totalSaved = window.tokensSaved || 0;
-                window.addMessageToUi('ai', `🛠️ تم التنفيذ محلياً باستخدام [${local.tool}]:\n\n${resultText}\n\n💰 إجمالي التوفير حتى الآن: ${totalSaved} توكن.`, 'Local Engine (0 Tokens)');
-                btn.classList.remove('working');
-                if (statusBadge) statusBadge.innerText = "SYSTEM READY";
-                window.stopAiTimer();
-                return; // Stop here, no API call
-            }
-        }
+        // عرض رسالة المستخدم
+        addMessageToUI('user', msg);
+        input.value = '';
+        autoResizeInput();
+        btn.disabled = true;
+        btn.innerText = '⏳';
 
         try {
-            const res = await window.callAiBrain(text);
-            window.addMessageToUi('ai', res.text, res.model);
-        } catch (e) {
-            console.error("Critical AI Error:", e);
-            window.addMessageToUi('ai', `⚠️ تعذر الاتصال: ${e.message || "خطأ في الجسر"}`);
+            // محاولة المعالجة عبر المحرك المحلي أولاً (من ai_engine_core.js)
+            const result = await window.callAiBrain(msg, window.geminiApiKey, document.getElementById('modelSelector').value);
+            addMessageToUI('ai', result.text || 'تمت المعالجة.', result.model || 'AI');
+        } catch (error) {
+            addMessageToUI('ai', '⚠️ حدث خطأ أثناء المعالجة: ' + error.message);
         } finally {
-            btn.classList.remove('working');
-            if (statusBadge) statusBadge.innerText = "SYSTEM READY";
-            window.stopAiTimer();
+            btn.disabled = false;
+            btn.innerText = '🚀';
         }
     };
 
-    // ================================================================
-    //  4.  إعدادات المحرك والوقت (AI Settings & Timer)
-    // ================================================================
-    let aiTimerInterval = null;
-    let aiTimerSeconds = 0;
-
-    window.startAiTimer = function() {
-        const timerBadge = document.getElementById('aiDynamicTimer');
-        if (!timerBadge) return;
-        timerBadge.style.display = 'inline-block';
-        aiTimerSeconds = 0;
-        if (aiTimerInterval) clearInterval(aiTimerInterval);
-        aiTimerInterval = setInterval(() => {
-            aiTimerSeconds++;
-            const mins = Math.floor(aiTimerSeconds / 60);
-            const secs = aiTimerSeconds % 60;
-            timerBadge.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }, 1000);
-    };
-
-    window.stopAiTimer = function() {
-        if (aiTimerInterval) clearInterval(aiTimerInterval);
-    };
-
-    window.resetGeminiKey = async function() {
-        const choice = prompt("⚙️ إعدادات المحرك السيادي:\n1. تعديل مفتاح API\n2. تعديل رابط الجسر (Proxy URL)\n3. تعديل مفتاح GitHub\n\nأدخل رقم الخيار (1-3):");
-
-        if (choice === "1") {
-            const key = prompt("أدخل مفتاح API الجديد:");
-            if (key) {
-                window.geminiApiKey = key.trim();
-                if (window.saveApiKeyToSupabase) await window.saveApiKeyToSupabase('gemini_key', key);
-                alert("✅ تم تحديث المفتاح.");
-            }
-        } else if (choice === "2") {
-            const url = prompt("🔗 أدخل رابط الجسر السيادي (Cloudflare URL):", window.mastermindProxyUrl);
-            if (url) {
-                const cleanUrl = url.trim();
-                window.mastermindProxyUrl = cleanUrl;
-                localStorage.setItem('vsa_proxy_url', cleanUrl); // 🛡️ حفظ دائم
-                if (window.saveApiKeyToSupabase) await window.saveApiKeyToSupabase('proxy_url', cleanUrl);
-                alert("✅ تم ربط الجسر وحفظه في الذاكرة الدائمة.");
-                location.reload();
-            }
-        } else if (choice === "3") {
-            const token = prompt("أدخل GitHub Token:");
-            if (token) {
-                window.githubToken = token.trim();
-                if (window.saveApiKeyToSupabase) await window.saveApiKeyToSupabase('github_token', token);
-                alert("✅ تم تحديث توكن GitHub.");
-            }
-        }
-    };
-
-    window.addMessageToUi = function(sender, text, model = null) {
+    // دالة عامة لإضافة رسالة إلى واجهة المحادثة
+    function addMessageToUI(sender, text, modelName = null) {
         const container = document.getElementById('aiMessages');
-        if (!container) return;
         const div = document.createElement('div');
-
-        // 🚀 إصلاح حرج: ضمان المحاذاة الصحيحة (User=Right, AI=Left)
-        div.className = `msg ${sender === 'user' ? 'user' : 'ai'}`;
+        div.className = `msg ${sender}`;
 
         const content = document.createElement('div');
         content.className = 'msg-content';
-
-        // 🛡️ معالجة أمنية: تنظيف المخرجات ومنع تنفيذ السكريبتات
-        if (typeof marked !== 'undefined' && sender !== 'user') {
-            const cleanHtml = marked.parse(text);
-            content.innerHTML = cleanHtml;
-            // إزالة أي وسوم سكريبت قد تكون تسللت
-            const scripts = content.getElementsByTagName('script');
-            for (let i = scripts.length - 1; i >= 0; i--) {
-                scripts[i].parentNode.removeChild(scripts[i]);
-            }
+        if (sender === 'ai' && typeof marked !== 'undefined') {
+            content.innerHTML = marked.parse(text);
         } else {
             content.innerText = text;
         }
-
         div.appendChild(content);
-        if (model) { const b = document.createElement('div'); b.className = 'model-badge'; b.innerText = model; div.appendChild(b); }
-        container.appendChild(div); container.scrollTop = container.scrollHeight;
-    };
 
-    window.checkForEvolution = function() {
-        const evolutionPrompt = `
-        [EVOLUTION MODE ACTIVE]
-        المهمة: فحص ذاتي شامل للترقية.
-        الخطوات المطلوبة:
-        1. تحليل الفجوات البرمجية في index.html و app_logic.js.
-        2. تحديد الميزات المفقودة لتعزيز القدرات السيادية.
-        3. تقديم اقتراح تقني محدد لترقية الكود.
-        ابدأ بالبحث الآن.`;
+        if (sender === 'ai' && modelName) {
+            const badge = document.createElement('div');
+            badge.className = 'model-badge';
+            badge.innerText = modelName;
+            div.appendChild(badge);
+        }
+
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    // ============================================================
+    //  7.  الإعدادات والتهيئة
+    // ============================================================
+
+    function initSettings() {
+        document.getElementById('aiSettingsBtn').addEventListener('click', async function() {
+            const key = prompt('الرجاء إدخال مفتاح Gemini API:');
+            if (key) {
+                window.geminiApiKey = key.trim();
+                localStorage.setItem('gemini_api_key', key.trim());
+                alert('✅ تم حفظ المفتاح بنجاح!');
+            }
+        });
+
+        // استعادة المفتاح من localStorage
+        const savedKey = localStorage.getItem('gemini_api_key');
+        if (savedKey) window.geminiApiKey = savedKey;
+    }
+
+    // ============================================================
+    //  8.  بدء التشغيل
+    // ============================================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadWebsiteData();
+        setupSearch();
+        initSettings();
+
+        // ربط دالة autoResizeInput مع حدث الإدخال
         const input = document.getElementById('aiInput');
         if (input) {
-            input.value = evolutionPrompt;
-            window.sendAiMessage();
+            input.addEventListener('input', autoResizeInput);
         }
-    };
 
-    // نظام الإنقاذ (Emergency UI Toggle)
-    window.addEventListener('keydown', function(e) {
-        if (e.ctrlKey && e.shiftKey && e.code === 'KeyE') {
-            const overlay = document.getElementById('emergencyOverlay');
-            if (overlay) overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
-        }
+        // إعادة تحميل المودال
+        window.modalGoBack = modalGoBack;
+        window.modalGoForward = modalGoForward;
+        window.closeModal = closeModal;
+        window.openDetails = openDetails;
+        window.toggleAiChat = toggleAiChat;
+        // window.sendAiMessage معرفة بالفعل كدالة عامة
+        window.playSpecificVideo = playSpecificVideo;
+        window.parseTimeToSeconds = parseTimeToSeconds;
+
+        window.addEventListener('hashchange', handleRoute);
+        window.addEventListener('load', handleRoute);
     });
 
-    // 🚀 دعم زر Enter وربط زر الإعدادات
-    window.addEventListener('load', () => {
-        window.loadWebsiteData();
-
-        const aiInput = document.getElementById('aiInput');
-        if (aiInput) {
-            aiInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    window.sendAiMessage();
-                }
-            });
-        }
-
-        const settingsBtn = document.getElementById('aiSettingsBtn');
-        if (settingsBtn) {
-            settingsBtn.onclick = window.resetGeminiKey;
-        }
-    });
-
-    window.addEventListener('hashchange', window.handleRoute);
-
-    console.log("🚀 VSA Academy App Logic V3.0 (Comprehensive) Loaded.");
-})(window);
+})();
