@@ -3,7 +3,7 @@
  * This module provides tools to enforce clean code, design patterns, and syntactic standards.
  */
 
-const AppliedEngineeringTools = {
+window.AppliedEngineeringTools = {
     /**
      * Simulates linting and fixing code based on strict standards (e.g., Airbnb, StandardJS).
      * @param {string} code - The source code to be processed.
@@ -48,4 +48,5 @@ const AppliedEngineeringTools = {
     }
 };
 
-module.exports = AppliedEngineeringTools;
+// Browser context - window scope
+window.AppliedEngineeringTools = AppliedEngineeringTools;

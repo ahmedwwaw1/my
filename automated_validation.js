@@ -3,9 +3,7 @@
  * Ensures integrity and safety before any code is deployed or finalized.
  */
 
-const AppliedEngineeringTools = require('./applied_engineering_tools');
-
-const AutomatedValidation = {
+window.AutomatedValidation = {
     /**
      * Runs safety tests (Static analysis, Balance checks).
      * @param {string} code - The code to validate.
@@ -41,10 +39,10 @@ const AutomatedValidation = {
      * @returns {boolean}
      */
     enforceQualityGate: function(code) {
-        const cleanedCode = AppliedEngineeringTools.lintAndFix(code);
+        // Use window.AppliedEngineeringTools if available
+        const tools = window.AppliedEngineeringTools;
+        const cleanedCode = tools ? tools.lintAndFix(code) : code;
         const safetyResult = this.runSafetyTests(cleanedCode);
         return safetyResult.success;
     }
 };
-
-module.exports = AutomatedValidation;

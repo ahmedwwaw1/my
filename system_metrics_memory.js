@@ -3,12 +3,7 @@
  * Manages operational history and tracks resource usage.
  */
 
-const fs = require('fs');
-const path = require('path');
-
-const MEMORY_FILE = path.join(__dirname, 'system_memory.json');
-
-const SystemMetricsMemory = {
+window.SystemMetricsMemory = {
     /**
      * Logs operation metrics (tokens, time, cost).
      * @param {string} operationName - Name of the task executed.
@@ -21,7 +16,10 @@ const SystemMetricsMemory = {
             ...metrics
         };
         console.log(`⚖️ [Engine 8] Metric Log: ${operationName} | Tokens: ${metrics.tokens} | Time: ${metrics.timeMs}ms`);
-        // Append to a local log file if needed
+        // In browser, use localStorage or console for now
+        let logs = JSON.parse(localStorage.getItem('system_logs') || '[]');
+        logs.push(logEntry);
+        localStorage.setItem('system_logs', JSON.stringify(logs.slice(-100)));
     },
 
     /**
@@ -31,15 +29,12 @@ const SystemMetricsMemory = {
      */
     storeMemory: function(problemKey, solution) {
         console.log(`🧠 [Engine 7] Archiving successful solution for: ${problemKey}`);
-        let memory = {};
-        if (fs.existsSync(MEMORY_FILE)) {
-            memory = JSON.parse(fs.readFileSync(MEMORY_FILE, 'utf8'));
-        }
+        let memory = JSON.parse(localStorage.getItem('ai_memory') || '{}');
         memory[problemKey] = {
             solution: solution,
             savedAt: new Date().toISOString()
         };
-        fs.writeFileSync(MEMORY_FILE, JSON.stringify(memory, null, 2));
+        localStorage.setItem('ai_memory', JSON.stringify(memory));
     },
 
     /**
@@ -48,10 +43,7 @@ const SystemMetricsMemory = {
      * @returns {string|null} - The archived solution or null.
      */
     retrieveBestPractice: function(problemKey) {
-        if (!fs.existsSync(MEMORY_FILE)) return null;
-        const memory = JSON.parse(fs.readFileSync(MEMORY_FILE, 'utf8'));
+        let memory = JSON.parse(localStorage.getItem('ai_memory') || '{}');
         return memory[problemKey] ? memory[problemKey].solution : null;
     }
 };
-
-module.exports = SystemMetricsMemory;

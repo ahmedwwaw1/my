@@ -267,6 +267,20 @@
         if (statusBadge) statusBadge.innerText = "AUTONOMOUS AGENT ACTIVE";
         window.startAiTimer();
 
+        // 🛠️ [DeepSeek Fix] - Local Routing Check
+        if (window.processLocalCommand) {
+            const local = window.processLocalCommand(text);
+            if (local) {
+                const resultText = typeof local.result === 'object' ? JSON.stringify(local.result, null, 2) : local.result;
+                const totalSaved = window.tokensSaved || 0;
+                window.addMessageToUi('ai', `🛠️ تم التنفيذ محلياً باستخدام [${local.tool}]:\n\n${resultText}\n\n💰 إجمالي التوفير حتى الآن: ${totalSaved} توكن.`, 'Local Engine (0 Tokens)');
+                btn.classList.remove('working');
+                if (statusBadge) statusBadge.innerText = "SYSTEM READY";
+                window.stopAiTimer();
+                return; // Stop here, no API call
+            }
+        }
+
         try {
             const res = await window.callAiBrain(text);
             window.addMessageToUi('ai', res.text, res.model);
