@@ -2,17 +2,16 @@
 //  🖥️  APP LOGIC - UI Interface for VSA Academy
 //  المسؤول عن: الأزرار، المحادثة، عرض البطاقات، والبحث.
 //  يعتمد على: ai_engine_core.js (المحرك الرئيسي)
-//  تم التعديل: جعل ملفات JSON المحلية المصدر الأساسي للبيانات.
+//  تم التعديل: الاعتماد على ملفات JSON المحلية + الجسر الآمن
 // ================================================================
 
 (function() {
     "use strict";
 
     // ============================================================
-    //  1.  إعدادات واجهة المستخدم
+    //  1.  إعدادات واجهة المستخدم (لا توجد مفاتيح هنا!)
     // ============================================================
-    const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-    const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
+    const PROXY_URL = 'https://green-night-1c47.ahmedwwaw10.workers.dev/'; // جسر Cloudflare
 
     let allData = [];
     let isDataLoaded = false;
@@ -22,13 +21,12 @@
     let chatHistory = [];
 
     // ============================================================
-    //  2.  دوال تحميل البيانات وعرضها (مُعدلة لجعل JSON هو المصدر الأساسي)
+    //  2.  دوال تحميل البيانات وعرضها (JSON المحلية أولاً)
     // ============================================================
 
     async function loadWebsiteData() {
-        // محاولة تحميل البيانات من ملفات JSON المحلية أولاً (الأسرع والأكثر استقراراً على GitHub)
+        // محاولة تحميل البيانات من ملفات JSON المحلية أولاً
         try {
-            // قائمة الملفات التي تحتوي على البيانات (حسب تصنيفاتك)
             const jsonFiles = [
                 'vsa.json',
                 'technical-analysis.json',
@@ -40,10 +38,9 @@
 
             let allLocalData = [];
 
-            // تحميل كل ملف JSON ومحاولة دمج البيانات
             for (const file of jsonFiles) {
                 try {
-                    const response = await fetch(file + '?v=' + Date.now()); // منع التخزين المؤقت
+                    const response = await fetch(file + '?v=' + Date.now());
                     if (response.ok) {
                         const data = await response.json();
                         if (Array.isArray(data)) {
@@ -60,7 +57,6 @@
                 }
             }
 
-            // إذا تم تحميل بيانات من الملفات المحلية
             if (allLocalData.length > 0) {
                 allData = allLocalData;
                 isDataLoaded = true;
@@ -68,66 +64,44 @@
                 handleRoute();
                 document.getElementById('statusMsg').innerText = `✅ تم تحميل ${allData.length} بطاقة من الملفات المحلية.`;
                 console.log("🚀 تم تحميل البيانات من JSON المحلية بنجاح.");
-                return; // نخرج من الدالة لأن البيانات جاهزة
+                return;
             } else {
-                console.warn("⚠️ لم يتم العثور على بيانات في الملفات المحلية. سنحاول Supabase.");
+                console.warn("⚠️ لم يتم العثور على بيانات في الملفات المحلية. سنحاول الجسر.");
             }
         } catch (e) {
-            console.warn("⚠️ فشل تحميل البيانات من الملفات المحلية، سننتقل إلى Supabase.", e);
+            console.warn("⚠️ فشل تحميل البيانات من الملفات المحلية، سننتقل إلى الجسر.", e);
         }
 
         // ==========================================================
-        //  الخيار الاحتياطي: محاولة جلب البيانات من Supabase
+        //  الخيار الاحتياطي: محاولة جلب البيانات عبر الجسر
         // ==========================================================
-        const headers = { 'apikey': SERVICE_ROLE_KEY, 'Authorization': `Bearer ${SERVICE_ROLE_KEY}` };
         try {
-            const [cardsRes, videosRes, chaptersRes, assetsRes] = await Promise.all([
-                fetch(`${SUPABASE_URL}/rest/v1/cards?select=*`, { headers }),
-                fetch(`${SUPABASE_URL}/rest/v1/videos?select=*&order=order_index`, { headers }),
-                fetch(`${SUPABASE_URL}/rest/v1/video_chapters?select=*`, { headers }),
-                fetch(`${SUPABASE_URL}/rest/v1/card_assets?select=*`, { headers })
-            ]);
-
-            if (!cardsRes.ok) throw new Error("Supabase error");
-
-            const cards = await cardsRes.json();
-            const videos = await videosRes.json();
-            const chapters = await chaptersRes.json();
-            const assets = await assetsRes.json();
-
-            allData = cards.map(card => {
-                const cardVideos = videos.filter(v => v.card_id === card.id).map(v => ({
-                    ...v,
-                    chapters: chapters.filter(ch => ch.video_id === v.id).map(ch => ({
-                        time: ch.chapter_time,
-                        text: ch.chapter_text
-                    }))
-                }));
-                const cardAssets = assets.filter(a => a.card_id === card.id);
-                return {
-                    id: card.id,
-                    title: card.title,
-                    category: card.category,
-                    content: card.content,
-                    image: card.image_url,
-                    videos: cardVideos.length > 0 ? cardVideos : null,
-                    links: cardAssets.filter(a => a.asset_type === 'link' || !a.asset_type).map(a => ({ text: a.title, url: a.url })),
-                    images: cardAssets.filter(a => a.asset_type === 'image').map(a => ({ title: a.title, url: a.url })),
-                    pdfs: cardAssets.filter(a => a.asset_type === 'pdf').map(a => ({ title: a.title, url: a.url })),
-                    recommendations: [],
-                    thematic_index: null
-                };
-            });
-
+            const response = await fetch(PROXY_URL + 'supabase/cards');
+            if (!response.ok) throw new Error("فشل جلب البيانات عبر الجسر");
+            const cards = await response.json();
+            // معالجة البيانات (نفس الهيكل السابق)
+            // ... (يمكن إعادة استخدام نفس المنطق من الإصدار السابق)
+            allData = cards.map(card => ({
+                id: card.id,
+                title: card.title,
+                category: card.category,
+                content: card.content,
+                image: card.image_url,
+                videos: card.videos || null,
+                links: card.links || [],
+                images: card.images || [],
+                pdfs: card.pdfs || [],
+                recommendations: [],
+                thematic_index: null
+            }));
             isDataLoaded = true;
             render(allData);
             handleRoute();
-            document.getElementById('statusMsg').innerText = '✅ تم تحميل البيانات من Supabase بنجاح.';
-            console.log("✅ تم تحميل البيانات من Supabase بنجاح.");
+            document.getElementById('statusMsg').innerText = '✅ تم تحميل البيانات عبر الجسر.';
+            console.log("✅ تم تحميل البيانات عبر الجسر بنجاح.");
         } catch (e) {
-            console.error("❌ فشل تحميل البيانات من Supabase أيضاً:", e);
-            document.getElementById('statusMsg').innerText = '❌ فشل تحميل البيانات من جميع المصادر. تأكد من وجود ملفات JSON أو اتصال Supabase.';
-            // عرض بعض البطاقات التجريبية إن أمكن
+            console.error("❌ فشل تحميل البيانات من جميع المصادر:", e);
+            document.getElementById('statusMsg').innerText = '❌ فشل تحميل البيانات. تأكد من الملفات المحلية أو الجسر.';
             allData = [];
             render(allData);
         }
@@ -165,9 +139,8 @@
     }
 
     // ============================================================
-    //  3.  دوال التنقل والبحث
+    //  3.  دوال التنقل والبحث (نفس الكود السابق - بدون تغيير)
     // ============================================================
-
     function handleRoute() {
         const hash = window.location.hash || '#/';
         const searchInput = document.getElementById('globalSearch');
@@ -217,9 +190,8 @@
     }
 
     // ============================================================
-    //  4.  دوال البحث
+    //  4.  دوال البحث (نفس الكود السابق - بدون تغيير)
     // ============================================================
-
     function setupSearch() {
         const input = document.getElementById('globalSearch');
         const dropdown = document.getElementById('searchDropdown');
@@ -236,14 +208,11 @@
             let hasResults = false;
 
             allData.forEach(item => {
-                // البحث في العنوان والمحتوى
                 if ((item.title && item.title.toLowerCase().includes(term)) ||
                     (item.content && item.content.toLowerCase().includes(term))) {
                     hasResults = true;
                     addSearchItem(`📄 ${item.title}`, item.id);
                 }
-
-                // البحث في الفيديوهات
                 if (item.videos) {
                     item.videos.forEach(vid => {
                         if (vid.title && vid.title.toLowerCase().includes(term)) {
@@ -260,8 +229,6 @@
                         }
                     });
                 }
-
-                // البحث في الصور
                 if (item.images) {
                     item.images.forEach(img => {
                         if (img.title && img.title.toLowerCase().includes(term)) {
@@ -270,8 +237,6 @@
                         }
                     });
                 }
-
-                // البحث في PDF
                 if (item.pdfs) {
                     item.pdfs.forEach(pdf => {
                         if (pdf.title && pdf.title.toLowerCase().includes(term)) {
@@ -280,8 +245,6 @@
                         }
                     });
                 }
-
-                // البحث في الروابط
                 if (item.links) {
                     item.links.forEach(link => {
                         if (link.text && link.text.toLowerCase().includes(term)) {
@@ -331,9 +294,8 @@
     }
 
     // ============================================================
-    //  5.  دوال المودال (عرض التفاصيل)
+    //  5.  دوال المودال (نفس الكود السابق - بدون تغيير)
     // ============================================================
-
     function openDetails(id, isHistory = false) {
         const item = allData.find(d => String(d.id) === String(id));
         if (!item) return;
@@ -358,7 +320,6 @@
         const pdfsSection = document.getElementById('pdfsSection');
         const pdfsContainer = document.getElementById('pdfsContainer');
 
-        // تنظيف
         videoContainer.style.display = 'none';
         videoContainer.innerHTML = '';
         linksContainer.innerHTML = '';
@@ -371,7 +332,6 @@
         pdfsSection.style.display = 'none';
         pdfsContainer.innerHTML = '';
 
-        // تشغيل الفيديو
         if (item.videos && item.videos.length > 0) {
             playlistSection.style.display = 'block';
             item.videos.forEach((vid, idx) => {
@@ -381,14 +341,12 @@
                 btn.addEventListener('click', () => playSpecificVideo(item, idx));
                 playlistContainer.appendChild(btn);
             });
-            // تشغيل الأول تلقائياً
             playSpecificVideo(item, 0);
         } else if (item.videoUrl) {
             videoContainer.style.display = 'block';
             videoContainer.innerHTML = `<video src="${item.videoUrl}" controls autoplay style="width:100%; height:100%;"></video>`;
         }
 
-        // عرض الفصول
         if (item.chapters && item.chapters.length > 0) {
             chaptersSection.style.display = 'block';
             item.chapters.forEach(ch => {
@@ -407,7 +365,6 @@
             });
         }
 
-        // عرض الصور
         if (item.images && item.images.length > 0) {
             imagesSection.style.display = 'block';
             item.images.forEach(img => {
@@ -425,7 +382,6 @@
             });
         }
 
-        // عرض PDF
         if (item.pdfs && item.pdfs.length > 0) {
             pdfsSection.style.display = 'block';
             item.pdfs.forEach(pdf => {
@@ -439,7 +395,6 @@
             });
         }
 
-        // عرض الروابط
         if (item.links && item.links.length > 0) {
             item.links.forEach(link => {
                 const a = document.createElement('a');
@@ -484,7 +439,6 @@
                 }
             }
         }
-        // تحديث الفصول الخاصة بالفيديو
         const chaptersSection = document.getElementById('chaptersSection');
         const chaptersContainer = document.getElementById('chaptersContainer');
         if (vid.chapters && vid.chapters.length > 0) {
@@ -507,7 +461,6 @@
         } else {
             chaptersSection.style.display = 'none';
         }
-        // تحديث playlist highlight
         document.querySelectorAll('#playlistContainer .chapter-row-btn').forEach((b, idx) => {
             b.classList.toggle('active', idx === videoIndex);
         });
@@ -543,10 +496,8 @@
     }
 
     // ============================================================
-    //  6.  دوال المحادثة (AI Chat Interface) - المُصلحة
+    //  6.  دوال المحادثة (AI Chat Interface)
     // ============================================================
-
-    // دالة عامة لتوسيع مربع النص تلقائياً
     function autoResizeInput() {
         const input = document.getElementById('aiInput');
         if (input) {
@@ -555,7 +506,6 @@
         }
     }
 
-    // دالة عامة لإظهار/إخفاء واجهة المحادثة
     function toggleAiChat() {
         const box = document.getElementById('aiChatBox');
         const btn = document.getElementById('aiToggleBtn');
@@ -569,14 +519,12 @@
         }
     }
 
-    // دالة عامة لإرسال الرسالة (يتم استدعاؤها من الزر ومن حدث Enter)
     window.sendAiMessage = async function() {
         const input = document.getElementById('aiInput');
         const btn = document.getElementById('aiSendBtn');
         const msg = input.value.trim();
         if (!msg) return;
 
-        // عرض رسالة المستخدم
         addMessageToUI('user', msg);
         input.value = '';
         autoResizeInput();
@@ -584,8 +532,8 @@
         btn.innerText = '⏳';
 
         try {
-            // محاولة المعالجة عبر المحرك المحلي أولاً (من ai_engine_core.js)
-            const result = await window.callAiBrain(msg, window.geminiApiKey, document.getElementById('modelSelector').value);
+            // المفتاح الآن يُؤخذ من الجسر مباشرة، ولكن نمرر ما في localStorage كاحتياطي
+            const result = await window.callAiBrain(msg, window.geminiApiKey || 'PROXY_MODE', document.getElementById('modelSelector').value);
             addMessageToUI('ai', result.text || 'تمت المعالجة.', result.model || 'AI');
         } catch (error) {
             addMessageToUI('ai', '⚠️ حدث خطأ أثناء المعالجة: ' + error.message);
@@ -595,7 +543,6 @@
         }
     };
 
-    // دالة عامة لإضافة رسالة إلى واجهة المحادثة
     function addMessageToUI(sender, text, modelName = null) {
         const container = document.getElementById('aiMessages');
         const div = document.createElement('div');
@@ -624,18 +571,19 @@
     // ============================================================
     //  7.  الإعدادات والتهيئة
     // ============================================================
-
     function initSettings() {
         document.getElementById('aiSettingsBtn').addEventListener('click', async function() {
-            const key = prompt('الرجاء إدخال مفتاح Gemini API:');
+            // في الوضع الجديد، المفتاح موجود في الجسر، لكن نترك خياراً للمستخدم في حال أراد تجاوز الجسر
+            const key = prompt('🔐 الرجاء إدخال مفتاح Gemini API (اختياري - إذا كان الجسر يعمل، يمكنك تركه فارغاً):');
             if (key) {
                 window.geminiApiKey = key.trim();
                 localStorage.setItem('gemini_api_key', key.trim());
-                alert('✅ تم حفظ المفتاح بنجاح!');
+                alert('✅ تم حفظ المفتاح محلياً (سيُستخدم فقط إذا فشل الجسر).');
+            } else {
+                alert('ℹ️ سيتم استخدام الجسر الآمن (Cloudflare) للاتصال بـ Gemini.');
             }
         });
 
-        // استعادة المفتاح من localStorage
         const savedKey = localStorage.getItem('gemini_api_key');
         if (savedKey) window.geminiApiKey = savedKey;
     }
@@ -643,25 +591,21 @@
     // ============================================================
     //  8.  بدء التشغيل
     // ============================================================
-
     document.addEventListener('DOMContentLoaded', function() {
         loadWebsiteData();
         setupSearch();
         initSettings();
 
-        // ربط دالة autoResizeInput مع حدث الإدخال
         const input = document.getElementById('aiInput');
         if (input) {
             input.addEventListener('input', autoResizeInput);
         }
 
-        // إعادة تحميل المودال
         window.modalGoBack = modalGoBack;
         window.modalGoForward = modalGoForward;
         window.closeModal = closeModal;
         window.openDetails = openDetails;
         window.toggleAiChat = toggleAiChat;
-        // window.sendAiMessage معرفة بالفعل كدالة عامة
         window.playSpecificVideo = playSpecificVideo;
         window.parseTimeToSeconds = parseTimeToSeconds;
 

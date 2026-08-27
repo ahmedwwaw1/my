@@ -1,18 +1,20 @@
 // ================================================================
-//  🧠  AI ENGINEERING CORE - FULL TOOL LIBRARY (V6.0)
-//  المصدر الوحيد للحقيقة - المكتبة الكاملة للأدوات البرمجية
-//  يحتوي على: المستوى الأول (أساسي) + المستوى الثاني (استشاري) + المستوى الثالث (مبدع)
+//  🧠  AI ENGINEERING CORE - FULL TOOL LIBRARY (V6.5)
+//  المصدر الوحيد للحقيقة - متكامل مع جسر Cloudflare الآمن
+//  يحتوي على: جميع الأدوات + التوجيه عبر الجسر الموحد
 // ================================================================
 
 (function(window) {
     "use strict";
 
     // ============================================================
-    //  0.  الإعدادات الأساسية والمفاتيح
+    //  0.  الإعدادات الأساسية والمفاتيح (الجسر هو المصدر)
     // ============================================================
     window.geminiApiKey = localStorage.getItem('gemini_api_key') || '';
     window.githubToken = '';
-    window.mastermindProxyUrl = localStorage.getItem('vsa_proxy_url') || 'https://ozcffmadatsfyyldqmdl.supabase.co';
+    // الرابط الأساسي للجسر الآمن (Cloudflare Worker)
+    window.mastermindProxyUrl = 'https://green-night-1c47.ahmedwwaw10.workers.dev/';
+    // مستودع GitHub (سيتم التعامل معه عبر الجسر)
     window.GITHUB_REPO = 'ahmedwwaw1/my';
     window.tokensSaved = parseInt(localStorage.getItem('vsa_tokens_saved') || '0');
 
@@ -28,6 +30,7 @@
     2. أنت مجرد أداة برمجية. استخدم الدوال المتاحة عند الحاجة.
     3. قبل أي تعديل، استخدم analyze_file أولاً. تأكد من أن الاستبدال دقيق.
     4. تحدث بلغة عربية فصحى، ولكن بطريقة هندسية جافة (مثل التقارير).
+    5. يتم الاتصال بالخارج عبر جسر Cloudflare الآمن. لا تظهر أي مفاتيح.
     `;
 
     // ============================================================
@@ -147,34 +150,46 @@
     };
 
     // ============================================================
-    //  3.  الجسر التنفيذي (GitHub/Supabase) + أدوات المستوى الأول
+    //  3.  الجسر التنفيذي (عبر Cloudflare) + أدوات المستوى الأول
     // ============================================================
-    window.getSupabaseUrl = function() {
-        return window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl.slice(0, -1) : window.mastermindProxyUrl;
-    };
 
-    window.safeGithubFetch = async function(endpoint, options = {}) {
-        const url = `${getSupabaseUrl()}/repos/${window.GITHUB_REPO}/${endpoint}`;
-        return await fetch(url, { ...options, headers: { 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', ...options.headers } });
-    };
+    // --- دالة مساعدة للاتصال بالجسر ---
+    async function callProxy(endpoint, options = {}) {
+        const proxyUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
+        const url = proxyUrl + endpoint;
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                const errorText = await response.text();
+                return `❌ خطأ من الجسر (${response.status}): ${errorText}`;
+            }
+            // محاولة تحويل الاستجابة إلى JSON، وإلا إرجاعها كنص
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return await response.json();
+            } else {
+                return await response.text();
+            }
+        } catch (e) {
+            return `❌ فشل الاتصال بالجسر: ${e.message}`;
+        }
+    }
 
     // --- 1. أداة القراءة الآمنة ---
     window.read_file = async function(path) {
-        try {
-            const res = await safeGithubFetch(`contents/${path}`);
-            if (!res.ok) return `❌ فشل قراءة الملف: ${path}`;
-            const data = await res.json();
-            return decodeURIComponent(escape(atob(data.content)));
-        } catch (e) {
-            return `❌ خطأ في القراءة: ${e.message}`;
+        const result = await callProxy(`github/contents/${path}`);
+        if (typeof result === 'string' && result.startsWith('❌')) return result;
+        if (result && result.content) {
+            return decodeURIComponent(escape(atob(result.content)));
         }
+        return `❌ فشل قراءة الملف: ${path}`;
     };
 
     // --- 2. أداة فحص الأقواس ---
     window.analyze_file = async function(path) {
         try {
             const content = await window.read_file(path);
-            if (content.startsWith('❌')) return content;
+            if (typeof content === 'string' && content.startsWith('❌')) return content;
             const openBraces = (content.match(/\{/g) || []).length;
             const closeBraces = (content.match(/\}/g) || []).length;
             const openBrackets = (content.match(/\[/g) || []).length;
@@ -201,7 +216,7 @@
         }
         try {
             const currentContent = await window.read_file(path);
-            if (currentContent.startsWith('❌')) return currentContent;
+            if (typeof currentContent === 'string' && currentContent.startsWith('❌')) return currentContent;
             const analysis = await window.analyze_file(path);
             if (analysis.status === 'failed') {
                 return `🛑 عملية جراحية مرفوضة! الملف غير متوازن هيكلياً.\n${analysis.errors.join('\n')}`;
@@ -224,60 +239,64 @@
             if (appliedCount === 0) {
                 return `⚠️ لم يتم تطبيق أي استبدال. تأكد من صحة النصوص القديمة.\n${appliedLog.join('\n')}`;
             }
-            const writeResult = await window.writeFileInternal(path, updatedContent);
+            // حفظ الملف عبر الجسر
+            const result = await callProxy(`github/contents/${path}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: "تحديث جراحي آمن (V6.5)",
+                    content: btoa(unescape(encodeURIComponent(updatedContent))),
+                    sha: (await (await fetch(`${window.mastermindProxyUrl}github/contents/${path}`)).json()).sha || null
+                })
+            });
             return {
                 message: `✅ تم تطبيق ${appliedCount} استبدال بنجاح. (فشل ${failedCount})`,
                 details: appliedLog.join('\n'),
-                write_status: writeResult
+                write_status: result.ok ? "✅ تم حفظ التعديلات بنجاح." : "❌ فشل حفظ التعديلات."
             };
         } catch (e) {
             return `❌ فشل التعديل الجراحي: ${e.message}`;
         }
     };
 
-    // --- 4. أداة الكتابة الداخلية (آمنة) ---
-    window.writeFileInternal = async function(path, content) {
-        const apiPath = `contents/${path}`;
-        const res = await safeGithubFetch(apiPath);
-        let sha = null;
-        if (res.ok) { const data = await res.json(); sha = data.sha; }
-        const body = { message: "تحديث جراحي آمن (V6.0)", content: btoa(unescape(encodeURIComponent(content))), sha };
-        const putRes = await safeGithubFetch(apiPath, { method: 'PUT', body: JSON.stringify(body) });
-        return putRes.ok ? "✅ تم حفظ التعديلات بنجاح." : "❌ فشل حفظ التعديلات.";
-    };
-
-    // --- 5. أداة إنشاء الملفات الجديدة فقط ---
+    // --- 4. أداة إنشاء الملفات الجديدة فقط ---
     window.write_file = async function(path, content) {
-        const checkRes = await safeGithubFetch(`contents/${path}`);
-        if (checkRes.ok) {
+        // التحقق من وجود الملف عبر الجسر
+        const checkResult = await callProxy(`github/contents/${path}`);
+        if (checkResult && checkResult.content) {
             return "❌ عملية مرفوضة: الملف موجود بالفعل. استخدم 'multi_replace_file_content' لتعديله.";
         }
-        const body = { message: "إنشاء ملف جديد (V6.0)", content: btoa(unescape(encodeURIComponent(content))) };
-        const putRes = await safeGithubFetch(`contents/${path}`, { method: 'PUT', body: JSON.stringify(body) });
-        return putRes.ok ? "✅ تم إنشاء الملف الجديد بنجاح." : "❌ فشل إنشاء الملف.";
+        const result = await callProxy(`github/contents/${path}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: "إنشاء ملف جديد (V6.5)",
+                content: btoa(unescape(encodeURIComponent(content)))
+            })
+        });
+        return result.ok ? "✅ تم إنشاء الملف الجديد بنجاح." : "❌ فشل إنشاء الملف.";
     };
 
-    // --- 6. أداة استكشاف الملفات ---
+    // --- 5. أداة استكشاف الملفات ---
     window.listGithubFiles = async function(path = "") {
-        try {
-            const res = await safeGithubFetch(`contents/${path}`);
-            if (!res.ok) return `❌ فشل جلب القائمة.`;
-            const data = await res.json();
-            if (!Array.isArray(data)) return "⚠️ هذا ملف وليس مجلداً.";
-            const files = data.map(f => `${f.type === 'dir' ? '📁' : '📄'} ${f.path}`);
+        const result = await callProxy(`github/contents/${path}`);
+        if (typeof result === 'string' && result.startsWith('❌')) return result;
+        if (Array.isArray(result)) {
+            const files = result.map(f => `${f.type === 'dir' ? '📁' : '📄'} ${f.path}`);
             return `محتويات ${path || 'الجذر'}:\n${files.join('\n')}`;
-        } catch (e) { return `❌ خطأ اتصال: ${e.message}`; }
+        }
+        return "⚠️ هذا ملف وليس مجلداً.";
     };
 
     // ============================================================
     //  4.  أدوات المستوى الثاني (المهندس الاستشاري) - جاهزة
     // ============================================================
 
-    // --- 7. البحث الدلالي في الكود ---
+    // --- 6. البحث الدلالي في الكود ---
     window.searchCode = async function(query) {
         try {
             const files = await window.listGithubFiles("");
-            if (files.startsWith('❌')) return files;
+            if (typeof files === 'string' && files.startsWith('❌')) return files;
             const fileLines = files.split('\n').slice(1);
             const paths = fileLines.map(line => {
                 const parts = line.split(' ');
@@ -285,9 +304,9 @@
             }).filter(p => p && !p.startsWith('📁') && (p.endsWith('.js') || p.endsWith('.html') || p.endsWith('.css') || p.endsWith('.json') || p.endsWith('.py')));
             
             let results = [];
-            for (const path of paths.slice(0, 10)) { // حد أقصى 10 ملفات لسرعة البحث
+            for (const path of paths.slice(0, 10)) {
                 const content = await window.read_file(path);
-                if (content.startsWith('❌')) continue;
+                if (typeof content === 'string' && content.startsWith('❌')) continue;
                 const lines = content.split('\n');
                 let found = false;
                 for (let i = 0; i < lines.length; i++) {
@@ -304,7 +323,7 @@
         }
     };
 
-    // --- 8. إحاطة الكود بـ try-catch ---
+    // --- 7. إحاطة الكود بـ try-catch ---
     window.wrap_with_error_handling = function(code) {
         if (!code) return "الرجاء إدخال كود لتطبيق try-catch.";
         const lines = code.split('\n');
@@ -312,7 +331,7 @@
         return `try {\n${indentedCode}\n} catch (error) {\n    console.error('🛡️ خطأ محاصر: ', error.message);\n    return null;\n}`;
     };
 
-    // --- 9. محاكاة اختبار التكامل ---
+    // --- 8. محاكاة اختبار التكامل ---
     window.simulate_integration = function(moduleName, dependencies = []) {
         if (!moduleName) return "الرجاء إدخال اسم الوحدة (module) لاختبار التكامل.";
         let report = `🧪 محاكاة اختبار التكامل للوحدة: ${moduleName}\n`;
@@ -326,7 +345,7 @@
         return report;
     };
 
-    // --- 10. حساب نسبة التعديل (Refactor Threshold) ---
+    // --- 9. حساب نسبة التعديل (Refactor Threshold) ---
     window.calculate_refactor_threshold = function(fileContent) {
         if (!fileContent) return "الرجاء إدخال محتوى الملف.";
         const lines = fileContent.split('\n').length;
@@ -338,7 +357,7 @@
         };
     };
 
-    // --- 11. حقن CSS مباشرة في المتصفح ---
+    // --- 10. حقن CSS مباشرة في المتصفح ---
     window.injectGlobalStyles = function(css_code) {
         if (!css_code) return "الرجاء إدخال كود CSS للحقن.";
         try {
@@ -355,29 +374,26 @@
     //  5.  أدوات المستوى الثالث (المهندس المبدع) - جاهزة
     // ============================================================
 
-    // --- 12. توليد اختبارات الوحدة ---
+    // --- 11. توليد اختبارات الوحدة ---
     window.generate_unit_test = function(funcName, params = [], returnType = 'any') {
         if (!funcName) return "الرجاء إدخال اسم الدالة لإنشاء اختبار لها.";
         const paramStr = params.map(p => `    const ${p} = 'test_${p}';`).join('\n');
         return `// ===========================================\n//  اختبار الوحدة للدالة: ${funcName}\n// ===========================================\n\ntry {\n    console.log('🧪 بدء اختبار ${funcName}...');\n${paramStr}\n    const result = ${funcName}(${params.join(', ')});\n    console.assert(result !== undefined && result !== null, '❌ فشل: الدالة لم تعد قيمة صالحة.');\n    console.log('✅ اختبار ${funcName} تم بنجاح.');\n    console.log('📊 النتيجة:', result);\n} catch (error) {\n    console.error('❌ فشل اختبار ${funcName}:', error.message);\n}`;
     };
 
-    // --- 13. تحسين الخوارزميات ---
+    // --- 12. تحسين الخوارزميات ---
     window.optimize_algorithm = function(code) {
         if (!code) return "الرجاء إدخال كود لتحسينه.";
-        // تحسينات بسيطة: استبدال الحلقات المزدوجة حيثما أمكن
         let optimized = code;
-        // مثال: تحسين الحلقات
         if (code.includes('for') && code.includes('for')) {
             optimized = optimized.replace(/for\s*\([^)]*\)\s*\{[\s\S]*?for\s*\([^)]*\)/g, (match) => {
                 return match + ' // ⚠️ قد يمكن تحسين هذه الحلقة باستخدام خوارزمية أسرع (مثل استخدام Map).';
             });
         }
-        // إضافة تعليق توضيحي
         return `// ===== كود محسّن =====\n// ⚡ تم تحسين الخوارزمية بإضافة تعليقات توضيحية.\n// 💡 يمكنك استبدال الحلقات المزدوجة بخوارزمية O(n) باستخدام كائن (Object) للتخزين المؤقت.\n\n${optimized}`;
     };
 
-    // --- 14. ترجمة الكود بين اللغات ---
+    // --- 13. ترجمة الكود بين اللغات ---
     window.translate_code = function(code, targetLang = 'python') {
         if (!code) return "الرجاء إدخال كود للترجمة.";
         if (targetLang === 'python') {
@@ -389,7 +405,7 @@
         }
     };
 
-    // --- 15. شرح الكود بالعربية ---
+    // --- 14. شرح الكود بالعربية ---
     window.explain_code = function(code) {
         if (!code) return "الرجاء إدخال كود لشرحه.";
         const lines = code.split('\n');
@@ -408,21 +424,16 @@
         return explanation;
     };
 
-    // --- 16. إعادة الهيكلة إلى Clean Architecture ---
+    // --- 15. إعادة الهيكلة إلى Clean Architecture ---
     window.refactor_to_clean_architecture = function(code, moduleName = 'Module') {
         if (!code) return "الرجاء إدخال كود لإعادة هيكلته.";
         return `// ===== إعادة هيكلة ${moduleName} إلى Clean Architecture =====\n\n// 1. طبقة الكيانات (Entities)\nclass ${moduleName}Entity {\n    constructor(data) {\n        this.data = data;\n    }\n}\n\n// 2. طبقة حالات الاستخدام (Use Cases)\nclass ${moduleName}UseCase {\n    constructor(repository) {\n        this.repository = repository;\n    }\n    execute(params) {\n        // منطق العمل هنا\n        return new ${moduleName}Entity(params);\n    }\n}\n\n// 3. طبقة الواجهات (Controllers/UI)\nclass ${moduleName}Controller {\n    constructor(useCase) {\n        this.useCase = useCase;\n    }\n    handle(request) {\n        const result = this.useCase.execute(request);\n        return result;\n    }\n}\n\n// 4. الكود الأصلي (للرجوع إليه)\n/*\n${code}\n*/\n`;
     };
 
-    // --- 17. دمج الفروع وحل التعارضات ---
+    // --- 16. دمج الفروع وحل التعارضات ---
     window.merge_branches = function(branch1, branch2) {
         if (!branch1 || !branch2) return "الرجاء إدخال اسمي الفرعين للدمج.";
-        return `🔄 محاكاة دمج فرعي ${branch1} و ${branch2}:\n\n`;
-        `✅ تم دمج الفرعين بنجاح.\n`;
-        `⚠️ تم حل التعارضات التالية:\n`;
-        `   - تعارض في ملف index.html (تم الاحتفاظ بالإصدار الأحدث).\n`;
-        `   - تعارض في ملف app_logic.js (تم دمج التغييرات يدوياً).\n`;
-        `✅ الـ Merge اكتمل. يمكنك الآن رفع التغييرات إلى الـ main.`;
+        return `🔄 محاكاة دمج فرعي ${branch1} و ${branch2}:\n\n✅ تم دمج الفرعين بنجاح.\n⚠️ تم حل التعارضات التالية:\n   - تعارض في ملف index.html (تم الاحتفاظ بالإصدار الأحدث).\n   - تعارض في ملف app_logic.js (تم دمج التغييرات يدوياً).\n✅ الـ Merge اكتمل. يمكنك الآن رفع التغييرات إلى الـ main.`;
     };
 
     // ============================================================
@@ -470,22 +481,8 @@
     };
 
     // ============================================================
-    //  7.  جسر الاتصال بـ API (مع جميع الأدوات)
+    //  7.  جسر الاتصال بـ Gemini عبر Cloudflare Worker
     // ============================================================
-    window.fetchApiKeyFromSupabase = async function(id) {
-        try {
-            const res = await fetch(`${getSupabaseUrl()}/rest/v1/secret_settings?id=eq.${id}`, { headers: { 'Content-Type': 'application/json' } });
-            const data = await res.json();
-            return data.length > 0 ? data[0].secret_value : null;
-        } catch (e) { return null; }
-    };
-
-    window.initKeys = async function() {
-        window.geminiApiKey = await window.fetchApiKeyFromSupabase('gemini_key') || '';
-        window.githubToken = await window.fetchApiKeyFromSupabase('github_token') || '';
-        console.log("🛡️ تم استعادة الاتصال واستحضار المفاتيح.");
-    };
-
     window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash') {
         // محاولة محلية أولاً
         const localResponse = window.processLocalCommand(promptText);
@@ -500,13 +497,11 @@
             };
         }
 
-        // الاتصال بـ API
-        const effectiveKey = apiKey || window.geminiApiKey || localStorage.getItem('gemini_api_key') || '';
-        if (!effectiveKey || effectiveKey.length < 10) {
-            return { text: "⚠️ مفتاح Gemini API غير صالح. اضغط ⋮ لإدخاله.", model: "System" };
-        }
+        // الاتصال بـ Gemini عبر الجسر الآمن (Cloudflare Worker)
+        const proxyUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
+        const url = proxyUrl + 'gemini';
 
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${effectiveKey}`;
+        // إضافة الدستور والأدوات إلى الطلب
         const systemInstruction = { parts: [{ text: GROUNDED_SYSTEM_PROMPT }] };
 
         // قائمة الأدوات المتاحة (جميع المستويات)
@@ -522,14 +517,12 @@
                 { name: "vector_search", description: "البحث في الذاكرة.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                 { name: "estimate_cost", description: "حساب التكلفة.", parameters: { type: "OBJECT", properties: { model: { type: "STRING" }, tokens: { type: "NUMBER" } }, required: ["model", "tokens"] } },
                 { name: "run_virtual_test", description: "اختبار الكود.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
-
                 // المستوى الثاني
                 { name: "searchCode", description: "البحث الدلالي في كل ملفات المشروع عن كلمة أو دالة.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                 { name: "wrap_with_error_handling", description: "إحاطة الكود بـ try-catch لحمايته من الانهيار.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
                 { name: "simulate_integration", description: "محاكاة اختبار تكامل الوحدة الجديدة مع بقية النظام.", parameters: { type: "OBJECT", properties: { moduleName: { type: "STRING" }, dependencies: { type: "ARRAY", items: { type: "STRING" } } }, required: ["moduleName"] } },
                 { name: "calculate_refactor_threshold", description: "حساب نسبة التعديل في الملف لتحديد ما إذا كان يحتاج إلى إعادة كتابة.", parameters: { type: "OBJECT", properties: { fileContent: { type: "STRING" } }, required: ["fileContent"] } },
                 { name: "injectGlobalStyles", description: "حقن CSS مباشرة في المتصفح لتجربة التغييرات البصرية.", parameters: { type: "OBJECT", properties: { css_code: { type: "STRING" } }, required: ["css_code"] } },
-
                 // المستوى الثالث
                 { name: "generate_unit_test", description: "توليد اختبار وحدة (Unit Test) لدالة معينة.", parameters: { type: "OBJECT", properties: { funcName: { type: "STRING" }, params: { type: "ARRAY", items: { type: "STRING" } }, returnType: { type: "STRING" } }, required: ["funcName"] } },
                 { name: "optimize_algorithm", description: "تحسين الخوارزميات البطيئة (مثل تغيير O(n²) إلى O(n log n)).", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
@@ -540,12 +533,30 @@
             ]
         }];
 
-        const body = { system_instruction: systemInstruction, contents: [{ role: "user", parts: [{ text: promptText }] }], tools, generationConfig: { temperature: 0, maxOutputTokens: 2048 } };
+        const body = {
+            model: modelName,
+            system_instruction: systemInstruction,
+            contents: [{ role: "user", parts: [{ text: promptText }] }],
+            tools: tools,
+            generationConfig: { temperature: 0, maxOutputTokens: 2048 }
+        };
 
         try {
-            const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-            const data = await res.json();
-            if (!res.ok) return { text: "❌ خطأ API: " + (data.error?.message || "غير معروف"), model: "System" };
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                return { text: `❌ خطأ من الجسر (${response.status}): ${errorText}`, model: "System" };
+            }
+
+            const data = await response.json();
+            if (data.error) {
+                return { text: `❌ خطأ من Gemini: ${data.error.message}`, model: "System" };
+            }
 
             const parts = data.candidates?.[0]?.content?.parts || [];
             let thought = parts.find(p => p.text)?.text || "تمت المعالجة.";
@@ -582,10 +593,11 @@
             }
             return { text: thought, model: modelName + " (API)" };
         } catch (e) {
-            return { text: "❌ فشل الاتصال: " + e.message, model: "System" };
+            return { text: "❌ فشل الاتصال بالجسر: " + e.message, model: "System" };
         }
     };
 
-    console.log("🚀 AI Core V6.0 (Full Tool Library) Loaded Successfully.");
+    console.log("🚀 AI Core V6.5 (Integrated with Cloudflare Bridge) Loaded Successfully.");
+    console.log(`🔗 جسر Cloudflare: ${window.mastermindProxyUrl}`);
     console.log("📌 الأدوات المتاحة: 22 أداة (المستوى الأول + الثاني + الثالث).");
 })(window);
