@@ -1,7 +1,7 @@
 // ================================================================
-//  🧠  AI ENGINEERING CORE - SMART EXECUTOR EDITION (V7.2)
-//  المصدر الوحيد للحقيقة - Thought تنفذ الخطة تلقائياً
-//  يحتوي على: Intent-Aware Thought + Auto-Execution
+//  🧠  AI ENGINEERING CORE - DYNAMIC THINKER EDITION (V7.3)
+//  المصدر الوحيد للحقيقة - Thought تفرق بين البحث المحلي والويب
+//  يحتوي على: Intent-Aware Thought + Local/Web Search Detection
 // ================================================================
 
 (function(window) {
@@ -31,6 +31,7 @@
     5. استخدم الأدوات المتاحة بدقة (read_file, analyze_file).
     6. **قاعدة ذهبية: فكر → اعرض الخطة → انتظر الموافقة → نفذ.**
     7. **عند الحاجة إلى معلومات خارجية، استخدم 'web_search'.**
+    8. **للبحث عن محتوى داخل المستودع، استخدم 'searchCode' أو اقرأ ملفات JSON مباشرة.**
     `;
 
     // ============================================================
@@ -174,6 +175,42 @@
         }
     };
 
+    // --- دالة مساعدة للبحث المحلي في ملفات JSON (للبحث عن فيديوات) ---
+    window.searchLocalVideos = async function(query) {
+        try {
+            // محاولة قراءة ملف vsa.json (الذي يحتوي على بيانات الفيديوهات)
+            const response = await fetch('vsa.json?v=' + Date.now());
+            if (!response.ok) return "❌ فشل قراءة ملف البيانات المحلي.";
+            const data = await response.json();
+            
+            // البحث في البيانات عن فيديوات تحتوي على الاستعلام
+            let results = [];
+            if (Array.isArray(data)) {
+                data.forEach(item => {
+                    // البحث في العنوان والمحتوى والفيديوهات
+                    const title = item.title || '';
+                    const content = item.content || '';
+                    if (title.toLowerCase().includes(query.toLowerCase()) || 
+                        content.toLowerCase().includes(query.toLowerCase())) {
+                        results.push(`📹 ${title}: ${content.substring(0, 100)}...`);
+                    }
+                    // البحث في الفيديوهات الفرعية
+                    if (item.videos && Array.isArray(item.videos)) {
+                        item.videos.forEach(vid => {
+                            if (vid.title && vid.title.toLowerCase().includes(query.toLowerCase())) {
+                                results.push(`🎥 ${vid.title} (من ${title})`);
+                            }
+                        });
+                    }
+                });
+            }
+            if (results.length === 0) return `🔍 لم يتم العثور على فيديوات تحتوي على "${query}" في المستودع.`;
+            return `📚 **نتائج البحث المحلي عن "${query}" في المستودع:**\n\n${results.join('\n')}`;
+        } catch (e) {
+            return `❌ فشل البحث المحلي: ${e.message}`;
+        }
+    };
+
     window.wrap_with_error_handling = function(code) {
         if (!code) return "الرجاء إدخال كود لتطبيق try-catch.";
         const lines = code.split('\n');
@@ -274,9 +311,10 @@
     };
 
     // ============================================================
-    //  4.  أدوات التفكير والتحليل العميق
+    //  4.  أدوات التفكير والتحليل العميق (الجديدة)
     // ============================================================
 
+    // --- 4.1 أداة التفكير الذكية (Intent-Aware Thought) - ديناميكية وتميز بين المحلي والويب ---
     window.thought = function(reasoning, plan = "", risks = "غير محددة", peer_review = "غير محددة") {
         if (!reasoning) return "الرجاء تقديم تحليل منطقي (reasoning).";
         const input = reasoning.toLowerCase();
@@ -285,15 +323,27 @@
         let generatedRisks = "منخفضة";
         let generatedPeerReview = "لم تتم المراجعة";
 
+        // ---- التصنيف الديناميكي: التمييز بين البحث المحلي والويب ----
         if (input.includes('عدل') || input.includes('غير') || input.includes('استبدل') || input.includes('أضف') || input.includes('حذف') || input.includes('اكتب')) {
             intent = "تعديل كود";
             generatedPlan = "1. قراءة الملف المطلوب باستخدام read_file.\n2. تحديد النص القديم بدقة (case-sensitive).\n3. تنفيذ الاستبدال الجراحي باستخدام multi_replace_file_content.\n4. حفظ التغييرات والتحقق من السلامة.";
             generatedRisks = "متوسطة (احتمال حدوث تعارض في الأقواس أو كسر الموقع)";
             generatedPeerReview = "يجب فحص توازن الأقواس باستخدام analyze_file بعد التعديل.";
         } 
-        else if (input.includes('ابحث') || input.includes('بحث') || input.includes('اكتشف') || input.includes('إنترنت') || input.includes('ويب')) {
-            intent = "بحث واستعلام";
-            generatedPlan = "1. استدعاء web_search لجلب النتائج.\n2. تحليل النتائج واستخراج الملخص.\n3. عرض المصادر والروابط.";
+        // ---- بحث محلي (داخل المستودع) ----
+        else if (input.includes('المستودع') || input.includes('الملفات') || input.includes('المشروع') || 
+                 input.includes('البيانات') || input.includes('الكورسات') || input.includes('الدروس') ||
+                 (input.includes('ابحث') && !input.includes('يوتيوب') && !input.includes('الإنترنت') && !input.includes('الويب'))) {
+            intent = "بحث محلي";
+            generatedPlan = "1. استخدام 'searchLocalVideos' أو 'searchCode' للبحث في ملفات المستودع.\n2. عرض النتائج المحلية دون استهلاك توكنات.";
+            generatedRisks = "منخفضة جداً (بحث في الملفات المحلية فقط)";
+            generatedPeerReview = "تأكد من وجود الملفات المطلوبة في المستودع.";
+        }
+        // ---- بحث ويب (خارجي) ----
+        else if (input.includes('يوتيوب') || input.includes('الإنترنت') || input.includes('الويب') || 
+                 input.includes('جوجل') || input.includes('بحث في الويب')) {
+            intent = "بحث ويب";
+            generatedPlan = "1. استدعاء web_search لجلب النتائج من الإنترنت.\n2. تحليل النتائج واستخراج الملخص.\n3. عرض المصادر والروابط.";
             generatedRisks = "منخفضة (قد تكون النتائج غير دقيقة إذا كان الاستعلام غامضاً)";
             generatedPeerReview = "التحقق من صحة المصادر وعدم احتوائها على معلومات مضللة.";
         }
@@ -332,6 +382,7 @@
         };
     };
 
+    // --- 4.2 أداة التفكير العميق (DeepThink) - مستوحاة من DeepSeek R1 ---
     window.DeepThink = function(problem, context = "عام", constraints = []) {
         if (!problem) return "الرجاء تقديم المشكلة المراد تحليلها.";
         const analysis = {
@@ -351,6 +402,7 @@
         return analysis;
     };
 
+    // --- 4.3 أداة البحث على الإنترنت (web_search) - Google أولاً، DuckDuckGo احتياطي ---
     window.web_search = async function(query) {
         if (!query) return "الرجاء إدخال استعلام للبحث.";
         
@@ -408,6 +460,7 @@
         return `🌐 لم يتم العثور على نتائج لـ "${query}" من أي مصدر. يرجى التحقق من الاتصال بالإنترنت.`;
     };
 
+    // --- 4.4 أداة قراءة الروابط الخارجية (read_url) ---
     window.read_url = async function(url) {
         if (!url) return "الرجاء إدخال رابط صالح.";
         try {
@@ -419,6 +472,7 @@
         }
     };
 
+    // --- 4.5 أداة شرح الخطة قبل التنفيذ (explain_plan) ---
     window.explain_plan = function(plan_summary, steps = []) {
         if (!plan_summary) return "الرجاء تقديم ملخص للخطة.";
         let output = `📋 خطة العمل المقترحة:\n\n📌 الملخص: ${plan_summary}\n`;
@@ -431,6 +485,10 @@
         output += `\n⏳ الرجاء الموافقة على الخطة قبل المتابعة.`;
         return output;
     };
+
+    // ============================================================
+    //  5.  طبقة الموافقة البشرية (Approval Layer)
+    // ============================================================
 
     window.request_approval = function(plan_summary, steps = [], estimated_impact = "غير محدد") {
         if (!plan_summary) return "الرجاء تقديم ملخص للخطة.";
@@ -459,7 +517,7 @@
     };
 
     // ============================================================
-    //  5.  الجسر التنفيذي (عبر Cloudflare)
+    //  6.  الجسر التنفيذي (عبر Cloudflare)
     // ============================================================
     async function callProxy(endpoint, options = {}) {
         const proxyUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
@@ -535,7 +593,7 @@
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: "تحديث جراحي آمن (V7.2)",
+                    message: "تحديث جراحي آمن (V7.3)",
                     content: btoa(unescape(encodeURIComponent(updatedContent)))
                 })
             });
@@ -550,7 +608,7 @@
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                message: "إنشاء ملف جديد (V7.2)",
+                message: "إنشاء ملف جديد (V7.3)",
                 content: btoa(unescape(encodeURIComponent(content)))
             })
         });
@@ -575,7 +633,7 @@
     };
 
     // ============================================================
-    //  6.  التوجيه المحلي
+    //  7.  التوجيه المحلي
     // ============================================================
     window.processLocalCommand = async function(inputText) {
         if (!inputText) return null;
@@ -626,7 +684,7 @@
     };
 
     // ============================================================
-    //  7.  جسر الاتصال بـ Gemini (المُحدث - مع Auto-Execution للـ Thought)
+    //  8.  جسر الاتصال بـ Gemini (المُحدث - مع Auto-Execution للـ Thought)
     // ============================================================
     window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash') {
         // محاولة التنفيذ المحلي
@@ -663,6 +721,7 @@
                 { name: "estimate_cost", description: "حساب التكلفة.", parameters: { type: "OBJECT", properties: { model: { type: "STRING" }, tokens: { type: "NUMBER" } }, required: ["model", "tokens"] } },
                 { name: "run_virtual_test", description: "اختبار الكود.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
                 { name: "searchCode", description: "البحث الدلالي في كل الملفات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "searchLocalVideos", description: "البحث عن فيديوات في ملفات المستودع المحلية (0 توكنات).", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                 { name: "wrap_with_error_handling", description: "إحاطة الكود بـ try-catch.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
                 { name: "simulate_integration", description: "محاكاة اختبار التكامل.", parameters: { type: "OBJECT", properties: { moduleName: { type: "STRING" }, dependencies: { type: "ARRAY", items: { type: "STRING" } } }, required: ["moduleName"] } },
                 { name: "injectGlobalStyles", description: "حقن CSS مباشرة.", parameters: { type: "OBJECT", properties: { css_code: { type: "STRING" } }, required: ["css_code"] } },
@@ -707,32 +766,43 @@
 
                 // تنفيذ الأدوات الجديدة مع Auto-Execution للـ Thought
                 if (name === "thought") {
-                    // 1. تنفيذ أداة thought للحصول على التحليل والخطة
                     const thoughtResult = window.thought(args.reasoning, args.plan || "", args.risks || "غير محددة", args.peer_review || "غير محددة");
                     
-                    // 2. إذا كان التصنيف "بحث واستعلام"، نقوم بتنفيذ web_search تلقائياً
-                    if (thoughtResult.intent === "بحث واستعلام" && thoughtResult.reasoning) {
-                        // استخراج الاستعلام من النص (أو استخدام النص كله)
+                    // ---- التنفيذ الديناميكي بناءً على التصنيف ----
+                    if (thoughtResult.intent === "بحث محلي") {
+                        // استخراج الاستعلام من النص
+                        const queryMatch = thoughtResult.reasoning.match(/["']([^"']+)["']/);
+                        const query = queryMatch ? queryMatch[1] : thoughtResult.reasoning;
+                        // البحث المحلي في ملفات المستودع (0 توكنات)
+                        const localResult = await window.searchLocalVideos(query);
+                        return {
+                            text: `🧠 **فكرت أولاً (بحث محلي):**\n${JSON.stringify(thoughtResult, null, 2)}\n\n📂 **نتيجة البحث المحلي:**\n${localResult}`,
+                            model: "Local Engine (Thought + Local Search) - 0 Tokens"
+                        };
+                    }
+                    
+                    else if (thoughtResult.intent === "بحث ويب") {
                         const queryMatch = thoughtResult.reasoning.match(/["']([^"']+)["']/);
                         const query = queryMatch ? queryMatch[1] : thoughtResult.reasoning;
                         const searchResult = await window.web_search(query);
                         return {
-                            text: `🧠 **فكرت أولاً:**\n${JSON.stringify(thoughtResult, null, 2)}\n\n🌐 **ثم نفذت البحث:**\n${searchResult}`,
+                            text: `🧠 **فكرت أولاً (بحث ويب):**\n${JSON.stringify(thoughtResult, null, 2)}\n\n🌐 **نتيجة البحث على الويب:**\n${searchResult}`,
                             model: "Local Engine (Thought + Web Search)"
                         };
                     }
                     
-                    // 3. إذا كان التصنيف "تعديل كود"، نطلب الموافقة
-                    if (thoughtResult.intent === "تعديل كود") {
+                    else if (thoughtResult.intent === "تعديل كود") {
                         return {
                             text: `🧠 **تحليل التعديل المطلوب:**\n${JSON.stringify(thoughtResult, null, 2)}\n\n⏳ يرجى كتابة "نفذ" للموافقة على الخطة.`,
                             model: "Local Engine (Thought)"
                         };
                     }
                     
-                    // 4. وإلا، نعيد نتيجة التفكير فقط
-                    return { text: `🧠 **نتيجة التفكير:**\n${JSON.stringify(thoughtResult, null, 2)}`, model: "Local Engine (Thought)" };
+                    else {
+                        return { text: `🧠 **نتيجة التفكير:**\n${JSON.stringify(thoughtResult, null, 2)}`, model: "Local Engine (Thought)" };
+                    }
                 }
+                else if (name === "searchLocalVideos") result = await window.searchLocalVideos(args.query);
                 else if (name === "DeepThink") result = window.DeepThink(args.problem, args.context, args.constraints);
                 else if (name === "web_search") result = await window.web_search(args.query);
                 else if (name === "read_url") result = await window.read_url(args.url);
@@ -765,7 +835,7 @@
         }
     };
 
-    console.log("🚀 AI Core V7.2 (Smart Executor) Loaded.");
-    console.log("🧠 أدوات التفكير: Thought (ذكي) + DeepThink.");
-    console.log("🌐 أدوات البحث: web_search (Google أولاً، DuckDuckGo احتياطي).");
+    console.log("🚀 AI Core V7.3 (Dynamic Thinker) Loaded.");
+    console.log("🧠 أدوات التفكير: Thought (يميز بين المحلي والويب) + DeepThink.");
+    console.log("🌐 أدوات البحث: web_search (ويب) + searchLocalVideos (محلي - 0 توكنات).");
 })(window);
