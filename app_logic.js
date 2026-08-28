@@ -2,7 +2,7 @@
 //  🖥️  APP LOGIC - UI Interface for VSA Academy
 //  المسؤول عن: الأزرار، المحادثة، عرض البطاقات، والبحث.
 //  يعتمد على: ai_engine_core.js (المحرك الرئيسي)
-//  تم التعديل: الاعتماد على ملفات JSON المحلية + الجسر الآمن
+//  تم التعديل: إضافة فحص لـ window.callAiBrain لتجنب الأخطاء
 // ================================================================
 
 (function() {
@@ -496,7 +496,7 @@
     }
 
     // ============================================================
-    //  6.  دوال المحادثة (AI Chat Interface)
+    //  6.  دوال المحادثة (AI Chat Interface) - مُصلحة
     // ============================================================
     function autoResizeInput() {
         const input = document.getElementById('aiInput');
@@ -532,11 +532,16 @@
         btn.innerText = '⏳';
 
         try {
-            // المفتاح الآن يُؤخذ من الجسر مباشرة، ولكن نمرر ما في localStorage كاحتياطي
+            // ⭐ الإصلاح: التحقق من وجود الدالة قبل استدعائها
+            if (typeof window.callAiBrain !== 'function') {
+                throw new Error('محرك الذكاء الاصطناعي (ai_engine_core.js) لم يتم تحميله بشكل صحيح. يرجى تحديث الصفحة (Ctrl+Shift+R).');
+            }
+
             const result = await window.callAiBrain(msg, window.geminiApiKey || 'PROXY_MODE', document.getElementById('modelSelector').value);
             addMessageToUI('ai', result.text || 'تمت المعالجة.', result.model || 'AI');
         } catch (error) {
-            addMessageToUI('ai', '⚠️ حدث خطأ أثناء المعالجة: ' + error.message);
+            console.error('AI Error:', error);
+            addMessageToUI('ai', `⚠️ خطأ: ${error.message}`);
         } finally {
             btn.disabled = false;
             btn.innerText = '🚀';
@@ -573,7 +578,6 @@
     // ============================================================
     function initSettings() {
         document.getElementById('aiSettingsBtn').addEventListener('click', async function() {
-            // في الوضع الجديد، المفتاح موجود في الجسر، لكن نترك خياراً للمستخدم في حال أراد تجاوز الجسر
             const key = prompt('🔐 الرجاء إدخال مفتاح Gemini API (اختياري - إذا كان الجسر يعمل، يمكنك تركه فارغاً):');
             if (key) {
                 window.geminiApiKey = key.trim();
