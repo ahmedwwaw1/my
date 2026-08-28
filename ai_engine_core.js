@@ -416,11 +416,40 @@
     };
 
     // ============================================================
-    //  4.  أدوات التفكير والتحليل العميق (الجديدة)
+    //  4.  أدوات الحماية والدرع السيادي (Sovereign Shield)
     // ============================================================
 
-    // --- 4.1 أداة التفكير الذكية (Engineering Thought 2.0) ---
+    // --- 4.1 لقطة ما قبل الجراحة (Pre-Surgery Snapshot) ---
+    window.take_snapshot = async function(path) {
+        try {
+            const content = await window.read_file(path);
+            if (typeof content === 'string' && content.startsWith('❌')) return content;
+            const snapshotKey = 'snapshot_' + path.replace(/[\/\.]/g, '_');
+            localStorage.setItem(snapshotKey, content);
+            return `✅ تم أخذ لقطة أمان للملف: ${path}`;
+        } catch (e) { return `❌ فشل أخذ اللقطة: ${e.message}`; }
+    };
+
+    // --- 4.2 التراجع السيادي اللحظي (Instant Undo) ---
+    window.instant_undo = async function(path) {
+        const snapshotKey = 'snapshot_' + path.replace(/[\/\.]/g, '_');
+        const backup = localStorage.getItem(snapshotKey);
+        if (!backup) return `⚠️ لا توجد لقطة سابقة للملف: ${path}`;
+
+        const result = await callProxy(`github/contents/${path}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: "🛡️ تراجع سيادي (Rollback) لاستعادة الاستقرار",
+                content: btoa(unescape(encodeURIComponent(backup)))
+            })
+        });
+        return result.ok ? `✅ تم التراجع بنجاح واستعادة حالة الملف السليمة.` : `❌ فشل التراجع.`;
+    };
+
+    // --- 4.3 أداة التفكير الهندسي (Engineering Thought 2.0) ---
     window.thought = function(reasoning, plan = "", risks = "غير محددة", peer_review = "غير محددة", swot = null, complexity = "منخفضة", self_correction = "") {
+        // ... (نفس المنطق السابق) ...
         if (!reasoning) return "الرجاء تقديم تحليل منطقي (reasoning).";
         const input = reasoning.toLowerCase();
         let intent = "عام";
@@ -623,34 +652,51 @@
     window.multi_replace_file_content = async function(path, replacements) {
         if (!Array.isArray(replacements) || replacements.length === 0) return "❌ يجب توفير مصفوفة من الاستبدالات.";
         try {
+            // 1. أخذ لقطة أمان تلقائية (Sovereign Shield)
+            await window.take_snapshot(path);
+
             const currentContent = await window.read_file(path);
             if (typeof currentContent === 'string' && currentContent.startsWith('❌')) return currentContent;
-            const analysis = await window.analyze_file(path);
-            if (analysis.status === 'failed') return `🛑 عملية مرفوضة! ${analysis.errors.join('\n')}`;
+
+            // 2. فحص أولي قبل التعديل
+            const preAnalysis = await window.analyze_file(path);
+            if (preAnalysis.status === 'failed') return `🛑 التعديل مرفوض! الملف الأصلي معطوب بالفعل: ${preAnalysis.errors.join(', ')}`;
+
             let updatedContent = currentContent;
-            let appliedCount = 0, failedCount = 0;
-            const appliedLog = [];
+            let appliedCount = 0;
             for (let i = 0; i < replacements.length; i++) {
                 const { targetContent, replacementContent } = replacements[i];
-                if (!updatedContent.includes(targetContent)) {
-                    failedCount++;
-                    appliedLog.push(`❌ الجزء ${i+1} غير موجود.`);
-                    continue;
+                if (updatedContent.includes(targetContent)) {
+                    updatedContent = updatedContent.replace(targetContent, replacementContent);
+                    appliedCount++;
                 }
-                updatedContent = updatedContent.replace(targetContent, replacementContent);
-                appliedCount++;
-                appliedLog.push(`✅ تم استبدال الجزء ${i+1}.`);
             }
-            if (appliedCount === 0) return `⚠️ لم يتم تطبيق أي استبدال.`;
+            if (appliedCount === 0) return `⚠️ لم يتم العثور على أي نص مطابق للاستبدال.`;
+
+            // 3. محاولة الحفظ
             const result = await callProxy(`github/contents/${path}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: "تحديث جراحي آمن (V7.4)",
+                    message: "تعديل جراحي سيادي (V7.5)",
                     content: btoa(unescape(encodeURIComponent(updatedContent)))
                 })
             });
-            return { message: `✅ تم تطبيق ${appliedCount} استبدال.`, details: appliedLog.join('\n'), write_status: result.ok ? "تم الحفظ." : "فشل الحفظ." };
+
+            // 4. التحقق بعد الجراحة (Post-Surgery Validation)
+            const postAnalysis = await window.analyze_file(path);
+            if (postAnalysis.status === 'failed') {
+                console.error("🛡️ اكتشاف خلل بعد التعديل! البدء في التراجع التلقائي...");
+                await window.instant_undo(path);
+                return {
+                    status: "failed_and_reverted",
+                    error: "تم اكتشاف أخطاء في بناء الكود بعد التعديل (أقواس غير متوازنة).",
+                    details: postAnalysis.errors,
+                    action: "تم التراجع تلقائياً لحماية النظام. يرجى مراجعة منطق الكود وإعادة المحاولة."
+                };
+            }
+
+            return { message: `✅ تم تطبيق ${appliedCount} استبدال بنجاح وتم التحقق من سلامة الكود.`, write_status: result.ok ? "تم الحفظ." : "فشل الحفظ." };
         } catch (e) { return `❌ فشل التعديل: ${e.message}`; }
     };
 
@@ -752,10 +798,10 @@
     };
 
     // ============================================================
-    //  8.  جسر الاتصال بـ Gemini (المُحدث)
+    //  8.  جسر الاتصال بـ Gemini (المُحدث: بنظام الحلقة الذاتية Agentic Loop)
     // ============================================================
     window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash') {
-        // محاولة التنفيذ المحلي
+        // 1. محاولة التنفيذ المحلي الفوري (توفير توكنات)
         try {
             const localResponse = await window.processLocalCommand(promptText);
             if (localResponse) {
@@ -768,15 +814,17 @@
                     model: "Local Engine (0 Tokens)"
                 };
             }
-        } catch (e) {
-            console.warn('Local command execution failed:', e.message);
-        }
+        } catch (e) { console.warn('Local command failed:', e.message); }
 
-        // الاتصال بـ Gemini API
+        // 2. إعدادات الجسر والسياق
         const proxyUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
         const url = proxyUrl + 'gemini';
-        const systemInstruction = { parts: [{ text: GROUNDED_SYSTEM_PROMPT }] };
+        let conversationHistory = [{ role: "user", parts: [{ text: promptText }] }];
+        let maxIterations = 5; // أقصى عدد من الخطوات المتتالية لمنع الحلقات اللانهائية
+        let currentIteration = 0;
+        let finalResponse = { text: "⚠️ فشل المحرك في الوصول لرد نهائي.", model: modelName };
 
+        // 3. تعريف الأدوات (نفس المصفوفة السابقة)
         const tools = [{
             function_declarations: [
                 { name: "listGithubFiles", description: "استكشاف هيكل المشروع.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } } } },
@@ -807,74 +855,84 @@
             ]
         }];
 
-        const body = {
-            model: modelName,
-            system_instruction: systemInstruction,
-            contents: [{ role: "user", parts: [{ text: promptText }] }],
-            tools: tools,
-            generationConfig: { temperature: 0, maxOutputTokens: 2048 }
-        };
+        // 4. حلقة الوكيل الذكي (Agentic Loop)
+        while (currentIteration < maxIterations) {
+            currentIteration++;
+            console.log(`🤖 Step ${currentIteration}: Thinking...`);
 
-        try {
-            const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-            if (!response.ok) {
-                const errorText = await response.text();
-                return { text: `❌ خطأ من الجسر (${response.status}): ${errorText}`, model: "System" };
-            }
-            const data = await response.json();
-            if (data.error) return { text: `❌ خطأ من Gemini: ${data.error.message}`, model: "System" };
+            const body = {
+                model: modelName,
+                system_instruction: { parts: [{ text: GROUNDED_SYSTEM_PROMPT }] },
+                contents: conversationHistory,
+                tools: tools,
+                generationConfig: { temperature: 0, maxOutputTokens: 2048 }
+            };
 
-            const parts = data.candidates?.[0]?.content?.parts || [];
-            let thought = parts.find(p => p.text)?.text || "تمت المعالجة.";
-            const functionCall = parts.find(p => p.functionCall);
+            try {
+                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+                if (!response.ok) return { text: `❌ خطأ الجسر: ${response.status}`, model: "System" };
+                const data = await response.json();
 
-            if (functionCall) {
-                const { name, args } = functionCall.functionCall;
-                let result;
+                const parts = data.candidates?.[0]?.content?.parts || [];
+                const assistantMessage = data.candidates?.[0]?.content || { role: "model", parts: [] };
+                conversationHistory.push(assistantMessage);
 
-                if (name === "thought") {
-                    const result = window.thought(args.reasoning, args.plan || "", args.risks || "غير محددة", args.peer_review || "غير محددة", args.swot, args.complexity || "منخفضة", args.self_correction || "");
-                    
-                    if (result.intent === "بحث محلي") {
-                        const queryMatch = result.reasoning.match(/["']([^"']+)["']/);
-                        const query = queryMatch ? queryMatch[1] : result.reasoning;
-                        const localResult = await window.searchLocalVideos(query);
-                        return { text: `🧠 **تفكير هندسي (بحث محلي):**\n${JSON.stringify(result, null, 2)}\n\n📂 **النتائج:**\n${localResult}`, model: "Local Engine" };
-                    }
-                    // ... استكمال باقي التصنيفات بنفس النمط
-                    return { text: `🧠 **تفكير هندسي عميق:**\n${JSON.stringify(result, null, 2)}`, model: "Local Engine" };
+                const textPart = parts.find(p => p.text);
+                const functionCallPart = parts.find(p => p.functionCall);
+
+                // إذا كان هناك نص فقط (نهاية المهمة)
+                if (textPart && !functionCallPart) {
+                    return { text: textPart.text, model: modelName };
                 }
-                else if (name === "searchLocalVideos") result = await window.searchLocalVideos(args.query);
-                else if (name === "DeepThink") result = window.DeepThink(args.problem, args.context, args.constraints);
-                else if (name === "web_search") result = await window.web_search(args.query);
-                else if (name === "read_url") result = await window.read_url(args.url);
-                else if (name === "explain_plan") result = window.explain_plan(args.plan_summary, args.steps);
-                else if (name === "request_approval") result = window.request_approval(args.plan_summary, args.steps || [], args.estimated_impact || "غير محدد");
-                else if (name === "execute_approved_plan") result = await window.execute_approved_plan();
-                else if (name === "listGithubFiles") result = await window.listGithubFiles(args.path || "");
-                else if (name === "read_file") result = await window.read_file(args.path);
-                else if (name === "analyze_file") result = await window.analyze_file(args.path);
-                else if (name === "multi_replace_file_content") result = await window.multi_replace_file_content(args.path, args.replacements);
-                else if (name === "write_file") result = await window.write_file(args.path, args.content);
-                else if (name === "store_memory") result = await window.store_memory(args.key, args.value);
-                else if (name === "vector_search") result = await window.vector_search(args.query);
-                else if (name === "estimate_cost") result = window.estimate_cost(args.model, args.tokens);
-                else if (name === "run_virtual_test") result = window.run_virtual_test(args.code);
-                else if (name === "searchCode") result = await window.searchCode(args.query);
-                else if (name === "wrap_with_error_handling") result = window.wrap_with_error_handling(args.code);
-                else if (name === "simulate_integration") result = window.simulate_integration(args.moduleName, args.dependencies || []);
-                else if (name === "injectGlobalStyles") result = window.injectGlobalStyles(args.css_code);
-                else if (name === "generate_unit_test") result = window.generate_unit_test(args.funcName, args.params || []);
-                else if (name === "optimize_algorithm") result = window.optimize_algorithm(args.code);
-                else if (name === "translate_code") result = window.translate_code(args.code, args.targetLang || 'python');
-                else if (name === "explain_code") result = window.explain_code(args.code);
-                else result = "أداة غير معروفة.";
-                return { text: thought + "\n\n📊 نتيجة [" + name + "]:\n" + JSON.stringify(result, null, 2), model: modelName + " (API)" };
+
+                // إذا طلب استدعاء أداة
+                if (functionCallPart) {
+                    const { name, args } = functionCallPart.functionCall;
+                    console.log(`🛠️ Executing: ${name}...`);
+                    
+                    let result;
+                    // تنفيذ الأداة (نفس منطق switch السابق)
+                    if (name === "thought") result = window.thought(args.reasoning, args.plan, args.risks, args.peer_review, args.swot, args.complexity, args.self_correction);
+                    else if (name === "web_search") result = await window.web_search(args.query);
+                    else if (name === "read_file") result = await window.read_file(args.path);
+                    else if (name === "listGithubFiles") result = await window.listGithubFiles(args.path || "");
+                    else if (name === "analyze_file") result = await window.analyze_file(args.path);
+                    else if (name === "multi_replace_file_content") result = await window.multi_replace_file_content(args.path, args.replacements);
+                    else if (name === "write_file") result = await window.write_file(args.path, args.content);
+                    else if (name === "request_approval") {
+                        // طلب الموافقة هو "نقطة توقف" إجبارية في الحلقة
+                        const approval = window.request_approval(args.plan_summary, args.steps || [], args.estimated_impact);
+                        return { text: (textPart ? textPart.text + "\n\n" : "") + (typeof approval === 'string' ? approval : approval.message), model: modelName, requires_approval: true };
+                    }
+                    else if (name === "store_memory") result = await window.store_memory(args.key, args.value);
+                    else if (name === "vector_search") result = await window.vector_search(args.query);
+                    else if (name === "searchCode") result = await window.searchCode(args.query);
+                    else if (name === "DeepThink") result = window.DeepThink(args.problem, args.context, args.constraints);
+                    else result = "أداة غير مدعومة حالياً في الحلقة.";
+
+                    // إضافة نتيجة الأداة للسياق لإكمال الحلقة
+                    conversationHistory.push({
+                        role: "function",
+                        parts: [{
+                            functionResponse: {
+                                name: name,
+                                response: { content: typeof result === 'object' ? result : { message: result } }
+                            }
+                        }]
+                    });
+
+                    // إذا كان هناك نص مصاحب للأداة، نعرضه في الكونسول للمتابعة
+                    if (textPart) console.log("📝 AI says:", textPart.text);
+                } else {
+                    // إذا لم يرجع نصاً ولا أداة (حالة نادرة)
+                    break;
+                }
+            } catch (e) {
+                return { text: "❌ خطأ في الحلقة الذكية: " + e.message, model: "System" };
             }
-            return { text: thought, model: modelName + " (API)" };
-        } catch (e) {
-            return { text: "❌ فشل الاتصال بالجسر: " + e.message, model: "System" };
         }
+
+        return finalResponse;
     };
 
     console.log("🚀 AI Core V7.4 (Cloud Memory) Loaded.");
