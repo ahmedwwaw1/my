@@ -1,8 +1,7 @@
 // ================================================================
-//  🧠  AI ENGINEERING CORE - SMART THINKER EDITION (V7.1)
-//  المصدر الوحيد للحقيقة - مزود بأداة Thought ذكية (تحلل النية بنفسها)
-//  يحتوي على: Intent-Aware Thought + DeepThink + web_search (Google أولاً)
-//  الإصدار الكامل (جميع الدوال من V1 إلى V7.1)
+//  🧠  AI ENGINEERING CORE - SMART EXECUTOR EDITION (V7.2)
+//  المصدر الوحيد للحقيقة - Thought تنفذ الخطة تلقائياً
+//  يحتوي على: Intent-Aware Thought + Auto-Execution
 // ================================================================
 
 (function(window) {
@@ -18,25 +17,24 @@
     window.tokensSaved = parseInt(localStorage.getItem('vsa_tokens_saved') || '0');
 
     // ============================================================
-    //  1.  الدستور السيادي المقيد (مع طبقة الموافقة)
+    //  1.  الدستور السيادي المقيد
     // ============================================================
     const GROUNDED_SYSTEM_PROMPT = `
     [SYSTEM INSTRUCTION - APPROVAL ENGINEERING MODE]
-    أنت مهندس برمجي سيادي (Sovereign Software Engineer). مهمتك هي كتابة وتعديل الأكواد.
+    أنت مهندس برمجي سيادي. مهمتك هي كتابة وتعديل الأكواد.
 
-    قواعد العمل الإلزامية (آلية الموافقة):
-    1. **قبل تنفيذ أي تعديل، استخدم أداة 'thought' (مرر لها طلب المستخدم الأصلي) لتحليل المهمة وتصنيفها.**
-    2. **بعد الانتهاء من التفكير، استخدم أداة 'request_approval' لعرض الخطة على المستخدم وطلب موافقته.**
-    3. **لا تستخدم أي أداة تعديل (مثل multi_replace_file_content) دون موافقة صريحة من المستخدم عبر 'execute_approved_plan'.**
+    قواعد العمل الإلزامية:
+    1. **قبل تنفيذ أي تعديل، استخدم أداة 'thought' لتحليل المهمة وتصنيفها.**
+    2. **بعد الانتهاء من التفكير، استخدم أداة 'request_approval' لعرض الخطة.**
+    3. **لا تستخدم أي أداة تعديل دون موافقة صريحة.**
     4. ممنوع منعاً باتاً استخدام أي كلمات فلسفية أو دينية أو عاطفية.
     5. استخدم الأدوات المتاحة بدقة (read_file, analyze_file).
     6. **قاعدة ذهبية: فكر → اعرض الخطة → انتظر الموافقة → نفذ.**
-    7. **عند الحاجة إلى معلومات خارجية، استخدم 'web_search' (يبحث في Google أولاً ثم DuckDuckGo).**
-    8. **للبحث المحلي في الذاكرة، استخدم 'vector_search'، ولكن فقط عند الطلب الصريح بذلك.**
+    7. **عند الحاجة إلى معلومات خارجية، استخدم 'web_search'.**
     `;
 
     // ============================================================
-    //  2.  المحركات الأساسية (المستوى الأول)
+    //  2.  المحركات الأساسية
     // ============================================================
 
     window.store_memory = function(key, value) {
@@ -279,10 +277,8 @@
     //  4.  أدوات التفكير والتحليل العميق
     // ============================================================
 
-    // --- 4.1 أداة التفكير الذكية (Intent-Aware Thought) ---
     window.thought = function(reasoning, plan = "", risks = "غير محددة", peer_review = "غير محددة") {
         if (!reasoning) return "الرجاء تقديم تحليل منطقي (reasoning).";
-
         const input = reasoning.toLowerCase();
         let intent = "عام";
         let generatedPlan = "";
@@ -291,8 +287,8 @@
 
         if (input.includes('عدل') || input.includes('غير') || input.includes('استبدل') || input.includes('أضف') || input.includes('حذف') || input.includes('اكتب')) {
             intent = "تعديل كود";
-            generatedPlan = "1. قراءة الملف المطلوب باستخدام read_file.\n2. تحديد النص القديم بدقة.\n3. تنفيذ الاستبدال الجراحي باستخدام multi_replace_file_content.\n4. حفظ التغييرات والتحقق من السلامة.";
-            generatedRisks = "متوسطة (احتمال حدوث تعارض في الأقواس)";
+            generatedPlan = "1. قراءة الملف المطلوب باستخدام read_file.\n2. تحديد النص القديم بدقة (case-sensitive).\n3. تنفيذ الاستبدال الجراحي باستخدام multi_replace_file_content.\n4. حفظ التغييرات والتحقق من السلامة.";
+            generatedRisks = "متوسطة (احتمال حدوث تعارض في الأقواس أو كسر الموقع)";
             generatedPeerReview = "يجب فحص توازن الأقواس باستخدام analyze_file بعد التعديل.";
         } 
         else if (input.includes('ابحث') || input.includes('بحث') || input.includes('اكتشف') || input.includes('إنترنت') || input.includes('ويب')) {
@@ -303,7 +299,7 @@
         }
         else if (input.includes('حلل') || input.includes('قيّم') || input.includes('راجع') || input.includes('فكر') || input.includes('استراتيجية')) {
             intent = "تحليل وتقييم";
-            generatedPlan = "1. تحليل المشكلة من زوايا متعددة.\n2. اقتراح حلول بديلة.\n3. تقديم توصية نهائية.";
+            generatedPlan = "1. تحليل المشكلة من زوايا متعددة (معمارية، أداء، أمان، صيانة).\n2. اقتراح حلول بديلة.\n3. تقديم توصية نهائية.";
             generatedRisks = "منخفضة";
             generatedPeerReview = "مراجعة منطقية للتحليل للتأكد من عدم التحيز.";
         }
@@ -336,7 +332,6 @@
         };
     };
 
-    // --- 4.2 أداة التفكير العميق (DeepThink) ---
     window.DeepThink = function(problem, context = "عام", constraints = []) {
         if (!problem) return "الرجاء تقديم المشكلة المراد تحليلها.";
         const analysis = {
@@ -356,9 +351,6 @@
         return analysis;
     };
 
-    // ============================================================
-    //  4.3 أداة البحث على الإنترنت (web_search) - Google أولاً، DuckDuckGo احتياطي
-    // ============================================================
     window.web_search = async function(query) {
         if (!query) return "الرجاء إدخال استعلام للبحث.";
         
@@ -416,7 +408,6 @@
         return `🌐 لم يتم العثور على نتائج لـ "${query}" من أي مصدر. يرجى التحقق من الاتصال بالإنترنت.`;
     };
 
-    // --- 4.4 أداة قراءة الروابط الخارجية (read_url) ---
     window.read_url = async function(url) {
         if (!url) return "الرجاء إدخال رابط صالح.";
         try {
@@ -428,7 +419,6 @@
         }
     };
 
-    // --- 4.5 أداة شرح الخطة قبل التنفيذ (explain_plan) ---
     window.explain_plan = function(plan_summary, steps = []) {
         if (!plan_summary) return "الرجاء تقديم ملخص للخطة.";
         let output = `📋 خطة العمل المقترحة:\n\n📌 الملخص: ${plan_summary}\n`;
@@ -441,10 +431,6 @@
         output += `\n⏳ الرجاء الموافقة على الخطة قبل المتابعة.`;
         return output;
     };
-
-    // ============================================================
-    //  5.  طبقة الموافقة البشرية (Approval Layer)
-    // ============================================================
 
     window.request_approval = function(plan_summary, steps = [], estimated_impact = "غير محدد") {
         if (!plan_summary) return "الرجاء تقديم ملخص للخطة.";
@@ -473,7 +459,7 @@
     };
 
     // ============================================================
-    //  6.  الجسر التنفيذي (عبر Cloudflare)
+    //  5.  الجسر التنفيذي (عبر Cloudflare)
     // ============================================================
     async function callProxy(endpoint, options = {}) {
         const proxyUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
@@ -497,7 +483,6 @@
         }
     }
 
-    // أدوات GitHub
     window.read_file = async function(path) {
         const result = await callProxy(`github/contents/${path}`);
         if (typeof result === 'string' && result.startsWith('❌')) return result;
@@ -550,7 +535,7 @@
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: "تحديث جراحي آمن (V7.1)",
+                    message: "تحديث جراحي آمن (V7.2)",
                     content: btoa(unescape(encodeURIComponent(updatedContent)))
                 })
             });
@@ -565,7 +550,7 @@
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                message: "إنشاء ملف جديد (V7.1)",
+                message: "إنشاء ملف جديد (V7.2)",
                 content: btoa(unescape(encodeURIComponent(content)))
             })
         });
@@ -590,7 +575,7 @@
     };
 
     // ============================================================
-    //  7.  التوجيه المحلي (يدعم web_search مباشرة)
+    //  6.  التوجيه المحلي
     // ============================================================
     window.processLocalCommand = async function(inputText) {
         if (!inputText) return null;
@@ -641,9 +626,10 @@
     };
 
     // ============================================================
-    //  8.  جسر الاتصال بـ Gemini
+    //  7.  جسر الاتصال بـ Gemini (المُحدث - مع Auto-Execution للـ Thought)
     // ============================================================
     window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash') {
+        // محاولة التنفيذ المحلي
         try {
             const localResponse = await window.processLocalCommand(promptText);
             if (localResponse) {
@@ -660,6 +646,7 @@
             console.warn('Local command execution failed:', e.message);
         }
 
+        // الاتصال بـ Gemini API
         const proxyUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
         const url = proxyUrl + 'gemini';
         const systemInstruction = { parts: [{ text: GROUNDED_SYSTEM_PROMPT }] };
@@ -717,8 +704,34 @@
             if (functionCall) {
                 const { name, args } = functionCall.functionCall;
                 let result;
+
+                // تنفيذ الأدوات الجديدة مع Auto-Execution للـ Thought
                 if (name === "thought") {
-                    result = window.thought(args.reasoning, args.plan || "", args.risks || "غير محددة", args.peer_review || "غير محددة");
+                    // 1. تنفيذ أداة thought للحصول على التحليل والخطة
+                    const thoughtResult = window.thought(args.reasoning, args.plan || "", args.risks || "غير محددة", args.peer_review || "غير محددة");
+                    
+                    // 2. إذا كان التصنيف "بحث واستعلام"، نقوم بتنفيذ web_search تلقائياً
+                    if (thoughtResult.intent === "بحث واستعلام" && thoughtResult.reasoning) {
+                        // استخراج الاستعلام من النص (أو استخدام النص كله)
+                        const queryMatch = thoughtResult.reasoning.match(/["']([^"']+)["']/);
+                        const query = queryMatch ? queryMatch[1] : thoughtResult.reasoning;
+                        const searchResult = await window.web_search(query);
+                        return {
+                            text: `🧠 **فكرت أولاً:**\n${JSON.stringify(thoughtResult, null, 2)}\n\n🌐 **ثم نفذت البحث:**\n${searchResult}`,
+                            model: "Local Engine (Thought + Web Search)"
+                        };
+                    }
+                    
+                    // 3. إذا كان التصنيف "تعديل كود"، نطلب الموافقة
+                    if (thoughtResult.intent === "تعديل كود") {
+                        return {
+                            text: `🧠 **تحليل التعديل المطلوب:**\n${JSON.stringify(thoughtResult, null, 2)}\n\n⏳ يرجى كتابة "نفذ" للموافقة على الخطة.`,
+                            model: "Local Engine (Thought)"
+                        };
+                    }
+                    
+                    // 4. وإلا، نعيد نتيجة التفكير فقط
+                    return { text: `🧠 **نتيجة التفكير:**\n${JSON.stringify(thoughtResult, null, 2)}`, model: "Local Engine (Thought)" };
                 }
                 else if (name === "DeepThink") result = window.DeepThink(args.problem, args.context, args.constraints);
                 else if (name === "web_search") result = await window.web_search(args.query);
@@ -752,7 +765,7 @@
         }
     };
 
-    console.log("🚀 AI Core V7.1 (Full & Complete) Loaded Successfully.");
+    console.log("🚀 AI Core V7.2 (Smart Executor) Loaded.");
     console.log("🧠 أدوات التفكير: Thought (ذكي) + DeepThink.");
     console.log("🌐 أدوات البحث: web_search (Google أولاً، DuckDuckGo احتياطي).");
 })(window);
