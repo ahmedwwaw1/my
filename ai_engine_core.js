@@ -732,11 +732,20 @@
             const match = inputText.match(/(?:اكتشف خطأ|detect bug)\s*["']?([^"']+)["']?/);
             if (match) return { result: window.detect_bug_signature(match[1]), tool: "detect_bug_signature" };
         }
-        if (lower.includes('ابحث عن') || lower.includes('ابحث في الإنترنت') || lower.includes('بحث في الويب')) {
-            const match = inputText.match(/(?:ابحث عن|ابحث في الإنترنت|بحث في الويب)\s*["']?([^"']+)["']?/);
-            if (match) {
-                const result = await window.web_search(match[1]);
-                return { result: result, tool: "web_search" };
+        if (lower.includes('ابحث عن') || lower.includes('ابحث في الإنترنت') || lower.includes('بحث في الويب') || lower.includes('search')) {
+            let engine = 'auto';
+            if (lower.includes('tavily')) engine = 'tavily';
+            else if (lower.includes('google') || lower.includes('جوجل')) engine = 'google';
+            else if (lower.includes('wiki') || lower.includes('ويكيبيديا')) engine = 'wiki';
+            else if (lower.includes('arxiv')) engine = 'arxiv';
+            else if (lower.includes('news')) engine = 'news';
+
+            const match = inputText.match(/(?:ابحث عن|ابحث في الإنترنت|بحث في الويب|search)\s*(?:في\s+)?(?:tavily|google|جوجل|wiki|ويكيبيديا|arxiv|news)?\s*["']?([^"']+)["']?/i);
+            const query = match ? match[1] : inputText.replace(/ابحث عن|ابحث في الإنترنت|بحث في الويب|search|tavily|google|جوجل|wiki|ويكيبيديا|arxiv|news|في/gi, '').trim();
+
+            if (query) {
+                const result = await window.web_search(query, engine);
+                return { result: result, tool: `web_search (${engine})` };
             }
         }
         return null;
