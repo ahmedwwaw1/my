@@ -1,7 +1,7 @@
 // ================================================================
-//  🧠  AI ENGINEERING CORE - DYNAMIC THINKER EDITION (V7.3)
-//  المصدر الوحيد للحقيقة - Thought تفرق بين البحث المحلي والويب
-//  يحتوي على: Intent-Aware Thought + Local/Web Search Detection
+//  🧠  AI ENGINEERING CORE - CLOUD MEMORY EDITION (V7.4)
+//  المصدر الوحيد للحقيقة - الذاكرة الآن في engine_memory.json عبر GitHub
+//  يحتوي على: store_memory (سحابي) + vector_search (سحابي) + localStorage احتياطي
 // ================================================================
 
 (function(window) {
@@ -32,45 +32,157 @@
     6. **قاعدة ذهبية: فكر → اعرض الخطة → انتظر الموافقة → نفذ.**
     7. **عند الحاجة إلى معلومات خارجية، استخدم 'web_search'.**
     8. **للبحث عن محتوى داخل المستودع، استخدم 'searchCode' أو اقرأ ملفات JSON مباشرة.**
+    9. **الذاكرة محفوظة في engine_memory.json عبر GitHub (سحابي).**
     `;
 
     // ============================================================
-    //  2.  المحركات الأساسية
+    //  2.  المحركات الأساسية (الذاكرة سحابية الآن)
     // ============================================================
 
-    window.store_memory = function(key, value) {
+    // --- دالة مساعدة لقراءة ملف الذاكرة من GitHub ---
+    async function readMemoryFile() {
         try {
-            const data = { value: value, timestamp: new Date().toISOString() };
-            localStorage.setItem('ai_memory_' + key, JSON.stringify(data));
-            return { status: "success", key: key, saved_at: new Date().toLocaleString() };
+            const content = await window.read_file('engine_memory.json');
+            if (typeof content === 'string' && content.startsWith('❌')) {
+                // إذا فشل القراءة، نعيد هيكلاً افتراضياً
+                return { history: [], preferences: { coding_style: "clean_and_documented", auto_backup: true }, last_update: null };
+            }
+            return JSON.parse(content);
         } catch (e) {
+            console.warn('Failed to read memory file, using default:', e.message);
+            return { history: [], preferences: { coding_style: "clean_and_documented", auto_backup: true }, last_update: null };
+        }
+    }
+
+    // --- دالة مساعدة لحفظ ملف الذاكرة في GitHub ---
+    async function saveMemoryFile(memory) {
+        try {
+            const result = await window.write_file('engine_memory.json', JSON.stringify(memory, null, 2));
+            return result;
+        } catch (e) {
+            console.warn('Failed to save memory file:', e.message);
             return { status: "error", error: e.message };
+        }
+    }
+
+    // --- store_memory (سحابي مع localStorage احتياطي) ---
+    window.store_memory = async function(key, value) {
+        try {
+            // 1. قراءة الملف الحالي من GitHub
+            const memory = await readMemoryFile();
+            
+            // 2. إضافة الحدث الجديد إلى السجل
+            memory.history.push({
+                timestamp: new Date().toISOString(),
+                event: key,
+                status: "success",
+                message: typeof value === 'string' ? value : JSON.stringify(value)
+            });
+            memory.last_update = new Date().toISOString();
+            
+            // 3. حفظ في GitHub
+            const saveResult = await saveMemoryFile(memory);
+            if (saveResult && saveResult.includes('✅')) {
+                // 4. حفظ نسخة احتياطية في localStorage (للتشغيل دون اتصال)
+                try {
+                    localStorage.setItem('ai_memory_' + key, JSON.stringify({ value: value, timestamp: new Date().toISOString() }));
+                } catch(e) {}
+                return { status: "success", key: key, saved_at: new Date().toLocaleString(), cloud: true };
+            } else {
+                // 5. إذا فشل الحفظ في GitHub، نعود إلى localStorage
+                localStorage.setItem('ai_memory_' + key, JSON.stringify({ value: value, timestamp: new Date().toISOString() }));
+                return { status: "success", key: key, saved_at: new Date().toLocaleString(), cloud: false, fallback: true };
+            }
+        } catch (e) {
+            // 6. في حالة أي خطأ، نستخدم localStorage كحل أخير
+            try {
+                localStorage.setItem('ai_memory_' + key, JSON.stringify({ value: value, timestamp: new Date().toISOString() }));
+                return { status: "success", key: key, saved_at: new Date().toLocaleString(), cloud: false, fallback: true };
+            } catch(e2) {
+                return { status: "error", error: e.message };
+            }
         }
     };
 
-    window.vector_search = function(query) {
+    // --- vector_search (سحابي مع localStorage احتياطي) ---
+    window.vector_search = async function(query) {
         try {
-            const keys = Object.keys(localStorage).filter(k => k.startsWith('ai_memory_'));
+            // 1. محاولة البحث في GitHub أولاً
+            const memory = await readMemoryFile();
             let results = [];
+            
+            // البحث في سجل الأحداث
+            if (memory.history && Array.isArray(memory.history)) {
+                memory.history.forEach(item => {
+                    const searchable = (item.event + ' ' + (item.message || '')).toLowerCase();
+                    if (searchable.includes(query.toLowerCase())) {
+                        results.push({
+                            key: item.event,
+                            value: item.message,
+                            timestamp: item.timestamp
+                        });
+                    }
+                });
+            }
+            
+            // 2. إذا كانت هناك نتائج من GitHub، نعيدها
+            if (results.length > 0) {
+                return results;
+            }
+            
+            // 3. إذا لم نجد في GitHub، نبحث في localStorage
+            const keys = Object.keys(localStorage).filter(k => k.startsWith('ai_memory_'));
+            let localResults = [];
             keys.forEach(key => {
                 try {
                     const item = JSON.parse(localStorage.getItem(key));
-                    if ((item.value || '').toLowerCase().includes(query.toLowerCase())) {
-                        results.push({ key: key.replace('ai_memory_', ''), value: item.value, timestamp: item.timestamp });
+                    const searchable = (item.value || '').toLowerCase();
+                    if (searchable.includes(query.toLowerCase())) {
+                        localResults.push({
+                            key: key.replace('ai_memory_', ''),
+                            value: item.value,
+                            timestamp: item.timestamp
+                        });
                     }
                 } catch(e) {}
             });
-            return results.length > 0 ? results : "لم يتم العثور على نتائج.";
-        } catch(e) {
-            return "خطأ في البحث: " + e.message;
+            
+            if (localResults.length > 0) {
+                return localResults;
+            }
+            
+            return "لم يتم العثور على نتائج.";
+        } catch (e) {
+            // 4. في حالة أي خطأ، نبحث في localStorage فقط
+            try {
+                const keys = Object.keys(localStorage).filter(k => k.startsWith('ai_memory_'));
+                let results = [];
+                keys.forEach(key => {
+                    try {
+                        const item = JSON.parse(localStorage.getItem(key));
+                        if ((item.value || '').toLowerCase().includes(query.toLowerCase())) {
+                            results.push({
+                                key: key.replace('ai_memory_', ''),
+                                value: item.value,
+                                timestamp: item.timestamp
+                            });
+                        }
+                    } catch(e) {}
+                });
+                return results.length > 0 ? results : "لم يتم العثور على نتائج.";
+            } catch(e2) {
+                return "خطأ في البحث: " + e.message;
+            }
         }
     };
 
+    // --- compress_context (محفوظ كما هو) ---
     window.compress_context = function(long_text) {
         if (!long_text) return "لا يوجد نص لضغطه.";
         return { original_length: long_text.length, compressed_length: Math.min(long_text.length, 200), text: long_text.substring(0, 200) + "..." };
     };
 
+    // --- estimate_cost (محفوظ كما هو) ---
     window.estimate_cost = function(model, tokens) {
         const pricing = {
             'gemini-3.5-flash-lite': 0.00005,
@@ -85,6 +197,7 @@
         return { model, tokens, cost_usd: cost.toFixed(6), calculation: `${tokens} * ${price} = ${cost.toFixed(6)}` };
     };
 
+    // --- run_virtual_test (محفوظ كما هو) ---
     window.run_virtual_test = function(code) {
         if (!code) return { passed: false, errors: ["الكود فارغ"], suggestion: "أدخل كوداً للاختبار." };
         const hasTry = code.includes('try');
@@ -178,23 +291,19 @@
     // --- دالة مساعدة للبحث المحلي في ملفات JSON (للبحث عن فيديوات) ---
     window.searchLocalVideos = async function(query) {
         try {
-            // محاولة قراءة ملف vsa.json (الذي يحتوي على بيانات الفيديوهات)
             const response = await fetch('vsa.json?v=' + Date.now());
             if (!response.ok) return "❌ فشل قراءة ملف البيانات المحلي.";
             const data = await response.json();
             
-            // البحث في البيانات عن فيديوات تحتوي على الاستعلام
             let results = [];
             if (Array.isArray(data)) {
                 data.forEach(item => {
-                    // البحث في العنوان والمحتوى والفيديوهات
                     const title = item.title || '';
                     const content = item.content || '';
                     if (title.toLowerCase().includes(query.toLowerCase()) || 
                         content.toLowerCase().includes(query.toLowerCase())) {
                         results.push(`📹 ${title}: ${content.substring(0, 100)}...`);
                     }
-                    // البحث في الفيديوهات الفرعية
                     if (item.videos && Array.isArray(item.videos)) {
                         item.videos.forEach(vid => {
                             if (vid.title && vid.title.toLowerCase().includes(query.toLowerCase())) {
@@ -323,14 +432,12 @@
         let generatedRisks = "منخفضة";
         let generatedPeerReview = "لم تتم المراجعة";
 
-        // ---- التصنيف الديناميكي: التمييز بين البحث المحلي والويب ----
         if (input.includes('عدل') || input.includes('غير') || input.includes('استبدل') || input.includes('أضف') || input.includes('حذف') || input.includes('اكتب')) {
             intent = "تعديل كود";
             generatedPlan = "1. قراءة الملف المطلوب باستخدام read_file.\n2. تحديد النص القديم بدقة (case-sensitive).\n3. تنفيذ الاستبدال الجراحي باستخدام multi_replace_file_content.\n4. حفظ التغييرات والتحقق من السلامة.";
             generatedRisks = "متوسطة (احتمال حدوث تعارض في الأقواس أو كسر الموقع)";
             generatedPeerReview = "يجب فحص توازن الأقواس باستخدام analyze_file بعد التعديل.";
         } 
-        // ---- بحث محلي (داخل المستودع) ----
         else if (input.includes('المستودع') || input.includes('الملفات') || input.includes('المشروع') || 
                  input.includes('البيانات') || input.includes('الكورسات') || input.includes('الدروس') ||
                  (input.includes('ابحث') && !input.includes('يوتيوب') && !input.includes('الإنترنت') && !input.includes('الويب'))) {
@@ -339,7 +446,6 @@
             generatedRisks = "منخفضة جداً (بحث في الملفات المحلية فقط)";
             generatedPeerReview = "تأكد من وجود الملفات المطلوبة في المستودع.";
         }
-        // ---- بحث ويب (خارجي) ----
         else if (input.includes('يوتيوب') || input.includes('الإنترنت') || input.includes('الويب') || 
                  input.includes('جوجل') || input.includes('بحث في الويب')) {
             intent = "بحث ويب";
@@ -593,7 +699,7 @@
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: "تحديث جراحي آمن (V7.3)",
+                    message: "تحديث جراحي آمن (V7.4)",
                     content: btoa(unescape(encodeURIComponent(updatedContent)))
                 })
             });
@@ -608,7 +714,7 @@
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                message: "إنشاء ملف جديد (V7.3)",
+                message: "إنشاء ملف جديد (V7.4)",
                 content: btoa(unescape(encodeURIComponent(content)))
             })
         });
@@ -641,11 +747,17 @@
 
         if (lower.includes('خزن') || lower.includes('تذكر')) {
             const match = inputText.match(/(?:خزن|تذكر)\s*["']?([^"'\s]+)["']?\s*(.*)/);
-            if (match) return { result: window.store_memory(match[1], match[2] || "تم الحفظ"), tool: "store_memory" };
+            if (match) {
+                const result = await window.store_memory(match[1], match[2] || "تم الحفظ");
+                return { result: result, tool: "store_memory" };
+            }
         }
         if (lower.includes('ابحث في الذاكرة') || lower.includes('ابحث محلياً') || lower.includes('بحث في الذاكرة')) {
             const match = inputText.match(/(?:ابحث في الذاكرة|ابحث محلياً|بحث في الذاكرة)\s*["']?([^"']+)["']?/);
-            if (match) return { result: window.vector_search(match[1]), tool: "vector_search" };
+            if (match) {
+                const result = await window.vector_search(match[1]);
+                return { result: result, tool: "vector_search" };
+            }
         }
         if (lower.includes('تكلفة') || lower.includes('سعر')) {
             const modelMatch = inputText.match(/نموذج\s*["']?([^"'\s]+)["']?/) || [null, 'gemini-3.7-flash'];
@@ -684,7 +796,7 @@
     };
 
     // ============================================================
-    //  8.  جسر الاتصال بـ Gemini (المُحدث - مع Auto-Execution للـ Thought)
+    //  8.  جسر الاتصال بـ Gemini (المُحدث)
     // ============================================================
     window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash') {
         // محاولة التنفيذ المحلي
@@ -716,8 +828,8 @@
                 { name: "analyze_file", description: "فحص توازن الأقواس.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
                 { name: "multi_replace_file_content", description: "تعديل أجزاء محددة من الملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
                 { name: "write_file", description: "إنشاء ملف جديد فقط.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
-                { name: "store_memory", description: "تخزين معلومة.", parameters: { type: "OBJECT", properties: { key: { type: "STRING" }, value: { type: "STRING" } }, required: ["key", "value"] } },
-                { name: "vector_search", description: "البحث في الذاكرة المحلية.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "store_memory", description: "تخزين معلومة (سحابي عبر GitHub).", parameters: { type: "OBJECT", properties: { key: { type: "STRING" }, value: { type: "STRING" } }, required: ["key", "value"] } },
+                { name: "vector_search", description: "البحث في الذاكرة السحابية.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                 { name: "estimate_cost", description: "حساب التكلفة.", parameters: { type: "OBJECT", properties: { model: { type: "STRING" }, tokens: { type: "NUMBER" } }, required: ["model", "tokens"] } },
                 { name: "run_virtual_test", description: "اختبار الكود.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
                 { name: "searchCode", description: "البحث الدلالي في كل الملفات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
@@ -764,16 +876,12 @@
                 const { name, args } = functionCall.functionCall;
                 let result;
 
-                // تنفيذ الأدوات الجديدة مع Auto-Execution للـ Thought
                 if (name === "thought") {
                     const thoughtResult = window.thought(args.reasoning, args.plan || "", args.risks || "غير محددة", args.peer_review || "غير محددة");
                     
-                    // ---- التنفيذ الديناميكي بناءً على التصنيف ----
                     if (thoughtResult.intent === "بحث محلي") {
-                        // استخراج الاستعلام من النص
                         const queryMatch = thoughtResult.reasoning.match(/["']([^"']+)["']/);
                         const query = queryMatch ? queryMatch[1] : thoughtResult.reasoning;
-                        // البحث المحلي في ملفات المستودع (0 توكنات)
                         const localResult = await window.searchLocalVideos(query);
                         return {
                             text: `🧠 **فكرت أولاً (بحث محلي):**\n${JSON.stringify(thoughtResult, null, 2)}\n\n📂 **نتيجة البحث المحلي:**\n${localResult}`,
@@ -814,8 +922,8 @@
                 else if (name === "analyze_file") result = await window.analyze_file(args.path);
                 else if (name === "multi_replace_file_content") result = await window.multi_replace_file_content(args.path, args.replacements);
                 else if (name === "write_file") result = await window.write_file(args.path, args.content);
-                else if (name === "store_memory") result = window.store_memory(args.key, args.value);
-                else if (name === "vector_search") result = window.vector_search(args.query);
+                else if (name === "store_memory") result = await window.store_memory(args.key, args.value);
+                else if (name === "vector_search") result = await window.vector_search(args.query);
                 else if (name === "estimate_cost") result = window.estimate_cost(args.model, args.tokens);
                 else if (name === "run_virtual_test") result = window.run_virtual_test(args.code);
                 else if (name === "searchCode") result = await window.searchCode(args.query);
@@ -835,7 +943,7 @@
         }
     };
 
-    console.log("🚀 AI Core V7.3 (Dynamic Thinker) Loaded.");
-    console.log("🧠 أدوات التفكير: Thought (يميز بين المحلي والويب) + DeepThink.");
+    console.log("🚀 AI Core V7.4 (Cloud Memory) Loaded.");
+    console.log("🧠 الذاكرة الآن سحابية (engine_memory.json) مع localStorage احتياطي.");
     console.log("🌐 أدوات البحث: web_search (ويب) + searchLocalVideos (محلي - 0 توكنات).");
 })(window);
