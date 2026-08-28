@@ -2,6 +2,7 @@
 //  🧠  AI ENGINEERING CORE - SMART THINKER EDITION (V7.1)
 //  المصدر الوحيد للحقيقة - مزود بأداة Thought ذكية (تحلل النية بنفسها)
 //  يحتوي على: Intent-Aware Thought + DeepThink + web_search (Google أولاً)
+//  الإصدار الكامل (جميع الدوال من V1 إلى V7.1)
 // ================================================================
 
 (function(window) {
@@ -35,7 +36,7 @@
     `;
 
     // ============================================================
-    //  2.  المحركات الأساسية (المستوى الأول - محفوظة)
+    //  2.  المحركات الأساسية (المستوى الأول)
     // ============================================================
 
     window.store_memory = function(key, value) {
@@ -145,7 +146,7 @@
     };
 
     // ============================================================
-    //  3.  أدوات المستوى الثاني والثالث (محفوظة)
+    //  3.  أدوات المستوى الثاني والثالث
     // ============================================================
     window.searchCode = async function(query) {
         try {
@@ -275,25 +276,23 @@
     };
 
     // ============================================================
-    //  4.  أدوات التفكير والتحليل العميق (الجديدة)
+    //  4.  أدوات التفكير والتحليل العميق
     // ============================================================
 
-    // --- 4.1 أداة التفكير الذكية (Intent-Aware Thought) - تحلل النية تلقائياً ---
+    // --- 4.1 أداة التفكير الذكية (Intent-Aware Thought) ---
     window.thought = function(reasoning, plan = "", risks = "غير محددة", peer_review = "غير محددة") {
         if (!reasoning) return "الرجاء تقديم تحليل منطقي (reasoning).";
 
-        // تحليل النية بناءً على النص المرسل
         const input = reasoning.toLowerCase();
         let intent = "عام";
         let generatedPlan = "";
         let generatedRisks = "منخفضة";
         let generatedPeerReview = "لم تتم المراجعة";
 
-        // 1. كشف النية (Intent Detection) بناءً على الكلمات المفتاحية
         if (input.includes('عدل') || input.includes('غير') || input.includes('استبدل') || input.includes('أضف') || input.includes('حذف') || input.includes('اكتب')) {
             intent = "تعديل كود";
-            generatedPlan = "1. قراءة الملف المطلوب باستخدام read_file.\n2. تحديد النص القديم بدقة (case-sensitive).\n3. تنفيذ الاستبدال الجراحي باستخدام multi_replace_file_content.\n4. حفظ التغييرات والتحقق من السلامة.";
-            generatedRisks = "متوسطة (احتمال حدوث تعارض في الأقواس أو كسر الموقع)";
+            generatedPlan = "1. قراءة الملف المطلوب باستخدام read_file.\n2. تحديد النص القديم بدقة.\n3. تنفيذ الاستبدال الجراحي باستخدام multi_replace_file_content.\n4. حفظ التغييرات والتحقق من السلامة.";
+            generatedRisks = "متوسطة (احتمال حدوث تعارض في الأقواس)";
             generatedPeerReview = "يجب فحص توازن الأقواس باستخدام analyze_file بعد التعديل.";
         } 
         else if (input.includes('ابحث') || input.includes('بحث') || input.includes('اكتشف') || input.includes('إنترنت') || input.includes('ويب')) {
@@ -304,7 +303,7 @@
         }
         else if (input.includes('حلل') || input.includes('قيّم') || input.includes('راجع') || input.includes('فكر') || input.includes('استراتيجية')) {
             intent = "تحليل وتقييم";
-            generatedPlan = "1. تحليل المشكلة من زوايا متعددة (معمارية، أداء، أمان، صيانة).\n2. اقتراح حلول بديلة.\n3. تقديم توصية نهائية.";
+            generatedPlan = "1. تحليل المشكلة من زوايا متعددة.\n2. اقتراح حلول بديلة.\n3. تقديم توصية نهائية.";
             generatedRisks = "منخفضة";
             generatedPeerReview = "مراجعة منطقية للتحليل للتأكد من عدم التحيز.";
         }
@@ -321,7 +320,6 @@
             generatedPeerReview = "الرد مباشر ولا يحتاج مراجعة إضافية.";
         }
 
-        // دمج المدخلات مع التحليل الذكي (الأولوية للمدخلات إن كانت مفيدة، وإلا نستخدم التحليل التلقائي)
         const finalPlan = (plan && plan.length > 5 && plan !== "غير محددة") ? plan : generatedPlan;
         const finalRisks = (risks && risks !== "غير محددة") ? risks : generatedRisks;
         const finalPeerReview = (peer_review && peer_review !== "غير محددة") ? peer_review : generatedPeerReview;
@@ -338,7 +336,7 @@
         };
     };
 
-    // --- 4.2 أداة التفكير العميق (DeepThink) - مستوحاة من DeepSeek R1 ---
+    // --- 4.2 أداة التفكير العميق (DeepThink) ---
     window.DeepThink = function(problem, context = "عام", constraints = []) {
         if (!problem) return "الرجاء تقديم المشكلة المراد تحليلها.";
         const analysis = {
@@ -367,7 +365,6 @@
         let googleResult = null;
         let duckResult = null;
         
-        // 🔍 الخطوة 1: محاولة البحث عبر Google PSE أولاً (دقة عالية)
         try {
             const proxyUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
             const googleUrl = `${proxyUrl}search?q=${encodeURIComponent(query)}&engine=google`;
@@ -386,8 +383,6 @@
             console.warn('Google Search failed:', e.message);
         }
         
-        // 🦆 الخطوة 2: إذا كانت نتائج Google غير كافية، ننتقل إلى DuckDuckGo (واسع النطاق)
-        // معيار عدم الكفاية: أقل من 3 روابط فعلية
         const isGoogleInsufficient = !googleResult || googleResult.split('\n').filter(line => line.includes('🔗')).length < 3;
         
         if (isGoogleInsufficient) {
@@ -410,17 +405,14 @@
             }
         }
         
-        // 🏆 تحديد النتيجة النهائية (الأفضل)
-        if (googleResult && !duckResult) return googleResult; // فقط Google
-        if (duckResult && !googleResult) return duckResult; // فقط DuckDuckGo
+        if (googleResult && !duckResult) return googleResult;
+        if (duckResult && !googleResult) return duckResult;
         if (googleResult && duckResult) {
-            // إذا كان لدينا كليهما، ندمجها بطريقة ذكية (إظهار مصدر كل نتيجة)
             return `🔍 **نتائج البحث المدمجة (Google + DuckDuckGo):**\n\n` +
                    `🔍 **من Google PSE:**\n${googleResult}\n\n` +
                    `🦆 **من DuckDuckGo:**\n${duckResult}`;
         }
         
-        // إذا فشل كلا المحركين
         return `🌐 لم يتم العثور على نتائج لـ "${query}" من أي مصدر. يرجى التحقق من الاتصال بالإنترنت.`;
     };
 
@@ -451,10 +443,9 @@
     };
 
     // ============================================================
-    //  5.  طبقة الموافقة البشرية (Approval Layer) - الجديدة
+    //  5.  طبقة الموافقة البشرية (Approval Layer)
     // ============================================================
 
-    // --- 5.1 أداة طلب الموافقة ---
     window.request_approval = function(plan_summary, steps = [], estimated_impact = "غير محدد") {
         if (!plan_summary) return "الرجاء تقديم ملخص للخطة.";
         localStorage.setItem('pending_plan', JSON.stringify({
@@ -470,7 +461,6 @@
         };
     };
 
-    // --- 5.2 أداة تنفيذ الخطة بعد الموافقة ---
     window.execute_approved_plan = async function() {
         const pending = localStorage.getItem('pending_plan');
         if (!pending) return "⚠️ لا توجد خطة معلقة للموافقة عليها.";
@@ -600,55 +590,46 @@
     };
 
     // ============================================================
-    //  7.  التوجيه المحلي (المُحدث - يدعم web_search مباشرة)
+    //  7.  التوجيه المحلي (يدعم web_search مباشرة)
     // ============================================================
     window.processLocalCommand = async function(inputText) {
         if (!inputText) return null;
         const lower = inputText.toLowerCase();
 
-        // 1. تخزين
         if (lower.includes('خزن') || lower.includes('تذكر')) {
             const match = inputText.match(/(?:خزن|تذكر)\s*["']?([^"'\s]+)["']?\s*(.*)/);
             if (match) return { result: window.store_memory(match[1], match[2] || "تم الحفظ"), tool: "store_memory" };
         }
-        // 2. بحث محلي في الذاكرة (فقط إذا طُلب صراحة)
         if (lower.includes('ابحث في الذاكرة') || lower.includes('ابحث محلياً') || lower.includes('بحث في الذاكرة')) {
             const match = inputText.match(/(?:ابحث في الذاكرة|ابحث محلياً|بحث في الذاكرة)\s*["']?([^"']+)["']?/);
             if (match) return { result: window.vector_search(match[1]), tool: "vector_search" };
         }
-        // 3. تكلفة
         if (lower.includes('تكلفة') || lower.includes('سعر')) {
             const modelMatch = inputText.match(/نموذج\s*["']?([^"'\s]+)["']?/) || [null, 'gemini-3.7-flash'];
             const tokensMatch = inputText.match(/\b(\d+)\s*توكن/);
             const tokens = tokensMatch ? parseInt(tokensMatch[1]) : 100;
             return { result: window.estimate_cost(modelMatch[1], tokens), tool: "estimate_cost" };
         }
-        // 4. اختبار
         if (lower.includes('اختبر') || lower.includes('تحقق')) {
             const match = inputText.match(/(?:اختبر|تحقق)\s*([\s\S]*)/);
             if (match && match[1].length > 5) return { result: window.run_virtual_test(match[1]), tool: "run_virtual_test" };
         }
-        // 5. ضغط
         if (lower.includes('ضغط') || lower.includes('compress')) {
             const match = inputText.match(/(?:ضغط|compress)\s*["']?([^"']+)["']?/);
             if (match) return { result: window.compress_context(match[1]), tool: "compress_context" };
         }
-        // 6. توليد اختبار
         if (lower.includes('ولد اختبار') || lower.includes('synthesize')) {
             const match = inputText.match(/(?:ولد اختبار|synthesize)\s*([\s\S]*)/);
             if (match && match[1].length > 5) return { result: window.synthesize_test(match[1]), tool: "synthesize_test" };
         }
-        // 7. توثيق
         if (lower.includes('وثق') || lower.includes('docstring')) {
             const match = inputText.match(/(?:وثق|docstring)\s*["']?([^"'\s]+)["']?/);
             if (match) return { result: window.generate_docstring(match[1], {}), tool: "generate_docstring" };
         }
-        // 8. كشف الأخطاء
         if (lower.includes('اكتشف خطأ') || lower.includes('detect bug')) {
             const match = inputText.match(/(?:اكتشف خطأ|detect bug)\s*["']?([^"']+)["']?/);
             if (match) return { result: window.detect_bug_signature(match[1]), tool: "detect_bug_signature" };
         }
-        // 9. بحث على الإنترنت (web_search) - التوجيه الجديد
         if (lower.includes('ابحث عن') || lower.includes('ابحث في الإنترنت') || lower.includes('بحث في الويب')) {
             const match = inputText.match(/(?:ابحث عن|ابحث في الإنترنت|بحث في الويب)\s*["']?([^"']+)["']?/);
             if (match) {
@@ -660,10 +641,9 @@
     };
 
     // ============================================================
-    //  8.  جسر الاتصال بـ Gemini (المُحدث - يتعامل مع async processLocalCommand)
+    //  8.  جسر الاتصال بـ Gemini
     // ============================================================
     window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash') {
-        // محاولة التنفيذ المحلي (غير متزامن)
         try {
             const localResponse = await window.processLocalCommand(promptText);
             if (localResponse) {
@@ -680,14 +660,12 @@
             console.warn('Local command execution failed:', e.message);
         }
 
-        // الاتصال بـ Gemini API إذا لم يتم التعامل محلياً
         const proxyUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
         const url = proxyUrl + 'gemini';
         const systemInstruction = { parts: [{ text: GROUNDED_SYSTEM_PROMPT }] };
 
         const tools = [{
             function_declarations: [
-                // المستوى الأول
                 { name: "listGithubFiles", description: "استكشاف هيكل المشروع.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } } } },
                 { name: "read_file", description: "قراءة محتوى ملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
                 { name: "analyze_file", description: "فحص توازن الأقواس.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
@@ -697,23 +675,19 @@
                 { name: "vector_search", description: "البحث في الذاكرة المحلية.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                 { name: "estimate_cost", description: "حساب التكلفة.", parameters: { type: "OBJECT", properties: { model: { type: "STRING" }, tokens: { type: "NUMBER" } }, required: ["model", "tokens"] } },
                 { name: "run_virtual_test", description: "اختبار الكود.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
-                // المستوى الثاني
                 { name: "searchCode", description: "البحث الدلالي في كل الملفات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                 { name: "wrap_with_error_handling", description: "إحاطة الكود بـ try-catch.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
                 { name: "simulate_integration", description: "محاكاة اختبار التكامل.", parameters: { type: "OBJECT", properties: { moduleName: { type: "STRING" }, dependencies: { type: "ARRAY", items: { type: "STRING" } } }, required: ["moduleName"] } },
                 { name: "injectGlobalStyles", description: "حقن CSS مباشرة.", parameters: { type: "OBJECT", properties: { css_code: { type: "STRING" } }, required: ["css_code"] } },
-                // المستوى الثالث
                 { name: "generate_unit_test", description: "توليد اختبار وحدة.", parameters: { type: "OBJECT", properties: { funcName: { type: "STRING" }, params: { type: "ARRAY", items: { type: "STRING" } } }, required: ["funcName"] } },
                 { name: "optimize_algorithm", description: "تحسين الخوارزميات.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
                 { name: "translate_code", description: "ترجمة الكود بين اللغات.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" }, targetLang: { type: "STRING" } }, required: ["code", "targetLang"] } },
                 { name: "explain_code", description: "شرح الكود بالعربية.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
-                // أدوات التفكير (المستوى الرابع)
                 { name: "thought", description: "غرفة عمليات التفكير الذكي (تحلل النية تلقائياً).", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, risks: { type: "STRING" }, peer_review: { type: "STRING" } }, required: ["reasoning"] } },
                 { name: "DeepThink", description: "وضع التفكير العميق (مستوحى من DeepSeek R1).", parameters: { type: "OBJECT", properties: { problem: { type: "STRING" }, context: { type: "STRING" }, constraints: { type: "ARRAY", items: { type: "STRING" } } }, required: ["problem"] } },
                 { name: "web_search", description: "البحث على الإنترنت (Google أولاً).", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                 { name: "read_url", description: "قراءة محتوى رابط خارجي.", parameters: { type: "OBJECT", properties: { url: { type: "STRING" } }, required: ["url"] } },
                 { name: "explain_plan", description: "شرح خطة العمل قبل التنفيذ.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "STRING" } } }, required: ["plan_summary"] } },
-                // طبقة الموافقة (المستوى الخامس)
                 { name: "request_approval", description: "طلب موافقة المستخدم على خطة قبل التنفيذ.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "STRING" } }, estimated_impact: { type: "STRING" } }, required: ["plan_summary"] } },
                 { name: "execute_approved_plan", description: "تنفيذ الخطة بعد موافقة المستخدم.", parameters: { type: "OBJECT", properties: {} } }
             ]
@@ -743,9 +717,7 @@
             if (functionCall) {
                 const { name, args } = functionCall.functionCall;
                 let result;
-                // تنفيذ الأدوات الجديدة
                 if (name === "thought") {
-                    // تمرير المعاملات بالكامل إلى الدالة الذكية
                     result = window.thought(args.reasoning, args.plan || "", args.risks || "غير محددة", args.peer_review || "غير محددة");
                 }
                 else if (name === "DeepThink") result = window.DeepThink(args.problem, args.context, args.constraints);
@@ -754,7 +726,6 @@
                 else if (name === "explain_plan") result = window.explain_plan(args.plan_summary, args.steps);
                 else if (name === "request_approval") result = window.request_approval(args.plan_summary, args.steps || [], args.estimated_impact || "غير محدد");
                 else if (name === "execute_approved_plan") result = await window.execute_approved_plan();
-                // الأدوات القديمة
                 else if (name === "listGithubFiles") result = await window.listGithubFiles(args.path || "");
                 else if (name === "read_file") result = await window.read_file(args.path);
                 else if (name === "analyze_file") result = await window.analyze_file(args.path);
@@ -781,7 +752,7 @@
         }
     };
 
-    console.log("🚀 AI Core V7.1 (Smart Intent-Aware Thought) Loaded.");
+    console.log("🚀 AI Core V7.1 (Full & Complete) Loaded Successfully.");
     console.log("🧠 أدوات التفكير: Thought (ذكي) + DeepThink.");
     console.log("🌐 أدوات البحث: web_search (Google أولاً، DuckDuckGo احتياطي).");
 })(window);
