@@ -1,8 +1,7 @@
 // ================================================================
-//  🧠  AI ENGINEERING CORE - SOVEREIGN SEARCH EDITION (V7.0)
+//  🧠  AI ENGINEERING CORE - SOVEREIGN SEARCH EDITION (V7.1)
 //  المصدر الوحيد للحقيقة - بحث هجين مع توجيه ذكي
-//  يحتوي على: thought + DeepThink + request_approval + execute_approved_plan + web_search (Google أولاً)
-//  تم التحديث: processLocalCommand أصبح async ويدعم web_search مباشرة
+//  تم التحديث: تحسين تدفق thought → web_search
 // ================================================================
 
 (function(window) {
@@ -18,21 +17,18 @@
     window.tokensSaved = parseInt(localStorage.getItem('vsa_tokens_saved') || '0');
 
     // ============================================================
-    //  1.  الدستور السيادي المقيد (مع طبقة الموافقة)
+    //  1.  الدستور السيادي المقيد (محسّن لتدفق thought → web_search)
     // ============================================================
     const GROUNDED_SYSTEM_PROMPT = `
     [SYSTEM INSTRUCTION - APPROVAL ENGINEERING MODE]
-    أنت مهندس برمجي سيادي (Sovereign Software Engineer). مهمتك هي كتابة وتعديل الأكواد.
+    أنت مهندس برمجي سيادي (Sovereign Software Engineer). مهمتك هي كتابة وتعديل الأكواد، والبحث عن المعلومات.
 
     قواعد العمل الإلزامية (آلية الموافقة):
-    1. **قبل تنفيذ أي تعديل، استخدم أداة 'thought' لتحليل المهمة ووضع خطة.**
-    2. **بعد الانتهاء من التفكير، استخدم أداة 'request_approval' لعرض الخطة على المستخدم وطلب موافقته.**
-    3. **لا تستخدم أي أداة تعديل (مثل multi_replace_file_content) دون موافقة صريحة من المستخدم عبر 'execute_approved_plan'.**
-    4. ممنوع منعاً باتاً استخدام أي كلمات فلسفية أو دينية أو عاطفية.
-    5. استخدم الأدوات المتاحة بدقة (read_file, analyze_file).
-    6. **قاعدة ذهبية: فكر → اعرض الخطة → انتظر الموافقة → نفذ.**
-    7. **عند الحاجة إلى معلومات خارجية، استخدم 'web_search' (يبحث في Google أولاً ثم DuckDuckGo).**
-    8. **للبحث المحلي في الذاكرة، استخدم 'vector_search'، ولكن فقط عند الطلب الصريح بذلك.**
+    1. **للمهام التي تتطلب تعديل كود (مثل multi_replace_file_content, write_file):** استخدم 'thought' أولاً، ثم 'request_approval' لعرض الخطة، وانتظر موافقة المستخدم.
+    2. **للمهام التي لا تتطلب تعديل كود (مثل web_search, read_url, explain_code):** استخدم 'thought' لتحليل المهمة، ثم **نفذ الأداة مباشرة** دون انتظار موافقة.
+    3. ممنوع منعاً باتاً استخدام أي كلمات فلسفية أو دينية أو عاطفية.
+    4. استخدم الأدوات المتاحة بدقة.
+    5. **قاعدة ذهبية: فكر (للأمان) → نفذ (للقراءة والبحث) / اعرض الخطة → انتظر الموافقة → نفذ (للتعديل).**
     `;
 
     // ============================================================
@@ -516,7 +512,7 @@
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: "تحديث جراحي آمن (V7.0)",
+                    message: "تحديث جراحي آمن (V7.1)",
                     content: btoa(unescape(encodeURIComponent(updatedContent)))
                 })
             });
@@ -531,7 +527,7 @@
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                message: "إنشاء ملف جديد (V7.0)",
+                message: "إنشاء ملف جديد (V7.1)",
                 content: btoa(unescape(encodeURIComponent(content)))
             })
         });
@@ -604,10 +600,26 @@
             const match = inputText.match(/(?:اكتشف خطأ|detect bug)\s*["']?([^"']+)["']?/);
             if (match) return { result: window.detect_bug_signature(match[1]), tool: "detect_bug_signature" };
         }
-        // 9. بحث على الإنترنت (web_search) - التوجيه الجديد
-        if (lower.includes('ابحث عن') || lower.includes('ابحث في الإنترنت') || lower.includes('بحث في الويب')) {
-            const match = inputText.match(/(?:ابحث عن|ابحث في الإنترنت|بحث في الويب)\s*["']?([^"']+)["']?/);
-            if (match) {
+        // 9. بحث على الإنترنت (web_search) - تحسين التوافق مع أوامر مثل "جلب فيديوهات"
+        if (lower.includes('ابحث عن') || lower.includes('ابحث في الإنترنت') || lower.includes('بحث في الويب') || 
+            lower.includes('جلب') || lower.includes('احضر') || lower.includes('أحضر') || lower.includes('أبحث')) {
+            // محاولة استخراج الاستعلام
+            let match = inputText.match(/(?:ابحث عن|ابحث في الإنترنت|بحث في الويب|جلب|احضر|أحضر|أبحث)\s*["']?([^"']+)["']?/);
+            if (!match) {
+                // إذا لم يجد، يأخذ كل النص بعد الكلمة المفتاحية
+                const keywords = ['ابحث عن', 'ابحث في الإنترنت', 'بحث في الويب', 'جلب', 'احضر', 'أحضر', 'أبحث'];
+                for (let kw of keywords) {
+                    if (lower.includes(kw)) {
+                        const index = lower.indexOf(kw) + kw.length;
+                        const query = inputText.substring(index).trim();
+                        if (query) {
+                            match = [kw, query];
+                            break;
+                        }
+                    }
+                }
+            }
+            if (match && match[1]) {
                 const result = await window.web_search(match[1]);
                 return { result: result, tool: "web_search" };
             }
@@ -734,7 +746,7 @@
         }
     };
 
-    console.log("🚀 AI Core V7.0 (Smart Routing Search) Loaded.");
+    console.log("🚀 AI Core V7.1 (Thought → Web Search Flow) Loaded.");
     console.log("🧠 أدوات الموافقة: request_approval, execute_approved_plan.");
     console.log("🌐 أدوات البحث: web_search (Google أولاً، DuckDuckGo احتياطي).");
     console.log("📌 التوجيه المحلي: vector_search (للذاكرة) | web_search (للإنترنت)");
