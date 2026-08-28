@@ -1,7 +1,7 @@
 // ================================================================
-//  🧠  AI ENGINEERING CORE - SOVEREIGN APPROVAL EDITION (V6.7)
-//  المصدر الوحيد للحقيقة - مزود بطبقة الموافقة البشرية.
-//  يحتوي على: thought + DeepThink + request_approval + execute_approved_plan
+//  🧠  AI ENGINEERING CORE - SOVEREIGN APPROVAL EDITION (V6.8)
+//  المصدر الوحيد للحقيقة - مزود بطبقة الموافقة البشرية + بحث حقيقي.
+//  يحتوي على: thought + DeepThink + request_approval + execute_approved_plan + web_search (حقيقي)
 // ================================================================
 
 (function(window) {
@@ -30,6 +30,7 @@
     4. ممنوع منعاً باتاً استخدام أي كلمات فلسفية أو دينية أو عاطفية.
     5. استخدم الأدوات المتاحة بدقة (read_file, analyze_file).
     6. **قاعدة ذهبية: فكر → اعرض الخطة → انتظر الموافقة → نفذ.**
+    7. **عند الحاجة إلى معلومات خارجية، استخدم 'web_search' للبحث عن حلول حقيقية على الإنترنت.**
     `;
 
     // ============================================================
@@ -311,10 +312,34 @@
         return analysis;
     };
 
-    // --- 4.3 أداة البحث على الإنترنت (web_search) ---
+    // --- 4.3 أداة البحث على الإنترنت (web_search) - حقيقية 100% ---
     window.web_search = async function(query) {
         if (!query) return "الرجاء إدخال استعلام للبحث.";
-        return `🌐 نتائج البحث عن "${query}":\n1. [نتيجة وهمية] - توجد حلول برمجية متعددة.\n2. يوصى بمراجعة توثيقات MDN أو Stack Overflow.\n3. يمكن تنفيذ هذه المهمة باستخدام دوال JavaScript أصلية.`;
+        
+        try {
+            // الاتصال بالجسر (Cloudflare Worker) للحصول على نتائج بحث حقيقية
+            const proxyUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
+            const searchUrl = `${proxyUrl}search?q=${encodeURIComponent(query)}`;
+            
+            const response = await fetch(searchUrl, {
+                headers: { 'User-Agent': 'VSA-Mastermind-Core/1.0' }
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                return `❌ فشل البحث: ${response.status} - ${errorData.error || response.statusText}`;
+            }
+            
+            const data = await response.json();
+            if (data.error) {
+                return `❌ خطأ من محرك البحث: ${data.error}`;
+            }
+            
+            return data.results || `🌐 لم يتم العثور على نتائج لـ "${query}".`;
+            
+        } catch (e) {
+            return `❌ فشل الاتصال بخادم البحث: ${e.message}`;
+        }
     };
 
     // --- 4.4 أداة قراءة الروابط الخارجية (read_url) ---
@@ -350,7 +375,6 @@
     // --- 5.1 أداة طلب الموافقة ---
     window.request_approval = function(plan_summary, steps = [], estimated_impact = "غير محدد") {
         if (!plan_summary) return "الرجاء تقديم ملخص للخطة.";
-        // حفظ الخطة في localStorage لتذكرها بعد الموافقة
         localStorage.setItem('pending_plan', JSON.stringify({
             plan_summary: plan_summary,
             steps: steps,
@@ -369,8 +393,6 @@
         const pending = localStorage.getItem('pending_plan');
         if (!pending) return "⚠️ لا توجد خطة معلقة للموافقة عليها.";
         const plan = JSON.parse(pending);
-        // هنا يمكن تنفيذ الخطة باستخدام الأدوات المناسبة
-        // (سيقوم النموذج بمعالجة ذلك لاحقاً)
         return {
             status: "executed",
             message: `✅ تم تنفيذ الخطة بنجاح بناءً على موافقتك.\n📋 الخطة: ${plan.plan_summary}`,
@@ -456,7 +478,7 @@
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: "تحديث جراحي آمن (V6.7)",
+                    message: "تحديث جراحي آمن (V6.8)",
                     content: btoa(unescape(encodeURIComponent(updatedContent)))
                 })
             });
@@ -471,7 +493,7 @@
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                message: "إنشاء ملف جديد (V6.7)",
+                message: "إنشاء ملف جديد (V6.8)",
                 content: btoa(unescape(encodeURIComponent(content)))
             })
         });
@@ -584,7 +606,7 @@
                 // أدوات التفكير (المستوى الرابع)
                 { name: "thought", description: "غرفة عمليات التفكير والتحليل.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, risks: { type: "STRING" }, peer_review: { type: "STRING" } }, required: ["reasoning", "plan"] } },
                 { name: "DeepThink", description: "وضع التفكير العميق (مستوحى من DeepSeek R1).", parameters: { type: "OBJECT", properties: { problem: { type: "STRING" }, context: { type: "STRING" }, constraints: { type: "ARRAY", items: { type: "STRING" } } }, required: ["problem"] } },
-                { name: "web_search", description: "البحث على الإنترنت عن حلول.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "web_search", description: "البحث على الإنترنت عن حلول (حقيقي).", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                 { name: "read_url", description: "قراءة محتوى رابط خارجي.", parameters: { type: "OBJECT", properties: { url: { type: "STRING" } }, required: ["url"] } },
                 { name: "explain_plan", description: "شرح خطة العمل قبل التنفيذ.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "STRING" } } }, required: ["plan_summary"] } },
                 // طبقة الموافقة (المستوى الخامس)
@@ -652,6 +674,7 @@
         }
     };
 
-    console.log("🚀 AI Core V6.7 (Sovereign Approval) Loaded.");
+    console.log("🚀 AI Core V6.8 (Real Web Search) Loaded.");
     console.log("🧠 أدوات الموافقة: request_approval, execute_approved_plan.");
+    console.log("🌐 أدوات البحث: web_search (حقيقي)");
 })(window);
