@@ -415,7 +415,7 @@
         try {
             const content = await window.read_file(path);
             if (typeof content === 'string' && content.startsWith('❌')) return content;
-            const openBraces = (content.match(/\{/g) || []).length);
+            const openBraces = (content.match(/\{/g) || []).length;
             const closeBraces = (content.match(/\}/g) || []).length;
             const openBrackets = (content.match(/\[/g) || []).length;
             const closeBrackets = (content.match(/\]/g) || []).length;
