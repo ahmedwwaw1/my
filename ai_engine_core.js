@@ -1,7 +1,8 @@
 // ================================================================
-//  🧠  AI ENGINEERING CORE - SOVEREIGN SEARCH EDITION (V6.9)
-//  المصدر الوحيد للحقيقة - مزود بطبقة الموافقة البشرية + بحث هجين (Google أولاً)
+//  🧠  AI ENGINEERING CORE - SOVEREIGN SEARCH EDITION (V7.0)
+//  المصدر الوحيد للحقيقة - بحث هجين مع توجيه ذكي
 //  يحتوي على: thought + DeepThink + request_approval + execute_approved_plan + web_search (Google أولاً)
+//  تم التحديث: processLocalCommand أصبح async ويدعم web_search مباشرة
 // ================================================================
 
 (function(window) {
@@ -31,6 +32,7 @@
     5. استخدم الأدوات المتاحة بدقة (read_file, analyze_file).
     6. **قاعدة ذهبية: فكر → اعرض الخطة → انتظر الموافقة → نفذ.**
     7. **عند الحاجة إلى معلومات خارجية، استخدم 'web_search' (يبحث في Google أولاً ثم DuckDuckGo).**
+    8. **للبحث المحلي في الذاكرة، استخدم 'vector_search'، ولكن فقط عند الطلب الصريح بذلك.**
     `;
 
     // ============================================================
@@ -514,7 +516,7 @@
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: "تحديث جراحي آمن (V6.9)",
+                    message: "تحديث جراحي آمن (V7.0)",
                     content: btoa(unescape(encodeURIComponent(updatedContent)))
                 })
             });
@@ -529,7 +531,7 @@
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                message: "إنشاء ملف جديد (V6.9)",
+                message: "إنشاء ملف جديد (V7.0)",
                 content: btoa(unescape(encodeURIComponent(content)))
             })
         });
@@ -554,65 +556,87 @@
     };
 
     // ============================================================
-    //  7.  التوجيه المحلي
+    //  7.  التوجيه المحلي (المُحدث - يدعم web_search مباشرة)
     // ============================================================
-    window.processLocalCommand = function(inputText) {
+    window.processLocalCommand = async function(inputText) {
         if (!inputText) return null;
         const lower = inputText.toLowerCase();
 
+        // 1. تخزين
         if (lower.includes('خزن') || lower.includes('تذكر')) {
             const match = inputText.match(/(?:خزن|تذكر)\s*["']?([^"'\s]+)["']?\s*(.*)/);
             if (match) return { result: window.store_memory(match[1], match[2] || "تم الحفظ"), tool: "store_memory" };
         }
-        if (lower.includes('ابحث') || lower.includes('بحث')) {
-            const match = inputText.match(/(?:ابحث|بحث)\s*["']?([^"']+)["']?/);
+        // 2. بحث محلي في الذاكرة (فقط إذا طُلب صراحة)
+        if (lower.includes('ابحث في الذاكرة') || lower.includes('ابحث محلياً') || lower.includes('بحث في الذاكرة')) {
+            const match = inputText.match(/(?:ابحث في الذاكرة|ابحث محلياً|بحث في الذاكرة)\s*["']?([^"']+)["']?/);
             if (match) return { result: window.vector_search(match[1]), tool: "vector_search" };
         }
+        // 3. تكلفة
         if (lower.includes('تكلفة') || lower.includes('سعر')) {
             const modelMatch = inputText.match(/نموذج\s*["']?([^"'\s]+)["']?/) || [null, 'gemini-3.7-flash'];
             const tokensMatch = inputText.match(/\b(\d+)\s*توكن/);
             const tokens = tokensMatch ? parseInt(tokensMatch[1]) : 100;
             return { result: window.estimate_cost(modelMatch[1], tokens), tool: "estimate_cost" };
         }
+        // 4. اختبار
         if (lower.includes('اختبر') || lower.includes('تحقق')) {
             const match = inputText.match(/(?:اختبر|تحقق)\s*([\s\S]*)/);
             if (match && match[1].length > 5) return { result: window.run_virtual_test(match[1]), tool: "run_virtual_test" };
         }
+        // 5. ضغط
         if (lower.includes('ضغط') || lower.includes('compress')) {
             const match = inputText.match(/(?:ضغط|compress)\s*["']?([^"']+)["']?/);
             if (match) return { result: window.compress_context(match[1]), tool: "compress_context" };
         }
+        // 6. توليد اختبار
         if (lower.includes('ولد اختبار') || lower.includes('synthesize')) {
             const match = inputText.match(/(?:ولد اختبار|synthesize)\s*([\s\S]*)/);
             if (match && match[1].length > 5) return { result: window.synthesize_test(match[1]), tool: "synthesize_test" };
         }
+        // 7. توثيق
         if (lower.includes('وثق') || lower.includes('docstring')) {
             const match = inputText.match(/(?:وثق|docstring)\s*["']?([^"'\s]+)["']?/);
             if (match) return { result: window.generate_docstring(match[1], {}), tool: "generate_docstring" };
         }
+        // 8. كشف الأخطاء
         if (lower.includes('اكتشف خطأ') || lower.includes('detect bug')) {
             const match = inputText.match(/(?:اكتشف خطأ|detect bug)\s*["']?([^"']+)["']?/);
             if (match) return { result: window.detect_bug_signature(match[1]), tool: "detect_bug_signature" };
+        }
+        // 9. بحث على الإنترنت (web_search) - التوجيه الجديد
+        if (lower.includes('ابحث عن') || lower.includes('ابحث في الإنترنت') || lower.includes('بحث في الويب')) {
+            const match = inputText.match(/(?:ابحث عن|ابحث في الإنترنت|بحث في الويب)\s*["']?([^"']+)["']?/);
+            if (match) {
+                const result = await window.web_search(match[1]);
+                return { result: result, tool: "web_search" };
+            }
         }
         return null;
     };
 
     // ============================================================
-    //  8.  جسر الاتصال بـ Gemini (المُحدث)
+    //  8.  جسر الاتصال بـ Gemini (المُحدث - يتعامل مع async processLocalCommand)
     // ============================================================
     window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash') {
-        const localResponse = window.processLocalCommand(promptText);
-        if (localResponse) {
-            const resultText = typeof localResponse.result === 'object' ? JSON.stringify(localResponse.result, null, 2) : localResponse.result;
-            const tokensSaved = Math.ceil(promptText.length / 4);
-            window.tokensSaved += tokensSaved;
-            localStorage.setItem('vsa_tokens_saved', window.tokensSaved.toString());
-            return {
-                text: `🛠️ تم التنفيذ محلياً [${localResponse.tool}]:\n${resultText}\n💰 التوفير: ~${window.tokensSaved} توكن`,
-                model: "Local Engine (0 Tokens)"
-            };
+        // محاولة التنفيذ المحلي (غير متزامن)
+        try {
+            const localResponse = await window.processLocalCommand(promptText);
+            if (localResponse) {
+                const resultText = typeof localResponse.result === 'object' ? JSON.stringify(localResponse.result, null, 2) : localResponse.result;
+                const tokensSaved = Math.ceil(promptText.length / 4);
+                window.tokensSaved += tokensSaved;
+                localStorage.setItem('vsa_tokens_saved', window.tokensSaved.toString());
+                return {
+                    text: `🛠️ تم التنفيذ محلياً [${localResponse.tool}]:\n${resultText}\n💰 التوفير: ~${window.tokensSaved} توكن`,
+                    model: "Local Engine (0 Tokens)"
+                };
+            }
+        } catch (e) {
+            console.warn('Local command execution failed:', e.message);
         }
 
+        // الاتصال بـ Gemini API إذا لم يتم التعامل محلياً
         const proxyUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
         const url = proxyUrl + 'gemini';
         const systemInstruction = { parts: [{ text: GROUNDED_SYSTEM_PROMPT }] };
@@ -626,7 +650,7 @@
                 { name: "multi_replace_file_content", description: "تعديل أجزاء محددة من الملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
                 { name: "write_file", description: "إنشاء ملف جديد فقط.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
                 { name: "store_memory", description: "تخزين معلومة.", parameters: { type: "OBJECT", properties: { key: { type: "STRING" }, value: { type: "STRING" } }, required: ["key", "value"] } },
-                { name: "vector_search", description: "البحث في الذاكرة.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "vector_search", description: "البحث في الذاكرة المحلية.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
                 { name: "estimate_cost", description: "حساب التكلفة.", parameters: { type: "OBJECT", properties: { model: { type: "STRING" }, tokens: { type: "NUMBER" } }, required: ["model", "tokens"] } },
                 { name: "run_virtual_test", description: "اختبار الكود.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
                 // المستوى الثاني
@@ -710,7 +734,8 @@
         }
     };
 
-    console.log("🚀 AI Core V6.9 (Google-First Search) Loaded.");
+    console.log("🚀 AI Core V7.0 (Smart Routing Search) Loaded.");
     console.log("🧠 أدوات الموافقة: request_approval, execute_approved_plan.");
     console.log("🌐 أدوات البحث: web_search (Google أولاً، DuckDuckGo احتياطي).");
+    console.log("📌 التوجيه المحلي: vector_search (للذاكرة) | web_search (للإنترنت)");
 })(window);
