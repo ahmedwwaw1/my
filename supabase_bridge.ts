@@ -1,6 +1,6 @@
 // ============================================================
-//  🚀 VSA Sovereign Bridge V5.2 - SUPABASE EDITION (Deno)
-//  المهمة: هجرة شاملة لـ Gemini (الرسمي) + GitHub + Search
+//  🚀 VSA Sovereign Bridge V5.3 - SMART ROUTING EDITION
+//  التحديث: معالجة ذكية للطلبات + ردود JSON دائمًا
 // ============================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -16,18 +16,63 @@ serve(async (req) => {
   const url = new URL(req.url);
   const path = url.pathname;
 
-  // 1. معالجة طلبات OPTIONS لـ CORS
-  if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
-  }
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    // ============================================================
-    //  أ. مسار Gemini API (بالمكتبة الرسمية)
-    // ============================================================
-    if (path.includes("/gemini")) {
+    // 🧠 منطق التوجيه الذكي:
+    // إذا كان الطلب POST، فهو غالباً لـ Gemini (إلا إذا كان للبحث أو جت هاب)
+
+    // --- أ. مسار البحث ---
+    if (path.includes("/search")) {
+      const query = url.searchParams.get("q");
+      const googleKey = Deno.env.get("GOOGLE_SEARCH_KEY");
+      const googleCx = Deno.env.get("GOOGLE_SEARCH_CX");
+      let results = "🔍 **نتائج البحث من قلب Supabase:**\n\n";
+
+      if (googleKey && googleCx && query) {
+        const gRes = await fetch(`https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${googleCx}&q=${encodeURIComponent(query)}&num=5`);
+        const gData = await gRes.json();
+        if (gData.items) {
+          gData.items.forEach((item: any, i: number) => {
+            results += `${i+1}. ${item.link.includes('youtube.com') ? "🎥 " : "🌐 "}${item.title}\n   🔗 ${item.link}\n\n`;
+          });
+        }
+      }
+      return new Response(JSON.stringify({ success: true, results }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
+      });
+    }
+
+    // --- ب. مسار GitHub ---
+    if (path.includes("/github/")) {
+      const GITHUB_TOKEN = Deno.env.get("GITHUB_TOKEN");
+      if (!GITHUB_TOKEN) throw new Error("GITHUB_TOKEN not found in secrets");
+
+      const githubPath = path.split("/github/")[1];
+      const githubUrl = `https://api.github.com/repos/ahmedwwaw1/my/${githubPath}`;
+
+      const res = await fetch(githubUrl, {
+        method: req.method,
+        headers: {
+          "Authorization": `Bearer ${GITHUB_TOKEN}`,
+          "Accept": "application/vnd.github.v3+json",
+          "User-Agent": "VSA-Supabase-Bridge/5.3",
+          "Content-Type": "application/json",
+        },
+        body: req.method !== "GET" ? await req.text() : null,
+      });
+
+      const data = await res.text();
+      return new Response(data, {
+        status: res.status,
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
+      });
+    }
+
+    // --- ج. المسار الافتراضي لـ Gemini (لكل طلبات الـ POST) ---
+    if (req.method === "POST") {
       const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
-      if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY not found in secrets");
+      if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY not found");
 
       const body = await req.json();
       const genAI = new GoogleGenAI(GEMINI_API_KEY);
@@ -50,62 +95,10 @@ serve(async (req) => {
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // ============================================================
-    //  ب. مسار GitHub API (الهجرة الكاملة)
-    // ============================================================
-    if (path.includes("/github/")) {
-      const GITHUB_TOKEN = Deno.env.get("GITHUB_TOKEN");
-      if (!GITHUB_TOKEN) throw new Error("GITHUB_TOKEN not found in secrets");
-
-      const githubPath = path.split("/github/")[1];
-      const githubUrl = `https://api.github.com/repos/ahmedwwaw1/my/${githubPath}`;
-
-      const res = await fetch(githubUrl, {
-        method: req.method,
-        headers: {
-          "Authorization": `Bearer ${GITHUB_TOKEN}`,
-          "Accept": "application/vnd.github.v3+json",
-          "User-Agent": "VSA-Supabase-Bridge/5.2",
-          "Content-Type": "application/json",
-        },
-        body: req.method !== "GET" ? await req.text() : null,
-      });
-
-      const data = await res.text();
-      return new Response(data, {
-        status: res.status,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
-    }
-
-    // ============================================================
-    //  ج. مسار البحث الهجين (Multi-Engine)
-    // ============================================================
-    if (path.includes("/search")) {
-      const query = url.searchParams.get("q");
-      const googleKey = Deno.env.get("GOOGLE_SEARCH_KEY");
-      const googleCx = Deno.env.get("GOOGLE_SEARCH_CX");
-      const tavilyKey = Deno.env.get("TAVILY_API_KEY");
-
-      let results = "🔍 **نتائج البحث من قلب Supabase:**\n\n";
-
-      // البحث عبر جوجل
-      if (googleKey && googleCx && query) {
-        const gRes = await fetch(`https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${googleCx}&q=${encodeURIComponent(query)}&num=5`);
-        const gData = await gRes.json();
-        if (gData.items) {
-          gData.items.forEach((item: any, i: number) => {
-            results += `${i+1}. ${item.link.includes('youtube.com') ? "🎥 " : "🌐 "}${item.title}\n   🔗 ${item.link}\n\n`;
-          });
-        }
-      }
-
-      return new Response(JSON.stringify({ success: true, results }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
-    }
-
-    return new Response("🚀 VSA Supabase Bridge Active.", { headers: corsHeaders });
+    // إذا كان مجرد فتح للرابط من المتصفح (GET)
+    return new Response(JSON.stringify({ message: "🚀 VSA Supabase Bridge is LIVE and waiting for commands." }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
+    });
 
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {
