@@ -737,8 +737,8 @@
     // ============================================================
     window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash', existingHistory = []) {
         // تم إلغاء التنفيذ المحلي - الطلب يذهب مباشرة للعقل المدبر لضمان أقصى درجات الذكاء
-        const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
-        const url = baseUrl + 'gemini';
+        const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl.slice(0, -1) : window.mastermindProxyUrl;
+        const url = baseUrl + '/gemini';
 
         // استخدام التاريخ السابق إذا وجد، أو البدء بمصفوفة جديدة
         let conversationHistory = existingHistory.length > 0 ? existingHistory : [];

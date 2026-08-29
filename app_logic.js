@@ -593,7 +593,7 @@
                 localStorage.setItem('gemini_api_key', key.trim());
                 alert('✅ تم حفظ المفتاح محلياً (سيُستخدم فقط إذا فشل الجسر).');
             } else {
-                alert('ℹ️ سيتم استخدام الجسر الآمن (Cloudflare) للاتصال بـ Gemini.');
+                alert('ℹ️ سيتم استخدام الجسر الآمن (Supabase) للاتصال بـ Gemini.');
             }
         });
 
