@@ -816,9 +816,9 @@
             }
         } catch (e) { console.warn('Local command failed:', e.message); }
 
-        // 2. إعدادات الجسر والسياق
-        const proxyUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
-        const url = proxyUrl + 'gemini';
+        // 2. إعدادات الجسر والسياق (تصحيح بناء الرابط)
+        const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
+        const url = baseUrl + 'gemini';
         let conversationHistory = [{ role: "user", parts: [{ text: promptText }] }];
         let maxIterations = 5; // أقصى عدد من الخطوات المتتالية لمنع الحلقات اللانهائية
         let currentIteration = 0;
