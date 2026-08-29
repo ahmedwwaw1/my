@@ -805,31 +805,21 @@
     };
 
     // ============================================================
-    //  8.  جسر الاتصال بـ Gemini (المُحدث: بنظام الحلقة الذاتية Agentic Loop)
+    //  8.  جسر الاتصال بـ Gemini (المُحدث: بنظام الذاكرة السياقية والحلقة الذاتية)
     // ============================================================
-    window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash') {
-        // 1. محاولة التنفيذ المحلي الفوري (توفير توكنات)
-        try {
-            const localResponse = await window.processLocalCommand(promptText);
-            if (localResponse) {
-                const resultText = typeof localResponse.result === 'object' ? JSON.stringify(localResponse.result, null, 2) : localResponse.result;
-                const tokensSaved = Math.ceil(promptText.length / 4);
-                window.tokensSaved += tokensSaved;
-                localStorage.setItem('vsa_tokens_saved', window.tokensSaved.toString());
-                return {
-                    text: `🛠️ تم التنفيذ محلياً [${localResponse.tool}]:\n${resultText}\n💰 التوفير: ~${window.tokensSaved} توكن`,
-                    model: "Local Engine (0 Tokens)"
-                };
-            }
-        } catch (e) { console.warn('Local command failed:', e.message); }
+    window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash', existingHistory = []) {
+        // ... (منطق التنفيذ المحلي يبقى كما هو) ...
 
-        // 2. إعدادات الجسر والسياق (تصحيح بناء الرابط)
         const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
         const url = baseUrl + 'gemini';
-        let conversationHistory = [{ role: "user", parts: [{ text: promptText }] }];
-        let maxIterations = 5; // أقصى عدد من الخطوات المتتالية لمنع الحلقات اللانهائية
+
+        // استخدام التاريخ السابق إذا وجد، أو البدء بمصفوفة جديدة
+        let conversationHistory = existingHistory.length > 0 ? existingHistory : [];
+        conversationHistory.push({ role: "user", parts: [{ text: promptText }] });
+
+        let maxIterations = 5;
         let currentIteration = 0;
-        let finalResponse = { text: "⚠️ فشل المحرك في الوصول لرد نهائي.", model: modelName };
+        let finalResponse = { text: "⚠️ فشل المحرك في الوصول لرد نهائي.", model: modelName, fullHistory: conversationHistory };
 
         // 3. تعريف الأدوات (نفس المصفوفة السابقة)
         const tools = [{

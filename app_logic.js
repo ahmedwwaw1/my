@@ -519,6 +519,9 @@
         }
     }
 
+    // متغير عالمي لحفظ سياق المحادثة الجارية
+    window.currentChatContext = [];
+
     window.sendAiMessage = async function() {
         const input = document.getElementById('aiInput');
         const btn = document.getElementById('aiSendBtn');
@@ -532,12 +535,18 @@
         btn.innerText = '⏳';
 
         try {
-            // ⭐ الإصلاح: التحقق من وجود الدالة قبل استدعائها
             if (typeof window.callAiBrain !== 'function') {
-                throw new Error('محرك الذكاء الاصطناعي (ai_engine_core.js) لم يتم تحميله بشكل صحيح. يرجى تحديث الصفحة (Ctrl+Shift+R).');
+                throw new Error('محرك الذكاء الاصطناعي لم يتم تحميله. يرجى التحديث.');
             }
 
-            const result = await window.callAiBrain(msg, window.geminiApiKey || 'PROXY_MODE', document.getElementById('modelSelector').value);
+            // إرسال الرسالة مع السياق الكامل لضمان حرية الحوار وتذكر الكلام
+            const result = await window.callAiBrain(msg, window.geminiApiKey || 'PROXY_MODE', document.getElementById('modelSelector').value, window.currentChatContext);
+
+            // تحديث السياق بالرد الجديد
+            if (result.fullHistory) {
+                window.currentChatContext = result.fullHistory;
+            }
+
             addMessageToUI('ai', result.text || 'تمت المعالجة.', result.model || 'AI');
         } catch (error) {
             console.error('AI Error:', error);
