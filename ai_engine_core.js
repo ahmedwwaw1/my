@@ -12,7 +12,7 @@
     // ============================================================
     window.geminiApiKey = localStorage.getItem('gemini_api_key') || '';
     window.githubToken = '';
-    window.mastermindProxyUrl = 'https://green-night-1c47.ahmedwwaw10.workers.dev/';
+    window.mastermindProxyUrl = 'https://ozcffmadatsfyyldqmdl.supabase.co/functions/v1/vsa-bridge/';
     window.GITHUB_REPO = 'ahmedwwaw1/my';
     window.tokensSaved = parseInt(localStorage.getItem('vsa_tokens_saved') || '0');
 

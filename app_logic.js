@@ -11,7 +11,7 @@
     // ============================================================
     //  1.  إعدادات واجهة المستخدم (لا توجد مفاتيح هنا!)
     // ============================================================
-    const PROXY_URL = 'https://green-night-1c47.ahmedwwaw10.workers.dev/'; // جسر Cloudflare
+    const PROXY_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co/functions/v1/vsa-bridge/'; // جسر Supabase الجديد
 
     let allData = [];
     let isDataLoaded = false;
