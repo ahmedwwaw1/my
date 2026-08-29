@@ -1,6 +1,6 @@
 // ============================================================
-//  🚀 VSA Universal Bridge V4.4 - DETERMINISTIC ACCURACY
-//  التحديث: التوجيه الدقيق المسبق للنماذج + سرعة قصوى بدون إعادة محاولة
+//  🚀 VSA Universal Bridge V4.5 - COMPREHENSIVE GEMINI ARSENAL
+//  التحديث: دعم كامل لعائلات Gemini 3.x و 2.5 والنماذج المتخصصة
 // ============================================================
 
 export default {
@@ -25,23 +25,73 @@ export default {
                 const body = await request.json();
                 const requestedModel = (body.model || '').toLowerCase().trim();
 
-                // 🧠 جدول التوجيه الدقيق (Deterministic Mapping)
-                // يضمن اختيار الإصدار والنموذج الصحيح من أول محاولة وبأقصى سرعة
-                let targetModel = 'gemini-1.5-flash'; // الافتراضي
-                let apiVersion = 'v1beta'; // الافتراضي للنماذج الحديثة
+                // 🧠 محرك التوجيه الشامل (Comprehensive Deterministic Routing)
+                let targetModel = requestedModel;
+                let apiVersion = 'v1beta'; // الافتراضي للنماذج الحديثة والـ Agents
 
+                // --- 1. عائلة Gemini 3.x ---
                 if (requestedModel.includes('3.7')) {
-                    targetModel = 'gemini-1.5-flash'; // توجيه 3.7 للنسخة المستقرة المتوفرة
+                    targetModel = 'gemini-3.7-flash';
                     apiVersion = 'v1beta';
-                } else if (requestedModel.includes('3.6')){
+                } else if (requestedModel.includes('3.6')) {
                     targetModel = 'gemini-3.6-flash';
-                    apiVersion = 'v1';
-                } else if (requestedModel.includes('3.5')) {
+                    apiVersion = 'v1'; // بناءً على تجربة المهندس الناجحة
+                } else if (requestedModel.includes('3.5-flash-lite')) {
                     targetModel = 'gemini-3.5-flash-lite';
+                    apiVersion = 'v1'; // بناءً على تجربة المهندس الناجحة
+                } else if (requestedModel.includes('3.5-flash')) {
+                    targetModel = 'gemini-3.5-flash';
+                    apiVersion = 'v1beta';
+                } else if (requestedModel.includes('3.1-flash-lite')) {
+                    targetModel = 'gemini-3.1-flash-lite';
+                    apiVersion = 'v1beta';
+                } else if (requestedModel.includes('3.1-pro')) {
+                    targetModel = 'gemini-3.1-pro-preview';
+                    apiVersion = 'v1beta';
+                }
+
+                // --- 2. عائلة Gemini 2.5 ---
+                else if (requestedModel.includes('2.5-pro')) {
+                    targetModel = 'gemini-2.5-pro';
+                    apiVersion = 'v1beta';
+                } else if (requestedModel.includes('2.5-flash-lite')) {
+                    targetModel = 'gemini-2.5-flash-lite';
+                    apiVersion = 'v1beta';
+                } else if (requestedModel.includes('2.5-flash')) {
+                    targetModel = 'gemini-2.5-flash';
+                    apiVersion = 'v1beta';
+                }
+
+                // --- 3. نماذج Nano Banana (الصور) ---
+                else if (requestedModel.includes('image')) {
+                    apiVersion = 'v1beta';
+                    if (requestedModel.includes('3-pro')) targetModel = 'gemini-3-pro-image';
+                    else if (requestedModel.includes('3-1-flash-lite')) targetModel = 'gemini-3-1-flash-lite-image';
+                    else if (requestedModel.includes('3-1-flash')) targetModel = 'gemini-3-1-flash-image';
+                }
+
+                // --- 4. نماذج الصوت والترجمة ---
+                else if (requestedModel.includes('transcribe')) {
+                    targetModel = 'gemini-3.5-transcribe';
+                    apiVersion = 'v1beta';
+                } else if (requestedModel.includes('tts')) {
+                    targetModel = 'gemini-3.1-flash-tts-preview';
+                    apiVersion = 'v1beta';
+                } else if (requestedModel.includes('translate')) {
+                    targetModel = 'gemini-3.5-live-translate-preview';
+                    apiVersion = 'v1beta';
+                }
+
+                // --- 5. نماذج التضمين والقديمة ---
+                else if (requestedModel.includes('embedding-001')) {
+                    targetModel = 'gemini-embedding-001';
                     apiVersion = 'v1';
+                } else if (requestedModel.includes('embedding-2')) {
+                    targetModel = 'gemini-embedding-2-preview';
+                    apiVersion = 'v1beta';
                 } else if (requestedModel.includes('1.0')) {
                     targetModel = 'gemini-1.0-pro';
-                    apiVersion = 'v1'; // النماذج القديمة تعمل على v1
+                    apiVersion = 'v1';
                 }
 
                 const geminiUrl = `https://generativelanguage.googleapis.com/${apiVersion}/models/${targetModel}:generateContent?key=${apiKey}`;
@@ -63,12 +113,11 @@ export default {
             }
         }
 
-        // --- مسار البحث الصاروخي ---
+        // --- 2. مسار البحث الصاروخي ---
         if (path === '/search') {
             const query = url.searchParams.get('q');
             if (!query) return errorResponse('Missing query', 400, corsHeaders);
-
-            let results = "🔍 **نتائج البحث السريع:**\n\n";
+            let results = "🔍 **نتائج البحث المتقدم:**\n\n";
             try {
                 const gRes = await fetch(`https://www.googleapis.com/customsearch/v1?key=${env.GOOGLE_SEARCH_KEY}&cx=${env.GOOGLE_SEARCH_CX}&q=${encodeURIComponent(query)}&num=5`);
                 const gData = await gRes.json();
@@ -78,11 +127,10 @@ export default {
                     });
                 }
             } catch (e) {}
-
             return new Response(JSON.stringify({ success: true, results }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
         }
 
-        return new Response('🚀 VSA Bridge V4.4 - High Speed Active.', { status: 200, headers: corsHeaders });
+        return new Response('🚀 VSA Bridge V4.5 - Full Arsenal Active.', { status: 200, headers: corsHeaders });
     }
 };
 

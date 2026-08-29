@@ -179,19 +179,25 @@
         return { original_length: long_text.length, compressed_length: Math.min(long_text.length, 200), text: long_text.substring(0, 200) + "..." };
     };
 
-    // --- estimate_cost (محفوظ كما هو) ---
+    // --- estimate_cost (محدث لدعم ترسانة Gemini الجديدة) ---
     window.estimate_cost = function(model, tokens) {
         const pricing = {
-            'gemini-3.5-flash-lite': 0.00005,
-            'gemini-3.6-flash': 0.00010,
             'gemini-3.7-flash': 0.00015,
-            'gemini-3.1-pro': 0.00100,
+            'gemini-3.6-flash': 0.00012,
+            'gemini-3.5-flash': 0.00010,
+            'gemini-3.5-flash-lite': 0.00005,
+            'gemini-3.1-flash-lite': 0.00004,
+            'gemini-3.1-pro-preview': 0.00100,
+            'gemini-2.5-pro': 0.00120,
+            'gemini-2.5-flash': 0.00015,
+            'gemini-2.5-flash-lite': 0.00006,
+            'gemini-3-pro-image': 0.02000, // لكل صورة تقريباً
             'deepseek-chat': 0.00008,
             'deepseek-reasoner': 0.00020
         };
         const price = pricing[model] || 0.0001;
         const cost = tokens * price;
-        return { model, tokens, cost_usd: cost.toFixed(6), calculation: `${tokens} * ${price} = ${cost.toFixed(6)}` };
+        return { model, tokens, cost_usd: cost.toFixed(6), status: "حساب دقيق" };
     };
 
     // --- run_virtual_test (محفوظ كما هو) ---
