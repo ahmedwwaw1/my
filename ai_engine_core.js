@@ -739,77 +739,10 @@
     };
 
     // ============================================================
-    //  7.  التوجيه المحلي
-    // ============================================================
-    window.processLocalCommand = async function(inputText) {
-        if (!inputText) return null;
-        const lower = inputText.toLowerCase();
-
-        if (lower.includes('خزن') || lower.includes('تذكر')) {
-            const match = inputText.match(/(?:خزن|تذكر)\s*["']?([^"'\s]+)["']?\s*(.*)/);
-            if (match) {
-                const result = await window.store_memory(match[1], match[2] || "تم الحفظ");
-                return { result: result, tool: "store_memory" };
-            }
-        }
-        if (lower.includes('ابحث في الذاكرة') || lower.includes('ابحث محلياً') || lower.includes('بحث في الذاكرة')) {
-            const match = inputText.match(/(?:ابحث في الذاكرة|ابحث محلياً|بحث في الذاكرة)\s*["']?([^"']+)["']?/);
-            if (match) {
-                const result = await window.vector_search(match[1]);
-                return { result: result, tool: "vector_search" };
-            }
-        }
-        if (lower.includes('تكلفة') || lower.includes('سعر')) {
-            const modelMatch = inputText.match(/نموذج\s*["']?([^"'\s]+)["']?/) || [null, 'gemini-3.7-flash'];
-            const tokensMatch = inputText.match(/\b(\d+)\s*توكن/);
-            const tokens = tokensMatch ? parseInt(tokensMatch[1]) : 100;
-            return { result: window.estimate_cost(modelMatch[1], tokens), tool: "estimate_cost" };
-        }
-        if (lower.includes('اختبر') || lower.includes('تحقق')) {
-            const match = inputText.match(/(?:اختبر|تحقق)\s*([\s\S]*)/);
-            if (match && match[1].length > 5) return { result: window.run_virtual_test(match[1]), tool: "run_virtual_test" };
-        }
-        if (lower.includes('ضغط') || lower.includes('compress')) {
-            const match = inputText.match(/(?:ضغط|compress)\s*["']?([^"']+)["']?/);
-            if (match) return { result: window.compress_context(match[1]), tool: "compress_context" };
-        }
-        if (lower.includes('ولد اختبار') || lower.includes('synthesize')) {
-            const match = inputText.match(/(?:ولد اختبار|synthesize)\s*([\s\S]*)/);
-            if (match && match[1].length > 5) return { result: window.synthesize_test(match[1]), tool: "synthesize_test" };
-        }
-        if (lower.includes('وثق') || lower.includes('docstring')) {
-            const match = inputText.match(/(?:وثق|docstring)\s*["']?([^"'\s]+)["']?/);
-            if (match) return { result: window.generate_docstring(match[1], {}), tool: "generate_docstring" };
-        }
-        if (lower.includes('اكتشف خطأ') || lower.includes('detect bug')) {
-            const match = inputText.match(/(?:اكتشف خطأ|detect bug)\s*["']?([^"']+)["']?/);
-            if (match) return { result: window.detect_bug_signature(match[1]), tool: "detect_bug_signature" };
-        }
-        if (lower.includes('ابحث عن') || lower.includes('ابحث في الإنترنت') || lower.includes('بحث في الويب') || lower.includes('search')) {
-            let engine = 'auto';
-            if (lower.includes('tavily')) engine = 'tavily';
-            else if (lower.includes('google') || lower.includes('جوجل')) engine = 'google';
-            else if (lower.includes('wiki') || lower.includes('ويكيبيديا')) engine = 'wiki';
-            else if (lower.includes('arxiv')) engine = 'arxiv';
-            else if (lower.includes('news')) engine = 'news';
-
-            const match = inputText.match(/(?:ابحث عن|ابحث في الإنترنت|بحث في الويب|search)\s*(?:في\s+)?(?:tavily|google|جوجل|wiki|ويكيبيديا|arxiv|news)?\s*["']?([^"']+)["']?/i);
-            const query = match ? match[1] : inputText.replace(/ابحث عن|ابحث في الإنترنت|بحث في الويب|search|tavily|google|جوجل|wiki|ويكيبيديا|arxiv|news|في/gi, '').trim();
-
-            if (query) {
-                const result = await window.web_search(query, engine);
-                return { result: result, tool: `web_search (${engine})` };
-            }
-        }
-        return null;
-    };
-
-    // ============================================================
-    //  8.  جسر الاتصال بـ Gemini (المُحدث: بنظام الذاكرة السياقية والحلقة الذاتية)
+    //  7.  جسر الاتصال بـ Gemini (المُحدث: Agentic Loop المباشر)
     // ============================================================
     window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash', existingHistory = []) {
-        // ... (منطق التنفيذ المحلي يبقى كما هو) ...
-
+        // تم إلغاء التنفيذ المحلي - الطلب يذهب مباشرة للعقل المدبر لضمان أقصى درجات الذكاء
         const baseUrl = window.mastermindProxyUrl.endsWith('/') ? window.mastermindProxyUrl : window.mastermindProxyUrl + '/';
         const url = baseUrl + 'gemini';
 
