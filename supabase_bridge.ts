@@ -1,6 +1,6 @@
 // ============================================================
-//  🚀 VSA Sovereign Bridge V5.3 - SMART ROUTING EDITION
-//  التحديث: معالجة ذكية للطلبات + ردود JSON دائمًا
+//  🚀 VSA Sovereign Bridge V5.4 - OFFICIAL NEXT-GEN SDK
+//  التحديث: استخدام مكتبة @google/genai الجديدة 2026
 // ============================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -19,15 +19,15 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    // 🧠 منطق التوجيه الذكي:
-    // إذا كان الطلب POST، فهو غالباً لـ Gemini (إلا إذا كان للبحث أو جت هاب)
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+    if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY not found in secrets");
 
     // --- أ. مسار البحث ---
     if (path.includes("/search")) {
       const query = url.searchParams.get("q");
       const googleKey = Deno.env.get("GOOGLE_SEARCH_KEY");
       const googleCx = Deno.env.get("GOOGLE_SEARCH_CX");
-      let results = "🔍 **نتائج البحث من قلب Supabase:**\n\n";
+      let results = "🔍 **نتائج البحث المباشرة:**\n\n";
 
       if (googleKey && googleCx && query) {
         const gRes = await fetch(`https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${googleCx}&q=${encodeURIComponent(query)}&num=5`);
@@ -38,69 +38,49 @@ serve(async (req) => {
           });
         }
       }
-      return new Response(JSON.stringify({ success: true, results }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
+      return new Response(JSON.stringify({ success: true, results }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // --- ب. مسار GitHub ---
-    if (path.includes("/github/")) {
-      const GITHUB_TOKEN = Deno.env.get("GITHUB_TOKEN");
-      if (!GITHUB_TOKEN) throw new Error("GITHUB_TOKEN not found in secrets");
-
-      const githubPath = path.split("/github/")[1];
-      const githubUrl = `https://api.github.com/repos/ahmedwwaw1/my/${githubPath}`;
-
-      const res = await fetch(githubUrl, {
-        method: req.method,
-        headers: {
-          "Authorization": `Bearer ${GITHUB_TOKEN}`,
-          "Accept": "application/vnd.github.v3+json",
-          "User-Agent": "VSA-Supabase-Bridge/5.3",
-          "Content-Type": "application/json",
-        },
-        body: req.method !== "GET" ? await req.text() : null,
-      });
-
-      const data = await res.text();
-      return new Response(data, {
-        status: res.status,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
-    }
-
-    // --- ج. المسار الافتراضي لـ Gemini (لكل طلبات الـ POST) ---
+    // --- ب. مسار Gemini (بالمكتبة الحديثة @google/genai) ---
     if (req.method === "POST") {
-      const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
-      if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY not found");
-
       const body = await req.json();
-      const genAI = new GoogleGenAI(GEMINI_API_KEY);
 
+      // 1. تهيئة العميل (بناءً على نصيحة الخبير)
+      const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+
+      // 2. إعداد ميزة التفكير المتطورة
       const modelName = body.model || "gemini-3.5-flash-lite";
-      const model = genAI.getGenerativeModel({
+      const config = {
+        thinkingConfig: {
+          thinkingLevel: body.config?.thinkingConfig?.thinkingLevel || "MEDIUM"
+        }
+      };
+
+      // 3. إرسال الطلب بالصيغة الحديثة
+      // نمرر الـ prompt مباشرة أو الـ contents
+      const prompt = body.contents?.[0]?.parts?.[0]?.text || "مرحبا";
+
+      const response = await ai.models.generateContent({
         model: modelName,
-        thinkingConfig: body.config?.thinkingConfig || { thinkingLevel: "MEDIUM" }
+        contents: body.contents, // تمرير السياق الكامل للذاكرة
+        config: config
       });
 
-      const result = await model.generateContent({
-        contents: body.contents,
-        tools: body.tools,
-        generationConfig: body.generationConfig
-      });
-
-      const response = await result.response;
+      // 4. إعادة النتيجة بتنسيق متوافق مع الواجهة
       return new Response(JSON.stringify({
-        candidates: [{ content: { role: "model", parts: [{ text: response.text() }] } }]
+        candidates: [{
+          content: {
+            role: "model",
+            parts: [{ text: response.text }]
+          }
+        }]
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // إذا كان مجرد فتح للرابط من المتصفح (GET)
-    return new Response(JSON.stringify({ message: "🚀 VSA Supabase Bridge is LIVE and waiting for commands." }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
+    return new Response(JSON.stringify({ message: "VSA Bridge V5.4 Ready" }), { headers: corsHeaders });
 
   } catch (err) {
+    console.error("SDK Error:", err.message);
     return new Response(JSON.stringify({ error: err.message }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
