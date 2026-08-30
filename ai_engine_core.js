@@ -733,23 +733,34 @@
     };
 
     // ============================================================
-    //  7.  جسر الاتصال بـ Gemini (المُحدث: Triple Failover Dynamic Edition)
+    //  7.  مركز الهوية والوصول (Identity & Access Layer)
+    //  تطبيق بروتوكول الاتصال الهجين والصمود الثلاثي (V8.0)
     // ============================================================
-    window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash', existingHistory = []) {
-        const url = window.mastermindProxyUrl;
+
+    // مصفوفة الصمود: تسلسل النماذج عند الفشل أو بلوغ الحدود
+    const FAILOVER_MODELS = ['gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-1.5-pro', 'gemini-1.5-flash'];
+
+    window.callAiBrain = async function(promptText, apiKey, requestedModel = 'gemini-3.7-flash', existingHistory = []) {
+        const proxyUrl = window.mastermindProxyUrl;
+        const localKey = window.geminiApiKey || apiKey;
 
         let conversationHistory = existingHistory.length > 0 ? existingHistory : [];
-        conversationHistory.push({ role: "user", parts: [{ text: promptText }] });
+        if (conversationHistory.length === 0 || conversationHistory[conversationHistory.length-1].role !== 'user') {
+            conversationHistory.push({ role: "user", parts: [{ text: promptText }] });
+        }
 
-        let maxIterations = 5;
+        let currentModelIndex = FAILOVER_MODELS.indexOf(requestedModel);
+        if (currentModelIndex === -1) currentModelIndex = 0;
+
+        let maxIterations = 8; // زيادة عدد المحاولات لدعم الحلقة الذكية العميقة
         let currentIteration = 0;
-        let finalResponse = { text: "⚠️ فشل المحرك في الوصول لرد نهائي.", model: modelName, fullHistory: conversationHistory };
 
+        // تعريف الأدوات السيادية الموحدة
         const tools = [{
             function_declarations: [
-                { name: "listGithubFiles", description: "استكشاف هيكل ملفات المشروع في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "المسار المراد استكشافه." } } } },
-                { name: "read_file", description: "قراءة محتوى ملف من مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "المسار الكامل للملف." } }, required: ["path"] } },
-                { name: "analyze_file", description: "فحص توازن الأقواس في كود الملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                { name: "listGithubFiles", description: "استكشاف هيكل ملفات المشروع في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } } } },
+                { name: "read_file", description: "قراءة محتوى ملف من مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                { name: "analyze_file", description: "فحص توازن الأقواس وسلامة السنتكس.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
                 { name: "multi_replace_file_content", description: "تعديل أجزاء جراحية محددة في الملف داخل GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
                 { name: "write_file", description: "إنشاء ملف جديد في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
                 { name: "thought", description: "التفكير والتحليل الهندسي (SWOT + Complexity).", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, complexity: { type: "STRING" }, swot: { type: "OBJECT", properties: { strengths: { type: "STRING" }, weaknesses: { type: "STRING" }, opportunities: { type: "STRING" }, threats: { type: "STRING" } } } }, required: ["reasoning", "plan", "complexity", "swot"] } },
@@ -760,47 +771,99 @@
 
         while (currentIteration < maxIterations) {
             currentIteration++;
-            console.log(`🤖 Step ${currentIteration}: Thinking via Cloud Failover...`);
+            let currentModel = FAILOVER_MODELS[currentModelIndex] || requestedModel;
+            console.log(`🧠 [Layer 0] Attempt ${currentIteration} via ${currentModel}...`);
 
-            const body = {
-                model: modelName,
+            // تجهيز حزمة البيانات (Universal API Translator)
+            const payload = {
+                model: currentModel,
                 systemInstruction: GROUNDED_SYSTEM_PROMPT,
-                prompt: promptText,
                 contents: conversationHistory,
                 tools: tools,
-                generationConfig: { temperature: 0, maxOutputTokens: 2048 }
+                generationConfig: { temperature: 0.2, maxOutputTokens: 4096 }
             };
 
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
+            let responseData = null;
+            let usedProvider = "";
 
-                if (!response.ok) return { text: `❌ خطأ الجسر السحابي: ${response.status}`, model: "System" };
+            // --- [بروتوكول الاتصال الهجين: Hybrid Connection] ---
+            if (localKey && currentModel.includes('gemini')) {
+                try {
+                    console.log("⚡ [Hybrid] Attempting direct connection to Google API...");
+                    const apiVersion = 'v1beta';
+                    const directUrl = `https://generativelanguage.googleapis.com/${apiVersion}/models/${currentModel}:generateContent?key=${localKey}`;
 
-                const data = await response.json();
-                console.log(`🎯 استجابة ناجحة عبر: [${data.provider || "سحابي"}]`);
+                    const res = await fetch(directUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: payload.contents,
+                            tools: payload.tools,
+                            system_instruction: { parts: [{ text: payload.systemInstruction }] }
+                        })
+                    });
 
-                const textPart = data.text;
-                const functionCallPart = data.functionCall;
+                    if (res.ok) {
+                        const raw = await res.json();
+                        if (raw.candidates && raw.candidates[0]) {
+                            const parts = raw.candidates[0].content.parts;
+                            responseData = {
+                                text: parts.find(p => p.text)?.text || "",
+                                functionCall: parts.find(p => p.functionCall)?.functionCall || null,
+                                provider: `${currentModel} (Direct)`
+                            };
+                            usedProvider = "Direct Google API";
+                        }
+                    } else {
+                        console.warn(`⚠️ Direct call failed (${res.status}). Failing over to Sovereign Bridge...`);
+                    }
+                } catch (e) {
+                    console.warn("⚠️ Hybrid direct connection error:", e.message);
+                }
+            }
 
-                // 🌟 إضافة رد النموذج إلى التاريخ لضمان تعاقب الأدوار (user -> model -> function)
+            // المحاولة الثانية: الجسر السيادي (Sovereign Proxy Bridge)
+            if (!responseData) {
+                try {
+                    console.log("🛡️ [Bridge] Routing request through Supabase Sovereign Tunnel...");
+                    const res = await fetch(proxyUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (res.ok) {
+                        responseData = await res.json();
+                        usedProvider = responseData.provider || "Sovereign Bridge";
+                    } else if (res.status === 429 || res.status === 500) {
+                        console.error(`🛑 Model ${currentModel} exhausted. Switching brain...`);
+                        currentModelIndex++;
+                        if (currentModelIndex >= FAILOVER_MODELS.length) return { text: "🛑 جميع العقول السحابية مستنفذة.", model: "Identity Layer" };
+                        continue;
+                    }
+                } catch (e) {
+                    console.error("❌ Critical Bridge Error:", e.message);
+                    return { text: "❌ فشل الوصول للجسر السيادي: " + e.message, model: "System" };
+                }
+            }
+
+            if (responseData) {
+                console.log(`🎯 [Success] Response via ${usedProvider}`);
+                const textPart = responseData.text;
+                const functionCallPart = responseData.functionCall;
+
                 conversationHistory.push({
                     role: "model",
-                    parts: [
-                        functionCallPart ? { functionCall: functionCallPart } : { text: textPart || "" }
-                    ]
+                    parts: [ functionCallPart ? { functionCall: functionCallPart } : { text: textPart || "" } ]
                 });
 
                 if (textPart && !functionCallPart) {
-                    return { text: textPart, model: data.provider || modelName, fullHistory: conversationHistory };
+                    return { text: textPart, model: usedProvider, fullHistory: conversationHistory };
                 }
 
                 if (functionCallPart) {
                     const { name, args } = functionCallPart;
-                    console.log(`🛠️ السيرفر السحابي يطلب تنفيذ أداة محلية: ${name}...`);
+                    console.log(`🛠️ [Agentic] Executing tool: ${name}...`);
                     
                     let result;
                     if (name === "thought") result = window.thought(args.reasoning, args.plan, args.risks, args.peer_review, args.swot, args.complexity, args.self_correction);
@@ -812,27 +875,18 @@
                     else if (name === "write_file") result = await window.write_file(args.path, args.content);
                     else if (name === "request_approval") {
                         const approval = window.request_approval(args.plan_summary, args.steps || [], args.estimated_impact);
-                        return { text: approval.message, model: data.provider || modelName, requires_approval: true, fullHistory: conversationHistory };
+                        return { text: approval.message, model: usedProvider, requires_approval: true, fullHistory: conversationHistory };
                     }
-                    else result = "أداة غير مدعومة حالياً.";
+                    else result = "أداة غير مدعومة.";
 
                     conversationHistory.push({
                         role: "function",
-                        parts: [{
-                            functionResponse: {
-                                name: name,
-                                response: { content: typeof result === 'object' ? result : { message: result } }
-                            }
-                        }]
+                        parts: [{ functionResponse: { name: name, response: { content: typeof result === 'object' ? result : { message: result } } } }]
                     });
-                } else {
-                    break;
                 }
-            } catch (e) {
-                return { text: "❌ خطأ في الحلقة الذكية المحلية: " + e.message, model: "System" };
-            }
+            } else { break; }
         }
-        return finalResponse;
+        return { text: "⚠️ المحرك استنزف محاولات التفكير.", model: "System", fullHistory: conversationHistory };
     };
 
     console.log("🚀 AI Core V7.4 (Cloud Memory) Loaded.");
