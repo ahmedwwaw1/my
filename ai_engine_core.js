@@ -733,140 +733,82 @@
     };
 
     // ============================================================
-    //  7.  مركز الهوية والوصول (Identity & Access Layer)
-    //  تطبيق بروتوكول الاتصال الهجين والصمود الثلاثي (V8.0)
+    //  7.  مركز الهوية والوصول (Identity & Access Layer - V8.1)
+    //  التوافق الكامل مع الجسر السيادي V7.0 ودعم التفكير العميق
     // ============================================================
 
-    // مصفوفة الصمود: تسلسل النماذج عند الفشل أو بلوغ الحدود
-    const FAILOVER_MODELS = ['gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-1.5-pro', 'gemini-1.5-flash'];
-
-    window.callAiBrain = async function(promptText, apiKey, requestedModel = 'gemini-3.7-flash', existingHistory = []) {
+    window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.5-flash-lite', existingHistory = []) {
         const proxyUrl = window.mastermindProxyUrl;
-        const localKey = window.geminiApiKey || apiKey;
 
         let conversationHistory = existingHistory.length > 0 ? existingHistory : [];
+        // تأكد من عدم تكرار رسالة المستخدم الأخيرة
         if (conversationHistory.length === 0 || conversationHistory[conversationHistory.length-1].role !== 'user') {
             conversationHistory.push({ role: "user", parts: [{ text: promptText }] });
         }
 
-        let currentModelIndex = FAILOVER_MODELS.indexOf(requestedModel);
-        if (currentModelIndex === -1) currentModelIndex = 0;
-
-        let maxIterations = 8; // زيادة عدد المحاولات لدعم الحلقة الذكية العميقة
+        let maxIterations = 10; // زيادة المحاولات للسماح بالتحليل العميق
         let currentIteration = 0;
 
-        // تعريف الأدوات السيادية الموحدة
+        // تعريف الأدوات السيادية الموحدة (محدثة لعام 2026)
         const tools = [{
             function_declarations: [
-                { name: "listGithubFiles", description: "استكشاف هيكل ملفات المشروع في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } } } },
-                { name: "read_file", description: "قراءة محتوى ملف من مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                { name: "analyze_file", description: "فحص توازن الأقواس وسلامة السنتكس.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                { name: "multi_replace_file_content", description: "تعديل أجزاء جراحية محددة في الملف داخل GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
-                { name: "write_file", description: "إنشاء ملف جديد في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
-                { name: "thought", description: "التفكير والتحليل الهندسي (SWOT + Complexity).", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, complexity: { type: "STRING" }, swot: { type: "OBJECT", properties: { strengths: { type: "STRING" }, weaknesses: { type: "STRING" }, opportunities: { type: "STRING" }, threats: { type: "STRING" } } } }, required: ["reasoning", "plan", "complexity", "swot"] } },
-                { name: "web_search", description: "البحث على الإنترنت وجلب المعلومات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
-                { name: "request_approval", description: "طلب موافقة المستخدم قبل أي تعديل حقيقي.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "STRING" } } }, required: ["plan_summary"] } }
+                { name: "listGithubFiles", description: "استكشاف ملفات GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } } } },
+                { name: "read_file", description: "قراءة ملف من GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                { name: "analyze_file", description: "فحص سلامة السنتكس.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                { name: "multi_replace_file_content", description: "تعديل الكود في GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
+                { name: "write_file", description: "إنشاء ملف في GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
+                { name: "thought", description: "غرفة عمليات التفكير الهندسي.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, swot: { type: "OBJECT", properties: { strengths: { type: "STRING" }, weaknesses: { type: "STRING" } } } }, required: ["reasoning", "plan"] } },
+                { name: "web_search", description: "البحث في الإنترنت.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "request_approval", description: "طلب موافقة المطور.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" } }, required: ["plan_summary"] } }
             ]
         }];
 
         while (currentIteration < maxIterations) {
             currentIteration++;
-            let currentModel = FAILOVER_MODELS[currentModelIndex] || requestedModel;
-            console.log(`🧠 [Layer 0] Attempt ${currentIteration} via ${currentModel}...`);
+            console.log(`🤖 [VSA Agent] Step ${currentIteration} via Sovereign Bridge...`);
 
-            // تجهيز حزمة البيانات (Universal API Translator)
+            // بناء الطلب المتوافق مع الجسر V7.0
             const payload = {
-                model: currentModel,
+                model: modelName,
                 systemInstruction: GROUNDED_SYSTEM_PROMPT,
+                prompt: promptText,
                 contents: conversationHistory,
                 tools: tools,
-                generationConfig: { temperature: 0.2, maxOutputTokens: 4096 }
+                generationConfig: { temperature: 0 }
             };
 
-            let responseData = null;
-            let usedProvider = "";
+            try {
+                const response = await fetch(proxyUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-            // --- [بروتوكول الاتصال الهجين: Hybrid Connection] ---
-            if (localKey && currentModel.includes('gemini')) {
-                try {
-                    console.log("⚡ [Hybrid] Attempting direct connection to Google API...");
-                    const apiVersion = 'v1beta';
-                    const directUrl = `https://generativelanguage.googleapis.com/${apiVersion}/models/${currentModel}:generateContent?key=${localKey}`;
+                if (!response.ok) return { text: `❌ خطأ الجسر السحابي: ${response.status}`, model: "Sovereign" };
 
-                    const res = await fetch(directUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: payload.contents,
-                            tools: payload.tools,
-                            system_instruction: { parts: [{ text: payload.systemInstruction }] }
-                        })
-                    });
+                const data = await response.json();
 
-                    if (res.ok) {
-                        const raw = await res.json();
-                        if (raw.candidates && raw.candidates[0]) {
-                            const parts = raw.candidates[0].content.parts;
-                            responseData = {
-                                text: parts.find(p => p.text)?.text || "",
-                                functionCall: parts.find(p => p.functionCall)?.functionCall || null,
-                                provider: `${currentModel} (Direct)`
-                            };
-                            usedProvider = "Direct Google API";
-                        }
-                    } else {
-                        console.warn(`⚠️ Direct call failed (${res.status}). Failing over to Sovereign Bridge...`);
-                    }
-                } catch (e) {
-                    console.warn("⚠️ Hybrid direct connection error:", e.message);
-                }
-            }
+                // استخراج النصوص والأدوات (بناءً على تنسيق V7.0)
+                const textPart = data.text;
+                const functionCallPart = data.functionCall;
+                const usedModel = data.provider || modelName;
 
-            // المحاولة الثانية: الجسر السيادي (Sovereign Proxy Bridge)
-            if (!responseData) {
-                try {
-                    console.log("🛡️ [Bridge] Routing request through Supabase Sovereign Tunnel...");
-                    const res = await fetch(proxyUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (res.ok) {
-                        responseData = await res.json();
-                        usedProvider = responseData.provider || "Sovereign Bridge";
-                    } else if (res.status === 429 || res.status === 500) {
-                        console.error(`🛑 Model ${currentModel} exhausted. Switching brain...`);
-                        currentModelIndex++;
-                        if (currentModelIndex >= FAILOVER_MODELS.length) return { text: "🛑 جميع العقول السحابية مستنفذة.", model: "Identity Layer" };
-                        continue;
-                    }
-                } catch (e) {
-                    console.error("❌ Critical Bridge Error:", e.message);
-                    return { text: "❌ فشل الوصول للجسر السيادي: " + e.message, model: "System" };
-                }
-            }
-
-            if (responseData) {
-                console.log(`🎯 [Success] Response via ${usedProvider}`);
-                const textPart = responseData.text;
-                const functionCallPart = responseData.functionCall;
-
+                // 🌟 تحديث الذاكرة فوراً لضمان تعاقب الأدوار
                 conversationHistory.push({
                     role: "model",
                     parts: [ functionCallPart ? { functionCall: functionCallPart } : { text: textPart || "" } ]
                 });
 
                 if (textPart && !functionCallPart) {
-                    return { text: textPart, model: usedProvider, fullHistory: conversationHistory };
+                    return { text: textPart, model: usedModel, fullHistory: conversationHistory };
                 }
 
                 if (functionCallPart) {
                     const { name, args } = functionCallPart;
-                    console.log(`🛠️ [Agentic] Executing tool: ${name}...`);
+                    console.log(`🛠️ Executing Tool: ${name}`);
                     
                     let result;
-                    if (name === "thought") result = window.thought(args.reasoning, args.plan, args.risks, args.peer_review, args.swot, args.complexity, args.self_correction);
+                    if (name === "thought") result = window.thought(args.reasoning, args.plan, "", "", args.swot, "", "");
                     else if (name === "web_search") result = await window.web_search(args.query);
                     else if (name === "read_file") result = await window.read_file(args.path);
                     else if (name === "listGithubFiles") result = await window.listGithubFiles(args.path || "");
@@ -874,8 +816,8 @@
                     else if (name === "multi_replace_file_content") result = await window.multi_replace_file_content(args.path, args.replacements);
                     else if (name === "write_file") result = await window.write_file(args.path, args.content);
                     else if (name === "request_approval") {
-                        const approval = window.request_approval(args.plan_summary, args.steps || [], args.estimated_impact);
-                        return { text: approval.message, model: usedProvider, requires_approval: true, fullHistory: conversationHistory };
+                        const approval = window.request_approval(args.plan_summary, [], "");
+                        return { text: approval.message, model: usedModel, requires_approval: true, fullHistory: conversationHistory };
                     }
                     else result = "أداة غير مدعومة.";
 
@@ -883,10 +825,12 @@
                         role: "function",
                         parts: [{ functionResponse: { name: name, response: { content: typeof result === 'object' ? result : { message: result } } } }]
                     });
-                }
-            } else { break; }
+                } else { break; }
+            } catch (e) {
+                return { text: "❌ خطأ في الحلقة الذكية: " + e.message, model: "System" };
+            }
         }
-        return { text: "⚠️ المحرك استنزف محاولات التفكير.", model: "System", fullHistory: conversationHistory };
+        return { text: "⚠️ المحرك استنزف محاولات التفكير دون الوصول لرد نهائي.", model: "System", fullHistory: conversationHistory };
     };
 
     console.log("🚀 AI Core V7.4 (Cloud Memory) Loaded.");
