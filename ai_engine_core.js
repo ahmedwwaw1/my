@@ -735,11 +735,9 @@
     // ============================================================
     //  7.  جسر الاتصال بـ Gemini (المُحدث: Triple Failover Dynamic Edition)
     // ============================================================
-window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-2.5-flash', existingHistory = []) {
+window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.6-flash', existingHistory = []) {
     const url = window.mastermindProxyUrl;
 
-    // إصلاح اسم الموديل التلقائي
-    if (modelName.includes('3.6')) modelName = 'gemini-2.5-flash';
 
     let conversationHistory = existingHistory.length > 0 ? [...existingHistory] : [];
     conversationHistory.push({ role: "user", parts: [{ text: promptText }] });
