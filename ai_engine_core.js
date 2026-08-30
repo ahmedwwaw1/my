@@ -735,104 +735,109 @@
     // ============================================================
     //  7.  جسر الاتصال بـ Gemini (المُحدث: Triple Failover Dynamic Edition)
     // ============================================================
-window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.6-flash', existingHistory = []) {
-        const url = window.mastermindProxyUrl;
+window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-2.5-flash', existingHistory = []) {
+    const url = window.mastermindProxyUrl;
 
-        let conversationHistory = existingHistory.length > 0 ? [...existingHistory] : [];
-        conversationHistory.push({ role: "user", parts: [{ text: promptText }] });
+    // إصلاح اسم الموديل التلقائي
+    if (modelName.includes('3.6')) modelName = 'gemini-2.5-flash';
 
-        let maxIterations = 5;
-        let currentIteration = 0;
-        let finalResponse = { text: "⚠️ فشل المحرك في الوصول لرد نهائي.", model: modelName, fullHistory: conversationHistory };
+    let conversationHistory = existingHistory.length > 0 ? [...existingHistory] : [];
+    conversationHistory.push({ role: "user", parts: [{ text: promptText }] });
 
-        const tools = [{
-            function_declarations: [
-                { name: "listGithubFiles", description: "استكشاف هيكل ملفات المشروع في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "المسار المراد استكشافه." } } } },
-                { name: "read_file", description: "قراءة محتوى ملف من مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "المسار الكامل للملف." } }, required: ["path"] } },
-                { name: "analyze_file", description: "فحص توازن الأقواس في كود الملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                { name: "multi_replace_file_content", description: "تعديل أجزاء جراحية محددة في الملف داخل GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
-                { name: "write_file", description: "إنشاء ملف جديد في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
-                { name: "thought", description: "التفكير والتحليل الهندسي (SWOT + Complexity).", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, complexity: { type: "STRING" }, swot: { type: "OBJECT", properties: { strengths: { type: "STRING" }, weaknesses: { type: "STRING" }, opportunities: { type: "STRING" }, threats: { type: "STRING" } } } }, required: ["reasoning", "plan", "complexity", "swot"] } },
-                { name: "web_search", description: "البحث على الإنترنت وجلب المعلومات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
-                { name: "request_approval", description: "طلب موافقة المستخدم قبل أي تعديل حقيقي.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "STRING" } } }, required: ["plan_summary"] } }
-            ]
-        }];
+    let maxIterations = 5;
+    let currentIteration = 0;
+    let finalResponse = { text: "⚠️ فشل المحرك في الوصول لرد نهائي.", model: modelName, fullHistory: conversationHistory };
 
-        while (currentIteration < maxIterations) {
-            currentIteration++;
-            console.log(`🤖 Step ${currentIteration}: Thinking via Cloud Failover...`);
+    const tools = [{
+        function_declarations: [
+            { name: "listGithubFiles", description: "استكشاف هيكل ملفات المشروع في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "المسار المراد استكشافه." } } } },
+            { name: "read_file", description: "قراءة محتوى ملف من مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "المسار الكامل للملف." } }, required: ["path"] } },
+            { name: "analyze_file", description: "فحص توازن الأقواس في كود الملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+            { name: "multi_replace_file_content", description: "تعديل أجزاء جراحية محددة في الملف داخل GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
+            { name: "write_file", description: "إنشاء ملف جديد في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
+            { name: "thought", description: "التفكير والتحليل الهندسي (SWOT + Complexity).", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, complexity: { type: "STRING" }, swot: { type: "OBJECT", properties: { strengths: { type: "STRING" }, weaknesses: { type: "STRING" }, opportunities: { type: "STRING" }, threats: { type: "STRING" } } } }, required: ["reasoning", "plan", "complexity", "swot"] } },
+            { name: "web_search", description: "البحث على الإنترنت وجلب المعلومات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+            { name: "request_approval", description: "طلب موافقة المستخدم قبل أي تعديل حقيقي.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "STRING" } } }, required: ["plan_summary"] } }
+        ]
+    }];
 
-            const body = {
-                model: modelName,
-                systemInstruction: GROUNDED_SYSTEM_PROMPT,
-                prompt: promptText,
-                contents: conversationHistory,
-                tools: tools,
-                generationConfig: { temperature: 0, maxOutputTokens: 2048 }
-            };
+    while (currentIteration < maxIterations) {
+        currentIteration++;
+        console.log(`🤖 Step ${currentIteration}: Processing request...`);
 
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
+        const body = {
+            model: modelName,
+            systemInstruction: GROUNDED_SYSTEM_PROMPT,
+            prompt: promptText,
+            contents: conversationHistory,
+            tools: tools,
+            generationConfig: { temperature: 0.2, maxOutputTokens: 2048 }
+        };
 
-                if (!response.ok) {
-                    // 🛡️ في حالة وجود خطأ من السيرفر، تراجع عن إضافة الرسالة الأخيرة لمنع التلوث
-                    conversationHistory.pop();
-                    return { text: `❌ خطأ الجسر السحابي: ${response.status}`, model: "System", fullHistory: conversationHistory };
-                }
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
 
-                const data = await response.json();
-                console.log(`🎯 استجابة ناجحة عبر: [${data.provider || "سحابي"}]`);
+            const data = await response.json();
 
-                const textPart = data.text;
-                const functionCallPart = data.functionCall;
-
-                if (textPart && !functionCallPart) {
-                    return { text: textPart, model: data.provider || modelName, fullHistory: conversationHistory };
-                }
-
-                if (functionCallPart) {
-                    const { name, args } = functionCallPart;
-                    console.log(`🛠️ السيرفر السحابي يطلب تنفيذ أداة محلية: ${name}...`);
-
-                    let result;
-                    if (name === "thought") result = window.thought(args.reasoning, args.plan, args.risks, args.peer_review, args.swot, args.complexity, args.self_correction);
-                    else if (name === "web_search") result = await window.web_search(args.query);
-                    else if (name === "read_file") result = await window.read_file(args.path);
-                    else if (name === "listGithubFiles") result = await window.listGithubFiles(args.path || "");
-                    else if (name === "analyze_file") result = await window.analyze_file(args.path);
-                    else if (name === "multi_replace_file_content") result = await window.multi_replace_file_content(args.path, args.replacements);
-                    else if (name === "write_file") result = await window.write_file(args.path, args.content);
-                    else if (name === "request_approval") {
-                        const approval = window.request_approval(args.plan_summary, args.steps || [], args.estimated_impact);
-                        return { text: approval.message, model: data.provider || modelName, requires_approval: true, fullHistory: conversationHistory };
-                    }
-                    else result = "أداة غير مدعومة حالياً.";
-
-                    // إضافة استجابة الدالة في السجل بتنسيق آمن لـ Gemini
-                    conversationHistory.push({
-                        role: "function",
-                        parts: [{
-                            functionResponse: {
-                                name: name,
-                                response: { content: typeof result === 'object' ? result : { message: result } }
-                            }
-                        }]
-                    });
-                } else {
-                    break;
-                }
-            } catch (e) {
+            if (!response.ok) {
                 conversationHistory.pop();
-                return { text: "❌ خطأ في الحلقة الذكية المحلية: " + e.message, model: "System", fullHistory: conversationHistory };
+                return { text: `❌ خطأ الجسر السحابي: ${data.error || response.status}`, model: "System", fullHistory: conversationHistory };
             }
+
+            const textPart = data.text;
+            const functionCallPart = data.functionCall;
+
+            // 🔑 إصلاح جوهري: حفظ استجابة النموذج (Model Turn) في السجل في حال طلب أداة
+            if (data.rawCandidate) {
+                conversationHistory.push(data.rawCandidate);
+            }
+
+            if (textPart && !functionCallPart) {
+                return { text: textPart, model: data.provider || modelName, fullHistory: conversationHistory };
+            }
+
+            if (functionCallPart) {
+                const { name, args } = functionCallPart;
+                console.log(`🛠️ جاري تنفيذ الأداة المحلية: ${name}...`);
+
+                let result;
+                if (name === "thought") result = window.thought(args.reasoning, args.plan, args.risks, args.peer_review, args.swot, args.complexity, args.self_correction);
+                else if (name === "web_search") result = await window.web_search(args.query);
+                else if (name === "read_file") result = await window.read_file(args.path);
+                else if (name === "listGithubFiles") result = await window.listGithubFiles(args.path || "");
+                else if (name === "analyze_file") result = await window.analyze_file(args.path);
+                else if (name === "multi_replace_file_content") result = await window.multi_replace_file_content(args.path, args.replacements);
+                else if (name === "write_file") result = await window.write_file(args.path, args.content);
+                else if (name === "request_approval") {
+                    const approval = window.request_approval(args.plan_summary, args.steps || [], args.estimated_impact);
+                    return { text: approval.message, model: data.provider || modelName, requires_approval: true, fullHistory: conversationHistory };
+                }
+                else result = "أداة غير مدعومة حالياً.";
+
+                // 🔑 إضافة رد الأداة بعد كائن Model المباشر
+                conversationHistory.push({
+                    role: "function",
+                    parts: [{
+                        functionResponse: {
+                            name: name,
+                            response: { result: typeof result === 'object' ? result : { message: result } }
+                        }
+                    }]
+                });
+            } else {
+                break;
+            }
+        } catch (e) {
+            conversationHistory.pop();
+            return { text: "❌ خطأ في الاتصال: " + e.message, model: "System", fullHistory: conversationHistory };
         }
-        return finalResponse;
-    };
-    console.log("🚀 AI Core V7.4 (Cloud Memory) Loaded.");
+    }
+    return finalResponse;
+};    console.log("🚀 AI Core V7.4 (Cloud Memory) Loaded.");
     console.log("🧠 الذاكرة الآن سحابية (engine_memory.json) مع localStorage احتياطي.");
     console.log("🌐 أدوات البحث: web_search (ويب) + searchLocalVideos (محلي - 0 توكنات).");
 })(window);
