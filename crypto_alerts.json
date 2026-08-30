@@ -1,6 +1,36 @@
 [
   {
     "symbol": "SOL/USDT",
+    "price": 105.03,
+    "volume": 15560644.62,
+    "change_percent": 1.2,
+    "volatility": 2.69,
+    "timestamp": "2026-08-30T04:07:32.627466Z",
+    "category": "price_target_hit",
+    "target_hit": true
+  },
+  {
+    "symbol": "ETH/USDT",
+    "price": 2457.46,
+    "volume": 39414313.12,
+    "change_percent": 0.83,
+    "volatility": 1.5,
+    "timestamp": "2026-08-30T04:07:32.455441Z",
+    "category": "high_volume_with_analytics",
+    "target_hit": false
+  },
+  {
+    "symbol": "BTC/USDT",
+    "price": 78206.3,
+    "volume": 204304844.13,
+    "change_percent": 0.82,
+    "volatility": 1.2,
+    "timestamp": "2026-08-30T04:07:32.281063Z",
+    "category": "high_volume_with_analytics",
+    "target_hit": false
+  },
+  {
+    "symbol": "SOL/USDT",
     "price": 103.94,
     "volume": 45237010.91,
     "change_percent": -3.17,
