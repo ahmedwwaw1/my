@@ -1,13 +1,11 @@
 // ================================================================
-//  🧠 SUPABASE EDGE FUNCTION - DYNAMIC TRIPLE FAILOVER BRIDGE (V5.6)
-//  جسر سحابي ديناميكي نقي - يستقبل الشخصية والسؤال من المحرك المحلي
-//  التنفيذ: [Groq] -> [Mistral] -> [Gemini]
+// 🧠 SUPABASE EDGE FUNCTION - DYNAMIC TRIPLE FAILOVER BRIDGE (V5.7)
 // ================================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Groq } from "https://esm.sh/groq-sdk";
 import { Mistral } from "https://esm.sh/@mistralai/mistralai";
-import { GoogleGenAI } from "https://esm.sh/@google/genai";
+import { GoogleGenerativeAI } from "https://esm.sh/@google/generative-ai";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -25,7 +23,6 @@ serve(async (req) => {
     const MISTRAL_API_KEY = Deno.env.get("MISTRAL_API_KEY") || "";
     const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY") || "";
 
-    // 🌟 استقبال السؤال والتعليمات السيادية القادمة ديناميكياً من العميل 🌟
     const body = await req.json();
     const { prompt, systemInstruction, contents, tools, model: requestedModel } = body;
 
@@ -79,23 +76,28 @@ serve(async (req) => {
 
     // --- [المستوى الثالث والأخير: Gemini] ---
     if (GEMINI_API_KEY) {
-      const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+      const activeModel = requestedModel || "gemini-2.5-flash";
+      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
       const model = genAI.getGenerativeModel({
-        model: requestedModel || "gemini-3.5-flash-lite",
+        model: activeModel,
         systemInstruction: systemInstruction
       });
 
-      // جيميناي هنا هو "الجوكر" لأنه يدعم الأدوات (Tools) بشكل كامل في الحلقة الذكية
       const result = await model.generateContent({
         contents: contents || [{ role: "user", parts: [{ text: prompt }] }],
         tools: tools,
         generationConfig: body.generationConfig
       });
 
+      // 🛡️ استخراج آمن للنص واستدعاءات الأدوات لتفادي خطأ 500
+      const candidateParts = result.response.candidates?.[0]?.content?.parts || [];
+      const extractedText = candidateParts.find(p => p.text)?.text || "";
+      const extractedFunctionCall = candidateParts.find(p => p.functionCall)?.functionCall || null;
+
       return new Response(JSON.stringify({
-        text: result.response.text,
-        provider: "Gemini (The Fortress)",
-        functionCall: result.response.candidates?.[0]?.content?.parts?.find(p => p.functionCall)
+        text: extractedText,
+        provider: `Gemini (${activeModel})`,
+        functionCall: extractedFunctionCall
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 

@@ -808,6 +808,7 @@
                     }
                     else result = "أداة غير مدعومة حالياً.";
 
+                    // إضافة استجابة الدالة في السجل بتنسيق آمن لـ Gemini
                     conversationHistory.push({
                         role: "function",
                         parts: [{
