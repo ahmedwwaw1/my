@@ -735,10 +735,10 @@
     // ============================================================
     //  7.  جسر الاتصال بـ Gemini (المُحدث: Triple Failover Dynamic Edition)
     // ============================================================
-    window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash', existingHistory = []) {
+window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.6-flash', existingHistory = []) {
         const url = window.mastermindProxyUrl;
 
-        let conversationHistory = existingHistory.length > 0 ? existingHistory : [];
+        let conversationHistory = existingHistory.length > 0 ? [...existingHistory] : [];
         conversationHistory.push({ role: "user", parts: [{ text: promptText }] });
 
         let maxIterations = 5;
@@ -778,7 +778,11 @@
                     body: JSON.stringify(body)
                 });
 
-                if (!response.ok) return { text: `❌ خطأ الجسر السحابي: ${response.status}`, model: "System" };
+                if (!response.ok) {
+                    // 🛡️ في حالة وجود خطأ من السيرفر، تراجع عن إضافة الرسالة الأخيرة لمنع التلوث
+                    conversationHistory.pop();
+                    return { text: `❌ خطأ الجسر السحابي: ${response.status}`, model: "System", fullHistory: conversationHistory };
+                }
 
                 const data = await response.json();
                 console.log(`🎯 استجابة ناجحة عبر: [${data.provider || "سحابي"}]`);
@@ -793,7 +797,7 @@
                 if (functionCallPart) {
                     const { name, args } = functionCallPart;
                     console.log(`🛠️ السيرفر السحابي يطلب تنفيذ أداة محلية: ${name}...`);
-                    
+
                     let result;
                     if (name === "thought") result = window.thought(args.reasoning, args.plan, args.risks, args.peer_review, args.swot, args.complexity, args.self_correction);
                     else if (name === "web_search") result = await window.web_search(args.query);
@@ -822,12 +826,12 @@
                     break;
                 }
             } catch (e) {
-                return { text: "❌ خطأ في الحلقة الذكية المحلية: " + e.message, model: "System" };
+                conversationHistory.pop();
+                return { text: "❌ خطأ في الحلقة الذكية المحلية: " + e.message, model: "System", fullHistory: conversationHistory };
             }
         }
         return finalResponse;
     };
-
     console.log("🚀 AI Core V7.4 (Cloud Memory) Loaded.");
     console.log("🧠 الذاكرة الآن سحابية (engine_memory.json) مع localStorage احتياطي.");
     console.log("🌐 أدوات البحث: web_search (ويب) + searchLocalVideos (محلي - 0 توكنات).");
