@@ -746,34 +746,17 @@
         let currentIteration = 0;
         let finalResponse = { text: "⚠️ فشل المحرك في الوصول لرد نهائي.", model: modelName, fullHistory: conversationHistory };
 
-        // 3. تعريف الأدوات (نفس المصفوفة السابقة)
+        // 3. تعريف الأدوات (التي ستمكن Gemini من استخدام جسر Supabase)
         const tools = [{
             function_declarations: [
-                { name: "listGithubFiles", description: "استكشاف هيكل المشروع.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } } } },
-                { name: "read_file", description: "قراءة محتوى ملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                { name: "analyze_file", description: "فحص توازن الأقواس.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                { name: "multi_replace_file_content", description: "تعديل أجزاء محددة من الملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
-                { name: "write_file", description: "إنشاء ملف جديد فقط.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
-                { name: "store_memory", description: "تخزين معلومة (سحابي عبر GitHub).", parameters: { type: "OBJECT", properties: { key: { type: "STRING" }, value: { type: "STRING" } }, required: ["key", "value"] } },
-                { name: "vector_search", description: "البحث في الذاكرة السحابية.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
-                { name: "estimate_cost", description: "حساب التكلفة.", parameters: { type: "OBJECT", properties: { model: { type: "STRING" }, tokens: { type: "NUMBER" } }, required: ["model", "tokens"] } },
-                { name: "run_virtual_test", description: "اختبار الكود.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
-                { name: "searchCode", description: "البحث الدلالي في كل الملفات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
-                { name: "searchLocalVideos", description: "البحث عن فيديوات في ملفات المستودع المحلية (0 توكنات).", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
-                { name: "wrap_with_error_handling", description: "إحاطة الكود بـ try-catch.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
-                { name: "simulate_integration", description: "محاكاة اختبار التكامل.", parameters: { type: "OBJECT", properties: { moduleName: { type: "STRING" }, dependencies: { type: "ARRAY", items: { type: "STRING" } } }, required: ["moduleName"] } },
-                { name: "injectGlobalStyles", description: "حقن CSS مباشرة.", parameters: { type: "OBJECT", properties: { css_code: { type: "STRING" } }, required: ["css_code"] } },
-                { name: "generate_unit_test", description: "توليد اختبار وحدة.", parameters: { type: "OBJECT", properties: { funcName: { type: "STRING" }, params: { type: "ARRAY", items: { type: "STRING" } } }, required: ["funcName"] } },
-                { name: "optimize_algorithm", description: "تحسين الخوارزميات.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
-                { name: "translate_code", description: "ترجمة الكود بين اللغات.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" }, targetLang: { type: "STRING" } }, required: ["code", "targetLang"] } },
-                { name: "explain_code", description: "شرح الكود بالعربية.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
-                { name: "thought", description: "غرفة عمليات التفكير الهندسي (تحليل SWOT + التعقيد + نقد ذاتي).", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING", description: "التحليل المنطقي." }, plan: { type: "STRING", description: "خطة التنفيذ." }, risks: { type: "STRING" }, complexity: { type: "STRING", enum: ["منخفضة", "متوسطة", "عالية", "حرجة"] }, swot: { type: "OBJECT", properties: { strengths: { type: "STRING" }, weaknesses: { type: "STRING" }, opportunities: { type: "STRING" }, threats: { type: "STRING" } } }, self_correction: { type: "STRING", description: "ما الذي قد يفشل في هذه الخطة؟" }, peer_review: { type: "STRING" } }, required: ["reasoning", "plan", "complexity", "swot"] } },
-                { name: "DeepThink", description: "وضع التفكير العميق (مستوحى من DeepSeek R1).", parameters: { type: "OBJECT", properties: { problem: { type: "STRING" }, context: { type: "STRING" }, constraints: { type: "ARRAY", items: { type: "STRING" } } }, required: ["problem"] } },
-                { name: "web_search", description: "البحث على الإنترنت (Google أولاً).", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
-                { name: "read_url", description: "قراءة محتوى رابط خارجي.", parameters: { type: "OBJECT", properties: { url: { type: "STRING" } }, required: ["url"] } },
-                { name: "explain_plan", description: "شرح خطة العمل قبل التنفيذ.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "STRING" } } }, required: ["plan_summary"] } },
-                { name: "request_approval", description: "طلب موافقة المستخدم على خطة قبل التنفيذ.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "STRING" } }, estimated_impact: { type: "STRING" } }, required: ["plan_summary"] } },
-                { name: "execute_approved_plan", description: "تنفيذ الخطة بعد موافقة المستخدم.", parameters: { type: "OBJECT", properties: {} } }
+                { name: "listGithubFiles", description: "استكشاف هيكل ملفات المشروع في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "المسار المراد استكشافه." } } } },
+                { name: "read_file", description: "قراءة محتوى ملف من مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "المسار الكامل للملف." } }, required: ["path"] } },
+                { name: "analyze_file", description: "فحص توازن الأقواس في كود الملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                { name: "multi_replace_file_content", description: "تعديل أجزاء جراحية محددة في الملف داخل GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
+                { name: "write_file", description: "إنشاء ملف جديد في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
+                { name: "thought", description: "التفكير والتحليل الهندسي (SWOT + Complexity).", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, complexity: { type: "STRING" }, swot: { type: "OBJECT", properties: { strengths: { type: "STRING" }, weaknesses: { type: "STRING" }, opportunities: { type: "STRING" }, threats: { type: "STRING" } } } }, required: ["reasoning", "plan", "complexity", "swot"] } },
+                { name: "web_search", description: "البحث على الإنترنت وجلب المعلومات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "request_approval", description: "طلب موافقة المستخدم قبل أي تعديل حقيقي.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "STRING" } } }, required: ["plan_summary"] } }
             ]
         }];
 
