@@ -1,9 +1,12 @@
-// ============================================================
-//  🚀 VSA Sovereign Bridge V5.4 - OFFICIAL NEXT-GEN SDK
-//  التحديث: استخدام مكتبة @google/genai الجديدة 2026
-// ============================================================
+// ================================================================
+//  🧠 SUPABASE EDGE FUNCTION - DYNAMIC TRIPLE FAILOVER BRIDGE (V5.6)
+//  جسر سحابي ديناميكي نقي - يستقبل الشخصية والسؤال من المحرك المحلي
+//  التنفيذ: [Groq] -> [Mistral] -> [Gemini]
+// ================================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { Groq } from "https://esm.sh/groq-sdk";
+import { Mistral } from "https://esm.sh/@mistralai/mistralai";
 import { GoogleGenAI } from "https://esm.sh/@google/genai";
 
 const corsHeaders = {
@@ -13,76 +16,94 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  const url = new URL(req.url);
-  const path = url.pathname;
-
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
 
   try {
-    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
-    if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY not found in secrets");
+    const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY") || "";
+    const MISTRAL_API_KEY = Deno.env.get("MISTRAL_API_KEY") || "";
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY") || "";
 
-    // --- أ. مسار البحث ---
-    if (path.includes("/search")) {
-      const query = url.searchParams.get("q");
-      const googleKey = Deno.env.get("GOOGLE_SEARCH_KEY");
-      const googleCx = Deno.env.get("GOOGLE_SEARCH_CX");
-      let results = "🔍 **نتائج البحث المباشرة:**\n\n";
+    // 🌟 استقبال السؤال والتعليمات السيادية القادمة ديناميكياً من العميل 🌟
+    const body = await req.json();
+    const { prompt, systemInstruction, contents, tools, model: requestedModel } = body;
 
-      if (googleKey && googleCx && query) {
-        const gRes = await fetch(`https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${googleCx}&q=${encodeURIComponent(query)}&num=5`);
-        const gData = await gRes.json();
-        if (gData.items) {
-          gData.items.forEach((item: any, i: number) => {
-            results += `${i+1}. ${item.link.includes('youtube.com') ? "🎥 " : "🌐 "}${item.title}\n   🔗 ${item.link}\n\n`;
-          });
-        }
-      }
-      return new Response(JSON.stringify({ success: true, results }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    if (!prompt && !contents) {
+      throw new Error("الرجاء إدخال الـ prompt أو contents");
     }
 
-    // --- ب. مسار Gemini (بالمكتبة الحديثة @google/genai) ---
-    if (req.method === "POST") {
-      const body = await req.json();
+    // --- [المستوى الأول: Groq] ---
+    if (GROQ_API_KEY) {
+      try {
+        const groq = new Groq({ apiKey: GROQ_API_KEY });
+        const chatCompletion = await groq.chat.completions.create({
+          messages: [
+            { role: "system", content: systemInstruction || "You are a helpful engineer." },
+            { role: "user", content: prompt || (contents ? contents[contents.length-1].parts[0].text : "") }
+          ],
+          model: "llama-3.3-70b-specdec",
+        });
 
-      // 1. تهيئة العميل (بناءً على نصيحة الخبير)
-      const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+        return new Response(JSON.stringify({
+          text: chatCompletion.choices[0].message.content,
+          provider: "Groq"
+        }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
-      // 2. إعداد ميزة التفكير المتطورة
-      const modelName = body.model || "gemini-3.5-flash-lite";
-      const config = {
-        thinkingConfig: {
-          thinkingLevel: body.config?.thinkingConfig?.thinkingLevel || "MEDIUM"
-        }
-      };
+      } catch (e) {
+        console.warn("⚠️ Groq Failover Triggered:", e.message);
+      }
+    }
 
-      // 3. إرسال الطلب بالصيغة الحديثة
-      // نمرر الـ prompt مباشرة أو الـ contents
-      const prompt = body.contents?.[0]?.parts?.[0]?.text || "مرحبا";
+    // --- [المستوى الثاني: Mistral] ---
+    if (MISTRAL_API_KEY) {
+      try {
+        const mistral = new Mistral({ apiKey: MISTRAL_API_KEY });
+        const result = await mistral.chat.complete({
+          model: "mistral-large-latest",
+          messages: [
+            { role: "system", content: systemInstruction || "You are a helpful engineer." },
+            { role: "user", content: prompt || (contents ? contents[contents.length-1].parts[0].text : "") }
+          ],
+        });
 
-      const response = await ai.models.generateContent({
-        model: modelName,
-        contents: body.contents, // تمرير السياق الكامل للذاكرة
-        config: config
+        return new Response(JSON.stringify({
+          text: result.choices[0].message.content,
+          provider: "Mistral"
+        }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+
+      } catch (e) {
+        console.warn("⚠️ Mistral Failover Triggered:", e.message);
+      }
+    }
+
+    // --- [المستوى الثالث والأخير: Gemini] ---
+    if (GEMINI_API_KEY) {
+      const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+      const model = genAI.getGenerativeModel({
+        model: requestedModel || "gemini-3.5-flash-lite",
+        systemInstruction: systemInstruction
       });
 
-      // 4. إعادة النتيجة بتنسيق متوافق مع الواجهة
+      // جيميناي هنا هو "الجوكر" لأنه يدعم الأدوات (Tools) بشكل كامل في الحلقة الذكية
+      const result = await model.generateContent({
+        contents: contents || [{ role: "user", parts: [{ text: prompt }] }],
+        tools: tools,
+        generationConfig: body.generationConfig
+      });
+
       return new Response(JSON.stringify({
-        candidates: [{
-          content: {
-            role: "model",
-            parts: [{ text: response.text }]
-          }
-        }]
+        text: result.response.text,
+        provider: "Gemini (The Fortress)",
+        functionCall: result.response.candidates?.[0]?.content?.parts?.find(p => p.functionCall)
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    return new Response(JSON.stringify({ message: "VSA Bridge V5.4 Ready" }), { headers: corsHeaders });
+    throw new Error("🛑 جميع السيرفرات السحابية مستنفذة حالياً.");
 
   } catch (err) {
-    console.error("SDK Error:", err.message);
     return new Response(JSON.stringify({ error: err.message }), {
-      status: 400,
+      status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

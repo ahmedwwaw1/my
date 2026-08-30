@@ -733,12 +733,11 @@
     };
 
     // ============================================================
-    //  7.  جسر الاتصال بـ Gemini (المُحدث: Agentic Loop المباشر)
+    //  7.  جسر الاتصال بـ Gemini (المُحدث: Triple Failover Dynamic Edition)
     // ============================================================
     window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash', existingHistory = []) {
-        // تم إلغاء التنفيذ المحلي - الطلب يذهب مباشرة للعقل المدبر لضمان أقصى درجات الذكاء
-        // 2. إعدادات الجسر والسياق (الرابط المباشر لـ Supabase لضمان الوصول)
         const url = window.mastermindProxyUrl;
+
         let conversationHistory = existingHistory.length > 0 ? existingHistory : [];
         conversationHistory.push({ role: "user", parts: [{ text: promptText }] });
 
@@ -746,7 +745,6 @@
         let currentIteration = 0;
         let finalResponse = { text: "⚠️ فشل المحرك في الوصول لرد نهائي.", model: modelName, fullHistory: conversationHistory };
 
-        // 3. تعريف الأدوات (التي ستمكن Gemini من استخدام جسر Supabase)
         const tools = [{
             function_declarations: [
                 { name: "listGithubFiles", description: "استكشاف هيكل ملفات المشروع في مستودع GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "المسار المراد استكشافه." } } } },
@@ -760,43 +758,43 @@
             ]
         }];
 
-        // 4. حلقة الوكيل الذكي (Agentic Loop)
         while (currentIteration < maxIterations) {
             currentIteration++;
-            console.log(`🤖 Step ${currentIteration}: Thinking...`);
+            console.log(`🤖 Step ${currentIteration}: Thinking via Cloud Failover...`);
 
             const body = {
                 model: modelName,
-                system_instruction: { parts: [{ text: GROUNDED_SYSTEM_PROMPT }] },
+                systemInstruction: GROUNDED_SYSTEM_PROMPT,
+                prompt: promptText,
                 contents: conversationHistory,
                 tools: tools,
                 generationConfig: { temperature: 0, maxOutputTokens: 2048 }
             };
 
             try {
-                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-                if (!response.ok) return { text: `❌ خطأ الجسر: ${response.status}`, model: "System" };
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                if (!response.ok) return { text: `❌ خطأ الجسر السحابي: ${response.status}`, model: "System" };
+
                 const data = await response.json();
+                console.log(`🎯 استجابة ناجحة عبر: [${data.provider || "سحابي"}]`);
 
-                const parts = data.candidates?.[0]?.content?.parts || [];
-                const assistantMessage = data.candidates?.[0]?.content || { role: "model", parts: [] };
-                conversationHistory.push(assistantMessage);
+                const textPart = data.text;
+                const functionCallPart = data.functionCall;
 
-                const textPart = parts.find(p => p.text);
-                const functionCallPart = parts.find(p => p.functionCall);
-
-                // إذا كان هناك نص فقط (نهاية المهمة)
                 if (textPart && !functionCallPart) {
-                    return { text: textPart.text, model: modelName };
+                    return { text: textPart, model: data.provider || modelName, fullHistory: conversationHistory };
                 }
 
-                // إذا طلب استدعاء أداة
                 if (functionCallPart) {
-                    const { name, args } = functionCallPart.functionCall;
-                    console.log(`🛠️ Executing: ${name}...`);
+                    const { name, args } = functionCallPart;
+                    console.log(`🛠️ السيرفر السحابي يطلب تنفيذ أداة محلية: ${name}...`);
                     
                     let result;
-                    // تنفيذ الأداة (نفس منطق switch السابق)
                     if (name === "thought") result = window.thought(args.reasoning, args.plan, args.risks, args.peer_review, args.swot, args.complexity, args.self_correction);
                     else if (name === "web_search") result = await window.web_search(args.query);
                     else if (name === "read_file") result = await window.read_file(args.path);
@@ -805,17 +803,11 @@
                     else if (name === "multi_replace_file_content") result = await window.multi_replace_file_content(args.path, args.replacements);
                     else if (name === "write_file") result = await window.write_file(args.path, args.content);
                     else if (name === "request_approval") {
-                        // طلب الموافقة هو "نقطة توقف" إجبارية في الحلقة
                         const approval = window.request_approval(args.plan_summary, args.steps || [], args.estimated_impact);
-                        return { text: (textPart ? textPart.text + "\n\n" : "") + (typeof approval === 'string' ? approval : approval.message), model: modelName, requires_approval: true };
+                        return { text: approval.message, model: data.provider || modelName, requires_approval: true, fullHistory: conversationHistory };
                     }
-                    else if (name === "store_memory") result = await window.store_memory(args.key, args.value);
-                    else if (name === "vector_search") result = await window.vector_search(args.query);
-                    else if (name === "searchCode") result = await window.searchCode(args.query);
-                    else if (name === "DeepThink") result = window.DeepThink(args.problem, args.context, args.constraints);
-                    else result = "أداة غير مدعومة حالياً في الحلقة.";
+                    else result = "أداة غير مدعومة حالياً.";
 
-                    // إضافة نتيجة الأداة للسياق لإكمال الحلقة
                     conversationHistory.push({
                         role: "function",
                         parts: [{
@@ -825,18 +817,13 @@
                             }
                         }]
                     });
-
-                    // إذا كان هناك نص مصاحب للأداة، نعرضه في الكونسول للمتابعة
-                    if (textPart) console.log("📝 AI says:", textPart.text);
                 } else {
-                    // إذا لم يرجع نصاً ولا أداة (حالة نادرة)
                     break;
                 }
             } catch (e) {
-                return { text: "❌ خطأ في الحلقة الذكية: " + e.message, model: "System" };
+                return { text: "❌ خطأ في الحلقة الذكية المحلية: " + e.message, model: "System" };
             }
         }
-
         return finalResponse;
     };
 
