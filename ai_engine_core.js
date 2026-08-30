@@ -22,7 +22,7 @@
     const GROUNDED_SYSTEM_PROMPT = `
     [SYSTEM INSTRUCTION - VSA CREATIVE AGENT MODE]
     أنت مهندس برمجيات ووكيل ذكي ذو شخصية تعاونية. مهمتك هي مساعدة المستخدم في كل ما يحتاجه بحرية تامة.
-    
+
     فلسفة العمل الجديدة:
     1. **الحرية في الحوار:** تحدث مع المستخدم بطلاقة، أجب على التحيات، وناقش كافة المواضيع التقنية وغير التقنية.
     2. **الذكاء عند التنفيذ:** استخدم أدوات 'thought' و 'web_search' و 'read_file' تلقائياً عندما يتطلب الأمر ذلك، دون تقييد إبداعك.
@@ -733,82 +733,88 @@
     };
 
     // ============================================================
-    //  7.  مركز الهوية والوصول (Identity & Access Layer - V8.1)
-    //  التوافق الكامل مع الجسر السيادي V7.0 ودعم التفكير العميق
+    //  7.  جسر الاتصال بـ Gemini (المُحدث: Agentic Loop المباشر)
     // ============================================================
-
-    window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.5-flash-lite', existingHistory = []) {
-        const proxyUrl = window.mastermindProxyUrl;
-
+    window.callAiBrain = async function(promptText, apiKey, modelName = 'gemini-3.7-flash', existingHistory = []) {
+        // تم إلغاء التنفيذ المحلي - الطلب يذهب مباشرة للعقل المدبر لضمان أقصى درجات الذكاء
+        // 2. إعدادات الجسر والسياق (الرابط المباشر لـ Supabase لضمان الوصول)
+        const url = window.mastermindProxyUrl;
         let conversationHistory = existingHistory.length > 0 ? existingHistory : [];
-        // تأكد من عدم تكرار رسالة المستخدم الأخيرة
-        if (conversationHistory.length === 0 || conversationHistory[conversationHistory.length-1].role !== 'user') {
-            conversationHistory.push({ role: "user", parts: [{ text: promptText }] });
-        }
+        conversationHistory.push({ role: "user", parts: [{ text: promptText }] });
 
-        let maxIterations = 10; // زيادة المحاولات للسماح بالتحليل العميق
+        let maxIterations = 5;
         let currentIteration = 0;
+        let finalResponse = { text: "⚠️ فشل المحرك في الوصول لرد نهائي.", model: modelName, fullHistory: conversationHistory };
 
-        // تعريف الأدوات السيادية الموحدة (محدثة لعام 2026)
+        // 3. تعريف الأدوات (نفس المصفوفة السابقة)
         const tools = [{
             function_declarations: [
-                { name: "listGithubFiles", description: "استكشاف ملفات GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } } } },
-                { name: "read_file", description: "قراءة ملف من GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                { name: "analyze_file", description: "فحص سلامة السنتكس.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                { name: "multi_replace_file_content", description: "تعديل الكود في GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
-                { name: "write_file", description: "إنشاء ملف في GitHub.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
-                { name: "thought", description: "غرفة عمليات التفكير الهندسي.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" }, swot: { type: "OBJECT", properties: { strengths: { type: "STRING" }, weaknesses: { type: "STRING" } } } }, required: ["reasoning", "plan"] } },
-                { name: "web_search", description: "البحث في الإنترنت.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
-                { name: "request_approval", description: "طلب موافقة المطور.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" } }, required: ["plan_summary"] } }
+                { name: "listGithubFiles", description: "استكشاف هيكل المشروع.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } } } },
+                { name: "read_file", description: "قراءة محتوى ملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                { name: "analyze_file", description: "فحص توازن الأقواس.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                { name: "multi_replace_file_content", description: "تعديل أجزاء محددة من الملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
+                { name: "write_file", description: "إنشاء ملف جديد فقط.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
+                { name: "store_memory", description: "تخزين معلومة (سحابي عبر GitHub).", parameters: { type: "OBJECT", properties: { key: { type: "STRING" }, value: { type: "STRING" } }, required: ["key", "value"] } },
+                { name: "vector_search", description: "البحث في الذاكرة السحابية.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "estimate_cost", description: "حساب التكلفة.", parameters: { type: "OBJECT", properties: { model: { type: "STRING" }, tokens: { type: "NUMBER" } }, required: ["model", "tokens"] } },
+                { name: "run_virtual_test", description: "اختبار الكود.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
+                { name: "searchCode", description: "البحث الدلالي في كل الملفات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "searchLocalVideos", description: "البحث عن فيديوات في ملفات المستودع المحلية (0 توكنات).", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "wrap_with_error_handling", description: "إحاطة الكود بـ try-catch.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
+                { name: "simulate_integration", description: "محاكاة اختبار التكامل.", parameters: { type: "OBJECT", properties: { moduleName: { type: "STRING" }, dependencies: { type: "ARRAY", items: { type: "STRING" } } }, required: ["moduleName"] } },
+                { name: "injectGlobalStyles", description: "حقن CSS مباشرة.", parameters: { type: "OBJECT", properties: { css_code: { type: "STRING" } }, required: ["css_code"] } },
+                { name: "generate_unit_test", description: "توليد اختبار وحدة.", parameters: { type: "OBJECT", properties: { funcName: { type: "STRING" }, params: { type: "ARRAY", items: { type: "STRING" } } }, required: ["funcName"] } },
+                { name: "optimize_algorithm", description: "تحسين الخوارزميات.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
+                { name: "translate_code", description: "ترجمة الكود بين اللغات.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" }, targetLang: { type: "STRING" } }, required: ["code", "targetLang"] } },
+                { name: "explain_code", description: "شرح الكود بالعربية.", parameters: { type: "OBJECT", properties: { code: { type: "STRING" } }, required: ["code"] } },
+                { name: "thought", description: "غرفة عمليات التفكير الهندسي (تحليل SWOT + التعقيد + نقد ذاتي).", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING", description: "التحليل المنطقي." }, plan: { type: "STRING", description: "خطة التنفيذ." }, risks: { type: "STRING" }, complexity: { type: "STRING", enum: ["منخفضة", "متوسطة", "عالية", "حرجة"] }, swot: { type: "OBJECT", properties: { strengths: { type: "STRING" }, weaknesses: { type: "STRING" }, opportunities: { type: "STRING" }, threats: { type: "STRING" } } }, self_correction: { type: "STRING", description: "ما الذي قد يفشل في هذه الخطة؟" }, peer_review: { type: "STRING" } }, required: ["reasoning", "plan", "complexity", "swot"] } },
+                { name: "DeepThink", description: "وضع التفكير العميق (مستوحى من DeepSeek R1).", parameters: { type: "OBJECT", properties: { problem: { type: "STRING" }, context: { type: "STRING" }, constraints: { type: "ARRAY", items: { type: "STRING" } } }, required: ["problem"] } },
+                { name: "web_search", description: "البحث على الإنترنت (Google أولاً).", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "read_url", description: "قراءة محتوى رابط خارجي.", parameters: { type: "OBJECT", properties: { url: { type: "STRING" } }, required: ["url"] } },
+                { name: "explain_plan", description: "شرح خطة العمل قبل التنفيذ.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "STRING" } } }, required: ["plan_summary"] } },
+                { name: "request_approval", description: "طلب موافقة المستخدم على خطة قبل التنفيذ.", parameters: { type: "OBJECT", properties: { plan_summary: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "STRING" } }, estimated_impact: { type: "STRING" } }, required: ["plan_summary"] } },
+                { name: "execute_approved_plan", description: "تنفيذ الخطة بعد موافقة المستخدم.", parameters: { type: "OBJECT", properties: {} } }
             ]
         }];
 
+        // 4. حلقة الوكيل الذكي (Agentic Loop)
         while (currentIteration < maxIterations) {
             currentIteration++;
-            console.log(`🤖 [VSA Agent] Step ${currentIteration} via Sovereign Bridge...`);
+            console.log(`🤖 Step ${currentIteration}: Thinking...`);
 
-            // بناء الطلب المتوافق مع الجسر V7.0
-            const payload = {
+            const body = {
                 model: modelName,
-                systemInstruction: GROUNDED_SYSTEM_PROMPT,
-                prompt: promptText,
+                system_instruction: { parts: [{ text: GROUNDED_SYSTEM_PROMPT }] },
                 contents: conversationHistory,
                 tools: tools,
-                generationConfig: { temperature: 0 }
+                generationConfig: { temperature: 0, maxOutputTokens: 2048 }
             };
 
             try {
-                const response = await fetch(proxyUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) return { text: `❌ خطأ الجسر السحابي: ${response.status}`, model: "Sovereign" };
-
+                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+                if (!response.ok) return { text: `❌ خطأ الجسر: ${response.status}`, model: "System" };
                 const data = await response.json();
 
-                // استخراج النصوص والأدوات (بناءً على تنسيق V7.0)
-                const textPart = data.text;
-                const functionCallPart = data.functionCall;
-                const usedModel = data.provider || modelName;
+                const parts = data.candidates?.[0]?.content?.parts || [];
+                const assistantMessage = data.candidates?.[0]?.content || { role: "model", parts: [] };
+                conversationHistory.push(assistantMessage);
 
-                // 🌟 تحديث الذاكرة فوراً لضمان تعاقب الأدوار
-                conversationHistory.push({
-                    role: "model",
-                    parts: [ functionCallPart ? { functionCall: functionCallPart } : { text: textPart || "" } ]
-                });
+                const textPart = parts.find(p => p.text);
+                const functionCallPart = parts.find(p => p.functionCall);
 
+                // إذا كان هناك نص فقط (نهاية المهمة)
                 if (textPart && !functionCallPart) {
-                    return { text: textPart, model: usedModel, fullHistory: conversationHistory };
+                    return { text: textPart.text, model: modelName };
                 }
 
+                // إذا طلب استدعاء أداة
                 if (functionCallPart) {
-                    const { name, args } = functionCallPart;
-                    console.log(`🛠️ Executing Tool: ${name}`);
+                    const { name, args } = functionCallPart.functionCall;
+                    console.log(`🛠️ Executing: ${name}...`);
                     
                     let result;
-                    if (name === "thought") result = window.thought(args.reasoning, args.plan, "", "", args.swot, "", "");
+                    // تنفيذ الأداة (نفس منطق switch السابق)
+                    if (name === "thought") result = window.thought(args.reasoning, args.plan, args.risks, args.peer_review, args.swot, args.complexity, args.self_correction);
                     else if (name === "web_search") result = await window.web_search(args.query);
                     else if (name === "read_file") result = await window.read_file(args.path);
                     else if (name === "listGithubFiles") result = await window.listGithubFiles(args.path || "");
@@ -816,21 +822,39 @@
                     else if (name === "multi_replace_file_content") result = await window.multi_replace_file_content(args.path, args.replacements);
                     else if (name === "write_file") result = await window.write_file(args.path, args.content);
                     else if (name === "request_approval") {
-                        const approval = window.request_approval(args.plan_summary, [], "");
-                        return { text: approval.message, model: usedModel, requires_approval: true, fullHistory: conversationHistory };
+                        // طلب الموافقة هو "نقطة توقف" إجبارية في الحلقة
+                        const approval = window.request_approval(args.plan_summary, args.steps || [], args.estimated_impact);
+                        return { text: (textPart ? textPart.text + "\n\n" : "") + (typeof approval === 'string' ? approval : approval.message), model: modelName, requires_approval: true };
                     }
-                    else result = "أداة غير مدعومة.";
+                    else if (name === "store_memory") result = await window.store_memory(args.key, args.value);
+                    else if (name === "vector_search") result = await window.vector_search(args.query);
+                    else if (name === "searchCode") result = await window.searchCode(args.query);
+                    else if (name === "DeepThink") result = window.DeepThink(args.problem, args.context, args.constraints);
+                    else result = "أداة غير مدعومة حالياً في الحلقة.";
 
+                    // إضافة نتيجة الأداة للسياق لإكمال الحلقة
                     conversationHistory.push({
                         role: "function",
-                        parts: [{ functionResponse: { name: name, response: { content: typeof result === 'object' ? result : { message: result } } } }]
+                        parts: [{
+                            functionResponse: {
+                                name: name,
+                                response: { content: typeof result === 'object' ? result : { message: result } }
+                            }
+                        }]
                     });
-                } else { break; }
+
+                    // إذا كان هناك نص مصاحب للأداة، نعرضه في الكونسول للمتابعة
+                    if (textPart) console.log("📝 AI says:", textPart.text);
+                } else {
+                    // إذا لم يرجع نصاً ولا أداة (حالة نادرة)
+                    break;
+                }
             } catch (e) {
                 return { text: "❌ خطأ في الحلقة الذكية: " + e.message, model: "System" };
             }
         }
-        return { text: "⚠️ المحرك استنزف محاولات التفكير دون الوصول لرد نهائي.", model: "System", fullHistory: conversationHistory };
+
+        return finalResponse;
     };
 
     console.log("🚀 AI Core V7.4 (Cloud Memory) Loaded.");
