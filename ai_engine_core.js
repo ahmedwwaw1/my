@@ -786,6 +786,14 @@
                 const textPart = data.text;
                 const functionCallPart = data.functionCall;
 
+                // 🌟 إضافة رد النموذج إلى التاريخ لضمان تعاقب الأدوار (user -> model -> function)
+                conversationHistory.push({
+                    role: "model",
+                    parts: [
+                        functionCallPart ? { functionCall: functionCallPart } : { text: textPart || "" }
+                    ]
+                });
+
                 if (textPart && !functionCallPart) {
                     return { text: textPart, model: data.provider || modelName, fullHistory: conversationHistory };
                 }

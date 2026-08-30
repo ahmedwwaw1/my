@@ -1,7 +1,6 @@
 // ================================================================
-//  🧠 SUPABASE EDGE FUNCTION - DYNAMIC TRIPLE FAILOVER BRIDGE (V6.2)
-//  التحديث: العودة لنظام Deno الصافي لضمان الاستقرار المطلق
-//  التنفيذ المباشر عبر Fetch: [Groq] -> [Mistral] -> [Gemini]
+//  🚀 VSA Sovereign Bridge V6.7 - DYNAMIC MODEL SYNC
+//  التحديث: مزامنة اسم النموذج المختار + تحسين تتبع الأخطاء
 // ================================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -16,83 +15,61 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
+    const url = new URL(req.url);
+    const path = url.pathname;
     const body = await req.json().catch(() => ({}));
     const { prompt, systemInstruction, contents, tools, model: requestedModel } = body;
 
-    const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
-    const MISTRAL_API_KEY = Deno.env.get("MISTRAL_API_KEY");
+    const GITHUB_TOKEN = Deno.env.get("GITHUB_TOKEN");
     const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
 
-    const userMessage = prompt || (contents && contents.length > 0 ? contents[contents.length-1].parts[0].text : "مرحبا");
-
-    // --- [المستوى الأول: Groq عبر Fetch المباشر] ---
-    if (GROQ_API_KEY) {
-      try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-          method: "POST",
-          headers: { "Authorization": `Bearer ${GROQ_API_KEY}`, "Content-Type": "application/json" },
-          body: JSON.stringify({
-            model: "llama-3.3-70b-specdec",
-            messages: [{ role: "system", content: systemInstruction }, { role: "user", content: userMessage }]
-          })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          return new Response(JSON.stringify({ text: data.choices[0].message.content, provider: "Groq" }), {
-            headers: { ...corsHeaders, "Content-Type": "application/json" }
-          });
-        }
-      } catch (e) {}
+    // [مسار GitHub]
+    if (path.includes("/github/")) {
+      let githubPath = path.split("/github/")[1] || "";
+      githubPath = githubPath.replace(/^contents\//, "");
+      const res = await fetch(`https://api.github.com/repos/ahmedwwaw1/my/contents/${githubPath}`, {
+        method: req.method,
+        headers: { "Authorization": `Bearer ${GITHUB_TOKEN}`, "Accept": "application/vnd.github.v3+json", "User-Agent": "VSA-Bridge-V6.7" },
+        body: req.method !== "GET" ? JSON.stringify(body) : null
+      });
+      return new Response(await res.text(), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // --- [المستوى الثاني: Mistral عبر Fetch المباشر] ---
-    if (MISTRAL_API_KEY) {
-      try {
-        const res = await fetch("https://api.mistral.ai/v1/chat/completions", {
-          method: "POST",
-          headers: { "Authorization": `Bearer ${MISTRAL_API_KEY}`, "Content-Type": "application/json" },
-          body: JSON.stringify({
-            model: "mistral-large-latest",
-            messages: [{ role: "system", content: systemInstruction }, { role: "user", content: userMessage }]
-          })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          return new Response(JSON.stringify({ text: data.choices[0].message.content, provider: "Mistral" }), {
-            headers: { ...corsHeaders, "Content-Type": "application/json" }
-          });
-        }
-      } catch (e) {}
-    }
-
-    // --- [المستوى الثالث والأخير: Gemini عبر Fetch المباشر - لضمان الاستقرار] ---
-    if (GEMINI_API_KEY) {
-      const apiVersion = "v1beta";
-      const modelName = requestedModel || "gemini-1.5-flash";
-      const geminiUrl = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+    // [مسار Gemini]
+    if (GEMINI_API_KEY && (prompt || contents)) {
+      const modelName = requestedModel || "gemini-3.5-flash-lite"; // استخدام النموذج المختار من الواجهة
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
 
       const res = await fetch(geminiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contents: contents || [{ role: "user", parts: [{ text: userMessage }] }], tools, systemInstruction: { parts: [{ text: systemInstruction }] } })
+        body: JSON.stringify({
+          contents: contents || [{ role: "user", parts: [{ text: prompt || "مرحبا" }] }],
+          tools,
+          system_instruction: { parts: [{ text: systemInstruction }] }
+        })
       });
 
-      if (res.ok) {
-        const data = await res.json();
+      const data = await res.json();
+      if (res.ok && data.candidates?.[0]) {
+        const parts = data.candidates[0].content.parts;
         return new Response(JSON.stringify({
-          text: data.candidates[0].content.parts[0].text,
-          provider: "Gemini (Direct Fetch)",
-          functionCall: data.candidates[0].content.parts.find((p: any) => p.functionCall)
+          text: parts.find((p: any) => p.text)?.text || "",
+          functionCall: parts.find((p: any) => p.functionCall)?.functionCall || null,
+          provider: `${modelName} (Agentic)`
         }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
+
+      return new Response(JSON.stringify({ error: data.error?.message || "Google API Error", text: "⚠️ واجه Gemini مشكلة في المعالجة السحابية." }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
+      });
     }
 
-    throw new Error("فشلت جميع المحاولات السحابية.");
+    return new Response(JSON.stringify({ status: "online", message: "VSA Bridge V6.7 Active" }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
+    });
 
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 200,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return new Response(JSON.stringify({ error: err.message }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 });
