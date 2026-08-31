@@ -30,12 +30,7 @@
             }
         }
 
-        let geminiApiKey = '';
-        let openaiApiKey = '';
-        let claudeApiKey = '';
-        let deepseekApiKey = '';
-        let mastermindProxyUrl = ''; // رابط الجسر الوسيط لتجاوز الـ CORS
-        let githubToken = '';
+
         const GITHUB_REPO = 'ahmedwwaw1/my';
 
         // 📝 دستور النخبة السيادي الشامل (Sovereign Omni-Constitution)
@@ -72,73 +67,9 @@
             ]
         }];
 
-        function getCleanGithubToken() {
-            if (!githubToken) return null;
-            return githubToken.trim().replace(/^['"]|['"]$/g, '');
-        }
 
-        async function resetGeminiKey() {
-            const choice = prompt("⚙️ إعدادات العقل المدبر:\n1. تعديل مفتاح API للنموذج الحالي\n2. تعديل رابط الجسر (Proxy URL) لتجاوز CORS\n3. تعديل مفتاح GitHub\n\nأدخل رقم الخيار (1-3):");
-
-            if (choice === "1") {
-                const currentModel = document.getElementById('modelSelector').value;
-                let keyName = 'gemini_key';
-                let providerName = 'Google Gemini';
-                let promptText = 'الرجاء إدخال Gemini API Key الجديد (AIza...):';
-
-                if (currentModel.includes('claude')) {
-                    keyName = 'claude_key';
-                    providerName = 'Anthropic Claude';
-                    promptText = 'الرجاء إدخال Claude API Key الجديد (sk-ant-...):';
-                } else if (currentModel.includes('gpt')) {
-                    keyName = 'openai_key';
-                    providerName = 'OpenAI GPT';
-                    promptText = 'الرجاء إدخال OpenAI API Key الجديد (sk-proj-...):';
-                } else if (currentModel.includes('deepseek')) {
-                    keyName = 'deepseek_key';
-                    providerName = 'DeepSeek';
-                    promptText = 'الرجاء إدخال DeepSeek API Key الجديد (sk-...):';
-                }
-
-                const key = prompt(promptText);
-                if (key !== null) {
-                    const trimmedKey = key.trim();
-                    if (keyName === 'gemini_key') geminiApiKey = trimmedKey;
-                    else if (keyName === 'claude_key') claudeApiKey = trimmedKey;
-                    else if (keyName === 'openai_key') openaiApiKey = trimmedKey;
-                    else if (keyName === 'deepseek_key') deepseekApiKey = trimmedKey;
-
-                    if (trimmedKey) {
-                        await saveApiKeyToSupabase(keyName, trimmedKey);
-                        alert(`✅ تم تحديث مفتاح ${providerName} بنجاح.`);
-                    }
-                }
-            } else if (choice === "2") {
-                const url = prompt("🔗 أدخل رابط الجسر السيادي (Cloudflare Worker URL):", mastermindProxyUrl);
-                if (url !== null) {
-                    const trimmedUrl = url.trim();
-                    mastermindProxyUrl = trimmedUrl;
-                    await saveApiKeyToSupabase('proxy_url', trimmedUrl);
-                    alert("✅ تم تحديث رابط الجسر بنجاح! نماذج DeepSeek و Claude ستعمل الآن.");
-                }
-            } else if (choice === "3") {
-                await resetGithubToken();
-            } else if (choice !== null) {
-                alert("⚠️ خيار غير صحيح.");
-            }
-        }
-
-        async function resetGithubToken() {
-            const token = prompt("الرجاء إدخال GitHub Personal Access Token (لتمكين الإدارة التلقائية):");
-            if (token) {
-                githubToken = token.trim();
-                await saveApiKeyToSupabase('github_token', githubToken);
-                alert("✅ تم تحديث مفتاح GitHub.");
-            }
-        }
 
         async function initKeys() {
-            // إضافة زر إغلاق التيرمينال يدوياً إذا لم يكن موجوداً
             const term = document.getElementById('aiTerminal');
             if (term && !term.querySelector('.terminal-close-btn')) {
                 const closeBtn = document.createElement('div');
@@ -149,16 +80,18 @@
                 term.appendChild(closeBtn);
             }
 
-            if (!githubToken) githubToken = await fetchApiKeyFromSupabase('github_token');
-            if (!geminiApiKey) geminiApiKey = await fetchApiKeyFromSupabase('gemini_key');
-            if (!openaiApiKey) openaiApiKey = await fetchApiKeyFromSupabase('openai_key');
-            if (!claudeApiKey) claudeApiKey = await fetchApiKeyFromSupabase('claude_key');
-            if (!deepseekApiKey) deepseekApiKey = await fetchApiKeyFromSupabase('deepseek_key');
-            if (!mastermindProxyUrl) mastermindProxyUrl = await fetchApiKeyFromSupabase('proxy_url');
-
-            // Built-in recovery logic for owner's repository
-            if (!githubToken || githubToken.length < 5) {
-                githubToken = '';
+            if (!window.heartbeatStarted) {
+                window.heartbeatStarted = true;
+                setInterval(async () => {
+                    if (!document.getElementById('aiSendBtn').classList.contains('working')) {
+                        try {
+                            const start = Date.now();
+                            updateHealthUI(true, `BRIDGE: OK | ${Date.now() - start}ms`);
+                        } catch(e) {
+                            updateHealthUI(false, "BRIDGE OFFLINE");
+                        }
+                    }
+                }, 30000);
             }
         }
 
@@ -255,7 +188,7 @@
                 await initKeys();
                 initResizer();
 
-                if (!geminiApiKey) await resetGeminiKey();
+
             }
         }
 
@@ -294,47 +227,7 @@
             sendAiMessage();
         }
 
-        async function fetchApiKeyFromSupabase(id) {
-            // ...
-            if (!window.heartbeatStarted) {
-                window.heartbeatStarted = true;
-                setInterval(async () => {
-                    if (!document.getElementById('aiSendBtn').classList.contains('working')) {
-                        try {
-                            const start = Date.now();
-                            // فحص صامت للاتصال
-                            const isProxyReady = mastermindProxyUrl ? "PROXY: OK" : "DIRECT: OK";
-                            updateHealthUI(true, `${isProxyReady} | ${Date.now() - start}ms`);
-                        } catch(e) {
-                            updateHealthUI(false, "CONNECTION SLUGGISH");
-                        }
-                    }
-                }, 30000); // جس نبض كل 30 ثانية
-            }
 
-            try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/secret_settings?id=eq.${id}`, {
-                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                });
-                const data = await res.json();
-                return data.length > 0 ? data[0].secret_value : null;
-            } catch (e) {
-                return null;
-            }
-        }
-
-        async function saveApiKeyToSupabase(id, key) {
-            await fetch(`${SUPABASE_URL}/rest/v1/secret_settings`, {
-                method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'resolution=merge-duplicates'
-                },
-                body: JSON.stringify({ id: id, secret_value: key })
-            });
-        }
 
         // 🎯 محرك الاتصال الموحد (The Unified safeGithubFetch via Bridge)
         async function safeGithubFetch(endpoint, options = {}, isRetry = false) {
@@ -472,8 +365,6 @@
         const CHAT_LOG_PATH = 'chat_logs.json';
 
         async function saveChatToStorage() {
-            const token = getCleanGithubToken();
-            if (!token) return;
             try {
                 const globalContext = {
                     sessions: chatSessions,
@@ -510,8 +401,7 @@
 
             await initKeys();
 
-            const token = getCleanGithubToken();
-            if (token) {
+            if (true) {
                 try {
                     const syncBadge = document.createElement('div');
                     syncBadge.id = 'cloudSyncBadge';
@@ -599,9 +489,7 @@
 
         async function clearChatHistory() {
             chatHistory = [];
-            if (githubToken) {
-                await writeFile(CHAT_LOG_PATH, "[]", "تصفير المحادثة");
-            }
+            await writeFile(CHAT_LOG_PATH, "[]", "تصفير المحادثة");
             localStorage.removeItem('gemini_chat_ui');
             const container = document.getElementById('aiMessages');
             container.innerHTML = '<div class="msg ai">تم مسح الذاكرة العالمية. أنا جاهز لبدء مهمة جديدة!</div>';
@@ -1175,70 +1063,13 @@
         }
 
         async function repairSystem() {
-            const report = {
-                actions: [],
-                diagnostics: {},
-                status: "initiating_deep_repair",
-                timestamp: new Date().toISOString()
-            };
-
-            const token = getCleanGithubToken();
-
             try {
-                // 1. فحص التوكن وتطهيره (نواة محرك الترقية)
-                if (token && (token.includes('"') || token.includes("'") || token.trim() !== token)) {
-                    githubToken = token.trim().replace(/^['"]|['"]$/g, '');
-                    report.actions.push("✅ تم تطهير التوكن وتحديث الذاكرة المؤقتة لمنع خطأ 401.");
-                }
-
-                // 2. اختبار الاتصال العميق وفحص الصلاحيات (Scopes)
-                if (token) {
-                    const res = await fetch("https://api.github.com/user", {
-                        headers: { 'Authorization': `Bearer ${token}` },
-                        mode: 'cors'
-                    });
-
-                    if (res.status === 401) {
-                        report.status = "token_invalid";
-                        report.actions.push("❌ التوكن منتهي الصلاحية أو غير صالح. يرجى إعادة إدخاله.");
-                    } else {
-                        const scopes = res.headers.get('X-OAuth-Scopes');
-                        report.diagnostics.scopes = scopes;
-
-                        // ترقية: التأكد من صلاحية البحث (Search API)
-                        if (scopes && !scopes.includes('repo')) {
-                            report.actions.push("⚠️ التوكن لا يملك صلاحية 'repo'، وهذا يعطل أداة searchCode و githubAction.");
-                        } else {
-                            report.actions.push("✅ صلاحيات التوكن كاملة وتشمل إدارة المستودع والبحث.");
-                        }
-                    }
-                }
-
-                // 3. فحص الـ CORS والـ API Limit للبحث
-                const searchTest = await fetch(`https://api.github.com/search/code?q=Mastermind+repo:${GITHUB_REPO}`, {
-                    headers: { 'Authorization': `Bearer ${token}` },
-                    mode: 'cors'
-                });
-                if (searchTest.status === 403) {
-                    report.actions.push("⏳ تنبيه: تم الوصول للحد الأقصى لعمليات البحث (Rate Limit). سيتم تخفيف الضغط.");
-                } else if (!searchTest.ok) {
-                    report.actions.push(`⚠️ أداة البحث تواجه قيوداً تقنية (كود: ${searchTest.status}). جاري محاولة الالتفاف.`);
-                } else {
-                    report.actions.push("✅ محرك البحث (searchCode) يعمل بكفاءة 100%.");
-                }
-
-                // 4. إعادة مزامنة الأذرع التنفيذية
-                await initKeys();
-                report.actions.push("🚀 تم تفعيل 'محرك الترقية الشامل' لضمان قوة الأدوات.");
-
-                report.status = "fully_functional";
+                const start = Date.now();
+                const res = await callBridge('chat', { action: 'health_check' });
+                return `🛡️ تقرير العقل المدبر: الجسر الذكي متصل (${Date.now() - start}ms). جميع مفاتيح Supabase Secrets نشطة.`;
             } catch (e) {
-                report.status = "failed";
-                report.error = e.message;
-                report.actions.push("❌ فشل الإصلاح التلقائي. يرجى التحقق من جدار الحماية أو اتصال الشبكة.");
+                return `❌ فشل الاتصال بالجسر الذكي: ${e.message}`;
             }
-
-            return `🛡️ تقرير العقل المدبر (Diagnostic Report):\n${report.actions.join('\n')}\nحالة النظام: ${report.status}`;
         }
 
         async function readCodeRange(path, start, end) {
@@ -1324,39 +1155,14 @@
 
         async function callAiBrain(history) {
             const userModel = document.getElementById('modelSelector').value;
-            let key = geminiApiKey.trim();
-            let provider = 'google';
+            const payload = {
+                system_instruction: { parts: [{ text: CONSTITUTION + `\nأنت "العقل المدبر" (Mastermind). التزم بالدستور البرمجي حرفياً.` }] },
+                contents: history.map(h => ({ role: h.role, parts: h.parts })),
+                tools: AI_TOOLS,
+                generationConfig: GENERATION_CONFIG
+            };
 
-            if (userModel.includes('claude')) { provider = 'anthropic'; key = claudeApiKey.trim(); }
-            else if (userModel.includes('gpt')) { provider = 'openai'; key = openaiApiKey.trim(); }
-            else if (userModel.includes('deepseek')) { provider = 'deepseek'; key = deepseekApiKey.trim(); }
-
-            if (!key || key.length < 10) {
-                return { error: `⚠️ لم يتم ضبط مفتاح الـ API لـ ${provider.toUpperCase()} بشكل صحيح.` };
-            }
-
-            let body = {};
-            if (provider === 'google') {
-                body = {
-                    system_instruction: { parts: [{ text: CONSTITUTION + `\nأنت "العقل المدبر" (Mastermind). التزم بالدستور البرمجي حرفياً.` }] },
-                    contents: history.map(h => ({ role: h.role, parts: h.parts })),
-                    tools: AI_TOOLS,
-                    generationConfig: GENERATION_CONFIG
-                };
-            } else if (provider === 'openai' || provider === 'deepseek') {
-                const messages = history.map(h => ({
-                    role: h.role === 'model' ? 'assistant' : (h.role === 'user' ? (h.parts[0].functionResponse ? 'tool' : 'user') : 'system'),
-                    content: h.parts[0].text || '',
-                    ...(h.parts[0].functionCall && { tool_calls: [{ id: h.parts[0].functionCall.id || 'call_'+Date.now(), type: 'function', function: { name: h.parts[0].functionCall.name, arguments: JSON.stringify(h.parts[0].functionCall.args) } }] }),
-                    ...(h.parts[0].functionResponse && { tool_call_id: history[history.indexOf(h)-1].parts[0].functionCall.id, content: JSON.stringify(h.parts[0].functionResponse.response) })
-                }));
-                messages.unshift({ role: 'system', content: CONSTITUTION });
-                body = { model: userModel, messages: messages, tools: AI_TOOLS[0].function_declarations.map(f => ({ type: 'function', function: { name: f.name, description: f.description, parameters: f.parameters } })), tool_choice: 'auto' };
-            } else if (provider === 'anthropic') {
-                body = { model: userModel, system: CONSTITUTION, max_tokens: 4096, messages: history.filter(h => !h.parts[0].functionResponse).map(h => ({ role: h.role === 'model' ? 'assistant' : 'user', content: h.parts[0].text || '' })), tools: AI_TOOLS[0].function_declarations.map(f => ({ name: f.name, description: f.description, input_schema: f.parameters })) };
-            }
-
-            return await callBridge('chat', { provider, model: userModel, payload: body });
+            return await callBridge('chat', { model: userModel, payload });
         }
 
         async function runToolLoop(history) {
@@ -1373,32 +1179,20 @@
                 const data = await callAiBrain(history);
                 if (data.error) return { text: data.error, model: "System" };
 
-                const userModel = document.getElementById('modelSelector').value;
-                const provider = userModel.includes('claude') ? 'anthropic' : (userModel.includes('gpt') || userModel.includes('deepseek') ? 'openai' : 'google');
-
-                let thought = null;
-                let functionCallPart = null;
-                const parts = (provider === 'google') ? (data.candidates?.[0]?.content?.parts || []) : [];
-
-                if (provider === 'google') {
-                    functionCallPart = parts.find(p => p.functionCall);
-                    thought = parts.find(p => p.text)?.text;
-                } else if (provider === 'openai' || provider === 'deepseek') {
-                    const choice = data.choices?.[0]?.message;
-                    thought = choice?.content;
-                    if (choice?.tool_calls) {
-                        const tc = choice.tool_calls[0].function;
-                        functionCallPart = { functionCall: { name: tc.name, args: JSON.parse(tc.arguments) } };
-                    }
-                } else if (provider === 'anthropic') {
-                    thought = data.content.find(c => c.type === 'text')?.text;
-                    const tc = data.content.find(c => c.type === 'tool_use');
-                    if (tc) { functionCallPart = { functionCall: { name: tc.name, args: tc.input, id: tc.id } }; }
+                if (data.provider_info) {
+                    logToTerminal(`CONNECTED VIA: ${data.provider_info.tier} (${data.provider_info.model})`, "info");
                 }
+
+                const candidate = data.candidates?.[0];
+                const content = candidate?.content;
+                const parts = content?.parts || [];
+
+                const thought = parts.find(p => p.text)?.text;
+                const functionCallPart = parts.find(p => p.functionCall);
 
                 if (functionCallPart && functionCallPart.functionCall) {
                     const { name, args } = functionCallPart.functionCall;
-                    if (thought) addMessageToUi('ai', '', userModel, thought);
+                    if (thought) addMessageToUi('ai', '', data.model || 'AI', thought);
                     const stepId = addToolStepToUi(name, args);
                     let toolResult;
 
@@ -1424,16 +1218,19 @@
                     else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
                     else if (name === "repairSystem") toolResult = await repairSystem();
                     else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
-                    else if (name === "web_search" || name === "read_url") toolResult = "⚠️ هذه الأداة تتطلب معالجة خاصة عبر الجسر.";
+                    else if (name === "web_search" || name === "read_url") toolResult = await callBridge(name, args);
                     else toolResult = "❌ أداة غير مدعومة.";
 
                     updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
-                    history.push({ role: "model", parts: (provider === 'google' ? parts : [{text: thought || "Executing..."}]) });
+
+                    history.push({ role: "model", parts: parts });
                     history.push({ role: "user", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
+
                     return await runToolLoop(history);
                 }
 
-                const finalTurn = { role: "model", parts: (provider === 'google' ? parts : [{text: thought}]), model: userModel };
+                const userModel = document.getElementById('modelSelector').value;
+                const finalTurn = { role: "model", parts: parts, model: userModel };
                 chatHistory = history.concat([finalTurn]);
                 saveChatToStorage();
                 localStorage.removeItem('gemini_pending_history');

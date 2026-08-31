@@ -1,17 +1,21 @@
 /**
- * VSA Academy Sovereign Bridge - REPAIRED FOR TOOL ACCESS
+ * VSA Academy Sovereign Bridge - ULTRA-STABLE ESM VERSION
  * ---------------------------------------------------------------
- * هذا الكود يضمن تمرير الدستور (System Instruction) والأدوات (Tools) للنموذج.
+ * هذا التحديث يستخدم روابط esm.sh لتجنب خطأ "Failed to bundle" في Supabase.
+ * يدعم التبديل التلقائي: Groq -> Mistral -> Gemini 3.7.
  */
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { GoogleGenAI } from "npm:@google/genai"
-import Groq from "npm:groq-sdk"
-import { Mistral } from "npm:@mistralai/mistralai"
+
+// استيراد المكتبات عبر روابط ESM المستقرة
+import { GoogleGenAI } from "https://esm.sh/@google/genai"
+import Groq from "https://esm.sh/groq-sdk"
+import { Mistral } from "https://esm.sh/@mistralai/mistralai"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
 }
 
 serve(async (req) => {
@@ -20,42 +24,85 @@ serve(async (req) => {
   try {
     const { action, payload, model: requestedModel, endpoint, method, body } = await req.json()
 
+    // --- [1. محرك الدردشة الذكي] ---
     if (action === 'chat') {
+      const userPrompt = extractPrompt(payload)
       let lastError = null
 
-      // 1. محاولة Groq (المستوى الأول) - حالياً يدعم النص فقط في هذا الجسر
+      // المستوى الأول: Groq
       try {
         const groqKey = Deno.env.get("GROQ_API_KEY")
         if (groqKey) {
-          const prompt = extractPrompt(payload)
           const groq = new Groq({ apiKey: groqKey })
           const res = await groq.chat.completions.create({
-            messages: [{ role: "user", content: prompt }],
+            messages: [{ role: "user", content: userPrompt }],
             model: "llama-3.3-70b-specdec",
           })
           return sendSuccess(res.choices[0].message.content, "Groq (Llama 3.3)")
         }
-      } catch (e) { console.warn("Groq level failed") }
+      } catch (e) { console.warn("Groq level skipped:", e.message); lastError = e; }
 
-      // 2. محاولة Gemini (خط الدفاع الأساسي والأذكى للأدوات)
+      // المستوى الثاني: Mistral
+      try {
+        const mistralKey = Deno.env.get("MISTRAL_API_KEY")
+        if (mistralKey) {
+          const mistral = new Mistral({ apiKey: mistralKey })
+          const res = await mistral.chat.complete({
+            model: "mistral-large-latest",
+            messages: [{ role: "user", content: userPrompt }],
+          })
+          return sendSuccess(res.choices[0].message.content, "Mistral Large")
+        }
+      } catch (e) { console.warn("Mistral level skipped:", e.message); lastError = e; }
+
+      // المستوى الثالث (السيادي): Gemini 3.x
       try {
         const geminiKey = Deno.env.get("GEMINI_API_KEY")
         if (geminiKey) {
           const ai = new GoogleGenAI({ apiKey: geminiKey })
 
-          // تأمين تمرير كامل البيانات (الدستور، الأدوات، التاريخ)
+          let modelId = String(requestedModel || "gemini-3.7-flash").trim().toLowerCase();
+          if (modelId.includes("3.7")) modelId = "gemini-3.7-flash";
+          else if (modelId.includes("3.6")) modelId = "gemini-3.6-flash";
+          else if (modelId.includes("3.1")) modelId = "gemini-3.1-flash-lite";
+
           const genConfig = {
-            model: requestedModel || "gemini-3.5-flash-lite",
-            systemInstruction: payload.system_instruction,
-            contents: payload.contents || [{ role: "user", parts: [{ text: extractPrompt(payload) }] }],
-            tools: payload.tools,
-            generationConfig: payload.generationConfig
+            model: modelId,
+            contents: payload.contents,
+            config: {
+              systemInstruction: payload.system_instruction?.parts?.[0]?.text || payload.system_instruction,
+              tools: payload.tools?.map(tool => ({
+                functionDeclarations: (tool.function_declarations || tool.functionDeclarations)?.map(f => ({
+                  name: f.name,
+                  description: f.description,
+                  parameters: f.parameters
+                }))
+              })),
+              generationConfig: {
+                maxOutputTokens: payload.generationConfig?.max_output_tokens || 4096,
+                temperature: payload.generationConfig?.temperature || 0.7,
+                topP: payload.generationConfig?.top_p || 0.9
+              }
+            }
           }
 
           const res = await ai.models.generateContent(genConfig)
 
-          // إرجاع النتيجة بتنسيق يتوافق مع Frontend (سواء نص أو Function Call)
-          return new Response(JSON.stringify(res), {
+          const output = {
+            candidates: res.candidates.map(c => ({
+              content: {
+                role: "model",
+                parts: c.content.parts.map(p => {
+                    if (p.functionCall) return { functionCall: p.functionCall };
+                    if (p.text) return { text: p.text };
+                    return p;
+                })
+              }
+            })),
+            provider_info: `Gemini (${modelId})`
+          }
+
+          return new Response(JSON.stringify(output), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
           })
         }
@@ -64,9 +111,10 @@ serve(async (req) => {
         lastError = e
       }
 
-      throw new Error(lastError ? `Bridge exhausted all options: ${lastError.message}` : "Bridge Configuration Error")
+      throw new Error(`Omni-Bridge Exhausted: ${lastError?.message}`)
     }
 
+    // --- [2. محرك ملفات GitHub] ---
     if (action === 'github') {
       const res = await fetch(endpoint, {
         method: method || 'GET',
@@ -78,31 +126,30 @@ serve(async (req) => {
         body: body ? JSON.stringify(body) : undefined
       })
       const data = await res.json()
-      return new Response(JSON.stringify(data), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+      return new Response(JSON.stringify(data), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
     }
 
-    return new Response(JSON.stringify({ error: `Unknown action: ${action}` }), {
-      status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message, message: error.message }), {
-      status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500, headers: corsHeaders
     })
   }
 })
 
 function extractPrompt(payload) {
   if (typeof payload === 'string') return payload
-  if (payload.contents && payload.contents[payload.contents.length - 1]?.parts) {
-    return payload.contents[payload.contents.length - 1].parts[0].text
+  if (payload.contents && payload.contents.length > 0) {
+    const lastPart = payload.contents[payload.contents.length - 1].parts[0]
+    return lastPart.text || ""
   }
-  return JSON.stringify(payload)
+  return ""
 }
 
 function sendSuccess(text, provider) {
   return new Response(JSON.stringify({
-    candidates: [{ content: { parts: [{ text: text }] } }],
+    candidates: [{ content: { role: "model", parts: [{ text: text }] } }],
     provider_info: provider
   }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
 }
