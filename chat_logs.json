@@ -1,6 +1,48 @@
 {
   "sessions": [
     {
+      "id": "1788200472924",
+      "title": "مرحباً بك! كيف يمكنني مساعدتك ...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا بخير ولله الحمد، ومستعد تماماً لمساعدتك في أي مشروع برمجي، تطوير، تصميم واجهات، أو استشارات تقنية تحتاجها. \n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIP/kjCuMr7dx67mSz5dgWnHjgd3zc3QpC/cyxuWSvM9L6seIpk7eqUQK+/J/Y9GW3RyXMjg83aWuBqVFEyOCs2uackOB7eXf7cNmLGCuAW71VntIkeI6OC"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! كيف يمكنني مساعدتك اليوم؟ 😊",
+              "thoughtSignature": "El4KXAERTTIP3a7PSLkkAlw4nShm8iZESY1PYB4+kJuy4AcpJaxg/KaOTXofzb4cgTbm9j5HEnNjF7p2VsRj+P2FOjbiNAAIGEriUdKaWFavhx7mNSxHqnaVnnNE6Q3D"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1788200002716",
       "title": "محادثة جديدة",
       "history": []
@@ -23,5 +65,5 @@
   ],
   "activeSessionId": "1788200472924",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T18:21:17.732Z"
+  "timestamp": "2026-08-31T18:21:43.620Z"
 }
