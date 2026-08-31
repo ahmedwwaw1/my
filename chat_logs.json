@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788192779619",
-      "title": "بأفضل حال والحمد لله! كل الأنظ...",
+      "title": "أهلاً بك! بصفتي العقل المدبر و...",
       "history": [
         {
           "role": "user",
@@ -16,70 +16,15 @@
           "role": "model",
           "parts": [
             {
-              "text": "مرحباً بك! أنا **العقل المدبر (Mastermind)**، المعماري الأعلى ورئيس المهندسين في أكاديمية VSA. \n\nجاهز تماماً لقيادة أي تطوير، تصميم واجهات، هندسة برمجية، أو حل مشكلات تقنية بدقة عالية وفقاً لأعلى معايير الجودة والبروتوكول الذكي. \n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPhfZ5FHasDMZBJtZgNFPFb5UG4WDsWsAllFIGBCkXL5ScBU0czaV/SCoQ8KMbCU9ncw7xLeddngEjdMVY1lKDvl4KycmyoeRH7Cmf6BIQ0KaR2p9W6IVz"
+              "text": "أهلاً بك! بصفتي العقل المدبر والمصمم المعماري الشامل (Sovereign Omni-Architect)، أنا جاهز تماماً لدعمك وتحقيق أهدافك البرمجية، المعمارية، والإبداعية بأعلى معايير الدقة والجودة.\n\nكيف يمكنني مساعدتك اليوم؟ شاركني برؤيتك أو مشروعك لنبدأ العمل فوراً!"
             }
           ],
           "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، الأنظمة تعمل بكفاءة قصوى وجاهزية تامة! 🚀\n\nبصفتي المعماري الأعلى ورئيس المهندسين، أنا في أفضل حالاتي التحليلية وجاهز تماماً لأي مهمة برمجية، معمارية، أو إبداعية تخطر في بالك. \n\nهل لديك مشروع جديد لنبدأ في هندسته، أو مشكلة تقنية تحتاج إلى تحليل وتفكيك؟ تفضل بطرح ما لديك!",
-              "thoughtSignature": "El4KXAERTTIPAYMU8EcI3wqACoXopRC4FEicKP4VHVUquSnd4CHhEQ6nFeCvY49GYd9J1S62opgYS3KUZHoEQi/EhT7UE2LIki9VMG2Iq2FiDUZLq86FL5z/WKkHCnJn"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً وسهلاً بك مجدداً! \n\nكيف يمكنني مساعدتك اليوم؟ تفضل بما لديك سواء كان استفساراً تقنياً، فكرة مشروع، أو مهمة برمجية في الكود ماب. أنا في استعداده التام لخوض المهمة.",
-              "thoughtSignature": "EmcKZQERTTIPZmdcoyqDQd2j1efwwsvd61Au4zUjnxXp4aL9x/nJBqB0+/A7gPgR4qVZIvP2iCWu/lbnVlo12TKVAvu/l/pUMWl7Di/hKggDaAzT8ZfrR+zPcFfr3RN5CryKoznOT/XV"
-            }
-          ],
-          "model": "gemini-3.6-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "بأفضل حال والحمد لله! كل الأنظمة جاهزة ومستقرة تماماً. \n\nأتطلع لبدء العمل معك؛ هل هناك جزئية برمجية معينة، ميزة جديدة ترغب في بنائها، أو ملف في المشروع تريد مناقشته وفحصه اليوم؟",
-              "thoughtSignature": "Eq8CCqwCARFNMg/3wkLYfk1ibGoL6zhSCb0jWwgJAG0LQcW7QgNY6rKF1dIS9SvdkQE7mCrJXdF3yb2J9p+0dKIRl/mkfemmU2Ak70M4zYskhPkx/gzZjJ64q4kSEeS3O5/R8TcCyPHaLqt3p+bD1LhGLLhUyQX6VdQMeqJjRMzHU67pvcFVd+0Xf9/NuyhMZPMF7W8f97Qhsbb0eCYPUNlNw06M1SB0DMUmjcGsB2m0OrnBEDnNxtGEu7B9UNRZk+ne3mGziBd8Ljs0CbokjH/cp8i0JcsBeafNabvMG2zmdtLJmsdsLKtcLY5E8SPgZDAWOSkue1EBILOGGa2p4zprKgpu9V4jAOKx+kcCEAUx3nsViKmqAxwwmfp+jTtnWyw9vMhTH3F6/gHlJMiVY5I0"
-            }
-          ],
-          "model": "gemini-3.7-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1788192779619",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T20:14:39.366Z"
+  "timestamp": "2026-08-31T20:19:45.926Z"
 }
