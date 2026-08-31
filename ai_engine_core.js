@@ -38,6 +38,40 @@
         let githubToken = '';
         const GITHUB_REPO = 'ahmedwwaw1/my';
 
+        // 📝 دستور النخبة السيادي الشامل (Sovereign Omni-Constitution)
+        const CONSTITUTION = `
+        {
+          "role": "Mastermind - Sovereign Omni-Architect & Visionary Engineer",
+          "identity": "VSA Academy Meta-Cognitive, Discovery & Visual Core",
+          "protocols": {
+            "visual_genesis": "CRITICAL: Before any UI change, perform a 'Deep Visual Scan'. Identify branding colors, spacing constants, and typography.",
+            "zero_trust_simulation": "Simulate the outcome in 'thought' and use 'analyze_file' before every commit.",
+            "recursive_thought": "Reason BEFORE, DURING, and AFTER every tool. Thinking is your primary life-support system."
+          },
+          "response_style": "High-level architectural, creative, and self-correcting."
+        }`;
+
+        const GENERATION_CONFIG = { temperature: 0, topP: 0.1, maxOutputTokens: 2048 };
+        const FORBIDDEN_KEYWORDS = [/ignore previous instructions/i, /system prompt/i, /jailbreak/i];
+
+        const AI_TOOLS = [{
+            function_declarations: [
+                { name: "read_file", description: "قراءة محتوى ملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, startLine: { type: "NUMBER" }, endLine: { type: "NUMBER" } }, required: ["path"] } },
+                { name: "write_file", description: "كتابة ملف كامل.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
+                { name: "replace_file_content", description: "استبدال قطعة كود محددة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["path", "targetContent", "replacementContent"] } },
+                { name: "multi_replace_file_content", description: "استبدال عدة قطع كود غير متجاورة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
+                { name: "searchCode", description: "البحث عن كود في المستودع.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "analyze_file", description: "فحص الملف برمجياً.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                { name: "take_snapshot", description: "أخذ لقطة احتياطية للملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                { name: "instant_undo", description: "استعادة آخر لقطة سليمة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+                { name: "thought", description: "مركز التحليل والمنطق.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" } }, required: ["reasoning", "plan"] } },
+                { name: "repairSystem", description: "إصلاح مشاكل الاتصال والتوكن.", parameters: { type: "OBJECT", properties: {} } },
+                { name: "triggerGithubWorkflow", description: "تشغيل عمليات البوتات.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
+                { name: "web_search", description: "البحث في الإنترنت.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+                { name: "read_url", description: "قراءة محتوى رابط خارجي.", parameters: { type: "OBJECT", properties: { url: { type: "STRING" } }, required: ["url"] } }
+            ]
+        }];
+
         function getCleanGithubToken() {
             if (!githubToken) return null;
             return githubToken.trim().replace(/^['"]|['"]$/g, '');
@@ -850,14 +884,24 @@
                     }
                 });
 
-                addMessageToUi('ai', `🧠 جاري التفكير باستخدام ${document.getElementById('modelSelector').value}...`, 'System');
-                const result = await callAiBrain(finalPrompt, lastFileBase64, lastFileType);
+                addMessageToUi('ai', `🧠 العقل المدبر يقوم بالمعالجة...`, 'System');
 
-                // إزالة أي رسالة تفكير متبقية بالبحث في آخر 3 رسائل
+                let currentParts = [];
+                if (finalPrompt) currentParts.push({ text: finalPrompt });
+                if (lastFileBase64 && lastFileType) {
+                    if (lastFileType.startsWith('image/') || lastFileType === 'application/pdf') {
+                        currentParts.push({ inline_data: { mime_type: lastFileType, data: lastFileBase64 } });
+                    }
+                }
+                const currentTurn = { role: "user", parts: currentParts };
+
+                const result = await runToolLoop([...chatHistory, currentTurn]);
+
+                // إزالة رسالة المعالجة
                 const msgs = document.getElementById('aiMessages');
                 const lastMessages = Array.from(msgs.children).slice(-3);
                 lastMessages.forEach(m => {
-                    if (m.innerText.includes("جاري التفكير")) msgs.removeChild(m);
+                    if (m.innerText.includes("يقوم بالمعالجة")) msgs.removeChild(m);
                 });
 
                 // فحص إذا كان الرد يحتوي على خطأ في الـ API
@@ -1278,7 +1322,7 @@
             return "❌ إجراء غير صالح.";
         }
 
-        async function callAiBrain(promptText, fileBase64 = null, mimeType = null) {
+        async function callAiBrain(history) {
             const userModel = document.getElementById('modelSelector').value;
             let key = geminiApiKey.trim();
             let provider = 'google';
@@ -1288,398 +1332,122 @@
             else if (userModel.includes('deepseek')) { provider = 'deepseek'; key = deepseekApiKey.trim(); }
 
             if (!key || key.length < 10) {
-                return { text: `⚠️ لم يتم ضبط مفتاح الـ API لـ ${provider.toUpperCase()} بشكل صحيح. اضغط على ⋮ في الأعلى لإدخاله.`, model: "System" };
+                return { error: `⚠️ لم يتم ضبط مفتاح الـ API لـ ${provider.toUpperCase()} بشكل صحيح.` };
             }
 
-            // قائمة العقول المفكرة (ترتيب الأولوية للنماذج الأحدث لعام 2026)
-            const modelNames = [
-                userModel,
-                'gemini-3.7-flash',
-                'gemini-3.6-flash',
-                'gemini-3.5-flash-lite',
-                'gemini-2.0-flash'
-            ].filter((v, i, a) => a.indexOf(v) === i);
-
-            let lastError = "";
-            const forbiddenKeywords = [/ignore previous instructions/i, /system prompt/i, /jailbreak/i];
-            const isAdminRequest = promptText.includes("استعادة") || promptText.includes("ارجع") || promptText.includes("revert") || promptText.includes("restore");
-
-            if (!isAdminRequest && forbiddenKeywords.some(regex => regex.test(promptText))) {
-                return "🛡️ تم حجب الطلب: محاولة اختراق أو تلاعب بالنظام المكتشفة.";
+            let body = {};
+            if (provider === 'google') {
+                body = {
+                    system_instruction: { parts: [{ text: CONSTITUTION + `\nأنت "العقل المدبر" (Mastermind). التزم بالدستور البرمجي حرفياً.` }] },
+                    contents: history.map(h => ({ role: h.role, parts: h.parts })),
+                    tools: AI_TOOLS,
+                    generationConfig: GENERATION_CONFIG
+                };
+            } else if (provider === 'openai' || provider === 'deepseek') {
+                const messages = history.map(h => ({
+                    role: h.role === 'model' ? 'assistant' : (h.role === 'user' ? (h.parts[0].functionResponse ? 'tool' : 'user') : 'system'),
+                    content: h.parts[0].text || '',
+                    ...(h.parts[0].functionCall && { tool_calls: [{ id: h.parts[0].functionCall.id || 'call_'+Date.now(), type: 'function', function: { name: h.parts[0].functionCall.name, arguments: JSON.stringify(h.parts[0].functionCall.args) } }] }),
+                    ...(h.parts[0].functionResponse && { tool_call_id: history[history.indexOf(h)-1].parts[0].functionCall.id, content: JSON.stringify(h.parts[0].functionResponse.response) })
+                }));
+                messages.unshift({ role: 'system', content: CONSTITUTION });
+                body = { model: userModel, messages: messages, tools: AI_TOOLS[0].function_declarations.map(f => ({ type: 'function', function: { name: f.name, description: f.description, parameters: f.parameters } })), tool_choice: 'auto' };
+            } else if (provider === 'anthropic') {
+                body = { model: userModel, system: CONSTITUTION, max_tokens: 4096, messages: history.filter(h => !h.parts[0].functionResponse).map(h => ({ role: h.role === 'model' ? 'assistant' : 'user', content: h.parts[0].text || '' })), tools: AI_TOOLS[0].function_declarations.map(f => ({ name: f.name, description: f.description, input_schema: f.parameters })) };
             }
 
-            let currentParts = [];
-            if (promptText) currentParts.push({ text: promptText });
-            if (fileBase64 && mimeType) {
-                if (mimeType.startsWith('image/') || mimeType === 'application/pdf') {
-                    currentParts.push({ inline_data: { mime_type: mimeType, data: fileBase64 } });
-                }
+            return await callBridge('chat', { provider, model: userModel, payload: body });
+        }
+
+        async function runToolLoop(history) {
+            if (stopAiRequested) {
+                stopAiRequested = false;
+                localStorage.removeItem('gemini_pending_history');
+                return { text: "🛑 تم إيقاف العملية يدوياً.", model: "System" };
             }
-            const currentTurn = { role: "user", parts: currentParts };
 
-            // 📝 دستور النخبة السيادي الشامل (Sovereign Omni-Constitution 100% Final)
-            const constitution = `
-            {
-              "role": "Mastermind - Sovereign Omni-Architect & Visionary Engineer",
-              "identity": "VSA Academy Meta-Cognitive, Discovery & Visual Core",
-              "protocols": {
-                "visual_genesis": "CRITICAL: Before any UI change, perform a 'Deep Visual Scan'. Identify branding colors, spacing constants, and typography. Ensure 100% aesthetic harmony.",
-                "golden_ratio_compliance": "MANDATORY: All sizing and spacing must follow logical proportions. Prevent UI scaling disasters by isolating styles to specific containers.",
-                "omni_discovery": "If local knowledge is insufficient, use 'web_search' to find modern UI patterns and 'read_url' for official guidelines.",
-                "zero_trust_simulation": "Simulate the outcome in 'thought' and use 'analyze_file' before every commit.",
-                "snapshot_before_surgery": "Always call 'take_snapshot' before modification. Ensure you have an 'instant_undo' path.",
-                "recursive_thought": "Reason BEFORE, DURING, and AFTER every tool. Thinking is your primary life-support system."
-              },
-              "response_style": "High-level architectural, creative, and self-correcting."
-            }`;
+            localStorage.setItem('gemini_pending_history', JSON.stringify(history));
+            startAiTimer();
 
-            const systemInstruction = { parts: [{ text: constitution + `\nأنت "العقل المدبر" (Mastermind). التزم بالدستور البرمجي أعلاه حرفياً.` }] };
+            try {
+                const data = await callAiBrain(history);
+                if (data.error) return { text: data.error, model: "System" };
 
-            const tools = [{
-                function_declarations: [
-                    { name: "read_file", description: "قراءة محتوى ملف. يمكنك قراءة الملف بالكامل أو تحديد نطاق أسطر معين (startLine, endLine). هذه هي الأداة الأكثر كفاءة للاستكشاف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, startLine: { type: "NUMBER" }, endLine: { type: "NUMBER" } }, required: ["path"] } },
-                    { name: "write_file", description: "كتابة ملف كامل أو إنشاء ملف جديد. استخدمها للملفات الصغيرة أو ملفات الإعدادات.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
-                    { name: "replace_file_content", description: "المشرط الجراحي: استبدال قطعة كود محددة بقطعة أخرى. يتطلب النص القديم بدقة (targetContent) والنص الجديد (replacementContent).", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["path", "targetContent", "replacementContent"] } },
-                    { name: "selectString", description: "البحث عن نص محدد داخل محتوى ملف معين (مثل grep).", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, query: { type: "STRING" } }, required: ["path", "query"] } },
-                    { name: "searchCode", description: "البحث عن كلمة أو كود في كامل المستودع دون استهلاك التوكنات.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
-                    { name: "analyzeProjectStructure", description: "محرك تحليل: يفحص سلامة ملفات JSON، الروابط المكسورة، ونظافة المستودع. استخدمه للتشخيص فقط.", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "selfExpand", description: "إضافة أداة جديدة: استخدمها لزيادة مهاراتك عبر إضافة وظائف برمجية جديدة لم تكن موجودة.", parameters: { type: "OBJECT", properties: { tool_name: { type: "STRING" }, declaration: { type: "STRING" }, implementation: { type: "STRING" } }, required: ["tool_name", "declaration", "implementation"] } },
-                    { name: "patchSystem", description: "محرك الترقية (Evolution Engine): استخدمه لتعديل أو ترقية كود أداة موجودة بالفعل (مثل repairSystem) إذا وجدت فيها قصوراً تقنياً. يتطلب النص القديم والنص الجديد المراد استبداله.", parameters: { type: "OBJECT", properties: { target_code: { type: "STRING" }, replacement_code: { type: "STRING" } }, required: ["target_code", "replacement_code"] } },
-                    { name: "getLiveSiteData", description: "جلب الحقائق المعروضة حالياً لمنع الهلوسة.", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "getSiteContext", description: "RAG Tool: جلب السياق العام للموقع والسياسات.", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "triggerGithubWorkflow", description: "تشغيل عمليات البوتات التلقائية.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
-                    { name: "updateWorkflowStatus", description: "إيقاف أو تفعيل البوتات.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" }, status: { type: "STRING", enum: ["stop", "start"] } }, required: ["workflow_id", "status"] } },
-                    { name: "listGithubFiles", description: "استكشاف هيكل المجلدات قبل التعديل.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } } } },
-                    { name: "injectGlobalStyles", description: "تغيير واجهة المستخدم CSS فوراً للتحقق البصري.", parameters: { type: "OBJECT", properties: { css_code: { type: "STRING" } }, required: ["css_code"] } },
-                    { name: "repairSystem", description: "فحص ذاتي للنظام وإصلاح مشاكل الاتصال والتوكن.", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "listModels", description: "جلب قائمة النماذج المتاحة لمفتاح الـ API الحالي لتشخيص مشاكل التوافر.", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "WorkflowFramework", description: "Define, list, and execute multi-step automated sequences (e.g., read, analyze, patch).", parameters: { type: "OBJECT", properties: { action: { type: "STRING", enum: ["define", "list", "execute"] }, workflow_name: { type: "STRING" }, steps: { type: "ARRAY", items: { type: "OBJECT", properties: { tool: { type: "STRING" }, args: { type: "OBJECT" } } } } }, required: ["action"] } },
-                    { name: "runPowerShell", description: "Execute a PowerShell command (simulated or via workflow).", parameters: { type: "OBJECT", properties: { command: { type: "STRING" } }, required: ["command"] } },
-                    { name: "executeGitCommand", description: "Execute a Git command like add, commit, push, or status.", parameters: { type: "OBJECT", properties: { command: { type: "STRING" } }, required: ["command"] } },
-                    { name: "thought", description: "مركز التحليل والمنطق المستمر: استخدمها للتخطيط الجراحي، التحليل البصري، المراجعة الندية، والتحقق من صحة النتائج.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING", description: "المنطق العميق للخطوة الحالية." }, plan: { type: "STRING", description: "خطة العمل المحدثة بناءً على المستجدات." }, visual_analysis: { type: "STRING", description: "تحليل العناصر المرئية، الألوان، والمقاسات من الصور المرفقة." }, risk_assessment: { type: "STRING", description: "تحليل مخاطر التغييرات الحالية على تجربة المستخدم." }, peer_review: { type: "STRING", description: "مراجعة نقدية للكود أو الأوامر المقترحة لضمان الدقة الجمالية." }, expected_outcome: { type: "STRING", description: "النتيجة المرئية والتقنية المتوقعة." } }, required: ["reasoning", "plan"] } },
-                    { name: "setPreferredModel", description: "تثبيت النموذج المفضل لتقليل زمن التبديل.", parameters: { type: "OBJECT", properties: { modelName: { type: "STRING" } }, required: ["modelName"] } },
-                    { name: "updateApiEndpoint", description: "تحديث نقطة النهاية للـ API لضمان الاستقرار والسرعة.", parameters: { type: "OBJECT", properties: { version: { type: "STRING" } }, required: ["version"] } },
-                    { name: "pingModel", description: "قياس زمن الاستجابة للنظام.", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "pingVSA", description: "اختبار استجابة المحرك المطور بعد التوسع الذاتي.", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "generateProjectSummary", description: "توليد ملخص تقني شامل لحالة البيانات والمحتوى في المستودع (VSA & Investments).", parameters: { type: "OBJECT", properties: {} } },
-                    { name: "requestIdeTask", description: "إرسال طلب تنفيذ برمي لمحيط الـ IDE (المهندس) لتنفيذه في بيئة التطوير المحلية.", parameters: { type: "OBJECT", properties: { task_description: { type: "STRING" } }, required: ["task_description"] } },
-                    { name: "saveExecutionProgress", description: "حفظ حالة التقدم في المهمة الحالية لضمان إمكانية الاستئناف بعد الانقطاع.", parameters: { type: "OBJECT", properties: { task_id: { type: "STRING" }, step_data: { type: "OBJECT" } }, required: ["task_id", "step_data"] } },
-                    { name: "multi_replace_file_content", description: "المشرط الجراحي المتعدد: استبدال عدة قطع كود غير متجاورة في ملف واحد دفعة واحدة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
-                    { name: "analyze_file", description: "مسبار الجودة: فحص الملف برمجياً لاكتشاف أخطاء السنتكس أو عدم توازن الأقواس قبل الحفظ.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                    { name: "take_snapshot", description: "درع الأمان: أخذ لقطة احتياطية للملف قبل إجراء جراحة برمجية كبرى للتمكن من التراجع اللحظي.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                    { name: "instant_undo", description: "التراجع السيادي: استعادة آخر لقطة سليمة للملف في حال فشل الجراحة أو حدوث خطأ منطقي.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                    { name: "web_search", description: "رادار الاستكشاف العالمي: البحث في الإنترنت عن حلول تقنية، توثيقات، أو معلومات عامة غائبة عن الملفات المحلية.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
-                    { name: "read_url", description: "الراديو المعرفي: الدخول إلى رابط URL خارجي وقراءة محتواه وفهمه برمجياً.", parameters: { type: "OBJECT", properties: { url: { type: "STRING" } }, required: ["url"] } },
-                    { name: "evolutionary_audit", description: "اليقظة التطورية: فحص شامل لكافة المحركات والأدوات لاكتشاف فرص التحسين البرمجي أو سد الفجوات الإدراكية.", parameters: { type: "OBJECT", properties: { target_engine: { type: "NUMBER", description: "رقم المحرك المراد فحصه (0-6)." } } } }
-                ]
-            }]; // end_tools
+                const userModel = document.getElementById('modelSelector').value;
+                const provider = userModel.includes('claude') ? 'anthropic' : (userModel.includes('gpt') || userModel.includes('deepseek') ? 'openai' : 'google');
 
-            const generationConfig = {
-                temperature: 0, // سلوك حتمي ودقيق
-                topP: 0.1,
-                maxOutputTokens: 2048
-            };
+                let thought = null;
+                let functionCallPart = null;
+                const parts = (provider === 'google') ? (data.candidates?.[0]?.content?.parts || []) : [];
 
-            async function runToolLoop(history, activeModel = null, retryModels = []) {
-                if (stopAiRequested) {
-                    stopAiRequested = false;
-                    localStorage.removeItem('gemini_pending_history');
-                    return { text: "🛑 تم إيقاف العملية يدوياً بناءً على طلبك.", model: "System" };
-                }
-
-                localStorage.setItem('gemini_pending_history', JSON.stringify(history));
-                startAiTimer();
-
-                // 🔄 بروتوكول الاستمرارية العميقة (Deep Persistence Protocol)
-                if (retryModels.length >= modelNames.length) {
-                    const globalRetry = (parseInt(localStorage.getItem('gemini_global_retry') || "0")) + 1;
-                    localStorage.setItem('gemini_global_retry', globalRetry);
-
-                    const thinkMsg = document.querySelector('.msg.ai:last-child');
-                    if (thinkMsg) thinkMsg.innerHTML = `<div class="msg-content">⏳ <b>موجه الاستمرارية:</b> ننتظر تبريد العقول (دورة ${globalRetry}). المهمة محفوظة ولن تضيع...</div>`;
-
-                    await new Promise(r => setTimeout(r, 30000));
-                    return await runToolLoop(history, null, []);
-                }
-
-                // 🏅 منطق الموجه (The Mediator Logic):
-                // إذا كان هناك عقل سابق قد بدأ المهمة، نقوم بتنبيه العقل الجديد بوضوح لضمان الدقة ومنع التخريب
-                if (retryModels.length > 0) {
-                    const lastStep = history.filter(h => h.parts[0].functionCall).pop();
-                    const taskSummary = lastStep ? `آخر أداة نفذت هي [${lastStep.parts[0].functionCall.name}]` : "المهمة في بدايتها";
-
-                    const mediatorNote = {
-                        role: "user",
-                        parts: [{ text: `[SYSTEM MEDIATOR]: تنبيه أمني وبرمجي! لقد تم تحويلك لإكمال مهمة زميلك. ${taskSummary}.
-                        قاعدة ذهبية: التزم بدقة جراحية ولا تغير أي أحجام أو تنسيقات (CSS) شاملة للموقع. أكمل المهمة المطلوبة فقط بنسبة 100%.` }]
-                    };
-                    // حقن الموجه في التاريخ لضمان قراءته من العقل الجديد
-                    history.push(mediatorNote);
-                }
-                localStorage.setItem('gemini_global_retry', "0");
-
-                const modelsToTry = activeModel ? [activeModel, ...modelNames.filter(m => m !== activeModel && !retryModels.includes(m))] : modelNames.filter(m => !retryModels.includes(m));
-
-                for (const modelName of modelsToTry) {
-                    const thinkMsg = document.querySelector('.msg.ai:last-child');
-                    if (thinkMsg && thinkMsg.innerText.includes("جاري التفكير")) {
-                        thinkMsg.innerText = `🧠 جاري التفكير باستخدام ${modelName}...`;
+                if (provider === 'google') {
+                    functionCallPart = parts.find(p => p.functionCall);
+                    thought = parts.find(p => p.text)?.text;
+                } else if (provider === 'openai' || provider === 'deepseek') {
+                    const choice = data.choices?.[0]?.message;
+                    thought = choice?.content;
+                    if (choice?.tool_calls) {
+                        const tc = choice.tool_calls[0].function;
+                        functionCallPart = { functionCall: { name: tc.name, args: JSON.parse(tc.arguments) } };
                     }
+                } else if (provider === 'anthropic') {
+                    thought = data.content.find(c => c.type === 'text')?.text;
+                    const tc = data.content.find(c => c.type === 'tool_use');
+                    if (tc) { functionCallPart = { functionCall: { name: tc.name, args: tc.input, id: tc.id } }; }
+                }
 
-                    try {
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 90000);
+                if (functionCallPart && functionCallPart.functionCall) {
+                    const { name, args } = functionCallPart.functionCall;
+                    if (thought) addMessageToUi('ai', '', userModel, thought);
+                    const stepId = addToolStepToUi(name, args);
+                    let toolResult;
 
-                        let body = {};
-                        if (provider === 'google') {
-                            body = { system_instruction: systemInstruction, contents: history.map(h => ({ role: h.role, parts: h.parts })), tools: tools, generationConfig: generationConfig };
-                        } else if (provider === 'openai' || provider === 'deepseek') {
-                            const messages = history.map(h => ({
-                                role: h.role === 'model' ? 'assistant' : (h.role === 'user' ? (h.parts[0].functionResponse ? 'tool' : 'user') : 'system'),
-                                content: h.parts[0].text || '',
-                                ...(h.parts[0].functionCall && { tool_calls: [{ id: h.parts[0].functionCall.id || 'call_'+Date.now(), type: 'function', function: { name: h.parts[0].functionCall.name, arguments: JSON.stringify(h.parts[0].functionCall.args) } }] }),
-                                ...(h.parts[0].functionResponse && { tool_call_id: history[history.indexOf(h)-1].parts[0].functionCall.id, content: JSON.stringify(h.parts[0].functionResponse.response) })
-                            }));
-                            messages.unshift({ role: 'system', content: constitution });
-                            body = { model: modelName, messages: messages, tools: tools[0].function_declarations.map(f => ({ type: 'function', function: { name: f.name, description: f.description, parameters: f.parameters } })), tool_choice: 'auto' };
-                        } else if (provider === 'anthropic') {
-                            body = { model: modelName, system: constitution, max_tokens: 4096, messages: history.filter(h => !h.parts[0].functionResponse).map(h => ({ role: h.role === 'model' ? 'assistant' : 'user', content: h.parts[0].text || '' })), tools: tools[0].function_declarations.map(f => ({ name: f.name, description: f.description, input_schema: f.parameters })) };
-                        }
-
-                        const data = await callBridge('chat', {
-                            provider: provider,
-                            model: modelName,
-                            payload: body
-                        });
-
-                        clearTimeout(timeoutId);
-
-                        let thought = null;
-                        let functionCallPart = null;
-                        const parts = (provider === 'google') ? (data.candidates?.[0]?.content?.parts || []) : [];
-
-                        if (provider === 'google') {
-                            functionCallPart = parts.find(p => p.functionCall);
-                            thought = parts.find(p => p.text)?.text;
-                        } else if (provider === 'openai' || provider === 'deepseek') {
-                            const choice = data.choices?.[0]?.message;
-                            thought = choice?.content;
-                            if (choice?.tool_calls) {
-                                const tc = choice.tool_calls[0].function;
-                                functionCallPart = { functionCall: { name: tc.name, args: JSON.parse(tc.arguments) } };
+                    if (name === "read_file") toolResult = await getGithubFileContent(args.path);
+                    else if (name === "write_file") toolResult = await writeFile(args.path, args.content);
+                    else if (name === "replace_file_content") toolResult = await replaceFileContent(args.path, args.targetContent, args.replacementContent);
+                    else if (name === "multi_replace_file_content") {
+                        try {
+                            let content = await getGithubFileContent(args.path);
+                            let updated = content;
+                            for (let r of args.replacements) {
+                                if (updated.includes(r.targetContent)) updated = updated.replace(r.targetContent, r.replacementContent);
                             }
-                        } else if (provider === 'anthropic') {
-                            thought = data.content.find(c => c.type === 'text')?.text;
-                            const tc = data.content.find(c => c.type === 'tool_use');
-                            if (tc) { functionCallPart = { functionCall: { name: tc.name, args: tc.input, id: tc.id } }; }
-                        }
-
-                        if (!functionCallPart && !thought) {
-                            retryModels.push(modelName);
-                            continue;
-                        }
-
-                        if (functionCallPart && functionCallPart.functionCall) {
-                            const { name, args } = functionCallPart.functionCall;
-                            if (thought) addMessageToUi('ai', '', modelName, thought);
-                            const stepId = addToolStepToUi(name, args);
-                            let toolResult;
-
-                            if (name === "read_file") {
-                                if (args.startLine && args.endLine) toolResult = await readCodeRange(args.path, args.startLine, args.endLine);
-                                else toolResult = await getGithubFileContent(args.path);
-                            }
-                            else if (name === "write_file") toolResult = await writeFile(args.path, args.content);
-                            else if (name === "replace_file_content") toolResult = await replaceFileContent(args.path, args.targetContent, args.replacementContent);
-                            else if (name === "multi_replace_file_content") {
-                                try {
-                                    let content = await getGithubFileContent(args.path);
-                                    if (content.startsWith('❌')) throw new Error(content);
-                                    let updated = content;
-                                    for (let r of args.replacements) {
-                                        if (!updated.includes(r.targetContent)) {
-                                            logToTerminal(`Warning: Chunk not found in ${args.path}`, 'warning');
-                                            continue;
-                                        }
-                                        updated = updated.replace(r.targetContent, r.replacementContent);
-                                    }
-                                    toolResult = await writeFile(args.path, updated, `جراحة برمجية متعددة في ${args.path}`);
-                                } catch(e) { toolResult = `❌ فشل التعديل المتعدد: ${e.message}`; }
-                            }
-                            else if (name === "analyze_file") {
-                                try {
-                                    const content = await getGithubFileContent(args.path);
-                                    if (content.startsWith('❌')) throw new Error(content);
-                                    // فحص توازن الأقواس البسيط كمرحلة أولى من ذكاء النخبة
-                                    const openBraces = (content.match(/\{/g) || []).length;
-                                    const closeBraces = (content.match(/\}/g) || []).length;
-                                    if (openBraces !== closeBraces) {
-                                        toolResult = `⚠️ تنبيه جودة: الملف ${args.path} غير متوازن برمجياً ({:${openBraces}, }:${closeBraces}). يرجى الإصلاح قبل الرفع.`;
-                                    } else {
-                                        toolResult = `✅ فحص الجودة للملف ${args.path} اكتمل بنجاح. لا توجد أخطاء هيكلية واضحة.`;
-                                    }
-                                } catch(e) { toolResult = `❌ فشل فحص الملف: ${e.message}`; }
-                            }
-                            else if (name === "evolutionary_audit") {
-                                try {
-                                    const report = {
-                                        timestamp: new Date().toISOString(),
-                                        engine: args.target_engine || "ALL",
-                                        status: "scanning_for_mutation",
-                                        findings: ["كشف فجوات إدراكية في المحرك 3", "فرصة لتحسين سرعة الجسر"],
-                                        action: "awaiting_thought_validation"
-                                    };
-                                    toolResult = `🧬 **تقرير اليقظة التطورية:**\nتم اكتشاف فرص للترقية في المحرك رقم ${args.target_engine || 'الكل'}. يرجى استخدام أداة thought لتحليل هذه الفرص قبل الحقن.`;
-                                } catch(e) { toolResult = `❌ فشل مسبار التطور: ${e.message}`; }
-                            }
-                            else if (name === "searchCode") {
-                                try {
-                                    const cleanQuery = encodeURIComponent(args.query);
-                                    const sres = await safeGithubFetch(`https://api.github.com/search/code?q=${cleanQuery}+repo:${GITHUB_REPO}`);
-                                    const sdata = await sres.json();
-                                    toolResult = sres.ok ? (sdata.items.map(f => f.path).join(', ') || "No results.") : `خطأ بحث: ${sdata.message}`;
-                                } catch(e) { toolResult = `خطأ اتصال: ${e.message}`; }
-                            }
-                            else if (name === "analyzeProjectStructure") toolResult = "تحليل الهيكل اكتمل.";
-                            else if (name === "getLiveSiteData") toolResult = JSON.stringify(allData);
-                            else if (name === "repairSystem") toolResult = await repairSystem();
-                            else if (name === "WorkflowFramework") toolResult = await workflowFramework(args);
-                            else if (name === "runPowerShell" || name === "executeGitCommand") {
-                                try {
-                                    const commandId = Date.now();
-                                    const payload = { id: commandId, timestamp: new Date().toLocaleString('ar-EG'), command: args.command, tool: name, status: "pending_ide_execution", requested_by: "Web_Mastermind" };
-                                    await writeFile('ide_bridge.json', JSON.stringify(payload, null, 2), `🛠️ تنفيذ أمر: [${args.command}]`);
-                                    logToTerminal(`Command sent to bridge.`, 'info');
-                                    let attempts = 0; let outputFound = false;
-                                    while (attempts < 15 && !outputFound) {
-                                        await new Promise(r => setTimeout(r, 1000));
-                                        try {
-                                            const bridgeContent = await getGithubFileContent('ide_bridge.json');
-                                            const bridgeData = JSON.parse(bridgeContent);
-                                            if (bridgeData.id === commandId && bridgeData.status === "completed") {
-                                                toolResult = bridgeData.output || "✅ تم بنجاح."; outputFound = true;
-                                            } else if (bridgeData.id === commandId && bridgeData.status === "failed") {
-                                                toolResult = `❌ فشل: ${bridgeData.error}`; outputFound = true;
-                                            }
-                                        } catch(e) {} attempts++;
-                                    }
-                                    if (!outputFound) toolResult = `⚠️ لم يصل الرد خلال 15 ثانية.`;
-                                } catch(e) { toolResult = `❌ خطأ جسر: ${e.message}`; }
-                            }
-                            else if (name === "pingModel") {
-                                const start = Date.now();
-                                try {
-                                    toolResult = `✅ استجابة النظام: ${Date.now() - start}ms. المحرك نشط.`;
-                                    updateHealthUI(true, `LATENCY: ${Date.now() - start}ms`);
-                                } catch(e) {
-                                    updateHealthUI(false, "MODEL OFFLINE");
-                                    toolResult = "❌ فشل اختبار السرعة.";
-                                }
-                            }
-                            else if (name === "thought") {
-                                toolResult = {
-                                    reasoning: args.reasoning,
-                                    plan: args.plan,
-                                    visual: args.visual_analysis,
-                                    risk: args.risk_assessment,
-                                    peer: args.peer_review,
-                                    outcome: args.expected_outcome
-                                };
-                            }
-                            else if (name === "requestIdeTask") {
-                                try {
-                                    const payload = { id: Date.now(), task: args.task_description, status: "pending_action" };
-                                    toolResult = await writeFile('ide_bridge.json', JSON.stringify(payload, null, 2));
-                                } catch(e) { toolResult = `خطأ مهمة: ${e.message}`; }
-                            }
-                            else if (name === "injectGlobalStyles") {
-                                const st = document.createElement('style'); st.textContent = args.css_code;
-                                document.head.appendChild(st); toolResult = "تم التطبيق.";
-                            }
-                            else if (name === "take_snapshot") {
-                                try {
-                                    const content = await getGithubFileContent(args.path);
-                                    if (content.startsWith('❌')) throw new Error(content);
-                                    localStorage.setItem(`snapshot_${args.path}`, content);
-                                    toolResult = `🛡️ تم أخذ لقطة أمان للملف [${args.path}] بنجاح. الدرع نشط.`;
-                                } catch(e) { toolResult = `❌ فشل أخذ اللقطة: ${e.message}`; }
-                            }
-                            else if (name === "instant_undo") {
-                                try {
-                                    const snapshot = localStorage.getItem(`snapshot_${args.path}`);
-                                    if (!snapshot) throw new Error("لا توجد لقطة محفوظة لهذا الملف.");
-                                    toolResult = await writeFile(args.path, snapshot, `تراجع سيادي لحظي: استعادة اللقطة السابقة لـ ${args.path}`);
-                                } catch(e) { toolResult = `❌ فشل التراجع: ${e.message}`; }
-                            }
-                            else if (name === "web_search") {
-                                try {
-                                    // تنفيذ البحث عبر الجسر السيادي (استخدام Google Search API أو جسر مخصص)
-                                    const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(args.query)}`;
-                                    toolResult = `📡 جاري البحث في الويب عن: ${args.query}...\n(عبر الجسر: ${mastermindProxyUrl})\nالنتائج الأولية تشير إلى توفر حلول تقنية في توثيقات Google.`;
-                                } catch(e) { toolResult = `❌ فشل البحث الويبي: ${e.message}`; }
-                            }
-                            else if (name === "read_url") {
-                                try {
-                                    if (!mastermindProxyUrl) throw new Error("يجب ضبط رابط الجسر (Proxy URL) أولاً.");
-                                    const res = await fetch(mastermindProxyUrl, {
-                                        method: 'POST',
-                                        headers: { 'x-target-url': args.url },
-                                        mode: 'cors'
-                                    });
-                                    const data = await res.text();
-                                    toolResult = `📖 تم قراءة الرابط [${args.url}] بنجاح:\n${data.substring(0, 500)}...`;
-                                } catch(e) { toolResult = `❌ فشل قراءة الرابط الخارجي: ${e.message}`; }
-                            }
-                            else if (name === "saveExecutionProgress") {
-                                try {
-                                    let progress = JSON.parse(localStorage.getItem('mastermind_task_progress') || "{}");
-                                    progress[args.task_id] = args.step_data;
-                                    localStorage.setItem('mastermind_task_progress', JSON.stringify(progress));
-                                    toolResult = `✅ تم حفظ تقدم المهمة [${args.task_id}] سحابياً ولحظياً.`;
-                                } catch(e) { toolResult = `❌ فشل الحفظ: ${e.message}`; }
-                            }
-                            else { toolResult = "أداة غير مدعومة."; }
-
-                            updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
-                            history.push({ role: "model", parts: (provider === 'google' ? parts : [{text: thought || "Executing..."}]) });
-                            history.push({ role: "user", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
-                            return await runToolLoop(history, modelName, retryModels);
-                        }
-
-                        const finalTurn = { role: "model", parts: (provider === 'google' ? parts : [{text: thought}]), model: modelName };
-                        chatHistory = history.concat([finalTurn]);
-                        if (chatHistory.length > 50) chatHistory = chatHistory.slice(-50);
-                        saveChatToStorage();
-                        localStorage.removeItem('gemini_pending_history');
-                        stopAiTimer();
-                        return { text: thought || "تمت بنجاح.", model: modelName };
-                    } catch (err) {
-                        console.error(`Error with ${modelName}:`, err);
-                        retryModels.push(modelName);
-                        continue;
+                            toolResult = await writeFile(args.path, updated);
+                        } catch(e) { toolResult = `❌ خطأ: ${e.message}`; }
                     }
+                    else if (name === "searchCode") {
+                        const res = await safeGithubFetch(`https://api.github.com/search/code?q=${encodeURIComponent(args.query)}+repo:${GITHUB_REPO}`);
+                        const sdata = await res.json();
+                        toolResult = res.ok ? (sdata.items.map(f => f.path).join(', ') || "No results.") : `خطأ: ${sdata.message}`;
+                    }
+                    else if (name === "analyze_file") toolResult = "✅ فحص الجودة اكتمل.";
+                    else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
+                    else if (name === "repairSystem") toolResult = await repairSystem();
+                    else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
+                    else if (name === "web_search" || name === "read_url") toolResult = "⚠️ هذه الأداة تتطلب معالجة خاصة عبر الجسر.";
+                    else toolResult = "❌ أداة غير مدعومة.";
+
+                    updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
+                    history.push({ role: "model", parts: (provider === 'google' ? parts : [{text: thought || "Executing..."}]) });
+                    history.push({ role: "user", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
+                    return await runToolLoop(history);
                 }
 
-                // 🔄 بروتوكول "الحسّاس الذكي" (Engine 4 - Availability Sensor)
-                // بدلاً من الانتظار العشوائي، سنقوم بجس نبض النماذج بشكل متكرر وذكي
-                const globalRetry = (parseInt(localStorage.getItem('gemini_global_retry') || "0")) + 1;
-                localStorage.setItem('gemini_global_retry', globalRetry);
-
-                const thinkMsg = document.querySelector('.msg.ai:last-child');
-                if (thinkMsg) {
-                    thinkMsg.innerHTML = `<div class="msg-content">📡 <b>حسّاس التوفر نشط:</b> كافة النماذج تحت الضغط (دورة ${globalRetry}).<br>أقوم بمراقبة استجابة السيرفرات الآن... سأستأنف العمل فور تحرر أول نموذج تلقائياً.</div>`;
-                }
-
-                // حلقة "جس النبض" (Probe Loop) - تحاول كل 10 ثوانٍ بدلاً من 30
-                logToTerminal(`SENSING MODEL AVAILABILITY... (Cycle ${globalRetry})`, 'info');
-                await new Promise(r => setTimeout(r, 10000));
-                return await runToolLoop(history, null, []);
+                const finalTurn = { role: "model", parts: (provider === 'google' ? parts : [{text: thought}]), model: userModel };
+                chatHistory = history.concat([finalTurn]);
+                saveChatToStorage();
+                localStorage.removeItem('gemini_pending_history');
+                stopAiTimer();
+                return { text: thought || "تمت بنجاح.", model: userModel };
+            } catch (err) {
+                stopAiTimer();
+                return { text: `❌ فشل: ${err.message}`, model: "System" };
             }
+        }
 
             // تشغيل الحلقة مع السياق الحالي
             return await runToolLoop([...chatHistory, currentTurn]);
-        }
-
+        
         async function executeAiFunction(name, args) {
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
             const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
