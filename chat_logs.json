@@ -1,14 +1,14 @@
 {
   "sessions": [
     {
-      "id": "1788200472924",
-      "title": "تم قراءة ملف `index.html` بنجا...",
+      "id": "1788192779619",
+      "title": "أهلاً بك! رائع جداً، هذا اسم م...",
       "history": [
         {
           "role": "user",
           "parts": [
             {
-              "text": "اقرء ملف index.html"
+              "text": "مرحبا"
             }
           ]
         },
@@ -16,31 +16,17 @@
           "role": "model",
           "parts": [
             {
-              "functionCall": {
-                "name": "thought",
-                "args": {
-                  "reasoning": "المستخدم طلب قراءة ملف index.html، ويجب عليّ تنفيذ ذلك بدقة لتقديم تقرير أو محتوى الملف.",
-                  "plan": "قراءة ملف index.html لفهم محتواه وبنيته الأساسية باستخدام أداة قراءة الملفات."
-                },
-                "id": "call_13063"
-              },
-              "thoughtSignature": "El4KXAERTTIPByD4dJ9/EU/xOhT6zLRtYCjeZ0Mt4Fl5YxUz3QGs4WdVgsP3yor/WmfEKgjSFeaer3GflBZb+Icgju0zXImgI5cMQiWzdl8NdYTZQjabiIhzsrEmG0xe"
+              "text": "أهلاً وسهلاً بك! كيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "EscGCsQGARFNMg8uMDzUc8W+8hOT6nhLfg4f0EFZfyUkO5RFlzQoQKczcJbxb47rXPpYUZHmjAInZzm9T+uCogXiCfk6cfB/RTatDw25p3cH59Dlhv6T8982KXJeYzJFo4PWv/VCCBiT3v9OjD3Mu4qgha/8Ax+ohnzWOviwqGtj4KUWRwH1ChqwJsyvy9N4fRHAaoitz0VsbtBTulDZI+FnoNlGE5mpJjaccT66ObbkfJJIRq+5PyBzV56NgPmsbI3hjBLii5ggvMHUwpLXlFnVjCCHefVg+hPCo6o667i5dY7APt9p4A3ANp5NQFadmte3jexnfKbUQr6JPg8r1Rrbkoap8rQYsS+RkjIQSPhF89FAVFjJh9Im3qlDBkGLnw6ux5IrOH26vWe0cGCmVgZSpMnbpeh9bU0Db3atZGMr/xTF8JJN0INXHtUgJk2dKxQyWFHT1kU2CGXmlVPdWcXFd8b+bluEfxk7UegstlUBSUMdjyP2GWM3fIkoBoO7EBy9zAEXAHOCn/tAxIzwkvCeMUsUGFDEJVi/tZpbb4iqdXtES8pNA1kHWg8UigIyj44cUSDM3+y2yeq/iJNV5eIHh106rZ0Pw9BAQ/tE+SLsD7DLNeU68MmSv+FDgs2VjVvq71wFUqu6ncNFIo0vhVC1aoqAkal23vxC1UsHUjGsTvh4MVdkK/HYh08KiPlGHEaExYnqWyI6AVj4nC918zYlWiBwW75bO7f4Mr7usRD3cNGxgPqqmjk8raDXSEx/jzycROAcybshVMCMpEQIsyh/oTCbAWJF6U9ROg4rutJwJRJ2DkY2EW295z9WHCWJTmHk889kiH3ik5w7Ephigax2MbGygbHvCs9mix+x1HJK5QbFABG8/JQC8EJGA96PTnmA4+AMjxJys+0LlWuR0fz4zv8dtQ6ZW/FapTYJp621tAgLeIoJCa2cok1YBAMePMAlVD4NHF1bJM0ByBKbPHkAGMfAF0VSj1QtM7BVQrpXN0rkI84Ltkc+mLowrVR4gRTfbK22/KB0c3tmzA0R7yTIQUAmDNLMWnrMy45Q72h8h/F4auNkiRiIHEvAvtvOhTNrRw/ijAzM0273ExdzB1vOfbUsANEdM5c="
             }
-          ]
+          ],
+          "model": "gemini-3.6-flash"
         },
         {
           "role": "user",
           "parts": [
             {
-              "functionResponse": {
-                "name": "thought",
-                "response": {
-                  "content": {
-                    "reasoning": "المستخدم طلب قراءة ملف index.html، ويجب عليّ تنفيذ ذلك بدقة لتقديم تقرير أو محتوى الملف.",
-                    "plan": "قراءة ملف index.html لفهم محتواه وبنيته الأساسية باستخدام أداة قراءة الملفات."
-                  }
-                }
-              }
+              "text": "مرحبا"
             }
           ]
         },
@@ -48,27 +34,17 @@
           "role": "model",
           "parts": [
             {
-              "functionCall": {
-                "name": "read_file",
-                "args": {
-                  "path": "index.html"
-                },
-                "id": "call_53781"
-              },
-              "thoughtSignature": "El4KXAERTTIPE/zDq5groFjI5CkmiOufVY4Tvl8OBfngJZ8iTDM1NB5EBnama45oMlgutrbxpBVrRmtnQIybd8bl4RJBsSaxw9Tag2xUS/JO9MUT3HRGfiWNLwNLFwv3"
+              "text": "أهلاً بك مرة أخرى! هل هناك شيء محدد أستطيع مساعدتك فيه؟",
+              "thoughtSignature": "El4KXAERTTIPqIgfQIdbuws96oEfH3PBMmRd5DkQXbbgGslj3FHHyq1fIGTv60fgj8X1aUkFH6fyBzG5+HU2DsnouoTmby2ddYsA5fvFNqlUucAOV19iqkf9YBHEn+Lf"
             }
-          ]
+          ],
+          "model": "gemini-3.5-flash-lite"
         },
         {
           "role": "user",
           "parts": [
             {
-              "functionResponse": {
-                "name": "read_file",
-                "response": {
-                  "content": "<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>My website</title>\n    <!-- Marked for Markdown rendering -->\n    <script src=\"https://cdn.jsdelivr.net/npm/marked/marked.min.js\"></script>\n    <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n\n<body>\n    <!--للقسم اضافة زر -->\n    <nav>\n        <a href=\"#/\" id=\"btn-vsa\">منوعات</a>\n        <a href=\"#/rw\" id=\"btn-rw\"> التحليل الحجمي </a>\n        <a href=\"#/time-analysis\" id=\"btn-time-analysis\">⏱️ التحليل الزمني</a>\n        <a href=\"#/technical-analysis\" id=\"btn-technical-analysis\">التحليل الفني</a>\n        <a href=\"#/investment\" id=\"btn-invest\">🏢 قسم الاستثمار</a>\n        <a href=\"#/crypto\" id=\"btn-crypto\">🤖 تنبيهات الكريبتو</a>\n        <a href=\"viewer.html\" id=\"btn-viewer\"\n            style=\"color: var(--accent-color); border: 1px solid rgba(0, 212, 255, 0.3);\">📁 عارض الصور و PDF</a>\n    </nav>\n\n    <div class=\"container\">\n        <div class=\"search-container\">\n            <input type=\"text\" id=\"globalSearch\" placeholder=\"ابحث هنا...\">\n            <div id=\"searchDropdown\" class=\"search-dropdown\" style=\"display: none;\"></div>\n        </div>\n\n        <h1 id=\"pageTitle\" style=\"text-align: center; margin-bottom: 1.5rem; font-weight: 700;\"></h1>\n        <div id=\"statusMsg\"></div>\n        <div class=\"grid-layout\" id=\"mainGrid\"></div>\n    </div>\n\n    <!-- AI Orchestrator Widget (The Agent) -->\n    <div class=\"ai-widget\">\n        <button class=\"ai-btn\" id=\"aiToggleBtn\" onclick=\"toggleAiChat()\" title=\"فتح العقل المدبر\">🧠</button>\n        <div class=\"ai-chat-box\" id=\"aiChatBox\">\n            <!-- Resize Handles -->\n            <div class=\"ai-resizer ai-resizer-r\"></div>\n            <div class=\"ai-resizer ai-resizer-l\"></div>\n            <div class=\"ai-resizer ai-resizer-t\"></div>\n            <div class=\"ai-resizer ai-resizer-b\"></div>\n            <div class=\"ai-resizer ai-resizer-br\"></div>\n            <div class=\"ai-resizer ai-resizer-bl\"></div>\n            <div class=\"ai-resizer ai-resizer-tr\"></div>\n            <div class=\"ai-resizer ai-resizer-tl\"></div>\n\n            <!-- Sidebar for Recent Chats -->\n            <div class=\"ai-history-sidebar\" id=\"aiHistorySidebar\">\n                <div class=\"history-header\">\n                    <span style=\"font-weight: bold; font-size: 14px; letter-spacing: 0.5px;\">Recent Chats</span>\n                    <span onclick=\"toggleHistory()\" style=\"cursor: pointer; opacity: 0.7;\">✕</span>\n                </div>\n                <div id=\"historyList\" style=\"flex-grow: 1; overflow-y: auto;\">\n                    <!-- Chats injected here -->\n                </div>\n            </div>\n\n                <!-- Main Chat Area -->\n                <div class=\"ai-main-content\">\n                    <div class=\"ai-header\">\n                        <div class=\"ai-header-title\">\n                            <span onclick=\"toggleHistory()\" style=\"cursor: pointer; font-size: 20px; color: #afb1b3;\" title=\"History\">🕒</span>\n                            <span style=\"letter-spacing: 0.5px;\">Agent / العقل المدبر</span>\n                            <span id=\"aiLiveClock\" style=\"margin-right: 10px; font-family: monospace; font-size: 12px; color: #4db6ac; background: rgba(77, 182, 172, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(77, 182, 172, 0.2);\">08:22:20</span>\n                            <span id=\"aiDynamicTimer\" class=\"ai-timer-badge\">0:00</span>\n                            <div id=\"systemHealthBadge\" class=\"system-status-pill\">\n                                <div class=\"status-dot\"></div>\n                                <span id=\"healthStatusText\">SYSTEM READY</span>\n                            </div>\n                        </div>\n                        <div class=\"ai-header-actions\">\n                            <span onclick=\"checkForEvolution()\" title=\"Check for Evolution Updates\" style=\"font-size: 16px;\">🚀</span>\n                            <span onclick=\"createNewChat()\" title=\"New Chat\" style=\"font-size: 22px;\">＋</span>\n                            <span onclick=\"toggleMaximizeAi()\" title=\"Maximize/Restore\" style=\"font-size: 16px;\">⬜</span>\n                            <span title=\"Settings\" onclick=\"resetGeminiKey()\">⋮</span>\n                            <span onclick=\"toggleAiChat()\">—</span>\n                        </div>\n                    </div>\n\n                    <div class=\"ai-messages\" id=\"aiMessages\">\n                        <div class=\"msg ai\">\n                            أهلاً بك في <b>VSA Academy</b>! أنا العقل المدبر. كيف يمكنني مساعدتك اليوم؟\n                        </div>\n                    </div>\n\n                    <!-- 📟 شاشة الباور شيل التفاعلية (Clean Minimal Terminal) -->\n                    <div id=\"aiTerminal\" class=\"ai-terminal\">\n                        <div class=\"terminal-content-wrapper\">\n                            <div class=\"terminal-toolbar\">\n                                <span class=\"terminal-tool\" title=\"Rerun\">🔄</span>\n                                <span class=\"terminal-tool\" title=\"Stop\" style=\"color: #ff3d00;\">⏹</span>\n                                <span class=\"terminal-tool\" title=\"Clear\">🧹</span>\n                            </div>\n                            <div id=\"terminalOutput\"></div>\n                        </div>\n                    </div>\n\n                    <div class=\"ai-input-container\">\n                        <div class=\"ai-input-wrapper\">\n                            <!-- Previews Container (Now inside the wrapper) -->\n                            <div id=\"imagePreviewContainer\"></div>\n\n                            <div class=\"ai-input-row\">\n                                <textarea id=\"aiInput\" placeholder=\"Ask AI...\" rows=\"1\" oninput=\"autoResizeInput(); updateSendButtonState()\" onkeydown=\"handleKeydown(event)\"></textarea>\n                            </div>\n\n                            <div class=\"ai-input-footer\">\n                                <div class=\"ai-footer-icons\">\n                                    <span onclick=\"document.getElementById('fileInput').click()\" title=\"Attach PDF, JSON, Video, Image\" style=\"font-size: 20px;\">⊞</span>\n                                    <span onclick=\"toggleTerminal()\" title=\"Toggle Terminal\" style=\"font-size: 18px; color: #afb1b3;\">📟</span>\n                                    <span title=\"Safety Protocol Active\" style=\"color: #4db6ac; font-size: 16px;\">🛡️</span>\n                                    <div class=\"model-selector-container\">\n                                        <select id=\"modelSelector\" onchange=\"saveModelSelection()\" title=\"AI Model\">\n                                            <optgroup label=\"Google Gemini (Elite Tier)\">\n                                                <option value=\"gemini-3.7-flash\" selected>Gemini 3.7 Flash (SOTA)</option>\n                                                <option value=\"gemini-3.6-flash\">Gemini 3.6 Flash (Efficient)</option>\n                                                <option value=\"gemini-3.5-flash-lite\">Gemini 3.5 Flash-Lite (Fast)</option>\n                                            </optgroup>\n                                            <optgroup label=\"Google Gemini (Stable Legacy)\">\n                                                <option value=\"gemini-2.0-flash\">Gemini 2.0 Flash</option>\n                                                <option value=\"gemini-1.5-pro\">Gemini 1.5 Pro</option>\n                                            </optgroup>\n                                            <optgroup label=\"DeepSeek (Proxy Bridge)\">\n                                                <option value=\"deepseek-chat\">DeepSeek V3 (Chat/Coder)</option>\n                                                <option value=\"deepseek-reasoner\">DeepSeek R1 (Reasoning)</option>\n                                            </optgroup>\n                                        </select>\n                                    </div>\n                                </div>\n                                <button class=\"ai-send-btn-new\" id=\"aiSendBtn\" onclick=\"sendAiMessage()\">\n                                    <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M2.01 21L23 12 2.01 3 2 10l15 2-15 2z\"/></svg>\n                                </button>\n                            </div>\n                            <input type=\"file\" id=\"fileInput\" style=\"display: none;\" multiple onchange=\"handleFileUpload(event)\">\n                        </div>\n                    </div>\n                </div>\n        </div>\n    </div>\n\n    <div id=\"myModal\" class=\"modal\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <h2 id=\"modalTitle\" style=\"color: var(--accent-color); margin: 0; font-weight: 700; font-size: 1.5rem;\">\n                </h2>\n                <div style=\"display: flex; align-items: center; gap: 15px;\">\n                    <div style=\"display: flex; gap: 8px; direction: ltr;\">\n                        <button id=\"modalBackBtn\" class=\"nav-arrow-btn\" onclick=\"modalGoBack()\" title=\"المحتوى السابق\">\n                            <span>&larr;</span> السابق\n                        </button>\n                        <button id=\"modalForwardBtn\" class=\"nav-arrow-btn\" onclick=\"modalGoForward()\"\n                            title=\"المحتوى التالي\">\n                            التالي <span>&rarr;</span>\n                        </button>\n                    </div>\n                    <span class=\"close-btn\" onclick=\"closeModal()\">&times;</span>\n                </div>\n            </div>\n\n            <div class=\"modal-body-grid\">\n                <div class=\"modal-main-area\">\n                    <div id=\"popupVideoContainer\" class=\"video-container-wrapper\" style=\"display: none;\"></div>\n\n                    <div id=\"popupLinksContainer\" class=\"links-container-wrapper\"></div>\n\n                    <div class=\"details-section\">\n                        <h3\n                            style=\"color: #fff; border-bottom: 1px solid #222226; padding-bottom: 8px; margin-top: 0; font-size: 1.2rem;\">\n                            الوصف والتفاصيل</h3>\n                        <div id=\"modalContent\" class=\"modal-description-text\"></div>\n                    </div>\n                </div>\n\n                <div class=\"modal-sidebar-area\">\n                    <div id=\"playlistSection\" class=\"sidebar-card\"\n                        style=\"display: none; border-color: var(--accent-color);\">\n                        <h3 style=\"color: var(--accent-color); margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;\">\n                            📚 قائمة دروس الدورة\n                        </h3>\n                        <div id=\"playlistContainer\" class=\"chapters-flex-list\"></div>\n                    </div>\n\n                    <!-- معرض الصور المستقل -->\n                    <div id=\"imagesSection\" class=\"sidebar-card\" style=\"display: none; border-color: #7b1fa2;\">\n                        <h3 style=\"color: #ce93d8; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;\">\n                            🖼️ معرض الصور\n                        </h3>\n                        <div id=\"imagesContainer\" class=\"images-gallery-grid\"></div>\n                    </div>\n\n                    <!-- قائمة PDF المستقلة -->\n                    <div id=\"pdfsSection\" class=\"sidebar-card\" style=\"display: none; border-color: #e53935;\">\n                        <h3 style=\"color: #ef9a9a; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;\">\n                            📄 ملفات PDF\n                        </h3>\n                        <div id=\"pdfsContainer\" class=\"chapters-flex-list\"></div>\n                    </div>\n\n                    <!-- القسم الجديد للفهارس الموضوعية -->\n                    <div id=\"thematicSection\" class=\"sidebar-card\" style=\"display: none;\">\n                        <h3 style=\"color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;\">\n                            🧠 الفهارس الموضوعية (حسب المواضيع)\n                        </h3>\n                        <div id=\"thematicContainer\" class=\"chapters-flex-list\"></div>\n                    </div>\n\n                    <div id=\"chaptersSection\" class=\"sidebar-card\" style=\"display: none;\">\n                        <h3\n                            style=\"color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;\">\n                            ⏱️ الفصول والطوابع الزمنية\n                        </h3>\n                        <div id=\"chaptersContainer\" class=\"chapters-flex-list\"></div>\n                        <div id=\"chaptersUnsupportedNotice\" class=\"chapters-notice\" style=\"display: none;\">\n                            ⚠️ الطوابع الزمنية التفاعلية غير مدعومة لهذه المنصة.\n                        </div>\n                    </div>\n\n                    <div id=\"recommendationsContainer\" class=\"sidebar-card\" style=\"display: none;\">\n                        <h3 style=\"color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;\">💡 دروس ومقترحات\n                            ذات صلة</h3>\n                        <div id=\"recommendationsList\" class=\"recommendations-vertical-list\"></div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <div id=\"emergencyOverlay\" style=\"display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:100000; color:white; font-family:sans-serif; direction:rtl; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(10px);\">\n        <div style=\"background:#121212; border:2px solid #ff3d00; padding:30px; border-radius:15px; max-width:500px; text-align:center; box-shadow:0 0 30px rgba(255,61,0,0.4);\">\n            <div style=\"font-size:50px; margin-bottom:10px;\">🚨</div>\n            <h2 style=\"color:#ff3d00; margin:0 0 15px 0;\">لوحة إصلاح الطوارئ</h2>\n            <p style=\"color:#ccc; font-size:15px;\">تم استدعاء هذا النظام لتجاوز عطل في الواجهة الأساسية أو خطأ برمي حرج.</p>\n\n            <div id=\"emergencyStatus\" style=\"margin:20px 0; padding:15px; background:rgba(255,61,0,0.1); border-radius:8px; color:#ff8a50; font-size:14px; min-height:40px; border:1px solid rgba(255,61,0,0.2);\">\n                الحالة: جاهز لتنفيذ أوامر الإنقاذ...\n            </div>\n\n            <div style=\"display:flex; flex-direction:column; gap:12px;\">\n                <button onclick=\"emergencyRepair()\" style=\"background:#ff3d00; color:white; border:none; padding:15px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:16px; transition:0.3s;\" onmouseover=\"this.style.background='#ff6333'\" onmouseout=\"this.style.background='#ff3d00'\">\n                    🛠️ إصلاح الموقع فوراً (استعادة النسخة السليمة)\n                </button>\n\n                <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:10px;\">\n                    <button onclick=\"location.reload()\" style=\"background:#333; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;\">🔄 إعادة تحميل</button>\n                    <button onclick=\"document.getElementById('emergencyOverlay').style.display='none'\" style=\"background:#222; color:#777; border:none; padding:10px; border-radius:8px; cursor:pointer;\">إغلاق اللوحة</button>\n                </div>\n            </div>\n\n            <div style=\"margin-top:25px; font-size:12px; color:#444; border-top:1px solid #222; padding-top:15px;\">\n                يمكنك فتح هذه اللوحة دائماً عبر: <span style=\"color:#888; background:#222; padding:2px 6px; border-radius:4px;\">Ctrl + Shift + E</span>\n            </div>\n        </div>\n    </div>\n\n    <script src=\"app_logic.js\"></script>\n    <script src=\"ai_engine_core.js\"></script>\n</body>\n\n</html>\n"
-                }
-              }
+              "text": "هل يمنك التعديل على ملفاتي"
             }
           ]
         },
@@ -76,36 +52,70 @@
           "role": "model",
           "parts": [
             {
-              "text": "تم قراءة ملف `index.html` بنجاح. \n\nيتكون الملف من:\n1. **الترويسة (`<head>`)**: تحتوي على إعدادات اللغة العربية، الرمز التعريفي، ربط مكتبة `marked` لتحويل Markdown، وملف التصميم `style.css`.\n2. **شريط التنقل (`<nav>`)**: يحتوي على أزرار التنقل بين الأقسام المختلفة (منوعات، التحليل الحجمي، التحليل الزمني، التحليل الفني، قسم الاستثمار، تنبيهات الكريبتو، وعارض الصور و PDF).\n3. **المحتوى الرئيسي (`.container`)**: يشمل حقل البحث السريع، عنوان الصفحة، مكان لعرض الرسائل، وشبك العرض (`#mainGrid`).\n4. **أداة العقل المدبر الذكية (`.ai-widget`)**: نافذة محادثة ذكية متكاملة تتضمن سجل المحادثات، شاشة التفاعل (Terminal)، ومحدد النماذج.\n5. **نافذة منبثقة (`#myModal`)**: لعرض تفاصيل الدروس والفيديوهات والروابط وقوائم التشغيل والمعارض.\n6. **لوحة طوارئ (`#emergencyOverlay`)**: لأغراض الإصلاح التلقائي وحالات الاستجابة السريعة (تُفتح بـ `Ctrl + Shift + E`).\n7. **ملفات الجافاسكريبت**: `app_logic.js` و `ai_engine_core.js`.\n\nكيف يمكنني مساعدتك أكثر بخصوص هذا الملف أو التطبيق؟",
-              "thoughtSignature": "El4KXAERTTIPgcTRaQBrRsK4OlY06xPrHdHP0glK5WhRv5inRnaBDV3+NIddQeLWvmfGwTPV/nBS0wNd0LlmbOQo47d4PNatMBmYBGds0/wn6GkNDZOFJw8FbfbQ44tb"
+              "text": "نعم، بالتأكيد! يمكنني مساعدتك في تعديل النصوص، إعادة صياغتها، تصحيح الأخطاء الإملائية والنحوية، أو تلخيصها.\n\nفقط **انسخ النص** الذي تريد تعديله والصقه هنا، وأخبرني بما تود تغليفه أو تعديله (مثلاً: جعله أكثر رسمية، تصحيح الأخطاء، اختصاره، إلخ). \n\n*(ملاحظة: إذا كنت تقصد ملفات مثل Word أو PDF، يمكنك نسخ محتواها ولصقه هنا، حيث لا يمكنني حتى الآن فتح الملفات المباشرة أو التعديل عليها مباشرة في جهازك).* \n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIP+Tqnc73JR7PwpTdoloyXRFcJgtof2ukaxNtsJG5HbOQ2P931UOac0QudzGp7eNegw6q0K9sTzPUGYv7JV99OjRmC1rRde75xU1N+/qPJZBsuoZXn7qJ3"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ملفاتي في مستودعي"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا مستعد لمساعدتك! هل تقصد مستودعاً على منصة مثل **GitHub**، أو مستودعاً سحابياً، أو شيئاً آخر؟\n\nبما أنني نموذج لغوي ذكي، لا يمكنني الوصول المباشر إلى حساباتك أو مستودعاتك الشخصية لأسباب أمنية. ولكن يمكنك فعل الآتي:\n\n1. **نسخ ولصق** الأكواد أو النصوص الموجودة في ملفاتك هنا في المحادثة.\n2. أخبرني بما تريد تعديله أو تحسينه فيها (مثلاً: إصلاح خطأ برمجي، تحسين التنسيق، إضافة ميزة معينة، أو شرح الكود).\n3. سأقوم بتعديلها لك، ويمكنك بعدها نسخ النتائج ولصقها مرة أخرى في مستودعك.\n\nتفضل، شاركني بالنص أو الكود الذي تريد العمل عليه!",
+              "thoughtSignature": "El4KXAERTTIPoHa7sleVqJpvMM4/fA43VZydwncX7TDwNubuo8VYezF7+lxkiibtEqvLNWN9CORcSeRk85OPvSm9huNRxNv1AzIaGa2xaujOaQkYjU/Q9OT8FduBLG/8"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ملفاتي الان"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا في انتظارك! تفضل بنسخ المحتوى (سواء كان نصوصاً أو أكواد برمجية) من ملفاتك والصقه هنا، وأخبرني بما تريد تعديله أو تحسينه. سأقوم باللازم فوراً!",
+              "thoughtSignature": "El4KXAERTTIPx+8YxUDaMFElxSZfcYbyznZEuuuk3egekw2mN4n6G4+fOkITV37sV43ZMMQveXIa6JdHVcQg/uLIa6I/eYleh0lH57rA/seBAXa81wnoZkFGlls883tl"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ملف AI_AGENTS_REFERENCE.md"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! رائع جداً، هذا اسم ملف مرجعي (Markdown). \n\nبما أنني لا أستطيع الدخول إلى جهازك أو مستودعك بشكل مباشر لقراءة الملف، **يمكنك نسخ محتوى ملف `AI_AGENTS_REFERENCE.md` بالكامل ولصقه هنا في المحادثة**.\n\nبمجرد أن تلصقه، أخبرني:\n* ما الذي تريد تعديله فيه؟ (إضافة معلومات جديدة، تنظيم الأقسام، تصحيح أخطاء، أو إعادة صياغة؟)\n\nأنا بانتظار لصقك للمحتوى لنبدأ العمل فوراً!",
+              "thoughtSignature": "El4KXAERTTIPT5liiZ+i1QSsr1Bzelcu1r2dUBN7YZhVSh9z2RWw1lJVDuEvg9Zw511g4cNwEb7spkUv7YoyN55KbfFYIyz8zZL090Negzalu2er5e9EPHQ1Wl9p3lXC"
             }
           ],
           "model": "gemini-3.5-flash-lite"
         }
       ]
-    },
-    {
-      "id": "1788200002716",
-      "title": "محادثة جديدة",
-      "history": []
-    },
-    {
-      "id": "1788199413777",
-      "title": "محادثة جديدة",
-      "history": []
-    },
-    {
-      "id": "1788199212827",
-      "title": "محادثة جديدة",
-      "history": []
-    },
-    {
-      "id": "1788199022764",
-      "title": "محادثة جديدة",
-      "history": []
     }
   ],
-  "activeSessionId": "1788200472924",
+  "activeSessionId": "1788192779619",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T19:48:37.099Z"
+  "timestamp": "2026-08-31T20:03:42.086Z"
 }
