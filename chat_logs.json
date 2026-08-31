@@ -1,14 +1,14 @@
 {
   "sessions": [
     {
-      "id": "1788192779619",
-      "title": "مرحباً بك مجدداً! \n\nكيف يمكنني...",
+      "id": "1788200472924",
+      "title": "بالإضافة إلى البنية العامة، يت...",
       "history": [
         {
           "role": "user",
           "parts": [
             {
-              "text": "كيف الحال"
+              "text": "اقرء ملف index.html"
             }
           ]
         },
@@ -16,7 +16,68 @@
           "role": "model",
           "parts": [
             {
-              "text": "أهلاً بك! أنا بخير ولله الحمد، ومستعد تماماً لمساعدتك في أي مشروع برمجي، أو هندسة وتطوير الأنظمة، أو حل أي تحدٍ تقني تواجهه. \n\nكيف يمكنني مساعدتك اليوم؟"
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم طلب قراءة ملف index.html، ويجب عليّ تنفيذ ذلك بدقة لتقديم تقرير أو محتوى الملف.",
+                  "plan": "قراءة ملف index.html لفهم محتواه وبنيته الأساسية باستخدام أداة قراءة الملفات."
+                },
+                "id": "call_13063"
+              },
+              "thoughtSignature": "El4KXAERTTIPByD4dJ9/EU/xOhT6zLRtYCjeZ0Mt4Fl5YxUz3QGs4WdVgsP3yor/WmfEKgjSFeaer3GflBZb+Icgju0zXImgI5cMQiWzdl8NdYTZQjabiIhzsrEmG0xe"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم طلب قراءة ملف index.html، ويجب عليّ تنفيذ ذلك بدقة لتقديم تقرير أو محتوى الملف.",
+                    "plan": "قراءة ملف index.html لفهم محتواه وبنيته الأساسية باستخدام أداة قراءة الملفات."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "read_file",
+                "args": {
+                  "path": "index.html"
+                },
+                "id": "call_53781"
+              },
+              "thoughtSignature": "El4KXAERTTIPE/zDq5groFjI5CkmiOufVY4Tvl8OBfngJZ8iTDM1NB5EBnama45oMlgutrbxpBVrRmtnQIybd8bl4RJBsSaxw9Tag2xUS/JO9MUT3HRGfiWNLwNLFwv3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "read_file",
+                "response": {
+                  "content": "<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>My website</title>\n    <!-- Marked for Markdown rendering -->\n    <script src=\"https://cdn.jsdelivr.net/npm/marked/marked.min.js\"></script>\n    <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n\n<body>\n    <!--للقسم اضافة زر -->\n    <nav>\n        <a href=\"#/\" id=\"btn-vsa\">منوعات</a>\n        <a href=\"#/rw\" id=\"btn-rw\"> التحليل الحجمي </a>\n        <a href=\"#/time-analysis\" id=\"btn-time-analysis\">⏱️ التحليل الزمني</a>\n        <a href=\"#/technical-analysis\" id=\"btn-technical-analysis\">التحليل الفني</a>\n        <a href=\"#/investment\" id=\"btn-invest\">🏢 قسم الاستثمار</a>\n        <a href=\"#/crypto\" id=\"btn-crypto\">🤖 تنبيهات الكريبتو</a>\n        <a href=\"viewer.html\" id=\"btn-viewer\"\n            style=\"color: var(--accent-color); border: 1px solid rgba(0, 212, 255, 0.3);\">📁 عارض الصور و PDF</a>\n    </nav>\n\n    <div class=\"container\">\n        <div class=\"search-container\">\n            <input type=\"text\" id=\"globalSearch\" placeholder=\"ابحث هنا...\">\n            <div id=\"searchDropdown\" class=\"search-dropdown\" style=\"display: none;\"></div>\n        </div>\n\n        <h1 id=\"pageTitle\" style=\"text-align: center; margin-bottom: 1.5rem; font-weight: 700;\"></h1>\n        <div id=\"statusMsg\"></div>\n        <div class=\"grid-layout\" id=\"mainGrid\"></div>\n    </div>\n\n    <!-- AI Orchestrator Widget (The Agent) -->\n    <div class=\"ai-widget\">\n        <button class=\"ai-btn\" id=\"aiToggleBtn\" onclick=\"toggleAiChat()\" title=\"فتح العقل المدبر\">🧠</button>\n        <div class=\"ai-chat-box\" id=\"aiChatBox\">\n            <!-- Resize Handles -->\n            <div class=\"ai-resizer ai-resizer-r\"></div>\n            <div class=\"ai-resizer ai-resizer-l\"></div>\n            <div class=\"ai-resizer ai-resizer-t\"></div>\n            <div class=\"ai-resizer ai-resizer-b\"></div>\n            <div class=\"ai-resizer ai-resizer-br\"></div>\n            <div class=\"ai-resizer ai-resizer-bl\"></div>\n            <div class=\"ai-resizer ai-resizer-tr\"></div>\n            <div class=\"ai-resizer ai-resizer-tl\"></div>\n\n            <!-- Sidebar for Recent Chats -->\n            <div class=\"ai-history-sidebar\" id=\"aiHistorySidebar\">\n                <div class=\"history-header\">\n                    <span style=\"font-weight: bold; font-size: 14px; letter-spacing: 0.5px;\">Recent Chats</span>\n                    <span onclick=\"toggleHistory()\" style=\"cursor: pointer; opacity: 0.7;\">✕</span>\n                </div>\n                <div id=\"historyList\" style=\"flex-grow: 1; overflow-y: auto;\">\n                    <!-- Chats injected here -->\n                </div>\n            </div>\n\n                <!-- Main Chat Area -->\n                <div class=\"ai-main-content\">\n                    <div class=\"ai-header\">\n                        <div class=\"ai-header-title\">\n                            <span onclick=\"toggleHistory()\" style=\"cursor: pointer; font-size: 20px; color: #afb1b3;\" title=\"History\">🕒</span>\n                            <span style=\"letter-spacing: 0.5px;\">Agent / العقل المدبر</span>\n                            <span id=\"aiLiveClock\" style=\"margin-right: 10px; font-family: monospace; font-size: 12px; color: #4db6ac; background: rgba(77, 182, 172, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(77, 182, 172, 0.2);\">08:22:20</span>\n                            <span id=\"aiDynamicTimer\" class=\"ai-timer-badge\">0:00</span>\n                            <div id=\"systemHealthBadge\" class=\"system-status-pill\">\n                                <div class=\"status-dot\"></div>\n                                <span id=\"healthStatusText\">SYSTEM READY</span>\n                            </div>\n                        </div>\n                        <div class=\"ai-header-actions\">\n                            <span onclick=\"checkForEvolution()\" title=\"Check for Evolution Updates\" style=\"font-size: 16px;\">🚀</span>\n                            <span onclick=\"createNewChat()\" title=\"New Chat\" style=\"font-size: 22px;\">＋</span>\n                            <span onclick=\"toggleMaximizeAi()\" title=\"Maximize/Restore\" style=\"font-size: 16px;\">⬜</span>\n                            <span title=\"Settings\" onclick=\"resetGeminiKey()\">⋮</span>\n                            <span onclick=\"toggleAiChat()\">—</span>\n                        </div>\n                    </div>\n\n                    <div class=\"ai-messages\" id=\"aiMessages\">\n                        <div class=\"msg ai\">\n                            أهلاً بك في <b>VSA Academy</b>! أنا العقل المدبر. كيف يمكنني مساعدتك اليوم؟\n                        </div>\n                    </div>\n\n                    <!-- 📟 شاشة الباور شيل التفاعلية (Clean Minimal Terminal) -->\n                    <div id=\"aiTerminal\" class=\"ai-terminal\">\n                        <div class=\"terminal-content-wrapper\">\n                            <div class=\"terminal-toolbar\">\n                                <span class=\"terminal-tool\" title=\"Rerun\">🔄</span>\n                                <span class=\"terminal-tool\" title=\"Stop\" style=\"color: #ff3d00;\">⏹</span>\n                                <span class=\"terminal-tool\" title=\"Clear\">🧹</span>\n                            </div>\n                            <div id=\"terminalOutput\"></div>\n                        </div>\n                    </div>\n\n                    <div class=\"ai-input-container\">\n                        <div class=\"ai-input-wrapper\">\n                            <!-- Previews Container (Now inside the wrapper) -->\n                            <div id=\"imagePreviewContainer\"></div>\n\n                            <div class=\"ai-input-row\">\n                                <textarea id=\"aiInput\" placeholder=\"Ask AI...\" rows=\"1\" oninput=\"autoResizeInput(); updateSendButtonState()\" onkeydown=\"handleKeydown(event)\"></textarea>\n                            </div>\n\n                            <div class=\"ai-input-footer\">\n                                <div class=\"ai-footer-icons\">\n                                    <span onclick=\"document.getElementById('fileInput').click()\" title=\"Attach PDF, JSON, Video, Image\" style=\"font-size: 20px;\">⊞</span>\n                                    <span onclick=\"toggleTerminal()\" title=\"Toggle Terminal\" style=\"font-size: 18px; color: #afb1b3;\">📟</span>\n                                    <span title=\"Safety Protocol Active\" style=\"color: #4db6ac; font-size: 16px;\">🛡️</span>\n                                    <div class=\"model-selector-container\">\n                                        <select id=\"modelSelector\" onchange=\"saveModelSelection()\" title=\"AI Model\">\n                                            <optgroup label=\"Google Gemini (Elite Tier)\">\n                                                <option value=\"gemini-3.7-flash\" selected>Gemini 3.7 Flash (SOTA)</option>\n                                                <option value=\"gemini-3.6-flash\">Gemini 3.6 Flash (Efficient)</option>\n                                                <option value=\"gemini-3.5-flash-lite\">Gemini 3.5 Flash-Lite (Fast)</option>\n                                            </optgroup>\n                                            <optgroup label=\"Google Gemini (Stable Legacy)\">\n                                                <option value=\"gemini-2.0-flash\">Gemini 2.0 Flash</option>\n                                                <option value=\"gemini-1.5-pro\">Gemini 1.5 Pro</option>\n                                            </optgroup>\n                                            <optgroup label=\"DeepSeek (Proxy Bridge)\">\n                                                <option value=\"deepseek-chat\">DeepSeek V3 (Chat/Coder)</option>\n                                                <option value=\"deepseek-reasoner\">DeepSeek R1 (Reasoning)</option>\n                                            </optgroup>\n                                        </select>\n                                    </div>\n                                </div>\n                                <button class=\"ai-send-btn-new\" id=\"aiSendBtn\" onclick=\"sendAiMessage()\">\n                                    <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M2.01 21L23 12 2.01 3 2 10l15 2-15 2z\"/></svg>\n                                </button>\n                            </div>\n                            <input type=\"file\" id=\"fileInput\" style=\"display: none;\" multiple onchange=\"handleFileUpload(event)\">\n                        </div>\n                    </div>\n                </div>\n        </div>\n    </div>\n\n    <div id=\"myModal\" class=\"modal\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <h2 id=\"modalTitle\" style=\"color: var(--accent-color); margin: 0; font-weight: 700; font-size: 1.5rem;\">\n                </h2>\n                <div style=\"display: flex; align-items: center; gap: 15px;\">\n                    <div style=\"display: flex; gap: 8px; direction: ltr;\">\n                        <button id=\"modalBackBtn\" class=\"nav-arrow-btn\" onclick=\"modalGoBack()\" title=\"المحتوى السابق\">\n                            <span>&larr;</span> السابق\n                        </button>\n                        <button id=\"modalForwardBtn\" class=\"nav-arrow-btn\" onclick=\"modalGoForward()\"\n                            title=\"المحتوى التالي\">\n                            التالي <span>&rarr;</span>\n                        </button>\n                    </div>\n                    <span class=\"close-btn\" onclick=\"closeModal()\">&times;</span>\n                </div>\n            </div>\n\n            <div class=\"modal-body-grid\">\n                <div class=\"modal-main-area\">\n                    <div id=\"popupVideoContainer\" class=\"video-container-wrapper\" style=\"display: none;\"></div>\n\n                    <div id=\"popupLinksContainer\" class=\"links-container-wrapper\"></div>\n\n                    <div class=\"details-section\">\n                        <h3\n                            style=\"color: #fff; border-bottom: 1px solid #222226; padding-bottom: 8px; margin-top: 0; font-size: 1.2rem;\">\n                            الوصف والتفاصيل</h3>\n                        <div id=\"modalContent\" class=\"modal-description-text\"></div>\n                    </div>\n                </div>\n\n                <div class=\"modal-sidebar-area\">\n                    <div id=\"playlistSection\" class=\"sidebar-card\"\n                        style=\"display: none; border-color: var(--accent-color);\">\n                        <h3 style=\"color: var(--accent-color); margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;\">\n                            📚 قائمة دروس الدورة\n                        </h3>\n                        <div id=\"playlistContainer\" class=\"chapters-flex-list\"></div>\n                    </div>\n\n                    <!-- معرض الصور المستقل -->\n                    <div id=\"imagesSection\" class=\"sidebar-card\" style=\"display: none; border-color: #7b1fa2;\">\n                        <h3 style=\"color: #ce93d8; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;\">\n                            🖼️ معرض الصور\n                        </h3>\n                        <div id=\"imagesContainer\" class=\"images-gallery-grid\"></div>\n                    </div>\n\n                    <!-- قائمة PDF المستقلة -->\n                    <div id=\"pdfsSection\" class=\"sidebar-card\" style=\"display: none; border-color: #e53935;\">\n                        <h3 style=\"color: #ef9a9a; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;\">\n                            📄 ملفات PDF\n                        </h3>\n                        <div id=\"pdfsContainer\" class=\"chapters-flex-list\"></div>\n                    </div>\n\n                    <!-- القسم الجديد للفهارس الموضوعية -->\n                    <div id=\"thematicSection\" class=\"sidebar-card\" style=\"display: none;\">\n                        <h3 style=\"color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;\">\n                            🧠 الفهارس الموضوعية (حسب المواضيع)\n                        </h3>\n                        <div id=\"thematicContainer\" class=\"chapters-flex-list\"></div>\n                    </div>\n\n                    <div id=\"chaptersSection\" class=\"sidebar-card\" style=\"display: none;\">\n                        <h3\n                            style=\"color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;\">\n                            ⏱️ الفصول والطوابع الزمنية\n                        </h3>\n                        <div id=\"chaptersContainer\" class=\"chapters-flex-list\"></div>\n                        <div id=\"chaptersUnsupportedNotice\" class=\"chapters-notice\" style=\"display: none;\">\n                            ⚠️ الطوابع الزمنية التفاعلية غير مدعومة لهذه المنصة.\n                        </div>\n                    </div>\n\n                    <div id=\"recommendationsContainer\" class=\"sidebar-card\" style=\"display: none;\">\n                        <h3 style=\"color: #fff; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;\">💡 دروس ومقترحات\n                            ذات صلة</h3>\n                        <div id=\"recommendationsList\" class=\"recommendations-vertical-list\"></div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <div id=\"emergencyOverlay\" style=\"display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:100000; color:white; font-family:sans-serif; direction:rtl; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(10px);\">\n        <div style=\"background:#121212; border:2px solid #ff3d00; padding:30px; border-radius:15px; max-width:500px; text-align:center; box-shadow:0 0 30px rgba(255,61,0,0.4);\">\n            <div style=\"font-size:50px; margin-bottom:10px;\">🚨</div>\n            <h2 style=\"color:#ff3d00; margin:0 0 15px 0;\">لوحة إصلاح الطوارئ</h2>\n            <p style=\"color:#ccc; font-size:15px;\">تم استدعاء هذا النظام لتجاوز عطل في الواجهة الأساسية أو خطأ برمي حرج.</p>\n\n            <div id=\"emergencyStatus\" style=\"margin:20px 0; padding:15px; background:rgba(255,61,0,0.1); border-radius:8px; color:#ff8a50; font-size:14px; min-height:40px; border:1px solid rgba(255,61,0,0.2);\">\n                الحالة: جاهز لتنفيذ أوامر الإنقاذ...\n            </div>\n\n            <div style=\"display:flex; flex-direction:column; gap:12px;\">\n                <button onclick=\"emergencyRepair()\" style=\"background:#ff3d00; color:white; border:none; padding:15px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:16px; transition:0.3s;\" onmouseover=\"this.style.background='#ff6333'\" onmouseout=\"this.style.background='#ff3d00'\">\n                    🛠️ إصلاح الموقع فوراً (استعادة النسخة السليمة)\n                </button>\n\n                <div style=\"display:grid; grid-template-columns:1fr 1fr; gap:10px;\">\n                    <button onclick=\"location.reload()\" style=\"background:#333; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;\">🔄 إعادة تحميل</button>\n                    <button onclick=\"document.getElementById('emergencyOverlay').style.display='none'\" style=\"background:#222; color:#777; border:none; padding:10px; border-radius:8px; cursor:pointer;\">إغلاق اللوحة</button>\n                </div>\n            </div>\n\n            <div style=\"margin-top:25px; font-size:12px; color:#444; border-top:1px solid #222; padding-top:15px;\">\n                يمكنك فتح هذه اللوحة دائماً عبر: <span style=\"color:#888; background:#222; padding:2px 6px; border-radius:4px;\">Ctrl + Shift + E</span>\n            </div>\n        </div>\n    </div>\n\n    <script src=\"app_logic.js\"></script>\n    <script src=\"ai_engine_core.js\"></script>\n</body>\n\n</html>\n"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "تم قراءة ملف `index.html` بنجاح. \n\nيتكون الملف من:\n1. **الترويسة (`<head>`)**: تحتوي على إعدادات اللغة العربية، الرمز التعريفي، ربط مكتبة `marked` لتحويل Markdown، وملف التصميم `style.css`.\n2. **شريط التنقل (`<nav>`)**: يحتوي على أزرار التنقل بين الأقسام المختلفة (منوعات، التحليل الحجمي، التحليل الزمني، التحليل الفني، قسم الاستثمار، تنبيهات الكريبتو، وعارض الصور و PDF).\n3. **المحتوى الرئيسي (`.container`)**: يشمل حقل البحث السريع، عنوان الصفحة، مكان لعرض الرسائل، وشبك العرض (`#mainGrid`).\n4. **أداة العقل المدبر الذكية (`.ai-widget`)**: نافذة محادثة ذكية متكاملة تتضمن سجل المحادثات، شاشة التفاعل (Terminal)، ومحدد النماذج.\n5. **نافذة منبثقة (`#myModal`)**: لعرض تفاصيل الدروس والفيديوهات والروابط وقوائم التشغيل والمعارض.\n6. **لوحة طوارئ (`#emergencyOverlay`)**: لأغراض الإصلاح التلقائي وحالات الاستجابة السريعة (تُفتح بـ `Ctrl + Shift + E`).\n7. **ملفات الجافاسكريبت**: `app_logic.js` و `ai_engine_core.js`.\n\nكيف يمكنني مساعدتك أكثر بخصوص هذا الملف أو التطبيق؟",
+              "thoughtSignature": "El4KXAERTTIPgcTRaQBrRsK4OlY06xPrHdHP0glK5WhRv5inRnaBDV3+NIddQeLWvmfGwTPV/nBS0wNd0LlmbOQo47d4PNatMBmYBGds0/wn6GkNDZOFJw8FbfbQ44tb"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -25,7 +86,7 @@
           "role": "user",
           "parts": [
             {
-              "text": "مرحبا"
+              "text": "وماذا يوجد ايضا فيه"
             }
           ]
         },
@@ -33,15 +94,68 @@
           "role": "model",
           "parts": [
             {
-              "text": "مرحباً بك مجدداً! \n\nكيف يمكنني خدمتك اليوم؟ هل لديك مشروع معين تعمل عليه، أو مشكلة برمجية تحتاج لحلها؟ أنا هنا لدعمك بكل ما تحتاجه."
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم يسأل عن تفاصيل إضافية ودقيقة حول ما يحتوي عليه ملف index.html. يجب شرح كافة الأجزاء التقنية، الهياكل، الخصائص التفاعلية، والواجهات البرمجية الموجودة داخل الهيكل بالتفصيل.",
+                  "plan": "استعراض وتفصيل المكونات الدقيقة والخصائص المتقدمة المكتشفة في ملف index.html وإيضاحها للمستخدم."
+                },
+                "id": "call_38699"
+              },
+              "thoughtSignature": "EmcKZQERTTIPe2SID32gr/yMk04N5uMPGEJpxS0Ve6SvLqy8vnpvuZ//GITxzteAhwxDW1+nSTe59kBKyQ2UQ0PM8S8LGZgdue88ZtBfFJkaediwyu8xIn9HJ+dYtQpw6fhf2ddO5enx"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يسأل عن تفاصيل إضافية ودقيقة حول ما يحتوي عليه ملف index.html. يجب شرح كافة الأجزاء التقنية، الهياكل، الخصائص التفاعلية، والواجهات البرمجية الموجودة داخل الهيكل بالتفصيل.",
+                    "plan": "استعراض وتفصيل المكونات الدقيقة والخصائص المتقدمة المكتشفة في ملف index.html وإيضاحها للمستخدم."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "بالإضافة إلى البنية العامة، يتضمن ملف `index.html` العديد من التفاصيل والآليات البرمجية المتقدمة الدقيقة:\n\n---\n\n### 1. 🧠 أداة العقل المدبر الذكية (`.ai-widget`):\n- **مقابض تغيير الحجم المتعددة الاتجاهات (`.ai-resizer-*`)**: 8 زوايا وأطراف لتكبير وتصغير نافذة المحادثة بحرية كاملة (`r, l, t, b, br, bl, tr, tl`).\n- **الشريط الجانبي لسجل المحادثات (`#aiHistorySidebar`)**: لإظهار والتحكم في المحادثات السابقة (`Recent Chats`).\n- **شريط العلوي التفاعلي (`.ai-header`)**:\n  - ساعة حية دقيقة (`#aiLiveClock`) تعمل بصيغة مونوسبيس.\n  - عداد زمني ديناميكي (`#aiDynamicTimer`).\n  - شارة حالة صحة النظام (`#systemHealthBadge`) لتحديث الحالة تلقائياً (`SYSTEM READY`).\n  - أدوات سريعة: زر التحديث للترقيات والتطوير (`🚀`)، إنشاء محادثة جديدة (`＋`)، التكبير الكامل/الاستعادة (`⬜`)، إعادة إعداد مفاتيح Gemini (`⋮`)، والتصغير (`—`).\n- **📟 شاشة الباورشيل/التيرمينال التفاعلية (`#aiTerminal`)**: شاشة سوداء منسقة داخل النافذة مع شريط أدوات يحتوي على زر إعادة التشغيل (Rerun)، الإيقاف (Stop)، وتنظيف الشاشة (Clear).\n- **حقل الإدخال الذكي وشريط الأدوات السفلي**:\n  - إمكانية معاينة المرفقات والصور أفقياً قبل الإرسال (`#imagePreviewContainer`).\n  - توسيع تلقائي لمساحة الكتابة (`autoResizeInput`).\n  - دعم رفع أنواع متعددة من الملفات: `PDF` و `JSON` والفيديوهات والصور عبر `input[type=\"file\"]`.\n  - **محدد نماذج الذكاء الاصطناعي (`#modelSelector`)**:\n    - **Google Gemini (Elite Tier)**: `Gemini 3.7 Flash (SOTA)`, `Gemini 3.6 Flash`, `Gemini 3.5 Flash-Lite`.\n    - **Google Gemini (Stable Legacy)**: `Gemini 2.0 Flash`, `Gemini 1.5 Pro`.\n    - **DeepSeek (Proxy Bridge)**: `DeepSeek V3 (Chat/Coder)`, `DeepSeek R1 (Reasoning)`.\n\n---\n\n### 2. 🗂️ النافذة المنبثقة الشاملة للمحتوى (`#myModal`):\n- **نظام تنقل بين العناصر**: يحتوي على أزرار \"التالي\" و\"السابق\" للحديث والتنقل بين الدروس أو المحتويات دون إغلاق النافذة (`#modalBackBtn` / `#modalForwardBtn`).\n- **شبكة عرض مزدوجة (`.modal-body-grid`)**:\n  - **القسم الرئيسي (`.modal-main-area`)**: يحتوي على مشغل الفيديو (`#popupVideoContainer`)، الروابط المرفقة (`#popupLinksContainer`)، وقسم التفاصيل المنسق بـ Markdown (`#modalContent`).\n  - **الشريط الجانبي المتقدم (`.modal-sidebar-area`)**:\n    - 📚 **قائمة دروس الدورة التدريبية** (`#playlistSection`).\n    - 🖼️ **معرض الصور المستقل** (`#imagesSection`).\n    - 📄 **قائمة ملفات PDF المستقلة** (`#pdfsSection`).\n    - 🧠 **الفهارس الموضوعية (حسب المواضيع)** (`#thematicSection`).\n    - ⏱️ **الفصول والطوابع الزمنية والتفاعلية** مع إشعار الحالات غير المدعومة (`#chaptersSection`).\n    - 💡 **التوصيات والدروس ذات الصلة** (`#recommendationsContainer`).\n\n---\n\n### 3. 🚨 نظام لوحة إصلاح الطوارئ (`#emergencyOverlay`):\n- لوحة عائمة مجهزة للظهور فوق التطبيق بالكامل عند حدوث عطل برمجي أو استدعائها يدوياً اختصاراً عبر **`Ctrl + Shift + E`**.\n- تتيح للمستخدم إمكانية **إصلاح الموقع واستعادة النسخة السليمة فوراً** (`emergencyRepair`)، مع إمكانية تحديث الصفحة أو إغلاق اللوحة وشاشة عرض حالة النظام.",
+              "thoughtSignature": "EmcKZQERTTIPWfo/qlMgPLzDZszFTwXabHwWPaxvD/QRcifrqsDQ7VSBQse493moEk0XTfkyedPTLm+iUW1pUTnwiTG2XhF3SeQKJcM0yM7CbiifYqkRdXmr2VR5EWdHW8d21To4TZEg"
             }
           ],
-          "model": "gemini-3.5-flash-lite"
+          "model": "gemini-3.6-flash"
         }
       ]
+    },
+    {
+      "id": "1788200002716",
+      "title": "محادثة جديدة",
+      "history": []
+    },
+    {
+      "id": "1788199413777",
+      "title": "محادثة جديدة",
+      "history": []
+    },
+    {
+      "id": "1788199212827",
+      "title": "محادثة جديدة",
+      "history": []
+    },
+    {
+      "id": "1788199022764",
+      "title": "محادثة جديدة",
+      "history": []
     }
   ],
-  "activeSessionId": "1788192779619",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك! أنا بخير ولله الحمد، ومستعد تماماً لمساعدتك في أي مشروع برمجي، أو هندسة وتطوير الأنظمة، أو حل أي تحدٍ تقني تواجهه. \\n\\nكيف يمكنني مساعدتك اليوم؟\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك مجدداً! \\n\\nكيف يمكنني خدمتك اليوم؟ هل لديك مشروع معين تعمل عليه، أو مشكلة برمجية تحتاج لحلها؟ أنا هنا لدعمك بكل ما تحتاجه.\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"ماذا يعني ❌ فشل: Bridge error: 500\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\"Bridge error\"},\"id\":\"call_57878\"}}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"searchCode\",\"response\":{\"content\":\"supabase_bridge_logic.js, .artifacts/دليل_محرك_الربط_Edge_Function.artifact.md, ai_engine_core.js, Worker.js, المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md\"}}}]}]",
-  "timestamp": "2026-08-31T20:22:50.722Z"
+  "activeSessionId": "1788207788752",
+  "pendingHistory": null,
+  "timestamp": "2026-08-31T20:23:08.753Z"
 }
