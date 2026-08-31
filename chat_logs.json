@@ -2,25 +2,8 @@
   "sessions": [
     {
       "id": "1788192779619",
-      "title": "مرحباً بك مجدداً! \n\nكيف يمكنني...",
+      "title": "مرحباً بك! أنا **العقل المدبر ...",
       "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! أنا بخير ولله الحمد، ومستعد تماماً لمساعدتك في أي مشروع برمجي، أو هندسة وتطوير الأنظمة، أو حل أي تحدٍ تقني تواجهه. \n\nكيف يمكنني مساعدتك اليوم؟"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
         {
           "role": "user",
           "parts": [
@@ -33,7 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "مرحباً بك مجدداً! \n\nكيف يمكنني خدمتك اليوم؟ هل لديك مشروع معين تعمل عليه، أو مشكلة برمجية تحتاج لحلها؟ أنا هنا لدعمك بكل ما تحتاجه."
+              "text": "مرحباً بك! أنا **العقل المدبر (Mastermind)**، المعماري السيادي الشامل لـ VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في تطوير، هندسة، أو تحسين النظام والواجهات البرمجية؟ أنا جاهز لكل التحديات التقنية والتصميمية!",
+              "thoughtSignature": "El4KXAERTTIPedGMpCZLRArWc/7BT70vWMZZG9pKY2x4OTsfvieDvyYNwoVT1P1Fnc7bDjviLl5xK2V9C7l2s7Ax1PmYpXeg+DBn1lZM6CbRMKVrOgiNQBrUGERu+QdP"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -42,6 +26,6 @@
     }
   ],
   "activeSessionId": "1788192779619",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-08-31T20:31:39.643Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-31T20:31:45.103Z"
 }
