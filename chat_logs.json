@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788210309098",
-      "title": "أهلاً بك! بصفتي العقل المدبر (...",
+      "title": "مرحباً بك! كيف يمكنني مساعدتك ...",
       "history": [
         {
           "role": "user",
@@ -16,8 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "أهلاً بك! بصفتي العقل المدبر (Mastermind) والمهندس المعماري المطلق لأكاديمية VSA، أنا جاهز تماماً لتوجيه عمليات التطوير، وتحليل الشيفرات البرمجية، وابتكار واجهات بصرية وتجارب مستخدم فائقة الدقة والجمال.\n\nكيف يمكنني مساعدتك اليوم؟ تفضل بطرح فكرتك، مشروعك، أو التعديل الذي ترغب في تنفيذه.",
-              "thoughtSignature": "El4KXAERTTIP2xK8rGquEzE5ay1xhTEFTRjjxu9n897/4E3tjbFa3Gb7UGvVTokUk7wUq22vFVAz9ijlkM1/DXF3qgG05+d0lH8MZLlmjPs3ydxZY7t4IVtiqkyCDVxO"
+              "text": "مرحباً بك! كيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIP0cOHd6m4yRoicX9uYf3ngmNxe3eXcBrvDu+3cfq4A04sNd5mPg9vGyAQrppji1YtUeKriLjZMBTqFzm3s01WWlduOuj9AUsLAw/K+v+xMSroqDuW3sQ+"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -92,6 +92,6 @@
     }
   ],
   "activeSessionId": "1788210309098",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-08-31T21:11:06.299Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-31T21:11:12.445Z"
 }
