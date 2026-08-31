@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1787757528819",
-      "title": "العفو يا صديقي! العفو منك، وسع...",
+      "title": "أهلاً بك مجدداً! 😊 \n\nكيف حالك...",
       "history": [
         {
           "role": "user",
@@ -204,11 +204,29 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك مجدداً! 😊 \n\nكيف حالك اليوم؟ هل نكمل نقاشنا الشيق حول الذكاء الاصطناعي والبرمجة، أم أن هناك شيئاً جديداً تريد أن نتحدث عنه أو ننجزه معاً؟ أنا جاهز! 🚀",
+              "thoughtSignature": "El4KXAERTTIPHbxRnKanFOZoeqn+5b0E87ttvJufLYX4XwPSDmNWmxqugyaYRNHFqqX17ThGKOJHasE/yNulumojz8L0/sCErS2/T/9berZUaS35pV9jw0b2poigSm+R"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1787757528819",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T09:42:54.773Z"
+  "timestamp": "2026-08-31T09:42:59.317Z"
 }
