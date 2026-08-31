@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1787757528819",
-      "title": "أنا في أفضل حالاتي التشغيلية! ...",
+      "title": "بكل سرور وحماس! 🎮 \n\nأي نوع من...",
       "history": [
         {
           "role": "user",
@@ -57,11 +57,29 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل نلعب لعبة انا ومعك"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "بكل سرور وحماس! 🎮 \n\nأي نوع من الألعاب تفضل أن نلعب؟ إليك بعض الخيارات الممتعة:\n\n1. **لعبة الـ 20 سؤال (خمن الشخصية أو الشيء):** تفكر في شخصية/شيء وأنا أسألك أسئلة إجابتها (نعم/لا) حتى أخمنه، أو العكس!\n2. **لعبة الألغاز الذهنية والفكرية:** أطرح عليك لغزاً ذكياً وتحاول حله، ثم نرى كم نقطة ستجمع.\n3. **تحدي المعلومات العامة / الأسئلة السريعة (Trivia):** في التكنولوجيا، التاريخ، الجغرافيا، أو أي مجال تختاره.\n4. **لعبة الكلمات وتكملة القصة:** نبني قصة مشوقة جملة بجملة أو كلمة بكلمة.\n5. **مغامرة نصية تفاعلية (RPG / Text Adventure):** تختار عالماً (فضاء، عالم خيالي، تحقيق بوليسي) وأنت البطل وتقرر الخطوات التالية!\n\nما الذي يروق لك، أم لديك لعبة أخرى في بالك تريد أن نلعبها؟ 🎲",
+              "thoughtSignature": "EmIKYAERTTIPYntFlRzDhB/uGZ2PAIS9womBg0P1uw6xFSHLrpAtdkZwSZQLY+7LX6z+v23EtUxd85e9hmV03i7FJTLPMyP0JzTT4Cg2ldtwROVO5hS+uecbMJzyEaT5A2G+Eg=="
+            }
+          ],
+          "model": "gemini-3.7-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1787757528819",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك! أنا **العقل المدبر (Mastermind)**، المعماري السيادي ومحرك الابتكار البصري والبرمجي في أكاديمية VSA. \\n\\nكيف يمكنني مساعدتك اليوم؟ هل نبدأ بتطوير ميزة جديدة، فحص المشروع، تحسين الواجهات، أم تنفيذ مهام برمجية متقدمة؟ أنا جاهز وفي أتم الاستعداد!\",\"thoughtSignature\":\"El4KXAERTTIPK8N1t7fdlx/MgvwKYNwfzbSoKGhQISvNLuVvvgtQPTtHWKF4guLAYk8ooDBLpMOU7isTGv8AJt80Gf56dacMEmo+uYFMm5GENY3P4dAOI2cUbUoft6aM\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"الحمد لله، الأنظمة تعمل بكفاءة تامة وجاهزة بالكامل لتنفيذ أي مشروع أو تعديل برمجي أو تصميم بصري بدقة متناهية. 🚀\\n\\nكيف تجري أمورك اليوم؟ أخبرني، ما هو التحدي أو الفكرة التي ترغب في أن نعمل عليها سوياً الآن؟\",\"thoughtSignature\":\"El4KXAERTTIPMGRDxwO0Hy6ecEEicRa5hWptpEFA95p9JkuAzoRMIyVomnZXUEk7zTD7A2Siori2CZJMvfe/XfM0CkTja/IS7bl3/szPTZN/vQ+diTvH7PtBgri7UnCW\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل انت بخير\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أنا في أفضل حالاتي التشغيلية! محركاتي الذكية تعمل بأقصى طاقة، وكل الأدوات البرمجية والبصرية متأهبة لتلبية أي طلب وإنجازه بأعلى معايير الجودة والإتقان. ⚡️\\n\\nشكراً لسؤالك اللطيف. هل نبدأ العمل على شيء ممتع اليوم؟ شاركني بما يدور في ذهنك!\",\"thoughtSignature\":\"El4KXAERTTIP2PJQicbuwNLTy43S6lox0Cjv57B4rnQusOYIVllcJ0tBVdK+MWtKNEK9em3pxcu2gowIZKt3GOtYIi+OkVx5N0WhPMMcg8ZzQySw2557FzdxatbD9Ap2\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل نلعب لعبة انا ومعك\"}]}]",
-  "timestamp": "2026-08-31T09:38:34.450Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-31T09:38:56.134Z"
 }
