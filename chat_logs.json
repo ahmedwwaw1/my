@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788209536737",
+      "title": "مرحباً بك! كيف يمكنني مساعدتك ...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! كيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPjXrsDQKtI08WaKjv47GEreSzvKA4tKKQX26AqCv+nH3WEkuLjhLCdV433X97Kqg/x8jMbPdY46sdJeRq4YeiDicXWe85pcO7JKged9+nYeTOW4o2pTpd"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788209536737",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T20:52:24.580Z"
+  "timestamp": "2026-08-31T20:52:32.742Z"
 }
