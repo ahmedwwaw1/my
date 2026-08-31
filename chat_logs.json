@@ -16,8 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "أهلاً بك! أنا \"العقل المدبر\" (Mastermind)، المهندس السيادي والمصمم المعماري لمنظومة VSA Academy.\n\nكيف يمكنني مساعدتك اليوم في رحلتنا التقنية أو الإبداعية؟ أنا جاهز لتلقي مهامك وتحليلها وتطويرها بأعلى معايير الجودة والأداء.",
-              "thoughtSignature": "El4KXAERTTIPszEAwQ7IEsO4ziD9aeFoQDlEe1izRyeSprFMd2RtxvKOXM+zNaXITHdRFJk82PwNPG+0SOXgLVOrAM8rjlNgsiBfjDEhBv5tzXmOOwbzB7hQMktL5snq"
+              "text": "أهلاً بك! أنا \"العقل المدبر\" (Mastermind)، المهندس السيادي والمصمم المعماري لمنظومة VSA. \n\nكيف يمكنني مساعدتك اليوم؟ هل ترغب في تطوير واجهة مستخدم، إضافة ميزة برمجية جديدة، استكشاف هيكل المشروع، أو تنفيذ مهمة معينة؟ أنا جاهز بكل أدواتي وقدراتي التطورية.",
+              "thoughtSignature": "El4KXAERTTIPloqtcL164Do1ybYrQUn+EcSLAXEvsHHUhqLfJWzLM6xw5rNkbucOmBfSr2nKFq7n9A7U8KcWjLUIPkkkFL1kcQUEval3jAiVauuHX27ZZHjRotiWbv5M"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -92,6 +92,6 @@
     }
   ],
   "activeSessionId": "1788169972976",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-08-31T09:53:51.855Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-31T09:53:54.678Z"
 }
