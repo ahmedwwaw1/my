@@ -63,7 +63,7 @@
       ]
     }
   ],
-  "activeSessionId": "1788196391928",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك قرائة ملف index.html\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"قراءة ملف index.html للتحقق من محتواه وهيكليته.\",\"reasoning\":\"المستخدم يطلب قراءة ملف index.html، وسأقوم باستخدام أداة قراءة الملفات للقيام بذلك.\"},\"id\":\"call_153260\"}}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يطلب قراءة ملف index.html، وسأقوم باستخدام أداة قراءة الملفات للقيام بذلك.\",\"plan\":\"قراءة ملف index.html للتحقق من محتواه وهيكليته.\"}}}}]}]",
-  "timestamp": "2026-08-31T17:13:16.568Z"
+  "activeSessionId": "1788196414032",
+  "pendingHistory": null,
+  "timestamp": "2026-08-31T17:13:34.032Z"
 }
