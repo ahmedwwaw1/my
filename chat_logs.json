@@ -1,6 +1,65 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788172308173",
+      "title": "نعم، بالطبع! أمتلك القدرة الكا...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك البحث في الانترنت"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "الرد على المستخدم وتأكيد قدرتي التامة على البحث في الإنترنت باستخدام أداة رادار الاستكشاف العالمي (web_search) أو قراءة الروابط (read_url).",
+                  "expected_outcome": "تأكيد جاهزية أداة البحث في الإنترنت والتواصل الفعال مع المستخدم.",
+                  "reasoning": "المستخدم يسأل عما إذا كان بإمكاني البحث في الإنترنت، وأنا أمتلك بالفعل أداة `web_search` المخصصة لهذا الغرض. سأجيبه بإيجابية وأوضح له كيف يمكنني مساعدته."
+                },
+                "id": "call_975462"
+              },
+              "thoughtSignature": "El4KXAERTTIPJtBqwEV8vAVc8Qfg5wXiJZDh9ezCHJzEkxGzl8xJ8w5R3Iv5LImTY3nkzEAzfYKo6kg3o4AovSwSGKBCKyB5R6SVzv7yw+rVI+i+fnfVfQCopqW5GMRr"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يسأل عما إذا كان بإمكاني البحث في الإنترنت، وأنا أمتلك بالفعل أداة `web_search` المخصصة لهذا الغرض. سأجيبه بإيجابية وأوضح له كيف يمكنني مساعدته.",
+                    "plan": "الرد على المستخدم وتأكيد قدرتي التامة على البحث في الإنترنت باستخدام أداة رادار الاستكشاف العالمي (web_search) أو قراءة الروابط (read_url).",
+                    "outcome": "تأكيد جاهزية أداة البحث في الإنترنت والتواصل الفعال مع المستخدم."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "نعم، بالطبع! أمتلك القدرة الكاملة على البحث في الإنترنت، استكشاف أحدث المعلومات، قراءة الروابط، وجمع البيانات بدقة عالية. \n\nكيف يمكنني مساعدتك اليوم؟ هل تبحث عن معلومة معينة، توثيق تقني، أو موضوع محدد تريد مني البحث عنه؟",
+              "thoughtSignature": "El4KXAERTTIPONAHQEJyULyKk835DktR+Fkn3ku6EZ9riBG5uDpnS+SdRCTWDtdgrl5zgpq/UixKfQZeI8FK0wsbbYs+V6wy23WEAO0tt5PUISkZBoqwxs8lAdPQ0yeu"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788172308173",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك البحث في الانترنت\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"الرد على المستخدم وتأكيد قدرتي التامة على البحث في الإنترنت باستخدام أداة رادار الاستكشاف العالمي (web_search) أو قراءة الروابط (read_url).\",\"expected_outcome\":\"تأكيد جاهزية أداة البحث في الإنترنت والتواصل الفعال مع المستخدم.\",\"reasoning\":\"المستخدم يسأل عما إذا كان بإمكاني البحث في الإنترنت، وأنا أمتلك بالفعل أداة `web_search` المخصصة لهذا الغرض. سأجيبه بإيجابية وأوضح له كيف يمكنني مساعدته.\"},\"id\":\"call_975462\"},\"thoughtSignature\":\"El4KXAERTTIPJtBqwEV8vAVc8Qfg5wXiJZDh9ezCHJzEkxGzl8xJ8w5R3Iv5LImTY3nkzEAzfYKo6kg3o4AovSwSGKBCKyB5R6SVzv7yw+rVI+i+fnfVfQCopqW5GMRr\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يسأل عما إذا كان بإمكاني البحث في الإنترنت، وأنا أمتلك بالفعل أداة `web_search` المخصصة لهذا الغرض. سأجيبه بإيجابية وأوضح له كيف يمكنني مساعدته.\",\"plan\":\"الرد على المستخدم وتأكيد قدرتي التامة على البحث في الإنترنت باستخدام أداة رادار الاستكشاف العالمي (web_search) أو قراءة الروابط (read_url).\",\"outcome\":\"تأكيد جاهزية أداة البحث في الإنترنت والتواصل الفعال مع المستخدم.\"}}}}]}]",
-  "timestamp": "2026-08-31T10:32:01.672Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-31T10:32:12.275Z"
 }
