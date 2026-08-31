@@ -1,31 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1787757528819",
-      "title": "على الرحب والسعة دائماً! إذا ا...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "لا شكرا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "على الرحب والسعة دائماً! إذا احتجت إلى أي مساعدة برمجية أو تطويرية مستقبلاً، أنا في الخدمة. بالتوفيق!",
-              "thoughtSignature": "EqwBCqkBARFNMg/rcugk4E4zWBpHN9h64QGbXdEv8C1VHXsn8bx0ib1aKxXWroDhjnsXkTx9dahzMnlPPJL1DN4pspWizevT5scAnFDW0ARq6IS5ki4FJAoeQz5jl3/JjiLTB9WJTadyDUpER74vVQX/ZwWCBpIU1kw+XQOrhWwnWfxI9Rj7jshijwJ+bBv8mpqLZFQzt8EhxP8FczwlIZRcjo2PtDI5ZOcXolkCdQ=="
-            }
-          ],
-          "model": "gemini-3.7-flash"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788169024536",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T09:37:04.536Z"
+  "timestamp": "2026-08-31T09:37:09.421Z"
 }
