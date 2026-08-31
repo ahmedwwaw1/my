@@ -26,6 +26,6 @@
     }
   ],
   "activeSessionId": "1788210159483",
-  "pendingHistory": null,
-  "timestamp": "2026-08-31T21:02:48.327Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك اعطائي اسماء ملفاتي\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"استعراض هيكل المشروع وملفاته المتاحة لعرضها على المستخدم.\",\"reasoning\":\"المستخدم يطلب معرفة أسماء ملفاته، لذا نحتاج للبحث في ملفات المستودع أو استعراضها.\"},\"id\":\"call_39253\"},\"thoughtSignature\":\"El4KXAERTTIPBNtZyR6pyUC/kissxx6NkpPMWxssiyCKyqkM2P2FLQbLW212xxy8QFs+AkT/NEWrTS+YeDphcOtSuatskXYZ1udulEGAqkD6nsMG9pZtX7D76p8SySwC\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يطلب معرفة أسماء ملفاته، لذا نحتاج للبحث في ملفات المستودع أو استعراضها.\",\"plan\":\"استعراض هيكل المشروع وملفاته المتاحة لعرضها على المستخدم.\"}}}}]}]",
+  "timestamp": "2026-08-31T21:02:49.521Z"
 }
