@@ -1,31 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788208308059",
-      "title": "مرحباً بك! بصفتي العقل المدبر ...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "مرحباً بك! بصفتي العقل المدبر (Mastermind) ومهندس الأنظمة الشامل في أكاديمية VSA، أنا هنا لدعمك ومساعدتك في تطوير البرمجيات، تحسين واجهات المستخدم، معالجة المشاكل البرمجية، أو تنفيذ أي أفكار إبداعية وهندسية تود إنجازها.\n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "El4KXAERTTIP99/hpZkamH9iIWfQ7Bvy9bSy00EgKFG8rm6hpSG/IEsNBmReJ8DMOtM3J4uFcvtZJEZ2AJ7JLHtGLQe9kMB9DvZjQC//9X4nU4CkhEEr+6IvKjXOVL72"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788211395433",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T21:23:21.338Z"
+  "timestamp": "2026-08-31T21:23:23.136Z"
 }
