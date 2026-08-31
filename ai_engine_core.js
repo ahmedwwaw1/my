@@ -2,6 +2,34 @@
         // === AI Orchestrator (Gemini) Integration ===
         // ==========================================
 
+        const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
+        const SUPABASE_BRIDGE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co/functions/v1/vsa-bridge';
+
+        async function callBridge(action, payload) {
+            try {
+                const res = await fetch(SUPABASE_BRIDGE_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'apikey': SUPABASE_KEY
+                    },
+                    body: JSON.stringify({ action, ...payload })
+                });
+
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(error.message || `Bridge error: ${res.status}`);
+                }
+
+                return await res.json();
+            } catch (e) {
+                console.error("Bridge Call Failed:", e);
+                throw e;
+            }
+        }
+
         let geminiApiKey = '';
         let openaiApiKey = '';
         let claudeApiKey = '';
@@ -233,7 +261,7 @@
         }
 
         async function fetchApiKeyFromSupabase(id) {
-            // 💓 نبض النظام التلقائي (System Heartbeat)
+            // ...
             if (!window.heartbeatStarted) {
                 window.heartbeatStarted = true;
                 setInterval(async () => {
@@ -249,12 +277,10 @@
                     }
                 }, 30000); // جس نبض كل 30 ثانية
             }
-            const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-            const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
 
             try {
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/secret_settings?id=eq.${id}`, {
-                    headers: { 'apikey': SERVICE_ROLE_KEY, 'Authorization': `Bearer ${SERVICE_ROLE_KEY}` }
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
                 const data = await res.json();
                 return data.length > 0 ? data[0].secret_value : null;
@@ -264,14 +290,11 @@
         }
 
         async function saveApiKeyToSupabase(id, key) {
-            const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-            const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
-
             await fetch(`${SUPABASE_URL}/rest/v1/secret_settings`, {
                 method: 'POST',
                 headers: {
-                    'apikey': SERVICE_ROLE_KEY,
-                    'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
                     'Content-Type': 'application/json',
                     'Prefer': 'resolution=merge-duplicates'
                 },
@@ -279,42 +302,37 @@
             });
         }
 
-        // 🎯 محرك الاتصال الموحد (The Unified safeGithubFetch)
+        // 🎯 محرك الاتصال الموحد (The Unified safeGithubFetch via Bridge)
         async function safeGithubFetch(endpoint, options = {}, isRetry = false) {
-            const token = getCleanGithubToken();
-            if (!token) throw new Error("GitHub Token غير متوفر.");
-
-            const url = endpoint.startsWith('http') ? endpoint : `https://api.github.com/repos/${GITHUB_REPO}/${endpoint}`;
-            const defaultHeaders = {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/vnd.github+json',
-                'X-GitHub-Api-Version': '2022-11-28'
-            };
-
-            const mergedOptions = {
-                ...options,
-                headers: { ...defaultHeaders, ...options.headers },
-                mode: 'cors'
+            const payload = {
+                endpoint: endpoint.startsWith('http') ? endpoint : `https://api.github.com/repos/${GITHUB_REPO}/${endpoint}`,
+                method: options.method || 'GET',
+                body: options.body ? JSON.parse(options.body) : undefined,
+                headers: options.headers
             };
 
             try {
-                const res = await fetch(url, mergedOptions);
-
-                // 🛠️ إذا وجد مشكلة في الصلاحيات ولم نقم بالمحاولة الثانية بعد
-                if (res.status === 401 && !isRetry) {
-                    console.warn("🛠️ محرك الأمان: كشف خطأ 401، بدء الإصلاح التلقائي...");
-                    await repairSystem();
-                    return await safeGithubFetch(endpoint, options, true); // إعادة المحاولة
-                }
-
-                return res;
+                const data = await callBridge('github', payload);
+                // محاكاة كائن Response للتوافق مع بقية الكود
+                return {
+                    ok: true,
+                    status: 200,
+                    json: async () => data,
+                    text: async () => typeof data === 'string' ? data : JSON.stringify(data)
+                };
             } catch (e) {
+                console.error("🛠️ Bridge GitHub Error:", e);
                 if (!isRetry) {
-                    console.warn("🛠️ محرك الأمان: خطأ شبكة، محاولة الإصلاح...");
+                    console.warn("🛠️ محاولة إصلاح النظام قبل إعادة المحاولة عبر الجسر...");
                     await repairSystem();
                     return await safeGithubFetch(endpoint, options, true);
                 }
-                throw e;
+                return {
+                    ok: false,
+                    status: 500,
+                    json: async () => ({ message: e.message }),
+                    text: async () => e.message
+                };
             }
         }
 
@@ -1408,51 +1426,14 @@
                         thinkMsg.innerText = `🧠 جاري التفكير باستخدام ${modelName}...`;
                     }
 
-                    let url = '';
-                    let useProxy = (provider !== 'google' && mastermindProxyUrl); // استخدام الجسر للشركات التي تحجب المتصفح
-
-                    if (useProxy) {
-                        url = mastermindProxyUrl;
-                    } else {
-                        if (provider === 'google') {
-                            // نظام التوجيه الديناميكي للإصدارات: v1 للمستقر، v1beta للأحدث والتجريبي
-                            const isBeta = modelName.includes('exp') ||
-                                           modelName.includes('preview') ||
-                                           modelName.includes('beta') ||
-                                           modelName.startsWith('gemini-3');
-                            const apiVersion = isBeta ? 'v1beta' : 'v1';
-                            url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelName}:generateContent?key=${key}`;
-                        } else if (provider === 'openai') {
-                            url = 'https://api.openai.com/v1/chat/completions';
-                        } else if (provider === 'anthropic') {
-                            url = 'https://api.anthropic.com/v1/messages';
-                        } else if (provider === 'deepseek') {
-                            url = 'https://api.deepseek.com/v1/chat/completions';
-                        }
-                    }
-
                     try {
                         const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 60000);
-
-                        let fetchOptions = {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            signal: controller.signal
-                        };
-
-                        // إذا كنا نستخدم بروكسي، نرسل الهدف الحقيقي في الهيدر أو البودي
-                        if (useProxy) {
-                            fetchOptions.headers['x-target-url'] = (provider === 'anthropic') ? 'https://api.anthropic.com/v1/messages' :
-                                                                  (provider === 'openai') ? 'https://api.openai.com/v1/chat/completions' :
-                                                                  'https://api.deepseek.com/chat/completions';
-                        }
+                        const timeoutId = setTimeout(() => controller.abort(), 90000);
 
                         let body = {};
                         if (provider === 'google') {
                             body = { system_instruction: systemInstruction, contents: history.map(h => ({ role: h.role, parts: h.parts })), tools: tools, generationConfig: generationConfig };
                         } else if (provider === 'openai' || provider === 'deepseek') {
-                            fetchOptions.headers['Authorization'] = `Bearer ${key}`;
                             const messages = history.map(h => ({
                                 role: h.role === 'model' ? 'assistant' : (h.role === 'user' ? (h.parts[0].functionResponse ? 'tool' : 'user') : 'system'),
                                 content: h.parts[0].text || '',
@@ -1462,31 +1443,16 @@
                             messages.unshift({ role: 'system', content: constitution });
                             body = { model: modelName, messages: messages, tools: tools[0].function_declarations.map(f => ({ type: 'function', function: { name: f.name, description: f.description, parameters: f.parameters } })), tool_choice: 'auto' };
                         } else if (provider === 'anthropic') {
-                            fetchOptions.headers['x-api-key'] = key;
-                            fetchOptions.headers['anthropic-version'] = '2023-06-01';
                             body = { model: modelName, system: constitution, max_tokens: 4096, messages: history.filter(h => !h.parts[0].functionResponse).map(h => ({ role: h.role === 'model' ? 'assistant' : 'user', content: h.parts[0].text || '' })), tools: tools[0].function_declarations.map(f => ({ name: f.name, description: f.description, input_schema: f.parameters })) };
                         }
 
-                        fetchOptions.body = JSON.stringify(body);
-                        const res = await fetch(url, fetchOptions);
+                        const data = await callBridge('chat', {
+                            provider: provider,
+                            model: modelName,
+                            payload: body
+                        });
+
                         clearTimeout(timeoutId);
-
-                        const data = await res.json();
-                        if (!res.ok) {
-                            lastError = data.error?.message || data.error || JSON.stringify(data);
-                            console.error(`🔴 API Error (${modelName}):`, lastError);
-
-                            // تحسين رسالة الخطأ للمستخدم
-                            if (res.status === 0 || lastError.includes('TypeError')) {
-                                return { text: `🛡️ <b>خطأ في الجسر (Proxy Error):</b> تعذر الاتصال بـ Cloudflare.<br>يرجى التأكد من تحديث كود الـ Worker في Cloudflare ومراجعة الرابط في الإعدادات.`, model: "System" };
-                            }
-                            if (res.status === 429 || res.status === 404) {
-                                retryModels.push(modelName);
-                                continue;
-                            }
-                            retryModels.push(modelName);
-                            continue;
-                        }
 
                         let thought = null;
                         let functionCallPart = null;
