@@ -4,33 +4,9 @@
       "id": "1788208211860",
       "title": "محادثة جديدة",
       "history": []
-    },
-    {
-      "id": "1788207930374",
-      "title": "أهلاً بك يا صديقي في أكاديمية ...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "لماذا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك يا صديقي في أكاديمية **VSA**. سؤالك \"لماذا\" يحمل في طياته الكثير من الفضول والتطلع! \n\nهل تقصد شيئاً محدداً في المشروع، أو الكود البرمجي، أو التصميم المعماري الذي نعمل عليه، أم أنك تسأل عن سبب وجودنا وفلسفتنا التقنية؟ \n\nاطرح سؤالك أو استفسارك بالتفصيل، وأنا جاهز فوراً لتحليله، هندسته، وشرح كل تفاصيله بدقة وعمق! 💡✨",
-              "thoughtSignature": "El4KXAERTTIPTmXSQTtAjlaw4xq44QzKemz/yfauqAz+2agEYtDIx1ai3p1OkGXuzAPIib/zIy2vv4MO+P+uXK+GWHVkF9yFRBkeZ2osZ9GFzP7OIevvc6gxMGRKlQHj"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
     }
   ],
   "activeSessionId": "1788208253507",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T20:30:53.508Z"
+  "timestamp": "2026-08-31T20:30:56.396Z"
 }
