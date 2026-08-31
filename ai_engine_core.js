@@ -1445,9 +1445,6 @@
             }
         }
 
-            // تشغيل الحلقة مع السياق الحالي
-            return await runToolLoop([...chatHistory, currentTurn]);
-        
         async function executeAiFunction(name, args) {
             const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
             const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
