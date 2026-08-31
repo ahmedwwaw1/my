@@ -1,48 +1,6 @@
 {
   "sessions": [
     {
-      "id": "1788210309098",
-      "title": "صحيح، لا يمكنني تصفح أو فتح ال...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "مرحباً بك! كيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "El4KXAERTTIP0cOHd6m4yRoicX9uYf3ngmNxe3eXcBrvDu+3cfq4A04sNd5mPg9vGyAQrppji1YtUeKriLjZMBTqFzm3s01WWlduOuj9AUsLAw/K+v+xMSroqDuW3sQ+"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "انت لا يمكنك فحص ملفات"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "صحيح، لا يمكنني تصفح أو فتح الملفات الموجودة على جهازك بشكل مباشر، ولكن **يمكنني مساعدتك بطرق أخرى كثيرة**، مثل:\n\n1. **نسخ ولصق النصوص:** يمكنك نسخ النص الموجود داخل الملف (مقال، كود برمجي، بيانات، إلخ) ولصقه هنا، وسأقوم بتحليله، مراجعته، أو تلخيصه لك.\n2. **كتابة الأكواد والملفات:** يمكنني كتابة نصوص البرمجة، أو ملفات التكوين (مثل JSON, CSV, HTML)، ويمكنك حفظها عندك.\n3. **الإجابة على الأسئلة:** طرح أي استفسار وسأجيب عليه.\n\nإذا كان لديك نص أو بيانات تريد العمل عليها، تفضل بلصقها هنا!",
-              "thoughtSignature": "El4KXAERTTIPjgvvHwj/CCNbolQkI9yzu8TlQBjN8fxHcO2o3C33PYMYuW5Qu8dtiyLctin65aMikNo31pm67C1wJI3dj87Dh6mRZKOkn4dbMiP4ScTuCTJlpoFegGgt"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    },
-    {
       "id": "1788210159483",
       "title": "العفو يا صديقي! أنا دائماً في ...",
       "history": [
@@ -111,5 +69,5 @@
   ],
   "activeSessionId": "1788211395433",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T21:23:15.433Z"
+  "timestamp": "2026-08-31T21:23:19.002Z"
 }
