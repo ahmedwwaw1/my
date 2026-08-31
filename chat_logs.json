@@ -68,14 +68,9 @@
           "model": "gemini-3.5-flash-lite"
         }
       ]
-    },
-    {
-      "id": "1788197506888",
-      "title": "محادثة جديدة",
-      "history": []
     }
   ],
   "activeSessionId": "1788199022764",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T17:57:05.508Z"
+  "timestamp": "2026-08-31T17:57:06.908Z"
 }
