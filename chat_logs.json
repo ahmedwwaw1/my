@@ -1,6 +1,30 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788196809757",
+      "title": "مرحباً بك! كيف يمكنني مساعدتك ...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! كيف يمكنني مساعدتك اليوم؟"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788196809757",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T17:25:52.198Z"
+  "timestamp": "2026-08-31T17:26:08.173Z"
 }
