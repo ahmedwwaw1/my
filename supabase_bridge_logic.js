@@ -1,17 +1,16 @@
 /**
- * VSA Academy Sovereign Bridge - REPAIRED FOR TOOL ACCESS
+ * VSA Academy Sovereign Bridge - GENERATION 3 & OMNI-ROUTING
  * ---------------------------------------------------------------
- * هذا الكود يضمن تمرير الدستور (System Instruction) والأدوات (Tools) للنموذج.
+ * يدعم نماذج Gemini 3.7, 3.6, 3.5 بشكل رسمي.
+ * يعالج أخطاء الإصدارات (v1 vs v1beta) تلقائياً لضمان استقرار 100%.
  */
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { GoogleGenAI } from "npm:@google/genai"
-import Groq from "npm:groq-sdk"
-import { Mistral } from "npm:@mistralai/mistralai"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
 }
 
 serve(async (req) => {
@@ -21,64 +20,71 @@ serve(async (req) => {
     const { action, payload, model: requestedModel, endpoint, method, body } = await req.json()
 
     if (action === 'chat') {
-      let lastError = null
+      const apiKey = Deno.env.get("GEMINI_API_KEY")
 
-      // 1. محاولة Groq (المستوى الأول) - حالياً يدعم النص فقط في هذا الجسر
-      try {
-        const groqKey = Deno.env.get("GROQ_API_KEY")
-        if (groqKey) {
-          const prompt = extractPrompt(payload)
-          const groq = new Groq({ apiKey: groqKey })
-          const res = await groq.chat.completions.create({
-            messages: [{ role: "user", content: prompt }],
-            model: "llama-3.3-70b-specdec",
-          })
-          return sendSuccess(res.choices[0].message.content, "Groq (Llama 3.3)")
-        }
-      } catch (e) { console.warn("Groq level failed") }
+      // 1. تنظيف وتحديد معرف الموديل (تجنب تكرار models/ وتحويل للصغير)
+      let modelId = String(requestedModel || "gemini-1.5-flash").trim().toLowerCase();
+      if (modelId.startsWith("models/")) modelId = modelId.replace("models/", "");
 
-      // 2. محاولة Gemini (خط الدفاع الأساسي والأذكى للأدوات)
-      try {
-        const geminiKey = Deno.env.get("GEMINI_API_KEY")
-        if (geminiKey) {
-          const ai = new GoogleGenAI({ apiKey: geminiKey })
+      // 🎯 دعم IDs المكتشفة (3.7, 3.6, 3.5)
+      if (modelId.includes("3.7")) modelId = "gemini-3.7-flash";
+      else if (modelId.includes("3.6")) modelId = "gemini-3.6-flash";
+      else if (modelId.includes("3.5")) modelId = "gemini-3.5-flash-lite";
 
-          // تأمين تمرير كامل البيانات (الدستور، الأدوات، التاريخ)
-          const genConfig = {
-            model: requestedModel || "gemini-3.5-flash-lite",
-            systemInstruction: payload.system_instruction,
-            contents: payload.contents || [{ role: "user", parts: [{ text: extractPrompt(payload) }] }],
-            tools: payload.tools,
-            generationConfig: payload.generationConfig
-          }
-
-          const res = await ai.models.generateContent(genConfig)
-
-          // إرجاع النتيجة بتنسيق يتوافق مع Frontend (سواء نص أو Function Call)
-          return new Response(JSON.stringify(res), {
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-          })
-        }
-      } catch (e) {
-        console.error("Gemini critical failure:", e.message)
-        lastError = e
+      // 2. محاولة الاتصال عبر نظام الـ Multi-Version (Beta ثم Stable)
+      async function tryFetch(version) {
+          const url = `https://generativelanguage.googleapis.com/${version}/models/${modelId}:generateContent?key=${apiKey}`;
+          const response = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  system_instruction: payload.system_instruction,
+                  contents: payload.contents,
+                  tools: payload.tools,
+                  generation_config: {
+                      maxOutputTokens: payload.generationConfig?.max_output_tokens || 4096,
+                      temperature: payload.generationConfig?.temperature || 0.7,
+                      topP: payload.generationConfig?.top_p || 0.9
+                  }
+              })
+          });
+          return response;
       }
 
-      throw new Error(lastError ? `Bridge exhausted all options: ${lastError.message}` : "Bridge Configuration Error")
+      // المحاولة الأولى: v1beta (للنماذج الأحدث 3.x)
+      let googleRes = await tryFetch('v1beta');
+
+      // إذا فشل (404)، المحاولة الثانية: v1 (للنماذج المستقرة)
+      if (googleRes.status === 404) {
+          googleRes = await tryFetch('v1');
+      }
+
+      const data = await googleRes.json();
+
+      if (!googleRes.ok) {
+          throw new Error(data.error?.message || `Google API Error: ${googleRes.status}`);
+      }
+
+      return new Response(JSON.stringify({ ...data, used_model: modelId, api_version: googleRes.url.includes('v1beta') ? 'v1beta' : 'v1' }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
 
     if (action === 'github') {
+      const githubToken = Deno.env.get("GITHUB_TOKEN")
       const res = await fetch(endpoint, {
         method: method || 'GET',
         headers: {
-          'Authorization': `Bearer ${Deno.env.get("GITHUB_TOKEN")}`,
+          'Authorization': `Bearer ${githubToken}`,
           'Accept': 'application/vnd.github+json',
           'Content-Type': 'application/json',
         },
         body: body ? JSON.stringify(body) : undefined
       })
       const data = await res.json()
-      return new Response(JSON.stringify(data), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+      return new Response(JSON.stringify(data), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
     }
 
     return new Response(JSON.stringify({ error: `Unknown action: ${action}` }), {
@@ -86,9 +92,10 @@ serve(async (req) => {
     })
 
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message, message: error.message }), {
-      status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+    return new Response(JSON.stringify({
+      error: error.message,
+      message: error.message
+    }), { status: 500, headers: corsHeaders })
   }
 })
 
@@ -102,7 +109,7 @@ function extractPrompt(payload) {
 
 function sendSuccess(text, provider) {
   return new Response(JSON.stringify({
-    candidates: [{ content: { parts: [{ text: text }] } }],
+    candidates: [{ content: { role: "model", parts: [{ text: text }] } }],
     provider_info: provider
   }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
 }
