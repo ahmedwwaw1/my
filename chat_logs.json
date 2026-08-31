@@ -42,6 +42,6 @@
     }
   ],
   "activeSessionId": "1788192779619",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك! أنا بخير ولله الحمد، ومستعد تماماً لمساعدتك في أي مشروع برمجي، أو هندسة وتطوير الأنظمة، أو حل أي تحدٍ تقني تواجهه. \\n\\nكيف يمكنني مساعدتك اليوم؟\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك مجدداً! \\n\\nكيف يمكنني خدمتك اليوم؟ هل لديك مشروع معين تعمل عليه، أو مشكلة برمجية تحتاج لحلها؟ أنا هنا لدعمك بكل ما تحتاجه.\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"ماذا يعني ❌ فشل: Bridge error: 500\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\"Bridge error\"},\"id\":\"call_57878\"}}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"searchCode\",\"response\":{\"content\":\"supabase_bridge_logic.js, .artifacts/دليل_محرك_الربط_Edge_Function.artifact.md, ai_engine_core.js, Worker.js, المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md\"}}}]}]",
-  "timestamp": "2026-08-31T20:31:38.752Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
+  "timestamp": "2026-08-31T20:31:39.643Z"
 }
