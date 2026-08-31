@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788192779619",
-      "title": "الحمد لله، الأنظمة تعمل بكفاءة...",
+      "title": "أهلاً وسهلاً بك مجدداً! \n\nكيف ...",
       "history": [
         {
           "role": "user",
@@ -39,11 +39,29 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً وسهلاً بك مجدداً! \n\nكيف يمكنني مساعدتك اليوم؟ تفضل بما لديك سواء كان استفساراً تقنياً، فكرة مشروع، أو مهمة برمجية في الكود ماب. أنا في استعداده التام لخوض المهمة.",
+              "thoughtSignature": "EmcKZQERTTIPZmdcoyqDQd2j1efwwsvd61Au4zUjnxXp4aL9x/nJBqB0+/A7gPgR4qVZIvP2iCWu/lbnVlo12TKVAvu/l/pUMWl7Di/hKggDaAzT8ZfrR+zPcFfr3RN5CryKoznOT/XV"
+            }
+          ],
+          "model": "gemini-3.6-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1788192779619",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T20:04:29.959Z"
+  "timestamp": "2026-08-31T20:04:37.053Z"
 }
