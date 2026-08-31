@@ -1,6 +1,11 @@
 {
   "sessions": [
     {
+      "id": "1788199413777",
+      "title": "محادثة جديدة",
+      "history": []
+    },
+    {
       "id": "1788199212827",
       "title": "محادثة جديدة",
       "history": []
@@ -12,6 +17,6 @@
     }
   ],
   "activeSessionId": "1788199413777",
-  "pendingHistory": null,
-  "timestamp": "2026-08-31T18:03:39.284Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
+  "timestamp": "2026-08-31T18:03:56.556Z"
 }
