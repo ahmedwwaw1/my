@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788200472924",
-      "title": "مرحباً بك! كيف يمكنني مساعدتك ...",
+      "title": "أهلاً بك! أنا بأفضل حال ولله ا...",
       "history": [
         {
           "role": "user",
@@ -39,6 +39,24 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال يا جيمي"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا بأفضل حال ولله الحمد ومستعد تماماً لكل ما تطلبه. 🚀\n\nكيف يمكنني مساعدتك اليوم؟ هل نبدأ بتطوير ميزة جديدة، أو مراجعة أكواد، أو أي فكرة مبهرة أخرى؟ تفضل!",
+              "thoughtSignature": "El4KXAERTTIPYgSL8A1vHbUC7QPTnsu0GR2TcZFkoEWdeD7aRNIAQ/IlZKb5o0Blnn1Fi1SjW4zQw5ZrTyo0cigy1iZaXKfNBG64rAecvVh6WSVBFMAYu5wKtxv674ge"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     },
@@ -65,5 +83,5 @@
   ],
   "activeSessionId": "1788200472924",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T18:21:43.620Z"
+  "timestamp": "2026-08-31T18:21:44.907Z"
 }
