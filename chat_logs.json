@@ -2,13 +2,13 @@
   "sessions": [
     {
       "id": "1787757528819",
-      "title": "أهلاً بك. أنا جاهز ومستعد للمس...",
+      "title": "أهلاً بك. أنا \"العقل المدبر\" (...",
       "history": [
         {
           "role": "user",
           "parts": [
             {
-              "text": "كيف الحال"
+              "text": "مرحبا"
             }
           ]
         },
@@ -16,16 +16,16 @@
           "role": "model",
           "parts": [
             {
-              "text": "أهلاً بك. أنا جاهز ومستعد للمساعدة في المهام البرمجية والهندسية.\n\nكيف يمكنني مساعدتك اليوم في المشروع؟",
-              "thoughtSignature": "EmcKZQERTTIPVtO83Dgmxms0OJEAQChIOfIsvaFD3uK+AbFKJk73/AeMJ8QfZfbVP9VbjguIDLz8nAsZr/UTp8gCKrbSwXDUImSKMXLM4ZCiYp80w8gnX4fetv3mfyK0WxX6hGsny8Bj"
+              "text": "أهلاً بك. أنا \"العقل المدبر\" (Mastermind)، المدير التنفيذي والمهندس الذكي لمنظومة VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في التطوير، البرمجة، التحليل الهندسي، أو إدارة المشاريع؟",
+              "thoughtSignature": "El4KXAERTTIPPGxbKL3zUlZqtRmKjhwtu1OERWp645JdhH3Ftau6Xjw7QmRJI+VU+NNdHS3uKf3xPV9HgP5edVmjLHIXTWjYUyFNtjQ3R2Q+sDQTLfbIs9asTdhOrVWj"
             }
           ],
-          "model": "gemini-3.6-flash"
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1787757528819",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T07:53:48.644Z"
+  "timestamp": "2026-08-31T07:53:59.955Z"
 }
