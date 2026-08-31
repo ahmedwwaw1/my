@@ -1,6 +1,48 @@
 {
   "sessions": [
     {
+      "id": "1788194663261",
+      "title": "أهلاً بك مجدداً! كيف يمكنني خد...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! كيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIP8oeqVkqSb5P/hLxy1opZWT4GIY6dg1eVmoUgnlm+1pIs/keOgDHeSCV9GOG6gN6BXLg15L/EztSFBRDjt45CS8ttrO5DceN8s4lnijJxAxYalS1mdWSb"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك مجدداً! كيف يمكنني خدمتِك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPojmPyqG6eY5iPMsI4JxLJLrJvuByWRlrHCA+2liIpFTs5mHvrLUJiy6SHV8KAKjrCSUSGOEOVgTkDtcGQRWWDlJdi+nJeySYU4ce+hLyb7Sf0ZAZzmKk"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1788194480398",
       "title": "محادثة جديدة",
       "history": []
@@ -13,5 +55,5 @@
   ],
   "activeSessionId": "1788194663261",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T16:44:28.025Z"
+  "timestamp": "2026-08-31T16:44:41.793Z"
 }
