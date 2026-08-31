@@ -1,6 +1,11 @@
 {
   "sessions": [
     {
+      "id": "1788208211860",
+      "title": "محادثة جديدة",
+      "history": []
+    },
+    {
       "id": "1788207930374",
       "title": "أهلاً بك يا صديقي في أكاديمية ...",
       "history": [
@@ -26,6 +31,6 @@
     }
   ],
   "activeSessionId": "1788208211860",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك فصح الملفات\"}]}]",
-  "timestamp": "2026-08-31T20:30:46.310Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-31T20:30:47.484Z"
 }
