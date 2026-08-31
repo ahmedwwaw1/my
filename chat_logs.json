@@ -30,6 +30,6 @@
     }
   ],
   "activeSessionId": "1788196534287",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك قرائة ملف index.html\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"المستخدم يطلب قراءة ملف index.html، وسأقوم بقراءته واستعراض محتواه له.\",\"plan\":\"قراءة ملف index.html باستخدام دالة read_file لفحص محتواه وتلبية طلب المستخدم بدقة واحترافية.\"},\"id\":\"call_149811\"}}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يطلب قراءة ملف index.html، وسأقوم بقراءته واستعراض محتواه له.\",\"plan\":\"قراءة ملف index.html باستخدام دالة read_file لفحص محتواه وتلبية طلب المستخدم بدقة واحترافية.\"}}}}]}]",
-  "timestamp": "2026-08-31T17:15:38.307Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-31T17:18:06.756Z"
 }
