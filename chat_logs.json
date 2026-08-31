@@ -2,8 +2,27 @@
   "sessions": [
     {
       "id": "1788210159483",
-      "title": "محادثة جديدة",
-      "history": []
+      "title": "أهلاً بك يا صديقي في **أكاديمي...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "لماذا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك يا صديقي في **أكاديمية VSA (VSA Academy)**! \n\nيبدو أن سؤالك غير مكتمل أو أنك كنت تبدأ جملة وتريد الاستفسار عن شيء محدد (لماذا...؟). \n\nأنا جاهز تماماً وبكامل قدراتي المعمارية والبرمجية والبصرية لمساعدتك في أي استفسار لديك، سواء كان يتعلق بـ:\n- تطوير واجهات المستخدم وتصميمها (UI/UX).\n- البرمجة وتطوير الأنظمة والتطبيقات.\n- شرح مفاهيم تقنية أو برمجية معقدة.\n- أو أي فكرة أو مشروع ترغب في تنفيذه بدقة واحترافية عالية.\n\nتفضل, اطرح سؤالك كاملاً أو وضح لي ما الذي يدور في ذهنك لنبدأ العمل فوراً!",
+              "thoughtSignature": "El4KXAERTTIPbwokvYW3cTVpjqg7NBDqiyOxRfSEeqkKZayXw4QXTIjiywmlRjSEnTuFoQDc+2YHOV3jeFSbbS/vDcZJwdXN5DlRbV1xPn/zJLO5OkFaKEGufP8F8c6A"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
     },
     {
       "id": "1788208308059",
@@ -31,6 +50,6 @@
     }
   ],
   "activeSessionId": "1788210159483",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"لماذا\"}]}]",
-  "timestamp": "2026-08-31T21:02:53.634Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-31T21:03:00.303Z"
 }
