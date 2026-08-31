@@ -72,6 +72,6 @@
     }
   ],
   "activeSessionId": "1788195149713",
-  "pendingHistory": null,
-  "timestamp": "2026-08-31T16:52:38.525Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك قرائة ملف index.html\"}]}]",
+  "timestamp": "2026-08-31T16:52:40.152Z"
 }
