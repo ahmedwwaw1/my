@@ -1,67 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788209536737",
-      "title": "عذراً، لا يمكنني رؤية أو الوصو...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "مرحباً بك! كيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPjXrsDQKtI08WaKjv47GEreSzvKA4tKKQX26AqCv+nH3WEkuLjhLCdV433X97Kqg/x8jMbPdY46sdJeRq4YeiDicXWe85pcO7JKged9+nYeTOW4o2pTpd"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "هل يمكنك فحص ملفاتي"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! \n\nنعم، يمكنك رفع الملفات أو نسخ ولصق محتواها هنا لمساعدتك في فحصها، ومراجعتها، أو الإجابة عن أي استفسارات تتعلق بها. \n\n*(ملاحظة: تأكد من عدم مشاركة أي معلومات شخصية أو حساسة للغاية لأسباب تتعلق بالأمان والخصوصية).* \n\nما هي الملفات التي ترغب في فحصها وماذا تريد مني أن أفعل بها؟",
-              "thoughtSignature": "El4KXAERTTIPDgl9plupNtNJI9mFYYu2Wrc30606Oz0Ggec7anCr6aadJ6Djr9lnCX3zirCrz8yRaUcH4XAjDuptNmqgJTAkJX7JdHexauNAFp4mzhrojYENH7dDCC1y"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "في مستودعي اريني اساميهن"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "عذراً، لا يمكنني رؤية أو الوصول إلى الملفات الموجودة في مستودعك (Repository) بشكل مباشر، لأنني نموذج لغوي ذكاء اصطناعي وليس لدي اتصال مباشر بجهازك أو بحساباتك الشخصية إلا ما تقوم برفعه أو مشاركته معي هنا في المحادثة.\n\nإذا كنت تريد مني فحص ملفات معينة، يمكنك:\n1. **رفع الملفات** مباشرة هنا في المحادثة (إذا كانت صيغتها مدعومة مثل النصوص، المستندات، أو الأكواد).\n2. **نسخ ولصق** محتوى الملفات أو الأكواد هنا.\n3. إعطائي **أسماء الملفات ووصفها** إذا كنت تريد مناقشة هيكلية مشروع معين أو طريقة تنظيم الكود.\n\nكيف تفضل أن نتابع؟",
-              "thoughtSignature": "El4KXAERTTIPAPc+6GDMKNIeHDJGxUQ07cgwadWmm+TrMQhg1mnsO9HUzn2WMbho8prYMz4Qotv3tVEbQNcHrDjNaaOObqmuipahibfrdjPSSLbQxIdUHbkhhkKWGcce"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788209693823",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T20:54:53.823Z"
+  "timestamp": "2026-08-31T20:54:56.648Z"
 }
