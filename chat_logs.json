@@ -2,11 +2,46 @@
   "sessions": [
     {
       "id": "1788182389152",
-      "title": "محادثة جديدة",
-      "history": []
+      "title": "أهلاً بك مجدداً! كيف يمكنني خد...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! كيف يمكنني مساعدتك اليوم؟"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك مجدداً! كيف يمكنني خدمتِك اليوم؟"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
     }
   ],
   "activeSessionId": "1788182389152",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T14:29:28.636Z"
+  "timestamp": "2026-08-31T14:29:38.524Z"
 }
