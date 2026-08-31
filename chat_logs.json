@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788186639548",
-      "title": "بصفتي ذكاءً اصطناعيًا، ليس لدي...",
+      "title": "لا، ليس لدي إمكانية الوصول الم...",
       "history": [
         {
           "role": "user",
@@ -39,11 +39,29 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك الوصول الى ملفاتي في مستودعي على github"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "لا، ليس لدي إمكانية الوصول المباشر إلى حسابك أو مستودعاتك على GitHub إلا إذا قمت أنت بمشاركة محتوى الملفات أو الروابط معنا هنا في المحادثة. \n\nلا أستطيع تصفح مستودعاتك تلقائياً لأسباب تتعلق بالأمان والخصوصية. \n\nولكن، إذا أردت مني مساعدتك في شيء متعلق بمستودعك (مثل كود برمجي، أو ملفات توثيق مثل `AI_AGENTS_REFERENCE.md`)، يمكنك ببساطة **نسخ ولصق** محتوى الملف هنا، وسأقوم بتحليله أو مساعدتك في العمل عليه فوراً!",
+              "thoughtSignature": "El4KXAERTTIP9xu5qZhwYn8Y+T9NwH2Bk9paUZrfGGjsQaYw+IOXSzxAiLmaU6nCjbdbXrYmpj0zel34a/Hi7Ffk5GUrCPJFQ+unl3uROyjq1li6Q89p7oqeoSEls3OP"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1788186639548",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T16:16:30.906Z"
+  "timestamp": "2026-08-31T16:16:33.561Z"
 }
