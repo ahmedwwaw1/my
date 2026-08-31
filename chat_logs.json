@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788194663261",
-      "title": "أهلاً بك مجدداً! كيف يمكنني خد...",
+      "title": "عذراً، ليس لدي إمكانية الوصول ...",
       "history": [
         {
           "role": "user",
@@ -39,6 +39,24 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك البحث في ملفات مستودعي"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "عذراً، ليس لدي إمكانية الوصول المباشر إلى ملفات مستودعك (Repository) إلا إذا قمت برفعها هنا في المحادثة أو نسخ المحتوى ولصقه. \n\nإذا أردت، يمكنك مشاركة الأكواد أو الملفات التي ترغب في البحث عنها أو مناقشتها وسأكون سعيداً بمساعدتك!",
+              "thoughtSignature": "El4KXAERTTIPxXJIY2nEu3jxCEpYgXCI20M0sSsb91e47Nb34ypFDYqwvnLh4+IdFYru7oqwb7CVD7Ir2Ut1eLb9gHc409s8n5QebChXIWhSGujE6WU4bLN+N9A8rjta"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     },
@@ -55,5 +73,5 @@
   ],
   "activeSessionId": "1788194663261",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T16:44:41.793Z"
+  "timestamp": "2026-08-31T16:44:43.194Z"
 }
