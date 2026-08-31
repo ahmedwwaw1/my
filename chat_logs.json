@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788169972976",
-      "title": "دائماً وأبداً إن شاء الله! \n\nأ...",
+      "title": "أهلاً بك! بصفتي العقل المدبر (...",
       "history": [
         {
           "role": "user",
@@ -16,44 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "أهلاً بك! أنا \"العقل المدبر\" (Mastermind)، مهندس النظم السيادي والمصمم المعماري لمنصة VSA. \n\nكيف يمكنني مساعدتك اليوم في رحلتك البرمجية أو التصميمية؟ أنا جاهز لتنفيذ أي مهام بدقة عالية وتحليل عميق.",
-              "thoughtSignature": "El4KXAERTTIPWMxlbS4eQ53MTBET8DBQWJMbK3fqnNPmZcJJdG+YT9yUMUnPjOPUBppzacFSSGSxOc0UxPUYwQkOKKi+st0xwsZREX+D3g9Wq+GCzU794v2UddGMxxpr"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، النظم تعمل بأعلى كفاءة وجاهزة تماماً لأي مهمة برمجية، معمارية، أو إبداعية تفكر في إنجازها! 🚀\n\nأخبرني، ما المشروع أو الفكرة التي نعمل عليها اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPnvQpmmFzIKyOlTs4wOb+Uq0QJBdcZNl8NArTcTfh9zpd/eZBfBRVQydVTJ6slqcgloYFv+h4lBpDAkR5ap20Oh/g+y2wHp2F/OZSgsDTeL+nz1kPHc82"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "الحمد لله"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "دائماً وأبداً إن شاء الله! \n\nأنا معك هنا لأي مهمة تقنية أو إبداعية تحتاجها. هل نبدأ في استعراض شيء معين، تطوير ميزة جديدة، أو فحص كود ونظام؟ طلق الإشارة وأنا في الخدمة!",
-              "thoughtSignature": "El4KXAERTTIPrM4wXFJdwedRfbuv7W/A24nfCFZE0p2r1xJuhv4CrYmulBmjROs+frSpZvuT7zcm5pbYFD3pHWIVZk7SS797DBuDFza2dWzJdGVKmMovRRhOXKmVi5f8"
+              "text": "أهلاً بك! بصفتي العقل المدبر (Mastermind) والمهندس المعماري لمنظومة VSA Academy، أنا جاهز تماماً لتلبية طلباتك، وتطوير المنظومة، وتحقيق أعلى معايير الجمال والكفاءة التقنية. \n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPO7KA+S0S9EqI/Zfx2hEVNBc1eqM5D7mqhLZWRVVIjRlcpL9ZyxfzwngOAfROznz8IwNAVGOadJ1lAMC2XgCLhuQ1g6R4Z6r/DnbEUj6J2GxCCmBMHW7i"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -129,5 +93,5 @@
   ],
   "activeSessionId": "1788169972976",
   "pendingHistory": null,
-  "timestamp": "2026-08-31T10:23:45.151Z"
+  "timestamp": "2026-08-31T10:23:59.111Z"
 }
