@@ -2,11 +2,30 @@
   "sessions": [
     {
       "id": "1788172308173",
-      "title": "محادثة جديدة",
-      "history": []
+      "title": "مرحباً بك! أنا **العقل المدبر ...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **العقل المدبر (Mastermind)**، المعماري السيادي والمهندس المسؤول عن منظومة VSA Academy. \n\nكيف يمكنني مساعدتك اليوم؟ هل ترغب في تطوير واجهة مستخدم، استكشاف بنية المشروع، تنفيذ جراحة برمجية، أو تحليل أكواد معينة؟ أطلق العنان لتطلعاتك وسأقوم بتنفيذها بأعلى معايير الهندسة والدقة البصرية!",
+              "thoughtSignature": "El4KXAERTTIP2z25gwxPC1b1VhXOTzdijyVw6xlqIgwiLjpyAGRNRMKZIAAyEJ+PJi7md43ECL/qCBhowwxapUwoc/cv0WCB5Zx98uHrDVcN3PcwxqAjwNhgO7zc/hIi"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
     }
   ],
   "activeSessionId": "1788172308173",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-08-31T11:35:23.674Z"
+  "pendingHistory": null,
+  "timestamp": "2026-08-31T11:35:26.603Z"
 }
