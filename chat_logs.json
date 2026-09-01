@@ -2,8 +2,27 @@
   "sessions": [
     {
       "id": "1788257592085",
-      "title": "محادثة جديدة",
-      "history": []
+      "title": "أهلاً بك. أنا **العقل المدبر (...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. أنا **العقل المدبر (Mastermind)** — المنظومة المعمارية الذكية والهندسية لـ VSA Academy.\n\nكيف يمكنني مساعدتك اليوم؟ سواء كان ذلك في تطوير الواجهات، مراجعة المعمارية البرمجية، تحسين الأداء، أو حل المشكلات التقنية، أنا في أتم الاستعداد للمباشرة والعمل.",
+              "thoughtSignature": "Eo0GCooGARFNMg+OrESnQI69FriixzwybIFm3UY5ojfPre8h6SoN1mHAXSc/EYXYChXwVMta0/GPQmyCo7bZO0Td8lWGhncGcLXy9ivDZU+BvNQKKaIwxJTLUQ+w9LRcg3y5rPi5aufwEQW6R7kS+wAkLQfyuGjnzpQnVJ4XxpvHhBVMeSFaLMhDWdVLUC8O1/77lyMAVTWKndMfFdldFQ57yY5Jbyl9xLWf4g6fkqQP4dqiu1C1COXN4edrdTCb38RFIKkeohtNO1UKdNGYpASvLcvr+3FtQ1EEkb2d8NggtcYtVTnWMc0Q9pYoep+HpnXkr4MTj1HcTiZM0hdo7BDD6OPxSQT7LgkegVmROurRqNoYPFNr6wgbSdHqQozKdFR+6hw/ELoWtGI91rHT3iV2Uo6cy1j6EhjdMIG8O6fzWy1jxUO9xsgWjZAPTxnc5GY7wNCEvQV6N3/ecwGvvvWb6Lwt78ZcvlX1wmiDtwGMgIEGRhgvKK+NBlW8dYk3DaoyKk9iDj69EAHrMTD7D/AIvfhwWgcWT7QbSnf45m4iKxLpwo2kzYszoI/GlIuGorswYywG1Q27Y7xaRasFANBOaQcQJl4newRqKOV78CPhacruMG/D8gBPdg8NcA+h9hwdtOBy219125Q2RaTZUBMOeuPi1V3VUIr3Pwc8JSgoX0HLXoP5EmqTyxhcH1SWy9LqNcndcCUovsSWKhNJs/XbIjsZUfIXhR9/b4Ap5GQkr2RSQ4IWpv63dYfXO/TLJ9bM10X9CN6btyL1tDf7wu+KaYjJQ2h6D6Fy8Yqi//L/YtoHx3HJ3BLL6O9dPzCCfXskAgOT4eRrXUaW3vKbwa+yfhXqVH1BVkIwDqlG1RfQhl85jhUxcCElJNXqe91aM8RhWybtQ7+7u3c6nirDWIhOXfdX2AN4Li4UwuSMuo0/0qrQsBChb+HZqVjmQ7cniGQ9/qzVtSF/KG+XmCXVsAORI085GpwBL8JdJvJWHvTA+de9RettURnCTWl5fSBVvS4hGT7MG06ew0KgLRunjw=="
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        }
+      ]
     },
     {
       "id": "1788257580837",
@@ -12,6 +31,6 @@
     }
   ],
   "activeSessionId": "1788257592085",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-01T10:14:13.656Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-01T10:14:16.992Z"
 }
