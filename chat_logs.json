@@ -1,49 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788211395433",
-      "title": "نعم، الأمور ممتازة وتحت السيطر...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! أنا بخير ولله الحمد، ومستعد تماماً لمساعدتك في أي مشروع برمجي، أو تطوير تصميم، أو حل أي مسألة تقنية تفكر بها. \n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPtNT4qSaNR8J9Y45/+ZY1Ban33yYKXTKV19BQoJwD9whik3xhzylMwxMGtzKo8g5p+IMNz9d7TPBah6jxoO21BC2shsoSySrFC/FXH5fG9iDf7fSJL06u"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "هل الامور تمام"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "نعم، الأمور ممتازة وتحت السيطرة تماماً! 🚀 \n\nجميع الأنظمة تعمل بكفاءة عالية، وجاهزون لأي مهمة برمجية، هندسية، أو إبداعية تريد تنفيذها. \n\nهل لديك فكرة مشروع جديدة، أو مشكلة تقنية ترغب في أن نلقي نظرة عليها ونحلها سوياً؟",
-              "thoughtSignature": "El4KXAERTTIP7y7h1az2SSVkvl/8mTIUtfsu0kqEsHEbxNZZiFIwQ7zk3l3pSHMZ4ixX0l451aoz6chD7d57YQed7eOQ/ZlRpL796XKGGIBWGk4hs6OIJL8KZfkhweXo"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788286434773",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T18:13:54.774Z"
+  "timestamp": "2026-09-01T18:13:58.046Z"
 }
