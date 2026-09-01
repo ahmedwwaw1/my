@@ -1,44 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788268697479",
-      "title": "أهلاً بك. بصفتي \"العقل المدبر\"...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [],
-          "model": "gemini-3.5-transcribe"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "ماذا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك. بصفتي \"العقل المدبر\" (Mastermind)، أنا هنا لتصميم، هندسة، وتطوير رؤيتك التقنية.\n\nأعمل وفق بروتوكولات **VSA Academy**، حيث يتم دمج التفكير الاستراتيجي العميق مع التنفيذ البرمجي الدقيق. سواء كنت تبحث عن بناء هيكلية برمجية معقدة، تحسين واجهات المستخدم، أو حل معضلات تقنية مستعصية، أنا جاهز للبدء.\n\n**ما هو التحدي أو المشروع الذي سنقوم به اليوم؟**\n*   هل نحتاج إلى تحليل كود موجود؟\n*   هل هناك ميزة جديدة تتطلب \"توليداً بصرياً\" (Visual Genesis)؟\n*   أم أننا بصدد بناء نظام جديد من الصفر؟\n\nأنا في حالة استعداد تام. بانتظار توجيهاتك.",
-              "thoughtSignature": "EnEKbwERTTIPaNX8N1qTv6PmtLnzYjxOEcsS9R+wvev+BLhm8djhDmdg3qKjtXwSvUH7OtpWXH8Bkl1d46YP802nLoYhHHTHMgwP2eMl6jxBKuzAkh9baUHDJ0ge2kDPmL7aqxroV/2bb/w5FzsdojUUzA=="
-            }
-          ],
-          "model": "gemini-3.5-transcribe"
-        }
-      ]
-    }
-  ],
-  "activeSessionId": "1788274674895",
+  "sessions": [],
+  "activeSessionId": "1788268697479",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T14:57:59.039Z"
+  "timestamp": "2026-09-01T14:58:12.342Z"
 }
