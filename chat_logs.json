@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788283567301",
+      "title": "أهلاً بك! أنا \"العقل المدبر\" (...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا \"العقل المدبر\" (Mastermind)، المهندس السيادي الشامل ومستشار الذكاء الاصطناعي لمنصة VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في رحلتنا التطويرية أو الاستكشافية؟",
+              "thoughtSignature": "El4KXAERTTIP+eBSPl/yaDt4JfDztBLd85Xkl145WCtNgomtpWcusBvg8terV1L958Hwp3VaCJAfTfhLH+OwrbFmfAYA19XKEw5+lTBow3c3MsROliO21aCiMp+1CwOq"
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788283567301",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T17:26:15.637Z"
+  "timestamp": "2026-09-01T17:26:22.064Z"
 }
