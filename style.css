@@ -1399,11 +1399,26 @@
         .status-error .status-dot { background: #ff3d00; box-shadow: 0 0 5px #ff3d00; }
         .status-error { color: #ff3d00; border-color: rgba(255, 61, 0, 0.2); background: rgba(255, 61, 0, 0.05); }
 
+        /* 💎 Elite Mastermind UI/UX Engine 6.0 - Advanced Styling */
+        :root {
+            --ide-bg: #1e1f22;
+            --ide-header: #2b2d30;
+            --ide-border: #3c3f41;
+            --ide-accent: #3574f0;
+            --ide-text: #dfe1e5;
+            --ide-muted: #afb1b3;
+            --ide-success: #59a869;
+            --ide-error: #f98a94;
+            --ide-warning: #ebc40d;
+        }
 
         .code-viewer-ui {
             display: flex;
             gap: 15px;
             line-height: 1.6;
+            background: #141517;
+            border-radius: 6px;
+            padding: 10px;
         }
 
         .line-numbers {
@@ -1413,6 +1428,7 @@
             font-size: 12px;
             padding-right: 15px;
             border-right: 1px solid var(--ide-border);
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .code-content {
@@ -1420,31 +1436,33 @@
             font-size: 12px;
             white-space: pre-wrap;
             word-break: break-all;
-        }
-
-        /* 🧠 Thought Process Elite Box */
-        .thought-container {
-            background: rgba(53, 116, 240, 0.03);
-            border: 1px solid rgba(53, 116, 240, 0.2);
-            border-left: 4px solid var(--ide-accent);
-            border-radius: 4px 8px 8px 4px;
-            padding: 12px 18px;
-            margin: 15px 0;
             font-family: 'JetBrains Mono', monospace;
-            position: relative;
         }
 
-        .thought-container::before {
-            content: 'THOUGHT PROCESS';
+        /* 🧠 Thought Process Elite Box (Aligned with Image 2) */
+        .thought-container {
+            background: rgba(53, 116, 240, 0.05) !important;
+            border: 1px solid rgba(53, 116, 240, 0.2) !important;
+            border-left: 4px solid var(--ide-accent) !important;
+            border-radius: 6px;
+            padding: 15px !important;
+            margin: 10px 0;
+            position: relative;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .thought-label {
             position: absolute;
             top: -10px;
-            left: 15px;
+            right: 15px;
             background: #1e1f22;
             padding: 0 8px;
-            font-size: 9px;
+            font-size: 10px;
             color: var(--ide-accent);
             font-weight: bold;
+            text-transform: uppercase;
             letter-spacing: 1px;
+            z-index: 10;
         }
 
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

@@ -1008,22 +1008,10 @@
                     outputArea.innerHTML = `<div style="padding:0; color:#dfe1e5; font-size:13px;">${escapeHtml(textOutput)}</div>`;
                 }
             }
-                // تحويل المخرجات الطويلة إلى نافذة كود احترافية
-                if (textOutput.length > 50 || textOutput.includes('\n')) {
-                    const lines = textOutput.split('\n');
-                    let html = `<div class="code-viewer-ui">`;
-                    html += `<div class="line-numbers">${lines.map((_, i) => i + 1).join('<br>')}</div>`;
-                    html += `<div class="code-content">${escapeHtml(textOutput)}</div>`;
-                    html += `</div>`;
-                    outputArea.innerHTML = html;
-                } else {
-                    outputArea.innerHTML = `<div style="padding:0; color:var(--ide-text); font-size:13px;">${escapeHtml(textOutput)}</div>`;
-                }
-            }
 
             // فتح التفاصيل تلقائياً عند الاكتمال
             step.querySelector('.ai-step-details').style.display = 'block';
-        
+        }
 
         function escapeHtml(text) {
             const div = document.createElement('div');
