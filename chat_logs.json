@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788284925526",
-      "title": "نعم، صحيح تماماً! أنا مبني على...",
+      "title": "العفو، على الرحب والسعة دائماً...",
       "history": [
         {
           "role": "user",
@@ -337,6 +337,56 @@
             }
           ],
           "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "شكر الك جدا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم يشكرني، ومن الواجب الرد بعبارات ترحيبية مهنية تؤكد الجاهزية التامة لأي مهمة مستقبلية.",
+                  "plan": "الرد بلطف واحترافية على شكر المستخدم وتأكيد الاستعداد الدائم للمساعدة."
+                },
+                "id": "call_152118"
+              },
+              "thoughtSignature": "El4KXAERTTIPbQLHkpKlUwsZFipRZFNU/bDOEqYa5GcDJeAStCF090y2dQxD0L5TxuWdR6kvytjxHTe0wMRBvo1+zrGp+ED8haxUHaQz3iEpeK5xVs5gjlSRTTqhGAai"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يشكرني، ومن الواجب الرد بعبارات ترحيبية مهنية تؤكد الجاهزية التامة لأي مهمة مستقبلية.",
+                    "plan": "الرد بلطف واحترافية على شكر المستخدم وتأكيد الاستعداد الدائم للمساعدة."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "العفو، على الرحب والسعة دائماً! \n\nأنا هنا في خدمتكم في أي وقت تحتاجون فيه إلى مساعدة برمجية، تحليل، تطوير، أو استشارة تقنية. لا تترددوا أبداً في طرح أي سؤال أو فكرة. \n\nيومك سعيد ومبارك!",
+              "thoughtSignature": "El4KXAERTTIPQO29UE2Vh2RPWzREhIxaJpkVOkdueAupwm0RB13UlmqxAoh1XZIRmPS2GeqR1tmlM6DXt+M7dhkZ+G28Y9GoU3c9Qs8BSe1XeCNusRzPxzy1D6R8r+CI"
+            }
+          ],
+          "model": "gemini-3.6-flash"
         }
       ]
     },
@@ -403,5 +453,5 @@
   ],
   "activeSessionId": "1788284925526",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T18:21:09.635Z"
+  "timestamp": "2026-09-01T18:21:12.577Z"
 }
