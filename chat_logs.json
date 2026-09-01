@@ -1,6 +1,6 @@
 {
   "sessions": [],
   "activeSessionId": "1788292552709",
-  "pendingHistory": null,
-  "timestamp": "2026-09-01T19:56:23.986Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ممكن تفحص ملفاتي\"}]}]",
+  "timestamp": "2026-09-01T19:56:25.487Z"
 }
