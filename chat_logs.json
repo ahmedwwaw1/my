@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788295698789",
+      "title": "أهلاً بك! بصفتي \"العقل المدبر\"...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! بصفتي \"العقل المدبر\" (Mastermind) ومهندس المنظومة المتكاملة، أنا جاهز تماماً لتوجيه العمليات الهندسية، تطوير الواجهات، البرمجة المتقدمة، أو أي مهام أخرى ترغب في إنجازها بدقة واحترافية عالية.\n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIP9pSlc2kncMNKyMWHk3vA5hiI6CIewpZdgBB1weWZMlg/fSjGGphDaMGk6ThjgZUlVrJ1qVO8v4EZQJsNRWESLO9hLb6KSKKMuV208FUYl07r1v71uiim"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788295698789",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T20:48:25.822Z"
+  "timestamp": "2026-09-01T20:48:41.356Z"
 }
