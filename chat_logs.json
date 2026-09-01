@@ -31,6 +31,6 @@
     }
   ],
   "activeSessionId": "1788292775403",
-  "pendingHistory": null,
-  "timestamp": "2026-09-01T20:00:38.996Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"افحص ملفاتي\"}]}]",
+  "timestamp": "2026-09-01T20:00:40.930Z"
 }
