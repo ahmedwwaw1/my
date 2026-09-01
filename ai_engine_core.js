@@ -1005,12 +1005,13 @@
                     html += `</div>`;
                     outputArea.innerHTML = html;
                 } else {
-                    outputArea.innerHTML = `<div style="padding:0; color:#dfe1e5; font-size:13px;">${escapeHtml(textOutput)}</div>`;
+                    outputArea.innerHTML = `<div style="padding:10px; color:#dfe1e5; font-size:13px; line-height:1.5;">${escapeHtml(textOutput)}</div>`;
                 }
             }
 
-            // فتح التفاصيل تلقائياً عند الاكتمال
-            step.querySelector('.ai-step-details').style.display = 'block';
+            // ضمان ظهور التفاصيل بشكل صريح
+            const details = step.querySelector('.ai-step-details');
+            if (details) details.style.setProperty('display', 'block', 'important');
         }
 
         function escapeHtml(text) {

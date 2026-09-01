@@ -1006,30 +1006,30 @@
             transform: rotate(90deg);
         }
 
-        /* 🛠️ IDE Style Tool Steps (Optimized for Transparency & Alignment) */
+        /* 🛠️ IDE Style Tool Steps - FINAL REPAIR VERSION */
         .ai-step-container {
-            margin: 12px 0;
-            border: 1px solid #3c3f41;
-            border-radius: 8px;
-            background: #2b2d30 !important;
-            overflow: hidden;
-            font-family: 'JetBrains Mono', monospace;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            width: 100%;
             display: block !important;
+            margin: 15px 0 !important;
+            border: 1px solid #3c3f41 !important;
+            border-radius: 8px !important;
+            background: #2b2d30 !important;
+            overflow: hidden !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+            width: 100% !important;
+            clear: both !important;
         }
 
         .ai-step-header {
             display: flex !important;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 15px !important;
-            cursor: pointer;
+            flex-direction: row !important;
+            align-items: center !important;
+            padding: 12px 16px !important;
+            cursor: pointer !important;
             background: #2b2d30 !important;
             color: #dfe1e5 !important;
-            border-bottom: 1px solid #3c3f41;
-            min-height: 40px !important;
-            user-select: none;
+            border-bottom: 1px solid #3c3f41 !important;
+            min-height: 44px !important;
+            box-sizing: border-box !important;
         }
 
         .ai-step-header:hover {
@@ -1037,79 +1037,71 @@
         }
 
         .ai-step-icon {
-            font-size: 16px;
-            width: 24px;
-            height: 24px;
+            font-size: 18px !important;
+            margin-right: 12px !important;
             display: flex !important;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.05);
-            border-radius: 4px;
-            border-right: 1px solid rgba(255,255,255,0.1);
-            padding-right: 10px;
-            margin-right: 5px;
+            align-items: center !important;
+            justify-content: center !important;
+            min-width: 24px !important;
         }
 
         .ai-step-name {
-            font-size: 12px !important;
-            font-weight: 600 !important;
+            font-size: 13px !important;
+            font-weight: bold !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            flex-grow: 1 !important;
             color: #dfe1e5 !important;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            flex-grow: 1;
+            text-align: left !important;
         }
 
         .ai-step-status {
             font-size: 11px !important;
             display: flex !important;
-            align-items: center;
-            gap: 6px;
-            color: #afb1b3;
+            align-items: center !important;
+            gap: 8px !important;
+            color: #afb1b3 !important;
+            margin-left: 10px !important;
         }
 
         .status-spinner {
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             border: 2px solid rgba(53, 116, 240, 0.2);
             border-top: 2px solid #3574f0;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
 
-        .status-done { color: #59a869 !important; font-weight: bold; }
-        .status-error { color: #f98a94 !important; font-weight: bold; }
+        .status-done { color: #59a869 !important; }
+        .status-error { color: #f98a94 !important; }
 
         .ai-step-details {
-            display: none;
+            display: block !important; /* Force open initially for visibility */
             background: #1e1f22 !important;
-            padding: 15px;
-            border-top: 1px solid #3c3f41;
-            font-family: 'JetBrains Mono', 'Consolas', monospace;
-            font-size: 12px;
-            color: #afb1b3;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .ai-step-details pre {
-            margin: 0;
-            white-space: pre-wrap;
-            word-break: break-all;
+            padding: 15px !important;
+            border-top: 1px solid #3c3f41 !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 12px !important;
+            color: #afb1b3 !important;
+            max-height: 500px !important;
+            overflow-y: auto !important;
         }
 
         .ai-step-args {
             color: #d7ba7d !important;
-            font-size: 11px;
-            margin-bottom: 10px;
-            display: block;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 8px;
+            margin-bottom: 12px !important;
+            display: block !important;
+            border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+            padding-bottom: 8px !important;
+            font-style: italic !important;
         }
 
         .step-output-area {
-            white-space: pre-wrap;
-            word-break: break-all;
-            line-height: 1.5;
+            white-space: pre-wrap !important;
+            word-break: break-all !important;
+            line-height: 1.6 !important;
+            display: block !important;
         }
 
         /* 🧠 Thought Process Container (Image 2 Style) */
