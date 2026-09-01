@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788292775403",
+      "title": "مرحباً بك! بصفتي العقل المدبر ...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! بصفتي العقل المدبر والمهندس السيادي (Sovereign Omni-Architect)، أنا جاهز تماماً لقيادة أي مهمة برمجية، تطوير واجهات، تحليل ملفات، أو هندسة حلول مبتكرة في هذا المشروع وفقاً لأعلى معايير الدقة والجودة.\n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPInPNTe1jcua4zG3XSoF8dx46mikIIJZ5TLZA96HZW1F7EyBN7By0h41DkCe4b6Jh1Xy8I6hl6v343rRQzDqpGYjS1s040t4rN9umUVwpxzBffw/j2NcA"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788292775403",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-01T20:29:49.544Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-01T20:29:49.566Z"
 }
