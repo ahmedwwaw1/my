@@ -1229,13 +1229,13 @@
                     return await runToolLoop(history);
                 }
 
-                const userModel = document.getElementById('modelSelector').value;
-                const finalTurn = { role: "model", parts: parts, model: userModel };
+                const actualModel = data.used_model || document.getElementById('modelSelector').value;
+                const finalTurn = { role: "model", parts: parts, model: actualModel };
                 chatHistory = history.concat([finalTurn]);
                 saveChatToStorage();
                 localStorage.removeItem('gemini_pending_history');
                 stopAiTimer();
-                return { text: thought || "تمت بنجاح.", model: userModel };
+                return { text: thought || "تمت بنجاح.", model: actualModel };
             } catch (err) {
                 stopAiTimer();
                 return { text: `❌ فشل: ${err.message}`, model: "System" };
