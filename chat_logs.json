@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1788257776508",
+      "title": "أهلاً بك! أنا \"العقل المدبر\" (...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا \"العقل المدبر\" (Mastermind) - المنسق والمتحكم البرمجي الأعلى في المنظومة. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت تريد إضافة ميزات جديدة، تحسين واجهة المستخدم، إصلاح أخطاء، أو إعادة هيكلة كود، أنا مستعد للعمل.",
+              "thoughtSignature": "EmcKZQERTTIPvb9uLHqWmeJj0dlDPS+n2PZFHNZQ4wf/O0VamzDB/tXB2z7YUHdqxtywRut6gv0cMbXepZXtuaWRcSG8h178rKLh1D6oTZNCgceYa9V16Q5yk4SLHPrq0+0FPLDI5ldH"
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        }
+      ]
+    },
+    {
       "id": "1788257698580",
       "title": "محادثة جديدة",
       "history": []
@@ -82,6 +106,6 @@
     }
   ],
   "activeSessionId": "1788257776508",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-01T10:16:22.862Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-01T10:16:32.489Z"
 }
