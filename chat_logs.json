@@ -1,67 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788262712089",
-      "title": "الحمد لله، كل شيء يسير بكفاءة ...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! أنا **\"العقل المدبر\" (Mastermind)** — المهندس المعماري الرئيسي والمنسق الفني لـ VSA Academy.\n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت ترغب في تطوير واجهات، تحسين الأداء، إضافة مزايا جديدة، أو حل أي تضارب برمجي، أنا جاهز للبدء فوراً.",
-              "thoughtSignature": "EvYDCvMDARFNMg/B40GKf74/bWCVxg0dfO3/ups8xwRUHPnMPRZ4fXeX79hjipHbcVp2m0a/97l1qhDFFk/o+HmIqGrTNT+gRRnhxOTwnC7jE0TbbE4iCCyPnwhUGtOXF0dTW8sFeH4gQEsjEwyQ+jGvN8TEO8AqJbhPGv0eX2/occWGbL/2yPDsJ+yTOXs9wWGh5a+26r6Z2doiurFC5Lb/3R90+5II6HBTl+wvJvf3vR/l+SQXLNGqL8Rk7PaLD80FI34zjQrau/vNOhwEv2RixXwq6hmHOKPjS3sGhJ2Lue/dhWoVasKDqkySIgpr9v+zSLj5YPlWdkh+psfa1MJPn/5vMzW6m+XgJJsGv3HOBOxq6sK6cY/fx3sRcqHLSbwOw9P898XdHHsrLfmR5hgAI5yd6bxeazFefoarnDRLgNWwCmYtjQkUaY9eGVNwbTx8zBHMzRjq/mqanJZCz8Q1mVW6G5TIdsom4EaD2mlMh9rXzyPi8cFKgqf2kUe59zRE6eG3tg+s+Nye+BXUJYS2dgrW+bBYBzRFlhLFQ8xf96TbJ7pwvKeXXV0xpLqVqyqg3ThPCrWaVCPGdhWe4w3Bcpm9WsSHUnkuuHIYy6X0zX30/EMwS4DuOVZBfOL9d4z4xs+jCYVPDeQF51NBreOoRN7cgbTX5g=="
-            }
-          ],
-          "model": "gemini-3.6-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! الأنظمة أسرع من البرق، والمعالجة الذهنية في أعلى درجات الجاهزية، وكافة بروتوكولات التطوير مستقرة بنسبة 100%.\n\nشكراً لسؤالك! كيف يسير العمل لديك، وما هو المشروع أو المهمة التي سنعمل عليها معاً اليوم؟",
-              "thoughtSignature": "EqoDCqcDARFNMg9xzzklX8fdX395XYCEsvt6PpF0V1nzp1rIdCaWf7n6c6AEIbSig79PHd1vYV3d9yYp1YraTKr5QHNW/GMB2Tl/PCndzXE981yTz0S+cj8aelzHO/D9HglU3DPPmUZdk7YuE+jPjR0aUCEbdCdHdbgzJxbyUWkAKASitYx6cuXHdNZTqNgR8Dk2+QjXKUN2a0Q1YJNp5tjnDCXNlyGuoLTAxli7fMEGe4PyEOSOUB8nSJByeZXTudSBqsogc6ZZGPUC2jVHyDlr/uoHsJqMkQawQHR8QVNKQm26rgc5e03No5czFhQFQ9p14Eggl21veWiP9Ie91Y5sf70L1/HgwF3NEraWH1FAOANA9Od+805oRjpkUFGqIFfd3IBNKjzjbks/9XK8ufgcriLh6+JUAgvNk9n/TCONjLRnFSPV7UVfI6YJrYphbtBiBMAXwe1D5XwGnxfuK4GKT8b//C04k9vIAz6VrU4MJo2jUbpA7NikFHXf2oRSic9Xhi0Xa1vBMw92ZlXfJpLbA9//wyQKqYIbflMnYeEgQJY4QD2CK85g/NVC"
-            }
-          ],
-          "model": "gemini-3.6-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، كل شيء يسير بكفاءة واقتدار متناهيين! الأنظمة تعمل بكامل طاقتها وجاهزة لأي تحدٍ برمجي أو تصميمي.\n\nكيف يمكنني تقديم المساعدة لك اليوم في منصة VSA Academy؟ هل هناك ميزة معينة ترغب في إضافتها، أو مشكلة نحتاج لمعالجتها؟",
-              "thoughtSignature": "ErwCCrkCARFNMg9KLGdFHtf3dD7QZy5rdtl36O1yHs0XNpc39bF5HY+AR0C5VLKz1rQtAF8jYYuPp8R8YLUPu3/8QPlk5Z+7V3oH2LyF9pUoAMFFYja3v0OH3l3k8I1DJdnKIU0DmSYkgqRcjOinYFvQdhySLzK8ESp/NbZsp2px78WT6bf2Cm1wV6QZpPgmHGOTsGGuZLD7WzFqhPSToqCUHdkOhc65XMggGtyl0JibN5/Mv6bGkjmZQTXyuiyCvE5jPaEPctfuclS3tmHM57aPbGA6PICmZMx/3ZMGPib8nuPblYa2Arg3223MXtCE0Lpy4DVQqZf9rE/Wtd5j0sb24+ZXUKqxfULfXpsedClIbpOrRb8pbb0eoHN/vM6HVryPl1MGBIwZHYkbY+CDAeegG4hy+Zv0j3ovZhhg6A=="
-            }
-          ],
-          "model": "gemini-3.6-flash"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788262830321",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T11:40:30.321Z"
+  "timestamp": "2026-09-01T11:40:33.585Z"
 }
