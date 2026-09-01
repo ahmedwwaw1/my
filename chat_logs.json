@@ -1,6 +1,11 @@
 {
   "sessions": [
     {
+      "id": "1788259942891",
+      "title": "محادثة جديدة",
+      "history": []
+    },
+    {
       "id": "1788257804635",
       "title": "أهلاً بك في \"أكاديمية VSA\". أن...",
       "history": [
@@ -148,6 +153,6 @@
     }
   ],
   "activeSessionId": "1788259942891",
-  "pendingHistory": null,
-  "timestamp": "2026-09-01T10:52:33.753Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
+  "timestamp": "2026-09-01T10:53:23.446Z"
 }
