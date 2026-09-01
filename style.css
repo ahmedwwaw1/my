@@ -1002,33 +1002,30 @@
             transition: transform 0.2s;
         }
 
-        .thought-toggle.open::before {
-            transform: rotate(90deg);
-        }
-
-        /* 🛠️ IDE Style Tool Steps - FINAL REPAIR VERSION */
+        /* 🚀 ULTIMATE PROFESSIONAL TOOL STEPS - 2026 EDITION */
         .ai-step-container {
-            display: block !important;
-            margin: 15px 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            margin: 20px 0 !important;
             border: 1px solid #3c3f41 !important;
-            border-radius: 8px !important;
+            border-radius: 10px !important;
             background: #2b2d30 !important;
             overflow: hidden !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
-            width: 100% !important;
-            clear: both !important;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4) !important;
+            width: 98% !important;
+            align-self: center !important;
+            flex-shrink: 0 !important;
+            transition: all 0.3s ease !important;
         }
 
         .ai-step-header {
             display: flex !important;
-            flex-direction: row !important;
             align-items: center !important;
-            padding: 12px 16px !important;
+            padding: 14px 20px !important;
             cursor: pointer !important;
-            background: #2b2d30 !important;
-            color: #dfe1e5 !important;
+            background: linear-gradient(to bottom, #32353a, #2b2d30) !important;
             border-bottom: 1px solid #3c3f41 !important;
-            min-height: 44px !important;
+            min-height: 52px !important;
             box-sizing: border-box !important;
         }
 
@@ -1037,71 +1034,67 @@
         }
 
         .ai-step-icon {
-            font-size: 18px !important;
-            margin-right: 12px !important;
+            font-size: 20px !important;
+            margin-right: 15px !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            min-width: 24px !important;
+            background: rgba(255,255,255,0.08) !important;
+            border-radius: 6px !important;
+            width: 32px !important;
+            height: 32px !important;
         }
 
         .ai-step-name {
             font-size: 13px !important;
-            font-weight: bold !important;
-            text-transform: uppercase !important;
-            letter-spacing: 1px !important;
-            flex-grow: 1 !important;
+            font-weight: 700 !important;
             color: #dfe1e5 !important;
-            text-align: left !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1.2px !important;
+            flex-grow: 1 !important;
+            font-family: 'JetBrains Mono', monospace !important;
         }
 
         .ai-step-status {
-            font-size: 11px !important;
+            font-size: 12px !important;
             display: flex !important;
             align-items: center !important;
             gap: 8px !important;
+            background: rgba(0,0,0,0.2) !important;
+            padding: 4px 12px !important;
+            border-radius: 15px !important;
             color: #afb1b3 !important;
-            margin-left: 10px !important;
-        }
-
-        .status-spinner {
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(53, 116, 240, 0.2);
-            border-top: 2px solid #3574f0;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
         }
 
         .status-done { color: #59a869 !important; }
         .status-error { color: #f98a94 !important; }
 
         .ai-step-details {
-            display: block !important; /* Force open initially for visibility */
+            display: block !important;
             background: #1e1f22 !important;
-            padding: 15px !important;
+            padding: 20px !important;
             border-top: 1px solid #3c3f41 !important;
-            font-family: 'JetBrains Mono', monospace !important;
-            font-size: 12px !important;
-            color: #afb1b3 !important;
-            max-height: 500px !important;
+            max-height: 600px !important;
             overflow-y: auto !important;
+            font-size: 13px !important;
         }
 
         .ai-step-args {
-            color: #d7ba7d !important;
-            margin-bottom: 12px !important;
             display: block !important;
-            border-bottom: 1px solid rgba(255,255,255,0.05) !important;
-            padding-bottom: 8px !important;
-            font-style: italic !important;
+            padding: 10px 15px !important;
+            background: #141517 !important;
+            border: 1px solid #3c3f41 !important;
+            border-radius: 6px !important;
+            color: #d7ba7d !important;
+            margin-bottom: 15px !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 11px !important;
         }
 
         .step-output-area {
+            color: #dfe1e5 !important;
+            line-height: 1.7 !important;
             white-space: pre-wrap !important;
-            word-break: break-all !important;
-            line-height: 1.6 !important;
-            display: block !important;
         }
 
         /* 🧠 Thought Process Container (Image 2 Style) */
