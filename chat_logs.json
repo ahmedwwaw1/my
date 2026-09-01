@@ -128,6 +128,6 @@
     }
   ],
   "activeSessionId": "1788211251386",
-  "pendingHistory": null,
-  "timestamp": "2026-09-01T07:11:10.439Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"اذا اعطيتك صورة هل يمكنك مشاهدتها\"}]}]",
+  "timestamp": "2026-09-01T07:11:12.114Z"
 }
