@@ -1,12 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788284354681",
-      "title": "محادثة جديدة",
-      "history": []
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788284591543",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T17:43:16.520Z"
+  "timestamp": "2026-09-01T17:43:18.264Z"
 }
