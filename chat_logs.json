@@ -7,6 +7,6 @@
     }
   ],
   "activeSessionId": "1788292597253",
-  "pendingHistory": null,
-  "timestamp": "2026-09-01T19:56:42.367Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ممكن تفحص ملفاتي\"}]}]",
+  "timestamp": "2026-09-01T19:56:43.864Z"
 }
