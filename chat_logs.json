@@ -1,55 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788274855534",
-      "title": "أهلاً بك في مركز القيادة. أنا ...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك في مركز القيادة. أنا \"العقل المدبر\" (Mastermind)، مهندس النظم الكلي والمصمم الرؤيوي لأكاديمية VSA.\n\nأنا في حالة تأهب قصوى، وجاهز للبدء في عمليات التطوير، التحليل، أو التصميم المعماري. ما هو التحدي التقني أو الرؤية التي سنقوم بتجسيدها اليوم؟ \n\n**بانتظار مدخلاتك للبدء في \"التوليد البصري\" أو \"الهيكلة البرمجية\".**",
-              "thoughtSignature": "EnEKbwERTTIP0FqaC6OpwEGpbrdbiwVEnGyqmdch/7LfvSg3WqH/0t5jifgfArlWByUKZdPV3gjUPpdcaYqA1JTF/hOyCeaOkdBVCg54Z3NCE66+IXXmZiKV2HOZySgjRzMwtyBaUCAfOIKNYUeWcpqD9w=="
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    },
-    {
-      "id": "1788268697479",
-      "title": "أهلاً بك. بصفتي \"العقل المدبر\"...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "محبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك. بصفتي \"العقل المدبر\" (Mastermind)، أنا في حالة استعداد تام للبدء في هندسة الحلول، تحليل الأنظمة، أو ابتكار رؤى تقنية جديدة.\n\nما هو التحدي أو المشروع الذي سنقوم بتفكيكه وإعادة بنائه اليوم؟ أنا بانتظار توجيهاتك للبدء في \"المسح العميق\" (Deep Scan) أو التخطيط المعماري.",
-              "thoughtSignature": "EnEKbwERTTIPIv+99/grJpklmSa7mLClG1zMFbSQUbr7fcqv3OkvcnEBltFq3OG2jDSOO1GTGjRYuqEmYnI8TJlYHpf6zKh4D8B6DKh6b2e4CtvP3eAKnKeLYhIN3Nxo6a5ufXutydGaa+2a0sIerrT45w=="
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788274957549",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T15:03:38.486Z"
+  "timestamp": "2026-09-01T15:03:42.149Z"
 }
