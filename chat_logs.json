@@ -1,67 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788284445208",
-      "title": "أهلاً بك مجدداً يا صديقي! 🌟 \n...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "مرحباً بك! بصفتي العقل المدبر والمهندس الشامل (Mastermind & Sovereign Omni-Architect)، أنا جاهز تماماً لمساعدتك اليوم في أي مهام برمجية، تصميم واجهات، هندسة المعمارية، أو أي تطوير ترغب في إنجازه. \n\nكيف يمكنني خدمتك وتوجيه طاقاتنا التقنية اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPrS392JvXvGj0lRXxGSiPpleigzwwpWN69oiSOTDB+GXODvAfZSb8/d6v7CpPzkix4s8QC/okyMDBFDJu+vNnqmgZW/wq6IwIhWdoBRe3VSMz6jgQOM9R"
-            }
-          ],
-          "model": "gemini-3.6-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، الأنظمة تعمل بكفاءة قصوى، والشبكة العصبية في أعلى جاهزيتها لتلقي أحدث الأفكار والتحديات البرمجية والهندسية! 🚀\n\nكيف حالك أنت؟ وما هو المشروع أو التحدي المثير الذي سنعمل عليه معاً اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPdaVCMKotAY/pQQ5GxAwCClJNldzikkgYRjkbbZPWV3nXyYBoXRVIw8RcKs+1jP4TTcttHWrKwSN+LNTF349mpmTdtuRXyeipR4lCLLxvR3dAJc7ESvzT"
-            }
-          ],
-          "model": "gemini-3.7-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك مجدداً يا صديقي! 🌟 \n\nكيف يمكنني مساعدتك اليوم؟ هل هناك نظام معين ترغب في بنائه، كود تريد تحسينه، أو فكرة إبداعية تريد تحويلها إلى واقع برمجي؟ أنا في الخدمة!",
-              "thoughtSignature": "El4KXAERTTIPI6DsFyKlEhCxYtPn637DI5nqHwGOCir4btxAiNRHlM66nx2HmlF4sZiRdaacJDE64BPgDMVn8c3AZtIGLM4omb8f2bHJR2L2wyYI62h2Ba3Pe+//aEB5"
-            }
-          ],
-          "model": "gemini-3.5-flash"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788284925526",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T18:27:26.017Z"
+  "timestamp": "2026-09-01T18:27:27.777Z"
 }
