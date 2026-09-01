@@ -379,6 +379,6 @@
     }
   ],
   "activeSessionId": "1788268697479",
-  "pendingHistory": null,
-  "timestamp": "2026-09-01T14:55:24.447Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[],\"model\":\"gemini-3.5-transcribe\"},{\"role\":\"user\",\"parts\":[{\"text\":\"ماذا\"}]}]",
+  "timestamp": "2026-09-01T14:55:29.043Z"
 }
