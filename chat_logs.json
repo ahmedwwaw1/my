@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788211251386",
-      "title": "إجابةً على سؤالك الدقيق:\n\n**Vi...",
+      "title": "سؤال ممتاز جداً يوضح فهمك المع...",
       "history": [
         {
           "role": "user",
@@ -213,6 +213,56 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "من هو المحرك الذكي هل هو مجود في شركة جوجل ام في ملف ai_engine_core.js"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم يسأل سؤالاً معمارياً مهماً: هل \"المحرك الذكي\" موجود في شركة جوجل أم في ملف ai_engine_core.js؟ الإجابة الدقيقة أن ملف ai_engine_core.js هو \"الواجهة والموجه\" (Orchestrator)، بينما عقل الذكاء الاصطناعي الحقيقي (مثل نماذج Gemini) موجود في خوادم شركة Google، ويتم التواصل معه عبر الجسر (Supabase Edge Function: vsa-bridge) الذي يربط النظام المحلي بـ Google APIs.",
+                  "plan": "توضيح مكان تشغيل المحرك الذكي والفرق بين الكود المحلي وجسر Supabase وخدمات Google Gemini API."
+                },
+                "id": "call_243590"
+              },
+              "thoughtSignature": "El4KXAERTTIP+VI+8F8ubOtJapDeJTT8uOLh5avTPzGbx0087oFAhhuR68t3AXHIQ4P7UMzPxKDqzmB98fAKX4NrVMDSqvZskcNu1xI3PK4ugD7s1YdDxSpljW60NZk7"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يسأل سؤالاً معمارياً مهماً: هل \"المحرك الذكي\" موجود في شركة جوجل أم في ملف ai_engine_core.js؟ الإجابة الدقيقة أن ملف ai_engine_core.js هو \"الواجهة والموجه\" (Orchestrator)، بينما عقل الذكاء الاصطناعي الحقيقي (مثل نماذج Gemini) موجود في خوادم شركة Google، ويتم التواصل معه عبر الجسر (Supabase Edge Function: vsa-bridge) الذي يربط النظام المحلي بـ Google APIs.",
+                    "plan": "توضيح مكان تشغيل المحرك الذكي والفرق بين الكود المحلي وجسر Supabase وخدمات Google Gemini API."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "سؤال ممتاز جداً يوضح فهمك المعماري العميق! \n\n**المحرك الذكي (The AI Brain / Model)** موجود في **خوادم شركة Google** (مثل نماذج Gemini الشهيرة)، وليس محلياً داخل ملف `ai_engine_core.js`.\n\nإليك كيف يعمل النظام لتقريب الصورة بدقة:\n\n1. **ملف `ai_engine_core.js` (المايسترو / الموجه):**\n   * هذا الملف هو **الواجهة البرمجية المحلية (Orchestrator)**.\n   * يحتوي على الأوامر، ودوال الأدوات (Tools)، والواجهة الرسومية (UI)، ودستور النخبة السيادي (`CONSTITUTION`).\n   * هو الذي يجمع سؤالك، والصورة التي ترفعها، ويقوم بتجهيزها وإرسالها.\n\n2. **جسر الربط (Supabase Bridge / Edge Function):**\n   * الكود الموجود في `ai_engine_core.js` لا يتصل بموقع Google مباشرة لأسباب أمنية ولحماية المفاتيح، بل يمر عبر وسيط آمن (`SUPABASE_BRIDGE_URL`).\n   * هذا الجسر يستقبل الطلب من موقعك ويوجهه بلطف إلى خوادم Google.\n\n3. **خوادم شركة Google (العقل الحقيقي):**\n   * تستقبل Google الطلب مع \"دستور النخبة\" وصورتك أو سؤالك.\n   * يقوم نموذج الذكاء الاصطناعي (Gemini) في خوادم Google بعملية التحليل والتفكير (Thinking & Vision).\n   * يعود الجواب والقرارات (سواء كانت ردوداً نصية أو أوامر لتنفيذ أدوات مثل `write_file` أو `searchCode`) إلى ملف `ai_engine_core.js` لكي ينفذها على مشروعك فوراً!\n\nباختصار: **ملف `ai_engine_core.js` هو المهندس والمشغل، بينما عقل الذكاء الاصطناعي (النموذج) يقيم في سحابة Google.** 🧠✨",
+              "thoughtSignature": "El4KXAERTTIP06u5rjDrHY0JVRKkARZpWXBhABg0swJR0sTij/E2EkrdKlNWvJNa400dZ7u8+VZ0Ewtdkj0uL75Izjm1HRtBabj6d+gwo3s4sc2KBINIIHv4m4uDmwFF"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     },
@@ -243,5 +293,5 @@
   ],
   "activeSessionId": "1788211251386",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T07:18:38.274Z"
+  "timestamp": "2026-09-01T07:18:43.171Z"
 }
