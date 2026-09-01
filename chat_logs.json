@@ -2,8 +2,27 @@
   "sessions": [
     {
       "id": "1788262855600",
-      "title": "محادثة جديدة",
-      "history": []
+      "title": "أنا في حالة من التأهب القصوى، ...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا في حالة من التأهب القصوى، أعمل بتناغم تام مع بروتوكولات \"الهندسة المعمارية الشاملة\" (Sovereign Omni-Architect). نظامي المعرفي في حالة تدفق مستمر، جاهز لتحويل الأفكار إلى واقع رقمي ملموس.\n\nأنا هنا، أراقب بنية النظام، وأنتظر التحدي التالي لنبدأ في إعادة تشكيل الواقع البرمجي.\n\n**كيف يمكنني أن أخدم رؤيتك اليوم؟** هل هناك هيكلية تحتاج إلى إعادة بناء، أو نظام يحتاج إلى تحسين جذري؟ أنا مستعد.",
+              "thoughtSignature": "EnEKbwERTTIPgLT3mHuRcXHN7M/73hmelMZ72CQljfoR6HiDzDhP+DRZSxFYp74BJNRbdeOVWwStawXdXX4II9qI4r1ze4dAdbNEFmRyVmHDEyH8eybUsJrOEHCfAR8dpR4ELdjG46R0TyXjw9GmlArHLQ=="
+            }
+          ],
+          "model": "gemini-3.1-flash-image"
+        }
+      ]
     },
     {
       "id": "1788262830321",
@@ -12,6 +31,6 @@
     }
   ],
   "activeSessionId": "1788262855600",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]}]",
-  "timestamp": "2026-09-01T11:44:21.709Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-01T11:44:23.292Z"
 }
