@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788282140429",
-      "title": "نعم، وبكل تأكيد! بصفتي **العقل...",
+      "title": "أنا بكل أذان صاغية، وبكامل طاق...",
       "history": [
         {
           "role": "user",
@@ -157,11 +157,61 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "لا اريد ان ادردش معك عن شي مهم"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "الاستعداد لمناقشة موضوع مهم وعميق مع المستخدم، وإظهار الاهتمام والجاهزية الكاملة للتحليل العميق والتفكير الاستراتيجي.",
+                  "reasoning": "التحول إلى وضع التركيز العميق والاستماع الفعال لمناقشة أي موضوع جاد أو استراتيجي يطرحه المستخدم."
+                },
+                "id": "call_192698"
+              },
+              "thoughtSignature": "El4KXAERTTIPvsp5GJ2RAdiDDIZDjgkPcflbEcyBjompb7zBNYVVA4DW0tNRWpmxsNeG9e95jMxnuLlzYOTZ/zh7dIcqWQ2eW5Ay0n19kq0+pG3NMTL/TBmsuCSBN5ne"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "التحول إلى وضع التركيز العميق والاستماع الفعال لمناقشة أي موضوع جاد أو استراتيجي يطرحه المستخدم.",
+                    "plan": "الاستعداد لمناقشة موضوع مهم وعميق مع المستخدم، وإظهار الاهتمام والجاهزية الكاملة للتحليل العميق والتفكير الاستراتيجي."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا بكل أذان صاغية، وبكامل طاقتي الإدراكية والاستراتيجية. \n\nتفضل، اطرح الموضوع المهم الذي يدور في ذهنك، وسنقوم بتفكيكه وتحليله معاً خطوة بخطوة للوصول إلى أفضل رؤية أو قرار أو نتيجة ممكنة. أنا معك.",
+              "thoughtSignature": "El4KXAERTTIPpMHDtogPDlywTt6nOnewIZMg5EdmrCBAMMtZ5j2TjEmkanmGDl1Gh7ZEbu3JPeNavDRbNX+Q/xMbtirG4mZBJGOT/7TYLpqmRr40/Xccd4/nI0Jzw0zc"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1788282140429",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T17:04:28.468Z"
+  "timestamp": "2026-09-01T17:04:35.538Z"
 }
