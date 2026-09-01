@@ -2,63 +2,8 @@
   "sessions": [
     {
       "id": "1788275383251",
-      "title": "العفو! هذا واجبنا دائماً، ويسع...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! بصفتي \"العقل المدبر\" (Mastermind) والمهندس المعماري المطور لمنظومة VSA Academy، أنا جاهز تماماً لتلبية أي متطلبات برمجية، تصميم واجهات، أو تطوير وظائف متقدمة بأعلى معايير الدقة والابتكار.\n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPM1KQHbYMM5lFnuqBXBJK3y2vQOsj3RZy1491jlbN/Q0rb8wvBLZ3quE9w23FDNGebF6rmz3d71qjJ0bkasY8RBeSyhqm8jBwyzLt8v7uMHGTU1jqMxg3"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، أنا بأعلى مستويات الجاهزية والطاقة البرمجية! الأنظمة تعمل بكفاءة، والمعالجات الفكرية متأهبة لأي تحدي تقني أو إبداعي ترغب في إنجازه.\n\nأخبرني، ما هي المهمة أو الفكرة التي سنعمل عليها اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPyOelrBf+hL0z3ZDelqW0I5rqNibx9pVp8/pqeUdG3NrHBt6CdZ/wEJi6PAvZrZW/guuvZrqDVSEBec0FN+akFaLzWb2K+1TPZyv993gnRMMENni2pTJf"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "انا اشكرك"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "العفو! هذا واجبنا دائماً، ويسعدني جداً تقديم أفضل ما لدي لدعمك وتحقيق أهدافك بأعلى جودة وإتقان. \n\nإذا احتجت إلى أي مساعدة أخرى، سواء في البرمجة، أو التصميم، أو تطوير الأفكار، فأنا هنا وجاهز تماماً. بالتوفيق دائماً!",
-              "thoughtSignature": "El4KXAERTTIPqOVACl3zx0zNjCHPhpnBnUzNezeP/RR5kOT3njBD2QEbUsh1Is3xqCudktRmE3SS8vC6E7DPj83r3MMLvBdCVEg/sBanYThjOZCkfsno1+ukuuIAEcRo"
-            }
-          ],
-          "model": "gemini-3.6-flash"
-        }
-      ]
+      "title": "محادثة جديدة",
+      "history": []
     },
     {
       "id": "1788275278244",
@@ -67,6 +12,6 @@
     }
   ],
   "activeSessionId": "1788275383251",
-  "pendingHistory": null,
-  "timestamp": "2026-09-01T15:22:27.117Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
+  "timestamp": "2026-09-01T15:22:33.765Z"
 }
