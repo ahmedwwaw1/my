@@ -41,33 +41,9 @@
           "model": "gemini-3.5-flash-lite"
         }
       ]
-    },
-    {
-      "id": "1788292739468",
-      "title": "أهلاً بك! أنا \"العقل المدبر\" (...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مربا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! أنا \"العقل المدبر\" (Mastermind)، مهندسك المعماري الشامل وقائد الرؤية الفنية والبرمجية. \n\nكيف يمكنني مساعدتك اليوم في تطوير، هندسة، أو ابتكار مشروعك؟ أنا جاهز بكل بروتوكولي وقدراتي!",
-              "thoughtSignature": "El4KXAERTTIPHi2C8GQqG19KFouZ0BBrCN8VTK7zCieNLYnuTV8OboNGJBdX+Qw9a946YVrd7/09iUP9rSNcw01oEHhpJbGgAvSB5k2E2W3bEoR7BcsDTgF0J68Ar0s7"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
     }
   ],
   "activeSessionId": "1788293748364",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T20:15:48.365Z"
+  "timestamp": "2026-09-01T20:15:51.133Z"
 }
