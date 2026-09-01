@@ -6,11 +6,6 @@
       "history": []
     },
     {
-      "id": "1788277495559",
-      "title": "محادثة جديدة",
-      "history": []
-    },
-    {
       "id": "1788276197606",
       "title": "محادثة جديدة",
       "history": []
@@ -36,7 +31,7 @@
       "history": []
     }
   ],
-  "activeSessionId": "1788277502703",
-  "pendingHistory": null,
-  "timestamp": "2026-09-01T15:45:53.793Z"
+  "activeSessionId": "1788277553967",
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]}]",
+  "timestamp": "2026-09-01T15:45:56.607Z"
 }
