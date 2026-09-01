@@ -508,6 +508,6 @@
     }
   ],
   "activeSessionId": "1788255544389",
-  "pendingHistory": null,
-  "timestamp": "2026-09-01T09:39:15.621Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]}]",
+  "timestamp": "2026-09-01T09:39:22.950Z"
 }
