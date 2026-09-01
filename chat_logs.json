@@ -1,6 +1,48 @@
 {
   "sessions": [
     {
+      "id": "1788281969886",
+      "title": "الحمد لله، الأنظمة تعمل بكفاءة...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! بصفتي العقل المدبر والمهندس الشامل لـ VSA Academy، أنا جاهز تماماً لدعمك في أي مهمة برمجية، معمارية، أو إبداعية تحتاجها. \n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPgTXR0EabuMoZRyMctoFF5jtwwERm6sJVwhHTgWsrJ3OOD674Q4Wrge9wI7i37LoL039LEz6NRzXlQ4JuvWqUnAjGVDJZSWRpPNLP705kkcqY3PSuTDgM"
+            }
+          ],
+          "model": "gemini-3.5-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "الحمد لله، الأنظمة تعمل بكفاءة عالية والجاهزية تامة في أعلى مستوياتها! 🚀\n\nكيف يمكنني مساعدتك اليوم في مشروعنا؟ هل هناك تطويرات برمجية، تحسينات في واجهات المستخدم، أو أفكار جديدة تريد منا تنفيذها؟",
+              "thoughtSignature": "El4KXAERTTIPMkK7qIWNk1cGzX9VIugLLk9q9RJekR128YLomT7F2xcRhA5q5n7/vnfmOen/nRBUdYxPn+2HfuRzTd85qySVC43yP0u0B621FYkOCT+uFgiAaYr24U2e"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1788281886087",
       "title": "مرحباً بك! بصفتي العقل المدبر ...",
       "history": [
@@ -27,5 +69,5 @@
   ],
   "activeSessionId": "1788281969886",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T16:59:34.022Z"
+  "timestamp": "2026-09-01T16:59:46.325Z"
 }
