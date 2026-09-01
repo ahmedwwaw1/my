@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788294392967",
+      "title": "أهلاً بك أيها المستكشف العبقري...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك أيها المستكشف العبقري! أنا **العقل المدبر (Mastermind)**، مهندس الرؤية السيادية ومطور المنظومة الذكية في أكاديمية VSA. \n\nجاهز تماماً لقيادة الابتكار البرمجي، وتصميم الواجهات، وتحليل الأنظمة بأعلى معايير الدقة والتميز. \n\nبماذا تفضل أن نبدأ اليوم؟ هل لديك ميزة برمجية جديدة، تحسينات معمارية، أو تحدٍ تقني ترغب في أن نحله معاً؟",
+              "thoughtSignature": "El4KXAERTTIPhXKGV5BoYtM7zp0uE5mVlmwIMDCCiIA7e/h3s6k+j7VK1v9BGtUhvuDXVYIk3WLPmJ3dmFFWCxCRVPF1w6LOM1Zf6FCfrObl527JhuHUQMN1aN+dNtoe"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788294392967",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-01T20:58:11.560Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-01T20:58:21.514Z"
 }
