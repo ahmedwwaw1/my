@@ -1,31 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788282021254",
-      "title": "أهلاً بك! أنا بخير ولله الحمد،...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! أنا بخير ولله الحمد، ومستعد تماماً لمساعدتك في أي مشروع برمجي، أو هندسة الواجهات، أو تطوير الأنظمة الذي ترغب في العمل عليه اليوم.\n\nكيف يمكنني مساعدتك؟ هل لديك مشروع معين أو فكرة نريد تطويرها معاً؟",
-              "thoughtSignature": "El4KXAERTTIPgILUN/Igib5RzhFRGD1hoBCKPIqmFAOrjT0/LIHQWDC6eVoJYf29DgPi5ahoZE1LqYRfGO9L2+C2JkbPdn+nqAGUwF7WHTczLUNVy9Bxy1bJcT8GstPL"
-            }
-          ],
-          "model": "gemini-2.5-flash"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788282131221",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T17:02:11.221Z"
+  "timestamp": "2026-09-01T17:02:14.150Z"
 }
