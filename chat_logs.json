@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788292775403",
-      "title": "لقد قمت بقراءة ملف `app_logic....",
+      "title": "بالتأكيد، وبصفتي العقل المدبر ...",
       "history": [
         {
           "role": "user",
@@ -261,11 +261,29 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل تعرف عن التدوال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "بالتأكيد، وبصفتي العقل المدبر والمهندس السيادي لهذا النظام، فأنا على دراية عميقة جداً بمجال **التداول (Trading)** بمختلف أنواعه وأسواقه (الأسواق المالية التقليدية، العملات الرقمية Crypto، الفوركس، الأسهم، وغيرها).\n\nكما أن نظامك الأساسي مصمم خصيصاً لدعم **أكاديمية VSA والتداول** (Volume Spread Analysis - تحليل الحجم والمدى المرتبط بمدارس ويكوف واحتراف حركة صانع السوق)، بالإضافة إلى:\n- **التحليل الفني والزمني** (Technical & Time Analysis).\n- **إدارة المخاطر** واستراتيجيات الدخول والخروج.\n- **تتبع تنبيهات الحجم العالي (High Volume Alerts)** وحركة العملات الرقمية عبر البوت.\n\nهل ترغب في مناقشة استراتيجية تداول معينة، أو إضافة ميزات تحليلية أو برمجية تتعلق بالأسواق وتداول العملات الرقمية داخل المنصة؟",
+              "thoughtSignature": "El4KXAERTTIPKwz7aVUtB0WYyRtkM8TNIHhbco5H9XHVg00ejqsiQXBsW9kmR3Rsz7hLDBuCRwCNaa3MohlWdP0NbuadAOy3VYgIK8KAen2L0JH9E2CxYaCb8TPyiBfX"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1788292775403",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T20:33:40.785Z"
+  "timestamp": "2026-09-01T20:33:43.461Z"
 }
