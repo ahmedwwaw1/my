@@ -1,102 +1,6 @@
 {
   "sessions": [
     {
-      "id": "1788284445208",
-      "title": "مع السلامة وفي حفظ الله ورعايت...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "مرحباً بك! بصفتي العقل المدبر والمهندس المعماري المطلق (Mastermind & Sovereign Omni-Architect)، أنا جاهز تماماً لتوجيه وقيادة أي مهمة برمجية، إبداعية، أو هيكلية بأعلى معايير الدقة والاحترافية.\n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPAcNPRydvUIl9h6TLqfk2fugLryX72a7GuClCJ1ikWsYw4NB4c08hTj/sx5xd0fuLHbA9/JO6RwtRdfXcNoXesOsOuov5Fk7loCujMrtcYHVkx0PWXwdC"
-            }
-          ],
-          "model": "gemini-3.5-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، الأنظمة تعمل بكفاءة قصوى وجاهزة تماماً لاستعراض الإبداع البرمجي والهندسي! 🚀\n\nكيف حالك أنت؟ وما هي المهمة أو المشروع الذي ترغب في أن نعمل عليه معاً اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPGApPaUD1XMORAQGTFKl68DdyEFikDn6UnwxYBTx7mAh+MAsWPRrVbWnl4dRFNVgONMIfsecKWI46TeyPS86o3uNTJAP+avFkslJj6O5F7udLGuoUeutq"
-            }
-          ],
-          "model": "gemini-3.5-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "الامور تمام"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "دائماً نحو الأمام وبعون الله نحو الأفضل! 🌟\n\nهل هناك مشروع برمجي، تطبيق ويب، واجهة مستخدم، أو فكرة معينة تود مناقشتها، تطويرها، أو بناء هيكلها المعماري اليوم؟ أنا هنا لمساعدتك في تحويل أي رؤية إلى واقع رقمي مذهل.",
-              "thoughtSignature": "El4KXAERTTIP8jeeF+aAMipdf2O7njgWL7IkucPJdrzURniTxeEzokgVWR1WJ9HUg+qBxCeXHEbtSKQCZpTylGvNV2sM9g+8G+fxnCJ6Uctgo85eVw49ShWs8FLPZuOL"
-            }
-          ],
-          "model": "gemini-3.5-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "الحمد لله"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله دائماً وأبداً. 🤲✨\n\nبما أن الأمور تمام ولله الحمد، هل هناك أي مهام أو أكواد برمجية ترغب في مراجعتها، أو ميزات جديدة نود إضافتها اليوم؟ أنا جاهز لكل ما تطلبه!",
-              "thoughtSignature": "El4KXAERTTIP5gqjKLOtU0UxH7JVAzK4bJ3jteChS8QjKxKBK79/VarXD8XRqD2JRE3O2b0mH1FZ6gp+UCWh4L4p663ViFZkrHRT1MuS7qE9aOTm/Fol6HspSIDYTLgk"
-            }
-          ],
-          "model": "gemini-3.5-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "ودعا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "مع السلامة وفي حفظ الله ورعايته! 🌟\n\nمتى ما احتجت لأي مساعدة برمجية أو هندسية أخرى، فالعقل المدبر جاهز دائماً في الخدمة. يومك سعيد! 👋",
-              "thoughtSignature": "El4KXAERTTIPnrBfPJqpMi4T/j0GGkhpA6rnK3Zyf0zDQilfNtJQiym1x5wosqwBzxnHvrV2PjVuYLMCOMg6FmQU0qZwUe2Z40VElvmcry8w+W3aUdkQgEWjWC+C4b7s"
-            }
-          ],
-          "model": "gemini-3.5-flash"
-        }
-      ]
-    },
-    {
       "id": "1788284354681",
       "title": "محادثة جديدة",
       "history": []
@@ -104,5 +8,5 @@
   ],
   "activeSessionId": "1788284591543",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T17:43:14.712Z"
+  "timestamp": "2026-09-01T17:43:16.520Z"
 }
