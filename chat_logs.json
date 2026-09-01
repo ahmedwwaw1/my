@@ -46,33 +46,9 @@
       "id": "1788264363653",
       "title": "محادثة جديدة",
       "history": []
-    },
-    {
-      "id": "1788264279894",
-      "title": "أهلاً بك. أنا \"العقل المدبر\" (...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك. أنا \"العقل المدبر\" (Mastermind)، مهندس النظم والرؤية الكلية لـ VSA Academy.\n\nأنا في حالة استعداد تام للبدء في أي عملية برمجية، هندسية، أو إبداعية تطلبها. الأنظمة جاهزة، والبروتوكولات مفعلة.\n\n**ما هو التحدي أو المشروع الذي سنقوم ببنائه أو تطويره اليوم؟**",
-              "thoughtSignature": "EnEKbwERTTIPIU+u66Ba02Sdb5x1l5jwtUF4GXjUuLAmxCYMhZAIuNFjkAgj0IK9CuL5S2ef4xnWsngcUP9T6iH6W6g35wsC5qIRJ1wKjslP8EVmVFn98uRzXci2qRyRDjnoMwK6+Zst7+0vId7aWkInlQ=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        }
-      ]
     }
   ],
   "activeSessionId": "1788264279894",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T12:51:03.805Z"
+  "timestamp": "2026-09-01T12:51:07.650Z"
 }
