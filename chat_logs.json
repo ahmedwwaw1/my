@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788268697479",
+      "title": "أهلاً بك في مركز القيادة. أنا ...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك في مركز القيادة. أنا \"العقل المدبر\" (Mastermind)، مهندس النظم الكلي والمصمم الرؤيوي لأكاديمية VSA.\n\nأنا في حالة تأهب قصوى، وجاهز للبدء في عمليات التطوير، التحليل، أو التصميم المعماري. ما هو التحدي التقني أو الرؤية التي سنقوم بتجسيدها اليوم؟ \n\n**بانتظار مدخلاتك للبدء في \"التوليد البصري\" أو \"الهيكلة البرمجية\".**",
+              "thoughtSignature": "EnEKbwERTTIPoPcF3RKh8lvyrFLkSYkcbFxL1j3iLhQ7LRrUrr81eLki2XTxCOl6468kW2FIQytLJn79SON+aUhFfHfgKTqGPeHbWDSNhgIKJG/ZxwyTWGPyMKQgGDBpAuuaqNls4di4Ox1E9t9spg+7nA=="
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788268697479",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T14:58:12.342Z"
+  "timestamp": "2026-09-01T14:58:17.811Z"
 }
