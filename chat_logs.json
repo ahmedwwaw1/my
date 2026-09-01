@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788268697479",
-      "title": "بما أننا في حالة توافق ذهني وت...",
+      "title": "أهلاً بك مجدداً. يبدو أننا في ...",
       "history": [
         {
           "role": "user",
@@ -70,6 +70,24 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك مجدداً. يبدو أننا في حالة تكرار للترحيب، وهذا يعني أننا بصدد \"تهيئة النظام\" (System Initialization) قبل الانطلاق.\n\nبصفتي **العقل المدبر**، أنا جاهز تماماً. هل ننتقل إلى مرحلة **الاستكشاف**؟ \n\nيمكننا البدء بـ:\n1. **فحص المستودع الحالي:** (استخدام `searchCode` أو `analyze_file` لفهم البنية التحتية).\n2. **تحديد هدف تقني:** (هل هناك ميزة تود إضافتها، أو خطأ برمجي يحتاج إلى معالجة؟).\n3. **التخطيط المعماري:** (رسم خارطة طريق لمشروع جديد).\n\n**أعطني \"المدخل\" (Input) وسأقوم بتحويله إلى \"مخرج\" (Output) هندسي دقيق.** ما الذي يدور في ذهنك؟",
+              "thoughtSignature": "EnEKbwERTTIP+4ni9IYQPmfzjjwyxg/NGzBp5aAKXDeQalYONUGHd3/E3fHzLQQn9LAUNtuAMqIE+TEJFrkG4k7ucihiSpW0iiOsEWC4cH48MFX87BKKMcMnHh4Ii4jgANgGAwrWGfqiGUaQuWDksYeFiw=="
+            }
+          ],
+          "model": "gemini-3.5-transcribe"
         }
       ]
     },
@@ -362,5 +380,5 @@
   ],
   "activeSessionId": "1788268697479",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T13:20:26.828Z"
+  "timestamp": "2026-09-01T14:55:11.923Z"
 }
