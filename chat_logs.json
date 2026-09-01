@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788295620126",
-      "title": "على الرحب والسعة! أنا دائماً ه...",
+      "title": "تفضل يا صديقي، أنا أسمعك بكل ت...",
       "history": [
         {
           "role": "user",
@@ -39,11 +39,29 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "اريد ان اسئلك عن شيء"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "تفضل يا صديقي، أنا أسمعك بكل تركيز. اسأل عمّا ترغب فيه، وسأقدم لك الإجابة والتحليل الشامل الذي تحتاجه!",
+              "thoughtSignature": "El4KXAERTTIPo577lz3i/7IzG5DKgoH4AqiCeABv/52b9tkKziKU3ZCbI8koPvfqX21OEiAHKSjiGQiZ6hzbbw686Bmh768yQyOvEYg9bsZHHPx1bLm61eF8vgcpCGjQ"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
-  "activeSessionId": "1788295620126",
+  "activeSessionId": "1788295698789",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T20:47:32.979Z"
+  "timestamp": "2026-09-01T20:48:18.789Z"
 }
