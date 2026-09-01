@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788295791869",
-      "title": "إذا كنت تقصد: **\"لماذا لم يجد ...",
+      "title": "العفو! على الرحب والسعة دائماً...",
       "history": [
         {
           "role": "user",
@@ -283,6 +283,56 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "شكرا لك"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "الرد بلطف واحترافية عالية تليق بدور العقل المدبر ومهندس المنظومات.",
+                  "reasoning": "المستخدم ينهي المحادثة بـ \"شكرا لك\". يجب الرد بطريقة ترحيبية وترك الباب مفتوحاً لأي استفسار مستقبلي."
+                },
+                "id": "call_499027"
+              },
+              "thoughtSignature": "El4KXAERTTIP4rij6efn3khVqRWqoS3HXc/kiW2gE9Uh9gYO4j2xNLOZjASKMYKg3wLIgimb9SnOluGAM1sTJjUE7SBrU79tWcKiQ8+hr+sPJ5RZhzQRhj0hmR0fX3Ip"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم ينهي المحادثة بـ \"شكرا لك\". يجب الرد بطريقة ترحيبية وترك الباب مفتوحاً لأي استفسار مستقبلي.",
+                    "plan": "الرد بلطف واحترافية عالية تليق بدور العقل المدبر ومهندس المنظومات."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "العفو! على الرحب والسعة دائماً. \n\nإذا احتجت لأي مساعدة في المستقبل، سواء في تطوير البرمجيات، هندسة الأنظمة، أو بناء مشروعك القادم في **VSA Academy**، فلا تتردد في العودة. \n\nدائماً في خدمتك! بالتوفيق لك! 🚀",
+              "thoughtSignature": "El4KXAERTTIPJ7pgbSc4NgDFQ++ZzUd9oJdAzgHKIuC+H5/xP6BhD/yUn9MDL53V2yvkwtEjyeC7wtYM2xC9VlsqOWalfY4kbacLgjkXPd6KndCQNH/XQzFJG/U4y600"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     },
@@ -329,7 +379,7 @@
       ]
     }
   ],
-  "activeSessionId": "1788295791869",
+  "activeSessionId": "1788300111028",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T22:01:12.321Z"
+  "timestamp": "2026-09-01T22:01:51.029Z"
 }
