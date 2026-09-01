@@ -1006,76 +1006,88 @@
             transform: rotate(90deg);
         }
 
-        /* 🛠️ IDE Style Tool Steps */
+        /* 🛠️ IDE Style Tool Steps (Optimized for Transparency & Alignment) */
         .ai-step-container {
-            margin: 5px 0;
+            margin: 12px 0;
             border: 1px solid #3c3f41;
             border-radius: 8px;
-            background: #2b2d30;
+            background: #2b2d30 !important;
             overflow: hidden;
-            transition: all 0.2s;
+            font-family: 'JetBrains Mono', monospace;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: 100%;
+            display: block !important;
         }
 
         .ai-step-header {
-            display: flex;
+            display: flex !important;
             align-items: center;
-            gap: 10px;
-            padding: 8px 12px;
+            gap: 12px;
+            padding: 10px 15px !important;
             cursor: pointer;
-            font-size: 13px;
-            color: #dfe1e5;
+            background: #2b2d30 !important;
+            color: #dfe1e5 !important;
+            border-bottom: 1px solid #3c3f41;
+            min-height: 40px !important;
             user-select: none;
-            transition: background 0.2s;
         }
 
         .ai-step-header:hover {
-            background: #393b40;
+            background: #393b40 !important;
         }
 
         .ai-step-icon {
-            font-size: 14px;
-            width: 18px;
-            display: flex;
+            font-size: 16px;
+            width: 24px;
+            height: 24px;
+            display: flex !important;
             align-items: center;
             justify-content: center;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            border-right: 1px solid rgba(255,255,255,0.1);
+            padding-right: 10px;
+            margin-right: 5px;
+        }
+
+        .ai-step-name {
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            color: #dfe1e5 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-grow: 1;
         }
 
         .ai-step-status {
-            margin-left: auto;
-            font-size: 12px;
-            display: flex;
+            font-size: 11px !important;
+            display: flex !important;
             align-items: center;
-            gap: 5px;
-            min-width: 80px;
-            justify-content: flex-end;
+            gap: 6px;
+            color: #afb1b3;
         }
 
         .status-spinner {
             width: 12px;
             height: 12px;
-            border: 2px solid rgba(255,255,255,0.1);
+            border: 2px solid rgba(53, 116, 240, 0.2);
             border-top: 2px solid #3574f0;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
 
-        .status-done { color: #4db6ac; }
-        .status-error { color: #ff3d00; }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        .status-done { color: #59a869 !important; font-weight: bold; }
+        .status-error { color: #f98a94 !important; font-weight: bold; }
 
         .ai-step-details {
             display: none;
-            padding: 10px 12px;
-            background: #1e1f22;
+            background: #1e1f22 !important;
+            padding: 15px;
             border-top: 1px solid #3c3f41;
             font-family: 'JetBrains Mono', 'Consolas', monospace;
             font-size: 12px;
             color: #afb1b3;
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
         }
 
@@ -1086,12 +1098,41 @@
         }
 
         .ai-step-args {
-            color: #d7ba7d; /* IDE style argument color */
+            color: #d7ba7d !important;
             font-size: 11px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: block;
             border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 5px;
+            padding-bottom: 8px;
+        }
+
+        .step-output-area {
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+
+        /* 🧠 Thought Process Container (Image 2 Style) */
+        .thought-container {
+            background: rgba(53, 116, 240, 0.05) !important;
+            border: 1px solid rgba(53, 116, 240, 0.2) !important;
+            border-left: 4px solid #3574f0 !important;
+            border-radius: 6px;
+            padding: 15px !important;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .thought-label {
+            position: absolute;
+            top: -10px;
+            right: 15px;
+            background: #1e1f22;
+            padding: 0 8px;
+            font-size: 10px;
+            color: #3574f0;
+            font-weight: bold;
+            text-transform: uppercase;
         }
 
         .ai-messages pre code {
@@ -1358,101 +1399,6 @@
         .status-error .status-dot { background: #ff3d00; box-shadow: 0 0 5px #ff3d00; }
         .status-error { color: #ff3d00; border-color: rgba(255, 61, 0, 0.2); background: rgba(255, 61, 0, 0.05); }
 
-        /* 💎 Elite Mastermind UI/UX Engine 6.0 - Advanced Styling */
-        :root {
-            --ide-bg: #1e1f22;
-            --ide-header: #2b2d30;
-            --ide-border: #3c3f41;
-            --ide-accent: #3574f0;
-            --ide-text: #dfe1e5;
-            --ide-muted: #afb1b3;
-            --ide-success: #59a869;
-            --ide-error: #f98a94;
-            --ide-warning: #ebc40d;
-        }
-
-        .ai-step-container {
-            background: var(--ide-bg);
-            border: 1px solid var(--ide-border);
-            border-radius: 8px;
-            margin: 15px 0;
-            overflow: hidden;
-            font-family: 'JetBrains Mono', monospace;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .ai-step-header {
-            background: var(--ide-header);
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            border-bottom: 1px solid var(--ide-border);
-            user-select: none;
-        }
-
-        .ai-step-header:hover { background: #32353a; }
-
-        .ai-step-icon {
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 4px;
-        }
-
-        .ai-step-name {
-            color: var(--ide-text);
-            font-weight: 600;
-            font-size: 12px;
-            flex-grow: 1;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .ai-step-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-        }
-
-        .status-spinner {
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(53, 116, 240, 0.2);
-            border-top: 2px solid var(--ide-accent);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        .status-done { color: var(--ide-success); font-weight: bold; }
-        .status-error { color: var(--ide-error); font-weight: bold; }
-
-        .ai-step-details {
-            background: #141517;
-            display: none;
-        }
-
-        .ai-step-args {
-            padding: 8px 16px;
-            background: #212226;
-            color: #d7ba7d;
-            font-size: 11px;
-            border-bottom: 1px solid var(--ide-border);
-            white-space: pre-wrap;
-        }
-
-        .step-output-area {
-            padding: 15px;
-            max-height: 500px;
-            overflow-y: auto;
-        }
 
         .code-viewer-ui {
             display: flex;

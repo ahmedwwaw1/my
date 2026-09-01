@@ -988,17 +988,26 @@
 
             // 🧠 معالجة خاصة لأداة التفكير المطور (Structured Thought)
             if (typeof output === 'object' && output.reasoning) {
-                let html = `<div style="display:flex; flex-direction:column; gap:12px;">`;
-                if (output.reasoning) html += `<div class="thought-container" style="margin:0;"><div style="color:var(--ide-text); font-size:12px;">${escapeHtml(output.reasoning)}</div></div>`;
-                if (output.visual) html += `<div style="background:rgba(187,134,252,0.05); padding:10px; border-radius:6px; border:1px solid rgba(187,134,252,0.2);"><b style="color:#bb86fc; font-size:10px; display:block; margin-bottom:5px;">🎨 VISUAL ANALYSIS:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.visual)}</div></div>`;
-                if (output.plan) html += `<div style="background:rgba(53,116,240,0.05); padding:10px; border-radius:6px; border:1px dashed var(--ide-accent);"><b style="color:var(--ide-accent); font-size:10px; display:block; margin-bottom:5px;">📋 EXECUTION PLAN:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.plan)}</div></div>`;
-                if (output.peer) html += `<div style="background:rgba(235,196,13,0.05); padding:10px; border-radius:6px; border:1px solid rgba(235,196,13,0.2);"><b style="color:var(--ide-warning); font-size:10px; display:block; margin-bottom:5px;">🕵️ PEER REVIEW & VALIDATION:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.peer)}</div></div>`;
-                if (output.risk) html += `<div style="background:rgba(249,138,148,0.05); padding:10px; border-radius:6px; border:1px solid rgba(249,138,148,0.2);"><b style="color:var(--ide-error); font-size:10px; display:block; margin-bottom:5px;">⚠️ RISK ASSESSMENT:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.risk)}</div></div>`;
-                if (output.outcome) html += `<div style="background:rgba(89,168,105,0.05); padding:10px; border-radius:6px; border:1px solid rgba(89,168,105,0.2);"><b style="color:var(--ide-success); font-size:10px; display:block; margin-bottom:5px;">🎯 EXPECTED OUTCOME:</b><div style="color:var(--ide-muted); font-size:11px;">${escapeHtml(output.outcome)}</div></div>`;
+                let html = `<div class="thought-container">`;
+                html += `<div class="thought-label">Thought Process</div>`;
+                html += `<div style="color:#dfe1e5; font-size:13px; margin-bottom:12px;">${escapeHtml(output.reasoning)}</div>`;
+                if (output.plan) html += `<div style="border-top:1px dashed #3c3f41; padding-top:10px; margin-top:10px;"><b style="color:#3574f0; font-size:10px; text-transform:uppercase;">📋 Action Plan:</b><div style="color:#afb1b3; font-size:12px; margin-top:4px;">${escapeHtml(output.plan)}</div></div>`;
                 html += `</div>`;
                 outputArea.innerHTML = html;
             } else {
                 const textOutput = String(output);
+                // تحويل المخرجات الطويلة إلى نافذة كود احترافية
+                if (textOutput.length > 50 || textOutput.includes('\n')) {
+                    const lines = textOutput.split('\n');
+                    let html = `<div class="code-viewer-ui">`;
+                    html += `<div class="line-numbers">${lines.map((_, i) => i + 1).join('<br>')}</div>`;
+                    html += `<div class="code-content">${escapeHtml(textOutput)}</div>`;
+                    html += `</div>`;
+                    outputArea.innerHTML = html;
+                } else {
+                    outputArea.innerHTML = `<div style="padding:0; color:#dfe1e5; font-size:13px;">${escapeHtml(textOutput)}</div>`;
+                }
+            }
                 // تحويل المخرجات الطويلة إلى نافذة كود احترافية
                 if (textOutput.length > 50 || textOutput.includes('\n')) {
                     const lines = textOutput.split('\n');
@@ -1014,7 +1023,7 @@
 
             // فتح التفاصيل تلقائياً عند الاكتمال
             step.querySelector('.ai-step-details').style.display = 'block';
-        }
+        
 
         function escapeHtml(text) {
             const div = document.createElement('div');
