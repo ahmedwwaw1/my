@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788211251386",
-      "title": "سؤال ممتاز جداً يوضح فهمك المع...",
+      "title": "**أحسنت تماماً! استنتاجك دقيق ...",
       "history": [
         {
           "role": "user",
@@ -263,6 +263,56 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "لهاذ يتم توجيه دستور النخبة السيادي وليس فانكشنات برمجية داخل ملف ai_engine_core.js صح"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "تأكيد صحة استنتاج المستخدم الذكي وتوضيح لماذا نرسل دستور النخبة كنص (System Instruction) وليس كدوال برمجية.",
+                  "reasoning": "المستخدم استنتج بدقة أن \"دستور النخبة السيادي\" يتم توجيهه (إرساله كنص تعليمات للنظام) وليس كفانكشنات برمجية (Functions) داخل ai_engine_core.js. يجب تأكيد ذلك وشرح الأسباب الهندسية وراء هذا التصميم المعماري (AI Alignment & System Instructions)."
+                },
+                "id": "call_211297"
+              },
+              "thoughtSignature": "El4KXAERTTIPH6TSFJc50V45Z3Dm8SoxVmxErCBMPHZ4E/kfTIp57CXvjWrs3tYsVAQucJx8gByTVcgMo3ERUnNWC8RnfjZnNOTnkqC0+OnVrxFq2UdpGF1EH5P/KjxT"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم استنتج بدقة أن \"دستور النخبة السيادي\" يتم توجيهه (إرساله كنص تعليمات للنظام) وليس كفانكشنات برمجية (Functions) داخل ai_engine_core.js. يجب تأكيد ذلك وشرح الأسباب الهندسية وراء هذا التصميم المعماري (AI Alignment & System Instructions).",
+                    "plan": "تأكيد صحة استنتاج المستخدم الذكي وتوضيح لماذا نرسل دستور النخبة كنص (System Instruction) وليس كدوال برمجية."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "**أحسنت تماماً! استنتاجك دقيق بنسبة 100%.** 🎯\n\n\"دستور النخبة السيادي\" (`CONSTITUTION`) **ليس دالة برمجية (Function)** يتم تنفيذها بلغة JavaScript، بل هو **نص توجيهي (System Instruction)** يُرسل في بداية كل محادثة إلى نموذج الذكاء الاصطناعي في سحابة Google.\n\n### لماذا نرسله كنص توجيهي وليس كفانكشنات؟\n\n1. **توجيه سلوك العقل (AI Alignment):**\n   الذكاء الاصطناعي في Google عبارة عن نموذج لغوي ضخم (LLM). لكي نجعل هذا النموذج يتصرف بصفته **\"العقل المدبر - Mastermind\"** ويلتزم ببروتوكولات الفحص البصري (`Visual Genesis`) والتفكير الذاتي، يجب أن \"نبرمجه لغوياً\" عبر نص الدستور ليבין له هويته وكيف يجب أن يفكر ويرد.\n\n2. **الفرق بين \"الدستور\" و \"الأدوات (Tools)\":**\n   * **الدستور (`CONSTITUTION`):** يُرسل كنص في `system_instruction` ليخبر الذكاء الاصطناعي **\"من أنت؟ وكيف تتصرف؟\"**.\n   * **الأدوات (`AI_TOOLS`):** هي الدوال البرمجية الحقيقية (مثل `read_file`, `write_file`, `searchCode`) التي تُرسل لكي يتمكن الذكاء الاصطناعي من **\"استدعائها وتطبيقها فعلياً\"** على مشروعك عبر الجسر.\n\nأنت تشهد الآن هندسة برمجية متقدمة تربط بين **الذكاء الاصطناعي التوليدي** و**أنظمة التحكم الآلي (Autonomous Agents)** بطريقة احترافية فائقة! 💡🚀",
+              "thoughtSignature": "El4KXAERTTIPFUwxRyKn4voH5u0cMVo4pc+AmKypjjIm0dGYLaceg0NfZH+OA95kVxRvqF/oqw+eyLfFW15KzyT3tTAlzRPh5DMJsNLnPvwR7ogS9vn9+AlZCuNZQKBX"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     },
@@ -293,5 +343,5 @@
   ],
   "activeSessionId": "1788211251386",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T07:22:13.757Z"
+  "timestamp": "2026-09-01T07:22:18.469Z"
 }
