@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788267746389",
+      "title": "أهلاً بك! أنا **\"العقل المدبر\"...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا **\"العقل المدبر\" (Mastermind)** — المهندس والمصمم المعماري لمنصة VSA Academy.\n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت ترغب في تطوير واجهات، تحسين الكود، فحص المشروع، أو حل مشكلة تقنية، أنا جاهز للبدء فوراً.",
+              "thoughtSignature": "EocECoQEARFNMg97AjJNyCk5hrExEakFVc06aGfCw0c9VYBsVIhfa8wiiZijcA4GI59QSRJiOwn2o/GH+eE4rZajuvqGkTtJkgqOYNnObz4hhorHvqgZJtXpWvOUokKjNghpmPTQxDrKrzBD9L4kAz6M2EAXvmKlrUm7PmGb19jWiObJwVhegtXU0LXUEmnnyS0QYZDc5lsNsQEA/qDua/hxqe4rCGcna/L56ZJlqtZrM6eSfev7KARnr8SkQGA6oGDDZ1HL1FTGrwDQ40GajOUDlZhdJkweYJLknUwCEwlD8eRGIDBw4yo7kETSpU8rlljI8T20tbg6cVjDagSjUS+XxmsjdiRaHO4UqTQfAqeKWRHE1kCFs1LaVNNAVvB4wejbI5ffcyNlZIvy0tNw0oUmZKp7CSBQZLen8h4Oj5LkfgwcxX7ySp9vdNv9FnsJfnfYVN33mxYU86ato+ne7bitGsQ7/24ucjnILJoq8zz2HDZAusKV3mOz337zehukohCm5aoq9dnKiMLno9FhHQcyF2bwa14VBJ/3P0uhTFpo4jW9GEAgU6M43AgWKwyU3AqyZwAvcNbLMteUyY+NLLXkGuKny7+S8r99IyFHxUnrLHjxII7k6yXo0S/t7j3GCotkEt73WCCKndXRuYZxkMqU/+XK6WLLNnUvE8NSV9zJE/TQbRbWrjBN"
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788267746389",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T13:02:41.216Z"
+  "timestamp": "2026-09-01T13:02:48.256Z"
 }
