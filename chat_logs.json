@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1788252391093",
+      "title": "مرحباً بك! أنا **العقل المدبر ...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **العقل المدبر (Mastermind)**، المعماري الأعلى ومصمم الأنظمة الذكية في VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في بناء، تطوير، أو هندسة مشروعك البرمجي بأعلى معايير الإتقان والإبداع؟ جاهز لتنفيذ أي مهمة أو الإجابة عن أي استفسار!",
+              "thoughtSignature": "El4KXAERTTIPjXQexA4C2HEzFqjGQl8pbQO+1564XypGzm1gvf2OJ0BOARHmyqu/gJXrrPin/e0o7mJ05m9KB0Xy2dk/KHEykle7Q0EY0y36vh82Fq88lZcnZofroIV4"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1788211251386",
       "title": "**أحسنت تماماً! استنتاجك دقيق ...",
       "history": [
@@ -341,7 +365,7 @@
       ]
     }
   ],
-  "activeSessionId": "1788252391093",
+  "activeSessionId": "1788252819274",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T08:53:34.688Z"
+  "timestamp": "2026-09-01T08:53:39.274Z"
 }
