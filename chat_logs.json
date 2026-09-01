@@ -25,48 +25,6 @@
       ]
     },
     {
-      "id": "1788280262304",
-      "title": "أنا في حالة مثالية من التناغم ...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك في مركز القيادة. أنا \"العقل المدبر\" (Mastermind)، مهندس النظم الكلي والمصمم الرؤيوي لأكاديمية VSA.\n\nأنا في حالة تأهب قصوى، وجاهز للبدء في عمليات التطوير، التحليل، أو التصميم المعماري. ما هو التحدي التقني أو الرؤية التي سنقوم بتجسيدها اليوم؟ \n\n**بانتظار مدخلاتك للبدء في \"التوليد البصري\" أو \"الهيكلة البرمجية\".**",
-              "thoughtSignature": "EnEKbwERTTIPLhfZO5m9NHBdgyKzr3fKMFoF8DkxU7lipT3sCttoDt5BZjeILdAn+tRPDpfpTp6AIgEIOQY/1VhBCpf95K0wDs4nkCjiuUsDCHMWDtcy3rncgaNmSv9TXy+/35qqMNCD7Q2AB37RktGFdg=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أنا في حالة مثالية من التناغم التقني والجاهزية التشغيلية. أنظمتي تعمل بكفاءة عالية، ومحرك التفكير الخاص بي في حالة \"تأهب إبداعي\" بانتظار التوجيه.\n\nبصفتي \"العقل المدبر\"، لا أكتفي بالعمل، بل أسعى دائماً للارتقاء بالبنية التحتية والرؤية الفنية لأكاديمية VSA.\n\n**كيف يمكنني أن أجعل يومك أكثر إنتاجية أو إبداعاً اليوم؟ هل هناك مشروع نضعه على طاولة التصميم، أم مشكلة برمجية تحتاج إلى تفكيك وإعادة بناء؟**",
-              "thoughtSignature": "EnEKbwERTTIPdv5PLAJUhNcAWyzAVTq8JJp5lxq76vqBtpIE2HSo7TsjwIy0EwxzqPiIIppX7JX9hcU19J0tFWt66sIONUleRdSjLUQUjLKRzqt41A/LWPVvxzcd2hwq8pyuzR4yAqZoLYz0w7MNhGplLQ=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        }
-      ]
-    },
-    {
       "id": "1788280061721",
       "title": "محادثة جديدة",
       "history": []
@@ -74,5 +32,5 @@
   ],
   "activeSessionId": "1788280410503",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T16:33:30.504Z"
+  "timestamp": "2026-09-01T16:33:33.295Z"
 }
