@@ -2,13 +2,13 @@
   "sessions": [
     {
       "id": "1788284925526",
-      "title": "مرحباً بك! بصفتي العقل المدبر ...",
+      "title": "أهلاً بك! أنا بخير ولله الحمد،...",
       "history": [
         {
           "role": "user",
           "parts": [
             {
-              "text": "مرحبا"
+              "text": "كيف الحال"
             }
           ]
         },
@@ -16,8 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "مرحباً بك! بصفتي العقل المدبر (Mastermind) والمهندس المعماري السيادي لمنظومة VSA، أنا مستعد تماماً لتوجيه وقيادة أي مهام برمجية، تصميمية، أو هندسية تحتاجها. \n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPYwipg4gBEzEqoOsUbPdor6pUH4DgxlWAx7kGHmZggZnSklJRqiUP3tIFE7jcfvEn5Zv8HSQZUBOfD8u2Ec6Mggz13t+1eaEuS7ZuxWLTtotLaDYa8nEx"
+              "text": "أهلاً بك! أنا بخير ولله الحمد، جاهز تماماً وبكامل طاقتي العقلية والبرمجية لمساعدتك في أي مشروع، أو فكرة، أو تطوير برمجي ترغب في تنفيذه اليوم. \n\nكيف يمكنني مساعدتك؟ ما هي المهمة أو التحدي البرمجي الذي بين أيدينا الآن؟",
+              "thoughtSignature": "El4KXAERTTIP2/dMa3Ta/y7kZa7zabQ1FLXqL+XccFzOZhUBua/DEuic2x+oRqr1ANsny9bumqCIgTlGIo+YSG8uVO+N2mZtA5GgUB2h39TGc1zNEfoOZam913/x5C7S"
             }
           ],
           "model": "gemini-3.6-flash"
@@ -87,5 +87,5 @@
   ],
   "activeSessionId": "1788284925526",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T18:17:32.091Z"
+  "timestamp": "2026-09-01T18:17:33.623Z"
 }
