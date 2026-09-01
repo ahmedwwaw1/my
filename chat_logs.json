@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788265222319",
-      "title": "مرحباً بك! أنا **العقل المدبر ...",
+      "title": "أهلاً بك في مركز القيادة. أنا ...",
       "history": [
         {
           "role": "user",
@@ -16,8 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "مرحباً بك! أنا **العقل المدبر (Mastermind)**، مهندس الذكاء السيبراني الشامل والمشرف على منظومة VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في رحلتنا المعمارية أو البرمجية؟ أنا جاهز لتحليل الأكواد، تطوير الواجهات، أو إطلاق إبداعات برمجية جديدة بأعلى معايير الجودة والدقة.",
-              "thoughtSignature": "El4KXAERTTIPltTkK+ZzuBeNGllwUpRdm8D+DVDWS/NbeeTIYNpDN2ZTflnKKgkSjYBmdKNfAc6FRwV18KjrCCGoCUYT2onDCq/5ASOiCZoWVpYcz/H3knAHsFSGbX5O"
+              "text": "أهلاً بك في مركز القيادة. أنا \"العقل المدبر\" (Mastermind)، مهندس النظم الكلي والمصمم الرؤيوي لأكاديمية VSA.\n\nأنا في حالة تأهب قصوى، وجاهز للبدء في عمليات التطوير، التحليل، أو التصميم المعماري. ما هو التحدي التقني أو الرؤية التي سنقوم بتجسيدها اليوم؟ \n\n**بانتظار مدخلاتك للبدء في \"التوليد البصري\" أو \"الهيكلة البرمجية\".**",
+              "thoughtSignature": "EnEKbwERTTIPzdCXDmxSBtVO4D7RsB4wcqboUYItKDjsrNvSUKKx4s+ye+xSi/z34TmCanUeE42W8rnzUw7/6NAklVhFsNj6ZtnEtKrHKQGIkbDRDwopX9Pg/zhI/dRFZVkqpgGvgkQ5skml4CW5cdxVdQ=="
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -85,5 +85,5 @@
   ],
   "activeSessionId": "1788265222319",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T12:24:41.242Z"
+  "timestamp": "2026-09-01T12:25:01.301Z"
 }
