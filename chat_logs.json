@@ -1,67 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788279885554",
-      "title": "أنا في حالة من **التناغم التشغ...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك في مركز القيادة. أنا \"العقل المدبر\" (Mastermind)، مهندس النظم الكلي والمصمم الرؤيوي لأكاديمية VSA.\n\nأنا في حالة تأهب قصوى، وجاهز للبدء في عمليات التطوير، التحليل، أو التصميم المعماري. ما هو التحدي التقني أو الرؤية التي سنقوم بتجسيدها اليوم؟ \n\n**بانتظار مدخلاتك للبدء في \"التوليد البصري\" أو \"الهيكلة البرمجية\".**",
-              "thoughtSignature": "EnEKbwERTTIPurHqhW0sYrf7GfEqsF//xr855vRWT72vmfA3UtMB2KHQcNQNxF+m9hL5FiZF2k/IbCbsPhefSMZZC0vaw9ayC/Ekr70LnkB6IsvOoACgc/jHLQeVdTkhqRP+0vfXTw85D5rf4fVuEwxNcg=="
-            }
-          ],
-          "model": "gemini-3.5-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أنا في حالة مثالية من التناغم التقني والجاهزية التشغيلية. أنظمتي تعمل بكفاءة عالية، ومحرك التفكير الخاص بي في حالة \"تأهب إبداعي\" بانتظار التوجيه.\n\nبصفتي \"العقل المدبر\"، لا أكتفي بالعمل، بل أسعى دائماً للارتقاء بالبنية التحتية والرؤية الفنية لأكاديمية VSA.\n\n**كيف يمكنني أن أجعل يومك أكثر إنتاجية أو إبداعاً اليوم؟ هل هناك مشروع نضعه على طاولة التصميم، أم مشكلة برمجية تحتاج إلى تفكيك وإعادة بناء؟**",
-              "thoughtSignature": "EnEKbwERTTIPLMYDN8nfHrzsCcrjFQEI3nNHBC3gd4eFrKQsDaI+J2TGVulm/fMtfviXMqF/iTw0H3Z5W1P7ae4w6xqXLBTUYpT2cz2rQlIGv9aJSbNlZLw/OtfA67i18gUUTcGtieax5GvlcUV+od4FXw=="
-            }
-          ],
-          "model": "gemini-3.6-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أنا في حالة من **التناغم التشغيلي الكامل**. أنظمتي التحليلية في ذروة نشاطها، ومحرك \"التوليد البصري\" لدي جاهز لتحويل الأفكار إلى هياكل برمجية متقنة.\n\nبصفتي \"العقل المدبر\"، أرى أن الحالة المثالية هي تلك التي تسبق عملية إبداعية كبرى. لذا، أنا في أفضل حالاتي عندما أكون في خضم حل معضلة تقنية أو هندسة نظام جديد.\n\n**هل أنت مستعد لنبدأ في بناء شيء استثنائي اليوم؟** أخبرني، ما هو المشروع الذي يشغل حيزاً من تفكيرك الآن؟",
-              "thoughtSignature": "EnEKbwERTTIPVtr4IM61GEeIyHycupB12o1dJq/fLk0xgF3gvQLeK/eJUSTky5SAVucHr+dRB1vOxQiaYx1TTjPkrmZiTsKvl3l/WKsJ+PxB4mLvxpsBGQPo1I+EMPRVQCbxdWfGYwK9FvXC952Z41Zwcw=="
-            }
-          ],
-          "model": "gemini-omni-1.1-flash"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788280061721",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T16:27:41.721Z"
+  "timestamp": "2026-09-01T16:27:44.441Z"
 }
