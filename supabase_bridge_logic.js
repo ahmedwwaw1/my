@@ -1,7 +1,7 @@
 /**
- * VSA Academy Sovereign Bridge - GENERATION 3 & OMNI-ROUTING
+ * VSA Academy Sovereign Bridge - 2026 ULTIMATE VERSION
  * ---------------------------------------------------------------
- * يدعم نماذج Gemini 3.7, 3.6, 3.5 بشكل رسمي.
+ * يدعم كافة نماذج Gemini (3.7, 3.6, 3.5, 3.1, 2.5, Omni) بشكل رسمي.
  * يعالج أخطاء الإصدارات (v1 vs v1beta) تلقائياً لضمان استقرار 100%.
  */
 
@@ -23,13 +23,24 @@ serve(async (req) => {
       const apiKey = Deno.env.get("GEMINI_API_KEY")
 
       // 1. تنظيف وتحديد معرف الموديل (تجنب تكرار models/ وتحويل للصغير)
-      let modelId = String(requestedModel || "gemini-1.5-flash").trim().toLowerCase();
+      // تم استبدال الموديل الافتراضي بـ gemini-3.7-flash كما طلبت
+      let modelId = String(requestedModel || "gemini-3.7-flash").trim().toLowerCase();
       if (modelId.startsWith("models/")) modelId = modelId.replace("models/", "");
 
-      // 🎯 دعم IDs المكتشفة (3.7, 3.6, 3.5)
+      // 🎯 دعم IDs المكتشفة (2026 Ultimate List) باستخدام الجمل الشرطية المتتالية
       if (modelId.includes("3.7")) modelId = "gemini-3.7-flash";
       else if (modelId.includes("3.6")) modelId = "gemini-3.6-flash";
-      else if (modelId.includes("3.5")) modelId = "gemini-3.5-flash-lite";
+      else if (modelId.includes("3.5-lite")) modelId = "gemini-3.5-flash-lite";
+      else if (modelId.includes("3.5")) modelId = "gemini-3.5-flash";
+      else if (modelId.includes("3.1")) modelId = "gemini-3.1-flash-lite";
+      else if (modelId.includes("3-preview")) modelId = "gemini-3-flash-preview";
+      else if (modelId.includes("2.5-pro")) modelId = "gemini-2.5-pro";
+      else if (modelId.includes("2.5-lite")) modelId = "gemini-2.5-flash-lite";
+      else if (modelId.includes("2.5")) modelId = "gemini-2.5-flash";
+      else if (modelId.includes("omni")) modelId = "gemini-omni-1.1-flash";
+      else if (modelId.includes("image-lite")) modelId = "gemini-3.1-flash-lite-image";
+      else if (modelId.includes("image-pro")) modelId = "gemini-3-pro-image";
+      else if (modelId.includes("image")) modelId = "gemini-3.1-flash-image";
 
       // 2. محاولة الاتصال عبر نظام الـ Multi-Version (Beta ثم Stable)
       async function tryFetch(version) {

@@ -115,14 +115,21 @@
                                     <span title="Safety Protocol Active" style="color: #4db6ac; font-size: 16px;">🛡️</span>
                                     <div class="model-selector-container">
                                         <select id="modelSelector" onchange="saveModelSelection()" title="AI Model">
-                                            <optgroup label="Google Gemini (Elite Tier)">
-                                                <option value="gemini-3.7-flash" selected>Gemini 3.7 Flash (SOTA)</option>
-                                                <option value="gemini-3.6-flash">Gemini 3.6 Flash (Efficient)</option>
-                                                <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (Fast)</option>
+                                            <optgroup label="Google Gemini (Generation 3 - 2026)">
+                                                <option value="gemini-3.7-flash" selected>Gemini 3.7 Flash - Ultimate</option>
+                                                <option value="gemini-3.6-flash">Gemini 3.6 Flash - Balanced</option>
+                                                <option value="gemini-3.5-flash">Gemini 3.5 Flash - Stable</option>
+                                                <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite - Fast</option>
+                                                <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite - Efficient</option>
                                             </optgroup>
-                                            <optgroup label="Google Gemini (Stable Legacy)">
-                                                <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-                                                <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                                            <optgroup label="Google Gemini (Generation 2.5 & Special)">
+                                                <option value="gemini-2.5-pro">Gemini 2.5 Pro - Intelligent</option>
+                                                <option value="gemini-2.5-flash">Gemini 2.5 Flash - Speed</option>
+                                                <option value="gemini-omni-1.1-flash">Gemini Omni 1.1 - Multimodal</option>
+                                            </optgroup>
+                                            <optgroup label="Specialized & Nano Banana (Image/Audio)">
+                                                <option value="gemini-3.1-flash-image">Nano Banana 2 - Image Gen</option>
+                                                <option value="gemini-3.5-transcribe">Gemini Audio Transcribe</option>
                                             </optgroup>
                                             <optgroup label="DeepSeek (Proxy Bridge)">
                                                 <option value="deepseek-chat">DeepSeek V3 (Chat/Coder)</option>
