@@ -1,12 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788291630524",
-      "title": "محادثة جديدة",
-      "history": []
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788291630524",
-  "pendingHistory": null,
-  "timestamp": "2026-09-01T19:41:25.604Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك فحص ملفاتي\"}]}]",
+  "timestamp": "2026-09-01T19:41:40.844Z"
 }
