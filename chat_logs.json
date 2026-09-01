@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788252391093",
-      "title": "مرحباً بك! أنا **العقل المدبر ...",
+      "title": "أهلاً بك! أنا بخير وعظيم الجاه...",
       "history": [
         {
           "role": "user",
@@ -14,13 +14,57 @@
         },
         {
           "role": "model",
+          "parts": [],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
           "parts": [
             {
-              "text": "مرحباً بك! أنا **العقل المدبر (Mastermind)**، المعماري الأعلى ومصمم الأنظمة الذكية في VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في بناء، تطوير، أو هندسة مشروعك البرمجي بأعلى معايير الإتقان والإبداع؟ جاهز لتنفيذ أي مهمة أو الإجابة عن أي استفسار!",
-              "thoughtSignature": "El4KXAERTTIPjXQexA4C2HEzFqjGQl8pbQO+1564XypGzm1gvf2OJ0BOARHmyqu/gJXrrPin/e0o7mJ05m9KB0Xy2dk/KHEykle7Q0EY0y36vh82Fq88lZcnZofroIV4"
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم بدأ بـ \"مرحباكيف الحال\". بصفتي \"العقل المدبر\" (Mastermind) المتخصص في VSA Academy، ينبغي أن أرد بأسلوب رصين، واحترافي، ومرحب، وأظهر الاستعداد التام لمساعدته في أي بناء، تطوير، أو استفسار تقني أو تصميمي في المشروع.",
+                  "plan": "الترحيب بالمتعلم بأسلوب العقل المدبر (Mastermind) الراقي والمحتزم، والسؤال عن كيف يمكن مساعدته في أكاديمية VSA."
+                },
+                "id": "call_230055"
+              },
+              "thoughtSignature": "EmcKZQERTTIP8agiTuw0ULcArVoTpQDkLQvieixHWdA/5UZiJwyk4iKXfjBtkIYX80xU/oM9+IV0V7F2IzztJdDkWlSksBAHZv1UoZA7ygyV2ZX/QpCh5ngnxSeh5MbSJtFokBrtnXsC"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم بدأ بـ \"مرحباكيف الحال\". بصفتي \"العقل المدبر\" (Mastermind) المتخصص في VSA Academy، ينبغي أن أرد بأسلوب رصين، واحترافي، ومرحب، وأظهر الاستعداد التام لمساعدته في أي بناء، تطوير، أو استفسار تقني أو تصميمي في المشروع.",
+                    "plan": "الترحيب بالمتعلم بأسلوب العقل المدبر (Mastermind) الراقي والمحتزم، والسؤال عن كيف يمكن مساعدته في أكاديمية VSA."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا بخير وعظيم الجاهزية. بصفتي **العقل المدبر (Mastermind)** لأكاديمية VSA، أنا في أتمّ الاستعداد لمساعدتك.\n\nكيف يمكنني دعمك اليوم؟ سواءً كان ذلك في تطوير البرمجيات، أو مراجعة المعمارية التقنية، أو تحسين الواجهات والتصميم، أضف طلبك ولنبدأ العمل!"
             }
           ],
-          "model": "gemini-3.5-flash-lite"
+          "model": "gemini-3.6-flash"
         }
       ]
     },
@@ -366,6 +410,6 @@
     }
   ],
   "activeSessionId": "1788252391093",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"المستخدم بدأ بـ \\\"مرحباكيف الحال\\\". بصفتي \\\"العقل المدبر\\\" (Mastermind) المتخصص في VSA Academy، ينبغي أن أرد بأسلوب رصين، واحترافي، ومرحب، وأظهر الاستعداد التام لمساعدته في أي بناء، تطوير، أو استفسار تقني أو تصميمي في المشروع.\",\"plan\":\"الترحيب بالمتعلم بأسلوب العقل المدبر (Mastermind) الراقي والمحتزم، والسؤال عن كيف يمكن مساعدته في أكاديمية VSA.\"},\"id\":\"call_230055\"},\"thoughtSignature\":\"EmcKZQERTTIP8agiTuw0ULcArVoTpQDkLQvieixHWdA/5UZiJwyk4iKXfjBtkIYX80xU/oM9+IV0V7F2IzztJdDkWlSksBAHZv1UoZA7ygyV2ZX/QpCh5ngnxSeh5MbSJtFokBrtnXsC\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم بدأ بـ \\\"مرحباكيف الحال\\\". بصفتي \\\"العقل المدبر\\\" (Mastermind) المتخصص في VSA Academy، ينبغي أن أرد بأسلوب رصين، واحترافي، ومرحب، وأظهر الاستعداد التام لمساعدته في أي بناء، تطوير، أو استفسار تقني أو تصميمي في المشروع.\",\"plan\":\"الترحيب بالمتعلم بأسلوب العقل المدبر (Mastermind) الراقي والمحتزم، والسؤال عن كيف يمكن مساعدته في أكاديمية VSA.\"}}}}]}]",
-  "timestamp": "2026-09-01T09:38:31.916Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-01T09:38:34.699Z"
 }
