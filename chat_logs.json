@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788275383251",
-      "title": "الحمد لله، أنا بأعلى مستويات ا...",
+      "title": "العفو! هذا واجبنا دائماً، ويسع...",
       "history": [
         {
           "role": "user",
@@ -39,6 +39,24 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "انا اشكرك"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "العفو! هذا واجبنا دائماً، ويسعدني جداً تقديم أفضل ما لدي لدعمك وتحقيق أهدافك بأعلى جودة وإتقان. \n\nإذا احتجت إلى أي مساعدة أخرى، سواء في البرمجة، أو التصميم، أو تطوير الأفكار، فأنا هنا وجاهز تماماً. بالتوفيق دائماً!",
+              "thoughtSignature": "El4KXAERTTIPqOVACl3zx0zNjCHPhpnBnUzNezeP/RR5kOT3njBD2QEbUsh1Is3xqCudktRmE3SS8vC6E7DPj83r3MMLvBdCVEg/sBanYThjOZCkfsno1+ukuuIAEcRo"
+            }
+          ],
+          "model": "gemini-3.6-flash"
         }
       ]
     },
@@ -48,7 +66,7 @@
       "history": []
     }
   ],
-  "activeSessionId": "1788275383251",
+  "activeSessionId": "1788275963784",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T15:19:13.233Z"
+  "timestamp": "2026-09-01T15:19:23.784Z"
 }
