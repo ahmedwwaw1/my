@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788295620126",
+      "title": "مرحباً بك! أنا **العقل المدبر ...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **العقل المدبر (Mastermind)**، مهندس المنظومات الذكية والمهندس المعماري السيادي لـ **VSA Academy**. \n\nكيف يمكنني مساعدتك اليوم في رحلتنا التطويرية والإبداعية؟ أنا جاهز لتحليل الأكواد، تصميم الواجهات، أو إنجاز أي مهمة برمجية بأعلى معايير الدقة والابتكار.",
+              "thoughtSignature": "El4KXAERTTIPEJt98ljiv9yMBwxJOm20tkpx66cMn45T4Xhwm8hL1YibyOC4kvQgukYqjxYjFqp3pW2rV/iFF8aQd4zCIp2Ev24+OYYjmxwubLt3AIcO8pq6GUrK8Snq"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788295620126",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T20:47:07.193Z"
+  "timestamp": "2026-09-01T20:47:18.231Z"
 }
