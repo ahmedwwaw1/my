@@ -41,14 +41,9 @@
           "model": "gemini-3.1-flash-image"
         }
       ]
-    },
-    {
-      "id": "1788264363653",
-      "title": "محادثة جديدة",
-      "history": []
     }
   ],
   "activeSessionId": "1788264279894",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T12:51:07.650Z"
+  "timestamp": "2026-09-01T12:51:08.906Z"
 }
