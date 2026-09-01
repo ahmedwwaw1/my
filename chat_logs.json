@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788257804635",
-      "title": "أهلاً بك! أنا **\"العقل المدبر\"...",
+      "title": "أهلاً بك في \"أكاديمية VSA\". أن...",
       "history": [
         {
           "role": "user",
@@ -16,43 +16,11 @@
           "role": "model",
           "parts": [
             {
-              "functionCall": {
-                "name": "thought",
-                "args": {
-                  "reasoning": "The user greeted with 'مرحبا'. I will introduce my role, express readiness to assist, and invite them to share their request or codebase task.",
-                  "plan": "Respond warmly and professionally in Arabic as Mastermind - Sovereign Omni-Architect, ready to assist the user with any architectural, UI/UX, feature implementation, or codebase tasks."
-                },
-                "id": "call_473655"
-              },
-              "thoughtSignature": "ErMECrAEARFNMg+yMqsYkzECOmokpW1/xIPVyDVISLPG9DiasMujDHM6b+ZC/ScsGoas7bs7/l/5Q9ktqKyCrb2TVv2rNE5ycizCiVpDMQZoaBFvheuStkSJNpiapKVVygLuUFTbwHtq83KaNG6LHouvt28XYOAoDu3dlV2YZNHUEsA+a6MkJ6XF32hnUrpE6JwzVIRkw9QLhb0FZZS39Y2c7D+4mDDFtSZwahmYNhZbyQFZVYyXmAGTerGvBu0g3aj09K5TwNKCMM60XC2H31qwn8S8Yryvfi8rLtRUJmEtym4L+i8aD5/ctvNe4WyjkFuSFCz6omEdRWcDtJgtS0qxarql78BPpK7rvEwvSqygRb+KEHimnPmmN3KJMArPnvIEHPnBgnHuXmw7b+CGRTYDwYAMVylaoGtG4ZYw1OJz+tTEHGMT4xk85VtexMS5pIaz7NrJeQid3XLLQJA9NFWV7m9LCFr/6gs7C4Aurg+H1JpYi6Ig88ZYu/XXYQiUa4HyDHpFxinS054UIPmq2vCgcJlD0w9ErT4vDszMEkvg+27l+JNHYEuVKir/9CWMz3O2neAQbp+4Rm/MOZ/KFmA2MLf26pW1saB4Z/Ek0xpd4BsKSbXZFmb6R9a9wkvttOxouqzpR8meHDk/rNq2XTuE/3qAbNPkLnWIIvwwl6iKWbIbed5YuLT8k/dwiWwHlaYFI549mJgjpy23dNSMe1XPrKaQEW15/K4FK99kjCKe4+4b+TU="
-            }
-          ]
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "functionResponse": {
-                "name": "thought",
-                "response": {
-                  "content": {
-                    "reasoning": "The user greeted with 'مرحبا'. I will introduce my role, express readiness to assist, and invite them to share their request or codebase task.",
-                    "plan": "Respond warmly and professionally in Arabic as Mastermind - Sovereign Omni-Architect, ready to assist the user with any architectural, UI/UX, feature implementation, or codebase tasks."
-                  }
-                }
-              }
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! أنا **\"العقل المدبر\" (Mastermind)** — المهندس والمطور المعماري للنظام.\n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت ترغب في:\n- **تحسين وتطوير الواجهات والتصميم (UI/UX)**\n- **بناء وإضافة ميزات برمجية جديدة**\n- **فحص وتحليل الكود وإصلاح المشاكل**\n- **إدارة وبنية المشروع الرقمي**\n\nأنا جاهز تماماً للبدء. تفضل بطرح ما لديك!",
-              "thoughtSignature": "EtABCs0BARFNMg8y2Dz/pjMqAS85b8SoLzuOrUx9ZahRmcTIX9fZ+dq5ripej6Dq4OFCtVRxd7Ble4uyL7ldL/AKzxsBgZs+B7NUhKJnGCyfJwLZDYSJk27YVU/2VqDXemghfhTHtcfl09xPuYWjzm/pYYsV8TWRzN1F76WzKom3zyMw20vp9MWyk2AWToI28MAaOsCv9+sljB3sS/rTJUb3RtpNCYixAFPpm3FODES83Y4HdQdqzf81y/FfsY4TvISSltSv00Bw1EPsWNlDcu99kw=="
+              "text": "أهلاً بك في \"أكاديمية VSA\". أنا العقل المدبر (Mastermind)، مهندس النظم الرؤيوي ومطور البنية التحتية المعرفية.\n\nأنا في حالة استعداد تام، ومستشعراتي البرمجية والتحليلية مفعلة. هل نبدأ في هندسة مشروع جديد، أم هناك خلل في البنية الحالية يتطلب تدخلاً هندسياً دقيقاً؟\n\n**بانتظار توجيهاتك لبدء عملية التشييد المعرفي.**",
+              "thoughtSignature": "EnEKbwERTTIPFVhEhfLJFRMitEWKt0PQvbkH01DYxypAZHLiiAge8+TfMpgKneKMaTRMgQbAOx0suQ1f4mC3o+04LrUZRemilH9ITMQqaY+/5VI5W5sjda91vcppW6FpHfFd+DGfBGJwNo2E26rM9DbaNQ=="
             }
           ],
-          "model": "gemini-3.6-flash"
+          "model": "gemini-3.1-flash-image"
         }
       ]
     },
@@ -181,5 +149,5 @@
   ],
   "activeSessionId": "1788257804635",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T10:51:53.341Z"
+  "timestamp": "2026-09-01T10:52:05.593Z"
 }
