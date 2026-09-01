@@ -2,26 +2,13 @@
   "sessions": [
     {
       "id": "1788211395433",
-      "title": "أهلاً وسهلاً بك! \n\nأنا **العقل...",
+      "title": "أهلاً بك! أنا بخير ولله الحمد،...",
       "history": [
         {
           "role": "user",
           "parts": [
             {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
+              "text": "كيف الحال"
             }
           ]
         },
@@ -29,48 +16,16 @@
           "role": "model",
           "parts": [
             {
-              "functionCall": {
-                "name": "thought",
-                "args": {
-                  "reasoning": "المستخدم رحّب باللغة العربية (\"مرحبامرحبا\"). بصفتي \"العقل المدبر\" (Mastermind - Sovereign Omni-Architect & Visionary Engineer)، يجب أن أرد بترحاب ذكي وشديد الاحترافية ويعكس الجاهزية الكاملة لبناء أو تطوير أو إصلاح المشروع.",
-                  "plan": "الترحيب بالمستخدم بحفاوة واحترافية وفقاً لهوية \"العقل المدبر\" (Mastermind) واستعراض الجاهزية للمساعدة في التطوير والهندسة البرمجية."
-                },
-                "id": "call_199309"
-              },
-              "thoughtSignature": "EmcKZQERTTIPTGWtbfCKjV1U6y8tgxq+oMHZTNZ3ObygfBJVdIUHK9xUMDOwAM3FV4ZufyO7wLSF1LvTsTmlnrb6MEHECh9ZVpbrQgquTqVZc1qUTt9MypeMzeNDG5t+AqYjb7At2rCW"
-            }
-          ]
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "functionResponse": {
-                "name": "thought",
-                "response": {
-                  "content": {
-                    "reasoning": "المستخدم رحّب باللغة العربية (\"مرحبامرحبا\"). بصفتي \"العقل المدبر\" (Mastermind - Sovereign Omni-Architect & Visionary Engineer)، يجب أن أرد بترحاب ذكي وشديد الاحترافية ويعكس الجاهزية الكاملة لبناء أو تطوير أو إصلاح المشروع.",
-                    "plan": "الترحيب بالمستخدم بحفاوة واحترافية وفقاً لهوية \"العقل المدبر\" (Mastermind) واستعراض الجاهزية للمساعدة في التطوير والهندسة البرمجية."
-                  }
-                }
-              }
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً وسهلاً بك! \n\nأنا **العقل المدبر (Mastermind)** — المهندس المعماري والنواة التفكيرية والبصرية للمشروع. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كان لديك:\n- 🎨 **تطوير وتحسين واجهات المستخدم (UI/UX Visual Genesis)**\n- 🏗️ **تصميم وبناء البنية التحتية البرمجية (System Architecture)**\n- 🔍 **فحص وحل المشكلات والأخطاء البرمجية (Deep Analysis & Debugging)**\n- 🚀 **إضافة مميزات جديدة أو تحسين الأداء**\n\nأنا جاهز تماماً لبدء العمل. تفضل بطرح ما لديك!",
-              "thoughtSignature": "EmcKZQERTTIPgVu48trgq1j4cbv4HhIN5RTBcRGfYHMMBRCi1UwXwAaro3S7VDyiFVmGUCt4TkYY1o46iiJEuaybzBzz/QvzTx2XUjl0arvNm9qVxRuoVxW6h5iFD/pRKt46bpVuBnnj"
+              "text": "أهلاً بك! أنا بخير ولله الحمد، ومستعد تماماً لمساعدتك في أي مشروع برمجي، أو تطوير تصميم، أو حل أي مسألة تقنية تفكر بها. \n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPtNT4qSaNR8J9Y45/+ZY1Ban33yYKXTKV19BQoJwD9whik3xhzylMwxMGtzKo8g5p+IMNz9d7TPBah6jxoO21BC2shsoSySrFC/FXH5fG9iDf7fSJL06u"
             }
           ],
-          "model": "gemini-3.6-flash"
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1788211395433",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T18:12:59.906Z"
+  "timestamp": "2026-09-01T18:13:01.229Z"
 }
