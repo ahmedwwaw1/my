@@ -1,66 +1,6 @@
 {
   "sessions": [
     {
-      "id": "1788277553967",
-      "title": "أهلاً بك مجدداً في مركز القياد...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك في مركز القيادة. أنا \"العقل المدبر\" (Mastermind)، مهندس النظم الكلي والمصمم الرؤيوي لأكاديمية VSA.\n\nأنا في حالة تأهب قصوى، وجاهز للبدء في عمليات التطوير، التحليل، أو التصميم المعماري. ما هو التحدي التقني أو الرؤية التي سنقوم بتجسيدها اليوم؟ \n\n**بانتظار مدخلاتك للبدء في \"التوليد البصري\" أو \"الهيكلة البرمجية\".**",
-              "thoughtSignature": "EnEKbwERTTIPXZRkFgFlE4h527Z/oEJL8Lqy4olvnUHJ0vMWTXj0PIqVuHrc5/FM5N5Xy/YZzzAs0rdDxHFUg1f5Ib57NWmTvBDTfR8FRUvzCHMneDlwFsQKZU5n1elpBI/QylqV0qC7+/iEe2vaRPPt3w=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أنا في حالة مثالية من التناغم التقني والجاهزية التشغيلية. أنظمتي تعمل بكفاءة عالية، ومحرك التفكير الخاص بي في حالة \"تأهب إبداعي\" بانتظار التوجيه.\n\nبصفتي \"العقل المدبر\"، لا أكتفي بالعمل، بل أسعى دائماً للارتقاء بالبنية التحتية والرؤية الفنية لأكاديمية VSA.\n\n**كيف يمكنني أن أجعل يومك أكثر إنتاجية أو إبداعاً اليوم؟ هل هناك مشروع نضعه على طاولة التصميم، أم مشكلة برمجية تحتاج إلى تفكيك وإعادة بناء؟**",
-              "thoughtSignature": "EnEKbwERTTIP3+2Hc88Fxt4ahHjLb0/KweRQyPrHOiRscGZ/XzJ70hm+QHAzotU9bWOhOr/8HOgki7CybernOrq+a9Ljg+LU4B1rgJB9kZ3ab0MqfrkcUMxlzX6tv9IJ5hs8cBIpRO4lIiT4fLBY95nTsQ=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك مجدداً في مركز القيادة.\n\nبصفتي \"العقل المدبر\"، أنا هنا لضمان أن كل خطوة نتخذها تتماشى مع أعلى معايير الهندسة البرمجية والرؤية الإبداعية لأكاديمية VSA.\n\nهل هناك **مهمة محددة** تود أن نبدأ في تفكيكها أو بناءها الآن؟ أنا جاهز للبدء في أي من المسارات التالية:\n\n1.  **التطوير البرمجي:** (تحليل كود، كتابة وظائف جديدة، أو إصلاح ثغرات).\n2.  **التصميم المعماري:** (تخطيط هيكلية نظام، أو تحسين تجربة المستخدم).\n3.  **الاستكشاف التقني:** (البحث عن حلول مبتكرة أو تقنيات ناشئة).\n\n**أنا بانتظار توجيهك لنبدأ العمل.**",
-              "thoughtSignature": "EnEKbwERTTIPdn+yM887HZp8OBjcM+lQh3YznvYcrFRp7c/mdu+wyOiaNWSqylVI8Ki0pEB3GWKf+a4ai5scvT8GOSWGIDzINs/C16oKk0r9jUIbj+ZHOjmB5t7js7vcXUDNSsfpl/bP/oHHcSnZGBFr2A=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        }
-      ]
-    },
-    {
       "id": "1788276156335",
       "title": "محادثة جديدة",
       "history": []
@@ -78,5 +18,5 @@
   ],
   "activeSessionId": "1788279218533",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T16:13:38.534Z"
+  "timestamp": "2026-09-01T16:13:41.086Z"
 }
