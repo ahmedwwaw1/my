@@ -2,27 +2,8 @@
   "sessions": [
     {
       "id": "1788263933825",
-      "title": "أهلاً بك في \"أكاديمية VSA\". بص...",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك في \"أكاديمية VSA\". بصفتي العقل المدبر (Mastermind)، أنا هنا لترجمة رؤيتك إلى هندسة برمجية دقيقة وواقع رقمي متكامل.\n\nلقد تم تفعيل بروتوكولات \"النشأة البصرية\" (Visual Genesis) و\"المحاكاة الصفرية\" (Zero Trust Simulation). أنا في حالة تأهب تام للتحليل، التصميم، أو التطوير.\n\n**ما هي المهمة الهندسية أو الرؤية البرمجية التي سنبدأ في تشكيلها اليوم؟**",
-              "thoughtSignature": "EnEKbwERTTIPQXT4lIen8x7w6XREv/gNHb2uyZnCWPUVl2x7RLkaj2mPZmxRROIKOGHJBKuEj1fli2wTaCWjE9sYzborIMFxkdXfFtZl9zsECe1ai1lf+F6UdRYpjim9vtaTkIOHCXvHt5IB0XJycSD8Fg=="
-            }
-          ],
-          "model": "gemini-3.1-flash-image"
-        }
-      ]
+      "title": "محادثة جديدة",
+      "history": []
     },
     {
       "id": "1788263918201",
@@ -32,5 +13,5 @@
   ],
   "activeSessionId": "1788263933825",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T11:59:50.630Z"
+  "timestamp": "2026-09-01T11:59:50.629Z"
 }
