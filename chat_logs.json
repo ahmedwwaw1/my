@@ -2,11 +2,30 @@
   "sessions": [
     {
       "id": "1788281886087",
-      "title": "محادثة جديدة",
-      "history": []
+      "title": "مرحباً بك! بصفتي العقل المدبر ...",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! بصفتي العقل المدبر والمهندس الشامل لـ VSA Academy، أنا جاهز تماماً لدعمك في أي مهمة برمجية، معمارية، أو إبداعية تحتاجها. \n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPgTXR0EabuMoZRyMctoFF5jtwwERm6sJVwhHTgWsrJ3OOD674Q4Wrge9wI7i37LoL039LEz6NRzXlQ4JuvWqUnAjGVDJZSWRpPNLP705kkcqY3PSuTDgM"
+            }
+          ],
+          "model": "gemini-3.5-flash"
+        }
+      ]
     }
   ],
   "activeSessionId": "1788281886087",
   "pendingHistory": null,
-  "timestamp": "2026-09-01T16:58:14.429Z"
+  "timestamp": "2026-09-01T16:58:15.775Z"
 }
