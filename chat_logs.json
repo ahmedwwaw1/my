@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788295791869",
-      "title": "مرحباً بك! أنا **العقل المدبر ...",
+      "title": "أهلاً بك مجدداً. لقد قمت بالبح...",
       "history": [
         {
           "role": "user",
@@ -18,6 +18,168 @@
             {
               "text": "مرحباً بك! أنا **العقل المدبر (Mastermind)**، مهندس المنظومات الشامل والمستشار التقني الأول لـ **VSA Academy**. \n\nأنا هنا لدعمك بكل ما تحتاجه من تطوير، تصميم، تحليل معماري، أو حل أي مشكلة برمجية بدقة واحترافية عالية. \n\nكيف يمكنني مساعدتك اليوم؟",
               "thoughtSignature": "El4KXAERTTIP6p1Y4Xr4XCR8bpCVYxokL5j2XzZkjagG3cuKO0F8H26aA/QPGMcxWp2tWJARvl2aKFHwt8V8QyIMybDd5s4ABjUMUs1ALPqr2wmMv8DrrXvokh0V2vql"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك فحص ملفاتي"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "فحص المشروع والملفات المتاحة للتعرف على هيكلة المشروع وبنيته الأساسية.",
+                  "reasoning": "المستخدم يطلب فحص الملفات، وعلينا كشف الملفات الرئيسية في المستودع لنستطيع تقديم تحليل دقيق وشامل."
+                },
+                "id": "call_761013"
+              },
+              "thoughtSignature": "El4KXAERTTIPEIkQBJvrxO8+Lu0lYHeKDFq2vfQN+f+u8iT6FsjfLSS6mjVumSUIjA24WuFBMyo4qchbuEkhuzP8oOJgDrCK5hUq9d57BBpX6ozlp5NOdAJgGx1aq7Gf"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يطلب فحص الملفات، وعلينا كشف الملفات الرئيسية في المستودع لنستطيع تقديم تحليل دقيق وشامل.",
+                    "plan": "فحص المشروع والملفات المتاحة للتعرف على هيكلة المشروع وبنيته الأساسية."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "package.json"
+                },
+                "id": "call_496483"
+              },
+              "thoughtSignature": "El4KXAERTTIPYPpFutqNWXEZmfDZcFyK4vDgUwIHRlwqNwB88QtofqIyN2BgTtrTtL4ZPVTjKLpuiXv8HQl/jJpSSWIVv/Y5BuHXKgMwBv3D0eGF0y+n4Fo+jA6/F0Js"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "searchCode",
+                "response": {
+                  "content": "No results."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "index"
+                },
+                "id": "call_494373"
+              },
+              "thoughtSignature": "El4KXAERTTIPz8lrKzLXzhTJl13J9AJXSBVHwrpDmwt5VXI6o7BHKVjv85Ggi9UEzAhYgyfGNw2ORWT8gTN/OKR8gg0gV1FFcW6Jku7kEMhshwK22Xm1YtL4KgKDYH2D"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "searchCode",
+                "response": {
+                  "content": "No results."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "html"
+                },
+                "id": "call_653372"
+              },
+              "thoughtSignature": "El4KXAERTTIP0u+x3D3ccy5EpGn6WME1Dm9UuM1In3rKSLKwmheEx+M3lh2ijNzb2DNGAtQvxRcmcx1uuI2aAKCg0S4JEPFKH+KgC0KHi1wYYRVkP501fkyZA3AHu6P3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "searchCode",
+                "response": {
+                  "content": "No results."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "."
+                },
+                "id": "call_330618"
+              },
+              "thoughtSignature": "El4KXAERTTIPFexNRJ99DkgeBFl8U6u5KwwdOIY9f/Jy8cBbH6Y4llRq7sT5yRYQyvEi/PAvrKJaw43pDwtx0u/ICZGbxOUhU30qNY2cOaVJhrlqyaFKkox+Ub3S5q/A"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "searchCode",
+                "response": {
+                  "content": "No results."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك مجدداً. لقد قمت بالبحث عن الملفات في المستودع الحالي، ويبدو أنه فارغ أو لا توجد ملفات مرفوعة بعد. \n\nهل ترغب في رفع ملفات معينة، أو ربط مستودع، أو البدء في كتابة مشروع جديد (سواء كان تطبيق واجهة أمامية، موقع إلكتروني، أو نظام متكامل لـ VSA Academy)؟ \n\nأنا جاهز تماماً لتوجيهك وهندسة النظام معك خطوة بخطوة!",
+              "thoughtSignature": "El4KXAERTTIP2BaiefrKJISn9Mdz3BP599NLX7fb9y7pecnd8FMsrcpXkIl2rTG6PFei8iBVJN69xp6hHFj9j79HvK77dPyILa8UuYYxmiuCv0yV5HN4T4oEbqpaPSXf"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -68,6 +230,6 @@
     }
   ],
   "activeSessionId": "1788295791869",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! أنا **العقل المدبر (Mastermind)**، مهندس المنظومات الشامل والمستشار التقني الأول لـ **VSA Academy**. \\n\\nأنا هنا لدعمك بكل ما تحتاجه من تطوير، تصميم، تحليل معماري، أو حل أي مشكلة برمجية بدقة واحترافية عالية. \\n\\nكيف يمكنني مساعدتك اليوم؟\",\"thoughtSignature\":\"El4KXAERTTIP6p1Y4Xr4XCR8bpCVYxokL5j2XzZkjagG3cuKO0F8H26aA/QPGMcxWp2tWJARvl2aKFHwt8V8QyIMybDd5s4ABjUMUs1ALPqr2wmMv8DrrXvokh0V2vql\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك فحص ملفاتي\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"فحص المشروع والملفات المتاحة للتعرف على هيكلة المشروع وبنيته الأساسية.\",\"reasoning\":\"المستخدم يطلب فحص الملفات، وعلينا كشف الملفات الرئيسية في المستودع لنستطيع تقديم تحليل دقيق وشامل.\"},\"id\":\"call_761013\"},\"thoughtSignature\":\"El4KXAERTTIPEIkQBJvrxO8+Lu0lYHeKDFq2vfQN+f+u8iT6FsjfLSS6mjVumSUIjA24WuFBMyo4qchbuEkhuzP8oOJgDrCK5hUq9d57BBpX6ozlp5NOdAJgGx1aq7Gf\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يطلب فحص الملفات، وعلينا كشف الملفات الرئيسية في المستودع لنستطيع تقديم تحليل دقيق وشامل.\",\"plan\":\"فحص المشروع والملفات المتاحة للتعرف على هيكلة المشروع وبنيته الأساسية.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\"package.json\"},\"id\":\"call_496483\"},\"thoughtSignature\":\"El4KXAERTTIPYPpFutqNWXEZmfDZcFyK4vDgUwIHRlwqNwB88QtofqIyN2BgTtrTtL4ZPVTjKLpuiXv8HQl/jJpSSWIVv/Y5BuHXKgMwBv3D0eGF0y+n4Fo+jA6/F0Js\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"searchCode\",\"response\":{\"content\":\"No results.\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\"index\"},\"id\":\"call_494373\"},\"thoughtSignature\":\"El4KXAERTTIPz8lrKzLXzhTJl13J9AJXSBVHwrpDmwt5VXI6o7BHKVjv85Ggi9UEzAhYgyfGNw2ORWT8gTN/OKR8gg0gV1FFcW6Jku7kEMhshwK22Xm1YtL4KgKDYH2D\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"searchCode\",\"response\":{\"content\":\"No results.\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\"html\"},\"id\":\"call_653372\"},\"thoughtSignature\":\"El4KXAERTTIP0u+x3D3ccy5EpGn6WME1Dm9UuM1In3rKSLKwmheEx+M3lh2ijNzb2DNGAtQvxRcmcx1uuI2aAKCg0S4JEPFKH+KgC0KHi1wYYRVkP501fkyZA3AHu6P3\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"searchCode\",\"response\":{\"content\":\"No results.\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\".\"},\"id\":\"call_330618\"},\"thoughtSignature\":\"El4KXAERTTIPFexNRJ99DkgeBFl8U6u5KwwdOIY9f/Jy8cBbH6Y4llRq7sT5yRYQyvEi/PAvrKJaw43pDwtx0u/ICZGbxOUhU30qNY2cOaVJhrlqyaFKkox+Ub3S5q/A\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"searchCode\",\"response\":{\"content\":\"No results.\"}}}]}]",
-  "timestamp": "2026-09-01T21:17:17.596Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-01T21:25:10.669Z"
 }
