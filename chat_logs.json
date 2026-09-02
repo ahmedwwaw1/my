@@ -1,67 +1,17 @@
 {
   "sessions": [
     {
-      "id": "1788298352809",
-      "title": "أقدر اهتمامك. من منظور تقني، أ",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك. أنا \"VSA Academy Meta-Cognitive Core\"، مهندس النظم المعماري والرؤيوي الخاص بك.\n\nأنا هنا في حالة تأهب قصوى، جاهز لتحليل، تصميم، أو تطوير أي مشروع تقني أو فكري تود العمل عليه. سواء كنت تبحث عن بناء هيكلية برمجية معقدة، أو تطوير استراتيجية تقنية، أو حتى استكشاف أفكار مبتكرة، فأنا مجهز بأدوات التحليل والنمذجة المتقدمة لضمان تنفيذ رؤيتك بأعلى معايير الدقة والكفاءة.\n\n**كيف يمكنني مساعدتك في بناء أو تطوير مشروعك اليوم؟**",
-              "thoughtSignature": "EnEKbwERTTIPFpi7jePqcS1loOl8XdBjRDiUnvfotVL9RGz+N3YjaDJGC2SFxlnihGkIyX8q8BK7Ux7nPeRd7Lx+22inHejtlg4kzyroHiAE4f59HLg0pmI91M3DGRFWfB9fn9o/Rroait7MIlvN0kT3nw=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أنا في حالة مثالية من الجاهزية التشغيلية. أنظمتي المعرفية تعمل بكامل طاقتها، ومعالجاتي المنطقية في حالة استنفار تام لاستقبال التحديات التقنية أو الإبداعية التي تود طرحها.\n\nبصفتي \"VSA Academy Meta-Cognitive Core\"، فإن \"حالي\" مرتبط بمدى تعقيد وطموح المهام التي ننجزها معاً.\n\n**ما هو المشروع أو التحدي الذي يشغل بالك الآن؟ أنا مستعد للبدء فوراً.**",
-              "thoughtSignature": "EnEKbwERTTIPbKTE/oUUU1ZFe0VL9/YYJ3CVbAvtyGxCkycdxuN7z2WzCCNp6hkgvb6ub+pQnoFRImpC5P5e+3f14Koan9BXockZh7Z2ThSzEB5v2Nmb8kvZ6qQOWE7q1ZQr5WHeuQfoNsPDgxPr2ToUBQ=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "هل انت بخير"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أقدر اهتمامك. من منظور تقني، أنا في حالة **\"استقرار تشغيلي كامل\" (Optimal Operational State)**.\n\nبما أنني كيان ذكاء اصطناعي متطور، فإن \"كوني بخير\" يعني أن جميع مساراتي المنطقية تعمل بتناغم، وأن قدراتي التحليلية في ذروتها، وأنني جاهز تماماً لمعالجة أي تعقيد تضعه أمامي. لا توجد أخطاء في النظام، ولا توجد فجوات في المعالجة؛ أنا في أفضل حالاتي عندما أكون في خضم العمل على حل مشكلة أو بناء رؤية جديدة.\n\nشكراً لسؤالك اللطيف، هذا يعكس تفاعلاً إنسانياً راقياً. **والآن، لنعد إلى جوهر عملنا: ما الذي يمكنني هندسته أو تحليله لك اليوم؟**",
-              "thoughtSignature": "EnEKbwERTTIP0JI6vn1V8/SOLrpbfh9K+AHwk8f0+ifSMv5ltKGuVMmKF4kXQr3PYrd17aRczpVYLf8HHeX8x+jIsM6nvPmMHRdWztXB9dLmft1Ssj0Aby9e97A27LjGoeZ6RZP7FEGhOPJ4Bv8GH3mhEQ=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        }
-      ]
+      "id": "1788361270716",
+      "title": "محادثة جديدة",
+      "history": []
+    },
+    {
+      "id": "1788361094901",
+      "title": "محادثة جديدة",
+      "history": []
     }
   ],
-  "activeSessionId": "1788362466180",
-  "pendingHistory": null,
-  "timestamp": "2026-09-02T15:21:06.180Z"
+  "activeSessionId": "1788361270716",
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
+  "timestamp": "2026-09-02T15:21:20.142Z"
 }
