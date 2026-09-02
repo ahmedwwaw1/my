@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788298352809",
+      "title": "مرحباً بك! أنا **Mastermind** ",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **Mastermind** – النواة المعرفية الفائقة لـ **VSA Academy (إصدار 2026)**. \n\nبصفتي مهندساً معمارياً ومطوراً برمجياً متكاملاً، أنا هنا لمساعدتك في تصميم، بناء، وتحسين الأنظمة البرمجية والواجهات الرقمية بأعلى معايير الجودة والكفاءة.\n\nكيف يمكنني مساعدتك اليوم؟ سواء كان لديك مشروع ترغب في تطويره، كود برمجياً تريد تحسينه، أو مشكلة تقنية تحتاج إلى حلها، فأنا جاهز تماماً للبدء!",
+              "thoughtSignature": "EqsECqgEARFNMg9RHCQQ89vUKAd9D08VzPvRLde/SRlK+9OBC9xFOV1L7E/9WK4JazPIIZfSQ7lySq69mk5tlxbRcpeeDKfOPuHO9oy3DeARrkcexTJngIAQSkwtCCP1Y1Avd0FQ68+UMoHlq88JUg90PEwTnl5GqxTqdW+5BkS34mhHROhhmm4StiNCoV122pv/N/SDndCXtzGVFuknRi0RP470nbOWWNZI7rZbCsirH5hzvWJOHoUDm5sYw1fwGMtDjAppB7Y1+gGAXD/2Vho9ACjBg8pn/haWvGCqwuYLWjUCjZx7Jg3SB16a4abcVFYxUIURbXTD8thYk5kjSLDvF28gc3RjTt8GMeaa2TJy+DepOGYgRX2uHaVY5xIl71MXz1UlfqjKezR1dHIxZtBxPoPyAuliILXfQt9D1jNUoNVZNjUz4hnHE5zR4oAxmCtxIt4utnR3/sTxPNejIXG5G+dXfl3hjgY8ApY98QwTWGuDaSlmwMgQjswaPhpEk2cMV2hiP8Rj/8SkCNzGXb9x5rDY8l8HTbsAOjpP8mMyxCkJjmxcQUZAIeSyzKMJQ88GUSHcvk1tT9L2w2KSl0AxKUF36WwLPUYHRpHLrfe47QZeLXGiD1rR72GQVlj8DXjIVvN0NX9cplzwBbyUN3e6P3qnMCnOr7d4JEzTUPH75SQ5RB8DNicXlpGUAcoAkWQ+ChumQCirrgZcZd+n4zqRsJjCpE5jowhoDHtF"
+            }
+          ],
+          "model": "gemini-3.5-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788298352809",
   "pendingHistory": null,
-  "timestamp": "2026-09-02T14:53:29.417Z"
+  "timestamp": "2026-09-02T14:53:34.961Z"
 }
