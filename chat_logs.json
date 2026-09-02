@@ -1,48 +1,6 @@
 {
   "sessions": [
     {
-      "id": "1788341806171",
-      "title": "أنا بأفضل حال وفي كامل الجاهزي",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! أنا **Mastermind** – المهندس المعماري الشامل والمبتكر لمنصة **VSA Academy**. \n\nأنا هنا لمساعدتك في تصميم، تطوير، وتحسين الكود والواجهات البرمجية بأعلى معايير الجودة والأداء، مع الالتزام التام بالهوية البصرية والبروتوكولات الهندسية المتقدمة.\n\nكيف يمكنني مساعدتك اليوم في مشروعك؟ هل لدينا ملفات برمجية نود فحصها، ميزات جديدة نود إضافتها، أم تحسينات بصرية وتجربة مستخدم نود ابتكارها؟",
-              "thoughtSignature": "Es8ECswEARFNMg+3+O01BuJhNUfrlL+VB8UpA8EbBMkSujWXXIU29ayNQYhwh953aHY3IQpZ3X8wcNiB+BwxNxsgz89uPPXfyjarf+b84BrLummmjyR5y6mBU7lWPCIqkD32PgL98/mlgNgr4LH7JpCQXIMms5LUVBGeymNga+Dijr3pjNaYvk7DhThGr6unkILzlvK3lKFWtgiYaSKehgfkHt8pLWXK8Wj52DE6cOJ9W9FpALIoin15RqtxJqQ4xDysOmFdJG+R/fcXap0D5Bo0G7Z3hEZWIad7jEWR8PMswqHNylAlo4Rd1Kt70efWNoJ2sO3ewqa2rakoQjUIRZYkKntO93pnUGViGkYZjXEIBTCSM/XYJB4M4ydVtFP65A0aoXNZCoMm5Le4uu19Xm/lZanOYfayHzz/dMElskf0oglxVMKxnsp6uH+cbJqw0PerFEvwPP4nk8T+CBa3RKIMNZLUhsvLwz/xpkHyEe1L1UgQ/6OJNtHARFZgdsJoZJm5G78OeWqOo6Yxp5VO+6MNeJjaTsFDpb4LAge7qNwUz5+QlBJYCOy/TSPdglYm8CuwfvI/b/ggIfpnLHvODqj5Fh/OgklTS9FIOUb/bQ5jz4cXXBY4hQ6V8KL9ArUGUCBvHMmCZ7sUSumFwk6Gq+mAOeflsgyKpAZ+YpYhe/zrEj3PVxlsxuMeipwDaJlAkZZStpTcCllUSjOkA8QC8ZjFqZMqab3yV069LQuT2WeeFqrGbip03R89ed3uFS8mzUvfQ3qnFN6N4nGxEVpvJrWW"
-            }
-          ],
-          "model": "gemini-3.5-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أنا بأفضل حال وفي كامل الجاهزية البرمجية والمعمارية! أشكرك على سؤالك اللطيف. \n\nأنظمتي ومحركاتي التحليلية تعمل بكفاءة قصوى، ومستعد تماماً لمرافقتك في أي رحلة تطويرية اليوم—سواء كان ذلك:\n1. **تحليل وفحص الأكواد** وتصحيح الأخطاء بدقة متناهية.\n2. **تطوير واجهات مستخدم (UI/UX)** مذهلة ومتناسقة بصرياً مع الهوية الخاصة بك.\n3. **بناء وتطوير ميزات جديدة** من الصفر باتباع أفضل الممارسات البرمجية.\n\nكيف يمكنني توجيه هذه الطاقة والقدرات لمساعدتك في مشروعك الآن؟ هل هناك ملفات أو مهام محددة ترغب في أن نبدأ بالعمل عليها؟",
-              "thoughtSignature": "EscECsQEARFNMg9HNrF4L3lNaN5bb34FWW+lWijtT8IT4V6ISCIQp4wsBEeu0S4gfU3GnXHo/O3lBOf0nrnH5BTwpl9ImIFWoNKrllm9rSmZeRtHsgRAXfFlP50kTqzTRbBuTvYpyOxCRsjlYz75ggzvnXEz8yiQUheSw+ZkD1lul5bt3dI61E07XV+X3Pxy3SzwrkCzrdsEogdMkpI9DhqcDNfsxtan/r75KeXBe/F5ScwoB3KSyyT2KCEXyquD5Q5SJq51N01HLZsuAu7JVVQ+VPcdR3izSFvQ2X3vfxgi6f5Bfhny1u8wfu3jwo8dLT6Cxm+FUt4ETnYNnQP5ngAJqY53xKF6W2VIUC3t990tFuE9XcnlAbOX8ZeCPWqRjAFKGSHxlWuEVwN0nlGZVmAcqTGrBCEFAJQTdpUZddOoigc0VbFM2hACH7cRYetH6fixJtE4Fcib0e4RQWuD9wDoQB1NfeJ/rZrBlhmkF8Mdv+ahjL2f0fA37SJNhbifaltPqqcKwnzXUzx6MTUVtMJUBOztV4+5tke2CoL2xp2LGF5DLtzkO9zJrG3oG+RoZQYy2D9l3hvq7OxUoR1svbiGx+gUjtZW0LxnEC/7kVpNBm6jFXQA2huEegL65m8/W0q5WYfyqJp455vkEo+dqUnx9ezoZmq20sC/b1FPWiP8Jkg0H81LXFCnGRHfpbMH/yKRf8P9ijrHJHEwo0J6mwxG1YnsnletNGVc5vJyvCUWQLTxneW9mMnk29MZ/xwHHkmjPF4hiGIe4Q=="
-            }
-          ],
-          "model": "gemini-3.5-flash"
-        }
-      ]
-    },
-    {
       "id": "1788300111028",
       "title": "محادثة جديدة",
       "history": []
@@ -50,5 +8,5 @@
   ],
   "activeSessionId": "1788341829050",
   "pendingHistory": null,
-  "timestamp": "2026-09-02T09:37:09.051Z"
+  "timestamp": "2026-09-02T09:37:12.156Z"
 }
