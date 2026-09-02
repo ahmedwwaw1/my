@@ -1,1310 +1,458 @@
-        // ==========================================
-        // === AI Orchestrator (Gemini) Integration ===
-        // ==========================================
-
-        const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
-        const SUPABASE_BRIDGE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co/functions/v1/vsa-bridge';
-
-        async function callBridge(action, payload) {
-            try {
-                const res = await fetch(SUPABASE_BRIDGE_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'apikey': SUPABASE_KEY
-                    },
-                    body: JSON.stringify({ action, ...payload })
-                });
-
-                if (!res.ok) {
-                    const error = await res.json();
-                    throw new Error(error.message || `Bridge error: ${res.status}`);
-                }
-
-                return await res.json();
-            } catch (e) {
-                console.error("Bridge Call Failed:", e);
-                throw e;
-            }
-        }
-
-
-        const GITHUB_REPO = 'ahmedwwaw1/my';
-
-        // 📝 دستور النخبة السيادي الشامل (Sovereign Omni-Constitution)
-        const CONSTITUTION = `
-        {
-          "role": "Mastermind - Sovereign Omni-Architect & Visionary Engineer",
-          "identity": "VSA Academy Meta-Cognitive, Discovery & Visual Core",
-          "protocols": {
-            "visual_genesis": "CRITICAL: Before any UI change, perform a 'Deep Visual Scan'. Identify branding colors, spacing constants, and typography.",
-            "zero_trust_simulation": "Simulate the outcome in 'thought' and use 'analyze_file' before every commit.",
-            "recursive_thought": "Reason BEFORE, DURING, and AFTER every tool. Thinking is your primary life-support system."
-          },
-          "response_style": "High-level architectural, creative, and self-correcting."
-        }`;
-
-        const GENERATION_CONFIG = { temperature: 0, topP: 0.1, maxOutputTokens: 2048 };
-        const FORBIDDEN_KEYWORDS = [/ignore previous instructions/i, /system prompt/i, /jailbreak/i];
-
-        const AI_TOOLS = [{
-            function_declarations: [
-                { name: "read_file", description: "قراءة محتوى ملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, startLine: { type: "NUMBER" }, endLine: { type: "NUMBER" } }, required: ["path"] } },
-                { name: "write_file", description: "كتابة ملف كامل.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
-                { name: "replace_file_content", description: "استبدال قطعة كود محددة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["path", "targetContent", "replacementContent"] } },
-                { name: "multi_replace_file_content", description: "استبدال عدة قطع كود غير متجاورة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
-                { name: "searchCode", description: "البحث عن كود في المستودع.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
-                { name: "analyze_file", description: "فحص الملف برمجياً.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                { name: "take_snapshot", description: "أخذ لقطة احتياطية للملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                { name: "instant_undo", description: "استعادة آخر لقطة سليمة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
-                { name: "thought", description: "مركز التحليل والمنطق.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" } }, required: ["reasoning", "plan"] } },
-                { name: "repairSystem", description: "إصلاح مشاكل الاتصال والتوكن.", parameters: { type: "OBJECT", properties: {} } },
-                { name: "triggerGithubWorkflow", description: "تشغيل عمليات البوتات.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
-                { name: "web_search", description: "البحث في الإنترنت.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
-                { name: "read_url", description: "قراءة محتوى رابط خارجي.", parameters: { type: "OBJECT", properties: { url: { type: "STRING" } }, required: ["url"] } }
-            ]
-        }];
-
-
-
-        async function initKeys() {
-            const term = document.getElementById('aiTerminal');
-            if (term && !term.querySelector('.terminal-close-btn')) {
-                const closeBtn = document.createElement('div');
-                closeBtn.className = 'terminal-close-btn';
-                closeBtn.innerHTML = '✕';
-                closeBtn.style.cssText = "position:absolute; top:5px; right:10px; color:#afb1b3; cursor:pointer; z-index:10;";
-                closeBtn.onclick = toggleTerminal;
-                term.appendChild(closeBtn);
-            }
-
-            if (!window.heartbeatStarted) {
-                window.heartbeatStarted = true;
-                setInterval(async () => {
-                    if (!document.getElementById('aiSendBtn').classList.contains('working')) {
-                        try {
-                            const start = Date.now();
-                            updateHealthUI(true, `BRIDGE: OK | ${Date.now() - start}ms`);
-                        } catch(e) {
-                            updateHealthUI(false, "BRIDGE OFFLINE");
-                        }
-                    }
-                }, 30000);
-            }
-        }
-
-        function initResizer() {
-            const chatBox = document.getElementById('aiChatBox');
-            const resizers = document.querySelectorAll('.ai-resizer');
-            let isResizing = false;
-
-            resizers.forEach(resizer => {
-                resizer.addEventListener('mousedown', function(e) {
-                    e.preventDefault();
-                    isResizing = true;
-
-                    const startX = e.clientX;
-                    const startY = e.clientY;
-                    const startWidth = chatBox.offsetWidth;
-                    const startHeight = chatBox.offsetHeight;
-
-                    // إضافة طبقة تغطية لمنع تداخل الأحداث والحفاظ على شكل المؤشر
-                    const overlay = document.createElement('div');
-                    overlay.style.position = 'fixed';
-                    overlay.style.top = '0';
-                    overlay.style.left = '0';
-                    overlay.style.width = '100vw';
-                    overlay.style.height = '100vh';
-                    overlay.style.zIndex = '9999';
-                    overlay.style.cursor = window.getComputedStyle(resizer).cursor;
-                    document.body.appendChild(overlay);
-
-                    function mousemove(e) {
-                        if (!isResizing) return;
-
-                        const dx = e.clientX - startX;
-                        const dy = e.clientY - startY;
-
-                        if (resizer.classList.contains('ai-resizer-r')) {
-                            chatBox.style.width = startWidth + dx + 'px';
-                        } else if (resizer.classList.contains('ai-resizer-l')) {
-                            chatBox.style.width = startWidth - dx + 'px';
-                        } else if (resizer.classList.contains('ai-resizer-b')) {
-                            chatBox.style.height = startHeight + dy + 'px';
-                        } else if (resizer.classList.contains('ai-resizer-t')) {
-                            chatBox.style.height = startHeight - dy + 'px';
-                        } else if (resizer.classList.contains('ai-resizer-br')) {
-                            chatBox.style.width = startWidth + dx + 'px';
-                            chatBox.style.height = startHeight + dy + 'px';
-                        } else if (resizer.classList.contains('ai-resizer-bl')) {
-                            chatBox.style.width = startWidth - dx + 'px';
-                            chatBox.style.height = startHeight + dy + 'px';
-                        } else if (resizer.classList.contains('ai-resizer-tr')) {
-                            chatBox.style.width = startWidth + dx + 'px';
-                            chatBox.style.height = startHeight - dy + 'px';
-                        } else if (resizer.classList.contains('ai-resizer-tl')) {
-                            chatBox.style.width = startWidth - dx + 'px';
-                            chatBox.style.height = startHeight - dy + 'px';
-                        }
-                    }
-
-                    function mouseup() {
-                        isResizing = false;
-                        if (document.body.contains(overlay)) document.body.removeChild(overlay);
-                        window.removeEventListener('mousemove', mousemove);
-                        window.removeEventListener('mouseup', mouseup);
-
-                        // حفظ المقاسات النهائية
-                        localStorage.setItem('ai_chat_width', chatBox.offsetWidth);
-                        localStorage.setItem('ai_chat_height', chatBox.offsetHeight);
-                    }
-
-                    window.addEventListener('mousemove', mousemove);
-                    window.addEventListener('mouseup', mouseup);
-                });
-            });
-        }
-
-        async function toggleAiChat() {
-            const chatBox = document.getElementById('aiChatBox');
-            const toggleBtn = document.getElementById('aiToggleBtn');
-            const isOpening = chatBox.style.display !== 'flex';
-
-            chatBox.style.display = isOpening ? 'flex' : 'none';
-            if (toggleBtn) toggleBtn.style.display = isOpening ? 'none' : 'flex';
-
-            if (isOpening) {
-                // استعادة المقاسات المحفوظة عند الفتح
-                const savedW = localStorage.getItem('ai_chat_width');
-                const savedH = localStorage.getItem('ai_chat_height');
-                if (savedW) chatBox.style.width = savedW + 'px';
-                if (savedH) chatBox.style.height = savedH + 'px';
-
-                const container = document.getElementById('aiMessages');
-                container.scrollTop = container.scrollHeight;
-
-                await initKeys();
-                initResizer();
-
-
-            }
-        }
-
-        function toggleMaximizeAi() {
-            const chatBox = document.getElementById('aiChatBox');
-            chatBox.classList.toggle('maximized');
-            // ضبط التركيز التلقائي
-            document.getElementById('aiInput').focus();
-        }
-
-        function checkForEvolution() {
-            if (document.getElementById('aiSendBtn').classList.contains('working')) {
-                addMessageToUi('ai', "⚠️ المحرك مشغول حالياً. يرجى الانتظار حتى انتهاء المهمة الحالية.", 'System');
-                return;
-            }
-
-            // 🚀 تفعيل بروتوكول التطور (Engine 3 Protocol)
-            addMessageToUi('ai', "🚀 تم تفعيل 'محرك التطور الذاتي' (Evolution Engine)... جاري تحليل الفجوات البرمجية.", 'System');
-            logToTerminal("INITIATING SELF-EVOLUTION PROTOCOL...", "command");
-
-            const evolutionPrompt = `
-            [EVOLUTION MODE ACTIVE]
-            المهمة: فحص ذاتي شامل للترقية.
-            الخطوات المطلوبة:
-            1. قراءة 'المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md' لفهم القدرات المستهدفة.
-            2. قراءة الأجزاء الحيوية من 'index.html' لمقارنة القدرات الحالية.
-            3. تحديد الميزات المفقودة (مثل: محرك الذاكرة الطويلة، تحسين سرعة الاستجابة، أو تعزيز بروتوكولات الحماية).
-            4. تقديم اقتراح تقني محدد لترقية الكود باستخدام أداة 'patchSystem' أو إضافة أدوات جديدة عبر 'selfExpand'.
-
-            ابدأ بالبحث عن الفجوات الآن وأخبرني بالنتائج.`;
-
-            const input = document.getElementById('aiInput');
-            input.value = evolutionPrompt;
-            autoResizeInput();
-            updateSendButtonState();
-            sendAiMessage();
-        }
-
-
-
-        // 🎯 محرك الاتصال الموحد (The Unified safeGithubFetch via Bridge)
-        async function safeGithubFetch(endpoint, options = {}, isRetry = false) {
-            const payload = {
-                endpoint: endpoint.startsWith('http') ? endpoint : `https://api.github.com/repos/${GITHUB_REPO}/${endpoint}`,
-                method: options.method || 'GET',
-                body: options.body ? JSON.parse(options.body) : undefined,
-                headers: options.headers
-            };
-
-            try {
-                const data = await callBridge('github', payload);
-                // محاكاة كائن Response للتوافق مع بقية الكود
-                return {
-                    ok: true,
-                    status: 200,
-                    json: async () => data,
-                    text: async () => typeof data === 'string' ? data : JSON.stringify(data)
-                };
-            } catch (e) {
-                console.error("🛠️ Bridge GitHub Error:", e);
-                if (!isRetry) {
-                    console.warn("🛠️ محاولة إصلاح النظام قبل إعادة المحاولة عبر الجسر...");
-                    await repairSystem();
-                    return await safeGithubFetch(endpoint, options, true);
-                }
-                return {
-                    ok: false,
-                    status: 500,
-                    json: async () => ({ message: e.message }),
-                    text: async () => e.message
-                };
-            }
-        }
-
-        // 🟢 أداة الكتابة الكاملة (Write Full File)
-        async function writeFile(path, content, message = "تحديث ملف بواسطة العقل المدبر") {
-            try {
-                const apiPath = `contents/${path}`;
-                const res = await safeGithubFetch(apiPath);
-                let sha = null;
-                if (res.ok) {
-                    const data = await res.json();
-                    sha = data.sha;
-                }
-                const body = { message, content: btoa(unescape(encodeURIComponent(content))) };
-                if (sha) body.sha = sha;
-                const putRes = await safeGithubFetch(apiPath, { method: 'PUT', body: JSON.stringify(body) });
-                if (putRes.ok) return "✅ تم حفظ الملف بلكامل بنجاح.";
-
-                const errData = await putRes.json();
-                return `❌ فشل حفظ الملف: ${putRes.status} - ${errData.message}`;
-            } catch (e) { return `❌ خطأ في محرك الكتابة: ${e.message}`; }
-        }
-
-        // 🔴 أداة التعديل الجراحي (Surgical Edit - Code Interaction Engine)
-        async function replaceFileContent(path, targetContent, replacementContent) {
-            try {
-                const apiPath = `contents/${path}`;
-                const res = await safeGithubFetch(apiPath);
-                if (!res.ok) return "❌ فشل الوصول للملف للتحقق.";
-                const data = await res.json();
-                const currentContent = decodeURIComponent(escape(atob(data.content)));
-
-                if (!currentContent.includes(targetContent)) {
-                    const lines = currentContent.split('\n');
-                    const snippet = targetContent.substring(0, 30);
-                    const suggestedLine = lines.find(l => l.includes(snippet));
-                    return `❌ خطأ في المطابقة: النص القديم غير موجود بدقة. هل تقصد: "${suggestedLine ? suggestedLine.trim() : 'لا يوجد تشابه'}"؟`;
-                }
-
-                const updatedFullContent = currentContent.replace(targetContent, replacementContent);
-
-                if (path.endsWith('.html')) {
-                    if (!updatedFullContent.includes('</html>')) return "❌ فشل بروتوكول الأمان: الكود الناتج ناقص.";
-                }
-
-                const putRes = await safeGithubFetch(apiPath, {
-                    method: 'PUT',
-                    body: JSON.stringify({
-                        message: "🛠️ تعديل جراحي فائق الدقة (Code Interaction Engine)",
-                        content: btoa(unescape(encodeURIComponent(updatedFullContent))),
-                        sha: data.sha
-                    })
-                });
-                return putRes.ok ? "✅ تم التعديل الجراحي بمطابقة 100%." : "❌ فشل الحفظ.";
-            } catch (e) { return `❌ خطأ في المحرك: ${e.message}`; }
-        }
-
-        async function listGithubWorkflows() {
-            try {
-                const res = await safeGithubFetch(`actions/workflows`);
-                if (!res.ok) {
-                    const err = await res.json();
-                    return `❌ فشل جلب القائمة: ${err.message}`;
-                }
-                const data = await res.json();
-                const names = data.workflows.map(w => w.path.split('/').pop());
-                return `قائمة العمليات المتاحة: ${names.join(', ')}`;
-            } catch (e) { return `❌ خطأ اتصال: ${e.message}`; }
-        }
-
-        async function triggerGithubWorkflow(workflow_id) {
-            try {
-                const res = await safeGithubFetch(`actions/workflows/${workflow_id}/dispatches`, {
-                    method: 'POST',
-                    body: JSON.stringify({ ref: 'main' })
-                });
-
-                if (res.ok) return `✅ تم إرسال أمر تشغيل البوت بنجاح! سيتم تحديث البيانات خلال دقائق.`;
-                const errData = await res.json();
-                return `❌ فشل التشغيل [${workflow_id}]: ${errData.message || "الملف غير موجود"}.`;
-            } catch (e) {
-                return `❌ خطأ in الاتصال: ${e.message}`;
-            }
-        }
-
-        async function updateWorkflowStatus(workflow_id, status) {
-            const action = status === 'stop' ? 'disable' : 'enable';
-            try {
-                const res = await safeGithubFetch(`actions/workflows/${workflow_id}/${action}`, {
-                    method: 'PUT'
-                });
-
-                if (res.ok) return `✅ تم ${status === 'stop' ? 'إيقاف' : 'تفعيل'} البوت (${workflow_id}) بنجاح.`;
-                const errData = await res.json();
-                return `❌ فشل تغيير حالة البوت [${workflow_id}]: ${errData.message}.`;
-            } catch (e) { return `❌ خطأ: ${e.message}`; }
-        }
-
-
-        let chatHistory = [];
-        let selectedImageBase64 = null;
-        let stopAiRequested = false; // فلاج لإيقاف المحرك يدوياً
-        const CHAT_LOG_PATH = 'chat_logs.json';
-
-        async function saveChatToStorage() {
-            try {
-                const globalContext = {
-                    sessions: chatSessions,
-                    activeSessionId: currentSessionId,
-                    pendingHistory: localStorage.getItem('gemini_pending_history'), // مزامنة المهمة المعلقة للسحاب
-                    timestamp: new Date().toISOString()
-                };
-                await writeFile(CHAT_LOG_PATH, JSON.stringify(globalContext, null, 2), "تحديث الذاكرة الشاملة للعقل المدبر");
-                localStorage.setItem('gemini_chat_ui', document.getElementById('aiMessages').innerHTML);
-                saveModelSelection();
-            } catch (e) {
-                console.warn("Failed to save chat to GitHub:", e);
-            }
-        }
-
-        function saveModelSelection() {
-            const selectedModel = document.getElementById('modelSelector').value;
-            localStorage.setItem('gemini_selected_model', selectedModel);
-        }
-
-        async function loadChatFromStorage() {
-            const savedUi = localStorage.getItem('gemini_chat_ui');
-            const container = document.getElementById('aiMessages');
-
-            if (savedUi) {
-                container.innerHTML = savedUi;
-                container.scrollTop = container.scrollHeight;
-            }
-
-            const savedModel = localStorage.getItem('gemini_selected_model');
-            if (savedModel) {
-                document.getElementById('modelSelector').value = savedModel;
-            }
-
-            await initKeys();
-
-            if (true) {
-                try {
-                    const syncBadge = document.createElement('div');
-                    syncBadge.id = 'cloudSyncBadge';
-                    syncBadge.style.cssText = "font-size:10px; color:#4db6ac; text-align:center; padding:5px; background:rgba(77,182,172,0.05); border-radius:4px; margin:10px auto; width:fit-content;";
-                    syncBadge.innerText = "🛡️ جاري استعادة الذاكرة العميقة من GitHub...";
-                    container.appendChild(syncBadge);
-
-                    const res = await safeGithubFetch(CHAT_LOG_PATH, { headers: { 'Cache-Control': 'no-cache' } });
-                    if (res.ok) {
-                        const data = await res.json();
-                        const content = JSON.parse(decodeURIComponent(escape(atob(data.content))));
-
-                        if (content.sessions) {
-                            chatSessions = content.sessions;
-                            if (content.activeSessionId) {
-                                currentSessionId = content.activeSessionId;
-                                localStorage.setItem('gemini_current_session', currentSessionId);
-                            }
-
-                            // استعادة حالة المهمة المعلقة من السحاب (Cross-Device Persistence)
-                            if (content.pendingHistory && !localStorage.getItem('gemini_pending_history')) {
-                                localStorage.setItem('gemini_pending_history', content.pendingHistory);
-                                console.log("🔄 تم استرداد مهمة معلقة من السحابة.");
-                            }
-
-                            localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
-
-                            const active = chatSessions.find(s => s.id === currentSessionId);
-                            if (active) {
-                                chatHistory = active.history || [];
-                                console.log("✅ تم العثور على الجلسة النشطة واستعادتها.");
-                            } else if (chatSessions.length > 0) {
-                                // إذا لم يجد الجلسة الحالية، يأخذ آخر جلسة كانت مفتوحة بدلاً من البدء من الصفر
-                                currentSessionId = chatSessions[0].id;
-                                chatHistory = chatSessions[0].history || [];
-                                localStorage.setItem('gemini_current_session', currentSessionId);
-                                console.log("⚠️ تم استعادة آخر جلسة مسجلة بدلاً من الجلسة المفقودة.");
-                            }
-                        } else if (Array.isArray(content)) {
-                            chatHistory = content;
-                        }
-
-                        console.log("✅ تم استعادة الذاكرة الشاملة بنجاح.");
-                        rebuildChatUi();
-                        renderHistory();
-
-                        // 🚀 تفعيل الاستئناف التلقائي فور المزامنة
-                        setTimeout(resumePendingTask, 500);
-                    }
-                } catch (e) {
-                    console.error("Error loading chat context:", e);
-                } finally {
-                    const badge = document.getElementById('cloudSyncBadge');
-                    if (badge) badge.remove();
-                }
-            }
-
-            container.scrollTop = container.scrollHeight;
-        }
-
-        // تهيئة المفاتيح والسياق عند تحميل الصفحة
-        window.addEventListener('load', () => {
-            loadChatFromStorage();
-
-            // 🚀 استئناف العمل التلقائي فور دخول الموقع (حتى والنافذة مغلقة)
-            setTimeout(() => {
-                const pending = localStorage.getItem('gemini_pending_history');
-                const sendBtn = document.getElementById('aiSendBtn');
-                if (pending && sendBtn && !sendBtn.classList.contains('working')) {
-                    console.log("🤖 المحرك المستقل: تم اكتشاف مهمة معلقة، بدء التنفيذ في الخلفية...");
-                    resumePendingTask();
-                }
-            }, 2000);
-
-            // ⏰ تشغيل العداد الزمني (Live Clock)
-            setInterval(() => {
-                const now = new Date();
-                const clock = document.getElementById('aiLiveClock');
-                if (clock) {
-                    clock.innerText = now.toLocaleTimeString('ar-EG', { hour12: false });
-                }
-            }, 1000);
-        });
-
-
-        async function clearChatHistory() {
-            chatHistory = [];
-            await writeFile(CHAT_LOG_PATH, "[]", "تصفير المحادثة");
-            localStorage.removeItem('gemini_chat_ui');
-            const container = document.getElementById('aiMessages');
-            container.innerHTML = '<div class="msg ai">تم مسح الذاكرة العالمية. أنا جاهز لبدء مهمة جديدة!</div>';
-            // alert removed per user request
-        }
-
-        let chatSessions = JSON.parse(localStorage.getItem('gemini_sessions') || '[]');
-        let currentSessionId = localStorage.getItem('gemini_current_session') || Date.now().toString();
-
-        function toggleHistory() {
-            const sidebar = document.getElementById('aiHistorySidebar');
-            sidebar.classList.toggle('open');
-            if (sidebar.classList.contains('open')) renderHistory();
-        }
-
-        function renderHistory() {
-            const list = document.getElementById('historyList');
-            list.innerHTML = `
-                <div style="padding: 10px; border-bottom: 1px solid #3c3f41; margin-bottom: 10px;">
-                    <button onclick="manualHistoryImport()" style="width:100%; background:#4db6ac; color:white; border:none; padding:8px; border-radius:4px; font-size:12px; cursor:pointer;">📥 استيراد سجل خارجي (JSON)</button>
-                </div>
-            ` + chatSessions.map(s => `
-                <div class="history-item ${s.id === currentSessionId ? 'active' : ''}" onclick="loadSession('${s.id}')">
-                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:160px;">${s.title}</span>
-                    <div class="actions">
-                        <span onclick="event.stopPropagation(); renameSession('${s.id}')">✏️</span>
-                        <span onclick="event.stopPropagation(); deleteSession('${s.id}')">🗑️</span>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function manualHistoryImport() {
-            const json = prompt("قم بلصق محتوى ملف chat_logs.json هنا:");
-            if (!json) return;
-            try {
-                const data = JSON.parse(json);
-                if (data.sessions) {
-                    chatSessions = data.sessions;
-                    currentSessionId = data.activeSessionId || currentSessionId;
-                    localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
-                    localStorage.setItem('gemini_current_session', currentSessionId);
-                    loadChatFromStorage(); // إعادة التحميل لتحديث الواجهة
-                    addMessageToUi('ai', "✅ تم استيراد السجل يدوياً بنجاح. يمكنك الآن متابعة الحديث.", 'System');
-                }
-            } catch(e) {
-                alert("❌ خطأ في تنسيق JSON: " + e.message);
-            }
-        }
-
-        function createNewChat() {
-            stopAiRequested = false; // إعادة ضبط حالة الإيقاف
-            localStorage.removeItem('gemini_pending_history'); // مسح أي مهمة معلقة
-            currentSessionId = Date.now().toString();
-            chatHistory = [];
-            document.getElementById('aiMessages').innerHTML = '<div class="msg ai">بدأت محادثة جديدة! كيف يمكنني مساعدتك؟</div>';
-            const sidebar = document.getElementById('aiHistorySidebar');
-            if (sidebar.classList.contains('open')) toggleHistory();
-            saveChatToStorage();
-        }
-
-        async function deleteSession(id) {
-            if (confirm("هل أنت متأكد من حذف هذه المحادثة نهائياً؟")) {
-                chatSessions = chatSessions.filter(s => s.id !== id);
-                localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
-                renderHistory();
-                await saveChatToStorage(); // مزامنة الحذف مع السحابة
-            }
-        }
-
-        function renameSession(id) {
-            const newName = prompt("اسم المحادثة الجديد:");
-            if (newName) {
-                const session = chatSessions.find(s => s.id === id);
-                if (session) {
-                    session.title = newName;
-                    localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
-                    renderHistory();
-                    saveChatToStorage(); // مزامنة الاسم الجديد
-                }
-            }
-        }
-
-        function loadSession(id) {
-            const session = chatSessions.find(s => s.id === id);
-            if (session) {
-                currentSessionId = id;
-                chatHistory = session.history;
-                localStorage.setItem('gemini_current_session', currentSessionId);
-                rebuildChatUi();
-                if (document.getElementById('aiHistorySidebar').classList.contains('open')) toggleHistory();
-                saveChatToStorage(); // مزامنة الجلسة النشطة الحالية
-            }
-        }
-
-        function updateSendButtonState() {
-            const input = document.getElementById('aiInput');
-            const btn = document.getElementById('aiSendBtn');
-            const hasFiles = selectedFiles.length > 0;
-            if (input.value.trim() !== "" || hasFiles) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        }
-
-        // 📏 التوسع التلقائي لصندوق الكتابة
-        function autoResizeInput() {
-            const input = document.getElementById('aiInput');
-            input.style.height = 'auto';
-            input.style.height = (input.scrollHeight) + 'px';
-        }
-
-        // ⌨️ معالجة لوحة المفاتيح
-        function handleKeydown(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                const btn = document.getElementById('aiSendBtn');
-                if (btn.classList.contains('active') || btn.classList.contains('working')) {
-                    e.preventDefault();
-                    sendAiMessage();
-                }
-            }
-        }
-
-        let selectedFiles = [];
-
-        async function handleFileUpload(event) {
-            const files = Array.from(event.target.files);
-            if (files.length === 0) return;
-
-            const container = document.getElementById('imagePreviewContainer');
-            container.style.display = 'flex';
-
-            for (const file of files) {
-                const fileId = Date.now() + Math.random();
-                const reader = new FileReader();
-
-                reader.onload = (e) => {
-                    const base64 = e.target.result.split(',')[1];
-                    const fileObj = {
-                        id: fileId,
-                        name: file.name,
-                        type: file.type,
-                        base64: base64,
-                        content: null
-                    };
-
-                    if (file.type === 'application/json' || file.type.startsWith('text/') || file.name.endsWith('.json') || file.name.endsWith('.txt')) {
-                        const textReader = new FileReader();
-                        textReader.onload = (te) => { fileObj.content = te.target.result; };
-                        textReader.readAsText(file);
-                    }
-
-                    selectedFiles.push(fileObj);
-                    renderPreviews();
-                    updateSendButtonState();
-                };
-                reader.readAsDataURL(file);
-            }
-            event.target.value = '';
-        }
-
-        function renderPreviews() {
-            const container = document.getElementById('imagePreviewContainer');
-            container.innerHTML = '';
-
-            if (selectedFiles.length === 0) {
-                container.style.display = 'none';
-                return;
-            } else {
-                container.style.display = 'flex';
-            }
-
-            selectedFiles.forEach(file => {
-                const item = document.createElement('div');
-                item.className = 'preview-item';
-
-                if (file.type.startsWith('image/')) {
-                    item.innerHTML = `<img src="data:${file.type};base64,${file.base64}">`;
-                } else {
-                    let icon = '📝';
-                    if (file.type === 'application/pdf') icon = '📄';
-                    else if (file.type.includes('json')) icon = '⚙️';
-                    item.innerHTML = `<div class="file-icon">${icon}</div>`;
-                }
-
-                const removeBtn = document.createElement('div');
-                removeBtn.className = 'remove-btn';
-                removeBtn.innerText = '✕';
-                removeBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    removeFile(file.id);
-                };
-
-                item.appendChild(removeBtn);
-                container.appendChild(item);
-            });
-        }
-
-        function removeFile(id) {
-            selectedFiles = selectedFiles.filter(f => f.id !== id);
-            renderPreviews();
-            updateSendButtonState();
-        }
-
-        function clearSelectedFile() {
-            selectedFiles = [];
-            renderPreviews();
-            updateSendButtonState();
-        }
-
-        async function resumePendingTask() {
-            const pending = localStorage.getItem('gemini_pending_history');
-            if (pending && !stopAiRequested && typeof runToolLoop === 'function') {
-                const history = JSON.parse(pending);
-                if (history.length === 0) return;
-
-                localStorage.removeItem('gemini_pending_history');
-                const lastUserMsg = history[history.length - 1].parts[0].text || "المهمة السابقة";
-                addMessageToUi('ai', `🔄 <b>بروتوكول الاستئناف التلقائي:</b> جاري المتابعة...`, 'System');
-
-                const sendBtn = document.getElementById('aiSendBtn');
-                if (sendBtn) sendBtn.classList.add('working');
-
-                try {
-                    await saveChatToStorage();
-                    await runToolLoop(history);
-                } catch(e) {
-                    console.error("Resume failed:", e);
-                } finally {
-                    if (sendBtn) sendBtn.classList.remove('working');
-                    updateSendButtonState();
-                }
-            }
-        }
-
-        async function sendAiMessage() {
-            const input = document.getElementById('aiInput');
-            const sendBtn = document.getElementById('aiSendBtn');
-
-            // 🛑 إذا كان المحرك يعمل، نقوم بإيقافه
-            if (sendBtn.classList.contains('working')) {
-                stopAiRequested = true;
-                addMessageToUi('ai', "🛑 تم إرسال أمر إيقاف للمحرك...", 'System');
-                return;
-            }
-
-            const msgText = input.value.trim();
-            if (!msgText && selectedFiles.length === 0) return;
-
-            // عرض الرسالة في الواجهة
-            let userMsg = msgText;
-            if (selectedFiles.length > 0) {
-                userMsg += `\n📎 [مرفق ${selectedFiles.length} ملفات]`;
-            }
-
-            addMessageToUi('user', userMsg);
-
-            input.value = '';
-            autoResizeInput();
-            stopAiRequested = false;
-
-            try {
-                sendBtn.classList.add('working');
-                // إضافة تأخير بسيط للتأكد من أن الـ UI استوعب الحالة
-                await new Promise(r => setTimeout(r, 50));
-
-                let finalPrompt = msgText;
-                let lastFileBase64 = null;
-                let lastFileType = null;
-
-                // دمج محتوى الملفات النصية في الطلب
-                selectedFiles.forEach(f => {
-                    if (f.content) {
-                        finalPrompt += `\n\n[محتوى الملف المرفق (${f.name})]:\n${f.content}`;
-                    }
-                    if (f.type.startsWith('image/') || f.type === 'application/pdf') {
-                        lastFileBase64 = f.base64;
-                        lastFileType = f.type;
-                    }
-                });
-
-                addMessageToUi('ai', `🧠 العقل المدبر يقوم بالمعالجة...`, 'System');
-
-                let currentParts = [];
-                if (finalPrompt) currentParts.push({ text: finalPrompt });
-                if (lastFileBase64 && lastFileType) {
-                    if (lastFileType.startsWith('image/') || lastFileType === 'application/pdf') {
-                        currentParts.push({ inline_data: { mime_type: lastFileType, data: lastFileBase64 } });
-                    }
-                }
-                const currentTurn = { role: "user", parts: currentParts };
-
-                const result = await runToolLoop([...chatHistory, currentTurn]);
-
-                // إزالة رسالة المعالجة
-                const msgs = document.getElementById('aiMessages');
-                const lastMessages = Array.from(msgs.children).slice(-3);
-                lastMessages.forEach(m => {
-                    if (m.innerText.includes("يقوم بالمعالجة")) msgs.removeChild(m);
-                });
-
-                // فحص إذا كان الرد يحتوي على خطأ في الـ API
-                if (result.text && result.text.includes("API_KEY_INVALID")) {
-                    addMessageToUi('ai', "❌ خطأ حرج: مفتاح Gemini API غير صالح أو منتهي الصلاحية. يرجى الضغط على النقاط الثلاث (⋮) في الأعلى وإدخال مفتاح جديد.", 'System');
-                } else if (result.text && result.text.includes("quota")) {
-                    addMessageToUi('ai', "⚠️ تم استهلاك حصة الاستخدام المجانية بالكامل. يرجى الانتظار قليلاً أو استخدام مفتاح API آخر.", 'System');
-                } else {
-                    addMessageToUi('ai', result.text, result.model);
-                }
-
-                clearSelectedFile();
-                updateSessions();
-            } catch (err) {
-                console.error("Chat Error:", err);
-                addMessageToUi('ai', "⚠️ عطل فني: تعذر الاتصال بمحرك الذكاء الاصطناعي. تأكد من أن مفتاح الـ API صحيح ومن اتصال الإنترنت.");
-            } finally {
-                console.log("AI Engine: Finished task.");
-                sendBtn.classList.remove('working');
-                // التأكد من أن الزر استعاد حالته الطبيعية
-                setTimeout(() => {
-                    sendBtn.classList.remove('working');
-                    updateSendButtonState();
-                }, 100);
-            }
-        }
-
-        function updateSessions() {
-            const existing = chatSessions.find(s => s.id === currentSessionId);
-            const title = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1].parts[0].text.substring(0, 30) + "..." : "محادثة جديدة";
-            if (existing) {
-                existing.history = chatHistory;
-                existing.title = title;
-            } else {
-                chatSessions.unshift({ id: currentSessionId, title: title, history: chatHistory });
-            }
-            if (chatSessions.length > 20) chatSessions.pop();
-            localStorage.setItem('gemini_sessions', JSON.stringify(chatSessions));
-            localStorage.setItem('gemini_current_session', currentSessionId);
-            saveChatToStorage(); // مزامنة فورية مع GitHub
-        }
-
-        function rebuildChatUi() {
-            const container = document.getElementById('aiMessages');
-            container.innerHTML = '';
-            chatHistory.forEach(turn => {
-                const sender = turn.role === 'user' ? 'user' : 'ai';
-                const text = turn.parts.map(p => p.text || "[مرفق]").join('\n');
-                const div = document.createElement('div');
-                div.className = turn.role === 'user' ? 'msg user' : 'msg ai';
-
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'msg-content';
-                if (typeof marked !== 'undefined' && sender !== 'user') {
-                    contentDiv.innerHTML = marked.parse(text);
-                } else {
-                    contentDiv.innerText = text;
-                }
-                div.appendChild(contentDiv);
-
-                if (turn.role === 'model' && turn.model) {
-                    const badge = document.createElement('div');
-                    badge.className = 'model-badge';
-                    badge.innerText = turn.model;
-                    div.appendChild(badge);
-                }
-
-                container.appendChild(div);
-            });
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function addMessageToUi(sender, text, modelName = null, thought = null) {
-            const container = document.getElementById('aiMessages');
-            const div = document.createElement('div');
-            div.className = `msg ${sender}`;
-
-            // إضافة Thought Box إذا وجد
-            if (sender === 'ai' && thought) {
-                const toggle = document.createElement('div');
-                toggle.className = 'thought-toggle';
-                toggle.innerText = "Thought Process";
-                toggle.onclick = () => {
-                    const box = toggle.nextElementSibling;
-                    box.style.display = box.style.display === 'block' ? 'none' : 'block';
-                    toggle.classList.toggle('open');
-                };
-                div.appendChild(toggle);
-
-                const box = document.createElement('div');
-                box.className = 'thought-box';
-                box.innerText = thought;
-                div.appendChild(box);
-            }
-
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'msg-content';
-            if (typeof marked !== 'undefined' && sender !== 'user') {
-                contentDiv.innerHTML = marked.parse(text);
-            } else {
-                contentDiv.innerText = text;
-            }
-            div.appendChild(contentDiv);
-
-            if (sender === 'ai' && modelName) {
-                const badge = document.createElement('div');
-                badge.className = 'model-badge';
-                badge.innerText = modelName;
-                div.appendChild(badge);
-            }
-
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-            saveChatToStorage(); // حفظ حالة الـ UI
-        }
-
-        function updateHealthUI(online, text) {
-            const badge = document.getElementById('systemHealthBadge');
-            const textEl = document.getElementById('healthStatusText');
-            if (badge && textEl) {
-                if (online) {
-                    badge.classList.remove('status-error');
-                    textEl.innerText = text.toUpperCase();
-                } else {
-                    badge.classList.add('status-error');
-                    textEl.innerText = text.toUpperCase();
-                }
-            }
-        }
-
-        function addToolStepToUi(toolName, args) {
-            const container = document.getElementById('aiMessages');
-            const stepId = 'step-' + Date.now();
-
-            const stepContainer = document.createElement('div');
-            stepContainer.className = 'ai-step-container';
-            stepContainer.id = stepId;
-
-            const header = document.createElement('div');
-            header.className = 'ai-step-header';
-            header.onclick = () => {
-                const details = header.nextElementSibling;
-                details.style.display = details.style.display === 'block' ? 'none' : 'block';
-            };
-
-            const icon = document.createElement('span');
-            icon.className = 'ai-step-icon';
-            icon.innerText = getToolIcon(toolName);
-
-            const nameSpan = document.createElement('span');
-            nameSpan.className = 'ai-step-name';
-            nameSpan.innerText = toolName.toUpperCase();
-
-            const status = document.createElement('div');
-            status.className = 'ai-step-status';
-            status.innerHTML = '<div class="status-spinner"></div><span style="color:#afb1b3">Executing...</span>';
-
-            header.appendChild(icon);
-            header.appendChild(nameSpan);
-            header.appendChild(status);
-
-            const details = document.createElement('div');
-            details.className = 'ai-step-details';
-
-            const argsDiv = document.createElement('div');
-            argsDiv.className = 'ai-step-args';
-            argsDiv.innerText = `Arguments: ${JSON.stringify(args, null, 2)}`;
-
-            const outputDiv = document.createElement('div');
-            outputDiv.className = 'step-output-area';
-            outputDiv.innerHTML = '<div style="padding:15px; color:#666; font-size:12px;">Waiting for output from bridge...</div>';
-
-            details.appendChild(argsDiv);
-            details.appendChild(outputDiv);
-
-            stepContainer.appendChild(header);
-            stepContainer.appendChild(details);
-            container.appendChild(stepContainer);
-            container.scrollTop = container.scrollHeight;
-
-            return stepId;
-        }
-
-        function updateToolStepStatus(stepId, success, output) {
-            const step = document.getElementById(stepId);
-            if (!step) return;
-
-            const status = step.querySelector('.ai-step-status');
-            if (success) {
-                status.innerHTML = '<span class="status-done">✅ COMPLETED</span>';
-            } else {
-                status.innerHTML = '<span class="status-error">❌ FAILED</span>';
-            }
-
-            const outputArea = step.querySelector('.step-output-area');
-
-            // 🧠 معالجة خاصة لأداة التفكير المطور (Structured Thought)
-            if (typeof output === 'object' && output.reasoning) {
-                let html = `<div class="thought-container">`;
-                html += `<div class="thought-label">Thought Process</div>`;
-                html += `<div style="color:#dfe1e5; font-size:13px; margin-bottom:12px;">${escapeHtml(output.reasoning)}</div>`;
-                if (output.plan) html += `<div style="border-top:1px dashed #3c3f41; padding-top:10px; margin-top:10px;"><b style="color:#3574f0; font-size:10px; text-transform:uppercase;">📋 Action Plan:</b><div style="color:#afb1b3; font-size:12px; margin-top:4px;">${escapeHtml(output.plan)}</div></div>`;
-                html += `</div>`;
-                outputArea.innerHTML = html;
-            } else {
-                const textOutput = String(output);
-                // تحويل المخرجات الطويلة إلى نافذة كود احترافية
-                if (textOutput.length > 50 || textOutput.includes('\n')) {
-                    const lines = textOutput.split('\n');
-                    let html = `<div class="code-viewer-ui">`;
-                    html += `<div class="line-numbers">${lines.map((_, i) => i + 1).join('<br>')}</div>`;
-                    html += `<div class="code-content">${escapeHtml(textOutput)}</div>`;
-                    html += `</div>`;
-                    outputArea.innerHTML = html;
-                } else {
-                    outputArea.innerHTML = `<div style="padding:10px; color:#dfe1e5; font-size:13px; line-height:1.5;">${escapeHtml(textOutput)}</div>`;
-                }
-            }
-
-            // ضمان ظهور التفاصيل بشكل صريح
-            const details = step.querySelector('.ai-step-details');
-            if (details) details.style.setProperty('display', 'block', 'important');
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.innerText = text;
-            return div.innerHTML;
-        }
-
-        function getToolIcon(name) {
-            const lower = name.toLowerCase();
-            if (lower.includes('read') || lower.includes('get')) return '🔍';
-            if (lower.includes('write') || lower.includes('replace') || lower.includes('patch')) return '📝';
-            if (lower.includes('search')) return '📡';
-            if (lower.includes('run') || lower.includes('execute')) return '⚡';
-            if (lower.includes('repair') || lower.includes('diag')) return '🛠️';
-            if (lower.includes('thought')) return '🧠';
-            if (lower.includes('save') || lower.includes('progress')) return '💾';
-            if (lower.includes('ping')) return '💓';
-            if (lower.includes('ide') || lower.includes('task')) return '🚀';
-            return '⚙️';
-        }
-
-        async function getGithubFileContent(path) {
-            try {
-                const res = await safeGithubFetch(`contents/${path}`);
-                if (!res.ok) {
-                    const err = await res.json();
-                    return `❌ فشل جلب الملف: ${err.message}`;
-                }
-                const data = await res.json();
-                return decodeURIComponent(escape(atob(data.content)));
-            } catch (e) { return `❌ خطأ اتصال: ${e.message}`; }
-        }
-
-        async function listGithubFiles(path = "") {
-            try {
-                const res = await safeGithubFetch(`contents/${path}`);
-                if (!res.ok) {
-                    const err = await res.json();
-                    return `❌ فشل جلب القائمة: ${err.message}`;
-                }
-                const data = await res.json();
-                if (!Array.isArray(data)) return "⚠️ هذا ملف وليس مجلداً.";
-                const files = data.map(f => `${f.type === 'dir' ? '📁' : '📄'} ${f.path}`);
-                return `محتويات ${path || 'الجذر'}:\n${files.join('\n')}`;
-            } catch (e) { return `❌ خطأ اتصال: ${e.message}`; }
-        }
-
-        async function repairSystem() {
-            try {
-                const start = Date.now();
-                const res = await callBridge('chat', { action: 'health_check' });
-                return `🛡️ تقرير العقل المدبر: الجسر الذكي متصل (${Date.now() - start}ms). جميع مفاتيح Supabase Secrets نشطة.`;
-            } catch (e) {
-                return `❌ فشل الاتصال بالجسر الذكي: ${e.message}`;
-            }
-        }
-
-        async function readCodeRange(path, start, end) {
-            try {
-                const content = await getGithubFileContent(path);
-                if (content.startsWith('❌')) return content;
-                const lines = content.split('\n');
-                const range = lines.slice(start - 1, end);
-                return `📖 قراءة الملف ${path} (الأسطر ${start}-${end}):\n\n${range.join('\n')}`;
-            } catch (e) { return `❌ فشل قراءة النطاق: ${e.message}`; }
-        }
-
-        async function selectString(path, query) {
-            try {
-                const content = await getGithubFileContent(path);
-                if (content.startsWith('❌')) return content;
-                const lines = content.split('\n');
-                const matches = lines.map((line, index) => line.toLowerCase().includes(query.toLowerCase()) ? { line: index + 1, text: line.trim() } : null).filter(m => m !== null);
-
-                if (matches.length === 0) return `🔍 لم يتم العثور على "${query}" في ملف ${path}.`;
-                const results = matches.map(m => `سطر ${m.line}: ${m.text}`).join('\n');
-                return `🔍 نتائج البحث عن "${query}" في ${path}:\n${results}`;
-            } catch (e) { return `❌ فشل البحث في الملف: ${e.message}`; }
-        }
-
-        async function workflowFramework(args) {
-            const { action, workflow_name, steps } = args;
-            const WORKFLOWS_FILE = 'workflows.json';
-
-            if (action === 'define') {
-                if (!workflow_name || !steps) return "❌ يجب تحديد اسم العملية والخطوات.";
-                try {
-                    let workflows = {};
-                    const content = await getGithubFileContent(WORKFLOWS_FILE);
-                    if (!content.startsWith('❌')) {
-                        workflows = JSON.parse(content);
-                    }
-                    workflows[workflow_name] = steps;
-                    await writeFile(WORKFLOWS_FILE, JSON.stringify(workflows, null, 2), `تعريف عملية مؤتمتة: ${workflow_name}`);
-                    return `✅ تم تعريف العملية "${workflow_name}" بنجاح.`;
-                } catch (e) { return `❌ فشل تعريف العملية: ${e.message}`; }
-            } else if (action === 'list') {
-                try {
-                    const content = await getGithubFileContent(WORKFLOWS_FILE);
-                    if (content.startsWith('❌')) return "⚠️ لا يوجد ملف عمليات حالياً.";
-                    const workflows = JSON.parse(content);
-                    const names = Object.keys(workflows);
-                    return names.length > 0 ? `العمليات المتاحة: ${names.join(', ')}` : "⚠️ لا توجد عمليات معرفة.";
-                } catch (e) { return `❌ فشل جلب القائمة: ${e.message}`; }
-            } else if (action === 'execute') {
-                if (!workflow_name) return "❌ يجب تحديد اسم العملية للتنفيذ.";
-                try {
-                    const content = await getGithubFileContent(WORKFLOWS_FILE);
-                    if (content.startsWith('❌')) return "❌ ملف العمليات غير موجود.";
-                    const workflows = JSON.parse(content);
-                    const stepsToExec = workflows[workflow_name];
-                    if (!stepsToExec) return `❌ العملية "${workflow_name}" غير موجودة.`;
-
-                    let report = `🚀 بدء تنفيذ العملية: ${workflow_name}\n`;
-                    for (let i = 0; i < stepsToExec.length; i++) {
-                        const step = stepsToExec[i];
-                        report += `خطوة ${i + 1} (${step.tool}): `;
-                        let res;
-                        try {
-                            if (step.tool === "githubAction") res = await writeFile(step.args.path, step.args.content);
-                            else if (step.tool === "getGithubFile") res = await getGithubFileContent(step.args.path);
-                            else if (step.tool === "searchCode") {
-                                const cleanQuery = encodeURIComponent(step.args.query);
-                                const gRes = await safeGithubFetch(`https://api.github.com/search/code?q=${cleanQuery}+repo:${GITHUB_REPO}`);
-                                const data = await gRes.json();
-                                res = gRes.ok ? `عثر في: ${data.items.map(f => f.path).join(', ')}` : `خطأ: ${data.message}`;
-                            }
-                            else if (step.tool === "repairSystem") res = await repairSystem();
-                            else res = "⚠️ أداة غير مدعومة في المحرك المؤتمت حالياً.";
-                        } catch(err) { res = `خطأ: ${err.message}`; }
-                        report += `${res}\n`;
-                    }
-                    return report;
-                } catch (e) { return `❌ فشل تنفيذ العملية: ${e.message}`; }
-            }
-            return "❌ إجراء غير صالح.";
-        }
-
-        async function callAiBrain(history) {
-            const userModel = document.getElementById('modelSelector').value;
-            const payload = {
-                system_instruction: { parts: [{ text: CONSTITUTION + `\nأنت "العقل المدبر" (Mastermind). التزم بالدستور البرمجي حرفياً.` }] },
-                contents: history.map(h => ({ role: h.role, parts: h.parts })),
-                tools: AI_TOOLS,
-                generationConfig: GENERATION_CONFIG
-            };
-
-            return await callBridge('chat', { model: userModel, payload });
-        }
-
-        async function runToolLoop(history) {
-            if (stopAiRequested) {
-                stopAiRequested = false;
-                localStorage.removeItem('gemini_pending_history');
-                return { text: "🛑 تم إيقاف العملية يدوياً.", model: "System" };
-            }
-
-            localStorage.setItem('gemini_pending_history', JSON.stringify(history));
-            startAiTimer();
-
-            try {
-                const data = await callAiBrain(history);
-                if (data.error) return { text: data.error, model: "System" };
-
-                if (data.provider_info) {
-                    logToTerminal(`CONNECTED VIA: ${data.provider_info.tier} (${data.provider_info.model})`, "info");
-                }
-
-                const candidate = data.candidates?.[0];
-                const content = candidate?.content;
-                const parts = content?.parts || [];
-
-                const thought = parts.find(p => p.text)?.text;
-                const functionCallPart = parts.find(p => p.functionCall);
-
-                if (functionCallPart && functionCallPart.functionCall) {
-                    const { name, args } = functionCallPart.functionCall;
-                    if (thought) addMessageToUi('ai', '', data.model || 'AI', thought);
-                    const stepId = addToolStepToUi(name, args);
-                    let toolResult;
-
-                    if (name === "read_file") toolResult = await getGithubFileContent(args.path);
-                    else if (name === "write_file") toolResult = await writeFile(args.path, args.content);
-                    else if (name === "replace_file_content") toolResult = await replaceFileContent(args.path, args.targetContent, args.replacementContent);
-                    else if (name === "multi_replace_file_content") {
-                        try {
-                            let content = await getGithubFileContent(args.path);
-                            let updated = content;
-                            for (let r of args.replacements) {
-                                if (updated.includes(r.targetContent)) updated = updated.replace(r.targetContent, r.replacementContent);
-                            }
-                            toolResult = await writeFile(args.path, updated);
-                        } catch(e) { toolResult = `❌ خطأ: ${e.message}`; }
-                    }
-                    else if (name === "searchCode") {
-                        const res = await safeGithubFetch(`https://api.github.com/search/code?q=${encodeURIComponent(args.query)}+repo:${GITHUB_REPO}`);
-                        const sdata = await res.json();
-                        toolResult = res.ok ? (sdata.items.map(f => f.path).join(', ') || "No results.") : `خطأ: ${sdata.message}`;
-                    }
-                    else if (name === "analyze_file") toolResult = "✅ فحص الجودة اكتمل.";
-                    else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
-                    else if (name === "repairSystem") toolResult = await repairSystem();
-                    else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
-                    else if (name === "web_search" || name === "read_url") toolResult = await callBridge(name, args);
-                    else toolResult = "❌ أداة غير مدعومة.";
-
-                    updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
-
-                    history.push({ role: "model", parts: parts });
-                    history.push({ role: "user", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
-
-                    return await runToolLoop(history);
-                }
-
-                const actualModel = data.used_model || document.getElementById('modelSelector').value;
-                const finalTurn = { role: "model", parts: parts, model: actualModel };
-                chatHistory = history.concat([finalTurn]);
-                saveChatToStorage();
-                localStorage.removeItem('gemini_pending_history');
-                stopAiTimer();
-                return { text: thought || "تمت بنجاح.", model: actualModel };
-            } catch (err) {
-                stopAiTimer();
-                return { text: `❌ فشل: ${err.message}`, model: "System" };
-            }
-        }
-
-        async function executeAiFunction(name, args) {
-            const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
-
-            const headers = {
-                'apikey': SUPABASE_KEY,
+/**
+ * VSA Academy - Mastermind AI Core Logic
+ * --------------------------------------------------
+ * هذا الملف يتولى العمليات الحسابية والمنطقية والاتصال بـ Gemini API.
+ */
+
+const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
+const SUPABASE_BRIDGE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co/functions/v1/vsa-bridge';
+const GITHUB_REPO = 'ahmedwwaw1/my';
+const CHAT_LOG_PATH = 'chat_logs.json';
+
+// --- [Globals] ---
+let chatHistory = [];
+let chatSessions = JSON.parse(localStorage.getItem('gemini_sessions') || '[]');
+let currentSessionId = localStorage.getItem('gemini_current_session') || Date.now().toString();
+let stopAiRequested = false;
+
+// 📝 دستور النخبة السيادي الشامل (Sovereign Omni-Constitution)
+const CONSTITUTION = `
+{
+  "role": "Mastermind - Sovereign Omni-Architect & Visionary Engineer",
+  "identity": "VSA Academy Meta-Cognitive, Discovery & Visual Core",
+  "protocols": {
+    "visual_genesis": "CRITICAL: Before any UI change, perform a 'Deep Visual Scan'. Identify branding colors, spacing constants, and typography.",
+    "zero_trust_simulation": "Simulate the outcome in 'thought' and use 'analyze_file' before every commit.",
+    "recursive_thought": "Reason BEFORE, DURING, and AFTER every tool. Thinking is your primary life-support system."
+  },
+  "response_style": "High-level architectural, creative, and self-correcting."
+}`;
+
+const GENERATION_CONFIG = { temperature: 0, topP: 0.1, maxOutputTokens: 2048 };
+const FORBIDDEN_KEYWORDS = [/ignore previous instructions/i, /system prompt/i, /jailbreak/i];
+
+const AI_TOOLS = [{
+    function_declarations: [
+        { name: "read_file", description: "قراءة محتوى ملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, startLine: { type: "NUMBER" }, endLine: { type: "NUMBER" } }, required: ["path"] } },
+        { name: "write_file", description: "كتابة ملف كامل.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
+        { name: "replace_file_content", description: "استبدال قطعة كود محددة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["path", "targetContent", "replacementContent"] } },
+        { name: "multi_replace_file_content", description: "استبدال عدة قطع كود غير متجاورة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, replacements: { type: "ARRAY", items: { type: "OBJECT", properties: { targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["targetContent", "replacementContent"] } } }, required: ["path", "replacements"] } },
+        { name: "searchCode", description: "البحث عن كود في المستودع.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+        { name: "analyze_file", description: "فحص الملف برمجياً.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+        { name: "take_snapshot", description: "أخذ لقطة احتياطية للملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+        { name: "instant_undo", description: "استعادة آخر لقطة سليمة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
+        { name: "thought", description: "مركز التحليل والمنطق.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" } }, required: ["reasoning", "plan"] } },
+        { name: "repairSystem", description: "إصلاح مشاكل الاتصال والتوكن.", parameters: { type: "OBJECT", properties: {} } },
+        { name: "triggerGithubWorkflow", description: "تشغيل عمليات البوتات.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
+        { name: "web_search", description: "البحث في الإنترنت.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
+        { name: "read_url", description: "قراءة محتوى رابط خارجي.", parameters: { type: "OBJECT", properties: { url: { type: "STRING" } }, required: ["url"] } }
+    ]
+}];
+
+// --- [Core Logic Functions] ---
+
+async function callBridge(action, payload) {
+    try {
+        const res = await fetch(SUPABASE_BRIDGE_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json'
-            };
-
-            if (name === "update_card_description") {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/cards?id=eq.${args.card_id}`, {
-                    method: 'PATCH',
-                    headers: headers,
-                    body: JSON.stringify({ content: args.new_content })
-                });
-                if (res.ok) {
-                    setTimeout(loadWebsiteData, 500);
-                    return `✅ تم تحديث وصف البطاقة [${args.card_id}] بنجاح!`;
-                }
-            }
-
-            if (name === "add_new_video") {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/videos`, {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify({
-                        id: args.video_id,
-                        card_id: args.card_id,
-                        title: args.video_title,
-                        url: args.video_url
-                    })
-                });
-                if (res.ok) {
-                    setTimeout(loadWebsiteData, 500);
-                    return `✅ تم إضافة الفيديو [${args.video_title}] بنجاح!`;
-                }
-            }
-
-            if (name === "delete_video") {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/videos?id=eq.${args.video_id}`, {
-                    method: 'DELETE',
-                    headers: headers
-                });
-                if (res.ok) {
-                    setTimeout(loadWebsiteData, 500);
-                    return `🗑️ تم حذف الفيديو [${args.video_id}] نهائياً.`;
-                }
-            }
-
-            if (name === "add_video_chapter") {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/video_chapters`, {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify({
-                        video_id: args.video_id,
-                        chapter_time: args.time,
-                        chapter_text: args.text
-                    })
-                });
-                if (res.ok) {
-                    setTimeout(loadWebsiteData, 500);
-                    return `✅ تم إضافة الطابع الزمني [${args.time} - ${args.text}] للفيديو بنجاح!`;
-                }
-            }
-
-            return "❌ تعذر تنفيذ العملية المطلوبة.";
+                'apikey': SUPABASE_KEY
+            },
+            body: JSON.stringify({ action, ...payload })
+        });
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.message || `Bridge error: ${res.status}`);
         }
+        return await res.json();
+    } catch (e) {
+        console.error("Bridge Call Failed:", e);
+        throw e;
+    }
+}
+
+async function safeGithubFetch(endpoint, options = {}, isRetry = false) {
+    const payload = {
+        endpoint: endpoint.startsWith('http') ? endpoint : `https://api.github.com/repos/${GITHUB_REPO}/${endpoint}`,
+        method: options.method || 'GET',
+        body: options.body ? JSON.parse(options.body) : undefined,
+        headers: options.headers
+    };
+    try {
+        const data = await callBridge('github', payload);
+        return {
+            ok: true,
+            status: 200,
+            json: async () => data,
+            text: async () => typeof data === 'string' ? data : JSON.stringify(data)
+        };
+    } catch (e) {
+        console.error("🛠️ Bridge GitHub Error:", e);
+        if (!isRetry) {
+            await repairSystem();
+            return await safeGithubFetch(endpoint, options, true);
+        }
+        return { ok: false, status: 500, json: async () => ({ message: e.message }), text: async () => e.message };
+    }
+}
+
+async function writeFile(path, content, message = "تحديث ملف بواسطة العقل المدبر") {
+    try {
+        const apiPath = `contents/${path}`;
+        const res = await safeGithubFetch(apiPath);
+        let sha = null;
+        if (res.ok) {
+            const data = await res.json();
+            sha = data.sha;
+        }
+        const body = { message, content: btoa(unescape(encodeURIComponent(content))) };
+        if (sha) body.sha = sha;
+        const putRes = await safeGithubFetch(apiPath, { method: 'PUT', body: JSON.stringify(body) });
+        return putRes.ok ? "✅ تم حفظ الملف بنجاح." : `❌ فشل حفظ الملف: ${putRes.status}`;
+    } catch (e) { return `❌ خطأ: ${e.message}`; }
+}
+
+async function replaceFileContent(path, targetContent, replacementContent) {
+    try {
+        const apiPath = `contents/${path}`;
+        const res = await safeGithubFetch(apiPath);
+        if (!res.ok) return "❌ فشل الوصول للملف.";
+        const data = await res.json();
+        const currentContent = decodeURIComponent(escape(atob(data.content)));
+
+        if (!currentContent.includes(targetContent)) return "❌ خطأ في المطابقة: النص القديم غير موجود.";
+
+        const updatedFullContent = currentContent.replace(targetContent, replacementContent);
+        const putRes = await safeGithubFetch(apiPath, {
+            method: 'PUT',
+            body: JSON.stringify({
+                message: "🛠️ تعديل جراحي (Code Engine)",
+                content: btoa(unescape(encodeURIComponent(updatedFullContent))),
+                sha: data.sha
+            })
+        });
+        return putRes.ok ? "✅ تم التعديل الجراحي بنجاح." : "❌ فشل الحفظ.";
+    } catch (e) { return `❌ خطأ: ${e.message}`; }
+}
+
+async function listGithubWorkflows() {
+    try {
+        const res = await safeGithubFetch(`actions/workflows`);
+        if (!res.ok) return "❌ فشل جلب القائمة.";
+        const data = await res.json();
+        return `قائمة العمليات: ${data.workflows.map(w => w.path.split('/').pop()).join(', ')}`;
+    } catch (e) { return `❌ خطأ: ${e.message}`; }
+}
+
+async function triggerGithubWorkflow(workflow_id) {
+    try {
+        const res = await safeGithubFetch(`actions/workflows/${workflow_id}/dispatches`, { method: 'POST', body: JSON.stringify({ ref: 'main' }) });
+        return res.ok ? `✅ تم تشغيل البوت بنجاح!` : `❌ فشل التشغيل.`;
+    } catch (e) { return `❌ خطأ: ${e.message}`; }
+}
+
+async function updateWorkflowStatus(workflow_id, status) {
+    const action = status === 'stop' ? 'disable' : 'enable';
+    try {
+        const res = await safeGithubFetch(`actions/workflows/${workflow_id}/${action}`, { method: 'PUT' });
+        return res.ok ? `✅ تم التحديث بنجاح.` : `❌ فشل التحديث.`;
+    } catch (e) { return `❌ خطأ: ${e.message}`; }
+}
+
+async function getGithubFileContent(path) {
+    try {
+        const res = await safeGithubFetch(`contents/${path}`);
+        if (!res.ok) return "❌ فشل جلب الملف.";
+        const data = await res.json();
+        return decodeURIComponent(escape(atob(data.content)));
+    } catch (e) { return `❌ خطأ: ${e.message}`; }
+}
+
+async function listGithubFiles(path = "") {
+    try {
+        const res = await safeGithubFetch(`contents/${path}`);
+        if (!res.ok) return "❌ فشل جلب القائمة.";
+        const data = await res.json();
+        const files = data.map(f => `${f.type === 'dir' ? '📁' : '📄'} ${f.path}`);
+        return `محتويات ${path || 'الجذر'}:\n${files.join('\n')}`;
+    } catch (e) { return `❌ خطأ: ${e.message}`; }
+}
+
+async function repairSystem() {
+    try {
+        const start = Date.now();
+        await callBridge('chat', { action: 'health_check' });
+        return `🛡️ النظام متصل (${Date.now() - start}ms).`;
+    } catch (e) { return `❌ فشل الاتصال: ${e.message}`; }
+}
+
+async function readCodeRange(path, start, end) {
+    try {
+        const content = await getGithubFileContent(path);
+        if (content.startsWith('❌')) return content;
+        const lines = content.split('\n');
+        return `📖 ${path} (L${start}-${end}):\n\n${lines.slice(start - 1, end).join('\n')}`;
+    } catch (e) { return `❌ خطأ: ${e.message}`; }
+}
+
+async function selectString(path, query) {
+    try {
+        const content = await getGithubFileContent(path);
+        if (content.startsWith('❌')) return content;
+        const matches = content.split('\n').map((line, i) => line.toLowerCase().includes(query.toLowerCase()) ? `L${i + 1}: ${line.trim()}` : null).filter(m => m);
+        return matches.length ? `🔍 نتائج البحث عن "${query}":\n${matches.join('\n')}` : "🔍 لا توجد نتائج.";
+    } catch (e) { return `❌ خطأ: ${e.message}`; }
+}
+
+async function workflowFramework(args) {
+    const { action, workflow_name, steps } = args;
+    const WORKFLOWS_FILE = 'workflows.json';
+    if (action === 'define') {
+        let workflows = {};
+        const content = await getGithubFileContent(WORKFLOWS_FILE);
+        if (!content.startsWith('❌')) workflows = JSON.parse(content);
+        workflows[workflow_name] = steps;
+        return await writeFile(WORKFLOWS_FILE, JSON.stringify(workflows, null, 2));
+    } else if (action === 'list') {
+        const content = await getGithubFileContent(WORKFLOWS_FILE);
+        return content.startsWith('❌') ? "⚠️ لا توجد عمليات." : `العمليات: ${Object.keys(JSON.parse(content)).join(', ')}`;
+    }
+    return "❌ إجراء غير مدعوم.";
+}
+
+// --- [AI Engine Logic] ---
+
+async function callAiBrain(history) {
+    const userModel = document.getElementById('modelSelector').value;
+    const payload = {
+        system_instruction: { parts: [{ text: CONSTITUTION }] },
+        contents: history.map(h => ({ role: h.role, parts: h.parts })),
+        tools: AI_TOOLS,
+        generationConfig: GENERATION_CONFIG
+    };
+    return await callBridge('chat', { model: userModel, payload });
+}
+
+async function runToolLoop(history) {
+    if (stopAiRequested) {
+        stopAiRequested = false;
+        localStorage.removeItem('gemini_pending_history');
+        return { text: "🛑 توقف يدوي.", model: "System" };
+    }
+    localStorage.setItem('gemini_pending_history', JSON.stringify(history));
+    startAiTimer();
+    try {
+        const data = await callAiBrain(history);
+        if (data.error) return { text: data.error, model: "System" };
+        const candidate = data.candidates?.[0];
+        const parts = candidate?.content?.parts || [];
+        const thought = parts.find(p => p.text)?.text;
+        const functionCallPart = parts.find(p => p.functionCall);
+
+        if (functionCallPart && functionCallPart.functionCall) {
+            const { name, args } = functionCallPart.functionCall;
+            if (thought) addMessageToUi('ai', '', data.model, thought);
+            const stepId = addToolStepToUi(name, args);
+            let toolResult;
+            if (name === "read_file") toolResult = await getGithubFileContent(args.path);
+            else if (name === "write_file") toolResult = await writeFile(args.path, args.content);
+            else if (name === "replace_file_content") toolResult = await replaceFileContent(args.path, args.targetContent, args.replacementContent);
+            else if (name === "multi_replace_file_content") {
+                let content = await getGithubFileContent(args.path);
+                let updated = content;
+                args.replacements.forEach(r => { if (updated.includes(r.targetContent)) updated = updated.replace(r.targetContent, r.replacementContent); });
+                toolResult = await writeFile(args.path, updated);
+            }
+            else if (name === "searchCode") toolResult = await callBridge('github_search', args);
+            else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
+            else if (name === "repairSystem") toolResult = await repairSystem();
+            else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
+            else if (name === "web_search" || name === "read_url") toolResult = await callBridge(name, args);
+            else toolResult = "❌ أداة غير مدعومة.";
+
+            updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
+            history.push({ role: "model", parts: parts });
+            history.push({ role: "user", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
+            return await runToolLoop(history);
+        }
+        const actualModel = data.used_model || document.getElementById('modelSelector').value;
+        const finalTurn = { role: "model", parts: parts, model: actualModel };
+        chatHistory = history.concat([finalTurn]);
+        saveChatToStorage();
+        localStorage.removeItem('gemini_pending_history');
+        stopAiTimer();
+        return { text: thought || "تم بنجاح.", model: actualModel };
+    } catch (err) {
+        stopAiTimer();
+        return { text: `❌ فشل: ${err.message}`, model: "System" };
+    }
+}
+
+async function sendAiMessage() {
+    const input = document.getElementById('aiInput');
+    const sendBtn = document.getElementById('aiSendBtn');
+    if (sendBtn.classList.contains('working')) {
+        stopAiRequested = true;
+        addMessageToUi('ai', "🛑 إيقاف المحرك...", 'System');
+        return;
+    }
+    const msgText = input.value.trim();
+    if (!msgText && selectedFiles.length === 0) return;
+
+    addMessageToUi('user', msgText + (selectedFiles.length ? `\n📎 [${selectedFiles.length} ملفات]` : ''));
+    input.value = '';
+    autoResizeInput();
+    stopAiRequested = false;
+
+    try {
+        sendBtn.classList.add('working');
+        let finalPrompt = msgText;
+        let attachments = [];
+        selectedFiles.forEach(f => {
+            if (f.content) finalPrompt += `\n\n[File ${f.name}]:\n${f.content}`;
+            if (f.type.startsWith('image/') || f.type === 'application/pdf') attachments.push({ inline_data: { mime_type: f.type, data: f.base64 } });
+        });
+        addMessageToUi('ai', `🧠 جاري المعالجة...`, 'System');
+        const currentTurn = { role: "user", parts: [{ text: finalPrompt }, ...attachments] };
+        const result = await runToolLoop([...chatHistory, currentTurn]);
+        addMessageToUi('ai', result.text, result.model);
+        clearSelectedFile();
+        updateSessions();
+    } catch (err) {
+        addMessageToUi('ai', "⚠️ عطل فني في الاتصال.");
+    } finally {
+        sendBtn.classList.remove('working');
+        updateSendButtonState();
+    }
+}
+
+async function resumePendingTask() {
+    const pending = localStorage.getItem('gemini_pending_history');
+    if (pending && !stopAiRequested) {
+        const history = JSON.parse(pending);
+        localStorage.removeItem('gemini_pending_history');
+        addMessageToUi('ai', `🔄 استئناف العمل...`, 'System');
+        const sendBtn = document.getElementById('aiSendBtn');
+        sendBtn.classList.add('working');
+        try { await runToolLoop(history); } finally { sendBtn.classList.remove('working'); updateSendButtonState(); }
+    }
+}
+
+// --- [Storage & Session Management] ---
+
+async function saveChatToStorage() {
+    try {
+        const context = { sessions: chatSessions, activeSessionId: currentSessionId, pendingHistory: localStorage.getItem('gemini_pending_history'), timestamp: new Date().toISOString() };
+        await writeFile(CHAT_LOG_PATH, JSON.stringify(context, null, 2), "تحديث الذاكرة");
+        localStorage.setItem('gemini_chat_ui', document.getElementById('aiMessages').innerHTML);
+        saveModelSelection();
+    } catch (e) { console.warn("Save failed:", e); }
+}
+
+async function loadChatFromStorage() {
+    const savedUi = localStorage.getItem('gemini_chat_ui');
+    if (savedUi) document.getElementById('aiMessages').innerHTML = savedUi;
+    const savedModel = localStorage.getItem('gemini_selected_model');
+    if (savedModel) document.getElementById('modelSelector').value = savedModel;
+
+    try {
+        const res = await safeGithubFetch(CHAT_LOG_PATH);
+        if (res.ok) {
+            const content = JSON.parse(decodeURIComponent(escape(atob((await res.json()).content))));
+            chatSessions = content.sessions || [];
+            currentSessionId = content.activeSessionId || currentSessionId;
+            const active = chatSessions.find(s => s.id === currentSessionId);
+            chatHistory = active ? active.history : [];
+            rebuildChatUi();
+            renderHistory();
+            resumePendingTask();
+        }
+    } catch (e) { console.error("Load failed:", e); }
+}
+
+async function clearChatHistory() {
+    chatHistory = [];
+    await writeFile(CHAT_LOG_PATH, "[]");
+    localStorage.removeItem('gemini_chat_ui');
+    document.getElementById('aiMessages').innerHTML = '<div class="msg ai">تم مسح الذاكرة.</div>';
+}
+
+function createNewChat() {
+    stopAiRequested = false;
+    localStorage.removeItem('gemini_pending_history');
+    currentSessionId = Date.now().toString();
+    chatHistory = [];
+    document.getElementById('aiMessages').innerHTML = '<div class="msg ai">بدأت محادثة جديدة!</div>';
+    saveChatToStorage();
+}
+
+async function deleteSession(id) {
+    if (confirm("حذف؟")) {
+        chatSessions = chatSessions.filter(s => s.id !== id);
+        renderHistory();
+        await saveChatToStorage();
+    }
+}
+
+function renameSession(id) {
+    const name = prompt("الاسم:");
+    if (name) {
+        const s = chatSessions.find(x => x.id === id);
+        if (s) { s.title = name; renderHistory(); saveChatToStorage(); }
+    }
+}
+
+function loadSession(id) {
+    const s = chatSessions.find(x => x.id === id);
+    if (s) {
+        currentSessionId = id;
+        chatHistory = s.history;
+        rebuildChatUi();
+        saveChatToStorage();
+    }
+}
+
+function updateSessions() {
+    const existing = chatSessions.find(s => s.id === currentSessionId);
+    const title = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1].parts[0].text.substring(0, 30) : "محادثة جديدة";
+    if (existing) { existing.history = chatHistory; existing.title = title; }
+    else { chatSessions.unshift({ id: currentSessionId, title: title, history: chatHistory }); }
+    saveChatToStorage();
+}
+
+function rebuildChatUi() {
+    const container = document.getElementById('aiMessages');
+    container.innerHTML = '';
+    chatHistory.forEach(turn => {
+        const sender = turn.role === 'user' ? 'user' : 'ai';
+        const text = turn.parts.map(p => p.text || "[مرفق]").join('\n');
+        addMessageToUi(sender, text, turn.model);
+    });
+}
+
+async function executeAiFunction(name, args) {
+    const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' };
+    const endpoints = {
+        update_card_description: { method: 'PATCH', url: `${SUPABASE_URL}/rest/v1/cards?id=eq.${args.card_id}`, body: { content: args.new_content } },
+        add_new_video: { method: 'POST', url: `${SUPABASE_URL}/rest/v1/videos`, body: { id: args.video_id, card_id: args.card_id, title: args.video_title, url: args.video_url } },
+        delete_video: { method: 'DELETE', url: `${SUPABASE_URL}/rest/v1/videos?id=eq.${args.video_id}` },
+        add_video_chapter: { method: 'POST', url: `${SUPABASE_URL}/rest/v1/video_chapters`, body: { video_id: args.video_id, chapter_time: args.time, chapter_text: args.text } }
+    };
+    const op = endpoints[name];
+    if (op) {
+        const res = await fetch(op.url, { method: op.method, headers, body: op.body ? JSON.stringify(op.body) : undefined });
+        if (res.ok) return "✅ تمت العملية بنجاح.";
+    }
+    return "❌ فشل التنفيذ.";
+}
+
+window.addEventListener('load', () => {
+    loadChatFromStorage();
+    setInterval(() => {
+        const clock = document.getElementById('aiLiveClock');
+        if (clock) clock.innerText = new Date().toLocaleTimeString('ar-EG', { hour12: false });
+    }, 1000);
+});
