@@ -308,6 +308,10 @@ async function sendAiMessage() {
         .map(f => `data:${f.type};base64,${f.base64}`);
 
     addMessageToUi('user', msgText, null, null, userImages);
+
+    // ⚡ التعديل الاحترافي: تفريغ واجهة الكتابة فوراً بعد الإرسال (سرعة البرق)
+    clearSelectedFile();
+
     input.value = '';
     autoResizeInput();
     stopAiRequested = false;

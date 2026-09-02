@@ -43,9 +43,24 @@
 .ai-input-footer { display: flex; justify-content: space-between; align-items: center; }
 .ai-footer-icons { display: flex; gap: 16px; color: var(--ai-muted); }
 
-/* زر الزائد المحترف */
-.btn-plus-attachment { font-size: 24px !important; color: var(--ai-muted); cursor: pointer; transition: transform 0.2s, color 0.2s; display: flex; align-items: center; }
-.btn-plus-attachment:hover { color: #fff; transform: rotate(90deg); }
+/* زر الزائد المحترف (Gemini Style) */
+.btn-plus-attachment {
+    font-size: 24px !important;
+    color: var(--ai-muted);
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.btn-plus-attachment:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+}
 
 #modelSelector { background: #2b2d30 !important; color: var(--ai-text) !important; border: 1px solid #4e5157; border-radius: 6px; font-size: 12px; padding: 4px 8px; cursor: pointer; outline: none; }
 
