@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788333898118",
+      "title": "أهلاً وسهلاً بك! كيف يمكنني مس",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً وسهلاً بك! كيف يمكنني مساعدتك اليوم في مشروعك أو أي مهام برمجية وهندسية ترغب في العمل عليها؟",
+              "thoughtSignature": "EtQBCtEBARFNMg9zrgw35luZNE3CcBq//hd7/7y60274pQ5v9fw4OUwWD27/G42/ezezbnSHYFE+003K7LAM5GuCfUUEZQOzsF8vK+leczpETkg/xtZeieJuEPtKFGwy758NvEj8p8dZnK0Jkdg7hj8frNSme2+dWjMfYzk/jyozDfIDvP0nUmoxVC1FJSLBa4V4OIrHTPvrAOI2KAHnx6auFxrpv6TT90F9wj66l9TSscNzIbVAHrSJKZpsC+TQlznNj9eRfMWHveI9T5EvuajpKveypzM="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788333898118",
   "pendingHistory": null,
-  "timestamp": "2026-09-02T07:25:01.622Z"
+  "timestamp": "2026-09-02T07:26:27.293Z"
 }
