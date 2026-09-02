@@ -1,6 +1,49 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788365858574",
+      "title": "الحمد لله، كل الأمور ممتازة وج",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **المساعد الذكي (Mastermind - Sovereign Omni-Architect)**. \n\nكيف يمكنني مساعدتك اليوم في تطوير الأكاديمية، البرمجة، أو أي مشاريع تقنية وإبداعية أخرى؟ أنا جاهز لكل ما تحتاجه!",
+              "thoughtSignature": "El4KXAERTTIPh/2tejSQMLzrw2emjuWR0EgZnPy1xAaQVLGXHtA2xvUpVXY1a6aWXRDauzyK05ijXslW7lT443tAzVm1gydJbp9yvgBcldPXlzDEhZj3xg/a1UokQXeX"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "الحمد لله، كل الأمور ممتازة وجاهزة تماماً لأعلى أداء! 🚀\n\nكيف حالك أنت؟ وما هو المشروع أو المهمة التي تود العمل عليها اليوم؟ أنا بكامل طاقتي وجاهز لمساعدتك!",
+              "thoughtSignature": "El4KXAERTTIPF46ct3Z707PShtVo3sM52rA3wYVUFqni2s5IGJhWvg4v44JK0U0qeRUFiMsJ5t7yFrZ7y9gLD3BENgLSAcJIfzQtyex/r5jW/PEKBCNG+y0AkQkrQZvu"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788365858574",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-02T16:17:52.366Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-02T16:17:58.123Z"
 }
