@@ -198,8 +198,7 @@ async function listGithubFiles(path = "") {
 async function repairSystem() {
     try {
         const start = Date.now();
-        // Use a simple github file list as a health check since the bridge lacks a dedicated health_check action
-        await callBridge('github', { endpoint: `https://api.github.com/repos/${GITHUB_REPO}/contents/` });
+        await callBridge('health_check', {});
         return `🛡️ النظام متصل (${Date.now() - start}ms).`;
     } catch (e) { return `❌ فشل الاتصال: ${e.message}`; }
 }

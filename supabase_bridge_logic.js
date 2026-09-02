@@ -12,54 +12,62 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS'
 }
 
-// 🎯 قائمة النماذج السيادية - خريطة التحويل لعام 2026
-// نقوم بربط الأسماء المستقبلية بنماذج حقيقية موجودة حالياً لضمان العمل
+// 🎯 قائمة النماذج السيادية لعام 2026
 const MODEL_ROUTES = [
-    { key: "3.7", id: "gemini-2.0-flash-exp" },
-    { key: "3.6", id: "gemini-2.0-flash-exp" },
-    { key: "3.5-lite", id: "gemini-1.5-flash" },
-    { key: "3.5", id: "gemini-1.5-flash" },
-    { key: "3.1", id: "gemini-1.5-flash" },
-    { key: "3-preview", id: "gemini-1.5-pro" },
-    { key: "2.5-pro", id: "gemini-1.5-pro" },
-    { key: "2.5-lite", id: "gemini-1.5-flash" },
-    { key: "2.5", id: "gemini-1.5-flash" },
-    { key: "omni", id: "gemini-1.5-flash" },
-    { key: "image-lite", id: "gemini-1.5-flash" },
-    { key: "image-pro", id: "gemini-1.5-pro" },
-    { key: "image", id: "gemini-1.5-flash" }
+    { key: "gemini-3.7-flash", id: "gemini-3.7-flash" },
+    { key: "gemini-3.6-flash", id: "gemini-3.6-flash" },
+    { key: "gemini-3.5-flash-lite", id: "gemini-3.5-flash-lite" },
+    { key: "gemini-3.5-flash", id: "gemini-3.5-flash" },
+    { key: "gemini-3.1-flash-lite", id: "gemini-3.1-flash-lite" },
+    { key: "gemini-3-flash-preview", id: "gemini-3-flash-preview" },
+    //{ key: "gemini-2.5-pro", id: "gemini-2.5-pro" },
+    //{ key: "gemini-2.5-flash-lite", id: "gemini-2.5-flash-lite" },
+    //{ key: "gemini-2.5-flash", id: "gemini-2.5-flash" },
+    //{ key: "gemini-omni-1.1-flash", id: "gemini-omni-1.1-flash" },
+    //{ key: "gemini-3.1-flash-lite-image", id: "gemini-3.1-flash-lite-image" },
+    //{ key: "gemini-3-pro-image", id: "gemini-3-pro-image" },
+    //{ key: "gemini-3.1-flash-image", id: "gemini-3.1-flash-image" }
 ];
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
-    const requestData = await req.json();
-    const { action, payload, model: requestedModel, endpoint, method, body } = requestData;
+    const { action, payload, model: requestedModel, endpoint, method, body } = await req.json()
+
+    if (action === 'health_check') {
+        return new Response(JSON.stringify({ status: "ok", message: "VSA Bridge 2026 Online" }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    }
 
     if (action === 'chat') {
       const apiKey = Deno.env.get("GEMINI_API_KEY")
-      if (!apiKey) throw new Error("GEMINI_API_KEY is missing in Supabase Secrets");
 
       let rawId = String(requestedModel || "").trim().toLowerCase();
 
-      // البحث عن النموذج المناسب أو استخدام الافتراضي
-      const route = MODEL_ROUTES.find(r => rawId.includes(r.key)) || MODEL_ROUTES[3]; // الافتراضي 3.5
-      const modelId = route.id;
+      // العثور على الفهرس المختار لبدء اللوب منه ومن ثم النزول لأسفل
+      let startIndex = MODEL_ROUTES.findIndex(r => rawId.includes(r.key));
+      if (startIndex === -1) startIndex = 0;
 
-      try {
-          const fetchWithVersion = async (version) => {
-              const url = `https://generativelanguage.googleapis.com/${version}/models/${modelId}:generateContent?key=${apiKey}`;
+      const allModelIds = [];
+      // إضافة النموذج المختار وما يليه في القائمة (حسب طلب المستخدم: يبدأ من تحت النموذج المحدد)
+      for (let i = startIndex; i < MODEL_ROUTES.length; i++) {
+          allModelIds.push(MODEL_ROUTES[i].id);
+      }
+      // إذا أردت تدوير اللوب ليعود للبداية في حال فشل الجميع (اختياري)
+      for (let i = 0; i < startIndex; i++) {
+          allModelIds.push(MODEL_ROUTES[i].id);
+      }
 
-              // إضافة تايم أوت لكل طلب داخلي لمنع التعليق
-              const controller = new AbortController();
-              const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 ثانية كحد أقصى للنموذج الواحد
+      const userPreference = MODEL_ROUTES[startIndex].id;
+      let lastError = null;
 
-              try {
-                  const response = await fetch(url, {
+      for (const modelId of allModelIds) {
+          try {
+              const fetchWithVersion = async (version) => {
+                  const url = `https://generativelanguage.googleapis.com/${version}/models/${modelId}:generateContent?key=${apiKey}`;
+                  return await fetch(url, {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      signal: controller.signal,
                       body: JSON.stringify({
                           system_instruction: payload.system_instruction,
                           contents: payload.contents,
@@ -67,33 +75,31 @@ serve(async (req) => {
                           generation_config: payload.generationConfig || { maxOutputTokens: 4096 }
                       })
                   });
-                  clearTimeout(timeoutId);
-                  return response;
-              } catch (e) {
-                  clearTimeout(timeoutId);
-                  throw e;
+              };
+
+              let response = await fetchWithVersion('v1beta');
+              if (response.status === 404) response = await fetchWithVersion('v1');
+
+              const data = await response.json();
+
+              if (!response.ok) {
+                  lastError = data.error?.message || "Model Unavailable";
+                  continue;
               }
-          };
 
-          let response = await fetchWithVersion('v1beta');
-          if (response.status === 404) response = await fetchWithVersion('v1');
+              // ✅ الشفافية: نرسل اسم الموديل الذي نجح فعلياً في المتغير used_model
+              return new Response(JSON.stringify({
+                  ...data,
+                  used_model: modelId,
+                  fallback_active: userPreference !== modelId
+              }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
-          const data = await response.json();
-
-          if (!response.ok) {
-              throw new Error(data.error?.message || `Google API Error: ${response.status}`);
+          } catch (err) {
+              lastError = err.message;
+              continue;
           }
-
-          // ✅ الشفافية: نرسل اسم الموديل الحقيقي المستخدم
-          return new Response(JSON.stringify({
-              ...data,
-              used_model: modelId,
-              requested_label: requestedModel
-          }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-
-      } catch (err) {
-          throw new Error(`خطأ في استدعاء النموذج (${modelId}): ${err.message}`);
       }
+      throw new Error(`كافة النماذج المتاحة استهلكت حصتها. آخر خطأ: ${lastError}`);
     }
 
     if (action === 'github') {

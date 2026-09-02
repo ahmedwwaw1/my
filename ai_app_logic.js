@@ -29,14 +29,14 @@ async function initKeys() {
                 try {
                     const status = await repairSystem();
                     const isOnline = !status.includes('❌');
-                    updateHealthUI(isOnline, isOnline ? `BRIDGE: OK | ONLINE` : `BRIDGE: OFFLINE`);
+                    updateHealthUI(isOnline, isOnline ? `BRIDGE: OK | ONLINE (2026)` : `BRIDGE: OFFLINE`);
                     if (!isOnline) logToTerminal(status, "error");
                 } catch (e) {
                     updateHealthUI(false, `BRIDGE: ERROR`);
                     logToTerminal(`Heartbeat failed: ${e.message}`, "error");
                 }
             }
-        }, 60000); // Check every minute to reduce overhead
+        }, 60000);
     }
 }
 
