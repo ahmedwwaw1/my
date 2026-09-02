@@ -75,30 +75,61 @@ function initResizer() {
         resizer.addEventListener('mousedown', function(e) {
             e.preventDefault();
             isResizing = true;
+
             const startX = e.clientX;
             const startY = e.clientY;
             const startWidth = chatBox.offsetWidth;
             const startHeight = chatBox.offsetHeight;
 
+            // ⚡ تعطيل الـ Transition أثناء التحجيم لضمان سرعة البرق
+            chatBox.style.transition = 'none';
+
             const overlay = document.createElement('div');
             overlay.style.cssText = "position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:9999; cursor:" + window.getComputedStyle(resizer).cursor;
             document.body.appendChild(overlay);
 
+            let animationFrame;
+
             function mousemove(e) {
                 if (!isResizing) return;
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
 
-                if (resizer.classList.contains('ai-resizer-r')) chatBox.style.width = startWidth + dx + 'px';
-                else if (resizer.classList.contains('ai-resizer-l')) chatBox.style.width = startWidth - dx + 'px';
-                else if (resizer.classList.contains('ai-resizer-b')) chatBox.style.height = startHeight + dy + 'px';
-                else if (resizer.classList.contains('ai-resizer-t')) chatBox.style.height = startHeight - dy + 'px';
-                else if (resizer.classList.contains('ai-resizer-br')) { chatBox.style.width = startWidth + dx + 'px'; chatBox.style.height = startHeight + dy + 'px'; }
-                // ... يمكن إضافة بقية الاتجاهات بنفس المنطق
+                if (animationFrame) cancelAnimationFrame(animationFrame);
+
+                animationFrame = requestAnimationFrame(() => {
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+
+                    if (resizer.classList.contains('ai-resizer-r')) {
+                        chatBox.style.width = (startWidth + dx) + 'px';
+                    } else if (resizer.classList.contains('ai-resizer-l')) {
+                        chatBox.style.width = (startWidth - dx) + 'px';
+                    } else if (resizer.classList.contains('ai-resizer-b')) {
+                        chatBox.style.height = (startHeight + dy) + 'px';
+                    } else if (resizer.classList.contains('ai-resizer-t')) {
+                        chatBox.style.height = (startHeight - dy) + 'px';
+                    } else if (resizer.classList.contains('ai-resizer-br')) {
+                        chatBox.style.width = (startWidth + dx) + 'px';
+                        chatBox.style.height = (startHeight + dy) + 'px';
+                    } else if (resizer.classList.contains('ai-resizer-bl')) {
+                        chatBox.style.width = (startWidth - dx) + 'px';
+                        chatBox.style.height = (startHeight + dy) + 'px';
+                    } else if (resizer.classList.contains('ai-resizer-tr')) {
+                        chatBox.style.width = (startWidth + dx) + 'px';
+                        chatBox.style.height = (startHeight - dy) + 'px';
+                    } else if (resizer.classList.contains('ai-resizer-tl')) {
+                        chatBox.style.width = (startWidth - dx) + 'px';
+                        chatBox.style.height = (startHeight - dy) + 'px';
+                    }
+                });
             }
 
             function mouseup() {
                 isResizing = false;
+                if (animationFrame) cancelAnimationFrame(animationFrame);
+
+                // 🔄 إعادة تفعيل الـ Transition بعد الانتهاء
+                chatBox.style.transition = '';
+
                 if (document.body.contains(overlay)) document.body.removeChild(overlay);
                 window.removeEventListener('mousemove', mousemove);
                 window.removeEventListener('mouseup', mouseup);
