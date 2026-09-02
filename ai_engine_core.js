@@ -53,6 +53,8 @@ const AI_TOOLS = [{
 // --- [Core Logic Functions] ---
 
 async function callBridge(action, payload) {
+    const start = Date.now();
+    logToTerminal(`Bridge Call [${action}] initiated...`, "info");
     try {
         const res = await fetch(SUPABASE_BRIDGE_URL, {
             method: 'POST',
@@ -63,6 +65,7 @@ async function callBridge(action, payload) {
             },
             body: JSON.stringify({ action, ...payload })
         });
+        const duration = Date.now() - start;
         if (!res.ok) {
             const errorText = await res.text();
             let errorMessage = `Bridge error: ${res.status}`;
@@ -72,10 +75,14 @@ async function callBridge(action, payload) {
             } catch (e) {
                 errorMessage = errorText || errorMessage;
             }
+            logToTerminal(`Bridge Error: ${errorMessage} (${duration}ms)`, "error");
             throw new Error(errorMessage);
         }
-        return await res.json();
+        const data = await res.json();
+        logToTerminal(`Bridge Success: ${action} (${duration}ms)`, "info");
+        return data;
     } catch (e) {
+        logToTerminal(`Bridge Fatal: ${e.message} (${Date.now() - start}ms)`, "error");
         console.error("Bridge Call Failed:", e);
         throw e;
     }

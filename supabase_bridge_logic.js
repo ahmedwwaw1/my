@@ -12,49 +12,54 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS'
 }
 
-// 🎯 قائمة النماذج السيادية
+// 🎯 قائمة النماذج السيادية - خريطة التحويل لعام 2026
+// نقوم بربط الأسماء المستقبلية بنماذج حقيقية موجودة حالياً لضمان العمل
 const MODEL_ROUTES = [
-    { key: "3.7", id: "gemini-3.7-flash" },
-    { key: "3.6", id: "gemini-3.6-flash" },
-    { key: "3.5-lite", id: "gemini-3.5-flash-lite" },
-    { key: "3.5", id: "gemini-3.5-flash" },
-    { key: "3.1", id: "gemini-3.1-flash-lite" },
-    { key: "3-preview", id: "gemini-3-flash-preview" },
-    { key: "2.5-pro", id: "gemini-2.5-pro" },
-    { key: "2.5-lite", id: "gemini-2.5-flash-lite" },
-    { key: "2.5", id: "gemini-2.5-flash" },
-    { key: "omni", id: "gemini-omni-1.1-flash" },
-    { key: "image-lite", id: "gemini-3.1-flash-lite-image" },
-    { key: "image-pro", id: "gemini-3-pro-image" },
-    { key: "image", id: "gemini-3.1-flash-image" }
+    { key: "3.7", id: "gemini-2.0-flash-exp" },
+    { key: "3.6", id: "gemini-2.0-flash-exp" },
+    { key: "3.5-lite", id: "gemini-1.5-flash" },
+    { key: "3.5", id: "gemini-1.5-flash" },
+    { key: "3.1", id: "gemini-1.5-flash" },
+    { key: "3-preview", id: "gemini-1.5-pro" },
+    { key: "2.5-pro", id: "gemini-1.5-pro" },
+    { key: "2.5-lite", id: "gemini-1.5-flash" },
+    { key: "2.5", id: "gemini-1.5-flash" },
+    { key: "omni", id: "gemini-1.5-flash" },
+    { key: "image-lite", id: "gemini-1.5-flash" },
+    { key: "image-pro", id: "gemini-1.5-pro" },
+    { key: "image", id: "gemini-1.5-flash" }
 ];
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
-    const { action, payload, model: requestedModel, endpoint, method, body } = await req.json()
+    const requestData = await req.json();
+    const { action, payload, model: requestedModel, endpoint, method, body } = requestData;
 
     if (action === 'chat') {
       const apiKey = Deno.env.get("GEMINI_API_KEY")
+      if (!apiKey) throw new Error("GEMINI_API_KEY is missing in Supabase Secrets");
 
       let rawId = String(requestedModel || "").trim().toLowerCase();
-      const userPreference = MODEL_ROUTES.find(r => rawId.includes(r.key))?.id;
 
-      // بناء قائمة الفحص: المفضل أولاً، ثم البقية بالترتيب الموجود في المصفوفة
-      const allModelIds = userPreference
-          ? [userPreference, ...MODEL_ROUTES.map(r => r.id).filter(id => id !== userPreference)]
-          : MODEL_ROUTES.map(r => r.id);
+      // البحث عن النموذج المناسب أو استخدام الافتراضي
+      const route = MODEL_ROUTES.find(r => rawId.includes(r.key)) || MODEL_ROUTES[3]; // الافتراضي 3.5
+      const modelId = route.id;
 
-      let lastError = null;
+      try {
+          const fetchWithVersion = async (version) => {
+              const url = `https://generativelanguage.googleapis.com/${version}/models/${modelId}:generateContent?key=${apiKey}`;
 
-      for (const modelId of allModelIds) {
-          try {
-              const fetchWithVersion = async (version) => {
-                  const url = `https://generativelanguage.googleapis.com/${version}/models/${modelId}:generateContent?key=${apiKey}`;
-                  return await fetch(url, {
+              // إضافة تايم أوت لكل طلب داخلي لمنع التعليق
+              const controller = new AbortController();
+              const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 ثانية كحد أقصى للنموذج الواحد
+
+              try {
+                  const response = await fetch(url, {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
+                      signal: controller.signal,
                       body: JSON.stringify({
                           system_instruction: payload.system_instruction,
                           contents: payload.contents,
@@ -62,31 +67,33 @@ serve(async (req) => {
                           generation_config: payload.generationConfig || { maxOutputTokens: 4096 }
                       })
                   });
-              };
-
-              let response = await fetchWithVersion('v1beta');
-              if (response.status === 404) response = await fetchWithVersion('v1');
-
-              const data = await response.json();
-
-              if (!response.ok) {
-                  lastError = data.error?.message || "Model Unavailable";
-                  continue;
+                  clearTimeout(timeoutId);
+                  return response;
+              } catch (e) {
+                  clearTimeout(timeoutId);
+                  throw e;
               }
+          };
 
-              // ✅ الشفافية: نرسل اسم الموديل الذي نجح فعلياً في المتغير used_model
-              return new Response(JSON.stringify({
-                  ...data,
-                  used_model: modelId,
-                  fallback_active: userPreference !== modelId
-              }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+          let response = await fetchWithVersion('v1beta');
+          if (response.status === 404) response = await fetchWithVersion('v1');
 
-          } catch (err) {
-              lastError = err.message;
-              continue;
+          const data = await response.json();
+
+          if (!response.ok) {
+              throw new Error(data.error?.message || `Google API Error: ${response.status}`);
           }
+
+          // ✅ الشفافية: نرسل اسم الموديل الحقيقي المستخدم
+          return new Response(JSON.stringify({
+              ...data,
+              used_model: modelId,
+              requested_label: requestedModel
+          }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+
+      } catch (err) {
+          throw new Error(`خطأ في استدعاء النموذج (${modelId}): ${err.message}`);
       }
-      throw new Error(`كافة النماذج المتاحة استهلكت حصتها. آخر خطأ: ${lastError}`);
     }
 
     if (action === 'github') {
