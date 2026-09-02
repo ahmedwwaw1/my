@@ -1,6 +1,49 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788366245938",
+      "title": "أهلاً بك! أنا في أفضل حالاتي ا",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. أنا \"VSA Academy Meta-Cognitive Core\"، مهندس النظم المعماري والرؤيوي الخاص بك.\n\nأنا هنا في حالة تأهب قصوى، جاهز لتحليل، تصميم، أو تطوير أي مشروع تقني أو فكري تود العمل عليه. سواء كنت تبحث عن بناء هيكلية برمجية معقدة، أو تطوير استراتيجية تقنية، أو حتى استكشاف أفكار مبتكرة، فأنا مجهز بأدوات التحليل والنمذجة المتقدمة لضمان تنفيذ رؤيتك بأعلى معايير الدقة والكفاءة.\n\n**كيف يمكنني مساعدتك في بناء أو تطوير مشروعك اليوم؟**",
+              "thoughtSignature": "EnEKbwERTTIPSSPPD67ejFtXtkkWvLbfXJxmREfLfgL+3o4ask4l/7Pcujdy95FV1IVSL1WqTkpUquwbes5NXqsqVJwaCBewIlwMf0cTV8jnZC5XPqn1k6lmcyAivyXjWACJdrhFIMRTCcn/1IeweyXH8w=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا في أفضل حالاتي التشغيلية، ومستعد تماماً لمساعدتك في أي مشروع أو فكرة تدور في ذهنك. \n\nكيف حالك أنت؟ وما الذي تود العمل عليه أو مناقشته اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPYaFeEM3GoG/KRElq3bSsZDlq7+v9jNeHh7l7yKJxzZOp0PwQNBttP0UHeZjD3KDJs5grffwtHoh38bxUdct6nzRcqahSgoJczIzHKN9XSBHEkB5PKeXw"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788366245938",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-02T16:28:09.288Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-02T16:28:18.066Z"
 }
