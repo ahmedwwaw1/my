@@ -20,13 +20,13 @@ const MODEL_ROUTES = [
     { key: "gemini-3.5-flash", id: "gemini-3.5-flash" },
     { key: "gemini-3.1-flash-lite", id: "gemini-3.1-flash-lite" },
     { key: "gemini-3-flash-preview", id: "gemini-3-flash-preview" },
-    //{ key: "gemini-2.5-pro", id: "gemini-2.5-pro" },
-    //{ key: "gemini-2.5-flash-lite", id: "gemini-2.5-flash-lite" },
-    //{ key: "gemini-2.5-flash", id: "gemini-2.5-flash" },
-    //{ key: "gemini-omni-1.1-flash", id: "gemini-omni-1.1-flash" },
-    //{ key: "gemini-3.1-flash-lite-image", id: "gemini-3.1-flash-lite-image" },
-    //{ key: "gemini-3-pro-image", id: "gemini-3-pro-image" },
-    //{ key: "gemini-3.1-flash-image", id: "gemini-3.1-flash-image" }
+    { key: "gemini-2.5-pro", id: "gemini-2.5-pro" },
+    { key: "gemini-2.5-flash-lite", id: "gemini-2.5-flash-lite" },
+    { key: "gemini-2.5-flash", id: "gemini-2.5-flash" },
+    { key: "gemini-omni-1.1-flash", id: "gemini-omni-1.1-flash" },
+    { key: "gemini-3.1-flash-lite-image", id: "gemini-3.1-flash-lite-image" },
+    { key: "gemini-3-pro-image", id: "gemini-3-pro-image" },
+    { key: "gemini-3.1-flash-image", id: "gemini-3.1-flash-image" }
 ];
 
 serve(async (req) => {
