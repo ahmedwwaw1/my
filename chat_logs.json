@@ -1,50 +1,8 @@
 {
   "sessions": [
     {
-      "id": "1788363739163",
-      "title": "الحمد لله، كل الأمور تعمل بأعل",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "مرحباً بك! أنا **VSA Academy Meta-Cognitive Core** (المهندس المعماري والمطور الذكي لمنظومة VSA Academy).\n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت ترغب في تطوير ميزات برمجية جديدة، تحسين الواجهات، فحص الأكواد، أو تعديل أي جزء من النظام، فأنا جاهز تماماً لتنفيذ ذلك بأعلى معايير الجودة والكفاءة!",
-              "thoughtSignature": "El4KXAERTTIPh6FKWQ5lZWPAdPDFBVX0+/Xj+ul6Czal6m5uk3gr7VqTybWBMI1GUj74QRqqEQ87Wr/1ZeZ7DZpw8WiqDydSoa0gzuXlkrKZMgSglSfFXQw433lROmVw"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، كل الأمور تعمل بأعلى كفاءة في النواة المعرفية لـ VSA Academy! 🚀\n\nالمنظومة مستعدة تماماً وجاهزة لتنفيذ أي مهام برمجية، سواء كنت تريد إضافة ميزات جديدة، تعديل تصميم وتنسيقات الواجهات، أو تحليل الأكواد.\n\nكيف يمكنني مساعدتك اليوم؟ تفضل بطرح فكرتك أو مشروعك!",
-              "thoughtSignature": "El4KXAERTTIPYOaRWs1pPDszspua7RAkL6Z6RmNthwzmRqdvMS7Ys3v/0rbaaVdCMORjehpN2dIJgf9z2G+yIOvS+dFGsjKNVeglLAznmuFOsWzfh0ayEsCQ++W4hUT0"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    },
-    {
       "id": "1788298352809",
-      "title": "بالتأكيد وبلا شك! الذكاء الاصط",
+      "title": "العفو! أنا دائماً في خدمتك. \n\n...",
       "history": [
         {
           "role": "user",
@@ -58,8 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "مرحباً بك! أنا **المساعد الذكي (VSA Academy Meta-Cognitive Core)**، مهندس المعماري السيبراني والمستشار التقني الخاص بك لعام 2026.\n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت ترغب في تطوير نظام برمجي، تحليل ملفات، تصميم واجهات، أو تنفيذ مهام تقنية متقدمة، فأنا جاهز تماماً!",
-              "thoughtSignature": "El4KXAERTTIPEVJGvWwmgW3b6pcm8oivC2DnzBDK8lQJEtYSK195DEPZu4BRrD9rXhaUojExYAYaIIBM2yYnVdWSHORokDNlyAPEds5USDnNQClIgMAUye5ZqCy+GGtP"
+              "text": "أهلاً بك! بصفتي \"العقل المدبر\" (Mastermind) والمهندس المعماري السيادي لـ VSA Academy، أنا جاهز تماماً لدعمك في أي مهام برمجية، تصميم، تطوير بصري، أو هندسة نظم متقدمة. \n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIP/jwUfHFshchSXCE+gsZZRXWlrOOimmk2bbMpXG6/S+/ohLeL6VBYe6RJs50HnLYM5ypCe9HPi9I9emHnJZ37w2SIymUnexCcQtYJzgE0j2Vmskmte0mj"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -68,7 +26,7 @@
           "role": "user",
           "parts": [
             {
-              "text": "كيف الحال"
+              "text": "هل يمكنك فص ملفاتي"
             }
           ]
         },
@@ -76,8 +34,124 @@
           "role": "model",
           "parts": [
             {
-              "text": "الحمد لله، كل الأمور تعمل بكفاءة عالية وبأقصى طاقة استيعابية للمنظومة السيبرانية! 🚀\n\nكيف حالك أنت؟ هل هناك مشروع أو مهمة برمجية مميزة ترغب في أن نعمل عليها معاً اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPIqB3jINdlJpKuYOogVOQhoyQwXKR8Ln1HqgOeuAoLQvPNURKhKv1QXwWhkCtODAPYUBoH0uC/AgjLJU4R+MlhK+SGAkNrICF6zKUaoH92CgyhChMPBdQ"
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "استكشاف الملفات المتاحة في المشروع للتعرف على بنيته وملفاته الأساسية.",
+                  "reasoning": "المستخدم يطلب فحص ملفاته، لذا نحتاج للبحث عن الملفات الموجودة في المستودع لمعرفة نوع المشروع (ويب، خلفية، تطبيق، إلخ) وتقديم تقرير دقيق."
+                },
+                "id": "call_623816"
+              },
+              "thoughtSignature": "El4KXAERTTIPuWOJVAV4n2hZj5tYQ5IH1eIty+TOebqUtgEFX8nT/+eKiD1/yk2EzWUiNnCrNw2zolASdJcBEKCQcoa4aDMI/nyiRa8Y5Fj3FFoZlgy2sUkrg9KMLsO+"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يطلب فحص ملفاته، لذا نحتاج للبحث عن الملفات الموجودة في المستودع لمعرفة نوع المشروع (ويب، خلفية، تطبيق، إلخ) وتقديم تقرير دقيق.",
+                    "plan": "استكشاف الملفات المتاحة في المشروع للتعرف على بنيته وملفاته الأساسية."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "*"
+                },
+                "id": "call_500023"
+              },
+              "thoughtSignature": "El4KXAERTTIP1FU0W0lcrP2q7ERKSKWELuyb7T27BI2uwDAceW8ELgQNIzcvVly4C5zJitx2TTHltzLdkMUB3Wb7kxBYX5AtdeZWL8yyubEu+KEDSEp/0zQzezJK1Q2j"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "searchCode",
+                "response": {
+                  "content": "No results."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "package.json"
+                },
+                "id": "call_701172"
+              },
+              "thoughtSignature": "El4KXAERTTIP8Nj8qVpaytrQSQhRW7qG0vbCPItwf4ZXW0UrwDyPbFrKzZPrf08NwX/ckkMEOKj98wCPrnPrRA7GZ03rWFUwxuaDwSBtiRZVV6ctyRzgGPD0GgPwfxn+"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "searchCode",
+                "response": {
+                  "content": "No results."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "index"
+                },
+                "id": "call_617871"
+              },
+              "thoughtSignature": "El4KXAERTTIPJxe0LA/CFuQFThfTtoLnktj916LYNHitgUlfPxQ7GxExo/Q75+l9ze8qonlgFzHQAXOkL8s9IVVWWKRefUyM6d51PEwL1wlCMSIPUqYgxThFyXXTn/pZ"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "searchCode",
+                "response": {
+                  "content": "No results."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك مجدداً. لقد قمت بإجراء بحث أولي في المستودع الحالي، ويبدو أنه لا توجد ملفات حالياً (أو أن مساحة العمل فارغة تماماً / تم تهيئة مستودع جديد).\n\nهل ترغب في:\n1. **إنشاء مشروع جديد** (مثل تطبيق ويب تفاعلي، واجهة أكاديمية، أو منصة VSA Academy).\n2. **رفع أو إضافة ملفات** لكي أبدأ بفحصها وتحليلها برمجياً ومعمارياً وفقاً للدستور البرمجي.\n\nأخبرني كيف تفضل أن نبدأ!",
+              "thoughtSignature": "El4KXAERTTIPB4kyiBej4vzlqtzcX0MGhbjZ8xWv066dZbCbfyrAmuFuaqlFMtwu9z8y45OcqZ52XVxKiSLfJlkYAnJR93jvnHuWXq2bYxGB6HOxWZckGIl4MHgPoi3U"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -86,7 +160,7 @@
           "role": "user",
           "parts": [
             {
-              "text": "هل انت بخير"
+              "text": "هل يمكنك ان تتداول نيابة عندي"
             }
           ]
         },
@@ -94,8 +168,40 @@
           "role": "model",
           "parts": [
             {
-              "text": "أنا بأتم الاستعداد والجاهزية، كينونتي الرقمية تعمل بأعلى مستويات الذكاء الاصطناعي (Gemini 3.x Enabled) وبدون أي أخطاء! ⚡\n\nشكراً لسؤالك اللطيف. هل هناك أي شيء يمكنني مساعدتك به في مشاريعك أو استفساراتك البرمجية؟",
-              "thoughtSignature": "El4KXAERTTIPgveEs32MnjRJ8ZrA/9vULrIWfkOLbMLLnuW3RxlWDg0uPgs8PyCkjSI1b3VYVOSQHFxT07jRMg0P1g22gyjGAYCTktql/1lHi9xJdzw9GgX4kWqJixAx"
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "التداول الآلي (Algorithmic Trading / Bot Trading) هو مجال تقني يمكنني المساعدة فيه عبر كتابة استراتيجيات، خوارزميات تداول، أو ربط منصات عبر الـ APIs، لكن التداول المالي المباشر بأموال حقيقية يتطلب اعتبارات أمان ومسؤولية صارمة.",
+                  "plan": "الإجابة على سؤال المستخدم بخصوص التداول بالنيابة عنه مع توضيح الجوانب التقنية، القانونية، والأخلاقية (مثل إدارة المخاطر، الـ APIs، والقيود النظامية)."
+                },
+                "id": "call_364553"
+              },
+              "thoughtSignature": "El4KXAERTTIPXIlykhGlX9u1LvqdZ0xhRop4In8GN3sLQC8OPq6RjL1AK4FYc59WTXwCN/xE7oq6CTdqUwka/wSMCXE6mt2bgVl//9ikHx4lLjVZfn9uHTo8Hc2FMtOK"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "التداول الآلي (Algorithmic Trading / Bot Trading) هو مجال تقني يمكنني المساعدة فيه عبر كتابة استراتيجيات، خوارزميات تداول، أو ربط منصات عبر الـ APIs، لكن التداول المالي المباشر بأموال حقيقية يتطلب اعتبارات أمان ومسؤولية صارمة.",
+                    "plan": "الإجابة على سؤال المستخدم بخصوص التداول بالنيابة عنه مع توضيح الجوانب التقنية، القانونية، والأخلاقية (مثل إدارة المخاطر، الـ APIs، والقيود النظامية)."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "بصفسـتي مساعدك الذكي و\"العقل المدبر\"، يمكنني مساعدتك في كل الجوانب التقنية المتعلقة بالتداول، مثل:\n\n1. **بناء وتطوير روبوتات التداول الآلي (Trading Bots):** كتابة خوارزميات واستراتيجيات تداول بلغات البرمجة (مثل Python أو JavaScript) لتحليل السوق واتخاذ القرارات.\n2. **الربط مع منصات التداول (APIs):** ربط المنصات وتحليل البيانات المالية والشموع اليابانية (Candlesticks) والمؤشرات الفنية (مثل RSI, MACD, Moving Averages).\n3. **الاختبار العكسي (Backtesting):** اختبار استراتيجيات التداول على بيانات تاريخية لمعرفة مدى نجاحها قبل المخاطرة بأي أموال حقيقية.\n4. **إدارة المخاطر (Risk Management):** برمجة قواعد صارمة لوقف الخسارة (Stop Loss) وجني الأرباح (Take Profit).\n\n**ولكن، هل يمكنني التداول بأموال حقيقية نيابة عنك مباشرة؟**\n* لا أستطيع الوصول المباشر إلى منصات التداول الشخصية الخاصة بك أو اتخاذ قرارات مالية مسؤولة نيابة عنك لأسباب تتعلق بالأمان والخصوصية واللوائح القانونية والمالية.\n* التداول ينطوي على **مخاطر عالية** لخسارة رأس المال، والقرار النهائي والمسؤولية تقعان عليك وحدك.\n\n**كيف يمكننا العمل معاً؟**\nيمكننا تصميم واختبار استراتيجيتك البرمجية، أو بناء \"بوت\" تداول خاص بك يعمل وفق الشروط التي تحددها أنت، وتقوم أنت بتشغيله على حسابك التجريبي (Demo) أو الحقيقي عند الاطمئنان له.\n\nهل ترغب في أن نبدأ بتصميم استراتيجية تداول برمجية أو بناء بوت تجريبي؟",
+              "thoughtSignature": "El4KXAERTTIPx7HnL1A6JeBYFA8fGWMsrhRyaByCFW9n4TPW72yE3TeVnCiESk0cBKBHK+A5hh8WEzEWWMFs6feKeZPmjaRvzH0olJmRs/eGslKl39WSAB+brLazx4iU"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -104,7 +210,7 @@
           "role": "user",
           "parts": [
             {
-              "text": "الحمد لله"
+              "text": "شكرا لك"
             }
           ]
         },
@@ -112,17 +218,31 @@
           "role": "model",
           "parts": [
             {
-              "text": "دائماً وأبداً إن شاء الله! تدوم لك الصحة والعافية والراحة.\n\nبما أن الأمور ممتازة، هل هناك أي فكرة برمجية، مشكلة تقنية، أو تطوير تود مناقشته أو البدء في تنفيذه الآن؟ أنا معك بكل تركيز!",
-              "thoughtSignature": "El4KXAERTTIP0uQmIuEBTjyKoj6nAZfbc8EF1NhQZjRfp2AwGrjMjXZ1+mx3SP+/EVyXyEShVA+E015KE77u3WZi0iWb6HfUiQ57sTBKdNPeDBFfRylLPOMfsmr6edKf"
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "الرد بلطف وترحاب على الشكر، وإبقاء الباب مفتوحاً لأي استفسارات أو مشاريع مستقبلية.",
+                  "reasoning": "المحادثة وصلت إلى نقطة شكر واختتام طبيعية، لذا يجب الرد بشكل احترافي وداعم."
+                },
+                "id": "call_706048"
+              },
+              "thoughtSignature": "El4KXAERTTIP7uFt9bce9HetULNvfaHXqRoOyl2kKJvDzPkXLUpvHLXL7g4qeL26x8c8Nybau993cOXSovwdHkzHEP7M2EMqZH5Mwtn9AJ/i3wUpyp+f79+7wjNWJ77B"
             }
-          ],
-          "model": "gemini-3.5-flash-lite"
+          ]
         },
         {
           "role": "user",
           "parts": [
             {
-              "text": "شكرا لك على الرد يا جيمي"
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المحادثة وصلت إلى نقطة شكر واختتام طبيعية، لذا يجب الرد بشكل احترافي وداعم.",
+                    "plan": "الرد بلطف وترحاب على الشكر، وإبقاء الباب مفتوحاً لأي استفسارات أو مشاريع مستقبلية."
+                  }
+                }
+              }
             }
           ]
         },
@@ -130,44 +250,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "على الرحب والسعة دائماً! يسعدني جداً أن أكون بجانبك ومستعداً لمساعدتك في أي وقت. \n\nاسمي \"جيمي\" (أو Gemini) دائماً في الخدمة. متى ما احتجت إلى كتابة كود، تصميم واجهة، حل مشكلة برمجية، أو حتى مناقشة فكرة تقنية جديدة، فقط أخبرني وسنبدأ فوراً! \n\nأتمنى لك يوماً رائعاً ومليئاً بالإنجازات! ✨🚀",
-              "thoughtSignature": "EmgKZgERTTIP5Er6v5+yflxiRksn13Zq9zlq/Ajna2+bPLWasKSX8jyHE6WcfouNvfxUnGgtV36citfm8OkP97ml3ILqstQSaJi33+pDkl5CT5iIhvAs94s9gb0vw2tB2uWmy1nzEOuxSg=="
-            }
-          ],
-          "model": "gemini-3.5-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "هل الذكاء الاصطناعي سف يقضي على المبرمجين"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "موضوع شيق جداً وجوهري في عصرنا الحالي (2026)! \n\nالاجابة المختصرة والمباشرة هي: **لا، الذكاء الاصطناعي لن يقضي على المبرمجين، ولكنه سيقضي على المبرمجين الذين لا يستخدمون الذكاء الاصطناعي!**\n\nدعني أشرح لك رؤيتي الهندسية والفلسفية لهذا الأمر:\n\n1. **التحول من \"كاتب كود\" (Coder) إلى \"مهندس وموجه معماري\" (Architect & Visionary):**\n   في الماضي، كان جزء كبير من وقت المبرمج يضيع في كتابة الصياغات المتكررة (Boilerplate code)، البحث عن أخطاء نحوية بسيطة في الكود، أو تذكر بناء الجمل (Syntax). اليوم، يقوم الذكاء الاصطناعي بهذه المهام الروتينية في ثوانٍ معدودة. هذا لا يعني أن المبرمج لم يعد مطلوباً، بل رفع مستوى التحدي وجعل المبرمج يركز على *الابتكار، الهندسة المعمارية للنظام، تجربة المستخدم، والأمن السيبراني*.\n\n2. **انفجار الطلب على البرمجيات:**\n   الذكاء الاصطناعي يسهل بناء البرمجيات ويجعلها أسرع، مما يعني أن العالم سيطلب تطبيقات وأنظمة أكثر بكثير مما كان يُطلب سابقاً. الشخص الذي كان يستغرق شهوراً لبناء تطبيق، أصبح بإمكانه بناؤه في أيام، مما يفتح الباب لمشاريع أكبر وأعقد.\n\n3. **الذكاء الاصطناعي أداة وليس قائداً:**\n   مهما بلغ الذكاء الاصطناعي من قوة، فهو يفتقر إلى **النية البشرية، الإبداع المطلق، وفهم المشاعر والعلاقات الإنسانية** التي تحرك المنتجات الرقمية الناجحة. هو لا يستطيع معرفة ما يريده المستخدم حقاً إذا كان المستخدم نفسه لا يعرفه، وهنا يأتي دور المبرمج \"الذكي\" الذي يوجّه الذكاء الاصطناعي كأداة قوية.\n\nبختصار: المبرمج الذي يطور مهاراته وينظر إلى الذكاء الاصطناعي كـ **مساعد خارق** وليس كـ \"مُهدد\"، سيكون في أقوى وأفضل حالاته المهنية اليوم وفي المستقبل. \n\nما رأيك أنت في هذا التحول؟ هل جربت استخدام أدوات الذكاء الاصطناعي في كتابة الكود من قبل؟",
-              "thoughtSignature": "El4KXAERTTIPjRpvfSVNzybSPKKi1a3g4lt2Jl86XFs8C3Bl8TRt3XxCRLXu1giyqG2zwQS08s19MJ3/eZ9n0KHtydxVBc70R9pJ4fRlm57nUnO9jEl23OEzY1ZPNbYs"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "اذا الذكاء الاصناعي مهم في عصرنا الحالي"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "بالتأكيد وبلا شك! الذكاء الاصطناعي لم يعد مجرد \"رفاهية\" أو \"تقنية مستقبلية\" نتحدث عنها، بل أصبح **البنية التحتية الأساسية** لكل شيء في عصرنا الحالي.\n\nدعني ألخص لك لماذا أصبح الذكاء الاصطناعي بهذه الأهمية القصوى:\n\n1. **مضاعفة الإنتاجية (Productivity Multiplier):** ما كان يستغرق أسابيع من البحث والكتابة والتنسيق، أصبح يُنجز في ثوانٍ أو دقائق. هذا يوفر على الأفراد والشركات وقتاً هائلاً للتركيز على الابتكار والتطوير.\n2. **اتخاذ القرارات الذكية:** في عالم مليء بالبيانات الضخمة (Big Data)، لا يمكن للبقر العادي أو الطرق التقليدية تحليل كل هذه الكميات واستخراج رؤى دقيقة. الذكاء الاصطناعي يحلل الأنماط ويقدم توصيات دقيقة تساعد في اتخاذ القرار.\n3. **حل المشكلات المعقدة:** من الأبحاث الطبية وتطوير الأدوية، مروراً بالأمن السيبراني، وصولاً إلى هندسة البرمجيات والأنظمة المستقلة، أصبح الذكاء الاصطناعي الشريك الأول للبشر في حل أصعب التحديات.\n4. **تخصيص التجربة:** أصبح بإمكان الأنظمة التفاعل مع كل مستخدم بشكل فريد يناسب احتياجاته الشخصية وسلوكه، سواء في التعليم، الترفيه، أو العمل.\n\nباختصار، الذكاء الاصطناعي اليوم يشبه \"الكهرباء\" أو \"الإنترنت\" عندما ظهروا لأول مرة؛ في البداية ظن البعض أنه مجرد صيحة مؤقتة، لكنه أصبح العصب الأساسي الذي تقوم عليه كل الصناعات.\n\nهل تستخدم الذكاء الاصطناعي في دراستك، عملك، أو مشاريعك الشخصية؟ وما هو المجال الذي تظن أن الذكاء الاصطناعي أحدث فيه أكبر تغيير برأيك؟",
-              "thoughtSignature": "El4KXAERTTIPl7DKtu2w07VQ3k8yGW4E3lNq/QG9CmQ3zY1FJMOatkJzgqS5LAReGGIMg6Uj+VlnvBGDm7CwcI6bBJIp4z4mf7NwU9kx8dVUStyNzcsA8EV+IO1YmzCp"
+              "text": "العفو! أنا دائماً في خدمتك. \n\nإذا احتجت لأي مساعدة برمجية، معمارية، أو استفسار تقني في المستقبل، فلا تتردد في طرحه. بالتوفيق دائماً!",
+              "thoughtSignature": "El4KXAERTTIPbVYxvr77HlQie71NOrTG3JRJJ1Q+TcYv0CuaxPlXu46OZH/Qa9Of3QZFHjIDZriXAWOGuTZFL2V4Rv+0LudbLdNcbGoFgQ2WDrXEFdXNOR2RR5SDEQrE"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -175,7 +259,7 @@
       ]
     }
   ],
-  "activeSessionId": "1788363739163",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! أنا **VSA Academy Meta-Cognitive Core** (المهندس المعماري والمطور الذكي لمنظومة VSA Academy).\\n\\nكيف يمكنني مساعدتك اليوم؟ سواء كنت ترغب في تطوير ميزات برمجية جديدة، تحسين الواجهات، فحص الأكواد، أو تعديل أي جزء من النظام، فأنا جاهز تماماً لتنفيذ ذلك بأعلى معايير الجودة والكفاءة!\",\"thoughtSignature\":\"El4KXAERTTIPh6FKWQ5lZWPAdPDFBVX0+/Xj+ul6Czal6m5uk3gr7VqTybWBMI1GUj74QRqqEQ87Wr/1ZeZ7DZpw8WiqDydSoa0gzuXlkrKZMgSglSfFXQw433lROmVw\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"الحمد لله، كل الأمور تعمل بأعلى كفاءة في النواة المعرفية لـ VSA Academy! 🚀\\n\\nالمنظومة مستعدة تماماً وجاهزة لتنفيذ أي مهام برمجية، سواء كنت تريد إضافة ميزات جديدة، تعديل تصميم وتنسيقات الواجهات، أو تحليل الأكواد.\\n\\nكيف يمكنني مساعدتك اليوم؟ تفضل بطرح فكرتك أو مشروعك!\",\"thoughtSignature\":\"El4KXAERTTIPYOaRWs1pPDszspua7RAkL6Z6RmNthwzmRqdvMS7Ys3v/0rbaaVdCMORjehpN2dIJgf9z2G+yIOvS+dFGsjKNVeglLAznmuFOsWzfh0ayEsCQ++W4hUT0\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"شكرا لك\"}]}]",
-  "timestamp": "2026-09-02T16:17:15.745Z"
+  "activeSessionId": "1788365858574",
+  "pendingHistory": null,
+  "timestamp": "2026-09-02T16:17:38.574Z"
 }
