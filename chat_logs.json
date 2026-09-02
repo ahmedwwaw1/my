@@ -1,6 +1,49 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788365940317",
+      "title": "الحمد لله، كل الأمور ممتازة وج",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا معك المعمار السيادي والمطور الذكي لمنظومة VSA Academy (مدعوم بنظام Gemini الذكي لعام 2026). \n\nكيف يمكنني مساعدتك اليوم؟ هل ترغب في تطوير ميزة برمجية جديدة، تحسين الواجهات، فحص الأكواد، أو العمل على أي جزء آخر من المشروع؟",
+              "thoughtSignature": "El4KXAERTTIP3xsWBvK0FnxaYk7qJAA2EmhnYTDbRYXVcLnpBpWNCEtVRxdhIGPvOjHY13kiD06BrLSkUuDfKxa0wC3n8aDftWGniXjxgdxds/D4MQ35zNDZmkUy23Th"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "الحمد لله، كل الأمور ممتازة وجاهزة تماماً! المنظومة تعمل بأعلى كفاءة وجاهزة لأي مهمة برمجية أو معمارية ترغب في تنفيذها.\n\nأخبرني، ما هي الفكرة أو التعديل الذي تود العمل عليه اليوم؟",
+              "thoughtSignature": "El4KXAERTTIP4EtYtRsq80UwZoMg7ZziYA3ppTns0Klbn8CKhdkCR0EeIqZy6Lc3hsrif1Y62Dzx9b24k7QpCmKJbXsHhCSD21RuFIHY6eaxyJrDG9rUJl5+CLx1EUjn"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788365940317",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-02T16:19:08.055Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-02T16:19:14.548Z"
 }
