@@ -291,7 +291,21 @@ async function runToolLoop(history) {
             else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
             else if (name === "repairSystem") toolResult = await repairSystem();
             else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
-            else if (name === "web_search" || name === "read_url") toolResult = await callBridge(name, args);
+            else if (name === "web_search") {
+                const searchResult = await callBridge('web_search', args);
+                if (searchResult.source === "google") {
+                    toolResult = `🌍 **Google Search Results:**\n\n` +
+                                 searchResult.results.map(r => `- [${r.title}](${r.url})\n  ${r.content}`).join('\n\n');
+                } else if (searchResult.answer) {
+                    toolResult = `🧠 **AI Answer (via Tavily):** ${searchResult.answer}\n\n🔗 **Sources:**\n` +
+                                 searchResult.results.map(r => `- [${r.title}](${r.url})`).join('\n');
+                } else if (searchResult.results) {
+                    toolResult = searchResult.results.map(r => `- [${r.title}](${r.url})`).join('\n');
+                } else {
+                    toolResult = JSON.stringify(searchResult);
+                }
+            }
+            else if (name === "read_url") toolResult = await callBridge(name, args);
             else toolResult = "❌ أداة غير مدعومة.";
 
             updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);

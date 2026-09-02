@@ -134,7 +134,49 @@ serve(async (req) => {
           const text = await res.text();
           return new Response(JSON.stringify({ content: text }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
       }
-      return new Response(JSON.stringify({ error: "Web Search not configured yet" }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+
+      const query = payload.query || requestData.query;
+      const googleKey = Deno.env.get("GOOGLE_SEARCH_KEY");
+      const googleCx = Deno.env.get("GOOGLE_CX"); // معرف محرك البحث المخصص
+      const tavilyKey = Deno.env.get("TAVILY_API_KEY");
+
+      // 1. المحاولة عبر Google Search API كمحرك أساسي
+      if (googleKey && googleCx) {
+        try {
+          const googleUrl = `https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${googleCx}&q=${encodeURIComponent(query)}`;
+          const res = await fetch(googleUrl);
+          const data = await res.json();
+          if (data.items) {
+             return new Response(JSON.stringify({
+               source: "google",
+               results: data.items.map(i => ({ title: i.title, url: i.link, content: i.snippet }))
+             }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+          }
+        } catch (e) { console.error("Google Search Failed, falling back to Tavily..."); }
+      }
+
+      // 2. المحاولة عبر Tavily API كمحرك ثانوي (أو أساسي في حال فشل جوجل)
+      if (tavilyKey) {
+        try {
+          const response = await fetch("https://api.tavily.com/search", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              api_key: tavilyKey,
+              query: query,
+              search_depth: "smart",
+              include_answer: true,
+              max_results: 5
+            })
+          });
+          const data = await response.json();
+          return new Response(JSON.stringify({ source: "tavily", ...data }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        } catch (err) {
+          return new Response(JSON.stringify({ error: `All search engines failed: ${err.message}` }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+      }
+
+      return new Response(JSON.stringify({ error: "No Search API keys configured" }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     // استجابة افتراضية في حال لم يتطابق أي إجراء
