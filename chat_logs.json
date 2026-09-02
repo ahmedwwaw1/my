@@ -1,17 +1,31 @@
 {
   "sessions": [
     {
-      "id": "1788361270716",
-      "title": "محادثة جديدة",
-      "history": []
-    },
-    {
-      "id": "1788361094901",
-      "title": "محادثة جديدة",
-      "history": []
+      "id": "1788298352809",
+      "title": "أهلاً بك. أنا \"VSA Academy Met",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. أنا \"VSA Academy Meta-Cognitive Core\"، مهندس النظم المعماري والرؤيوي الخاص بك.\n\nأنا هنا في حالة تأهب قصوى، جاهز لتحليل، تصميم، أو تطوير أي مشروع تقني أو فكري تود العمل عليه. سواء كنت تبحث عن بناء هيكلية برمجية معقدة، أو تطوير استراتيجية تقنية، أو حتى استكشاف أفكار مبتكرة، فأنا مجهز بأدوات التحليل والنمذجة المتقدمة لضمان تنفيذ رؤيتك بأعلى معايير الدقة والكفاءة.\n\n**كيف يمكنني مساعدتك في بناء أو تطوير مشروعك اليوم؟**",
+              "thoughtSignature": "EnEKbwERTTIPdi0/I7PQEoiMcyL0z8AGBjFN5ZALoLeCgCT8H5/cMlY0xHFKDx36iCm/NhgXq2bY9JiVAd2ui2fabeThb6jy7HIbmcwTcJO7NJR5ki44qUPGht1gEOcOxEqY2y4w3QLBWa4+dWM6VXCxIw=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
     }
   ],
-  "activeSessionId": "1788361270716",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-02T15:21:20.142Z"
+  "activeSessionId": "1788298352809",
+  "pendingHistory": null,
+  "timestamp": "2026-09-02T15:34:57.780Z"
 }
