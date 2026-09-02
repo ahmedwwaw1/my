@@ -110,6 +110,6 @@
     }
   ],
   "activeSessionId": "1788373262294",
-  "pendingHistory": null,
-  "timestamp": "2026-09-02T18:21:02.295Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك البحث في جوجل سيرج\"}]}]",
+  "timestamp": "2026-09-02T18:21:19.727Z"
 }
