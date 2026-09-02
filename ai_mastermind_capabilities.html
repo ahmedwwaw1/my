@@ -252,6 +252,11 @@
                     <td><span class="tag">استكشاف</span></td>
                 </tr>
                 <tr>
+                    <td class="tool-name">list_files</td>
+                    <td>مستكشف الملفات: عرض قائمة الملفات في أي مجلد بشكل حي.</td>
+                    <td><span class="tag">استكشاف</span></td>
+                </tr>
+                <tr>
                     <td class="tool-name">analyze_file</td>
                     <td>مسبار الجودة: فحص السنتكس وسلامة الكود برمجياً.</td>
                     <td><span class="tag">تحليل</span></td>
@@ -295,6 +300,69 @@
         </table>
     </div>
 
+    <!-- 5. أنواع البيئات والأدوات (Environments) -->
+    <div class="card" style="margin-top: 25px;">
+        <h2>🌐 تصنيف الأدوات حسب البيئة (Environment Tools)</h2>
+        <div class="grid">
+            <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px;">
+                <h3 style="color: var(--accent-blue); font-size: 1rem;">🐙 بيئة GitHub</h3>
+                <ul style="font-size: 0.85rem; color: var(--text-dim); padding-right: 20px;">
+                    <li>إدارة المستودعات (Repository Management).</li>
+                    <li>التحكم في الـ Workflows و Action Dispatches.</li>
+                    <li>البحث العميق في الكود (Code Indexing).</li>
+                    <li><b>Live Radar:</b> سرد حي للملفات (list_files) لتجاوز تأخير الأرشفة.</li>
+                </ul>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px;">
+                <h3 style="color: var(--accent-green); font-size: 1rem;">🖥️ بيئة النظام (Windows/OS)</h3>
+                <ul style="font-size: 0.85rem; color: var(--text-dim); padding-right: 20px;">
+                    <li>تنفيذ أوامر PowerShell و CMD.</li>
+                    <li>إدارة العمليات (Process Control).</li>
+                    <li>الوصول المباشر لنظام الملفات المحلي (Local FS).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. هندسة الجسر (Bridge Architecture) -->
+    <div class="card" style="margin-top: 25px;">
+        <h2>🌉 بنية الجسر السيادي (Bridge Architecture)</h2>
+        <p style="font-size: 0.9rem; color: var(--text-dim);">يعمل الجسر كبوابة أمنية (Secure Gateway) تربط بين الواجهة الأمامية والخدمات الحساسة:</p>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="color: var(--accent-purple); font-size: 1.1rem;">⚡ Supabase Edge Functions (Deno)</h3>
+            <p style="font-size: 0.85rem;">تعمل في بيئة Deno Runtime على حافة الشبكة. ميزتها هي التعامل الآمن مع <b>Secrets</b> (مثل GEMINI_API_KEY) دون تسريبها للعميل.</p>
+            <div class="constitution-block" style="color: #4db6ac;">
+// مثال لمنطق الجسر في Supabase
+serve(async (req) => {
+  const { action, payload } = await req.json();
+  if (action === 'chat') {
+    const apiKey = Deno.env.get("GEMINI_API_KEY");
+    // الاتصال بـ Google API وإرجاع النتيجة
+  }
+});</div>
+        </div>
+
+        <div>
+            <h3 style="color: var(--accent-blue); font-size: 1.1rem;">☁️ Cloudflare Workers (V8)</h3>
+            <p style="font-size: 0.85rem;">تشبه وظائف Supabase ولكنها تعمل في بيئة V8 Isolates. تستخدم لتوجيه الطلبات (Routing) وتخزين البيانات المؤقتة عبر KV Storage.</p>
+        </div>
+    </div>
+
+    <!-- 7. تكامل المحركات (API Integration) -->
+    <div class="card" style="margin-top: 25px;">
+        <h2>🚀 تكامل المحركات والـ APIs</h2>
+        <p style="font-size: 0.9rem; color: var(--text-dim);">كيف يتم تعريف ووضع الأدوات في النظام:</p>
+        <div style="padding: 15px; background: rgba(0,0,0,0.2); border-right: 4px solid var(--accent-blue);">
+            <h4 style="margin: 0; color: #fff;">1. تعريف الأداة في العقل المدبر (AI Engine):</h4>
+            <p style="font-size: 0.85rem;">يتم إرسال مصفوفة <code>function_declarations</code> داخل ملف <code>ai_engine_core.js</code> لتخبر النموذج بوجود أداة يمكنه طلبها.</p>
+        </div>
+        <div style="padding: 15px; background: rgba(0,0,0,0.2); border-right: 4px solid var(--accent-green); margin-top: 10px;">
+            <h4 style="margin: 0; color: #fff;">2. تعريف المحرك في الجسر (Bridge API):</h4>
+            <p style="font-size: 0.85rem;">يتم وضع مفاتيح API (مثل Google Search أو Tavily) في إعدادات البيئة (Env Vars). يقوم الجسر بالتبديل بين المحركات (Fallback Logic) في حال وصول أحدها لسقف الاستخدام.</p>
+        </div>
+    </div>
+
     <div style="text-align: center;">
         <button class="btn-copy" onclick="copyPrompt()">نسخ "بصمة العقل المدبر" لاستخدامها في نموذج آخر</button>
     </div>
@@ -309,7 +377,7 @@
     function copyPrompt() {
         const prompt = `أنت الآن تتقمص دور "العقل المدبر" (Mastermind).
 هذا هو دستورك: ${document.querySelector('.constitution-block').innerText}
-وهذه هي أدواتك المتاحة: [read_file, write_file, replace_file_content, multi_replace_file_content, searchCode, analyze_file, take_snapshot, instant_undo, thought, repairSystem, triggerGithubWorkflow, web_search, read_url].
+وهذه هي أدواتك المتاحة: [read_file, write_file, replace_file_content, multi_replace_file_content, searchCode, list_files, analyze_file, take_snapshot, instant_undo, thought, repairSystem, triggerGithubWorkflow, web_search, read_url].
 تذكر: التفكير (thought) هو نظام حياتك الأساسي. التزم بالدقة الجراحية 100%.`;
 
         navigator.clipboard.writeText(prompt).then(() => {
