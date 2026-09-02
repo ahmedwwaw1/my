@@ -1,6 +1,156 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788377534969",
+      "title": "لقد قمت بالبحث عن ملف `ai_engi",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك البحث عن ملف ai_engine_core.js"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "Search for the file ai_engine_core.js across the workspace to check its existence and location.",
+                  "reasoning": "The user is asking to search for a specific file named 'ai_engine_core.js'. I will use searchCode or list/search tools if available, or search for files matching this name. Let's use searchCode with a query or check workspace structure."
+                },
+                "id": "call_1070782"
+              },
+              "thoughtSignature": "El4KXAERTTIPG2dc+KyT1FXPr8gFc92bltM4sXDPV7w02zGfQQCxeBktprbj/fbYkayAz1Fs4KFSlwELNvzqSc5lPCa63eyoJ9IGaMRF6KrkM8mqPcSCLyWqPaBfTy0v"
+            },
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "ai_engine_core.js"
+                },
+                "id": "call_1070783"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "The user is asking to search for a specific file named 'ai_engine_core.js'. I will use searchCode or list/search tools if available, or search for files matching this name. Let's use searchCode with a query or check workspace structure.",
+                    "plan": "Search for the file ai_engine_core.js across the workspace to check its existence and location."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "ai_engine"
+                },
+                "id": "call_1818523"
+              },
+              "thoughtSignature": "El4KXAERTTIP3eFok04b6wd4nBlaxBqJiKqk1R+jke0NLuydbp9cnpGngMd3W8ZRkPxxicGtTDxfn/bb+fzfjw3b7HwJcD9gHHiPL+5Qwjs27Zo7BMvMt0H6wBnw+vYR"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "searchCode",
+                "response": {
+                  "content": "🔍 لا توجد نتائج."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "engine"
+                },
+                "id": "call_2384809"
+              },
+              "thoughtSignature": "El4KXAERTTIP2mCAt1ZyA8Ln2mWNDZ7Rkw5LGSj10PEnB2vzXE1EmqQFR2mKlVIl+qGYSJT4wN64s1trGMIU4myKYQVKtTH04xgYhcXoFP+80E7MMG++WDy9WjjbWFRP"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "searchCode",
+                "response": {
+                  "content": "🔍 لا توجد نتائج."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "searchCode",
+                "args": {
+                  "query": "js"
+                },
+                "id": "call_1816099"
+              },
+              "thoughtSignature": "El4KXAERTTIPdu8KDfB6WeWRe2zFvwOiQ9CJTLvTGtlmY9PofFtu5x8T4E/NqEe2Kffi5JOms//iqHh6SkfdIcPLzqU0KZDUE4Q+Y2iNa1BSbVws/BVDMaK9ntXGZngv"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "searchCode",
+                "response": {
+                  "content": "🔍 لا توجد نتائج."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "لقد قمت بالبحث عن ملف `ai_engine_core.js` (أو أي ملفات مرتبطة بـ `ai_engine`) في المشروع، ولم يتم العثور عليه. \n\nهل ترغب في أن نقوم بإنشاء هذا الملف أو هل هناك اسم مسار محدد تبحث عنه؟ يرجى إعلامي بما تود القيام به وسأقوم بتنفيذه فوراً.",
+              "thoughtSignature": "El4KXAERTTIPAA28W/V0evjKEYUilSg4ppkOrepJwJTnTFU/AUlBe25TVV0NP5T9yBm18k0NAT/mS7RcORoofOkScV6UEBjuX43VCxqrMzAa1rHjyNaA69/yfZkpgeq1"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788377534969",
   "pendingHistory": null,
-  "timestamp": "2026-09-02T19:32:17.322Z"
+  "timestamp": "2026-09-02T19:33:03.536Z"
 }
