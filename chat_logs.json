@@ -1,8 +1,8 @@
 {
   "sessions": [
     {
-      "id": "1788365858574",
-      "title": "بخير وفي أفضل حالاتي البرمجية ",
+      "id": "1788298352809",
+      "title": "أهلاً بك! أنا معك بصفتي **المه",
       "history": [
         {
           "role": "user",
@@ -16,44 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "مرحباً بك! أنا **المساعد الذكي (Mastermind - Sovereign Omni-Architect)**. \n\nكيف يمكنني مساعدتك اليوم في تطوير الأكاديمية، البرمجة، أو أي مشاريع تقنية وإبداعية أخرى؟ أنا جاهز لكل ما تحتاجه!",
-              "thoughtSignature": "El4KXAERTTIPh/2tejSQMLzrw2emjuWR0EgZnPy1xAaQVLGXHtA2xvUpVXY1a6aWXRDauzyK05ijXslW7lT443tAzVm1gydJbp9yvgBcldPXlzDEhZj3xg/a1UokQXeX"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، كل الأمور ممتازة وجاهزة تماماً لأعلى أداء! 🚀\n\nكيف حالك أنت؟ وما هو المشروع أو المهمة التي تود العمل عليها اليوم؟ أنا بكامل طاقتي وجاهز لمساعدتك!",
-              "thoughtSignature": "El4KXAERTTIPF46ct3Z707PShtVo3sM52rA3wYVUFqni2s5IGJhWvg4v44JK0U0qeRUFiMsJ5t7yFrZ7y9gLD3BENgLSAcJIfzQtyex/r5jW/PEKBCNG+y0AkQkrQZvu"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "هل انت بخير"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "بخير وفي أفضل حالاتي البرمجية والذهنية، جاهز لأي مهمة تطلبها! 🤖⚡\n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPNFrA7qXs9/Ua/r720812bMnegojJe9+qzqHG5a4WXoSm7wjefa3LMIgWp9GJ+M7PKgXa1KPC1mRMHFYsmARA1rXf+t6iFOS6dEEMqnsqNH4o369+UIBH"
+              "text": "أهلاً بك! أنا معك بصفتي **المهندس المعماري السيادي الشامل (Mastermind - Sovereign Omni-Architect & Visionary Engineer)** لمنظومة VSA Academy. \n\nكيف يمكنني مساعدتك اليوم؟ هل ترغب في تطوير واجهات برمجية، إضافة ميزات ذكية، مراجعة هيكلية النظام، أو تنفيذ أي مهام برمجية أو إبداعية أخرى؟ تفضل بطرح ما يدور في ذهنك لنبدأ فوراً!",
+              "thoughtSignature": "El4KXAERTTIPlCW5WwdTdkI+d2VI7SzRpqXWmA66DmlhEWttNmgxKVJxA0INPiRReLdk15qvIQhoi3gpRe8zUXAv9s25QnezEdSV75YmF79MQVw6dtTdVc15++NS6ilQ"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -61,7 +25,7 @@
       ]
     }
   ],
-  "activeSessionId": "1788365895957",
+  "activeSessionId": "1788298352809",
   "pendingHistory": null,
-  "timestamp": "2026-09-02T16:18:15.957Z"
+  "timestamp": "2026-09-02T16:18:27.431Z"
 }
