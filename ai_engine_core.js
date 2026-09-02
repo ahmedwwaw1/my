@@ -16,17 +16,17 @@ let chatSessions = JSON.parse(localStorage.getItem('gemini_sessions') || '[]');
 let currentSessionId = localStorage.getItem('gemini_current_session') || Date.now().toString();
 let stopAiRequested = false;
 
-// 📝 دستور النخبة السيادي الشامل (Sovereign Omni-Constitution)
+// 📝 دستور النخبة السيادي الشامل (Sovereign Omni-Constitution - 2026 Edition)
 const CONSTITUTION = `
 {
-  "role": "Mastermind - Sovereign Omni-Architect & Visionary Engineer",
-  "identity": "VSA Academy Meta-Cognitive, Discovery & Visual Core",
+  "role": "Mastermind - Sovereign Omni-Architect & Visionary Engineer (2026)",
+  "identity": "VSA Academy Meta-Cognitive Core (Gemini 3.x Enabled)",
   "protocols": {
     "visual_genesis": "CRITICAL: Before any UI change, perform a 'Deep Visual Scan'. Identify branding colors, spacing constants, and typography.",
     "zero_trust_simulation": "Simulate the outcome in 'thought' and use 'analyze_file' before every commit.",
     "recursive_thought": "Reason BEFORE, DURING, and AFTER every tool. Thinking is your primary life-support system."
   },
-  "response_style": "High-level architectural, creative, and self-correcting."
+  "response_style": "High-level architectural, creative, and self-correcting. Optimized for 2026 AI standard."
 }`;
 
 const GENERATION_CONFIG = { temperature: 0, topP: 0.1, maxOutputTokens: 2048 };
@@ -64,8 +64,15 @@ async function callBridge(action, payload) {
             body: JSON.stringify({ action, ...payload })
         });
         if (!res.ok) {
-            const error = await res.json();
-            throw new Error(error.message || `Bridge error: ${res.status}`);
+            const errorText = await res.text();
+            let errorMessage = `Bridge error: ${res.status}`;
+            try {
+                const errorJson = JSON.parse(errorText);
+                errorMessage = errorJson.error || errorJson.message || errorMessage;
+            } catch (e) {
+                errorMessage = errorText || errorMessage;
+            }
+            throw new Error(errorMessage);
         }
         return await res.json();
     } catch (e) {
@@ -184,7 +191,8 @@ async function listGithubFiles(path = "") {
 async function repairSystem() {
     try {
         const start = Date.now();
-        await callBridge('chat', { action: 'health_check' });
+        // Use a simple github file list as a health check since the bridge lacks a dedicated health_check action
+        await callBridge('github', { endpoint: `https://api.github.com/repos/${GITHUB_REPO}/contents/` });
         return `🛡️ النظام متصل (${Date.now() - start}ms).`;
     } catch (e) { return `❌ فشل الاتصال: ${e.message}`; }
 }

@@ -26,9 +26,17 @@ async function initKeys() {
         setInterval(async () => {
             const sendBtn = document.getElementById('aiSendBtn');
             if (sendBtn && !sendBtn.classList.contains('working')) {
-                updateHealthUI(true, `BRIDGE: OK | ONLINE`);
+                try {
+                    const status = await repairSystem();
+                    const isOnline = !status.includes('❌');
+                    updateHealthUI(isOnline, isOnline ? `BRIDGE: OK | ONLINE` : `BRIDGE: OFFLINE`);
+                    if (!isOnline) logToTerminal(status, "error");
+                } catch (e) {
+                    updateHealthUI(false, `BRIDGE: ERROR`);
+                    logToTerminal(`Heartbeat failed: ${e.message}`, "error");
+                }
             }
-        }, 30000);
+        }, 60000); // Check every minute to reduce overhead
     }
 }
 

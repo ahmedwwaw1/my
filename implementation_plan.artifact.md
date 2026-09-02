@@ -1,35 +1,38 @@
-# خطة تطوير النظام: التحول إلى بيئة الأدوات الشاملة (Tools-Surrounded Environment)
+# Implementation Plan - Fix Connection and Timeout Issues
 
-بناءً على المقارنة التحليلية، تهدف هذه الخطة إلى سد الفجوات بين النظام الحالي والمخطط الهندسي عبر إضافة "أدوات برمجية" فعلية تعزز قدرات النموذج.
+The user is experiencing connection failures and "Request idle timeout limit (150s) reached" errors after refactoring their AI logic into separate files. This plan addresses issues in both the client-side JavaScript and the Supabase Edge Function (bridge).
 
-## التغييرات المقترحة
+## User Review Required
 
-### 🏗️ المكون: محرك الهندسة البرمجية (الصانع - Engine 11)
-سيتم إضافة أدوات تضمن جودة الكود واتباع أنماط التصميم العالمية.
-#### [NEW] [applied_engineering_tools.js](file:///D:/New folder/my/applied_engineering_tools.js)
-*   دالة `lintAndFix`: لتنظيف الكود آلياً حسب المعايير.
-*   دالة `injectDesignPattern`: لحقن هياكل (Clean Architecture) في الملفات الجديدة.
+> [!IMPORTANT]
+> The current Edge Function logic iterates through a long list of futuristic/placeholder model IDs (e.g., `gemini-3.7-flash`). Since these models do not yet exist, every request results in multiple 404 errors and retries, which contributes to the 150s timeout. I will update these to currently available stable models.
 
----
+## Proposed Changes
 
-### 🧠 المكون: محرك الذاكرة والوعي (الأرشيف والميزان - Engine 7 & 8)
-تطوير نظام لحفظ الخبرات ومراقبة الاستهلاك.
-#### [NEW] [system_metrics_memory.js](file:///D:/New folder/my/system_metrics_memory.js)
-*   دالة `logOperationMetrics`: لتتبع استهلاك التوكنات والوقت.
-*   دالة `retrieveBestPractice`: لجلب حلول سابقة من ملف الذاكرة.
+### [Component] Supabase Edge Function (Bridge Logic)
 
----
-
-### 🛡️ المكون: محرك الاختبار والتقييم (المحك - Engine 9)
-أتمتة عملية التحقق قبل التنفيذ.
-#### [NEW] [automated_validation.js](file:///D:/New folder/my/automated_validation.js)
-*   دالة `runSafetyTests`: لتشغيل اختبارات وحدة وهمية قبل تعديل الملفات الحساسة.
+#### [MODIFY] [supabase_bridge_logic.js](file:///D:/New folder/my/supabase_bridge_logic.js)
+- Add a default response at the end of the `serve` handler to prevent timeouts for unknown actions.
+- Add an explicit handler for the `health_check` action.
+- Update `MODEL_ROUTES` with valid Gemini model IDs (e.g., `gemini-1.5-flash`, `gemini-2.0-flash-exp`).
+- Improve error handling to ensure a response is always sent back to the client.
 
 ---
 
-## خطة التحقق
-*   **يدوياً:** تجربة الأدوات الجديدة في مهام بسيطة والتأكد من أنها ترفض الكود "القذر" أو "المكلف".
-*   **تلقائياً:** استخدام `analyze_file` للتأكد من سلامة الأدوات الجديدة نفسها.
+### [Component] Client-side AI Logic
 
-## ملاحظة للمستخدم
-هذه الأدوات ستكون بمثابة "الأعصاب" التي تربط عقلك الاصطناعي بجسد المشروع البرمجي، مما يجعله محاطاً ببيئة أدوات تحميه من الخطأ وتزيد من سرعته.
+#### [MODIFY] [ai_engine_core.js](file:///D:/New folder/my/ai_engine_core.js)
+- Fix `repairSystem` to avoid overwriting the `action` parameter when calling the bridge.
+- Improve error handling in `callBridge` to handle non-JSON responses gracefully (preventing crash on timeout messages).
+- Update tool execution logic to use correct actions supported by the bridge.
+
+#### [MODIFY] [ai_app_logic.js](file:///D:/New folder/my/ai_app_logic.js)
+- Ensure the heartbeat logic doesn't falsely report "ONLINE" if the bridge hasn't actually been reached recently. (Optional but recommended).
+
+## Verification Plan
+
+### Manual Verification
+1. Test the "Ask AI" functionality to ensure responses are received without the 150s timeout.
+2. Check the "Bridge: OK | ONLINE" status to ensure it reflects actual connectivity.
+3. Verify that tool use (e.g., reading/writing files) still works through the bridge.
+4. Intentionally trigger a failure (e.g., wrong model ID) to verify that the error handling shows a clear message instead of hanging.
