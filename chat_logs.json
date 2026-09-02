@@ -1,12 +1,12 @@
 {
   "sessions": [
     {
-      "id": "1788335536682",
+      "id": "1788300111028",
       "title": "محادثة جديدة",
       "history": []
     }
   ],
-  "activeSessionId": "1788335763016",
-  "pendingHistory": null,
-  "timestamp": "2026-09-02T07:56:03.016Z"
+  "activeSessionId": "1788300111028",
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكن جلب لي اسماء ملفاتي\"}]}]",
+  "timestamp": "2026-09-02T07:56:41.099Z"
 }
