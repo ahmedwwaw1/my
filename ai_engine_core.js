@@ -280,7 +280,14 @@ async function runToolLoop(history) {
                 args.replacements.forEach(r => { if (updated.includes(r.targetContent)) updated = updated.replace(r.targetContent, r.replacementContent); });
                 toolResult = await writeFile(args.path, updated);
             }
-            else if (name === "searchCode") toolResult = await callBridge('github_search', args);
+            else if (name === "searchCode") {
+                const searchData = await callBridge('github_search', args);
+                if (searchData.items) {
+                    toolResult = searchData.items.map(i => `📄 ${i.path} (Score: ${i.score})`).join('\n') || "🔍 لا توجد نتائج.";
+                } else {
+                    toolResult = JSON.stringify(searchData);
+                }
+            }
             else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
             else if (name === "repairSystem") toolResult = await repairSystem();
             else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);

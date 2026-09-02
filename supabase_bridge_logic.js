@@ -33,7 +33,9 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
-    const { action, payload, model: requestedModel, endpoint, method, body } = await req.json()
+    const requestData = await req.json();
+    const { action, model: requestedModel, endpoint, method, body } = requestData;
+    const payload = requestData.payload || requestData;
 
     if (action === 'health_check') {
         return new Response(JSON.stringify({ status: "ok", message: "VSA Bridge 2026 Online" }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
@@ -102,9 +104,17 @@ serve(async (req) => {
       throw new Error(`كافة النماذج المتاحة استهلكت حصتها. آخر خطأ: ${lastError}`);
     }
 
-    if (action === 'github') {
+    if (action === 'github' || action === 'github_search') {
       const githubToken = Deno.env.get("GITHUB_TOKEN")
-      const res = await fetch(endpoint, {
+      let finalEndpoint = endpoint || requestData.endpoint;
+
+      if (action === 'github_search') {
+        const repo = Deno.env.get("GITHUB_REPO") || "ahmedwwaw1/my";
+        const query = payload.query || requestData.query;
+        finalEndpoint = `https://api.github.com/search/code?q=${encodeURIComponent(query)}+repo:${repo}`;
+      }
+
+      const res = await fetch(finalEndpoint, {
         method: method || 'GET',
         headers: {
           'Authorization': `Bearer ${githubToken}`,
@@ -116,6 +126,21 @@ serve(async (req) => {
       const data = await res.json()
       return new Response(JSON.stringify(data), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
     }
+
+    if (action === 'web_search' || action === 'read_url') {
+      if (action === 'read_url') {
+          const url = payload.url || requestData.url;
+          const res = await fetch(url);
+          const text = await res.text();
+          return new Response(JSON.stringify({ content: text }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+      }
+      return new Response(JSON.stringify({ error: "Web Search not configured yet" }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    }
+
+    // استجابة افتراضية في حال لم يتطابق أي إجراء
+    return new Response(JSON.stringify({ error: `Action '${action}' not supported by bridge.` }), {
+      status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
 
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
