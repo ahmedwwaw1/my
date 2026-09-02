@@ -232,7 +232,7 @@ function handleKeydown(e) {
 
 // --- [4. الرسوميات وبناء الرسائل] ---
 
-function addMessageToUi(sender, text, modelName = null, thought = null) {
+function addMessageToUi(sender, text, modelName = null, thought = null, images = []) {
     const container = document.getElementById('aiMessages');
     const div = document.createElement('div');
     div.className = `msg ${sender}`;
@@ -255,7 +255,26 @@ function addMessageToUi(sender, text, modelName = null, thought = null) {
 
     const contentDiv = document.createElement('div');
     contentDiv.className = 'msg-content';
-    contentDiv.innerHTML = (sender === 'user') ? text : marked.parse(text);
+
+    // Image Rendering Logic (Gemini Style)
+    if (images && images.length > 0) {
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'chat-images-container';
+        images.forEach(base64 => {
+            const img = document.createElement('img');
+            img.src = base64.startsWith('data:') ? base64 : `data:image/png;base64,${base64}`;
+            img.className = 'chat-image-msg';
+            imgContainer.appendChild(img);
+        });
+        contentDiv.appendChild(imgContainer);
+    }
+
+    if (text) {
+        const textPart = document.createElement('div');
+        textPart.innerHTML = (sender === 'user') ? text : marked.parse(text);
+        contentDiv.appendChild(textPart);
+    }
+
     div.appendChild(contentDiv);
 
     if (sender === 'ai' && modelName) {

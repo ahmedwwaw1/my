@@ -302,7 +302,12 @@ async function sendAiMessage() {
     const msgText = input.value.trim();
     if (!msgText && selectedFiles.length === 0) return;
 
-    addMessageToUi('user', msgText + (selectedFiles.length ? `\n📎 [${selectedFiles.length} ملفات]` : ''));
+    // Filter images for immediate rendering in UI
+    const userImages = selectedFiles
+        .filter(f => f.type.startsWith('image/'))
+        .map(f => `data:${f.type};base64,${f.base64}`);
+
+    addMessageToUi('user', msgText, null, null, userImages);
     input.value = '';
     autoResizeInput();
     stopAiRequested = false;
@@ -318,7 +323,13 @@ async function sendAiMessage() {
         addMessageToUi('ai', `🧠 جاري المعالجة...`, 'System');
         const currentTurn = { role: "user", parts: [{ text: finalPrompt }, ...attachments] };
         const result = await runToolLoop([...chatHistory, currentTurn]);
-        addMessageToUi('ai', result.text, result.model);
+
+        // Support AI response images if present in the final turn
+        const lastTurn = chatHistory[chatHistory.length - 1];
+        const aiImages = lastTurn && lastTurn.role === 'model' ?
+            lastTurn.parts.filter(p => p.inline_data).map(p => `data:${p.inline_data.mime_type};base64,${p.inline_data.data}`) : [];
+
+        addMessageToUi('ai', result.text, result.model, null, aiImages);
         clearSelectedFile();
         updateSessions();
     } catch (err) {
@@ -428,8 +439,14 @@ function rebuildChatUi() {
     container.innerHTML = '';
     chatHistory.forEach(turn => {
         const sender = turn.role === 'user' ? 'user' : 'ai';
-        const text = turn.parts.map(p => p.text || "[مرفق]").join('\n');
-        addMessageToUi(sender, text, turn.model);
+        const text = turn.parts.filter(p => p.text).map(p => p.text).join('\n');
+
+        // Extract images from turn parts (Gemini style inline_data)
+        const images = turn.parts
+            .filter(p => p.inline_data)
+            .map(p => `data:${p.inline_data.mime_type};base64,${p.inline_data.data}`);
+
+        addMessageToUi(sender, text, turn.model, null, images);
     });
 }
 

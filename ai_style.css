@@ -1,7 +1,6 @@
 /**
- * VSA Academy - Mastermind Sovereign UI Engine
- * --------------------------------------------------
- * هذا الملف يحتوي على كافة الرسوميات والأنماط الخاصة بالعقل المدبر.
+ * VSA Academy - Mastermind Sovereign UI Engine (Elite Gemini Style)
+ * ----------------------------------------------------------------
  */
 
 :root {
@@ -16,249 +15,52 @@
     --ai-warning: #ebc40d;
 }
 
-/* 🧠 AI Widget & Toggle Button */
-.ai-widget {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 2000;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-}
+/* 🧠 AI Widget & Button */
+.ai-widget { position: fixed; bottom: 20px; left: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
+.ai-btn { display: flex; width: 54px; height: 54px; background: var(--ai-accent); color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; box-shadow: 0 8px 25px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); }
 
-.ai-btn {
-    display: flex;
-    width: 54px;
-    height: 54px;
-    background: var(--ai-accent);
-    color: white;
-    border-radius: 50%;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    cursor: pointer;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.1);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+/* 💬 Chat Box Structure */
+.ai-chat-box { display: none; width: 820px; height: 600px; min-width: 400px; min-height: 400px; background: var(--ai-bg); border: 1px solid var(--ai-border); border-radius: 12px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); overflow: hidden; position: relative; flex-direction: row; font-family: 'Inter', sans-serif; }
+.ai-chat-box.maximized { width: 98vw !important; height: 98vh !important; border-radius: 0; top: 1vh !important; left: 1vw !important; }
 
-/* 💬 Chat Box Main Structure */
-.ai-chat-box {
-    display: none;
-    width: 820px;
-    height: 600px;
-    min-width: 400px;
-    min-height: 400px;
-    background: var(--ai-bg);
-    border: 1px solid var(--ai-border);
-    border-radius: 12px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-    overflow: hidden;
-    position: relative;
-    flex-direction: row;
-    font-family: 'Inter', sans-serif;
-}
+.ai-main-content { flex-grow: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+.ai-messages { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
 
-.ai-chat-box.maximized {
-    width: 98vw !important;
-    height: 98vh !important;
-    max-width: 98vw !important;
-    max-height: 98vh !important;
-    border-radius: 0;
-    top: 1vh !important;
-    left: 1vw !important;
-}
+/* 🎨 Advanced Input Wrapper (Gemini Style) */
+.ai-input-container { padding: 15px; background: var(--ai-bg); border-top: 1px solid var(--ai-border); }
+.ai-input-wrapper { background: #2b2d30; border: 1px solid #4e5157; border-radius: 18px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.2s; }
+.ai-input-wrapper:focus-within { border-color: var(--ai-accent); }
 
-.ai-main-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-}
+#aiInput { width: 100%; background: transparent; border: none; color: var(--ai-text); font-size: 15px; line-height: 1.6; outline: none; resize: none; max-height: 250px; min-height: 24px; font-family: inherit; }
 
-.ai-messages {
-    flex-grow: 1;
-    padding: 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+/* 🖼️ Fixed Attachment Previews (Image 1 Fix) */
+#imagePreviewContainer { display: none; flex-wrap: wrap; gap: 12px; padding-bottom: 8px; border-bottom: none !important; } /* حذفت الخط */
+.preview-item { position: relative; width: 55px; height: 55px; border-radius: 10px; overflow: hidden; border: 1px solid #4e5157; background: #141517; }
+.preview-item img { width: 100%; height: 100%; object-fit: cover; }
+.preview-item .remove-btn { position: absolute; top: -2px; right: -2px; background: rgba(0,0,0,0.8); color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #444; }
 
-/* 🎨 Input Area Styling (Android Studio / Gemini Style) */
-.ai-input-container {
-    padding: 16px;
-    background: var(--ai-bg);
-    border-top: 1px solid var(--ai-border);
-    flex-shrink: 0;
-}
+/* 🔘 Footer & Model Selector (Image 3 Style) */
+.ai-input-footer { display: flex; justify-content: space-between; align-items: center; }
+.ai-footer-icons { display: flex; gap: 16px; color: var(--ai-muted); }
 
-.ai-input-wrapper {
-    background: #2b2d30;
-    border: 1px solid #4e5157;
-    border-radius: 14px;
-    padding: 12px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: border-color 0.2s;
-}
+/* زر الزائد المحترف */
+.btn-plus-attachment { font-size: 24px !important; color: var(--ai-muted); cursor: pointer; transition: transform 0.2s, color 0.2s; display: flex; align-items: center; }
+.btn-plus-attachment:hover { color: #fff; transform: rotate(90deg); }
 
-.ai-input-wrapper:focus-within {
-    border-color: var(--ai-accent);
-}
+#modelSelector { background: #2b2d30 !important; color: var(--ai-text) !important; border: 1px solid #4e5157; border-radius: 6px; font-size: 12px; padding: 4px 8px; cursor: pointer; outline: none; }
 
-#aiInput {
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: var(--ai-text);
-    font-size: 15px;
-    line-height: 1.6;
-    outline: none;
-    resize: none;
-    max-height: 200px;
-    min-height: 24px;
-    padding: 0;
-    font-family: inherit;
-}
+.ai-send-btn-new { background: transparent; border: none; color: #4e5157; cursor: pointer; padding: 8px; transition: all 0.3s; border-radius: 50%; }
+.ai-send-btn-new.active { background: var(--ai-accent); color: #fff; }
 
-/* 🖼️ Attachments / Previews (Fixed Size) */
-#imagePreviewContainer {
-    display: none;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
+/* 🖼️ Images inside Chat (Image 4 Style) */
+.chat-image-msg { max-width: 280px; border-radius: 12px; border: 1px solid var(--ai-border); margin: 8px 0; cursor: zoom-in; transition: transform 0.2s; }
+.chat-image-msg:hover { transform: scale(1.02); }
 
-.preview-item {
-    position: relative;
-    width: 55px;
-    height: 55px;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #4e5157;
-    background: #141517;
-}
+/* 💬 Standard Messages */
+.msg { max-width: 85%; padding: 12px 16px; border-radius: 16px; line-height: 1.6; }
+.msg.user { background: #2b2d30; align-self: flex-end; border: 1px solid var(--ai-border); }
+.msg.ai { background: transparent; align-self: flex-start; max-width: 95%; }
 
-.preview-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.preview-item .remove-btn {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    background: rgba(0,0,0,0.7);
-    color: white;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-}
-
-/* 🛠️ Footer Icons & Buttons */
-.ai-input-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.ai-footer-icons {
-    display: flex;
-    gap: 14px;
-    color: var(--ai-muted);
-}
-
-.ai-footer-icons span { cursor: pointer; font-size: 18px; transition: color 0.2s; }
-.ai-footer-icons span:hover { color: #fff; }
-
-.ai-send-btn-new {
-    background: transparent;
-    border: none;
-    color: #4e5157;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: all 0.3s;
-}
-
-.ai-send-btn-new.active {
-    background: var(--ai-accent);
-    color: #fff;
-}
-
-.ai-send-btn-new.working {
-    background: #ff3d00 !important;
-}
-
-/* 🕒 Clock & Pills */
-.ai-header {
-    background: var(--ai-header);
-    padding: 0 16px;
-    height: 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--ai-border);
-}
-
-.system-status-pill {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 3px 8px;
-    background: rgba(77, 182, 172, 0.1);
-    border-radius: 20px;
-    font-size: 10px;
-    color: #4db6ac;
-}
-
-.status-dot { width: 6px; height: 6px; border-radius: 50%; background: #4db6ac; }
-
-/* 🛠️ TOOL STEPS & THOUGHTS */
-.ai-step-container {
-    margin: 15px 0;
-    border: 1px solid var(--ai-border);
-    border-radius: 10px;
-    background: var(--ai-header);
-    overflow: hidden;
-}
-
-.ai-step-header {
-    display: flex;
-    align-items: center;
-    padding: 12px 15px;
-    cursor: pointer;
-}
-
-.thought-container {
-    background: rgba(53, 116, 240, 0.05) !important;
-    border: 1px solid rgba(53, 116, 240, 0.2) !important;
-    border-left: 4px solid var(--ai-accent) !important;
-    padding: 15px !important;
-    margin: 10px 0;
-    position: relative;
-}
-
-.thought-label {
-    position: absolute;
-    top: -10px;
-    right: 15px;
-    background: #1e1f22;
-    padding: 0 8px;
-    font-size: 10px;
-    color: var(--ai-accent);
-    font-weight: bold;
-}
+/* 📐 Resizers */
+.ai-resizer { position: absolute; z-index: 1000; }
+.ai-resizer-br { cursor: se-resize; right: 0; bottom: 0; width: 14px; height: 14px; }
