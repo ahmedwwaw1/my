@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1788373262294",
+      "title": "نعم، بكل تأكيد! أستطيع البحث ف",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك البحث في جوجل سيرج"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "نعم، بكل تأكيد! أستطيع البحث في شبكة الإنترنت والوصول إلى أحدث المعلومات، الأخبار، والبيانات الفورية عبر أداة البحث المتاحة لدي.\n\nما الذي ترغب في البحث عنه أو الاستعلام عنه اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPLicWjtewqTZMHozUn5bkEU9wK8ZHqBDgzG1Ngi2Dn9s4tgEhv6k5soF+ImuY8JoDbOWhThi3q+tp5P5toF1XUVRpvtoSVplNK/3KE36KrDlRp6TRB9Yh"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1788298352809",
       "title": "أهلاً بك! لقد قمت بمحاولة البح",
       "history": [
@@ -110,6 +134,6 @@
     }
   ],
   "activeSessionId": "1788373262294",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك البحث في جوجل سيرج\"}]}]",
-  "timestamp": "2026-09-02T18:21:19.727Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك البحث في جوجل سيرج\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"نعم، بكل تأكيد! أستطيع البحث في شبكة الإنترنت والوصول إلى أحدث المعلومات، الأخبار، والبيانات الفورية عبر أداة البحث المتاحة لدي.\\n\\nما الذي ترغب في البحث عنه أو الاستعلام عنه اليوم؟\",\"thoughtSignature\":\"El4KXAERTTIPLicWjtewqTZMHozUn5bkEU9wK8ZHqBDgzG1Ngi2Dn9s4tgEhv6k5soF+ImuY8JoDbOWhThi3q+tp5P5toF1XUVRpvtoSVplNK/3KE36KrDlRp6TRB9Yh\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل اداة Google Search\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"VSA Academy\"},\"id\":\"call_2286953\"},\"thoughtSignature\":\"El4KXAERTTIPIZiyFgWJjadF9iqnSt8dJNQeMw7gkMjhGNCbPPQOd4hBQQLjoV0H03Xa6VPjSnu/YViRa+RnPwGhAUgRnOquNcVhkL+6e5qtWCi/z5dCYDRhBbaSKSGL\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]}]",
+  "timestamp": "2026-09-02T18:22:24.913Z"
 }
