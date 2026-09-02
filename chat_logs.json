@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788353051315",
+  "sessions": [
+    {
+      "id": "1788298352809",
+      "title": "أهلاً بك! مرحباً في أكاديمية V",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! مرحباً في أكاديمية VSA. \n\nأنا **Mastermind** — المهندس المعماري والنظام الذكي المسؤول عن التطوير، التصميم، والابتكار البرمجي. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت تتطلع لبناء ميزة جديدة، حل مشكلة تقنية، تحسين الواجهات والتصميم، أو استكشاف أفكار جديدة في المشروع، أنا جاهز تماماً!",
+              "thoughtSignature": "EooECocEARFNMg+5QyfAvYyRDg6XRKk8XnP0OP9ZfdqHdCjsliYGD3oqWR4LZSRYoexnC/cCkM5vVVI0EbzS1zEFPudL1qoyt9rPwO0Ghjxi/wUZuNQNx2N9EOfxSzK+5YplY4xaWGNWPp+c5YWm2VrlJoUwBUkurEELU2ZFoR4NlKDM2VtFD22vC7N28v77USccERJ9YV9IruFXE0n6oCiHR4CzYQLeQqyXVu4QFizyhH6d6Liyol6grtVp5Ehddc+nQigfF3YT/IQO9cJRnKAjOSJfXWBY2jyeH3Fw2eUxSV+3Gjl1K97naH47cC1KjjDg4tJMr9u1lMt5BSo4pvCKMnyUXxIg+TxDzcnJkcCIns5K5aMpXS9QicUIwLOwjJU26hq6JFLReEwqrSXGfr/z6us8ImkrTKKJDMz+sVk9TQZ/CciTM620IUZP3eTSRf6MOeUmlLQ7xwysbdzZUD6Dz0Zagp7HkS+KAaVQu1aRAIdLZe7Be4TogEBeSFF46BRvSzf664Lb5e/ok7FIoR3yF52XtJ3/53oNKtQFukQ2U5XrRIaumOUY7mbgUPdicbp/IcPplgmnbspWrfa6x3wU+Nl7bGk+QvU6fcYxAu0x2LqK0CeLIQo1I1+evf8c0Y/8K75FDvcjCOCeRcsyo3vubGiDMG2ZxUFWol7sOIQUOLAZXcKdnzlmMPaj"
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788298352809",
   "pendingHistory": null,
-  "timestamp": "2026-09-02T12:44:14.434Z"
+  "timestamp": "2026-09-02T12:44:45.748Z"
 }
