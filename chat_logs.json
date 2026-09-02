@@ -2,31 +2,13 @@
   "sessions": [
     {
       "id": "1788298352809",
-      "title": "العفو! أنا دائماً في خدمتك. \n\n...",
+      "title": "أهلاً بك! لقد قمت بمحاولة البح",
       "history": [
         {
           "role": "user",
           "parts": [
             {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! بصفتي \"العقل المدبر\" (Mastermind) والمهندس المعماري السيادي لـ VSA Academy، أنا جاهز تماماً لدعمك في أي مهام برمجية، تصميم، تطوير بصري، أو هندسة نظم متقدمة. \n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "El4KXAERTTIP/jwUfHFshchSXCE+gsZZRXWlrOOimmk2bbMpXG6/S+/ohLeL6VBYe6RJs50HnLYM5ypCe9HPi9I9emHnJZ37w2SIymUnexCcQtYJzgE0j2Vmskmte0mj"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "هل يمكنك فص ملفاتي"
+              "text": "هل يمكنك البحث في الانترنت عن اخر خبر لليورو دولار"
             }
           ]
         },
@@ -35,14 +17,13 @@
           "parts": [
             {
               "functionCall": {
-                "name": "thought",
+                "name": "web_search",
                 "args": {
-                  "plan": "استكشاف الملفات المتاحة في المشروع للتعرف على بنيته وملفاته الأساسية.",
-                  "reasoning": "المستخدم يطلب فحص ملفاته، لذا نحتاج للبحث عن الملفات الموجودة في المستودع لمعرفة نوع المشروع (ويب، خلفية، تطبيق، إلخ) وتقديم تقرير دقيق."
+                  "query": "آخر أخبار زوج اليورو دولار EUR USD اليوم"
                 },
-                "id": "call_623816"
+                "id": "call_1726777"
               },
-              "thoughtSignature": "El4KXAERTTIPuWOJVAV4n2hZj5tYQ5IH1eIty+TOebqUtgEFX8nT/+eKiD1/yk2EzWUiNnCrNw2zolASdJcBEKCQcoa4aDMI/nyiRa8Y5Fj3FFoZlgy2sUkrg9KMLsO+"
+              "thoughtSignature": "El4KXAERTTIP4ieSzYt3MzFgmylIIn85up0cAj8Wh3Zoz1qVLRzE4WryysCHoqVq6X+D/xlC04ZLDtjPDyOKqc6dUD/xhWDOPyMWDVHOaSwMbrVVSGNiZRenzgbg8BYt"
             }
           ]
         },
@@ -51,12 +32,9 @@
           "parts": [
             {
               "functionResponse": {
-                "name": "thought",
+                "name": "web_search",
                 "response": {
-                  "content": {
-                    "reasoning": "المستخدم يطلب فحص ملفاته، لذا نحتاج للبحث عن الملفات الموجودة في المستودع لمعرفة نوع المشروع (ويب، خلفية، تطبيق، إلخ) وتقديم تقرير دقيق.",
-                    "plan": "استكشاف الملفات المتاحة في المشروع للتعرف على بنيته وملفاته الأساسية."
-                  }
+                  "content": "{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\"}}"
                 }
               }
             }
@@ -67,13 +45,13 @@
           "parts": [
             {
               "functionCall": {
-                "name": "searchCode",
+                "name": "web_search",
                 "args": {
-                  "query": "*"
+                  "query": "EUR USD analysis news today"
                 },
-                "id": "call_500023"
+                "id": "call_2449939"
               },
-              "thoughtSignature": "El4KXAERTTIP1FU0W0lcrP2q7ERKSKWELuyb7T27BI2uwDAceW8ELgQNIzcvVly4C5zJitx2TTHltzLdkMUB3Wb7kxBYX5AtdeZWL8yyubEu+KEDSEp/0zQzezJK1Q2j"
+              "thoughtSignature": "El4KXAERTTIPow320JDRTHvJAmn375eFlTHxjyedrOBjecwc4gWcN3usS9WY/mKujuBrxk0CQPyusQC4t4J1307y8PG38VCX9n1sCAJ2U2rywaWB5EZ6GYpv3AbHK9Cr"
             }
           ]
         },
@@ -82,9 +60,9 @@
           "parts": [
             {
               "functionResponse": {
-                "name": "searchCode",
+                "name": "web_search",
                 "response": {
-                  "content": "No results."
+                  "content": "{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\"}}"
                 }
               }
             }
@@ -95,13 +73,13 @@
           "parts": [
             {
               "functionCall": {
-                "name": "searchCode",
+                "name": "web_search",
                 "args": {
-                  "query": "package.json"
+                  "query": "EUR USD analysis news"
                 },
-                "id": "call_701172"
+                "id": "call_2147206"
               },
-              "thoughtSignature": "El4KXAERTTIP8Nj8qVpaytrQSQhRW7qG0vbCPItwf4ZXW0UrwDyPbFrKzZPrf08NwX/ckkMEOKj98wCPrnPrRA7GZ03rWFUwxuaDwSBtiRZVV6ctyRzgGPD0GgPwfxn+"
+              "thoughtSignature": "El4KXAERTTIPTik4CrNw+uRg2tZLZQmo+LcG4PxTke19yB3MMkjEnCo1SHa7jCgGgT9gOsJdXdpuaiTgnaIb5NFyd0vRgDDmKcOQT/zd3SPH59ptCvEdFbpO9tLe5ar3"
             }
           ]
         },
@@ -110,9 +88,9 @@
           "parts": [
             {
               "functionResponse": {
-                "name": "searchCode",
+                "name": "web_search",
                 "response": {
-                  "content": "No results."
+                  "content": "{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\"}}"
                 }
               }
             }
@@ -122,136 +100,8 @@
           "role": "model",
           "parts": [
             {
-              "functionCall": {
-                "name": "searchCode",
-                "args": {
-                  "query": "index"
-                },
-                "id": "call_617871"
-              },
-              "thoughtSignature": "El4KXAERTTIPJxe0LA/CFuQFThfTtoLnktj916LYNHitgUlfPxQ7GxExo/Q75+l9ze8qonlgFzHQAXOkL8s9IVVWWKRefUyM6d51PEwL1wlCMSIPUqYgxThFyXXTn/pZ"
-            }
-          ]
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "functionResponse": {
-                "name": "searchCode",
-                "response": {
-                  "content": "No results."
-                }
-              }
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك مجدداً. لقد قمت بإجراء بحث أولي في المستودع الحالي، ويبدو أنه لا توجد ملفات حالياً (أو أن مساحة العمل فارغة تماماً / تم تهيئة مستودع جديد).\n\nهل ترغب في:\n1. **إنشاء مشروع جديد** (مثل تطبيق ويب تفاعلي، واجهة أكاديمية، أو منصة VSA Academy).\n2. **رفع أو إضافة ملفات** لكي أبدأ بفحصها وتحليلها برمجياً ومعمارياً وفقاً للدستور البرمجي.\n\nأخبرني كيف تفضل أن نبدأ!",
-              "thoughtSignature": "El4KXAERTTIPB4kyiBej4vzlqtzcX0MGhbjZ8xWv066dZbCbfyrAmuFuaqlFMtwu9z8y45OcqZ52XVxKiSLfJlkYAnJR93jvnHuWXq2bYxGB6HOxWZckGIl4MHgPoi3U"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "هل يمكنك ان تتداول نيابة عندي"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "functionCall": {
-                "name": "thought",
-                "args": {
-                  "reasoning": "التداول الآلي (Algorithmic Trading / Bot Trading) هو مجال تقني يمكنني المساعدة فيه عبر كتابة استراتيجيات، خوارزميات تداول، أو ربط منصات عبر الـ APIs، لكن التداول المالي المباشر بأموال حقيقية يتطلب اعتبارات أمان ومسؤولية صارمة.",
-                  "plan": "الإجابة على سؤال المستخدم بخصوص التداول بالنيابة عنه مع توضيح الجوانب التقنية، القانونية، والأخلاقية (مثل إدارة المخاطر، الـ APIs، والقيود النظامية)."
-                },
-                "id": "call_364553"
-              },
-              "thoughtSignature": "El4KXAERTTIPXIlykhGlX9u1LvqdZ0xhRop4In8GN3sLQC8OPq6RjL1AK4FYc59WTXwCN/xE7oq6CTdqUwka/wSMCXE6mt2bgVl//9ikHx4lLjVZfn9uHTo8Hc2FMtOK"
-            }
-          ]
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "functionResponse": {
-                "name": "thought",
-                "response": {
-                  "content": {
-                    "reasoning": "التداول الآلي (Algorithmic Trading / Bot Trading) هو مجال تقني يمكنني المساعدة فيه عبر كتابة استراتيجيات، خوارزميات تداول، أو ربط منصات عبر الـ APIs، لكن التداول المالي المباشر بأموال حقيقية يتطلب اعتبارات أمان ومسؤولية صارمة.",
-                    "plan": "الإجابة على سؤال المستخدم بخصوص التداول بالنيابة عنه مع توضيح الجوانب التقنية، القانونية، والأخلاقية (مثل إدارة المخاطر، الـ APIs، والقيود النظامية)."
-                  }
-                }
-              }
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "بصفسـتي مساعدك الذكي و\"العقل المدبر\"، يمكنني مساعدتك في كل الجوانب التقنية المتعلقة بالتداول، مثل:\n\n1. **بناء وتطوير روبوتات التداول الآلي (Trading Bots):** كتابة خوارزميات واستراتيجيات تداول بلغات البرمجة (مثل Python أو JavaScript) لتحليل السوق واتخاذ القرارات.\n2. **الربط مع منصات التداول (APIs):** ربط المنصات وتحليل البيانات المالية والشموع اليابانية (Candlesticks) والمؤشرات الفنية (مثل RSI, MACD, Moving Averages).\n3. **الاختبار العكسي (Backtesting):** اختبار استراتيجيات التداول على بيانات تاريخية لمعرفة مدى نجاحها قبل المخاطرة بأي أموال حقيقية.\n4. **إدارة المخاطر (Risk Management):** برمجة قواعد صارمة لوقف الخسارة (Stop Loss) وجني الأرباح (Take Profit).\n\n**ولكن، هل يمكنني التداول بأموال حقيقية نيابة عنك مباشرة؟**\n* لا أستطيع الوصول المباشر إلى منصات التداول الشخصية الخاصة بك أو اتخاذ قرارات مالية مسؤولة نيابة عنك لأسباب تتعلق بالأمان والخصوصية واللوائح القانونية والمالية.\n* التداول ينطوي على **مخاطر عالية** لخسارة رأس المال، والقرار النهائي والمسؤولية تقعان عليك وحدك.\n\n**كيف يمكننا العمل معاً؟**\nيمكننا تصميم واختبار استراتيجيتك البرمجية، أو بناء \"بوت\" تداول خاص بك يعمل وفق الشروط التي تحددها أنت، وتقوم أنت بتشغيله على حسابك التجريبي (Demo) أو الحقيقي عند الاطمئنان له.\n\nهل ترغب في أن نبدأ بتصميم استراتيجية تداول برمجية أو بناء بوت تجريبي؟",
-              "thoughtSignature": "El4KXAERTTIPx7HnL1A6JeBYFA8fGWMsrhRyaByCFW9n4TPW72yE3TeVnCiESk0cBKBHK+A5hh8WEzEWWMFs6feKeZPmjaRvzH0olJmRs/eGslKl39WSAB+brLazx4iU"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "شكرا لك"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "functionCall": {
-                "name": "thought",
-                "args": {
-                  "plan": "الرد بلطف وترحاب على الشكر، وإبقاء الباب مفتوحاً لأي استفسارات أو مشاريع مستقبلية.",
-                  "reasoning": "المحادثة وصلت إلى نقطة شكر واختتام طبيعية، لذا يجب الرد بشكل احترافي وداعم."
-                },
-                "id": "call_706048"
-              },
-              "thoughtSignature": "El4KXAERTTIP7uFt9bce9HetULNvfaHXqRoOyl2kKJvDzPkXLUpvHLXL7g4qeL26x8c8Nybau993cOXSovwdHkzHEP7M2EMqZH5Mwtn9AJ/i3wUpyp+f79+7wjNWJ77B"
-            }
-          ]
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "functionResponse": {
-                "name": "thought",
-                "response": {
-                  "content": {
-                    "reasoning": "المحادثة وصلت إلى نقطة شكر واختتام طبيعية، لذا يجب الرد بشكل احترافي وداعم.",
-                    "plan": "الرد بلطف وترحاب على الشكر، وإبقاء الباب مفتوحاً لأي استفسارات أو مشاريع مستقبلية."
-                  }
-                }
-              }
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "العفو! أنا دائماً في خدمتك. \n\nإذا احتجت لأي مساعدة برمجية، معمارية، أو استفسار تقني في المستقبل، فلا تتردد في طرحه. بالتوفيق دائماً!",
-              "thoughtSignature": "El4KXAERTTIPbVYxvr77HlQie71NOrTG3JRJJ1Q+TcYv0CuaxPlXu46OZH/Qa9Of3QZFHjIDZriXAWOGuTZFL2V4Rv+0LudbLdNcbGoFgQ2WDrXEFdXNOR2RR5SDEQrE"
+              "text": "أهلاً بك! لقد قمت بمحاولة البحث عبر الإنترنت عن آخر أخبار وتحليلات زوج اليورو دولار (EUR/USD)، ولكن يبدو أن محرك البحث واجه خطأ مؤقتاً في معايير الاستعلام (Invalid search depth). \n\nبشكل عام، تعتمد تحركات زوج **اليورو مقابل الدولار الأمريكي (EUR/USD)** في الوقت الحالي على عدة عوامل اقتصادية رئيسية تتصدر المشهد العالمي:\n1. **السياسة النقدية للبنوك المركزية:** التباين أو التقارب المرتقب في قرارات أسعار الفائدة بين **الاحتياطي الفيدرالي الأمريكي (Fed)** و**البنك المركزي الأوروبي (ECB)** بناءً على بيانات التضخم والنمو الاقتصادي الأخيرة.\n2. **بيانات الاقتصاد الكلي:** تقارير الوظائف الأمريكية (Non-Farm Payrolls)، ومؤشرات أسعار المستهلكين (CPI) في الولايات المتحدة ومنطقة اليورو، والتي تؤثر بشكل مباشر على توقعات الأسواق لخطوات الفائدة القادمة.\n3. **التطورات الجيوسياسية:** حالة الأسواق العالمية وتأثيرها على العملات الرئيسية كملاذات آمنة (مثل الدولار) مقابل العملات المرتبطة بالمخاطر.\n\nإذا كنت ترغب في تحليل فني دقيق أو استعراض مستويات الدعم والمقاومة الحالية للزوج ضمن منصتنا أو أكاديميتنا، فيمكننا مراجعة ذلك مباشرة! هل تود تفصيل جوانب معينة؟",
+              "thoughtSignature": "El4KXAERTTIPPP8zi+j5kDM7wIEmwsCQwmsVlxxv773iE6uabP6idcJVJQN1PepRpXeCQ5W1+hvQCp/Yk/uClBJ114HhjABQz0p3xdlPJ2XGIEJTqAS9A2MSLTvz7tZ7"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -259,7 +109,7 @@
       ]
     }
   ],
-  "activeSessionId": "1788298352809",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك البحث في الانترنت عن اخر خبر لليورو دولار\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"آخر أخبار زوج اليورو دولار EUR USD اليوم\"},\"id\":\"call_1726777\"},\"thoughtSignature\":\"El4KXAERTTIP4ieSzYt3MzFgmylIIn85up0cAj8Wh3Zoz1qVLRzE4WryysCHoqVq6X+D/xlC04ZLDtjPDyOKqc6dUD/xhWDOPyMWDVHOaSwMbrVVSGNiZRenzgbg8BYt\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"EUR USD analysis news today\"},\"id\":\"call_2449939\"},\"thoughtSignature\":\"El4KXAERTTIPow320JDRTHvJAmn375eFlTHxjyedrOBjecwc4gWcN3usS9WY/mKujuBrxk0CQPyusQC4t4J1307y8PG38VCX9n1sCAJ2U2rywaWB5EZ6GYpv3AbHK9Cr\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"EUR USD analysis news\"},\"id\":\"call_2147206\"},\"thoughtSignature\":\"El4KXAERTTIPTik4CrNw+uRg2tZLZQmo+LcG4PxTke19yB3MMkjEnCo1SHa7jCgGgT9gOsJdXdpuaiTgnaIb5NFyd0vRgDDmKcOQT/zd3SPH59ptCvEdFbpO9tLe5ar3\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]}]",
-  "timestamp": "2026-09-02T18:20:29.934Z"
+  "activeSessionId": "1788373262294",
+  "pendingHistory": null,
+  "timestamp": "2026-09-02T18:21:02.295Z"
 }
