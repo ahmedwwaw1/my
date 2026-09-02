@@ -1,6 +1,6 @@
 {
   "sessions": [],
   "activeSessionId": "1788348151700",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-02T11:45:41.526Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[],\"model\":\"gemini-3.5-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
+  "timestamp": "2026-09-02T11:46:09.008Z"
 }
