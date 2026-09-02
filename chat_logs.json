@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788298352809",
-      "title": "الحمد لله حمداً كثيراً! \n\nأنا ",
+      "title": "مرحباً بك! أنا **المساعد الذكي",
       "history": [
         {
           "role": "user",
@@ -16,62 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "أهلاً بك! أنا معك العقل الهيكلي السيادي والمستشار الهندسي لـ VSA Academy (بنسخة Gemini 3.x المطورة). \n\nكيف يمكنني مساعدتك اليوم في تطوير، هندسة، أو بناء مشاريعك البرمجية والذكية؟ أنا جاهز لكل ما تحتاجه!",
-              "thoughtSignature": "El4KXAERTTIPVHOq2rXm5pBVi6JUuDyGYnl50JcmFrRGaRX0yzRvb0RiaUiptBBA9NOUYCikeM3zOAeZKREdhj+xxZLxN85CXC10tB6Wd/uTNcEYRa5NNhfw1LrWSnW+"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، أنا بأفضل حال وجاهز تماماً وبكامل طاقتي الهندسية والابداعية لمساعدتك! 🚀\n\nكيف يمكنني دعمك اليوم؟ هل نبدأ بتطوير ميزة جديدة، فحص كود، تحسين واجهات، أو التخطيط لمشروع تقني ضخم؟ شاركني بما يدور في ذهنك!",
-              "thoughtSignature": "El4KXAERTTIPHdMKPzbduyPghgYFTIEIGEKnLrDTmw13dTH8wSmNFJX5TWwGBdW8sU+JLsyUSNVOqP6kErhtiGwZ+jkJrBgQMci+1LNYQm+/to2nqfmvEWWKp4D2EHsk"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "بخير"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "دائماً وأبداً إن شاء الله! 🌟\n\nبما أن الأمور ممتازة، هل هناك مشروع معين أو فكرة تقنية تحب أن نعمل عليها اليوم؟ أنا هنا لمساعدتك في أي شيء تحتاجه (تطوير ويب، ذكاء اصطناعي، تصميم واجهات، هندسة برمجيات، أو غير ذلك). تفضل!",
-              "thoughtSignature": "El4KXAERTTIPb2UjMJZ8cSTLLf8nYeZ1OR45w7eZgtjtDTBbJ1r+x6pu1jsXBiA8CRyvW+bdETq9dbcntwFE3dKzx9AN6AsHqQJ59R90Xqph4DEC9eUQgjZx9y69PGW5"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "الحمدلله"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله حمداً كثيراً! \n\nأنا جاهز متى ما كنت مستعداً. هل هناك أي مهمة أو استفسار تقني تود مناقشته اليوم؟ تفضل ب طرحه، ولننطلق معاً! 💻✨",
-              "thoughtSignature": "El4KXAERTTIPpBf+F5eZ5Njq+Fou8hoiopy4rf6ak6RBdGEBkVzbuVPJBwIAh7GE6dBygKmSeNer/3jTe32QDvLrzhKV9kFkXWl44MUVGVGGUg2xLFD/XKF9AsBxa6uz"
+              "text": "مرحباً بك! أنا **المساعد الذكي** (Mastermind - Sovereign Omni-Architect & Visionary Engineer)، معماري الأنظمة والحلول التقنية المتقدمة. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت ترغب في تطوير نظام برمجي، بناء واجهات مستخدم مذهلة، تحليل كود، أو ابتكار حلول تقنية جديدة، أنا جاهز تماماً لتنفيذها بأعلى معايير الجودة والكفاءة!",
+              "thoughtSignature": "El4KXAERTTIPOE4s3mqpK+yY4FlHe2eBOV1NB2FiDKXO0iuifFM5Hg1+hNt8TU5tfvDBbhvHwFaxp5gkxiP8f/c5nFGd5X8/SUv8AQ0jwroO88DMNgBSkr8fl+Qw7lGx"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -79,7 +25,7 @@
       ]
     }
   ],
-  "activeSessionId": "1788365986980",
+  "activeSessionId": "1788298352809",
   "pendingHistory": null,
-  "timestamp": "2026-09-02T16:19:46.980Z"
+  "timestamp": "2026-09-02T16:22:46.462Z"
 }
