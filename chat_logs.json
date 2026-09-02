@@ -80,6 +80,6 @@
     }
   ],
   "activeSessionId": "1788368932219",
-  "pendingHistory": null,
-  "timestamp": "2026-09-02T17:08:52.219Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك فحص ملفاتي\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"أريد استكشاف الملفات الموجودة في المشروع للرد على طلب المستخدم بشكل دقيق واحترافي.\",\"plan\":\"فحص المستودع والملفات المتاحة للتعرف على محتويات المشروع وإعطاء ملخص دقيق وشامل للمستخدم.\"},\"id\":\"call_897705\"},\"thoughtSignature\":\"El4KXAERTTIPQrM3AwJY/DYjDdrVD5HJBvIhDAhpGi5/hWEdlRra4u9ogArGDCZccmpyqIkcjRbsNEqenX6wqlKnqsCN91pMF+dPumT83/Y0v+5iDnsMCkanNOihOBjE\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"أريد استكشاف الملفات الموجودة في المشروع للرد على طلب المستخدم بشكل دقيق واحترافي.\",\"plan\":\"فحص المستودع والملفات المتاحة للتعرف على محتويات المشروع وإعطاء ملخص دقيق وشامل للمستخدم.\"}}}}]}]",
+  "timestamp": "2026-09-02T17:10:35.974Z"
 }
