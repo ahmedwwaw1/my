@@ -26,6 +26,6 @@
     }
   ],
   "activeSessionId": "1788298352809",
-  "pendingHistory": null,
-  "timestamp": "2026-09-02T19:46:07.573Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك البحث في ملفاتي\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"نعم، بالطبع! يمكنني البحث في ملفات المشروع الخاص بك، قراءتها، تعديلها، وإنشاء ملفات جديدة حسب الحاجة. \\n\\nهل تبحث عن ملف معين، أو ترغب في البحث عن كلمة أو دالة برمجية داخل المشروع؟ أخبرني بما تحتاج إليه وسأقوم بذلك فورا!\",\"thoughtSignature\":\"El4KXAERTTIPAdn+T04v6V/5MWsQx9UfDs1ojaW16M2uP8kYS6EkDD/LkbfAozCCbkVJH2455RrIjQKRLyqldotOgogr243gxEqu3et84RdMh6JiskQ9xHC/nfTtdxFl\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك رؤية ملف واحد على الاقل\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"searchCode\",\"args\":{\"query\":\"*\"},\"id\":\"call_2289645\"},\"thoughtSignature\":\"El4KXAERTTIP1Ii9EIKGGqt3CAzgBwvKhT77U7TFTT03NzIS4152AjEgEj3zU2e+mSbySYW3XzNIv8AdcSD2h7omgloyLFjhyn3wwsABDHu6z07fsS05puvQMuPfHt3e\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"searchCode\",\"response\":{\"content\":\"🔍 لا توجد نتائج.\"}}}]}]",
+  "timestamp": "2026-09-02T19:46:28.612Z"
 }
