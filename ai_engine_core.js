@@ -46,6 +46,8 @@ const AI_TOOLS = [{
         { name: "thought", description: "مركز التحليل والمنطق.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" } }, required: ["reasoning", "plan"] } },
         { name: "repairSystem", description: "إصلاح مشاكل الاتصال والتوكن.", parameters: { type: "OBJECT", properties: {} } },
         { name: "triggerGithubWorkflow", description: "تشغيل عمليات البوتات.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
+        { name: "os_command", description: "تنفيذ أوامر PowerShell/CMD على النظام المحلي (يتطلب الجسر المحلي).", parameters: { type: "OBJECT", properties: { command: { type: "STRING" } }, required: ["command"] } },
+        { name: "list_local_files", description: "سرد ملفات القرص الصلب المحلي (يتطلب الجسر المحلي).", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
         { name: "web_search", description: "البحث في الإنترنت.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
         { name: "read_url", description: "قراءة محتوى رابط خارجي.", parameters: { type: "OBJECT", properties: { url: { type: "STRING" } }, required: ["url"] } }
     ]
@@ -204,6 +206,30 @@ async function repairSystem() {
     } catch (e) { return `❌ فشل الاتصال: ${e.message}`; }
 }
 
+/**
+ * دالة الاتصال بالجسر المحلي (Node.js) للتحكم في الويندوز
+ */
+async function callLocalBridge(action, payload) {
+    logToTerminal(`Local Bridge [${action}] initiated...`, "info");
+    try {
+        const url = action === 'list' ? `http://localhost:3000/list?path=${encodeURIComponent(payload.path || '.')}` : `http://localhost:3000/cmd`;
+        const options = {
+            method: action === 'list' ? 'GET' : 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        };
+        if (action === 'cmd') options.body = JSON.stringify(payload);
+
+        const res = await fetch(url, options);
+        if (!res.ok) throw new Error(`Local bridge error: ${res.status}`);
+        const data = await res.json();
+        logToTerminal(`Local Bridge Success: ${action}`, "info");
+        return data;
+    } catch (e) {
+        logToTerminal(`Local Bridge Offline: ${e.message}`, "error");
+        return { error: "الجسر المحلي غير نشط. يرجى تشغيل 'node server.js' على جهازك." };
+    }
+}
+
 async function readCodeRange(path, start, end) {
     try {
         const content = await getGithubFileContent(path);
@@ -293,6 +319,8 @@ async function runToolLoop(history) {
             else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
             else if (name === "repairSystem") toolResult = await repairSystem();
             else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
+            else if (name === "os_command") toolResult = await callLocalBridge('cmd', { command: args.command });
+            else if (name === "list_local_files") toolResult = await callLocalBridge('list', { path: args.path });
             else if (name === "web_search") {
                 const searchResult = await callBridge('web_search', args);
                 if (searchResult.source === "google") {

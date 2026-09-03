@@ -324,32 +324,159 @@
         </div>
     </div>
 
-    <!-- 6. هندسة الجسر (Bridge Architecture) -->
+    <!-- 6. هندسة الجسر (Hybrid Bridge Architecture) -->
     <div class="card" style="margin-top: 25px;">
-        <h2>🌉 بنية الجسر السيادي (Bridge Architecture)</h2>
-        <p style="font-size: 0.9rem; color: var(--text-dim);">يعمل الجسر كبوابة أمنية (Secure Gateway) تربط بين الواجهة الأمامية والخدمات الحساسة:</p>
+        <h2>🌉 بنية الجسور السيادية (Hybrid Architecture)</h2>
+        <p style="font-size: 0.9rem; color: var(--text-dim);">يعمل النظام ببنية هجينة تربط السحاب بالنظام المحلي:</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+            <div style="background: rgba(77, 182, 172, 0.05); padding: 15px; border-radius: 8px; border: 1px solid var(--accent-green);">
+                <h3 style="color: var(--accent-green); font-size: 1.1rem; margin-top:0;">⚡ Cloud Bridge</h3>
+                <p style="font-size: 0.8rem;">مسؤول عن الاتصال بـ GitHub و Gemini API والبحث العالمي عبر Supabase Edge Functions.</p>
+            </div>
+            <div style="background: rgba(53, 116, 240, 0.05); padding: 15px; border-radius: 8px; border: 1px solid var(--accent-blue);">
+                <h3 style="color: var(--accent-blue); font-size: 1.1rem; margin-top:0;">🖥️ Local Bridge</h3>
+                <p style="font-size: 0.8rem;">جسر Node.js يعمل محلياً. يمنح العقل المدبر صلاحية الوصول للملفات المحلية وتنفيذ أوامر PowerShell.</p>
+            </div>
+        </div>
 
         <div style="margin-bottom: 20px;">
             <h3 style="color: var(--accent-purple); font-size: 1.1rem;">⚡ Supabase Edge Functions (Deno)</h3>
-            <p style="font-size: 0.85rem;">تعمل في بيئة Deno Runtime على حافة الشبكة. ميزتها هي التعامل الآمن مع <b>Secrets</b> (مثل GEMINI_API_KEY) دون تسريبها للعميل.</p>
+            <p style="font-size: 0.85rem;">تعمل في بيئة Deno Runtime على حافة الشبكة لتأمين الـ Secrets.</p>
             <div class="constitution-block" style="color: #4db6ac;">
-// مثال لمنطق الجسر في Supabase
+// منطق الجسر السحابي
 serve(async (req) => {
-  const { action, payload } = await req.json();
-  if (action === 'chat') {
-    const apiKey = Deno.env.get("GEMINI_API_KEY");
-    // الاتصال بـ Google API وإرجاع النتيجة
-  }
+  const { action } = await req.json();
+  if (action === 'chat') { /* Gemini API logic */ }
 });</div>
-        </div>
-
-        <div>
-            <h3 style="color: var(--accent-blue); font-size: 1.1rem;">☁️ Cloudflare Workers (V8)</h3>
-            <p style="font-size: 0.85rem;">تشبه وظائف Supabase ولكنها تعمل في بيئة V8 Isolates. تستخدم لتوجيه الطلبات (Routing) وتخزين البيانات المؤقتة عبر KV Storage.</p>
         </div>
     </div>
 
-    <!-- 7. تكامل المحركات (API Integration) -->
+    <!-- 7. أدوات النظام المحلي (OS Control) -->
+    <div class="card" style="margin-top: 25px;">
+        <h2>⚙️ أدوات التحكم في نظام التشغيل (OS Control)</h2>
+        <p style="font-size: 0.9rem; color: var(--text-dim);">هذه الأدوات تتطلب تشغيل الجسر المحلي (Local Bridge) على منفذ 3000:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>الأداة</th>
+                    <th>القدرة التشغيلية</th>
+                    <th>البيئة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="tool-name">os_command</td>
+                    <td>تنفيذ أوامر CMD/PowerShell مباشرة على الويندوز.</td>
+                    <td><span class="tag" style="color: #ff8a50; background: rgba(255,138,80,0.1);">محلي</span></td>
+                </tr>
+                <tr>
+                    <td class="tool-name">list_local_files</td>
+                    <td>استكشاف الملفات على القرص الصلب (C:/D:).</td>
+                    <td><span class="tag" style="color: #ff8a50; background: rgba(255,138,80,0.1);">محلي</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 8. دليل إعداد الجسر المحلي (Local Bridge Setup Guide) -->
+    <div class="card" style="margin-top: 25px; border-color: var(--accent-blue);">
+        <h2>🛠️ دليل إعداد الجسر المحلي (Local Bridge Setup)</h2>
+        <p style="font-size: 0.9rem; color: var(--text-dim);">لتفعيل أدوات التحكم في نظام التشغيل (OS Control)، اتبع الخطوات التالية لإعداد خادم Node.js المحلي:</p>
+
+        <ol style="font-size: 0.85rem; color: var(--text-main); padding-right: 20px;">
+            <li>قم بتثبيت <a href="https://nodejs.org/" target="_blank" style="color: var(--accent-blue);">Node.js</a> على جهازك.</li>
+            <li>أنشئ مجلداً باسم <code>vsa-bridge</code> وضع فيه ملفاً باسم <code>server.js</code>.</li>
+            <li>الصق الكود التالي داخل الملف:</li>
+        </ol>
+
+        <div class="constitution-block" style="color: #dfe1e5; max-height: 300px; overflow-y: auto; border: 1px solid #333;">
+const express = require('express');
+const fs = require('fs');
+const cors = require('cors');
+const { exec } = require('child_process');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// سرد الملفات المحلية
+app.get('/list', (req, res) => {
+    const dirPath = req.query.path || '.';
+    fs.readdir(dirPath, { withFileTypes: true }, (err, files) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(files.map(f => ({ name: f.name, type: f.isDirectory() ? 'dir' : 'file' })));
+    });
+});
+
+// تنفيذ أوامر النظام
+app.post('/cmd', (req, res) => {
+    exec(req.body.command, (error, stdout, stderr) => {
+        res.json({ output: stdout, error: stderr || error });
+    });
+});
+
+app.listen(3000, () => console.log('🚀 Local Bridge Active on port 3000'));
+        </div>
+
+        <p style="font-size: 0.85rem; margin-top: 15px;">
+            <span class="tag" style="background: rgba(255,50,50,0.1); color: #ff5252;">تحذير:</span>
+            هذا الجسر يمنح النموذج صلاحية كاملة على جهازك. استخدمه في بيئة تطوير آمنة فقط.
+        </p>
+    </div>
+
+    <!-- 9. هندسة دعم الأدوات (Internal Wiring) -->
+    <div class="card" style="margin-top: 25px; border-color: var(--accent-purple);">
+        <h2>⚙️ منطق دعم الأدوات في ai_engine_core.js</h2>
+        <p style="font-size: 0.9rem; color: var(--text-dim);">إليك كيف يفرق ملف البرمجة الأساسي بين أدوات السحاب (Cloud) وأدوات الويندوز (Local):</p>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px;">
+            <h4 style="color: var(--accent-blue); margin-top:0;">1. أدوات بيئة GitHub (السحابية):</h4>
+            <p style="font-size: 0.85rem;">تستخدم دالة <code>callBridge()</code> التي ترسل الطلب إلى <code>SUPABASE_BRIDGE_URL</code>. الجسر السحابي هو من يمتلك مفاتيح التشفير للوصول لـ GitHub.</p>
+
+            <h4 style="color: var(--accent-green);">2. أدوات بيئة Windows (المحلية):</h4>
+            <p style="font-size: 0.85rem;">تستخدم دالة <code>callLocalBridge()</code> التي تحاول الاتصال بـ <code>localhost:3000</code>. إذا كان الخادم المحلي يعمل، يتم تنفيذ الأمر مباشرة على جهازك.</p>
+        </div>
+
+        <div class="constitution-block" style="margin-top: 15px; font-size: 0.8rem; color: #afb1b3;">
+// مثال من كود معالجة الأدوات
+if (name === "os_command") {
+    // توجيه ذكي للجسر المحلي
+    toolResult = await callLocalBridge('cmd', { command: args.command });
+} else if (name === "read_file") {
+    // توجيه للجسر السحابي (GitHub)
+    toolResult = await getGithubFileContent(args.path);
+}</div>
+    </div>
+
+    <!-- 10. تفصيل دعم الأدوات الهجينة (Hybrid Wiring) -->
+    <div class="card" style="margin-top: 25px; border-color: var(--accent-purple);">
+        <h2>⚙️ كيف يفرق ai_engine_core.js بين البيئات؟</h2>
+        <p style="font-size: 0.9rem; color: var(--text-dim);">يعتمد "العقل المدبر" على منطق توجيه ذكي للتعامل مع نظامي GitHub وويندوز:</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border-right: 4px solid var(--accent-green);">
+                <h4 style="color: var(--accent-green); margin:0;">أدوات بيئة GitHub</h4>
+                <p style="font-size: 0.8rem;">تستخدم <code>callBridge('github', ...)</code> للاتصال بالجسر السحابي الذي يمتلك توكنات الوصول للمستودع.</p>
+            </div>
+            <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border-right: 4px solid var(--accent-blue);">
+                <h4 style="color: var(--accent-blue); margin:0;">أدوات بيئة Windows</h4>
+                <p style="font-size: 0.8rem;">تستخدم <code>callLocalBridge(...)</code> للاتصال المباشر بمنفذ 3000 على جهازك الشخصي.</p>
+            </div>
+        </div>
+
+        <div class="constitution-block" style="margin-top: 15px; font-size: 0.8rem; color: #4db6ac;">
+// مقتطف من منطق التوجيه في ai_engine_core.js
+if (name === "os_command") {
+    // توجيه محلي (ويندوز)
+    toolResult = await callLocalBridge('cmd', { command: args.command });
+} else if (name === "read_file") {
+    // توجيه سحابي (جت هاب)
+    toolResult = await getGithubFileContent(args.path);
+}</div>
+    </div>
+
+    <!-- 11. تكامل المحركات (API Integration) -->
     <div class="card" style="margin-top: 25px;">
         <h2>🚀 تكامل المحركات والـ APIs</h2>
         <p style="font-size: 0.9rem; color: var(--text-dim);">كيف يتم تعريف ووضع الأدوات في النظام:</p>
