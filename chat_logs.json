@@ -1,6 +1,106 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788448199444",
+      "title": "بالتأكيد، لقد قمت بإرسال أمر ا",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك تشغيل الحاسبة"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [],
+          "model": "gemini-3.5-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك تشغيل حاسبة الويندوز"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "محاولة تشغيل حاسبة الويندوز باستخدام أمر النظام.",
+                  "reasoning": "المستخدم طلب تشغيل حاسبة الويندوز، سأستخدم أمر `start calc` عبر `os_command` لمحاولة فتحها."
+                },
+                "id": "call_684207"
+              },
+              "thoughtSignature": "EnEKbwERTTIPf1V1Qnz4zgPwX5UNe4QLLfdRfp45eoLLHD2v93D+1ap25R8oFhtyp1TR6fWS/sV8eAFNkqw8jOqatlqgK4bWnu0puzyOjPW68eg8Tf0RVhTtDVlmJs4whl6c+6gkjJzBwU+t2aFUKUFuSQ=="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم طلب تشغيل حاسبة الويندوز، سأستخدم أمر `start calc` عبر `os_command` لمحاولة فتحها.",
+                    "plan": "محاولة تشغيل حاسبة الويندوز باستخدام أمر النظام."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "os_command",
+                "args": {
+                  "command": "start calc"
+                },
+                "id": "call_373434"
+              },
+              "thoughtSignature": "EmUKYwERTTIPMQsq1LkSZVlaoYKocdtknG1R0Yeku8mVdG6RM5xwD4aUhy45vK7Ic2xu+HeWLvDFZrSGPiucrGYscOjr8n1gvhUQIcrf5UgS+MWgRgynqQiRGzIU/lFx/7AqRcEy6A=="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "os_command",
+                "response": {
+                  "content": {
+                    "output": ""
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "بالتأكيد، لقد قمت بإرسال أمر التشغيل لنظامك. من المفترض أن تظهر **حاسبة الويندوز (Calculator)** أمامك الآن.\n\nهل هناك أي عملية حسابية معقدة تريد مني مساعدتك في حلها؟",
+              "thoughtSignature": "EmUKYwERTTIPtDaOpMsAF4ClmrNr9FgXIeSY8i6cwLuifs9PizqKG9+PK6g0J9f2RUtECANpidqlmEmi1QuPx8g9WCtYMvHalUmXulfhfDht2zUsCrMtwHEh1rTIb2mHXbIz03A8XQ=="
+            }
+          ],
+          "model": "gemini-3-flash-preview"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788448199444",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك تشغيل الحاسبة\"}]},{\"role\":\"model\",\"parts\":[],\"model\":\"gemini-3.5-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك تشغيل حاسبة الويندوز\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"محاولة تشغيل حاسبة الويندوز باستخدام أمر النظام.\",\"reasoning\":\"المستخدم طلب تشغيل حاسبة الويندوز، سأستخدم أمر `start calc` عبر `os_command` لمحاولة فتحها.\"},\"id\":\"call_684207\"},\"thoughtSignature\":\"EnEKbwERTTIPf1V1Qnz4zgPwX5UNe4QLLfdRfp45eoLLHD2v93D+1ap25R8oFhtyp1TR6fWS/sV8eAFNkqw8jOqatlqgK4bWnu0puzyOjPW68eg8Tf0RVhTtDVlmJs4whl6c+6gkjJzBwU+t2aFUKUFuSQ==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم طلب تشغيل حاسبة الويندوز، سأستخدم أمر `start calc` عبر `os_command` لمحاولة فتحها.\",\"plan\":\"محاولة تشغيل حاسبة الويندوز باستخدام أمر النظام.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"os_command\",\"args\":{\"command\":\"start calc\"},\"id\":\"call_373434\"},\"thoughtSignature\":\"EmUKYwERTTIPMQsq1LkSZVlaoYKocdtknG1R0Yeku8mVdG6RM5xwD4aUhy45vK7Ic2xu+HeWLvDFZrSGPiucrGYscOjr8n1gvhUQIcrf5UgS+MWgRgynqQiRGzIU/lFx/7AqRcEy6A==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"os_command\",\"response\":{\"content\":{\"output\":\"\"}}}}]}]",
-  "timestamp": "2026-09-03T15:10:52.578Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك تشغيل الحاسبة\"}]},{\"role\":\"model\",\"parts\":[],\"model\":\"gemini-3.5-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك تشغيل حاسبة الويندوز\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"محاولة تشغيل حاسبة الويندوز باستخدام أمر النظام.\",\"reasoning\":\"المستخدم طلب تشغيل حاسبة الويندوز، سأستخدم أمر `start calc` عبر `os_command` لمحاولة فتحها.\"},\"id\":\"call_684207\"},\"thoughtSignature\":\"EnEKbwERTTIPf1V1Qnz4zgPwX5UNe4QLLfdRfp45eoLLHD2v93D+1ap25R8oFhtyp1TR6fWS/sV8eAFNkqw8jOqatlqgK4bWnu0puzyOjPW68eg8Tf0RVhTtDVlmJs4whl6c+6gkjJzBwU+t2aFUKUFuSQ==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم طلب تشغيل حاسبة الويندوز، سأستخدم أمر `start calc` عبر `os_command` لمحاولة فتحها.\",\"plan\":\"محاولة تشغيل حاسبة الويندوز باستخدام أمر النظام.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"os_command\",\"args\":{\"command\":\"start calc\"},\"id\":\"call_373434\"},\"thoughtSignature\":\"EmUKYwERTTIPMQsq1LkSZVlaoYKocdtknG1R0Yeku8mVdG6RM5xwD4aUhy45vK7Ic2xu+HeWLvDFZrSGPiucrGYscOjr8n1gvhUQIcrf5UgS+MWgRgynqQiRGzIU/lFx/7AqRcEy6A==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"os_command\",\"response\":{\"content\":{\"output\":\"\"}}}}]},{\"role\":\"model\",\"parts\":[{\"text\":\"بالتأكيد، لقد قمت بإرسال أمر التشغيل لنظامك. من المفترض أن تظهر **حاسبة الويندوز (Calculator)** أمامك الآن.\\n\\nهل هناك أي عملية حسابية معقدة تريد مني مساعدتك في حلها؟\",\"thoughtSignature\":\"EmUKYwERTTIPtDaOpMsAF4ClmrNr9FgXIeSY8i6cwLuifs9PizqKG9+PK6g0J9f2RUtECANpidqlmEmi1QuPx8g9WCtYMvHalUmXulfhfDht2zUsCrMtwHEh1rTIb2mHXbIz03A8XQ==\"}],\"model\":\"gemini-3-flash-preview\"},{\"role\":\"user\",\"parts\":[{\"text\":\"شغلها مرة اخرة\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"os_command\",\"args\":{\"command\":\"start calc\"},\"id\":\"call_467833\"},\"thoughtSignature\":\"EnEKbwERTTIPCCYqt/XrJuhAkxB/u3zcINkhKi0EOWUyyucqfl/TeOOMpu3sS9XghR1EtfEw+rcQEca2/CpaKkJ8XTeFmyPPFq+RZF1ViEnUVP4z2josNd6LUJRvTyAaC+9deBoi8R7wL/TQJQmVnsYmPw==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"os_command\",\"response\":{\"content\":{\"output\":\"\"}}}}]}]",
+  "timestamp": "2026-09-03T15:11:09.888Z"
 }
