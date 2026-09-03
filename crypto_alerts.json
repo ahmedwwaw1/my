@@ -1,5 +1,15 @@
 [
   {
+    "symbol": "BNB/USDT",
+    "price": 702.629,
+    "volume": 5556129.8,
+    "change_percent": 2.45,
+    "volatility": 3.24,
+    "timestamp": "2026-09-03T08:38:11.402701Z",
+    "category": "price_target_hit",
+    "target_hit": true
+  },
+  {
     "symbol": "SOL/USDT",
     "price": 100.92,
     "volume": 26059364.06,
