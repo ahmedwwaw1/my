@@ -1,6 +1,238 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788474990418",
+      "title": "تم إغلاق الحاسبة بنجاح! هل توج",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "افتح الحاسبة"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم طلب فتح الحاسبة، وسأقوم بتنفيذ الأمر المناسب لنظام ويندوز (calc.exe).",
+                  "plan": "فتح برنامج الحاسبة (Calculator) على نظام التشغيل باستخدام أمر نظام (os_command)."
+                },
+                "id": "call_1054230"
+              },
+              "thoughtSignature": "El4KXAERTTIPZ8jy09k2bmawml7OaBk1E50zgRouVcEMXyMA0xRhkiOByXFTob6IrSghw1UNxtTNFaI5mcj0CFjKIesyuMM750L8wPM6z8JROhCI58MevMXg6mZnOX6a"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم طلب فتح الحاسبة، وسأقوم بتنفيذ الأمر المناسب لنظام ويندوز (calc.exe).",
+                    "plan": "فتح برنامج الحاسبة (Calculator) على نظام التشغيل باستخدام أمر نظام (os_command)."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "os_command",
+                "args": {
+                  "command": "calc.exe"
+                },
+                "id": "call_1283264"
+              },
+              "thoughtSignature": "El4KXAERTTIPu1vKd+bMLEnfi/P56JpDFAlvpGyKPhB03p82Hct0+mjiedTjVP0I4IfzGX7rcSTaNwpY/q/U1ugYoBs2XzHJlnvVork7dYjTgmWX1tLvD5d9UiQ44cJW"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "os_command",
+                "response": {
+                  "content": {
+                    "output": ""
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "تم تنفيذ أمر فتح الحاسبة بنجاح.",
+                  "plan": "تأكيد فتح الحاسبة وإبلاغ المستخدم."
+                },
+                "id": "call_1432647"
+              },
+              "thoughtSignature": "El4KXAERTTIPT7YLFueOl6vesouPycoZ12ueQtJrlZl+sl48JlwRakiZrRJYMHqJtbzbfVt8NajawAzXDsIAAvezCIxoUgNlQmGRxGpegZy2JsJcPzHU/VGmHTejXVf7"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "تم تنفيذ أمر فتح الحاسبة بنجاح.",
+                    "plan": "تأكيد فتح الحاسبة وإبلاغ المستخدم."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "تم فتح الحاسبة بنجاح! 🧮 هل تحتاج إلى مساعدة في أي عملية حسابية أخرى؟",
+              "thoughtSignature": "El4KXAERTTIPxWtvmTQzLpDYxRIbuK+pv5eJcOHy9nMkVmhs0pY2brMsK0H2gc64xCRV2wQDL6LJUm86JdxQbvgYYKLkSjY2ispM4T1CRsKOgTcxWamAWJ8XxTTdN4+Q"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "اغلقها"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "إغلاق برنامج الحاسبة (Calculator) باستخدام أمر نظام لإيقاف العمليات المرتبطة بـ CalculatorApp.exe.",
+                  "reasoning": "المستخدم طلب إغلاق الحاسبة، وسأستخدم أمر taskkill في ويندوز لإغلاق تطبيق الحاسبة."
+                },
+                "id": "call_1651848"
+              },
+              "thoughtSignature": "El4KXAERTTIPeApFeMl4fOgwGy/6+WdSUv0y9h97njMIluvSUV1A5F7QgCJSuslYvUGzU1h7dp1M7N/faMDpe/Ar/HBlqID+DQ2LJWhylXWwUU3I4Zyr+zH0dL0wm9pb"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم طلب إغلاق الحاسبة، وسأستخدم أمر taskkill في ويندوز لإغلاق تطبيق الحاسبة.",
+                    "plan": "إغلاق برنامج الحاسبة (Calculator) باستخدام أمر نظام لإيقاف العمليات المرتبطة بـ CalculatorApp.exe."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "os_command",
+                "args": {
+                  "command": "taskkill /f /im CalculatorApp.exe /im calc.exe"
+                },
+                "id": "call_1251872"
+              },
+              "thoughtSignature": "El4KXAERTTIPwESFO3lM/jR4RIVFAhcbHl5fGIpVVkh6DeJaZRE7FAd8X9UI+GJHr1kyU/c3ZFrBCAz+m9jmAGBOqE7hCFZ1Ja5rtXRWBBKMGExhEE6v4CsM+a9dpSYx"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "os_command",
+                "response": {
+                  "content": {
+                    "output": "SUCCESS: The process \"CalculatorApp.exe\" with PID 12780 has been terminated.\r\n",
+                    "error": "ERROR: The process \"calc.exe\" not found.\r\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "تم إغلاق الحاسبة بنجاح.",
+                  "plan": "تأكيد إغلاق الحاسبة للمستخدم."
+                },
+                "id": "call_1591723"
+              },
+              "thoughtSignature": "El4KXAERTTIPK9jYDkW09TxD1DqyM9RmGO8L0/c3ajESMoby9f646RH+6moBClWoZqecp4MKxupmwCJT6FIFbnd7S2FdzlUmvFwpuAMYWKcQe5Xb7EO3vEO1dWoxlfSM"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "تم إغلاق الحاسبة بنجاح.",
+                    "plan": "تأكيد إغلاق الحاسبة للمستخدم."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "تم إغلاق الحاسبة بنجاح! هل توجد أوامر أخرى ترغب في تنفيذها؟",
+              "thoughtSignature": "El4KXAERTTIP6gvAgM194OqVt4f/FfEmZ3r8k1JiNsMNHPClA5M3X4RJRkuMzicKV4Jj9rqBhZxvDW3MCbJyAtgfEni8qYkdGcMRQQ/jJrJ5MPTffosZF1S1Go6Ukmrl"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788474990418",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"افتح الحاسبة\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"المستخدم طلب فتح الحاسبة، وسأقوم بتنفيذ الأمر المناسب لنظام ويندوز (calc.exe).\",\"plan\":\"فتح برنامج الحاسبة (Calculator) على نظام التشغيل باستخدام أمر نظام (os_command).\"},\"id\":\"call_1054230\"},\"thoughtSignature\":\"El4KXAERTTIPZ8jy09k2bmawml7OaBk1E50zgRouVcEMXyMA0xRhkiOByXFTob6IrSghw1UNxtTNFaI5mcj0CFjKIesyuMM750L8wPM6z8JROhCI58MevMXg6mZnOX6a\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم طلب فتح الحاسبة، وسأقوم بتنفيذ الأمر المناسب لنظام ويندوز (calc.exe).\",\"plan\":\"فتح برنامج الحاسبة (Calculator) على نظام التشغيل باستخدام أمر نظام (os_command).\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"os_command\",\"args\":{\"command\":\"calc.exe\"},\"id\":\"call_1283264\"},\"thoughtSignature\":\"El4KXAERTTIPu1vKd+bMLEnfi/P56JpDFAlvpGyKPhB03p82Hct0+mjiedTjVP0I4IfzGX7rcSTaNwpY/q/U1ugYoBs2XzHJlnvVork7dYjTgmWX1tLvD5d9UiQ44cJW\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"os_command\",\"response\":{\"content\":{\"output\":\"\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"تم تنفيذ أمر فتح الحاسبة بنجاح.\",\"plan\":\"تأكيد فتح الحاسبة وإبلاغ المستخدم.\"},\"id\":\"call_1432647\"},\"thoughtSignature\":\"El4KXAERTTIPT7YLFueOl6vesouPycoZ12ueQtJrlZl+sl48JlwRakiZrRJYMHqJtbzbfVt8NajawAzXDsIAAvezCIxoUgNlQmGRxGpegZy2JsJcPzHU/VGmHTejXVf7\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"تم تنفيذ أمر فتح الحاسبة بنجاح.\",\"plan\":\"تأكيد فتح الحاسبة وإبلاغ المستخدم.\"}}}}]}]",
-  "timestamp": "2026-09-03T22:36:50.130Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-03T22:36:58.800Z"
 }
