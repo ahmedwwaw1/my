@@ -1,6 +1,46 @@
 [
   {
     "symbol": "BNB/USDT",
+    "price": 724.86,
+    "volume": 6980987.91,
+    "change_percent": 4.58,
+    "volatility": 5.56,
+    "timestamp": "2026-09-04T03:20:37.594523Z",
+    "category": "price_target_hit",
+    "target_hit": true
+  },
+  {
+    "symbol": "SOL/USDT",
+    "price": 103.86,
+    "volume": 32957438.93,
+    "change_percent": 2.64,
+    "volatility": 5.95,
+    "timestamp": "2026-09-04T03:20:37.464321Z",
+    "category": "price_target_hit",
+    "target_hit": true
+  },
+  {
+    "symbol": "ETH/USDT",
+    "price": 2511.67,
+    "volume": 141447632.72,
+    "change_percent": 4.21,
+    "volatility": 5.96,
+    "timestamp": "2026-09-04T03:20:37.328873Z",
+    "category": "high_volume_with_analytics",
+    "target_hit": false
+  },
+  {
+    "symbol": "BTC/USDT",
+    "price": 80918.1,
+    "volume": 493980737.17,
+    "change_percent": 3.92,
+    "volatility": 6.38,
+    "timestamp": "2026-09-04T03:20:37.190292Z",
+    "category": "price_target_hit",
+    "target_hit": true
+  },
+  {
+    "symbol": "BNB/USDT",
     "price": 702.629,
     "volume": 5556129.8,
     "change_percent": 2.45,
