@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788501123067",
-      "title": "أهلاً بك! بيئة موجه الأوامر (*",
+      "title": "تم تشغيل **PowerShell** بنجاح!",
       "history": [
         {
           "role": "user",
@@ -114,11 +114,122 @@
             }
           ],
           "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "شغل PowerShell"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "التحقق من تنفيذ أمر PowerShell واستعراض معلومات النظام الأساسية للتأكد من جاهزية بيئة PowerShell وعرض النتيجة للمستخدم.",
+                  "reasoning": "المستخدم طلب تشغيل PowerShell. سأقوم بتنفيذ أمر بسيط عبر PowerShell لجلب إصدار النظام أو معلومات سريعة مع تلبية طلبه باحترافية."
+                },
+                "id": "call_1640460"
+              },
+              "thoughtSignature": "El4KXAERTTIPfipHTFI1mjDV0R/4jftP7n9P+gB8xNanl5JR8atQXEU7yF+lXxYCoEVCvmP51NzC9ZaKYMA/MgzDadzUF4mk7HP6rs5Je6fJ/HEIpyJhZBWjHJnHnUUm"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم طلب تشغيل PowerShell. سأقوم بتنفيذ أمر بسيط عبر PowerShell لجلب إصدار النظام أو معلومات سريعة مع تلبية طلبه باحترافية.",
+                    "plan": "التحقق من تنفيذ أمر PowerShell واستعراض معلومات النظام الأساسية للتأكد من جاهزية بيئة PowerShell وعرض النتيجة للمستخدم."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "os_command",
+                "args": {
+                  "command": "powershell -Command \"$PSVersionTable.PSVersion\""
+                },
+                "id": "call_2030337"
+              },
+              "thoughtSignature": "Eu0BCuoBARFNMg+rkQr8Zl3cAmVaxZVI5E/enwSfflhYBOEY2n1I3AsqF/0GLMZ7S2JPZz8pIR6UjV67TLl14mmhlP1X+860YVQWICocUyfoKHpiVf12ltByLxhttemYB5B3b49iSvJ+jDVQX2qBCmzAWqkCOSx65NO5hZ0BiN3cf63fOr81RQokexILmtRk1y6HKq0T6mXUYnwXxe9OwYsuNtOrWVeguX6Q1YgodNPf2v7wn/uI0XahJYClulIkohLrw731OgaMHAHOZtPGT4nVWFeKOMXVIMClEvPueI5f0cZiCHuz5gp5/65skvjJ"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "os_command",
+                "response": {
+                  "content": {
+                    "output": "\r\nMajor  Minor  Build  Revision\r\n-----  -----  -----  --------\r\n5      1      26100  9168    \r\n\r\n\r\n"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "تم تشغيل PowerShell بنجاح وتم جلب إصدار PowerShell (الإصدار 5.1). أنا جاهز لأي أوامر إضافية يطلبها المستخدم.",
+                  "plan": "تقديم النتيجة للمستخدم وإخباره بأن PowerShell تعمل بكفاءة تامة وجاهزة لتلقي أي أوامر برمجية أو إدارية."
+                },
+                "id": "call_1581298"
+              },
+              "thoughtSignature": "EoQBCoEBARFNMg9p9cwSgT2SpI199YeB7yO7K21BIjXil5yZino6LCmtlNm9by/YMmhpjxfRETsULxFU1AnfarvDr209Xi68aaJtXiCmwovwlvMmqnRCclfl4VMI3z7OdW5u1NqZU/seEYndq9kg87WmS14cIOkYMM4h7lvK4Ojr39wdB8W7"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "تم تشغيل PowerShell بنجاح وتم جلب إصدار PowerShell (الإصدار 5.1). أنا جاهز لأي أوامر إضافية يطلبها المستخدم.",
+                    "plan": "تقديم النتيجة للمستخدم وإخباره بأن PowerShell تعمل بكفاءة تامة وجاهزة لتلقي أي أوامر برمجية أو إدارية."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "تم تشغيل **PowerShell** بنجاح! 🚀\n\nإليك معلومات الإصدار الحالي للـ PowerShell على جهازك:\n- **الإصدار (Version):** 5.1.26100.9168\n\nالبيئة جاهزة تماماً لأي أوامر أو سكريبتات (PowerShell / CMD). تفضل بطرح ما تريد تنفيذه أو الاستعلام عنه!"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1788501123067",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"شغل الcmd\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"التحقق من توفر أداة os_command واستكشاف النظام المتاح أو الاستفسار عن الأمر المطلوب تشغيله في CMD.\",\"reasoning\":\"المستخدم طلب 'شغل الcmd'. لدينا أداة os_command لتنفيذ أوامر النظام. سأتحقق من إمكانية تنفيذ أمر بسيط مثل `cmd.exe /c dir` أو `whoami` أو استجابة المستخدم مع تقديم المساعدة الفورية بأسلوب احترافي وواضح.\"},\"id\":\"call_1437723\"},\"thoughtSignature\":\"Eq4FCqsFARFNMg/Ye4aXwo0uD3SM2RNck0lMeo1DxgpKazRuTmLvZOs0iIrOfbM2/7/M0dg1VnM7IxQL8TLdOg38C4jpUZE73tXAxyc2dmwGn/DTXM7ZPCRz9BT+YcQhfILqHdHBtZN0CEq83z6VH1DLS7qGNIxt/OFGO0s2qKGm5WSNi/kQ3zGE7PHqJ0+wMizDSigJ+fzPHdz3nlMLcaJh4G7qBfsY6omaJ83yqP0C5q9yNU4IGnzHTamwegVhdXwi7nm0N39N6PBLTYlFBL+I/QqKYbkTWOFi5BRZaLwzAN+6fReEq39+ZFLNWZW3+S0SUqq2UHHFYvE7QlHqWotQl2CDlOYO4uEXcg4zjpWLUntcFbmaMAVyiNp/KSGPWpd5491YrnZPmjSTrhcsOt7/mYdu45+GOXaKbHpEaci18bfBk+oS5AQwTZYe4X3Z7cj+palZgJKyuUSY5GOqw6vmnFdNKIszR7KSjbY+Fs0PlVHoXqXb+PzGKg9M/iR0s7qYD0dgU0vGsCGO7rkTPoGi5dBKrioqHdrdKzXrMty+bVvLzdEpLSZ5go9xoF9VJ/SzgyB+F9MOvl5KJ0gNDecfLY+ct9fpBxb548FoAKE1+y021iVQv0pNoiXSOsJkguSelkLS1Mch43O0/u7XZNOdh5+uvwYVbea9IVxU85aEnKhyZCaa+BG5fXm5cmyuBsgxnReVGzI7qd4mzBvph56YxPnImsyPY5O6Nz6Nw0K+l/UTZzGx+h5N6rTpj8QQc31ZTm2nE03erqpQ1QjVq4pFE6Z/2FFk6EoJUk/e/MziXCXk1leFJ7nmT6rjZObZWzmhWvtQSP+Fea//hKoUiyQmgXoMsvcFQx0Ge8HbDYOW4EAD9ZXa/XvB43zY4ouk7PeFNnJymFoTMiJmmVqqWLQ=\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم طلب 'شغل الcmd'. لدينا أداة os_command لتنفيذ أوامر النظام. سأتحقق من إمكانية تنفيذ أمر بسيط مثل `cmd.exe /c dir` أو `whoami` أو استجابة المستخدم مع تقديم المساعدة الفورية بأسلوب احترافي وواضح.\",\"plan\":\"التحقق من توفر أداة os_command واستكشاف النظام المتاح أو الاستفسار عن الأمر المطلوب تشغيله في CMD.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"os_command\",\"args\":{\"command\":\"whoami\"},\"id\":\"call_1816282\"},\"thoughtSignature\":\"EpACCo0CARFNMg8ChHHhUYysdAW+k29QThlvI2hcp0zjNSxf0UI5kLkYqvkib/eIkAZUg81LnlsMvu4SiFKbcs+vurtgHwJO+hcs/EOJzzjOrx1nQfvqojtjpMSbv7++uo9k7FD1xSaxKAt8XZw7oD/Ehc6xvDqfrG1BZQmExiQUFVNmN/11pIL2skVqwffOGSRS06NKgWB5YbrcakSrVUMNIOLfA5ClBmkQvWj4M7Xu3UF1sN/eJ3gtJKbqXvDFGmmWWqYh+ob3T0TQZ3F/lE4hhwS12LhQbkT5MzVbIk0C3JO6H96OAVtfThJmJWY3wIYK1YrlOR/Pgf5M0j+lYKasHsAs6pjll/+nr7D3diZVPuA=\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"os_command\",\"response\":{\"content\":{\"output\":\"desktop-ud5o7q3\\\\pc\\r\\n\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"تأكيد تشغيل وجاهزية بيئة الأوامر (CMD) مع الترحيب بالمسخدم وطلب الأمر المراد تنفيذه.\",\"reasoning\":\"تم التحقق من تشغيل واجهة الأوامر المحلية بنجاح وهي جاهزة لاستقبال أي أوامر أو برامج نصية يريد المستخدم تشغيلها.\"},\"id\":\"call_1763738\"},\"thoughtSignature\":\"EpcECpQEARFNMg9kRaTCiZombaXWxf6zvucDg8qzkb298JL4ikr138iRMvppLHRGHRLouF6ipgq7W0iJ2g90ldgkpUlSg9UdBDuBBVEaYDaVzoOw+QqJgVa3v/QHytqcbve+oFuSgJmVnnbk6RJI5esjMqspKVYKqQueLPcYAMwp8lAd3SQptnvpv9/JB8zqSVjP/77FMHL97OLRQtJsuki1lthOgm/dBZBZpIwxDIPv07EbhSbX2IEq+a8jXk0PLCqvR6JRtSJV6XzsiPZxt4XYcrYVwTrQKI32Vjg1RGJcXeTwZT4FlSmr65DVvA9UzXOCpH4a/H6kpIkRQcPTMGhfOmTA0pU/F3cl435qHaAU3WphEh69G5tQHGxj92JYwWkXIA3d5FsJOBYl8KaCZEq2CL+u2uKV+VqffnmwoM3mMVS8ewRPRzwVh5hE7hrjhRGkkuSDe2Ok/OYfEQR8BnDQgqAiN0g5XDBgAbNRoo7JNPVLelT/Y5HkgY1EGtl44h8iGbxF2sfg3cZqrxh5nVRVhSWsqgjptbXWuotaHgi7qtStUFIaQrSScv/jNxVoNWA6AEjmPWnk9BYq9kDSwJvjb1EE8LzOhpDfTWTwvmrtTwhNkowsqrGyU3/MB6ulNXT8D482RlJ1TvmKhpltDbgIDMmR7r2jwVQV9Sv8sF+IU39ufGN04psf5XK6082NzO/se2By4MVvuQ==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"تم التحقق من تشغيل واجهة الأوامر المحلية بنجاح وهي جاهزة لاستقبال أي أوامر أو برامج نصية يريد المستخدم تشغيلها.\",\"plan\":\"تأكيد تشغيل وجاهزية بيئة الأوامر (CMD) مع الترحيب بالمسخدم وطلب الأمر المراد تنفيذه.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك! بيئة موجه الأوامر (**CMD / PowerShell**) متصلة وجاهزة تماماً لتنفيذ أي أوامر أو سكريبتات على الجهاز.\\n\\nما هو الأمر أو المهمة التي ترغب في تشغيلها؟ \\n\\n**أمثلة لما يمكننا القيام به:**\\n1. **استعراض الملفات والمجلدات:** مثل `dir` أو `ls`.\\n2. **فحص شبكة الاتصال:** مثل `ipconfig` أو `ping`.\\n3. **تشغيل وتفقد البرامج والخدمات:** مثل `systeminfo` أو `tasklist`.\\n4. **تنفيذ سكريبتات أو أوامر مخصصة** (Python, Node.js, Git, إلخ).\\n\\nاكتب الأمر الذي تريد تنفيذه وسأقوم بتشغيله لك فوراً!\"}],\"model\":\"gemini-3.6-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"شغل PowerShell\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"التحقق من تنفيذ أمر PowerShell واستعراض معلومات النظام الأساسية للتأكد من جاهزية بيئة PowerShell وعرض النتيجة للمستخدم.\",\"reasoning\":\"المستخدم طلب تشغيل PowerShell. سأقوم بتنفيذ أمر بسيط عبر PowerShell لجلب إصدار النظام أو معلومات سريعة مع تلبية طلبه باحترافية.\"},\"id\":\"call_1640460\"},\"thoughtSignature\":\"El4KXAERTTIPfipHTFI1mjDV0R/4jftP7n9P+gB8xNanl5JR8atQXEU7yF+lXxYCoEVCvmP51NzC9ZaKYMA/MgzDadzUF4mk7HP6rs5Je6fJ/HEIpyJhZBWjHJnHnUUm\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم طلب تشغيل PowerShell. سأقوم بتنفيذ أمر بسيط عبر PowerShell لجلب إصدار النظام أو معلومات سريعة مع تلبية طلبه باحترافية.\",\"plan\":\"التحقق من تنفيذ أمر PowerShell واستعراض معلومات النظام الأساسية للتأكد من جاهزية بيئة PowerShell وعرض النتيجة للمستخدم.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"os_command\",\"args\":{\"command\":\"powershell -Command \\\"$PSVersionTable.PSVersion\\\"\"},\"id\":\"call_2030337\"},\"thoughtSignature\":\"Eu0BCuoBARFNMg+rkQr8Zl3cAmVaxZVI5E/enwSfflhYBOEY2n1I3AsqF/0GLMZ7S2JPZz8pIR6UjV67TLl14mmhlP1X+860YVQWICocUyfoKHpiVf12ltByLxhttemYB5B3b49iSvJ+jDVQX2qBCmzAWqkCOSx65NO5hZ0BiN3cf63fOr81RQokexILmtRk1y6HKq0T6mXUYnwXxe9OwYsuNtOrWVeguX6Q1YgodNPf2v7wn/uI0XahJYClulIkohLrw731OgaMHAHOZtPGT4nVWFeKOMXVIMClEvPueI5f0cZiCHuz5gp5/65skvjJ\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"os_command\",\"response\":{\"content\":{\"output\":\"\\r\\nMajor  Minor  Build  Revision\\r\\n-----  -----  -----  --------\\r\\n5      1      26100  9168    \\r\\n\\r\\n\\r\\n\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"تم تشغيل PowerShell بنجاح وتم جلب إصدار PowerShell (الإصدار 5.1). أنا جاهز لأي أوامر إضافية يطلبها المستخدم.\",\"plan\":\"تقديم النتيجة للمستخدم وإخباره بأن PowerShell تعمل بكفاءة تامة وجاهزة لتلقي أي أوامر برمجية أو إدارية.\"},\"id\":\"call_1581298\"},\"thoughtSignature\":\"EoQBCoEBARFNMg9p9cwSgT2SpI199YeB7yO7K21BIjXil5yZino6LCmtlNm9by/YMmhpjxfRETsULxFU1AnfarvDr209Xi68aaJtXiCmwovwlvMmqnRCclfl4VMI3z7OdW5u1NqZU/seEYndq9kg87WmS14cIOkYMM4h7lvK4Ojr39wdB8W7\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"تم تشغيل PowerShell بنجاح وتم جلب إصدار PowerShell (الإصدار 5.1). أنا جاهز لأي أوامر إضافية يطلبها المستخدم.\",\"plan\":\"تقديم النتيجة للمستخدم وإخباره بأن PowerShell تعمل بكفاءة تامة وجاهزة لتلقي أي أوامر برمجية أو إدارية.\"}}}}]}]",
-  "timestamp": "2026-09-04T05:58:31.910Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"شغل الcmd\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"التحقق من توفر أداة os_command واستكشاف النظام المتاح أو الاستفسار عن الأمر المطلوب تشغيله في CMD.\",\"reasoning\":\"المستخدم طلب 'شغل الcmd'. لدينا أداة os_command لتنفيذ أوامر النظام. سأتحقق من إمكانية تنفيذ أمر بسيط مثل `cmd.exe /c dir` أو `whoami` أو استجابة المستخدم مع تقديم المساعدة الفورية بأسلوب احترافي وواضح.\"},\"id\":\"call_1437723\"},\"thoughtSignature\":\"Eq4FCqsFARFNMg/Ye4aXwo0uD3SM2RNck0lMeo1DxgpKazRuTmLvZOs0iIrOfbM2/7/M0dg1VnM7IxQL8TLdOg38C4jpUZE73tXAxyc2dmwGn/DTXM7ZPCRz9BT+YcQhfILqHdHBtZN0CEq83z6VH1DLS7qGNIxt/OFGO0s2qKGm5WSNi/kQ3zGE7PHqJ0+wMizDSigJ+fzPHdz3nlMLcaJh4G7qBfsY6omaJ83yqP0C5q9yNU4IGnzHTamwegVhdXwi7nm0N39N6PBLTYlFBL+I/QqKYbkTWOFi5BRZaLwzAN+6fReEq39+ZFLNWZW3+S0SUqq2UHHFYvE7QlHqWotQl2CDlOYO4uEXcg4zjpWLUntcFbmaMAVyiNp/KSGPWpd5491YrnZPmjSTrhcsOt7/mYdu45+GOXaKbHpEaci18bfBk+oS5AQwTZYe4X3Z7cj+palZgJKyuUSY5GOqw6vmnFdNKIszR7KSjbY+Fs0PlVHoXqXb+PzGKg9M/iR0s7qYD0dgU0vGsCGO7rkTPoGi5dBKrioqHdrdKzXrMty+bVvLzdEpLSZ5go9xoF9VJ/SzgyB+F9MOvl5KJ0gNDecfLY+ct9fpBxb548FoAKE1+y021iVQv0pNoiXSOsJkguSelkLS1Mch43O0/u7XZNOdh5+uvwYVbea9IVxU85aEnKhyZCaa+BG5fXm5cmyuBsgxnReVGzI7qd4mzBvph56YxPnImsyPY5O6Nz6Nw0K+l/UTZzGx+h5N6rTpj8QQc31ZTm2nE03erqpQ1QjVq4pFE6Z/2FFk6EoJUk/e/MziXCXk1leFJ7nmT6rjZObZWzmhWvtQSP+Fea//hKoUiyQmgXoMsvcFQx0Ge8HbDYOW4EAD9ZXa/XvB43zY4ouk7PeFNnJymFoTMiJmmVqqWLQ=\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم طلب 'شغل الcmd'. لدينا أداة os_command لتنفيذ أوامر النظام. سأتحقق من إمكانية تنفيذ أمر بسيط مثل `cmd.exe /c dir` أو `whoami` أو استجابة المستخدم مع تقديم المساعدة الفورية بأسلوب احترافي وواضح.\",\"plan\":\"التحقق من توفر أداة os_command واستكشاف النظام المتاح أو الاستفسار عن الأمر المطلوب تشغيله في CMD.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"os_command\",\"args\":{\"command\":\"whoami\"},\"id\":\"call_1816282\"},\"thoughtSignature\":\"EpACCo0CARFNMg8ChHHhUYysdAW+k29QThlvI2hcp0zjNSxf0UI5kLkYqvkib/eIkAZUg81LnlsMvu4SiFKbcs+vurtgHwJO+hcs/EOJzzjOrx1nQfvqojtjpMSbv7++uo9k7FD1xSaxKAt8XZw7oD/Ehc6xvDqfrG1BZQmExiQUFVNmN/11pIL2skVqwffOGSRS06NKgWB5YbrcakSrVUMNIOLfA5ClBmkQvWj4M7Xu3UF1sN/eJ3gtJKbqXvDFGmmWWqYh+ob3T0TQZ3F/lE4hhwS12LhQbkT5MzVbIk0C3JO6H96OAVtfThJmJWY3wIYK1YrlOR/Pgf5M0j+lYKasHsAs6pjll/+nr7D3diZVPuA=\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"os_command\",\"response\":{\"content\":{\"output\":\"desktop-ud5o7q3\\\\pc\\r\\n\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"تأكيد تشغيل وجاهزية بيئة الأوامر (CMD) مع الترحيب بالمسخدم وطلب الأمر المراد تنفيذه.\",\"reasoning\":\"تم التحقق من تشغيل واجهة الأوامر المحلية بنجاح وهي جاهزة لاستقبال أي أوامر أو برامج نصية يريد المستخدم تشغيلها.\"},\"id\":\"call_1763738\"},\"thoughtSignature\":\"EpcECpQEARFNMg9kRaTCiZombaXWxf6zvucDg8qzkb298JL4ikr138iRMvppLHRGHRLouF6ipgq7W0iJ2g90ldgkpUlSg9UdBDuBBVEaYDaVzoOw+QqJgVa3v/QHytqcbve+oFuSgJmVnnbk6RJI5esjMqspKVYKqQueLPcYAMwp8lAd3SQptnvpv9/JB8zqSVjP/77FMHL97OLRQtJsuki1lthOgm/dBZBZpIwxDIPv07EbhSbX2IEq+a8jXk0PLCqvR6JRtSJV6XzsiPZxt4XYcrYVwTrQKI32Vjg1RGJcXeTwZT4FlSmr65DVvA9UzXOCpH4a/H6kpIkRQcPTMGhfOmTA0pU/F3cl435qHaAU3WphEh69G5tQHGxj92JYwWkXIA3d5FsJOBYl8KaCZEq2CL+u2uKV+VqffnmwoM3mMVS8ewRPRzwVh5hE7hrjhRGkkuSDe2Ok/OYfEQR8BnDQgqAiN0g5XDBgAbNRoo7JNPVLelT/Y5HkgY1EGtl44h8iGbxF2sfg3cZqrxh5nVRVhSWsqgjptbXWuotaHgi7qtStUFIaQrSScv/jNxVoNWA6AEjmPWnk9BYq9kDSwJvjb1EE8LzOhpDfTWTwvmrtTwhNkowsqrGyU3/MB6ulNXT8D482RlJ1TvmKhpltDbgIDMmR7r2jwVQV9Sv8sF+IU39ufGN04psf5XK6082NzO/se2By4MVvuQ==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"تم التحقق من تشغيل واجهة الأوامر المحلية بنجاح وهي جاهزة لاستقبال أي أوامر أو برامج نصية يريد المستخدم تشغيلها.\",\"plan\":\"تأكيد تشغيل وجاهزية بيئة الأوامر (CMD) مع الترحيب بالمسخدم وطلب الأمر المراد تنفيذه.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك! بيئة موجه الأوامر (**CMD / PowerShell**) متصلة وجاهزة تماماً لتنفيذ أي أوامر أو سكريبتات على الجهاز.\\n\\nما هو الأمر أو المهمة التي ترغب في تشغيلها؟ \\n\\n**أمثلة لما يمكننا القيام به:**\\n1. **استعراض الملفات والمجلدات:** مثل `dir` أو `ls`.\\n2. **فحص شبكة الاتصال:** مثل `ipconfig` أو `ping`.\\n3. **تشغيل وتفقد البرامج والخدمات:** مثل `systeminfo` أو `tasklist`.\\n4. **تنفيذ سكريبتات أو أوامر مخصصة** (Python, Node.js, Git, إلخ).\\n\\nاكتب الأمر الذي تريد تنفيذه وسأقوم بتشغيله لك فوراً!\"}],\"model\":\"gemini-3.6-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"شغل PowerShell\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"التحقق من تنفيذ أمر PowerShell واستعراض معلومات النظام الأساسية للتأكد من جاهزية بيئة PowerShell وعرض النتيجة للمستخدم.\",\"reasoning\":\"المستخدم طلب تشغيل PowerShell. سأقوم بتنفيذ أمر بسيط عبر PowerShell لجلب إصدار النظام أو معلومات سريعة مع تلبية طلبه باحترافية.\"},\"id\":\"call_1640460\"},\"thoughtSignature\":\"El4KXAERTTIPfipHTFI1mjDV0R/4jftP7n9P+gB8xNanl5JR8atQXEU7yF+lXxYCoEVCvmP51NzC9ZaKYMA/MgzDadzUF4mk7HP6rs5Je6fJ/HEIpyJhZBWjHJnHnUUm\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم طلب تشغيل PowerShell. سأقوم بتنفيذ أمر بسيط عبر PowerShell لجلب إصدار النظام أو معلومات سريعة مع تلبية طلبه باحترافية.\",\"plan\":\"التحقق من تنفيذ أمر PowerShell واستعراض معلومات النظام الأساسية للتأكد من جاهزية بيئة PowerShell وعرض النتيجة للمستخدم.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"os_command\",\"args\":{\"command\":\"powershell -Command \\\"$PSVersionTable.PSVersion\\\"\"},\"id\":\"call_2030337\"},\"thoughtSignature\":\"Eu0BCuoBARFNMg+rkQr8Zl3cAmVaxZVI5E/enwSfflhYBOEY2n1I3AsqF/0GLMZ7S2JPZz8pIR6UjV67TLl14mmhlP1X+860YVQWICocUyfoKHpiVf12ltByLxhttemYB5B3b49iSvJ+jDVQX2qBCmzAWqkCOSx65NO5hZ0BiN3cf63fOr81RQokexILmtRk1y6HKq0T6mXUYnwXxe9OwYsuNtOrWVeguX6Q1YgodNPf2v7wn/uI0XahJYClulIkohLrw731OgaMHAHOZtPGT4nVWFeKOMXVIMClEvPueI5f0cZiCHuz5gp5/65skvjJ\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"os_command\",\"response\":{\"content\":{\"output\":\"\\r\\nMajor  Minor  Build  Revision\\r\\n-----  -----  -----  --------\\r\\n5      1      26100  9168    \\r\\n\\r\\n\\r\\n\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"تم تشغيل PowerShell بنجاح وتم جلب إصدار PowerShell (الإصدار 5.1). أنا جاهز لأي أوامر إضافية يطلبها المستخدم.\",\"plan\":\"تقديم النتيجة للمستخدم وإخباره بأن PowerShell تعمل بكفاءة تامة وجاهزة لتلقي أي أوامر برمجية أو إدارية.\"},\"id\":\"call_1581298\"},\"thoughtSignature\":\"EoQBCoEBARFNMg9p9cwSgT2SpI199YeB7yO7K21BIjXil5yZino6LCmtlNm9by/YMmhpjxfRETsULxFU1AnfarvDr209Xi68aaJtXiCmwovwlvMmqnRCclfl4VMI3z7OdW5u1NqZU/seEYndq9kg87WmS14cIOkYMM4h7lvK4Ojr39wdB8W7\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"تم تشغيل PowerShell بنجاح وتم جلب إصدار PowerShell (الإصدار 5.1). أنا جاهز لأي أوامر إضافية يطلبها المستخدم.\",\"plan\":\"تقديم النتيجة للمستخدم وإخباره بأن PowerShell تعمل بكفاءة تامة وجاهزة لتلقي أي أوامر برمجية أو إدارية.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"text\":\"تم تشغيل **PowerShell** بنجاح! 🚀\\n\\nإليك معلومات الإصدار الحالي للـ PowerShell على جهازك:\\n- **الإصدار (Version):** 5.1.26100.9168\\n\\nالبيئة جاهزة تماماً لأي أوامر أو سكريبتات (PowerShell / CMD). تفضل بطرح ما تريد تنفيذه أو الاستعلام عنه!\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"شغل PowerShell\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"os_command\",\"args\":{\"command\":\"powershell -Command \\\"Get-Date\\\"\"},\"id\":\"call_1056684\"},\"thoughtSignature\":\"EnEKbwERTTIPBSOwBwInqtb6Md+sYLQKcZ+0EwOkEjyoGf+060Q9hoJyZCd2RWPA5NkG/boO/wkTHpjdhsoNihwFpdJhbatL95c1FeaRdT0TVCkCJS7VvjjQ/3Kbx0/pvHmKTzuEyAND4diTWTDue/AWvw==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"os_command\",\"response\":{\"content\":{\"output\":\"\\r\\nFriday, September 4, 2026 8:59:09 AM\\r\\n\\r\\n\\r\\n\"}}}}]}]",
+  "timestamp": "2026-09-04T05:59:19.526Z"
 }
