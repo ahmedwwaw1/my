@@ -1,6 +1,63 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788637914434",
+      "title": "نعم، بكل تأكيد! أستطيع البحث ف",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمنك البحث في GOOGLE_SEARCH"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم يسأل عما إذا كان بإمكاني البحث في Google Search، وامتلك أداة web_search الفعالة للقيام بذلك.",
+                  "plan": "الرد على المستخدم وتوضيح توفر إمكانية البحث في الإنترنت (Google Search) وجاهزية المساعدة في أي استعلام أو بحث يحتاجه."
+                },
+                "id": "call_1482825"
+              },
+              "thoughtSignature": "El4KXAERTTIPDm8YlkDSVpya8PRe4rBOIVjh5HMDN2cKctFKEGjsTp0EFajCC5uWl941h9zybs1lgBViEcuiCuaIpeUBAh64GDLVJWsiwao+06ts210SYwEwWU/QIHVz"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يسأل عما إذا كان بإمكاني البحث في Google Search، وامتلك أداة web_search الفعالة للقيام بذلك.",
+                    "plan": "الرد على المستخدم وتوضيح توفر إمكانية البحث في الإنترنت (Google Search) وجاهزية المساعدة في أي استعلام أو بحث يحتاجه."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "نعم، بكل تأكيد! أستطيع البحث في شبكة الإنترنت وجلب أحدث المعلومات، الأخبار، المقالات، والبيانات التقنية بدقة وسرعة. \n\nما الذي تود البحث عنه أو الاستفسار عنه اليوم؟ تفضل بطرح سؤالك أو موضوعك وسأقوم بالبحث عنه فوراً!",
+              "thoughtSignature": "El4KXAERTTIPzOQVx+2Heg1I+MWI/nuJ4/LwEh6trJO+Z7RzGRIZz9mdLBWQNriUt2t+uih97vl6ZoxlU613BpkC0k/OPtSY8JDRRDjgjpYkvdiqIvTz4uOL0JkKT8xo"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788637914434",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمنك البحث في GOOGLE_SEARCH\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"المستخدم يسأل عما إذا كان بإمكاني البحث في Google Search، وامتلك أداة web_search الفعالة للقيام بذلك.\",\"plan\":\"الرد على المستخدم وتوضيح توفر إمكانية البحث في الإنترنت (Google Search) وجاهزية المساعدة في أي استعلام أو بحث يحتاجه.\"},\"id\":\"call_1482825\"},\"thoughtSignature\":\"El4KXAERTTIPDm8YlkDSVpya8PRe4rBOIVjh5HMDN2cKctFKEGjsTp0EFajCC5uWl941h9zybs1lgBViEcuiCuaIpeUBAh64GDLVJWsiwao+06ts210SYwEwWU/QIHVz\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يسأل عما إذا كان بإمكاني البحث في Google Search، وامتلك أداة web_search الفعالة للقيام بذلك.\",\"plan\":\"الرد على المستخدم وتوضيح توفر إمكانية البحث في الإنترنت (Google Search) وجاهزية المساعدة في أي استعلام أو بحث يحتاجه.\"}}}}]}]",
-  "timestamp": "2026-09-05T19:52:17.343Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمنك البحث في GOOGLE_SEARCH\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"المستخدم يسأل عما إذا كان بإمكاني البحث في Google Search، وامتلك أداة web_search الفعالة للقيام بذلك.\",\"plan\":\"الرد على المستخدم وتوضيح توفر إمكانية البحث في الإنترنت (Google Search) وجاهزية المساعدة في أي استعلام أو بحث يحتاجه.\"},\"id\":\"call_1482825\"},\"thoughtSignature\":\"El4KXAERTTIPDm8YlkDSVpya8PRe4rBOIVjh5HMDN2cKctFKEGjsTp0EFajCC5uWl941h9zybs1lgBViEcuiCuaIpeUBAh64GDLVJWsiwao+06ts210SYwEwWU/QIHVz\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يسأل عما إذا كان بإمكاني البحث في Google Search، وامتلك أداة web_search الفعالة للقيام بذلك.\",\"plan\":\"الرد على المستخدم وتوضيح توفر إمكانية البحث في الإنترنت (Google Search) وجاهزية المساعدة في أي استعلام أو بحث يحتاجه.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"text\":\"نعم، بكل تأكيد! أستطيع البحث في شبكة الإنترنت وجلب أحدث المعلومات، الأخبار، المقالات، والبيانات التقنية بدقة وسرعة. \\n\\nما الذي تود البحث عنه أو الاستفسار عنه اليوم؟ تفضل بطرح سؤالك أو موضوعك وسأقوم بالبحث عنه فوراً!\",\"thoughtSignature\":\"El4KXAERTTIPzOQVx+2Heg1I+MWI/nuJ4/LwEh6trJO+Z7RzGRIZz9mdLBWQNriUt2t+uih97vl6ZoxlU613BpkC0k/OPtSY8JDRRDjgjpYkvdiqIvTz4uOL0JkKT8xo\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف تسطيع البحث عبر GOOGLE_SEARCH\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"المستخدم يسأل عن الكيفية التقنية أو الآلية التي أستطيع من خلالها البحث عبر Google Search.\",\"plan\":\"شرح آلية عمل أداة البحث المتاحة لي (web_search) وكيفية استخدامها لجلب أحدث المعلومات من الإنترنت بدقة عالية وتحليلها للمستخدم.\"},\"id\":\"call_691568\"},\"thoughtSignature\":\"El4KXAERTTIPaYg9oe+0dNsyB5qQYcDtdipTcmJYGpGFci3eXcAABLuKNQxineWhP4MhQd/5B1KQBZxYHtk+whhQi6UaBL1sWnpA5ZB/4q+PrYgZKtnMfLeoSjRWyRBL\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يسأل عن الكيفية التقنية أو الآلية التي أستطيع من خلالها البحث عبر Google Search.\",\"plan\":\"شرح آلية عمل أداة البحث المتاحة لي (web_search) وكيفية استخدامها لجلب أحدث المعلومات من الإنترنت بدقة عالية وتحليلها للمستخدم.\"}}}}]}]",
+  "timestamp": "2026-09-05T19:52:34.230Z"
 }
