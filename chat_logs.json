@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788637914434",
-      "title": "نعم، بكل تأكيد! أستطيع البحث ف",
+      "title": "أهلاً بك للتوضيح التقني الدقيق",
       "history": [
         {
           "role": "user",
@@ -53,11 +53,111 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف تسطيع البحث عبر GOOGLE_SEARCH"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم يسأل عن الكيفية التقنية أو الآلية التي أستطيع من خلالها البحث عبر Google Search.",
+                  "plan": "شرح آلية عمل أداة البحث المتاحة لي (web_search) وكيفية استخدامها لجلب أحدث المعلومات من الإنترنت بدقة عالية وتحليلها للمستخدم."
+                },
+                "id": "call_691568"
+              },
+              "thoughtSignature": "El4KXAERTTIPaYg9oe+0dNsyB5qQYcDtdipTcmJYGpGFci3eXcAABLuKNQxineWhP4MhQd/5B1KQBZxYHtk+whhQi6UaBL1sWnpA5ZB/4q+PrYgZKtnMfLeoSjRWyRBL"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يسأل عن الكيفية التقنية أو الآلية التي أستطيع من خلالها البحث عبر Google Search.",
+                    "plan": "شرح آلية عمل أداة البحث المتاحة لي (web_search) وكيفية استخدامها لجلب أحدث المعلومات من الإنترنت بدقة عالية وتحليلها للمستخدم."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أستطيع البحث في الإنترنت عبر **أداة البحث المدمجة (Web Search)** المتاحة لي ضمن منظومتي البرمجية. \n\nوتعمل هذه العملية وفق الخطوات التالية:\n1. **استقبال الطلب وتحليل الكلمات المفتاحية:** عندما تطلب مني البحث عن موضوع معين، أقوم بتحليل سؤالك واستخراج المصطلحات والكلمات المفتاحية الأكثر أهمية ودقة.\n2. **تنفيذ الاستعلام:** أستخدم أداة البحث لإرسال الاستعلام إلى محركات البحث وجلب النتائج الأكثر صلة وحداثة (مثل الصفحات، المقالات، التقارير، والأخبار).\n3. **قراءة وتحليل المحتوى:** أقوم بـ \"قراءة\" وفحص محتوى النتائج المسترجعة وتصفية المعلومات الموثوقة والمطابقة لاحتياجك.\n4. **التركيب والصياغة:** أعيد صياغة المعلومات وتقديمها لك بشكل منظم، شامل، ومباشر مع الإشارة إلى المصادر إذا لزم الأمر.\n\nهل ترغب في أن أقوم بتجربة البحث عن موضوع معين الآن لترى النتيجة عملياً؟",
+              "thoughtSignature": "El4KXAERTTIP7vSk1UuEGQJxV1x40/Wz65vosixiEEWyaIGZs7yvqIH6A2pnixgAAqj1vg1VLLwwHK4FuUebIWhz6rHgz6BADt2aVg9hV/4dHvM+f67bgs6ez1F+Xt7K"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "انا قلت عبر API  GOOGLE_SEARCH"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم يحدد بدقة أنه يقصد Google Search API (واجهة برمجة التطبيقات الخاصة ببحث جوجل).",
+                  "plan": "توضيح الفرق بين محرك البحث الداخلي المدمج الذي أستخدمه لجلب النتائج (web_search) وبين Google Custom Search JSON API التقليدي، وكيفية ربط واستخدام Google Custom Search API برمجياً عند الحاجة."
+                },
+                "id": "call_1581881"
+              },
+              "thoughtSignature": "El4KXAERTTIPw6EKq2H0mIq6PSLg1Pt4/OQkUVZUkGtA05KHkbMNxDynyDu5ieuKwNWEVru+t/FlsfKnrkzdcduLBkCxOWelhivxxNtfCDgD2lPXySaW7FCdGs2QWsP/"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يحدد بدقة أنه يقصد Google Search API (واجهة برمجة التطبيقات الخاصة ببحث جوجل).",
+                    "plan": "توضيح الفرق بين محرك البحث الداخلي المدمج الذي أستخدمه لجلب النتائج (web_search) وبين Google Custom Search JSON API التقليدي، وكيفية ربط واستخدام Google Custom Search API برمجياً عند الحاجة."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك للتوضيح التقني الدقيق! \n\nبصفتي ذكاءً اصطناعياً متكاملاً، أمتلك أدوات بحث مدمجة خاصة بي، ولكن إذا كنت تقصد **كيفية دمج واستخدام Google Custom Search API** برمجياً في مشاريعك (سواء بلغة Python أو Node.js أو غيرها)، فالأمر يتم عبر الخطوات التالية:\n\n---\n\n### الخطوات التقنية لاستخدام Google Custom Search API:\n\n#### 1. الحصول على المتطلبات الأساسية من Google Cloud:\n* **مفتاح API (API Key):** يتم إنشاؤه عبر لوحة تحكم Google Cloud Console بعد تفعيل خدمة **Custom Search API**.\n* **معرف محرك البحث المخصص (Search Engine ID - CX):** يتم إنشاؤه من خلال موقع [Programmable Search Engine](https://programmablesearchengine.google.com/) لتحديد النطاق الذي سيتم البحث فيه (سواء الإنترنت بالكامل أو مواقع محددة).\n\n---\n\n#### 2. مثال عملي بلغة Python (باستخدام مكتبة `requests`):\n\nيمكنك إجراء طلب بحث والاستجابة بصيغة JSON عبر الكود التالي:\n\n```python\nimport requests\n\ndef google_search(query, api_key, cse_id, num=10):\n    url = \"https://www.googleapis.com/customsearch/v1\"\n    \n    params = {\n        'q': query,\n        'key': api_key,\n        'cx': cse_id,\n        'num': num  # عدد النتائج (الحد الأقصى عادة 10 في الطلب الواحد)\n    }\n    \n    try:\n        response = requests.get(url, params=params)\n        response.raise_for_status()\n        results = response.json()\n        \n        # استخراج النتائج والعناوين والروابط\n        items = results.get('items', [])\n        search_results = []\n        for item in items:\n            search_results.append({\n                'title': item.get('title'),\n                'link': item.get('link'),\n                'snippet': item.get('snippet')\n            })\n            \n        return search_results\n\n    except requests.exceptions.RequestException as e:\n        print(f\"حدث خطأ أثناء الاتصال بـ Google API: {e}\")\n        return []\n\n# --- مثال للاستخدام ---\n# API_KEY = \"مفتاح_الـ_api_ الخاص_بك\"\n# CSE_ID = \"معرف_محرك_البحث_cx_الخاص_بك\"\n# results = google_search(\"VSA Academy\", API_KEY, CSE_ID)\n# for r in results:\n#     print(r['title'], \"->\", r['link'])\n```\n\n---\n\n#### 3. القيود والحدود المجانية (Quotas):\n* **الخطة المجانية:** توفر عادةً **100 طلب بحث مجاني في اليوم** (Free Requests per Day).\n* **الخطة المدفوعة:** إذا احتجت إلى طلبات أكثر، يمكنك ترقية الحساب ودفع رسوم إضافية لكل ألف طلب إضافي (Paid Requests عبر Google Cloud Billing).\n\nهل تحتاج إلى مساعدة في كتابة الكود بلغة أخرى (مثل JavaScript/Node.js) أو إعداد الـ API Keys الخاصة بك؟",
+              "thoughtSignature": "El4KXAERTTIPvkuDqkfI+DmyxUUCxADalu4EhOVf656qWAVRCDkHl2N3ZdI6hBBgmF/jwsHBBXngVaFCHYIH/pYNwHsGJWhYFf+V2whhVmuj6p/uD74knzOl/FyDFmD5"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1788637914434",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمنك البحث في GOOGLE_SEARCH\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"المستخدم يسأل عما إذا كان بإمكاني البحث في Google Search، وامتلك أداة web_search الفعالة للقيام بذلك.\",\"plan\":\"الرد على المستخدم وتوضيح توفر إمكانية البحث في الإنترنت (Google Search) وجاهزية المساعدة في أي استعلام أو بحث يحتاجه.\"},\"id\":\"call_1482825\"},\"thoughtSignature\":\"El4KXAERTTIPDm8YlkDSVpya8PRe4rBOIVjh5HMDN2cKctFKEGjsTp0EFajCC5uWl941h9zybs1lgBViEcuiCuaIpeUBAh64GDLVJWsiwao+06ts210SYwEwWU/QIHVz\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يسأل عما إذا كان بإمكاني البحث في Google Search، وامتلك أداة web_search الفعالة للقيام بذلك.\",\"plan\":\"الرد على المستخدم وتوضيح توفر إمكانية البحث في الإنترنت (Google Search) وجاهزية المساعدة في أي استعلام أو بحث يحتاجه.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"text\":\"نعم، بكل تأكيد! أستطيع البحث في شبكة الإنترنت وجلب أحدث المعلومات، الأخبار، المقالات، والبيانات التقنية بدقة وسرعة. \\n\\nما الذي تود البحث عنه أو الاستفسار عنه اليوم؟ تفضل بطرح سؤالك أو موضوعك وسأقوم بالبحث عنه فوراً!\",\"thoughtSignature\":\"El4KXAERTTIPzOQVx+2Heg1I+MWI/nuJ4/LwEh6trJO+Z7RzGRIZz9mdLBWQNriUt2t+uih97vl6ZoxlU613BpkC0k/OPtSY8JDRRDjgjpYkvdiqIvTz4uOL0JkKT8xo\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف تسطيع البحث عبر GOOGLE_SEARCH\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"المستخدم يسأل عن الكيفية التقنية أو الآلية التي أستطيع من خلالها البحث عبر Google Search.\",\"plan\":\"شرح آلية عمل أداة البحث المتاحة لي (web_search) وكيفية استخدامها لجلب أحدث المعلومات من الإنترنت بدقة عالية وتحليلها للمستخدم.\"},\"id\":\"call_691568\"},\"thoughtSignature\":\"El4KXAERTTIPaYg9oe+0dNsyB5qQYcDtdipTcmJYGpGFci3eXcAABLuKNQxineWhP4MhQd/5B1KQBZxYHtk+whhQi6UaBL1sWnpA5ZB/4q+PrYgZKtnMfLeoSjRWyRBL\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يسأل عن الكيفية التقنية أو الآلية التي أستطيع من خلالها البحث عبر Google Search.\",\"plan\":\"شرح آلية عمل أداة البحث المتاحة لي (web_search) وكيفية استخدامها لجلب أحدث المعلومات من الإنترنت بدقة عالية وتحليلها للمستخدم.\"}}}}]}]",
-  "timestamp": "2026-09-05T19:52:34.230Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-05T19:55:10.144Z"
 }
