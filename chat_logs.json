@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788637914434",
-      "title": "معذرةً إن لم تكن الإجابة واضحة",
+      "title": "**نعم، أستطيع البحث في جوجل بك",
       "history": [
         {
           "role": "user",
@@ -203,11 +203,61 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "البحث في جوجل يمكنك"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم يسأل بعبارة مباشرة ومختصرة: \"البحث في جوجل يمكنك\" لتأكيد الإجابة. يجب الرد بـ \"نعم، أستطيع البحث في جوجل بكل تأكيد.\"",
+                  "plan": "الرد بحسم وبساطة وبشكل قاطع ومباشر على سؤال المستخدم: \"البحث في جوجل يمكنك\" لتأكيد الإجابة بنعم بشكل لا يحتمل اللبس."
+                },
+                "id": "call_1271269"
+              },
+              "thoughtSignature": "El4KXAERTTIPtj+uqaq3MLcKMSt/smIMe8+P1cYKwIzXW5AdgiL6qfd+4fRY2le4dIYVLB6wZiWR3dgAcO/jpU8g2fOscTVow7NH0XLkAgd0ni0ZMnmnk/gTytcMJNdF"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يسأل بعبارة مباشرة ومختصرة: \"البحث في جوجل يمكنك\" لتأكيد الإجابة. يجب الرد بـ \"نعم، أستطيع البحث في جوجل بكل تأكيد.\"",
+                    "plan": "الرد بحسم وبساطة وبشكل قاطع ومباشر على سؤال المستخدم: \"البحث في جوجل يمكنك\" لتأكيد الإجابة بنعم بشكل لا يحتمل اللبس."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "**نعم، أستطيع البحث في جوجل بكل تأكيد!** \n\nأمرني بما تشاء وسأبحث عنه فوراً.",
+              "thoughtSignature": "El4KXAERTTIPfo65PgsqfFqeavcDcwAr6u9G5O7Nw/K1IK1qzr/0R3+O47LM/DJ26cVF30ZKhA6ASsQ4HGSNYOkpXNr8TxM2E2zXAe+B66E4L+6yHu9Gc/s7y4IUoCcW"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1788637914434",
   "pendingHistory": null,
-  "timestamp": "2026-09-05T19:55:51.784Z"
+  "timestamp": "2026-09-05T19:56:16.153Z"
 }
