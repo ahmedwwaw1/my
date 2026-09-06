@@ -1,6 +1,63 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788720982106",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-06T18:57:13.734Z"
+  "sessions": [
+    {
+      "id": "1788724391276",
+      "title": "نعم، بالطبع! لدي القدرة على ال",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك البحث في محرك bing"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "الرد على المستخدم بإمكانية البحث عبر الإنترنت أو استخدام أدوات البحث المتاحة لدي عند الحاجة.",
+                  "reasoning": "المستخدم يسأل عما إذا كان بإمكاني البحث في محرك Bing أو محركات البحث عموماً. لدي أداة بحث في الويب (web_search) يمكنني من خلالها جلب أحدث المعلومات من الإنترنت."
+                },
+                "id": "call_2828914"
+              },
+              "thoughtSignature": "El4KXAERTTIPZfHDB56S87u1dupE91MY5v1O5lT/wlQ7B7sAkStvT23ZTudDxG+eJ287ZSs+7KwbD/Z/SATufOYuedVVwn9FQM3HLkfjF+om8fHThHm7QqD3ebK54Jbe"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يسأل عما إذا كان بإمكاني البحث في محرك Bing أو محركات البحث عموماً. لدي أداة بحث في الويب (web_search) يمكنني من خلالها جلب أحدث المعلومات من الإنترنت.",
+                    "plan": "الرد على المستخدم بإمكانية البحث عبر الإنترنت أو استخدام أدوات البحث المتاحة لدي عند الحاجة."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "نعم، بالطبع! لدي القدرة على البحث في شبكة الإنترنت لجلب أحدث المعلومات، الأخبار، والبيانات بدقة عالية. \n\nهل ترغب في البحث عن شيء معين الآن؟ فقط اخبرني بما تبحث عنه وسأقوم بالبحث عنه فوراً!",
+              "thoughtSignature": "El4KXAERTTIP0cpFTxlLPJpzq/rdwrlkqlhV+A0HalpzWykGvqejWif91QpLSMRUJdpj763jqcIGPCTzr0TYppV1ZljxJldh/yx0gahIe/Opd50v3RAcd7RBIFlz5ln9"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788724391276",
+  "pendingHistory": null,
+  "timestamp": "2026-09-06T19:56:46.480Z"
 }
