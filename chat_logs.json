@@ -1,34 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788695769977",
-      "title": "أهلاً بك! أنا بأفضل حال ومستعد",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! أنا بأفضل حال ومستعد وجاهز لمساعدتك بكامل طاقتي. \n\nكيف يمكن"
-            },
-            {
-              "text": "ني خدمتك وتوجيه جهودنا البرمجية أو المعمارية اليوم في المشروع؟",
-              "thoughtSignature": "EpgCCpUCARFNMg+0JSGw1HfV45apCm9SpIUKQe2Kd774mJAjLnR+vLCIsogdsOue/vxNZoIMu22iw3uABUFUXkSPVc6ZZbW4xM5/CLaowzHlOiqGpTkPU2+qlBtF/AQ9ssET8VKmm3qmoOmlv+TpXmtOgrwlh8hIdAHGROw2A8mLx3G5VIuMQ2ahyW3sj1hZVSZ3PD0HsODI1BXEAziWffD65SbYX6C7NLG+Lb2I7kTsqNlnAOCeYTXdAfdnOOyKKjEcCGRJ/idr8P3Ao984BtfG2FYbUmlrBJy6MSLqTQqwF81ec6LOGx0xrkscf8PFWXx1j/dwaY9XB/o+9P+I/466mKAesA+bHKr1+/R5PTXbtRSWBT4rgTYIYA=="
-            }
-          ],
-          "model": "gemini-3.7-flash"
-        }
-      ]
-    }
-  ],
-  "activeSessionId": "1788695769977",
+  "sessions": [],
+  "activeSessionId": "1788697666621",
   "pendingHistory": null,
-  "timestamp": "2026-09-06T12:04:11.609Z"
+  "timestamp": "2026-09-06T12:27:46.622Z"
 }
