@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788711468085",
+      "title": "نعم، بالتأكيد! يمكنني البحث في",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك البحث في جوجل"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "نعم، بالتأكيد! يمكنني البحث في شبكة الإنترنت للوصول إلى أحدث المعلومات، الأخبار، المقالات، والبيانات المحدثة. \n\nما الذي ترغب في البحث عنه أو معرفته اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPuKRU1N1bL5Oa4ZMhLffO0ViLyWuD0Q+QSNs7efYjhtT4IH9N5W3qZApDyp+atRjtsRdCXFPoKJO3ggxEDyYcp8hzwCQTbTtoPeLtbpUk/xymSiljY9fB"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788711468085",
   "pendingHistory": null,
-  "timestamp": "2026-09-06T16:17:50.493Z"
+  "timestamp": "2026-09-06T16:17:59.101Z"
 }
