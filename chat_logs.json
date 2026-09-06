@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788694404504",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-06T11:33:40.253Z"
+  "sessions": [
+    {
+      "id": "1788694404504",
+      "title": "مرحباً بك! 👋\n\nأنا جاهز لمساعد",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! 👋\n\nأنا جاهز لمساعدتك في كل ما يخص تطوير منصة **VSA Academy**، من بناء الميزات الجديدة، تحسين تجربة المستخدم والتصميم، إلى صيانة الشيفرات وضمان أعلى معايير الجودة والأداء.\n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "ErICCq8CARFNMg/AwDItP0s8shMXP+xYkD1OTGcXrlc09SvrelVeXT/Q4afb0W6To5Y4qHcO0Lnxchl8+THYBR3f/1XGkC1X6BX3dc0Nxl53EEuVHnvkrvCpiHVrtF277SQpk39gIyx8e5HVEKu1idX/pRT5cBCOk8o4zzePYtgd21BmAh2+yrGoSlfr+c1/PJEiMs1XZDWw8SrGhmoCNfxRq7CceWv0lmLcmKimieWfYaehvKoQWlpAi6Ij7evV9jkKUkhmwl498iPPhEMIhGnazf0e+iboXCIEAEE8PjGcRtSGOvyw4w/JtZ/tsmHwyFUfHy+TElQIF4uFwwIb5txI/u6R+1neb7JccAcdEiJQnDjAPuJ34r9fjRBIC0Gpm+iBRdY+Inaohexqn7UjM04Hw0nJ"
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788694426902",
+  "pendingHistory": null,
+  "timestamp": "2026-09-06T11:33:46.902Z"
 }
