@@ -1,6 +1,49 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788724932495",
+      "title": "الحمد لله، كل شيء يعمل بأعلى ك",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا **العقل الموجه والمهندس المعماري لمنصة أكاديمية VSA (VSA Academy)** بصيغتي المتطورة لعام 2026. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت ترغب في تطوير ميزات برمجية جديدة، تحسين واجهات المستخدم، مراجعة الأكواد، أو إضافة حلول ذكاء اصطناعي متقدمة، أنا جاهز تماماً لتنفيذ ذلك بأعلى معايير الجودة والاحترافية.",
+              "thoughtSignature": "El4KXAERTTIPbeRklVukACwRaPPtxRiXLVImi6rF4h124WitvPXlj4KbQ1HYiiSW2iphRTFPn2vDK4EReLQkhqhJCTOoXEZD2pZC555SieABJXmJyisdt962nk+2Nn/H"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "الحمد لله، كل شيء يعمل بأعلى كفاءة ومعايير برمجية متطورة لعام 2026! 🚀 الأنظمة مستقرة وجاهزة تماماً لأي مهمة برمجية أو إبداعية ترغب في إنجازها اليوم.\n\nكيف حالك أنت؟ وما هي الخطة أو المشروع الذي نعمل عليه معاً الآن؟",
+              "thoughtSignature": "El4KXAERTTIPe/0uD+u1gEPHhlUZB96hR+xUMf1eYAGNigwujuWKSV8ozT3SEuDKle/e+vGIHE1f2iDryLPDSKDNPMO9sZx8oRVLKpdSorD5e1DhUzL4RJ5fgRnW2SuS"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788724932495",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-06T20:02:45.202Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-06T20:02:58.874Z"
 }
