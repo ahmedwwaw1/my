@@ -2,8 +2,185 @@
   "sessions": [
     {
       "id": "1788690741882",
-      "title": "محادثة جديدة",
-      "history": []
+      "title": "عذراً على الإزعاج، يبدو أن هنا",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك تحويل الفيديو في هاذ الرابط https://www.youtube.com/shorts/_Fncw2YSYig الى نص"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "web_search",
+                "args": {
+                  "query": "https://www.youtube.com/shorts/_Fncw2YSYig"
+                },
+                "id": "call_2233606"
+              },
+              "thoughtSignature": "EnEKbwERTTIPWuF+4+UZ+gMyGxSOHrjgx5GN7SXd9zVHvA/4NMeGU2/7A46Mfrz9At9vVudUWpgthW5fmKItZLcdweVmuXOanldLmES2vQ8iY4xo7dF4onC2a/3h7xI/ynu2yARVjg6yXoKKlxjFXaCaQQ=="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "web_search",
+                "response": {
+                  "content": "{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\"}}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "web_search",
+                "args": {
+                  "query": "transcript of youtube short https://www.youtube.com/shorts/_Fncw2YSYig"
+                },
+                "id": "call_2213943"
+              },
+              "thoughtSignature": "EnEKbwERTTIP4XqCiZqBTlkCLhP2SpCpJkiSYpnvTzk6i+/Y0Tc1QdfkuRY5rZ6SJgu7H4Y/eszMvcfCLirKwDNL9oOPbvOdzzZXlm/d9X1hkjlOiVN3ENt90r9Gs6g8Lk/2tyxMjNCEqPrZtll+vVce+A=="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "web_search",
+                "response": {
+                  "content": "{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\"}}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "web_search",
+                "args": {
+                  "query": "https://www.youtube.com/shorts/_Fncw2YSYig"
+                },
+                "id": "call_2174140"
+              },
+              "thoughtSignature": "EnEKbwERTTIPYaZFnvuERySy/cJscKbrWFAb5s7eJlcv/0QSw0Hg7cF0x1w7kXCVlaRoaZEvaztl1A7uDVwJ1VDfPEXSAuocAydSqyUZiRwIWfjE+OJzF2bqFNcWsypH/RwB0G6aGBywpe3sK5ShcCENbg=="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "web_search",
+                "response": {
+                  "content": "{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\"}}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "عذراً، لا يمكنني الوصول مباشرة إلى محتوى الفيديو أو استخراج النص منه تلقائياً عبر الرابط.\n\nومع ذلك، يمكنك القيام بذلك بسهولة باتباع الخطوات التالية:\n\n1.  **افتح الرابط** في متصفحك.\n2.  **ابحث عن زر \"المزيد\" (More)** أو النقاط الثلاث (...) الموجودة أسفل الفيديو أو في وصف الفيديو.\n3.  اختر **\"إظهار النص\" (Show transcript)**. سيظهر لك النص المكتوب للفيديو في الجانب (أو أسفل الفيديو).\n4.  يمكنك **نسخ هذا النص** ولصقه هنا، وسأقوم بكل سرور بتلخيصه لك، ترجمته، أو إعادة صياغته كما تحب.\n\nإذا كان الفيديو لا يحتوي على نص تلقائي، يمكنك إخباري بموضوعه وسأحاول مساعدتك بناءً على المعلومات المتاحة عنه!",
+              "thoughtSignature": "EnEKbwERTTIPmeuO6aWlKqFEXz8I8sp2T5skyKrSIbOIMWRt2Is7BGK28RNHdHtINWeJDgZZJPBcWGhUK7GB1ok3TWZtwT8DQpgkHXUhIMHkuW4UHPRLZR1j4q10YGd8C88SPbdP9hRlwz1LttEhZCDUBg=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "طيب هاذ الرابط https://www.youtube.com/watch?v=_Fncw2YSYig هل يمكنك تحويله الى نص"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "web_search",
+                "args": {
+                  "query": "transcript of youtube video https://www.youtube.com/watch?v=_Fncw2YSYig"
+                },
+                "id": "call_2148805"
+              },
+              "thoughtSignature": "EnEKbwERTTIPdH0Wl/pQPEZNh44jiWz3KVTwmrAcQD4KjNS7atTObWfwhF+y+04FFFdF0mPWPTra734o6bd1yIonHEcWlghbtIN7sHG26MsSuIMviFY2NIhQ3N/CRo7rEgJh8LqWbW56v3Nh5dumOwbXqg=="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "web_search",
+                "response": {
+                  "content": "{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\"}}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "web_search",
+                "args": {
+                  "query": "what is the video https://www.youtube.com/watch?v=_Fncw2YSYig about"
+                },
+                "id": "call_1044548"
+              },
+              "thoughtSignature": "EnEKbwERTTIPgVKrKUk+IuaGvJMLge6HWa9OwAHFot2ikFa2UuXRWooJMuKWrEvD5vt0vsyJPsiGU9Lk5txD9Jabcm0R6MnrHJSB4gCRwMiVrXukTJFjj0TxXxU7hMBR8KM1BcbMq9Gc+yKJnvmGq6ZQAg=="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "web_search",
+                "response": {
+                  "content": "{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\"}}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "عذراً على الإزعاج، يبدو أن هناك قيوداً تقنية تمنعني من الوصول المباشر إلى محتوى الفيديوهات عبر روابط يوتيوب لاستخراج النصوص منها بشكل آلي.\n\nبما أنني لا أستطيع \"مشاهدة\" الفيديو أو استخراج النص منه مباشرة، أقترح عليك الطريقة الأسرع للحصول على النص:\n\n1.  افتح الفيديو على يوتيوب.\n2.  في وصف الفيديو (أسفل الفيديو)، اضغط على **\"المزيد\" (More)**.\n3.  ابحث عن خيار **\"إظهار النص\" (Show transcript)**.\n4.  بمجرد ظهور النص، قم بنسخه (Copy) ولصقه (Paste) هنا في المحادثة.\n\n**بمجرد أن تضع النص هنا، سأقوم فوراً بـ:**\n*   تلخيصه لك.\n*   استخراج النقاط الرئيسية.\n*   ترجمته إذا كان بلغة أخرى.\n*   أو الإجابة على أي أسئلة محددة لديك حول محتواه.\n\nأنا بانتظارك!",
+              "thoughtSignature": "EnEKbwERTTIPQJ8WM4HmXdDu9vYjnF0Qikn3AUiUMLMlByw0IfnicFM3Gt+mvP0F3OTUYuG84Dg1LvH6Cws7rW5bvHbKAko/3dUFeJWGr1i8qucOzs0ECo+XPQNPxZF3TmO0MwW4DzMjjVqfki5X6wWnew=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
     },
     {
       "id": "1788690626122",
@@ -143,6 +320,6 @@
     }
   ],
   "activeSessionId": "1788690741882",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك تحويل الفيديو في هاذ الرابط https://www.youtube.com/shorts/_Fncw2YSYig الى نص\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"https://www.youtube.com/shorts/_Fncw2YSYig\"},\"id\":\"call_2233606\"},\"thoughtSignature\":\"EnEKbwERTTIPWuF+4+UZ+gMyGxSOHrjgx5GN7SXd9zVHvA/4NMeGU2/7A46Mfrz9At9vVudUWpgthW5fmKItZLcdweVmuXOanldLmES2vQ8iY4xo7dF4onC2a/3h7xI/ynu2yARVjg6yXoKKlxjFXaCaQQ==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"transcript of youtube short https://www.youtube.com/shorts/_Fncw2YSYig\"},\"id\":\"call_2213943\"},\"thoughtSignature\":\"EnEKbwERTTIP4XqCiZqBTlkCLhP2SpCpJkiSYpnvTzk6i+/Y0Tc1QdfkuRY5rZ6SJgu7H4Y/eszMvcfCLirKwDNL9oOPbvOdzzZXlm/d9X1hkjlOiVN3ENt90r9Gs6g8Lk/2tyxMjNCEqPrZtll+vVce+A==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"https://www.youtube.com/shorts/_Fncw2YSYig\"},\"id\":\"call_2174140\"},\"thoughtSignature\":\"EnEKbwERTTIPYaZFnvuERySy/cJscKbrWFAb5s7eJlcv/0QSw0Hg7cF0x1w7kXCVlaRoaZEvaztl1A7uDVwJ1VDfPEXSAuocAydSqyUZiRwIWfjE+OJzF2bqFNcWsypH/RwB0G6aGBywpe3sK5ShcCENbg==\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]}]",
-  "timestamp": "2026-09-06T10:56:22.243Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-06T11:03:45.881Z"
 }
