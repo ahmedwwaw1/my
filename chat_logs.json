@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788717743509",
+      "title": "نعم، بالتأكيد! لدي القدرة الكا",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك البحث في الويب"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "نعم، بالتأكيد! لدي القدرة الكاملة على:\n\n1. **البحث المباشر في الويب (`web_search`)**: للعثور على أحدث المعلومات، المقالات، التوثيقات البرمجية، والمصادر المحدثة.\n2. **قراءة صفحات ومصادر محددة من الويب (`read_url`)**: لاستخراج المحتوى وتحليله مباشرة من الروابط.\n\nما الذي تود مني البحث عنه أو التحقق منه لك؟",
+              "thoughtSignature": "EmIKYAERTTIPEkA49WvJC6uXBt0GyrVQ7gno7iZ0ZxQbBIomnMDDtWaaDEVhGllTK1NiazqdDRvKNv62pi7L2XFoUIs1MWLoq2vRRfZE4k7UpGvyiIs2U0JbA6y1iWzWM5ojoQ=="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788717743509",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك البحث في الويب\"}]}]",
-  "timestamp": "2026-09-06T18:05:07.125Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك البحث في الويب\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"نعم، بالتأكيد! لدي القدرة الكاملة على:\\n\\n1. **البحث المباشر في الويب (`web_search`)**: للعثور على أحدث المعلومات، المقالات، التوثيقات البرمجية، والمصادر المحدثة.\\n2. **قراءة صفحات ومصادر محددة من الويب (`read_url`)**: لاستخراج المحتوى وتحليله مباشرة من الروابط.\\n\\nما الذي تود مني البحث عنه أو التحقق منه لك؟\",\"thoughtSignature\":\"EmIKYAERTTIPEkA49WvJC6uXBt0GyrVQ7gno7iZ0ZxQbBIomnMDDtWaaDEVhGllTK1NiazqdDRvKNv62pi7L2XFoUIs1MWLoq2vRRfZE4k7UpGvyiIs2U0JbA6y1iWzWM5ojoQ==\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"ابحث عن كورس بايثون للزيرو ويب سكول\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"كورس بايثون الزيرو ويب سكول elzero python course\"},\"id\":\"call_4296524\"},\"thoughtSignature\":\"El4KXAERTTIPLgWz4qRV/NFk3olIK1JCYS+XFbpA7wJZLGLcMlZl/FfvKhfXtc1vhN/bM2UuzcViS/fT8EoztC0biGQbck+3G1eRwbx0BQp/yJ0R57F0qo/li/wgf78p\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"elzero python course\"},\"id\":\"call_3650966\"},\"thoughtSignature\":\"El4KXAERTTIPA370poJDRmQrlSLuamRaChF7v4fkR9my6oFQTzOl0GrhxTHqbFRZIMwLwKjhdxqA1+40wIBj14XleszM3NqBxw8C/Kgd6xN/Uy3PuPS6gZBZNZbhGxb7\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"باثون الزيرو site:youtube.com\"},\"id\":\"call_2377110\"},\"thoughtSignature\":\"El4KXAERTTIP3qFxvbS4y1NpOSsaPiqyA2PURk7/r3vOz9yp8E/gTPCLf1YtD9y2R3VxgsqeRtyglfAzVY0QN4BQ2zMu1I+kHEvmFSvvp26fkOZktMQGEaY3l77nCqOA\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"Python Bootcamp Elzero Web School\"},\"id\":\"call_2413154\"},\"thoughtSignature\":\"El4KXAERTTIPNjmVz25wJ+FqPlYuTFWHnsnIJOqttbFEP3lKxjj6C7VdiB5MwIubusraTuv//+7WouEsptAAS2YhBsy/EhRM65lOJSsMO+pobCcsNURs8Ogx+oHtnvLy\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"الزيرو بايثون\"},\"id\":\"call_4079014\"},\"thoughtSignature\":\"El4KXAERTTIPYG8EN83MTKc3wZgikkxGCb9sl4E5ClBKgu3MFnddd4ljuk57H4U3KWjGmx8JuetfDSbrYokEWThtUR7ho47Vl24cWiN9O68FbxPUQxxHgS0x3iZowcVZ\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]}]",
+  "timestamp": "2026-09-06T18:05:37.198Z"
 }
