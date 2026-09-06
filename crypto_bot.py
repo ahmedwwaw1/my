@@ -119,8 +119,8 @@ def save_alerts(new_alerts):
         else:
             print(f"ℹ️ تنبيه {alert['symbol']} موجود بالفعل لتاريخ اليوم {today_date}. تخطي الإضافة.")
     
-    # الاحتفاظ بآخر 50 تنبيه فقط ليبقى الملف خفيفاً ومناسباً للموقع
-    existing_data = existing_data[:50]
+    # الاحتفاظ بآخر تنبيهين فقط ليبقى الملف خفيفاً ومناسباً للموقع بناءً على طلب المستخدم
+    existing_data = existing_data[:2]
     
     # كتابة وحفظ الملف بنظام الترميز العام ليعرض اللغة العربية والرموز بشكل صحيح
     with open(file_name, 'w', encoding='utf-8') as f:
