@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788706665253",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-06T14:58:10.965Z"
+  "sessions": [
+    {
+      "id": "1788706732410",
+      "title": "مرحباً بك! أنا في خدمتك بكامل ",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا في خدمتك بكامل جاهزيتي الهندسية والمعمارية.\n\nكيف يمكنني مساعدتك اليوم في مشروع **VSA Academy**؟ سواء كان ذلك في تطوير الواجهات، فحص الأكواد، ضبط البنية التحتية، أو بناء ميزات جديدة، أنا مستعد!",
+              "thoughtSignature": "EqUCCqICARFNMg+B1KUcImpuewyuzHDh6Ls2smG5XoCWVPAIHW9wodfz7Z8LFUDiBEetqF7cIHgx6fcSrOus/emFlqvBDzf2xKr1RTau8Fx6Gi2c/oSaGth89tQpt7VDqme3B8SeAHi5znuFMFqLM0BM2jplVogbSit6cqbM5dPz27q/N+PwjhdJ+zwnP3uwO96WvUmlfWjHVJEm5AzKzx9hY0EQMFLiXjT5jjx75JAraZ5seinFuVQDn/qmZsXwxgOXMpeEaNbRfbCU6pi9RHDmU2w2KsNNkBqxwkCNAvyhBIcqrsBGyoY0fJcHSCBcdxxECkNMfMDtqLAEVtqSGtkl9sNVxKKZvLa+O2valqVJYWwPuYly8adlkBVesZA+CJkZYdvqdmI="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788706732410",
+  "pendingHistory": null,
+  "timestamp": "2026-09-06T14:59:15.568Z"
 }
