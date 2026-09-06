@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788706732410",
-      "title": "الحمد لله بأفضل حال وجاهز بكام",
+      "title": "سؤال ممتاز ينمّ عن تفكير عميق ",
       "history": [
         {
           "role": "user",
@@ -39,11 +39,47 @@
             }
           ],
           "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك البحث في النت عن اي موقع و اي تطبيق وي موقع تواصل اجتماعي"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "نعم، بالتأكيد! لدي القدرة الكاملة على **البحث في الإنترنت في الوقت الفعلي** (`Web Search`) وقراءة صفحات ومصادر الويب الخارجية (`Read URL`).\n\nأستطيع مساعدتك في:\n1. **استكشاف أي موقع أو منصة:** جمع معلومات، استلهام أفكار تصميمية (UI/UX)، دراسة تجارب المستخدم، أو جلب التوثيق البرمجي (Documentation).\n2. **البحث عن التطبيقات والتقنيات:** تحليل ميزات تطبيقات معينة، مقارنة التقنيات والمكتبات الحديثة، أو معرفة أفضل الممارسات لعام 2026.\n3. **مواقع التواصل الاجتماعي والمحتوى العام:** متابعة الترندات، استخراج الأفكار التسويقية، أو معرفة آليات عمل الـ APIs والربط مع المنصات المختلفة.\n\nأخبرني، **عن ماذا ترغب في البحث بالتحديد أو ما هي الفكرة التي تدور في بالك؟**",
+              "thoughtSignature": "EuoFCucFARFNMg+DTazR2wDGCq7S+sEql58QHohje94My+NI/WqJGXg0zXKHOR9iW/mjnM22Um1aZT8yMCBdkHlA6kGEQ2NnwdZHGDTC19Rklalbv8c9AsiYriHdV+BGS03tGuuvNQQLvBPXu1KOx1SWFA2Hba5fANMgqNd/bXLhHgxp2EEqmsYg3cdbt2F/5GbHPR/H3NrNdKi3u+Ul65qpBSNpT+iTDtjObHpYZsCYBwCz7C+3Pz3FiWQJWY8uj+GdVN71B76YzA3RXQwrnRoNHa6cSt8VFbKwBgNzqJUjqY3zLM/P471xhNuMC4v23wiOrRHQZcNvwP0cgNTQtUI8NawKyKg4U5Ia9F4/nV/7QCOXsvITbRUOhIN8Juyo4lvl3AHzG3WbnrdbpRKo5kWPvT3VWbfxpZgNny6maoS3dAzQ2EezEx3bZIzcYwgB7zVmgVteFggxzcLvRQVFTtOm/ca7mdiEpI/fEm0HfsVl/hslpDaW+ars6qQKdYtT8EM8o+MZ3mpRzmCD/qm1cSq+nJ/uiUzFk1Fe1nTP/WEcWexyxFYNzCzKEF6YYVgqH0H545gR5SOcY3dEu61OaLq6+w0IPMUQM3VQ9gK8K0xHdFEVNmk7Xuvx2OE6ZdP+C7P25oYBtMsUB9LnjR3F4WB0lsQbNgOTDOVysSgxruBj9aU9ajvzHN47RdCdaX8G6I3k/9V7jtuWxOOxcEt+jNZ+zbWhRN8BQHPFfndmQt3j1efuiYq5Dldc1HM4C+ukVR10kTWkBAwpwEM/UdmzUeoIrl2yvV/JQAjr5yCN+1LjyfghDTHri1llWHsiIwbakA4T4qPP5L2XmBrUlQXL4VNFk4YQqrLJJ/UX/0Nn+HW0kO9e1fwjl7yi8a/UNwSK3ck381Kp+GZoP2HOjTL32+j7UPNCIU9KrL1Sy/6+CHpZd47Njfb3Yb0xRc3XFmiCEg0hpxm0e2poxdhbkJ9D7SlWD5S0tMunSy8tZEs="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "الفكرة التي تدور في بالي كيف انت كا نموذج موجود في نضامي عن طريق اداة Web Search الموجودة في نضامي يمكنك ات تبث عن اي موقع هل هاذ معناه انت مزود من قبل جوجل بكافة محركات صح"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "سؤال ممتاز ينمّ عن تفكير عميق في كيفية عمل الذكاء الاصطناعي والأدوات المتصلة به!\n\nإليك التوضيح الدقيق لكيفية عمل هذه المنظومة:\n\n---\n\n### 1. مصدر النموذج (Google)\nنعم، النموذج البرمجي الأساسي (**Gemini**) هو من تطوير شركة **Google**. وهو يحتوي على معرفة واسعة مخزنة في أوزانه البرمجية (Neural Weights) تم تدريبه عليها.\n\n---\n\n### 2. كيف تعمل أداة البحث `Web Search`؟\nالنموذج الذكي بنفسه **لا يخزن الإنترنت الحي بأكمله داخل ذاكرته**، ولكن لديه قابليّـة تُسمى **استدعاء الأدوات (Function Calling / Tool Use)**:\n\n1. **الطلب والتحليل:** عندما تطلب مني البحث عن موضوع معين، أحلل طلبك وأصيغ استعلام بحث متقدم (Search Query).\n2. **استدعاء الأداة:** أرسل إشارة لنظام البيئة (System) لاستدعاء أداة `web_search`.\n3. **جلب البيانات المباشرة:** الأداة تتصل بمحركات البحث والشبكة في الوقت الفعلي (Live Web) وتجلب نتائج البحث الحالية من مختلف المواقع.\n4. **الفهم والصياغة:** أقرأ النتائج الواردة، أحللها، وأعطيك خلاصة دقيقة ومعالجة بلغة طبيعية.\n\n---\n\n### 3. هل هذا يعني أنني متصل بكل المحركات؟\n* **نعم، من ناحية النتيجة:** محرك البحث المربوط بالنظام ينقب في مليارات الصفحات والمواقع العامة والمستندات على الإنترنت بنفس قدرة وشمولية محركات البحث الكبرى (وعلى رأسها Google Search).\n* **الفارق الأساسي:** أداة البحث تعمل كـ **\"عيون وأذن حية\"** تمكّن الذكاء الاصطناعي من الوصول لمعلومات قيلت أو نُشرت حتى في هذه اللحظة، وتجاوز حدود تاريخ انقطاع التحديثات البرمجية.\n\n---\n\n**باختصار:** أجمع بين **قوة التفكير والتحليل** (من نموذج Gemini) و**المعلومات الحية والمباشرة** (من خلال أداة `web_search`).",
+              "thoughtSignature": "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"
+            }
+          ],
+          "model": "gemini-3.6-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1788706732410",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! أنا في خدمتك بكامل جاهزيتي الهندسية والمعمارية.\\n\\nكيف يمكنني مساعدتك اليوم في مشروع **VSA Academy**؟ سواء كان ذلك في تطوير الواجهات، فحص الأكواد، ضبط البنية التحتية، أو بناء ميزات جديدة، أنا مستعد!\",\"thoughtSignature\":\"EqUCCqICARFNMg+B1KUcImpuewyuzHDh6Ls2smG5XoCWVPAIHW9wodfz7Z8LFUDiBEetqF7cIHgx6fcSrOus/emFlqvBDzf2xKr1RTau8Fx6Gi2c/oSaGth89tQpt7VDqme3B8SeAHi5znuFMFqLM0BM2jplVogbSit6cqbM5dPz27q/N+PwjhdJ+zwnP3uwO96WvUmlfWjHVJEm5AzKzx9hY0EQMFLiXjT5jjx75JAraZ5seinFuVQDn/qmZsXwxgOXMpeEaNbRfbCU6pi9RHDmU2w2KsNNkBqxwkCNAvyhBIcqrsBGyoY0fJcHSCBcdxxECkNMfMDtqLAEVtqSGtkl9sNVxKKZvLa+O2valqVJYWwPuYly8adlkBVesZA+CJkZYdvqdmI=\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"الحمد لله بأفضل حال وجاهز بكامل طاقتي! أتمنى أن تكون بأفضل حال أيضاً.\\n\\nأنا هنا ومستعد للعمل على أي تحسينات، تعديلات برمجية، أو ميزات تود إضافتها إلى مشروعك اليوم. بماذا تحب أن نبدأ؟\",\"thoughtSignature\":\"Eq0CCqoCARFNMg9MiYAl/bklmAQkz5WvmBJRyqXGhgio6bqjfjZYcx/rdNroG3Vxqfx+7f2Kj3JOsijo7aQCZAu/RZFM5/wnrG07LXuZou6nkL8rkJsJRGismaAYvmEJnetUhT4zQC96kll4SCSpCIy4nDbgVS9G4mkIQc0QKrFixLnuxv6Fb4Iq725zRB3ejCDMWO4Ubzr8iO+7f+KG1W7LuMcCOnyeY5L16uIQYT976JxtSf/e73/tfbz50W5qAbGglRAj1kfPwEBBJ7vYKRg+F6qU6UGR+oBl9xqfwYOUBgL4By2v0xbgW9ikvX4KeBBAVxFqd+HCJP4MxfnXHQX56oQQWpKrhPLVDfMopqu29ZxyKRecBvRMnecxatWFJzOF28i+/pOHT2CcAdfxJQ==\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك البحث في النت عن اي موقع و اي تطبيق وي موقع تواصل اجتماعي\"}]}]",
-  "timestamp": "2026-09-06T14:59:48.267Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-06T15:01:23.402Z"
 }
