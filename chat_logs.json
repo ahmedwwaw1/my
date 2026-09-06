@@ -1,49 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788694194654",
-      "title": "الحمد لله، بأفضل حال وبكامل ال",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "مرحباً بك! 👋\n\nأنا مساعدك الذكي ومطورك في **VSA Academy**. جاهز لمساعدتك في تطوير وبرمجة المشاريع، تحليل وتعديل الأكواد، تحسين واجهات وتجارب المستخدم، أو أي مهمة برمجية ومعمارية أخرى تحتاجها.\n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "EucCCuQCARFNMg+5FYo0UBI3mzRYKf+MkKtEoVh1jIklSNTgAtA0tSsrpPLQ2GBrQtfLrsh2mVjliWk0phizQFOgOguf7kad0+XAl5NGsvCfpleQ1lcyajBd/ydd22VWRe6VfKZIdA4X9pkxhnqGNZiHfcUQalbo5d+qlnBpxiIyD7ODjMjTxmp8qzMu0if4ofPsJ5Rv3Sldzml+kGU68TDcd/ykQCyteIwTM6lIf1FssB+C6RP2hxWPRmQrzPesanfPU+p8gvM636CE0zSZ5xxI0t8Y9s6p8VIGEwCifF8Jzv16t5/nVkiDP99asM1ouU72ZOAXuHdQn5FmpQ6eZZELpOn+YMtf61km3clBDUIZgJwMqtgsMhQpzt+rX1yNzxxVUg70UxNSfirf6T7kyYPuc9BNHW8hAW8j0/Dj35SyO8AP/rnXvTbDAZ01bLl29RMk4dR1p8Cg1WIvtmBf3wBH6NGOePQooH4="
-            }
-          ],
-          "model": "gemini-3.7-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، بأفضل حال وبكامل الجاهزية للعمل معك! 🚀\n\nأتمنى أن تكون بأفضل حال أيضاً. أخبرني، ما الذي نعمل عليه اليوم؟ هل لديك مشروع أو كود ترغب في تطويره، مراجعته، أو إضافة ميزات جديدة له؟",
-              "thoughtSignature": "ErMCCrACARFNMg/t2OgrQBsFVEqs8GZ1ESU2mzCEdEAfC26KxDG8+sv9mM0mI37A/LkLhNsC00qaGLO0tm7xj5J0O98Fp7Ll6IytYQh7JSr9zBkVsp03/EyVdy/3o1WYj7PARPD7bXFKBuzu3+ULCFHLKBp2FGePkfAiTZE8oHdnQr8UzTJ2qGygFKDhtPJJWbbbsf1wYIL90FtVUhvK1Dr5Y8J93QobdsbXmQJ925fxhpXxQjiOjOppMrkIfEeQH4Dn5Pp0JFjYPdLle5AyKe2f7EH3+9ZdAt1WllFWfwR2uzXRqh3UHzc4+BQXJy3TA84po4YWFRGwGVH5tnI/qf8IetlbVBZBHNMdjll/+ljidv/bRGOf69sa/c7u/N1ly85hgFRSGDG47jBo5P4zBIP7eAT4Wg=="
-            }
-          ],
-          "model": "gemini-3.7-flash"
-        }
-      ]
-    }
-  ],
-  "activeSessionId": "1788694240656",
-  "pendingHistory": null,
-  "timestamp": "2026-09-06T11:30:40.656Z"
+  "sessions": [],
+  "activeSessionId": "1788694404504",
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
+  "timestamp": "2026-09-06T11:33:40.253Z"
 }
