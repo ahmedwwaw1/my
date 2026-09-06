@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788706732410",
-      "title": "سؤال ممتاز ينمّ عن تفكير عميق ",
+      "title": "الجواب الصريح والمباشر 100%:\n\n",
       "history": [
         {
           "role": "user",
@@ -75,11 +75,29 @@
             }
           ],
           "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "نعم، من ناحية النتيجة: محرك البحث المربوط بالنظام ينقب في مليارات الصفحات والمواقع العامة والمستندات على الإنترنت بنفس قدرة وشمولية اي محرك تقصد بلضبط عن Google Search الموجود في نضامي الان ام الموجود في شركة جوجل اريد الجواب الصريح"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "الجواب الصريح والمباشر 100%:\n\nالمقصود هو **محرك بحث Google Search الموجود في خوادم شركة Google السحابية (Cloud Servers)**، وليس شيئاً مخزناً داخل جهازك أو نظامك المحلي.\n\n---\n\n### للتوضيح التقني الدقيق:\n\n1. **مستحيل أن يكون الفهرس في جهازك:**\n   * فهرس محرك بحث Google يحتوي على مئات المليارات من صفحات الويب ويحتاج لمراكز بيانات ضخمة (Data Centers) بسعات تخزين هائلة (Exabytes) لا يمكن لأي جهاز شخصي أو نظام محلي استيعابها.\n\n2. **ما هو الموجود في نظامك الحالي؟**\n   * الموجود في بيئتك البرمجية حالياً هو مجرد **\"واجهة اتصال / جسر برمجـي\" (API Bridge / Function Tool)**.\n\n3. **كيف تتم العملية فعلياً؟**\n   * عندما أقوم بتنفيذ بحث، تُرسل الكلمات المفتاحية عبر الإنترنت إلى **خوادم شركة Google ومحركاتها السحابية**.\n   * تقوم خوادم Google بالبحث في الإنترنت الحي وإرجاع النتائج الفورية.\n   * يستلم نظامك هذه النتائج، ويقوم النموذج بتحليلها وتقديمها لك.\n\n**الخلاصة:**\nأنت تستخدم **محرك بحث شركة Google الفعلي والحي عبر السحابة** من خلال أداة برمجية مدمجة في النظام.",
+              "thoughtSignature": "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"
+            }
+          ],
+          "model": "gemini-3.7-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1788706732410",
   "pendingHistory": null,
-  "timestamp": "2026-09-06T15:01:23.402Z"
+  "timestamp": "2026-09-06T15:06:30.538Z"
 }
