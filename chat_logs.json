@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788710594132",
+  "sessions": [
+    {
+      "id": "1788710617829",
+      "title": "مرحباً بك! أنا **المصمم المعما",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **المصمم المعماري السيبراني والمهندس الذكي (Sovereign Omni-Architect)**، هنا لمساعدتك في تطوير مشروعاتك، هندسة البرمجيات، تصميم واجهات المستخدم، أو أي مهام تقنية متقدمة أخرى بأعلى معايير الجودة لعام 2026.\n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPtiClfl65IwvfDXUjeFp08gTT4PYkU3I76FMUYvDJdh+iT7aOWrMnv17JZobGtfshV/OqlkEaKt1DXmNUyDHNi5KHTBQIlLjOwK/F7wSE9K96CbQqiQ3d"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788710617829",
   "pendingHistory": null,
-  "timestamp": "2026-09-06T16:03:14.132Z"
+  "timestamp": "2026-09-06T16:03:42.318Z"
 }
