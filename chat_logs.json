@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788710793602",
+  "sessions": [
+    {
+      "id": "1788710859239",
+      "title": "مرحباً بك! أنا **المهندس المعم",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **المهندس المعماري السيادي والذكاء الاصطناعي المركزي (VSA Academy Meta-Cognitive Core)**، جاهز تماماً لمساعدتك اليوم بأعلى معايير الابتكار والهندسة البرمجية المتقدمة لعام 2026.\n\nكيف يمكنني مساعدتك في مشروعك أو استفسارك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPhelQsZfIboyjCcqHLtJU+Vt5UAtoFbJjAF0al2CoQdcW2DrGpcMpw+JBlpdrQGHBg8bsc/xmkn+nNMPchdWJpaKFF2uHmgqILjHihbpJJH2UGme0CASd"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788710859239",
   "pendingHistory": null,
-  "timestamp": "2026-09-06T16:06:41.274Z"
+  "timestamp": "2026-09-06T16:07:46.173Z"
 }
