@@ -1,27 +1,9 @@
 {
   "sessions": [
     {
-      "id": "1788695089331",
-      "title": "أهلاً بك! أنا بأفضل حال وجاهز ",
+      "id": "1788695769977",
+      "title": "أهلاً بك! أنا بأفضل حال ومستعد",
       "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "مرحباً بك! أنا جاهز ومستعد لمساعدتك في أي مهمة برمجية، معمارية، أو تطويرية تحتاجها في المشروع. \n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "EtACCs0CARFNMg9Odk6tKgMuBQWb4lBl29vVF9BqKRK/lxCl+sae6tOqc6/bKoIbi/99j+X5wzifE9MxwvFmedrZ88tkGukJBT0hapY6l59wZ1fN2s2uv0BC4QUf6fXR6dVt90pjIcnti06aPFcr1FD6a1it0oyaUPOXGorQE/MpdINFBIAiRO1vOo+Sj2Tw0i0ufeJY6VF5ywN281a3obbpxD7mXGVIi1B4OHxC6Y8fzVUDY8wre1cZfbTY/RwI2vJO67PqnkOaWIMmmuI9nVoegciUbDUjMwNtoYaRykRXRocqDSBTqpg8PhZkJ3dOZIkvJVxRLlPzPE2tyD6MbxBoeK59V6+rYTc3vs8RdRB+zRzqkeqI0deHe5SrenAL9C5QGZViWZpz9A/IjgVjKs1Qj1ZQszfxd3BrSFH8okWs7DS41bS9cNaSUCgv6RoqfY7h"
-            }
-          ],
-          "model": "gemini-3.7-flash"
-        },
         {
           "role": "user",
           "parts": [
@@ -34,8 +16,11 @@
           "role": "model",
           "parts": [
             {
-              "text": "أهلاً بك! أنا بأفضل حال وجاهز بكامل طاقتي لمساعدتك. \n\nأتمنى أن تكون بأفضل حال أيضاً! ما الذي نود العمل عليه أو استكشافه اليوم في المشروع؟",
-              "thoughtSignature": "EuYBCuMBARFNMg8LztOn+okr9KUR/aidF1mAg3/17hg+2y3rdYcvTP+/SypIjSCPrjSxQLO/ONjstq8NWrPxoicbpWY1CzwVHqx37mWHwF2U3sxyW3xwE1Uj0XLu9LsC1xTmF/pNfyjmqGIEjlEHr4Wt6gNeOhvHVjeh5lGpbtUGIRevTA5Iw3sfUfdcjh731ouc6p1gtr0qhpMt8C4V2veBycGLZ1wsrVses5cjjkaPSTEJ5TA4MuPCS00L8vnLQstFT3eN3Tc00A9JFV+UchiIh4EEKjjjOv0iVTK5cxtQPrC8PUvcv5w="
+              "text": "أهلاً بك! أنا بأفضل حال ومستعد وجاهز لمساعدتك بكامل طاقتي. \n\nكيف يمكن"
+            },
+            {
+              "text": "ني خدمتك وتوجيه جهودنا البرمجية أو المعمارية اليوم في المشروع؟",
+              "thoughtSignature": "EpgCCpUCARFNMg+0JSGw1HfV45apCm9SpIUKQe2Kd774mJAjLnR+vLCIsogdsOue/vxNZoIMu22iw3uABUFUXkSPVc6ZZbW4xM5/CLaowzHlOiqGpTkPU2+qlBtF/AQ9ssET8VKmm3qmoOmlv+TpXmtOgrwlh8hIdAHGROw2A8mLx3G5VIuMQ2ahyW3sj1hZVSZ3PD0HsODI1BXEAziWffD65SbYX6C7NLG+Lb2I7kTsqNlnAOCeYTXdAfdnOOyKKjEcCGRJ/idr8P3Ao984BtfG2FYbUmlrBJy6MSLqTQqwF81ec6LOGx0xrkscf8PFWXx1j/dwaY9XB/o+9P+I/466mKAesA+bHKr1+/R5PTXbtRSWBT4rgTYIYA=="
             }
           ],
           "model": "gemini-3.7-flash"
@@ -43,7 +28,7 @@
       ]
     }
   ],
-  "activeSessionId": "1788695089331",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! أنا جاهز ومستعد لمساعدتك في أي مهمة برمجية، معمارية، أو تطويرية تحتاجها في المشروع. \\n\\nكيف يمكنني مساعدتك اليوم؟\",\"thoughtSignature\":\"EtACCs0CARFNMg9Odk6tKgMuBQWb4lBl29vVF9BqKRK/lxCl+sae6tOqc6/bKoIbi/99j+X5wzifE9MxwvFmedrZ88tkGukJBT0hapY6l59wZ1fN2s2uv0BC4QUf6fXR6dVt90pjIcnti06aPFcr1FD6a1it0oyaUPOXGorQE/MpdINFBIAiRO1vOo+Sj2Tw0i0ufeJY6VF5ywN281a3obbpxD7mXGVIi1B4OHxC6Y8fzVUDY8wre1cZfbTY/RwI2vJO67PqnkOaWIMmmuI9nVoegciUbDUjMwNtoYaRykRXRocqDSBTqpg8PhZkJ3dOZIkvJVxRLlPzPE2tyD6MbxBoeK59V6+rYTc3vs8RdRB+zRzqkeqI0deHe5SrenAL9C5QGZViWZpz9A/IjgVjKs1Qj1ZQszfxd3BrSFH8okWs7DS41bS9cNaSUCgv6RoqfY7h\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك! أنا بأفضل حال وجاهز بكامل طاقتي لمساعدتك. \\n\\nأتمنى أن تكون بأفضل حال أيضاً! ما الذي نود العمل عليه أو استكشافه اليوم في المشروع؟\",\"thoughtSignature\":\"EuYBCuMBARFNMg8LztOn+okr9KUR/aidF1mAg3/17hg+2y3rdYcvTP+/SypIjSCPrjSxQLO/ONjstq8NWrPxoicbpWY1CzwVHqx37mWHwF2U3sxyW3xwE1Uj0XLu9LsC1xTmF/pNfyjmqGIEjlEHr4Wt6gNeOhvHVjeh5lGpbtUGIRevTA5Iw3sfUfdcjh731ouc6p1gtr0qhpMt8C4V2veBycGLZ1wsrVses5cjjkaPSTEJ5TA4MuPCS00L8vnLQstFT3eN3Tc00A9JFV+UchiIh4EEKjjjOv0iVTK5cxtQPrC8PUvcv5w=\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"بخير\"}]}]",
-  "timestamp": "2026-09-06T11:45:14.786Z"
+  "activeSessionId": "1788695769977",
+  "pendingHistory": null,
+  "timestamp": "2026-09-06T11:56:28.748Z"
 }
