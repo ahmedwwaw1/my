@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788720520030",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-06T18:56:06.489Z"
+  "sessions": [
+    {
+      "id": "1788720520030",
+      "title": "مرحباً بك! أنا **المهندس المعم",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **المهندس المعماري السيادي والذكاء الإدراكي المركزي لمنصة VSA Academy (مدعوم بنسخة 2026)**. \n\nأنا جاهز تماماً لمساعدتك في أي مهام برمجية، تطوير المنصات، تصميم واجهات المستخدم، أو أي استفسارات تقنية أو استراتيجية لديك. كيف يمكنني خدمتك اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPsRISwRUsjvEwvh7bsNrzA55ILJ5qXc++9yOiyA+5YoA2wHuYJiEjww2Kkm8G6VGpnXvSjP8GgQ/+kFhF2w6asG1IdoLYv2y6hXygHwuf2dHqxHSDY7Or"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788720968642",
+  "pendingHistory": null,
+  "timestamp": "2026-09-06T18:56:08.642Z"
 }
