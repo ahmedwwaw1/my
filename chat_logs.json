@@ -8,5 +8,5 @@
   ],
   "activeSessionId": "1788712353590",
   "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ممكن اريد ان اعرف كورس بايثون من قناة الزيرو ويب سكول كم درس فيه\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"المستخدم يسأل عن عدد دروس كورس بايثون الخاص بقناة الزيرو ويب سكول. سأقوم بالبحث عبر الإنترنت لمعرفة عدد الدروس الحالي في كورس بايثون لأسامة الزيرو.\",\"plan\":\"بحث عن عدد دروس كورس بايثون من قناة الزيرو ويب سكول (Elzero Web School) للتأكد من العدد بدقة وإعطاء إجابة مفصلة ومحدثة.\"},\"id\":\"call_3503289\"},\"thoughtSignature\":\"El4KXAERTTIPrqLtAHGCu/O1AFQwDPlvsuB/ydNmjJ22MQoUvcMQB4YbqfGKeWx+AzqO84yUe4yhKWMGwrh5WcfnSdsZrsdJzXLymAbPS49OAaB4Og2FnoGUCWUsn/L8\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يسأل عن عدد دروس كورس بايثون الخاص بقناة الزيرو ويب سكول. سأقوم بالبحث عبر الإنترنت لمعرفة عدد الدروس الحالي في كورس بايثون لأسامة الزيرو.\",\"plan\":\"بحث عن عدد دروس كورس بايثون من قناة الزيرو ويب سكول (Elzero Web School) للتأكد من العدد بدقة وإعطاء إجابة مفصلة ومحدثة.\"}}}}]}]",
-  "timestamp": "2026-09-06T16:32:44.361Z"
+  "timestamp": "2026-09-06T16:32:48.615Z"
 }
