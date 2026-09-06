@@ -26,6 +26,6 @@
     }
   ],
   "activeSessionId": "1788695089331",
-  "pendingHistory": null,
-  "timestamp": "2026-09-06T11:44:59.234Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! أنا جاهز ومستعد لمساعدتك في أي مهمة برمجية، معمارية، أو تطويرية تحتاجها في المشروع. \\n\\nكيف يمكنني مساعدتك اليوم؟\",\"thoughtSignature\":\"EtACCs0CARFNMg9Odk6tKgMuBQWb4lBl29vVF9BqKRK/lxCl+sae6tOqc6/bKoIbi/99j+X5wzifE9MxwvFmedrZ88tkGukJBT0hapY6l59wZ1fN2s2uv0BC4QUf6fXR6dVt90pjIcnti06aPFcr1FD6a1it0oyaUPOXGorQE/MpdINFBIAiRO1vOo+Sj2Tw0i0ufeJY6VF5ywN281a3obbpxD7mXGVIi1B4OHxC6Y8fzVUDY8wre1cZfbTY/RwI2vJO67PqnkOaWIMmmuI9nVoegciUbDUjMwNtoYaRykRXRocqDSBTqpg8PhZkJ3dOZIkvJVxRLlPzPE2tyD6MbxBoeK59V6+rYTc3vs8RdRB+zRzqkeqI0deHe5SrenAL9C5QGZViWZpz9A/IjgVjKs1Qj1ZQszfxd3BrSFH8okWs7DS41bS9cNaSUCgv6RoqfY7h\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]}]",
+  "timestamp": "2026-09-06T11:45:07.225Z"
 }
