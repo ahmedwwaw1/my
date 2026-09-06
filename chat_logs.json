@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788724391276",
-      "title": "نعم، بالطبع! لدي القدرة على ال",
+      "title": "أنا جاهز تماماً! سواء كنت تريد",
       "history": [
         {
           "role": "user",
@@ -53,11 +53,61 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "في محرك .bing"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم يحدد محرك Bing بالذات. أستطيع البحث عبر الإنترنت باستخدام أدوات البحث المتاحة لدي لتلبية طلبه.",
+                  "plan": "توضيح آلية البحث للمستخدم وأنني أستطيع البحث واسترجاع النتائج الحية لمساعدته في أي موضوع يطلبه، مع الاستعداد التام لتنفيذ أي بحث يطلبه."
+                },
+                "id": "call_3907721"
+              },
+              "thoughtSignature": "El4KXAERTTIPEFaYe07dQgzxXBQawk5mOEyiTl4UWwDBhVeUkgMZbWhmEjzS8vQv3TgixWKsAhvV02zeMIw4ZMDR7njAOAjjxHMvmDaJu5GHL8E+PxxSLY3i8VzEB7aD"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يحدد محرك Bing بالذات. أستطيع البحث عبر الإنترنت باستخدام أدوات البحث المتاحة لدي لتلبية طلبه.",
+                    "plan": "توضيح آلية البحث للمستخدم وأنني أستطيع البحث واسترجاع النتائج الحية لمساعدته في أي موضوع يطلبه، مع الاستعداد التام لتنفيذ أي بحث يطلبه."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا جاهز تماماً! سواء كنت تريد البحث عن معلومات، أخبار، صور، مقالات، أو أي مواضيع أخرى عبر الإنترنت، أستطيع جلب النتائج بدقة.\n\nما هو الموضوع أو الكلمة التي تود مني البحث عنها؟ اكتبها لي وسأقوم بالبحث عنها فوراً!",
+              "thoughtSignature": "El4KXAERTTIP/UVnKBQ+5Y0Cry2LI8nwS46zGDZLfaFR2Rr4fr6PtOVkg0qJsj8oTh6jgjewL1qiqdpS4WHRrBpfsTjW1NskXV1YzUpo/M8iZ012caLEn76ZcLYjmlaN"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1788724391276",
   "pendingHistory": null,
-  "timestamp": "2026-09-06T19:56:46.480Z"
+  "timestamp": "2026-09-06T19:57:00.026Z"
 }
