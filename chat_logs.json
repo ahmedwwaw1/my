@@ -1,12 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788712353590",
-      "title": "محادثة جديدة",
-      "history": []
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788712353590",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ممكن اريد ان اعرف كورس بايثون من قناة الزيرو ويب سكول كم درس فيه\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"المستخدم يسأل عن عدد دروس كورس بايثون الخاص بقناة الزيرو ويب سكول. سأقوم بالبحث عبر الإنترنت لمعرفة عدد الدروس الحالي في كورس بايثون لأسامة الزيرو.\",\"plan\":\"بحث عن عدد دروس كورس بايثون من قناة الزيرو ويب سكول (Elzero Web School) للتأكد من العدد بدقة وإعطاء إجابة مفصلة ومحدثة.\"},\"id\":\"call_3503289\"},\"thoughtSignature\":\"El4KXAERTTIPrqLtAHGCu/O1AFQwDPlvsuB/ydNmjJ22MQoUvcMQB4YbqfGKeWx+AzqO84yUe4yhKWMGwrh5WcfnSdsZrsdJzXLymAbPS49OAaB4Og2FnoGUCWUsn/L8\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يسأل عن عدد دروس كورس بايثون الخاص بقناة الزيرو ويب سكول. سأقوم بالبحث عبر الإنترنت لمعرفة عدد الدروس الحالي في كورس بايثون لأسامة الزيرو.\",\"plan\":\"بحث عن عدد دروس كورس بايثون من قناة الزيرو ويب سكول (Elzero Web School) للتأكد من العدد بدقة وإعطاء إجابة مفصلة ومحدثة.\"}}}}]}]",
-  "timestamp": "2026-09-06T16:32:48.615Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ممكن اريد ان اعرف كورس بايثون من قناة الزيرو ويب سكول كم درس فيه\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"Search for Elzero Python course number of lessons to provide accurate, up-to-date information.\",\"reasoning\":\"User is asking about the number of lessons in Elzero Web School's Python course. I should search online to get the exact and current count.\"},\"id\":\"call_3417400\"},\"thoughtSignature\":\"El4KXAERTTIPaIzJbt6lFCbTQ8JHO47Q4RpfmIyWt6WY+BewptOPMWXrMhyLB30x57p8JflO77B4yoRMzimKjcDCrDYDbhI4RB/hAx2xXavI5+NEjjt5X7yFS7amoNJq\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"User is asking about the number of lessons in Elzero Web School's Python course. I should search online to get the exact and current count.\",\"plan\":\"Search for Elzero Python course number of lessons to provide accurate, up-to-date information.\"}}}}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"كورس بايثون الزيرو كم درس بايثون elzero python course playlist lessons count\"},\"id\":\"call_2054503\"},\"thoughtSignature\":\"El4KXAERTTIPGNtLXGhiMMzHcVaXqAh8v+qtaKQuFkFnPRg2+VpRQSCDGHhgXxvCBpQo/0eP28bctqYeXbqvqslZLjxFPUh1Ri7AfzwFmjW6BJSwPLPvYM4sz98AsH2c\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"{\\\"source\\\":\\\"tavily\\\",\\\"detail\\\":{\\\"error\\\":\\\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\\\"}}\"}}}]}]",
+  "timestamp": "2026-09-06T16:33:12.215Z"
 }
