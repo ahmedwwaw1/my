@@ -63,23 +63,22 @@
 
                 <!-- Main Chat Area -->
                 <div class="ai-main-content">
-                    <div class="ai-header">
-                        <div class="ai-header-title">
-                            <span onclick="toggleHistory()" style="cursor: pointer; font-size: 20px; color: #afb1b3;" title="History">🕒</span>
-                            <span style="letter-spacing: 0.5px;">Agent / العقل المدبر</span>
-                            <span id="aiLiveClock" style="margin-right: 10px; font-family: monospace; font-size: 12px; color: #4db6ac; background: rgba(77, 182, 172, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(77, 182, 172, 0.2);">08:22:20</span>
-                            <span id="aiDynamicTimer" class="ai-timer-badge">0:00</span>
-                            <div id="systemHealthBadge" class="system-status-pill">
-                                <div class="status-dot"></div>
-                                <span id="healthStatusText">SYSTEM READY</span>
+                    <div class="ai-header" style="height: 52px; padding: 0 16px; display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--ai-border); background: var(--ai-header); direction: ltr !important;">
+                        <div class="ai-header-title" style="display: flex; align-items: center; gap: 12px; flex-grow: 1; justify-content: flex-end;">
+                            <span id="aiDynamicTimer" class="ai-timer-badge" style="display:none;">0:00</span>
+                            <span id="aiLiveClock" style="margin-left: 10px; font-family: monospace; font-size: 12px; color: #4db6ac; background: rgba(77, 182, 172, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(77, 182, 172, 0.2);">08:22:20</span>
+                            <div id="systemHealthBadge" class="system-health-badge" style="padding: 3px 8px; border-radius: 6px; font-family: monospace; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 6px; background: rgba(77, 182, 172, 0.1); color: #4db6ac; border: 1px solid rgba(77, 182, 172, 0.2);">
+                                <span class="health-dot" style="width:8px; height:8px; background:#4db6ac; border-radius:50%; box-shadow: 0 0 8px #4db6ac;"></span>
+                                <span id="healthStatusText">BRIDGE: OK | ONLINE (2026)</span>
                             </div>
+                            <span style="letter-spacing: 0.5px; color: #fff; font-weight: 600;">Agent / العقل المدبر</span>
+                            <span onclick="toggleHistory()" style="cursor: pointer; font-size: 20px; color: #afb1b3; margin-right: 10px;" title="السجل">🕒</span>
                         </div>
-                        <div class="ai-header-actions">
-                            <span onclick="checkForEvolution()" title="Check for Evolution Updates" style="font-size: 16px;">🚀</span>
-                            <span onclick="createNewChat()" title="New Chat" style="font-size: 22px;">＋</span>
-                            <span onclick="toggleMaximizeAi()" title="Maximize/Restore" style="font-size: 16px;">⬜</span>
-                            <span title="Settings" onclick="alert('Settings managed via Supabase Secrets')">⋮</span>
-                            <span onclick="toggleAiChat()">—</span>
+                        <div class="ai-header-actions" style="display: flex; align-items: center; gap: 12px;">
+                            <span onclick="toggleAiChat()" title="إغلاق" style="cursor: pointer; color: var(--ai-muted); font-size: 18px;">✕</span>
+                            <span onclick="toggleMaximizeAi()" title="تكبير/استعادة" style="cursor: pointer; color: var(--ai-muted); font-size: 16px;">⬜</span>
+                            <span onclick="createNewChat()" title="محادثة جديدة" style="cursor: pointer; color: var(--ai-muted); font-size: 20px;">＋</span>
+                            <span onclick="checkForEvolution()" title="تحديثات التطور" style="cursor: pointer; color: var(--ai-muted); font-size: 16px;">🚀</span>
                         </div>
                     </div>
 

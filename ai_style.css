@@ -16,8 +16,53 @@
 }
 
 /* 🧠 AI Widget & Button */
-.ai-widget { position: fixed; bottom: 20px; left: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
-.ai-btn { display: flex; width: 54px; height: 54px; background: var(--ai-accent); color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; box-shadow: 0 8px 25px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); }
+.ai-widget {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.ai-btn {
+    width: 65px;
+    height: 65px;
+    background: linear-gradient(135deg, #1a1b1e 0%, #0d0d0f 100%);
+    border: 2px solid var(--ai-border);
+    border-radius: 50%;
+    font-size: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(53, 116, 240, 0.2);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+
+.ai-btn:hover {
+    transform: scale(1.1) rotate(5deg);
+    border-color: var(--ai-accent);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 25px rgba(53, 116, 240, 0.4);
+}
+
+.ai-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.ai-btn:hover::after { opacity: 1; }
 
 /* 💬 Chat Box Structure */
 .ai-chat-box { display: none; width: 820px; height: 600px; min-width: 400px; min-height: 400px; background: var(--ai-bg); border: 1px solid var(--ai-border); border-radius: 12px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); overflow: hidden; position: relative; flex-direction: row; font-family: 'Inter', sans-serif; }
@@ -41,25 +86,30 @@
 
 /* 🔘 Footer & Model Selector (Image 3 Style) */
 .ai-input-footer { display: flex; justify-content: space-between; align-items: center; }
-.ai-footer-icons { display: flex; gap: 16px; color: var(--ai-muted); }
+.ai-footer-icons { display: flex; gap: 16px; color: var(--ai-muted); align-items: center; }
 
 /* زر الزائد المحترف (Gemini Style) */
 .btn-plus-attachment {
-    font-size: 24px !important;
-    color: var(--ai-muted);
-    cursor: pointer;
-    transition: background 0.3s ease, color 0.2s;
+    width: 34px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
     border-radius: 50%;
+    cursor: pointer;
+    color: var(--ai-muted);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid transparent;
+    font-size: 20px !important;
 }
 
 .btn-plus-attachment:hover {
     color: #fff;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(53, 116, 240, 0.1);
+    border-color: rgba(53, 116, 240, 0.3);
+    box-shadow: -4px 4px 12px rgba(53, 116, 240, 0.2);
+    transform: translateY(-2px);
 }
 
 #modelSelector { background: #2b2d30 !important; color: var(--ai-text) !important; border: 1px solid #4e5157; border-radius: 6px; font-size: 12px; padding: 4px 8px; cursor: pointer; outline: none; }
@@ -68,8 +118,20 @@
 .ai-send-btn-new.active { background: var(--ai-accent); color: #fff; }
 
 /* 🖼️ Images inside Chat (Image 4 Style) */
-.chat-image-msg { max-width: 280px; border-radius: 12px; border: 1px solid var(--ai-border); margin: 8px 0; cursor: zoom-in; transition: transform 0.2s; }
-.chat-image-msg:hover { transform: scale(1.02); }
+.chat-image-msg {
+    max-width: 450px;
+    max-height: 350px;
+    border-radius: 12px;
+    border: 1px solid var(--ai-border);
+    margin: 8px 0;
+    cursor: zoom-in;
+    transition: transform 0.3s;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+.chat-image-msg:hover {
+    transform: scale(1.02);
+}
 
 /* 💬 Standard Messages */
 .msg { max-width: 85%; padding: 12px 16px; border-radius: 16px; line-height: 1.6; }
@@ -77,5 +139,12 @@
 .msg.ai { background: transparent; align-self: flex-start; max-width: 95%; }
 
 /* 📐 Resizers */
-.ai-resizer { position: absolute; z-index: 1000; }
-.ai-resizer-br { cursor: se-resize; right: 0; bottom: 0; width: 14px; height: 14px; }
+.ai-resizer { position: absolute; z-index: 10000 !important; }
+.ai-resizer-r { cursor: e-resize; top: 0; right: 0; width: 8px; height: 100%; }
+.ai-resizer-l { cursor: w-resize; top: 0; left: 0; width: 8px; height: 100%; }
+.ai-resizer-t { cursor: n-resize; top: 0; left: 0; width: 100%; height: 8px; }
+.ai-resizer-b { cursor: s-resize; bottom: 0; left: 0; width: 100%; height: 8px; }
+.ai-resizer-br { cursor: se-resize; right: 0; bottom: 0; width: 18px; height: 18px; }
+.ai-resizer-bl { cursor: sw-resize; left: 0; bottom: 0; width: 18px; height: 18px; }
+.ai-resizer-tr { cursor: ne-resize; right: 0; top: 0; width: 18px; height: 18px; }
+.ai-resizer-tl { cursor: nw-resize; left: 0; top: 0; width: 18px; height: 18px; }

@@ -410,9 +410,15 @@ function stopAiTimer() {
 function updateHealthUI(online, text) {
     const badge = document.getElementById('systemHealthBadge');
     const textEl = document.getElementById('healthStatusText');
+    const dot = badge ? badge.querySelector('.health-dot') : null;
+
     if (badge && textEl) {
         badge.classList.toggle('status-error', !online);
         textEl.innerText = text.toUpperCase();
+        if (dot) {
+            dot.style.background = online ? '#4db6ac' : '#ff3d00';
+            dot.style.boxShadow = online ? '0 0 8px #4db6ac' : '0 0 8px #ff3d00';
+        }
     }
 }
 
