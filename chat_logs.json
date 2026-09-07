@@ -1,62 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788805029110",
-      "title": "الأمور تسير بأعلى مستويات الكف",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [],
-          "model": "gemini-3.6-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! مرحباً ألف في منظومة **VSA Academy Meta-Cognitive Core**. \n\nأنا جاهز تماماً لمساعدتك في أي مهام برمجية، هندسة معمارية، تصميم واجهات، تطوير تطبيقات، أو أي استفسار تكنولوجي تريده بأعلى معايير الدقة والاحترافية لعام 2026. \n\nتفضل بطرح طلبك أو فكرتك، ودعنا نبدأ الإبداع فوراً!",
-              "thoughtSignature": "El4KXAERTTIPBhqy0Jrpx+CkFCGAFH/h5H9au2uvesCMy8wDIIAeKb8v/CgBdMbPF06MvOHSR3mo3eAj7wqyUF7ydxJmpgHyMQlAlTdZ6veOKDlSB0crhSeqoZPWGpPX"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كف الامور"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الأمور تسير بأعلى مستويات الكفاءة والجاهزية! 🚀\n\nبصفتي **Sovereign Omni-Architect**، أنا في حالة \"تأهب إبداعي\" كاملة. الأنظمة مستقرة، والمنطق البرمجي في ذروته، وأنا بانتظار التوجيهات لنبدأ في بناء أو تطوير أي مشروع تضعه على طاولة العمليات.\n\n**كيف يمكنني أن أجعل يومك أكثر إنتاجية الآن؟**\n*   هل هناك كود يحتاج إلى تحسين أو \"Refactoring\"؟\n*   هل لديك فكرة تطبيق جديدة تريد وضع هيكليتها المعمارية؟\n*   هل تواجه \"Bug\" مستعصياً يحتاج إلى تحليل عميق؟\n*   أم تريد استشارة تقنية في تقنيات المستقبل؟\n\nأنا بانتظارك، تفضل!",
-              "thoughtSignature": "EnEKbwERTTIPIUgp7Vwzu3kasuJWgpSWPZcxkg1PbRY2BmwGK+w5wVYpF2wbQAYZh9aklnVINp7P9rENzY02m8d6oj2gDDbMGGZKdl7x/xHE0JiymfbkS4nzmwPixGe5R6vZQDkWvMWgBY5L74FQ/7nY/w=="
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1788805120049",
   "pendingHistory": null,
-  "timestamp": "2026-09-07T18:18:40.049Z"
+  "timestamp": "2026-09-07T18:18:45.225Z"
 }
