@@ -1,6 +1,57 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788794089333",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك فحص هاذ الملف\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"list_files\",\"args\":{},\"id\":\"call_5971493\"},\"thoughtSignature\":\"EmcKZQERTTIPyFUNL/nx8HNxLtz+Rq/D2AncZ2MVmu9Uu1adM9ZcfAD5+dvnoRoIYdBu0QN4Fw8wI/W/s83H0I5RTqgdHnuI8j2KTNQsgmiJK430qdHvddvkBc4drC9TBISA5NrlnFkW\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"list_files\",\"response\":{\"content\":\"محتويات الجذر:\\n📁 .artifacts\\n📄 .gitattributes\\n📁 .github\\n📁 .idea\\n📁 .vscode\\n📄 AI_AGENTS_REFERENCE.md\\n📄 EMERGENCY_REPAIR_GUIDE.txt\\n📄 PDF-images.json\\n📄 Time-analysis.json\\n📄 Worker.js\\n📄 ai_app_logic.js\\n📄 ai_engine_core.js\\n📄 ai_mastermind_capabilities.html\\n📄 ai_style.css\\n📄 app_logic.js\\n📁 archive\\n📄 calculator.html\\n📄 chat_logs.json\\n📄 crypto_alerts.json\\n📄 crypto_bot.py\\n📄 data.json\\n📄 engine_memory.json\\n📄 forex_report.html\\n📄 ide_bridge.json\\n📁 images\\n📄 implementation_plan.artifact.md\\n📄 index.html\\n📄 market_pulse.html\\n📄 remigrate_final.ps1\\n📄 remigrate_final.py\\n📄 steps.jsonl\\n📄 style.css\\n📄 supabase_bridge_logic.js\\n📄 system-capabilities.txt\\n📄 system_prompt_discussion.txt\\n📄 technical-analysis.json\\n📄 test_engine.py\\n📄 viewer.html\\n📄 vsa.json\\n📄 المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md\\n📄 تقرير_الجلسة_التقنية_للمراجعة.artifact.md\\n📄 دليل_إصلاح_الطوارئ_VSA.txt\"}}}]}]",
-  "timestamp": "2026-09-07T15:16:25.369Z"
+  "sessions": [
+    {
+      "id": "1788794089333",
+      "title": "بالتأكيد! أنا جاهز تماماً لفحص",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك فحص هاذ الملف"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "list_files",
+                "args": {},
+                "id": "call_5971493"
+              },
+              "thoughtSignature": "EmcKZQERTTIPyFUNL/nx8HNxLtz+Rq/D2AncZ2MVmu9Uu1adM9ZcfAD5+dvnoRoIYdBu0QN4Fw8wI/W/s83H0I5RTqgdHnuI8j2KTNQsgmiJK430qdHvddvkBc4drC9TBISA5NrlnFkW"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "list_files",
+                "response": {
+                  "content": "محتويات الجذر:\n📁 .artifacts\n📄 .gitattributes\n📁 .github\n📁 .idea\n📁 .vscode\n📄 AI_AGENTS_REFERENCE.md\n📄 EMERGENCY_REPAIR_GUIDE.txt\n📄 PDF-images.json\n📄 Time-analysis.json\n📄 Worker.js\n📄 ai_app_logic.js\n📄 ai_engine_core.js\n📄 ai_mastermind_capabilities.html\n📄 ai_style.css\n📄 app_logic.js\n📁 archive\n📄 calculator.html\n📄 chat_logs.json\n📄 crypto_alerts.json\n📄 crypto_bot.py\n📄 data.json\n📄 engine_memory.json\n📄 forex_report.html\n📄 ide_bridge.json\n📁 images\n📄 implementation_plan.artifact.md\n📄 index.html\n📄 market_pulse.html\n📄 remigrate_final.ps1\n📄 remigrate_final.py\n📄 steps.jsonl\n📄 style.css\n📄 supabase_bridge_logic.js\n📄 system-capabilities.txt\n📄 system_prompt_discussion.txt\n📄 technical-analysis.json\n📄 test_engine.py\n📄 viewer.html\n📄 vsa.json\n📄 المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md\n📄 تقرير_الجلسة_التقنية_للمراجعة.artifact.md\n📄 دليل_إصلاح_الطوارئ_VSA.txt"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "بالتأكيد! أنا جاهز تماماً لفحصه وتحليله معمارياً وبرمجياً بأعلى معايير الدقة.\n\n**يرجى تحديد الملف الذي ترغب في فحصه:**\n- يمكنك تزويدي بـ **اسم الملف ومساره** من بين ملفات المشروع، أو\n- **لصق محتوى الملف أو نصه مباشرة** هنا في المحادثة، وسأقوم بإجراء فحص شامل (Syntax، Logic، Security، Performance، Best Practices).",
+              "thoughtSignature": "Em0KawERTTIPfvE1/T+ZwcNNzUQqbOGVuehZBZmY0/q8e3hhUd6vIkASGQ/NfsMZ532NZviDdmKqs5VGOllXNRCZUHmndV4JLnn4IQqiF6EHKrAOlj7r2Ogi+T+5Vkbyjj/XgKJpcpd2FSVinRRN"
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788794196853",
+  "pendingHistory": null,
+  "timestamp": "2026-09-07T15:16:36.855Z"
 }
