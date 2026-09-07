@@ -1,0 +1,31 @@
+{
+  "sessions": [
+    {
+      "id": "1788815602663",
+      "title": "أهلاً وسهلاً بك! أنا بخير وفي ",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً وسهلاً بك! أنا بخير وفي أتم الاستعداد والجاهزية، شكراً لسؤالك.\n\nكيف يمكنني مساعدتك اليوم في مشروعك أو في مهام التطوير والبرمجة؟",
+              "thoughtSignature": "EuECCt4CARFNMg/qOOzTQxNssGu9b+cMgsGRWlyvAHKz4w5IPfK6oBYCZDQCPzSiZPF/NN+rSpRkM1GkI2kqlCe4BH93Hpvh86FsK7eU+TZNnWV1NZPlv9/K0ziqWVAjZJ7hMLm58fB8/6tCkppbzAypPTLXtYGWX0fuPU6NSVA+0CrAomHYrHLZaM49tbtLLOwGKVDpwBpZIszCsP4N5ZAYrC11Px2Q02m3ulNMyoZW5VtNhk2HI8Ts07vIAqAvAW8+OstBbVnl3kftoGZ6CDnmktIyr0QZOl5GdpiL9JLz6iNzKOTSnahVZESjipo7OgPD88fe5OzjCnyCNWVjx4lFjIEUY8mJL8zx7PWStxUYQ19fWOqMGud+s/7dmPWkxMB6ILhOaxdyDgmC9WZ7Ttd82PGj46vR2hJpCiOKgoQcloS+OLSyOAZYgE+InxR8XF6FTm5Kqcn/aPAtBNbC3jXyokU="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788815602663",
+  "pendingHistory": null,
+  "timestamp": "2026-09-07T21:28:26.210Z"
+}
