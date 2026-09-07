@@ -164,7 +164,7 @@ serve(async (req) => {
             body: JSON.stringify({
               api_key: tavilyKey,
               query: query,
-              search_depth: "smart",
+              search_depth: "advanced",
               include_answer: true,
               max_results: 5
             })
