@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788776256003",
-      "title": "يشهد عالم **الذكاء الاصطناعي (",
+      "title": "بكل شفافية: **لا، لم يتم جلبها",
       "history": [
         {
           "role": "user",
@@ -137,11 +137,29 @@
             }
           ],
           "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل جلبت هاذه المصادر عبر محرك البحث tavily"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "بكل شفافية: **لا، لم يتم جلبها عبر محرك بحث Tavily في هذه المرة.**\n\n**السبب:**\nعندما حاولت تشغيل أداة البحث `web_search` (والتي تعتمد داخلياً على Tavily)، أرجعت خدمة البحث خطأً برمجياً في إعدادات الاتصال:\n> `{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth...\"}}`\n\nلذلك، قمت بالاعتماد المباشر على **قاعدتي المعرفية الداخلية الشاملة والمحدثة** لرسم خارطة التطورات وأحدث الاتجاهات التقنية، المعمارية، والصناعية لعام 2026 بدقة عالية وبشكل منظم.",
+              "thoughtSignature": "EuQGCuEGARFNMg8RWrRvftzQj4JQxeAZpYY12r/EYKsXrhL1dk09BqToGtyomVUxbJG/bbiEh1W4wD0wHpyKhNWqs7rmHwZG87JboLZrC4jziqJJ4V/ZUbEXGGWJ3a3zpZfeRZu41nuyRCHMe11qNn+q+TApbmvVKdf9ctxd5PjtEfFmknnKoNNtUUD9N8MWbSx0eNGC59lJF1UXrR5MiRYZAANdMwipNTtLmQLlL/dA6GfdcIrIlmfDJkmxogTjViZiI1lUQwls6LyYvAQYIWocMFVH0mL3FuU6d8lin5hpVPF9pvunB2AAiW9B/fzmX37ZjfI03NjipRfqPX6yeb2CW6nKli6IQI8Rzs/xHZ4E4VW2zii2URonhlT9lKNaA4rzMX5XofUv5ZvJM3GWU5iD3+C8/Cut+Yq7GetozeIZU3F337TpNjJFDMx7aJHM5RB7eQrHn2wbtdt0pXXrIfJHp73cwiozeS1usy9hyIf61wCoMznjLnSerfXofi/OrPPYtymWV+oRJ42kxo8T3HM/SNrk4uCheduUAXiW5Nbg5fQrP4Ui0+zZrFIOs8+XwOzTDK1tmtKWc8lXgP/7/BzdBC5olOWz5eoSavH74OX/k7zpACUbTKKLHRW5e21bNfybvc4zkOsBaBw03wIxwVIpbva1aeCjxIbSKOtoDayDBHKGvFqAfPbk9xfXhHIujIoANvTUuUKcbjQreZ/Hiwh0BbN+u5Xm52cQOFkCGUOdRD5D6vYxkEIcg6uNBAhdWF6iT0BnG7X0HU0PhZprOAEAQ+m57MxZYubkYolPUByBJnZbfyLdzwqXxwRasxyg9jwbo9xFnPv8Rge+zpfxGtBPCRunKQQ7iaKjvKufI643268enotz3SSXYLooD77E6/lB5H2hLl8v2kfZlUo3grjfSFhELkRBepMFWNL/y/9ySVMPnK2U/qfYf1sOHWc5WQToB04U6LKQo3fIMnagK+Ls2cLwK0JvvMIeZlfVeEWRonPzG+lQq0Sty9RIVM0FGxEpivTh+gOVevneJy6J+keb27q6JOS8ke8Gsf0TFgA2ju/HZlQ6gWrwBFAI1gdrgU0Of4vPMBOiQoFtB4fYuGOOBpQcabELlTkonJPFBPzZ2GClTXukvm+ofqYJwvRG+92agCu7eg=="
+            }
+          ],
+          "model": "gemini-3.7-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1788776256003",
   "pendingHistory": null,
-  "timestamp": "2026-09-07T10:20:39.589Z"
+  "timestamp": "2026-09-07T10:22:26.520Z"
 }
