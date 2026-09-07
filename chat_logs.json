@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788794196853",
-      "title": "لقد قمت بفحص المشروع وتحديد ال",
+      "title": "تم بحمد الله تعديل وتحديث واجه",
       "history": [
         {
           "role": "user",
@@ -630,6 +630,206 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "اجل"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "User approved the modification. I will now update index.html to add .json to the file input accept attribute, and update ai_app_logic.js handleFileUpload to correctly parse JSON files and pass them into selectedFiles.",
+                  "plan": "Modify ai_app_logic.js and index.html to support json file uploads directly via the attach button (+) and make sure file content is read and passed correctly to the AI engine."
+                },
+                "id": "call_5881437"
+              },
+              "thoughtSignature": "El4KXAERTTIPs0rntAPN+IzSUKqKJwb+heLvTJte5wJNkWXZcoQe83xzZ8xGRRBYTpeO2+N/ZPEWtVbmPeqs6KKA1Migdj3ZIOTolHkUEuPS329hwPW4H+ffDYT2lKcl"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "User approved the modification. I will now update index.html to add .json to the file input accept attribute, and update ai_app_logic.js handleFileUpload to correctly parse JSON files and pass them into selectedFiles.",
+                    "plan": "Modify ai_app_logic.js and index.html to support json file uploads directly via the attach button (+) and make sure file content is read and passed correctly to the AI engine."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "replace_file_content",
+                "args": {
+                  "replacementContent": "                            <input type=\"file\" id=\"fileInput\" style=\"display: none;\" multiple accept=\".pdf, .json, application/json, image/*, text/*\" onchange=\"handleFileUpload(event)\">",
+                  "targetContent": "                            <input type=\"file\" id=\"fileInput\" style=\"display: none;\" multiple onchange=\"handleFileUpload(event)\">",
+                  "path": "index.html"
+                },
+                "id": "call_3691551"
+              },
+              "thoughtSignature": "El4KXAERTTIPuXVzto07wksvvnuXspPle1v4K0JARykAGNzzMvXrJxYKOyYrXjmwKAonRI4xKmIVGcK/yMoTXQaPgBgXefrGWiC9HiukG5GRiXj6mtxoaWQvoAkm1M4u"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "replace_file_content",
+                "response": {
+                  "content": "✅ تم التعديل الجراحي بنجاح."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "replace_file_content",
+                "args": {
+                  "replacementContent": "async function handleFileUpload(event) {\n    const files = Array.from(event.target.files);\n    if (files.length === 0) return;\n\n    const container = document.getElementById('imagePreviewContainer');\n    container.style.display = 'flex';\n\n    for (const file of files) {\n        const fileId = Date.now() + Math.random();\n        const reader = new FileReader();\n\n        reader.onload = (e) => {\n            const base64 = e.target.result.split(',')[1];\n            const fileObj = { id: fileId, name: file.name, type: file.type || 'application/json', base64: base64, content: null };\n\n            if (file.type === 'application/json' || file.name.endsWith('.json') || file.type.startsWith('text/')) {\n                const textReader = new FileReader();\n                textReader.onload = (te) => { \n                    fileObj.content = te.target.result; \n                    selectedFiles.push(fileObj);\n                    renderPreviews();\n                    updateSendButtonState();\n                };\n                textReader.readAsText(file);\n            } else {\n                selectedFiles.push(fileObj);\n                renderPreviews();\n                updateSendButtonState();\n            }\n        };\n        reader.readAsDataURL(file);\n    }\n    event.target.value = '';\n}",
+                  "path": "ai_app_logic.js",
+                  "targetContent": "async function handleFileUpload(event) {\n    const files = Array.from(event.target.files);\n    if (files.length === 0) return;\n\n    const container = document.getElementById('imagePreviewContainer');\n    container.style.display = 'flex';\n\n    for (const file of files) {\n        const fileId = Date.now() + Math.random();\n        const reader = new FileReader();\n\n        reader.onload = (e) => {\n            const base64 = e.target.result.split(',')[1];\n            const fileObj = { id: fileId, name: file.name, type: file.type, base64: base64, content: null };\n\n            if (file.type === 'application/json' || file.type.startsWith('text/')) {\n                const textReader = new FileReader();\n                textReader.onload = (te) => { fileObj.content = te.target.result; };\n                textReader.readAsText(file);\n            }\n            selectedFiles.push(fileObj);\n            renderPreviews();\n            updateSendButtonState();\n        };\n        reader.readAsDataURL(file);\n    }\n    event.target.value = '';\n}"
+                },
+                "id": "call_4215681"
+              },
+              "thoughtSignature": "El4KXAERTTIPCfCwppSTrwCksCeufMj3aQI+faspYg47Kt2F2/OTaHvm6+7ZxG2JFc0YFwY/IQ5dpqSufpeAXRProa7MjiXZWh8epz46r14l27a5DAWhXZ2PlpQoDZHC"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "replace_file_content",
+                "response": {
+                  "content": "✅ تم التعديل الجراحي بنجاح."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "replace_file_content",
+                "args": {
+                  "path": "ai_app_logic.js",
+                  "replacementContent": "    selectedFiles.forEach(file => {\n        const item = document.createElement('div');\n        item.className = 'preview-item';\n        if (file.type.startsWith('image/')) {\n            item.innerHTML = `<img src=\"data:${file.type};base64,${file.base64}\">`;\n        } else if (file.type === 'application/json' || file.name.endsWith('.json')) {\n            item.innerHTML = `<div class=\"file-icon\" title=\"${file.name}\">📊</div>`;\n        } else {\n            item.innerHTML = `<div class=\"file-icon\" title=\"${file.name}\">📝</div>`;\n        }",
+                  "targetContent": "    selectedFiles.forEach(file => {\n        const item.className = 'preview-item';\n        if (file.type.startsWith('image/')) {\n            item.innerHTML = `<img src=\"data:${file.type};base64,${file.base64}\">`;\n        } else {\n            item.innerHTML = `<div class=\"file-icon\">📝</div>`;\n        }"
+                },
+                "id": "call_2134982"
+              },
+              "thoughtSignature": "El4KXAERTTIPKq2qHki2siI/S0xtWkqRD013x80ZgyGz8rLxzqLegujEa1kE0fSAHE/WQikQBfW0uCqLc+dueyqNt9mWxUv7rYPpIym43EdG9ITbzqSwWcspoyxdRJVB"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "replace_file_content",
+                "response": {
+                  "content": "❌ خطأ في المطابقة: النص القديم غير موجود."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "read_file",
+                "args": {
+                  "startLine": 250,
+                  "endLine": 285,
+                  "path": "ai_app_logic.js"
+                },
+                "id": "call_3231548"
+              },
+              "thoughtSignature": "El4KXAERTTIP2QIEX/visr+HZRK/VrhWbRefwkFxNOqY2qheAENER/WhFe2jg1PWArfB/ueVvE2MBfhPIu5AMbynZn0B8vq+tCxKLsbq9irvS3a+M2etRVmstKNojbrU"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "read_file",
+                "response": {
+                  "content": "/**\n * VSA Academy - Mastermind UI & Interaction Logic\n * --------------------------------------------------\n * هذا الملف يتولى كافة العمليات \"الميكانيكية\" والرسومية للواجهة.\n */\n\nvar selectedFiles = [];\nvar aiMasterTimerInterval = null;\nvar aiMasterStartTime = 0;\n\n// --- [1. تهيئة المفاتيح وإدارة الجلسات] ---\n\nasync function initKeys() {\n    const term = document.getElementById('aiTerminal');\n    if (term && !term.querySelector('.terminal-close-btn')) {\n        const closeBtn = document.createElement('div');\n        closeBtn.className = 'terminal-close-btn';\n        closeBtn.innerHTML = '✕';\n        closeBtn.style.cssText = \"position:absolute; top:5px; right:10px; color:#afb1b3; cursor:pointer; z-index:10;\";\n        closeBtn.onclick = toggleTerminal;\n        term.appendChild(closeBtn);\n    }\n\n    if (!window.heartbeatStarted) {\n        window.heartbeatStarted = true;\n        setInterval(async () => {\n            const sendBtn = document.getElementById('aiSendBtn');\n            if (sendBtn && !sendBtn.classList.contains('working')) {\n                try {\n                    const status = await repairSystem();\n                    const isOnline = !status.includes('❌');\n                    updateHealthUI(isOnline, isOnline ? `BRIDGE: OK | ONLINE (2026)` : `BRIDGE: OFFLINE`);\n                    if (!isOnline) logToTerminal(status, \"error\");\n                } catch (e) {\n                    updateHealthUI(false, `BRIDGE: ERROR`);\n                    logToTerminal(`Heartbeat failed: ${e.message}`, \"error\");\n                }\n            }\n        }, 60000);\n    }\n}\n\nfunction saveModelSelection() {\n    const selectedModel = document.getElementById('modelSelector').value;\n    localStorage.setItem('gemini_selected_model', selectedModel);\n}\n\nfunction toggleHistory() {\n    const sidebar = document.getElementById('aiHistorySidebar');\n    if (sidebar) {\n        sidebar.classList.toggle('open');\n        if (sidebar.classList.contains('open')) renderHistory();\n    }\n}\n\nfunction renderHistory() {\n    const list = document.getElementById('historyList');\n    if (!list) return;\n\n    list.innerHTML = `\n        <div style=\"padding: 10px; border-bottom: 1px solid #3c3f41; margin-bottom: 10px;\">\n            <button onclick=\"manualHistoryImport()\" style=\"width:100%; background:#4db6ac; color:white; border:none; padding:8px; border-radius:4px; font-size:12px; cursor:pointer;\">📥 استيراد سجل خارجي (JSON)</button>\n        </div>\n    ` + chatSessions.map(s => `\n        <div class=\"history-item ${s.id === currentSessionId ? 'active' : ''}\" onclick=\"loadSession('${s.id}')\">\n            <span style=\"overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:160px;\">${s.title}</span>\n            <div class=\"actions\">\n                <span onclick=\"event.stopPropagation(); renameSession('${s.id}')\">✏️</span>\n                <span onclick=\"event.stopPropagation(); deleteSession('${s.id}')\">🗑️</span>\n            </div>\n        </div>\n    `).join('');\n}\n\n// --- [2. التحكم في النافذة والتحجيم] ---\n\nfunction initResizer() {\n    const chatBox = document.getElementById('aiChatBox');\n    const resizers = document.querySelectorAll('.ai-resizer');\n    let isResizing = false;\n\n    resizers.forEach(resizer => {\n        resizer.addEventListener('mousedown', function(e) {\n            e.preventDefault();\n            isResizing = true;\n\n            const startX = e.clientX;\n            const startY = e.clientY;\n            const startWidth = chatBox.offsetWidth;\n            const startHeight = chatBox.offsetHeight;\n\n            // ⚡ تعطيل الـ Transition أثناء التحجيم لضمان سرعة البرق\n            chatBox.style.transition = 'none';\n\n            const overlay = document.createElement('div');\n            overlay.style.cssText = \"position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:9999; cursor:\" + window.getComputedStyle(resizer).cursor;\n            document.body.appendChild(overlay);\n\n            let animationFrame;\n\n            function mousemove(e) {\n                if (!isResizing) return;\n\n                if (animationFrame) cancelAnimationFrame(animationFrame);\n\n                animationFrame = requestAnimationFrame(() => {\n                    const dx = e.clientX - startX;\n                    const dy = e.clientY - startY;\n\n                    if (resizer.classList.contains('ai-resizer-r')) {\n                        chatBox.style.width = (startWidth + dx) + 'px';\n                    } else if (resizer.classList.contains('ai-resizer-l')) {\n                        chatBox.style.width = (startWidth - dx) + 'px';\n                    } else if (resizer.classList.contains('ai-resizer-b')) {\n                        chatBox.style.height = (startHeight + dy) + 'px';\n                    } else if (resizer.classList.contains('ai-resizer-t')) {\n                        chatBox.style.height = (startHeight - dy) + 'px';\n                    } else if (resizer.classList.contains('ai-resizer-br')) {\n                        chatBox.style.width = (startWidth + dx) + 'px';\n                        chatBox.style.height = (startHeight + dy) + 'px';\n                    } else if (resizer.classList.contains('ai-resizer-bl')) {\n                        chatBox.style.width = (startWidth - dx) + 'px';\n                        chatBox.style.height = (startHeight + dy) + 'px';\n                    } else if (resizer.classList.contains('ai-resizer-tr')) {\n                        chatBox.style.width = (startWidth + dx) + 'px';\n                        chatBox.style.height = (startHeight - dy) + 'px';\n                    } else if (resizer.classList.contains('ai-resizer-tl')) {\n                        chatBox.style.width = (startWidth - dx) + 'px';\n                        chatBox.style.height = (startHeight - dy) + 'px';\n                    }\n                });\n            }\n\n            function mouseup() {\n                isResizing = false;\n                if (animationFrame) cancelAnimationFrame(animationFrame);\n\n                // 🔄 إعادة تفعيل الـ Transition بعد الانتهاء\n                chatBox.style.transition = '';\n\n                if (document.body.contains(overlay)) document.body.removeChild(overlay);\n                window.removeEventListener('mousemove', mousemove);\n                window.removeEventListener('mouseup', mouseup);\n                localStorage.setItem('ai_chat_width', chatBox.offsetWidth);\n                localStorage.setItem('ai_chat_height', chatBox.offsetHeight);\n            }\n            window.addEventListener('mousemove', mousemove);\n            window.addEventListener('mouseup', mouseup);\n        });\n    });\n}\n\nasync function toggleAiChat() {\n    const chatBox = document.getElementById('aiChatBox');\n    const toggleBtn = document.getElementById('aiToggleBtn');\n    const isOpening = chatBox.style.display !== 'flex';\n\n    chatBox.style.display = isOpening ? 'flex' : 'none';\n    if (toggleBtn) toggleBtn.style.display = isOpening ? 'none' : 'flex';\n\n    if (isOpening) {\n        const savedW = localStorage.getItem('ai_chat_width');\n        const savedH = localStorage.getItem('ai_chat_height');\n        if (savedW) chatBox.style.width = savedW + 'px';\n        if (savedH) chatBox.style.height = savedH + 'px';\n\n        const container = document.getElementById('aiMessages');\n        container.scrollTop = container.scrollHeight;\n        await initKeys();\n        initResizer();\n    }\n}\n\nfunction toggleMaximizeAi() {\n    const chatBox = document.getElementById('aiChatBox');\n    chatBox.classList.toggle('maximized');\n    document.getElementById('aiInput').focus();\n}\n\n// --- [3. معالجة المدخلات والملفات] ---\n\nfunction autoResizeInput() {\n    const input = document.getElementById('aiInput');\n    input.style.height = 'auto';\n    input.style.height = (input.scrollHeight) + 'px';\n}\n\nfunction updateSendButtonState() {\n    const input = document.getElementById('aiInput');\n    const btn = document.getElementById('aiSendBtn');\n    const hasFiles = selectedFiles.length > 0;\n    if ((input.value && input.value.trim() !== \"\") || hasFiles) {\n        btn.classList.add('active');\n    } else {\n        btn.classList.remove('active');\n    }\n}\n\nasync function handleFileUpload(event) {\n    const files = Array.from(event.target.files);\n    if (files.length === 0) return;\n\n    const container = document.getElementById('imagePreviewContainer');\n    container.style.display = 'flex';\n\n    for (const file of files) {\n        const fileId = Date.now() + Math.random();\n        const reader = new FileReader();\n\n        reader.onload = (e) => {\n            const base64 = e.target.result.split(',')[1];\n            const fileObj = { id: fileId, name: file.name, type: file.type || 'application/json', base64: base64, content: null };\n\n            if (file.type === 'application/json' || file.name.endsWith('.json') || file.type.startsWith('text/')) {\n                const textReader = new FileReader();\n                textReader.onload = (te) => { \n                    fileObj.content = te.target.result; \n                    selectedFiles.push(fileObj);\n                    renderPreviews();\n                    updateSendButtonState();\n                };\n                textReader.readAsText(file);\n            } else {\n                selectedFiles.push(fileObj);\n                renderPreviews();\n                updateSendButtonState();\n            }\n        };\n        reader.readAsDataURL(file);\n    }\n    event.target.value = '';\n}\n\nfunction renderPreviews() {\n    const container = document.getElementById('imagePreviewContainer');\n    container.innerHTML = '';\n    container.style.display = selectedFiles.length === 0 ? 'none' : 'flex';\n\n    selectedFiles.forEach(file => {\n        const item = document.createElement('div');\n        item.className = 'preview-item';\n        if (file.type.startsWith('image/')) {\n            item.innerHTML = `<img src=\"data:${file.type};base64,${file.base64}\">`;\n        } else {\n            item.innerHTML = `<div class=\"file-icon\">📝</div>`;\n        }\n        const removeBtn = document.createElement('div');\n        removeBtn.className = 'remove-btn';\n        removeBtn.innerText = '✕';\n        removeBtn.onclick = () => removeFile(file.id);\n        item.appendChild(removeBtn);\n        container.appendChild(item);\n    });\n}\n\nfunction removeFile(id) {\n    selectedFiles = selectedFiles.filter(f => f.id !== id);\n    renderPreviews();\n    updateSendButtonState();\n}\n\nfunction clearSelectedFile() {\n    selectedFiles = [];\n    renderPreviews();\n    updateSendButtonState();\n}\n\nfunction handleKeydown(e) {\n    if (e.key === 'Enter' && !e.shiftKey) {\n        const btn = document.getElementById('aiSendBtn');\n        if (btn.classList.contains('active') || btn.classList.contains('working')) {\n            e.preventDefault();\n            sendAiMessage();\n        }\n    }\n}\n\n// --- [4. الرسوميات وبناء الرسائل] ---\n\nfunction addMessageToUi(sender, text, modelName = null, thought = null, images = []) {\n    const container = document.getElementById('aiMessages');\n    const div = document.createElement('div');\n    div.className = `msg ${sender}`;\n\n    if (sender === 'ai' && thought) {\n        const toggle = document.createElement('div');\n        toggle.className = 'thought-toggle';\n        toggle.innerText = \"Thought Process\";\n        toggle.onclick = () => {\n            const box = toggle.nextElementSibling;\n            box.style.display = box.style.display === 'block' ? 'none' : 'block';\n            toggle.classList.toggle('open');\n        };\n        div.appendChild(toggle);\n        const box = document.createElement('div');\n        box.className = 'thought-box';\n        box.innerText = thought;\n        div.appendChild(box);\n    }\n\n    const contentDiv = document.createElement('div');\n    contentDiv.className = 'msg-content';\n\n    // Image Rendering Logic (Gemini Style)\n    if (images && images.length > 0) {\n        const imgContainer = document.createElement('div');\n        imgContainer.className = 'chat-images-container';\n        images.forEach(base64 => {\n            const img = document.createElement('img');\n            img.src = base64.startsWith('data:') ? base64 : `data:image/png;base64,${base64}`;\n            img.className = 'chat-image-msg';\n            imgContainer.appendChild(img);\n        });\n        contentDiv.appendChild(imgContainer);\n    }\n\n    if (text) {\n        const textPart = document.createElement('div');\n        textPart.innerHTML = (sender === 'user') ? text : marked.parse(text);\n        contentDiv.appendChild(textPart);\n    }\n\n    div.appendChild(contentDiv);\n\n    if (sender === 'ai' && modelName) {\n        const badge = document.createElement('div');\n        badge.className = 'model-badge';\n        badge.innerText = modelName;\n        div.appendChild(badge);\n    }\n\n    container.appendChild(div);\n    container.scrollTop = container.scrollHeight;\n}\n\nfunction addToolStepToUi(toolName, args) {\n    const container = document.getElementById('aiMessages');\n    const stepId = 'step-' + Date.now();\n    const stepContainer = document.createElement('div');\n    stepContainer.className = 'ai-step-container';\n    stepContainer.id = stepId;\n\n    stepContainer.innerHTML = `\n        <div class=\"ai-step-header\" onclick=\"this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block'\">\n            <span class=\"ai-step-icon\">${getToolIcon(toolName)}</span>\n            <span class=\"ai-step-name\">${toolName.toUpperCase()}</span>\n            <div class=\"ai-step-status\"><div class=\"status-spinner\"></div><span>Executing...</span></div>\n        </div>\n        <div class=\"ai-step-details\">\n            <div class=\"ai-step-args\">Arguments: ${JSON.stringify(args, null, 2)}</div>\n            <div class=\"step-output-area\">Waiting for bridge...</div>\n        </div>\n    `;\n    container.appendChild(stepContainer);\n    container.scrollTop = container.scrollHeight;\n    return stepId;\n}\n\nfunction updateToolStepStatus(stepId, success, output) {\n    const step = document.getElementById(stepId);\n    if (!step) return;\n    const status = step.querySelector('.ai-step-status');\n    status.innerHTML = success ? '<span class=\"status-done\">✅ COMPLETED</span>' : '<span class=\"status-error\">❌ FAILED</span>';\n\n    const outputArea = step.querySelector('.step-output-area');\n    if (typeof output === 'object' && output.reasoning) {\n        outputArea.innerHTML = `<div class=\"thought-container\"><div class=\"thought-label\">Thought Process</div><div>${escapeHtml(output.reasoning)}</div></div>`;\n    } else {\n        const textOut = String(output);\n        outputArea.innerText = textOut;\n    }\n    step.querySelector('.ai-step-details').style.setProperty('display', 'block', 'important');\n}\n\nfunction getToolIcon(name) {\n    const icons = { read: '🔍', write: '📝', search: '📡', run: '⚡', repair: '🛠️', thought: '🧠' };\n    const key = Object.keys(icons).find(k => name.toLowerCase().includes(k));\n    return icons[key] || '⚙️';\n}\n\nfunction escapeHtml(text) {\n    const div = document.createElement('div');\n    div.innerText = text;\n    return div.innerHTML;\n}\n\n// --- [5. العدادات والتوقيت] ---\n\nfunction startAiTimer() {\n    const badge = document.getElementById('aiDynamicTimer');\n    if (!badge) return;\n    badge.style.display = 'inline-block';\n    aiMasterStartTime = Date.now();\n    aiMasterTimerInterval = setInterval(() => {\n        const diff = Math.floor((Date.now() - aiMasterStartTime) / 1000);\n        const mins = Math.floor(diff / 60);\n        const secs = diff % 60;\n        badge.innerText = `${mins}:${secs.toString().padStart(2, '0')}`;\n    }, 1000);\n}\n\nfunction stopAiTimer() {\n    if (aiMasterTimerInterval) clearInterval(aiMasterTimerInterval);\n    const badge = document.getElementById('aiDynamicTimer');\n    if (badge) badge.style.display = 'none';\n}\n\nfunction updateHealthUI(online, text) {\n    const badge = document.getElementById('systemHealthBadge');\n    const textEl = document.getElementById('healthStatusText');\n    if (badge && textEl) {\n        badge.classList.toggle('status-error', !online);\n        textEl.innerText = text.toUpperCase();\n    }\n}\n\nfunction toggleTerminal() {\n    const term = document.getElementById('aiTerminal');\n    if (term) term.style.display = term.style.display === 'flex' ? 'none' : 'flex';\n}\n\nfunction logToTerminal(msg, type = \"info\") {\n    const out = document.getElementById('terminalOutput');\n    if (!out) return;\n    const div = document.createElement('div');\n    div.className = `terminal-${type}`;\n    div.innerText = `> [${new Date().toLocaleTimeString()}] ${msg}`;\n    out.appendChild(div);\n    out.scrollTop = out.scrollHeight;\n}\n"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "replace_file_content",
+                "args": {
+                  "path": "ai_app_logic.js",
+                  "replacementContent": "    selectedFiles.forEach(file => {\n        const item = document.createElement('div');\n        item.className = 'preview-item';\n        if (file.type.startsWith('image/')) {\n            item.innerHTML = `<img src=\"data:${file.type};base64,${file.base64}\">`;\n        } else if (file.type === 'application/json' || file.name.endsWith('.json')) {\n            item.innerHTML = `<div class=\"file-icon\" title=\"${file.name}\">📊</div>`;\n        } else {\n            item.innerHTML = `<div class=\"file-icon\" title=\"${file.name}\">📝</div>`;\n        }",
+                  "targetContent": "    selectedFiles.forEach(file => {\n        const item = document.createElement('div');\n        item.className = 'preview-item';\n        if (file.type.startsWith('image/')) {\n            item.innerHTML = `<img src=\"data:${file.type};base64,${file.base64}\">`;\n        } else {\n            item.innerHTML = `<div class=\"file-icon\">📝</div>`;\n        }"
+                },
+                "id": "call_4327512"
+              },
+              "thoughtSignature": "El4KXAERTTIP5wa6Bm1/h7UpAMvghRzLnOy/w652kwPhbdrRtCJ5gbiiIe+mPPwy7iaSP/1X269xxT0f+/cfto4o4hHnKF71Y/P3RDZM+JZlCnVrmYC9Ve0wP8l73eV+"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "replace_file_content",
+                "response": {
+                  "content": "✅ تم التعديل الجراحي بنجاح."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "تم بحمد الله تعديل وتحديث واجهة المشروع ومحرك العقل المدبر بنجاح! \n\nإليك ما تم إنجازه:\n1. **تحديث خيارات الإرفاق في الواجهة (`index.html`):** تم السماح بصيغة `.json` في مدخل الملفات (`accept`) لكي يظهر في خيارات زر الـ `(+)` مباشرة.\n2. **تطوير معالج الملفات (`ai_app_logic.js`):** أصبح بإمكان النظام التقاط ملفات الـ JSON المرفقة، وقراءة محتواها نصياً، وعرض معاينة مخصصة لها (📊)، وإرسال محتواها بالكامل مع الـ Prompt إلى العقل المدبر ليقوم بقراءتها وتحليلها فوراً.\n\nالآن أصبح بإمكانك النقر على زر الـ `(+)` وإرفاق ملفات الـ JSON بكل سهولة وسيقوم العقل المدبر بقراءتها مباشرة كما تطلب تماماً!",
+              "thoughtSignature": "El4KXAERTTIPvlGoYeHvAL0857CScNEh19303n8XiuGwnaCsEOMc8XnGSJjvDpwtPA630cqKKpvkcvbBP5Owx6P64lJyQ/CKHcuopGS9SHtUgLF9HcPgVOfGiifFlXCW"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     },
@@ -686,5 +886,5 @@
   ],
   "activeSessionId": "1788794196853",
   "pendingHistory": null,
-  "timestamp": "2026-09-07T15:29:40.165Z"
+  "timestamp": "2026-09-07T15:30:26.079Z"
 }
