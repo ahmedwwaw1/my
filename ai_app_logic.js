@@ -241,8 +241,10 @@ function renderPreviews() {
         item.className = 'preview-item';
         if (file.type.startsWith('image/')) {
             item.innerHTML = `<img src="data:${file.type};base64,${file.base64}">`;
+        } else if (file.type === 'application/json' || file.name.endsWith('.json')) {
+            item.innerHTML = `<div class="file-icon" title="${file.name}">📊</div>`;
         } else {
-            item.innerHTML = `<div class="file-icon">📝</div>`;
+            item.innerHTML = `<div class="file-icon" title="${file.name}">📝</div>`;
         }
         const removeBtn = document.createElement('div');
         removeBtn.className = 'remove-btn';
