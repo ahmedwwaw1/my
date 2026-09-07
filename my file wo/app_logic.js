@@ -1,3 +1,21 @@
+        // --- إعدادات المسارات العالمية ---
+        const APP_CONFIG = {
+            // استخدام المسار المطلق لضمان الوصول للملفات مهما كان عمق المجلدات
+            jsonPath: window.location.origin + '/بيانات موقعي json/'
+        };
+
+        // دالة موحدة لجلب ملفات JSON المحلية
+        async function fetchLocalJSON(fileName) {
+            try {
+                const response = await fetch(`${APP_CONFIG.jsonPath}${fileName}?v=${new Date().getTime()}`);
+                if (!response.ok) return [];
+                return await response.json();
+            } catch (e) {
+                console.warn(`⚠️ فشل جلب الملف: ${fileName}`, e);
+                return [];
+            }
+        }
+
         let allData = [];
         let isDataLoaded = false;
 
@@ -229,9 +247,9 @@
             const processCryptoAlerts = async () => {
                 let cryptoAlerts = [];
                 try {
-                    const cryptoRes = await fetch('crypto_alerts.json?v=' + new Date().getTime());
-                    if (cryptoRes.ok) {
-                        cryptoAlerts = await cryptoRes.json();
+                    // استخدام الدالة الموحدة لضمان المسار الصحيح
+                    cryptoAlerts = await fetchLocalJSON('crypto_alerts.json');
+                    if (cryptoAlerts && cryptoAlerts.length > 0) {
                         cryptoAlerts.forEach(alert => {
                             const alertDate = new Date(alert.timestamp);
                             const formattedTime = alertDate.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
@@ -292,11 +310,9 @@
             } catch (error) {
                 console.warn("⚠️ فشل جلب البيانات من Supabase (CORS أو خلل اتصال). بدء نظام الاسترداد المحلي...", error);
                 try {
-                    // نظام الاسترداد من ملفات JSON المحلية المتاحة في المشروع
+                    // نظام الاسترداد باستخدام الدالة الموحدة التي تضمن المسار مهما كان عمق المجلد
                     const localFiles = ['vsa.json', 'data.json', 'technical-analysis.json', 'Time-analysis.json'];
-                    const fetchPromises = localFiles.map(file =>
-                        fetch(file + '?v=' + new Date().getTime()).then(res => res.ok ? res.json() : []).catch(() => [])
-                    );
+                    const fetchPromises = localFiles.map(file => fetchLocalJSON(file));
 
                     const results = await Promise.all(fetchPromises);
                     allData = results.flat();

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل قدرات العقل المدبر | AI Mastermind Capabilities</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .engine-tag {
+            display: inline-block;
+            background: rgba(187, 134, 252, 0.15);
+            color: #bb86fc;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+            font-weight: bold;
+            border: 1px solid rgba(187, 134, 252, 0.2);
+        }
+        .tool-row:hover {
+            background: rgba(53, 116, 240, 0.05);
+        }
+        .engine-section-title {
+            color: var(--accent-green);
+            margin: 25px 0 10px 0;
+            font-size: 1.1rem;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 5px;
+        }
+        .card table td:first-child {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-purple);
+            font-weight: bold;
+        }
+        .badge-general {
+            background: rgba(53, 116, 240, 0.15);
+            color: var(--accent-blue);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>المخطط التشغيلي لـ "العقل المدبر"</h1>
+        <span class="subtitle">Operational Blueprint for AI Mastermind v2026</span>
+    </header>
+
+    <div class="grid">
+        <!-- 0. مركز الهوية والوصول (Identity & Access Layer) -->
+        <div class="card" style="grid-column: span 2; border-color: var(--accent-blue);">
+            <h2>🔐 .0 مركز الهوية والوصول (Identity & Access Layer)</h2>
+            <p style="font-size: 0.9rem; color: var(--text-dim);">هذه هي طبقة الحماية والربط السيادي التي تضمن أمان المفاتيح واستقرار الاتصال:</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
+                    <h4 style="color: var(--accent-blue); margin-top:0;">🛡️ إدارة السحابة (Supabase & Cloudflare)</h4>
+                    <ul style="font-size: 0.8rem; color: var(--text-dim);">
+                        <li><b>البيئة:</b> يتم استضافة الجسر على Supabase Edge Functions.</li>
+                        <li><b>الأمان:</b> تُخزن مفاتيح APIs (Gemini, Google, Tavily) كـ <b>Secrets</b> مشفرة.</li>
+                        <li><b>الربط:</b> يتم استدعاء الرابط السحابي <code style="color:var(--accent-purple)">/v1/vsa-bridge</code> برمجياً.</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
+                    <h4 style="color: var(--accent-green); margin-top:0;">📡 دالة الربط في ai_engine_core.js</h4>
+                    <p style="font-size: 0.75rem; color: var(--text-dim);">يتم الاتصال عبر دالة <code>callBridge</code> التي تقوم بتغليف الأوامر وإرسالها للجسر:</p>
+                    <div class="constitution-block" style="font-size: 0.7rem; padding: 10px;">
+const BRIDGE_URL = "https://ozcffmadatsfyyldqmdl.../vsa-bridge";
+async function callBridge(action, payload) {
+  // تدمج مفتاح apikey وترسل الطلب للجسر
+}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. تصنيف وكلاء الذكاء الاصطناعي (AI Agents Taxonomy) -->
+        <div class="card" style="grid-column: span 2;">
+            <h2>🤖 تصنيف وكلاء النظام (The 8 Agent Classes)</h2>
+            <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 15px;">بناءً على مرجع AI_AGENTS_REFERENCE، يمتلك النظام القدرة على التحول بين هذه الأنماط:</p>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                <div class="badge-general" style="text-align:center; padding:10px;">1. Reactive (رد الفعل)</div>
+                <div class="badge-general" style="text-align:center; padding:10px;">2. Specialized (المتخصص)</div>
+                <div class="badge-general" style="text-align:center; padding:10px;">3. Hierarchical (الهرمي)</div>
+                <div class="badge-general" style="text-align:center; padding:10px;">4. Collaborative (الند للند)</div>
+                <div class="badge-general" style="text-align:center; padding:10px;">5. Proactive (الاستباقي)</div>
+                <div class="badge-general" style="text-align:center; padding:10px;">6. Hybrid (الهجين)</div>
+                <div class="badge-general" style="text-align:center; padding:10px;">7. Autonomous (الذاتي)</div>
+                <div class="badge-general" style="text-align:center; padding:10px;">8. Learning (المتطور)</div>
+            </div>
+        </div>
+
+        <!-- محرك الفكر السيادي (The Thought Engine) - النواة المركزية -->
+        <div class="card" style="grid-column: span 2; background: linear-gradient(145deg, #16161a 0%, #0d0d0f 100%); border: 1px solid var(--accent-purple);">
+            <h2 style="color: var(--accent-purple);">🧠 محرك الفكر السيادي (The Thought Engine)</h2>
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+                هذا المحرك هو <b>القلب النابض</b> والمسؤول الأول عن قدرة النظام على التحول بين أنماط الوكلاء الثمانية. هو "المعالج المركزي" الذي يدمج <b>القانون</b> مع <b>القوة</b> لإنتاج استجابة ذكية واحترافية:
+            </p>
+            <div style="display: flex; gap: 15px; margin-top: 15px;">
+                <div style="flex: 1; background: rgba(187, 134, 252, 0.05); padding: 15px; border-radius: 8px; border-right: 4px solid var(--accent-purple);">
+                    <h4 style="margin:0; color: var(--accent-purple);">1. دستور النظام (Instructions) - "منطق التفكير"</h4>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">يمثل **المتحكم والحاكم الفعلي**؛ هو القوانين الملزمة التي تبرمج إرادة النموذج، تحدد هويته، وتجبره على التحليل والتصحيح الذاتي قبل أي فعل.</p>
+                </div>
+                <div style="flex: 1; background: rgba(53, 116, 240, 0.05); padding: 15px; border-radius: 8px; border-right: 4px solid var(--accent-blue);">
+                    <h4 style="margin:0; color: var(--accent-blue);">2. ترسانة الأدوات (Function Calling) - "اليد المنفذة"</h4>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">تمثل **القوة والقدرة التنفيذية**؛ هي الحواس والأطراف التي تسمح للنموذج بالخروج من حيز "الدردشة" إلى حيز "التأثير الحقيقي" في الملفات والأنظمة.</p>
+                </div>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--accent-green); margin-top: 15px; font-weight: bold;">
+                ⚡ النتيجة: أداة Thought تقوم بتحليل المهمة، مراجعة الدستور، ثم اختيار الأداة الأنسب والنمط الأمثل للتنفيذ دون أي هلوسة.
+            </p>
+        </div>
+
+
+        <!-- 3. إعدادات التوليد -->
+        <div class="card">
+            <h2>⚙️ الإعدادات التقنية (Generation Config)</h2>
+            <table>
+                <tr><th>المعلمة (Parameter)</th><th>القيمة (Value)</th></tr>
+                <tr><td>Temperature</td><td><span class="tag">0</span> (دقة مطلقة)</td></tr>
+                <tr><td>Top P</td><td><span class="tag">0.1</span> (تركيز عالٍ)</td></tr>
+                <tr><td>Max Tokens</td><td><span class="tag">2048</span></td></tr>
+                <tr><td>Provider</td><td><span class="tag">Sovereign Bridge</span></td></tr>
+            </table>
+        </div>
+
+        <!-- 3. المبادئ الأساسية -->
+        <div class="card">
+            <h2>🛡️ بروتوكولات الأمان (Protocols)</h2>
+            <ul style="padding-right: 20px; font-size: 0.9rem; color: var(--text-dim);">
+                <li><b style="color: #fff;">Visual Genesis:</b> الفحص البصري العميق قبل أي تعديل واجهة.</li>
+                <li><b style="color: #fff;">Zero Trust:</b> محاكاة النتيجة في "الفكر" قبل الحفظ الفعلي.</li>
+                <li><b style="color: #fff;">Recursive Thought:</b> التحليل المستمر (قبل، أثناء، وبعد) كل أداة.</li>
+                <li><b style="color: #fff;">Auto-Recovery:</b> القدرة على استعادة اللقطات السليمة فوراً.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!--  ترسانة الأدوات السيادية (Function Calling)                 -->
+    <!-- ============================================================ -->
+    <div class="card" style="margin-top: 25px; grid-column: span 2;">
+        <h2>🛠️ ترسانة الأدوات السيادية (Function Calling)</h2>
+        <p style="font-size: 0.9rem; color: var(--text-dim);">
+            هذه هي "الأيدي المنفذة" للنموذج. تسمح له بالتفاعل المباشر مع البيئة والبيانات الخارجية:
+        </p>
+
+        <!-- ========================================================= -->
+        <!--  الأدوات الأساسية (المحركات 0-6) - الموجودة سابقاً       -->
+        <!-- ========================================================= -->
+        <div class="engine-section-title">🧰 الأدوات الأساسية (المحركات 0-6)</div>
+        <table>
+            <thead>
+                <tr><th>الأداة (Tool)</th><th>الوظيفة (Description)</th><th>الصلاحية</th></tr>
+            </thead>
+            <tbody>
+                <tr class="tool-row"><td>read_file</td><td>قراءة محتوى ملف بدقة (كامل أو أسطر محددة).</td><td><span class="tag">إدخال</span></td></tr>
+                <tr class="tool-row"><td>write_file</td><td>كتابة ملف كامل أو إنشاء ملف جديد.</td><td><span class="tag">إخراج</span></td></tr>
+                <tr class="tool-row"><td>replace_file_content</td><td>المشرط الجراحي: استبدال قطعة كود محددة بدقة.</td><td><span class="tag">تعديل</span></td></tr>
+                <tr class="tool-row"><td>multi_replace_file_content</td><td>إجراء عدة عمليات استبدال جراحية في آن واحد.</td><td><span class="tag">تعديل</span></td></tr>
+                <tr class="tool-row"><td>searchCode</td><td>رادار البحث: البحث عن أي كود داخل المستودع.</td><td><span class="tag">استكشاف</span></td></tr>
+                <tr class="tool-row"><td>list_files</td><td>مستكشف الملفات: عرض قائمة الملفات في أي مجلد بشكل حي (GitHub).</td><td><span class="tag">استكشاف</span></td></tr>
+                <tr class="tool-row"><td>analyze_file</td><td>مسبار الجودة: فحص السنتكس وسلامة الكود برمجياً.</td><td><span class="tag">تحليل</span></td></tr>
+                <tr class="tool-row"><td>take_snapshot</td><td>أخذ لقطة احتياطية للملف قبل إجراء "جراحة" كبرى.</td><td><span class="tag">أمان</span></td></tr>
+                <tr class="tool-row"><td>instant_undo</td><td>التراجع الفوري للنسخة السليمة في حال فشل التعديل.</td><td><span class="tag">أمان</span></td></tr>
+                <tr class="tool-row"><td>thought</td><td>محرك المنطق: التخطيط والتحليل العميق لكل خطوة.</td><td><span class="tag">تفكير</span></td></tr>
+                <tr class="tool-row"><td>repairSystem</td><td>التشخيص الذاتي وإصلاح مشاكل الاتصال والتوكنات.</td><td><span class="tag">نظام</span></td></tr>
+                <tr class="tool-row"><td>triggerGithubWorkflow</td><td>تشغيل عمليات البوتات والعمليات المؤتمتة على GitHub.</td><td><span class="tag">تنفيذ</span></td></tr>
+                <tr class="tool-row"><td>web_search</td><td>البحث في الإنترنت عن حلول تقنية عالمية.</td><td><span class="tag">خارجي</span></td></tr>
+                <tr class="tool-row"><td>read_url</td><td>الدخول لروابط المواقع وقراءتها برمجياً.</td><td><span class="tag">خارجي</span></td></tr>
+            </tbody>
+        </table>
+
+        <!-- ========================================================= -->
+        <!--  المحرك 11: الصانع                                           -->
+        <!-- ========================================================= -->
+        <div class="engine-section-title">⚙️ المحرك 11: الصانع (الهندسة البرمجية والحرفية)</div>
+        <table>
+            <thead>
+                <tr><th>الأداة (Tool)</th><th>الوظيفة (Description)</th><th>الصلاحية</th></tr>
+            </thead>
+            <tbody>
+                <tr class="tool-row"><td>select_design_pattern</td><td>اختيار النمط المعماري الأنسب (MVC, Clean, Hexagonal, ...).</td><td><span class="tag">تصميم</span></td></tr>
+                <tr class="tool-row"><td>install_dependency</td><td>إدارة تبعيات المشروع (npm, pip, ...) مع حل التعارضات.</td><td><span class="tag">إدارة</span></td></tr>
+                <tr class="tool-row"><td>resolve_version_conflict</td><td>حل تعارضات الإصدارات بين المكتبات المختلفة.</td><td><span class="tag">إصلاح</span></td></tr>
+                <tr class="tool-row"><td>auto_lint_and_fix</td><td>تنظيف الكود تلقائياً وفقاً لأسلوب الترميز المحدد (Airbnb, Standard).</td><td><span class="tag">تحسين</span></td></tr>
+                <tr class="tool-row"><td>wrap_with_error_handling</td><td>إحاطة الكود بـ try-catch لحمايته من الانهيار.</td><td><span class="tag">أمان</span></td></tr>
+                <tr class="tool-row"><td>calculate_refactor_threshold</td><td>حساب نسبة التعديل في الملف لتقرير إعادة الكتابة.</td><td><span class="tag">تحليل</span></td></tr>
+                <tr class="tool-row"><td>generate_docstring</td><td>توليد تعليقات توثيقية (JSDoc, Python docstrings) تلقائياً.</td><td><span class="tag">توثيق</span></td></tr>
+            </tbody>
+        </table>
+
+        <!-- ========================================================= -->
+        <!--  المحرك 7: الأرشيف                                           -->
+        <!-- ========================================================= -->
+        <div class="engine-section-title">📚 المحرك 7: الأرشيف (الذاكرة طويلة المدى)</div>
+        <table>
+            <thead>
+                <tr><th>الأداة (Tool)</th><th>الوظيفة (Description)</th><th>الصلاحية</th></tr>
+            </thead>
+            <tbody>
+                <tr class="tool-row"><td>store_memory</td><td>تخزين معلومة مهمة في الذاكرة السيادية (سحابياً أو محلياً).</td><td><span class="tag">إدخال</span></td></tr>
+                <tr class="tool-row"><td>vector_search</td><td>البحث الشعاعي (Semantic Search) في الذاكرة المخزنة.</td><td><span class="tag">استكشاف</span></td></tr>
+                <tr class="tool-row"><td>compress_context</td><td>ضغط النصوص الطويلة لتوفير مساحة السياق (Context).</td><td><span class="tag">تحليل</span></td></tr>
+            </tbody>
+        </table>
+
+        <!-- ========================================================= -->
+        <!--  المحرك 8: الميزان                                           -->
+        <!-- ========================================================= -->
+        <div class="engine-section-title">⚖️ المحرك 8: الميزان (القياس والتكلفة)</div>
+        <table>
+            <thead>
+                <tr><th>الأداة (Tool)</th><th>الوظيفة (Description)</th><th>الصلاحية</th></tr>
+            </thead>
+            <tbody>
+                <tr class="tool-row"><td>estimate_cost</td><td>حساب التكلفة التقريبية لاستهلاك التوكنات لنموذج معين.</td><td><span class="tag">مراقبة</span></td></tr>
+                <tr class="tool-row"><td>get_usage_metrics</td><td>جلب إحصائيات الاستخدام الحالية (عدد التوكنات، التكلفة، الزمن).</td><td><span class="tag">مراقبة</span></td></tr>
+                <tr class="tool-row"><td>latency_ping</td><td>قياس زمن الاستجابة (Ping) للخوادم أو النماذج المتصلة.</td><td><span class="tag">تشخيص</span></td></tr>
+            </tbody>
+        </table>
+
+        <!-- ========================================================= -->
+        <!--  المحرك 9: المحك                                             -->
+        <!-- ========================================================= -->
+        <div class="engine-section-title">🧪 المحرك 9: المحك (الاختبار والتقييم)</div>
+        <table>
+            <thead>
+                <tr><th>الأداة (Tool)</th><th>الوظيفة (Description)</th><th>الصلاحية</th></tr>
+            </thead>
+            <tbody>
+                <tr class="tool-row"><td>run_virtual_test</td><td>تشغيل اختبار وحدة افتراضي على قطعة كود معينة.</td><td><span class="tag">اختبار</span></td></tr>
+                <tr class="tool-row"><td>synthesize_test</td><td>توليد اختبارات وحدة (Unit Tests) تلقائياً للدوال الجديدة.</td><td><span class="tag">توليد</span></td></tr>
+                <tr class="tool-row"><td>self_score_output</td><td>تقييم ذاتي لمخرجات النموذج بناءً على معايير الجودة (الالتزام، الكفاءة، التوافق).</td><td><span class="tag">تقييم</span></td></tr>
+                <tr class="tool-row"><td>simulate_integration</td><td>محاكاة تفاعل الوحدة الجديدة مع بقية النظام لاكتشاف التعارضات.</td><td><span class="tag">محاكاة</span></td></tr>
+            </tbody>
+        </table>
+
+        <!-- ========================================================= -->
+        <!--  المحرك 10: النبض المتزامن                                  -->
+        <!-- ========================================================= -->
+        <div class="engine-section-title">⏳ المحرك 10: النبض المتزامن (الجدولة والمرونة)</div>
+        <table>
+            <thead>
+                <tr><th>الأداة (Tool)</th><th>الوظيفة (Description)</th><th>الصلاحية</th></tr>
+            </thead>
+            <tbody>
+                <tr class="tool-row"><td>graceful_interrupt</td><td>إيقاف مهمة طويلة وحفظ نقطة التوقف (Checkpoint).</td><td><span class="tag">تحكم</span></td></tr>
+                <tr class="tool-row"><td>resume_from_checkpoint</td><td>استئناف المهمة من آخر نقطة حفظ.</td><td><span class="tag">تحكم</span></td></tr>
+                <tr class="tool-row"><td>background_async_task</td><td>جدولة مهمة تعمل في الخلفية (غير متزامنة).</td><td><span class="tag">تنفيذ</span></td></tr>
+            </tbody>
+        </table>
+
+
+        <!--  المحرك 12: ملحق الذكاء الخام                               -->
+        <!-- ========================================================= -->
+        <div class="engine-section-title">🧩 المحرك 12: ملحق الذكاء الخام (الخبرات التراكمية)</div>
+        <table>
+            <thead>
+                <tr><th>الأداة (Tool)</th><th>الوظيفة (Description)</th><th>الصلاحية</th></tr>
+            </thead>
+            <tbody>
+                <tr class="tool-row"><td>classify_problem</td><td>تصنيف المشكلة البرمجية إلى واحدة من 7 فئات رئيسية (بحث، ترتيب، أمان، ...).</td><td><span class="tag">تحليل</span></td></tr>
+                <tr class="tool-row"><td>estimate_big_o</td><td>تقدير تعقيد الخوارزمية (Big-O) وحظر الأكواد البطيئة (O(n²) وما فوق).</td><td><span class="tag">تحليل</span></td></tr>
+                <tr class="tool-row"><td>detect_bug_signature</td><td>كشف التوقيعات الرقمية للأخطاء الشائعة (undefined, null, memory leaks).</td><td><span class="tag">تشخيص</span></td></tr>
+            </tbody>
+        </table>
+
+        <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 15px;">
+            ✅ هذه الترشانة تغطي كافة المحركات (0-12) وتشكل العمود الفقري لـ "العقل المدبر" في التفاعل مع الملفات، البيانات، والإنترنت.
+        </p>
+    </div>
+    <!-- ============================================================ -->
+
+        <!-- 5. نظام المسارات السيادي -->
+        <div class="card" style="grid-column: span 2; margin-top: 25px;">
+            <h2>🌐 نظام المسارات السيادي (Universal Path System)</h2>
+            <p style="font-size: 0.9rem; color: var(--text-dim);">هذا النظام يضمن بقاء الموقع متصلاً ببياناته مهما تغير مكان ملف الـ HTML أو زاد عمق المجلدات (حتى 10 مجلدات أو أكثر):</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border-right: 3px solid var(--accent-blue);">
+                    <h4 style="margin: 0 0 10px 0; color: #fff;">📁 هيكلية المجلدات السيادية</h4>
+                    <ul style="font-size: 0.8rem; line-height: 1.8; color: var(--text-dim);">
+                        <li><b style="color: var(--accent-blue);">/ (Root):</b> الجذر الأساسي [<span id="mainFileName" class="glow-text">index.html</span>]
+                            <button onclick="changeMainFile()" style="background:none; border:none; color:var(--accent-blue); cursor:pointer; font-size:0.7rem; text-decoration:underline; padding:0; margin-right:5px;">(تغيير الملف الرئيسي)</button>
+                        </li>
+                        <li><b style="color: var(--accent-blue);">/بيانات موقعي json/:</b> المستودع المركزي الشامل (JSON, Images, PDF, Text, etc) وأي صيغة أخرى.</li>
+                        <li><b style="color: var(--accent-blue);">/assets/:</b> الملفات المشتركة (CSS, JS, Fonts).</li>
+                        <li><b style="color: var(--accent-blue);">/pages/:</b> المجلدات الوظيفية العميقة.</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border-right: 3px solid var(--accent-green);">
+                    <h4 style="margin: 0 0 10px 0; color: #fff;">🛠️ محرك الربط الذكي</h4>
+                    <code class="glow-text" style="font-size: 0.8rem; color: var(--accent-purple); display: block; font-weight: bold;">fetchSmartData</code>
+                    <code class="glow-text" style="font-size: 0.8rem; color: var(--accent-purple); display: block; font-weight: bold;">window.location.origin</code>
+                    <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 10px;">يعتمد النظام على دالة جلب موحدة تدمج المسار المطلق مع نظام "البصمة الزمنية" لمنع التخزين المؤقت، مما يضمن تدفق البيانات لأي ملف مهما كان امتداده أو موقعه.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="btn-copy" onclick="copyAIProtocol()" style="background: var(--accent-purple);">📋 نسخ بروتوكول الـ AI للمسارات</button>
+            </div>
+        </div>
+
+        <!-- 6. بنية الجسر -->
+        <div class="card" style="margin-top: 25px; grid-column: span 2;">
+            <h2>🌉 بنية الجسر السيادي (Cloud Bridge Architecture)</h2>
+            <p style="font-size: 0.9rem; color: var(--text-dim);">يعمل الجسر كبوابة أمنية (Secure Gateway) تربط بين الواجهة الأمامية والخدمات الحساسة:</p>
+
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: var(--accent-purple); font-size: 1.1rem;">⚡ Supabase Edge Functions (Deno)</h3>
+                <p style="font-size: 0.85rem;">تعمل في بيئة Deno Runtime على حافة الشبكة لتأمين الـ Secrets (مثل GEMINI_API_KEY) ومعالجة المنطق السحابي.</p>
+                <div class="constitution-block" style="color: #4db6ac;">
+// منطق الجسر السحابي السيادي
+serve(async (req) => {
+  const { action, payload } = await req.json();
+  if (action === 'chat') {
+    // الاتصال بـ Google API وإرجاع النتيجة
+  }
+});</div>
+            </div>
+        </div>
+
+        <!-- 7. تكامل المحركات -->
+        <div class="card" style="margin-top: 25px; grid-column: span 2;">
+            <h2>🚀 تكامل المحركات والـ APIs</h2>
+            <p style="font-size: 0.9rem; color: var(--text-dim);">كيف يتم تعريف ووضع الأدوات في النظام السحابي:</p>
+            <div style="padding: 15px; background: rgba(0,0,0,0.2); border-right: 4px solid var(--accent-blue);">
+                <h4 style="margin: 0; color: #fff;">1. تعريف الأداة في العقل المدبر (AI Engine):</h4>
+                <p style="font-size: 0.85rem;">يتم إرسال مصفوفة <code>function_declarations</code> داخل ملف <code>ai_engine_core.js</code> لتخبر النموذج بوجود أداة يمكنه طلبها.</p>
+            </div>
+            <div style="padding: 15px; background: rgba(0,0,0,0.2); border-right: 4px solid var(--accent-green); margin-top: 10px;">
+                <h4 style="margin: 0; color: #fff;">2. التبديل الذكي بين المحركات (Fallback):</h4>
+                <p style="font-size: 0.85rem;">يقوم الجسر بالتبديل تلقائياً بين محركات البحث (Google Search و Tavily) في حال وصول أحدها لسقف الاستخدام، مما يضمن استمرارية الخدمة.</p>
+            </div>
+        </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <button class="btn-copy" onclick="copyPrompt()">نسخ "بصمة العقل المدبر" لاستخدامها في نموذج آخر</button>
+    </div>
+
+    <div class="footer-note">
+        تم توليد هذا المخطط بواسطة "العقل المدبر" ليظل مرجعاً سيادياً دائماً لمنظومة VSA Academy السحابية.<br>
+        2026 © جميع الحقوق محفوظة للنظام.
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

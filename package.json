@@ -1,0 +1,33 @@
+{
+  "name": "vsa-mastermind-desktop",
+  "version": "1.0.0",
+  "description": "VSA Academy AI Mastermind - Desktop Edition",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder build --windows --x64"
+  },
+  "build": {
+    "appId": "com.vsa.mastermind",
+    "productName": "VSA Mastermind",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "portable",
+      "icon": "favicon.ico"
+    },
+    "files": [
+      "**/*",
+      "!dist/**/*",
+      "!vsa-local-bridge/**/*"
+    ]
+  },
+  "keywords": [],
+  "author": "VSA Academy",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  }
+}

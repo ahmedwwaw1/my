@@ -1,0 +1,220 @@
+:root {
+    --bg-deep: #0d0d0f;
+    --bg-card: #16161a;
+    --accent-blue: #3574f0;
+    --accent-green: #4db6ac;
+    --accent-purple: #bb86fc;
+    --text-main: #dfe1e5;
+    --text-dim: #afb1b3;
+    --border: #2d2d35;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-deep);
+    color: var(--text-main);
+    margin: 0;
+    padding: 40px 20px;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 60px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 30px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin: 0;
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    color: var(--accent-blue);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+h2 {
+    font-size: 1.25rem;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent-green);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+}
+
+/* دستور النخبة */
+.constitution-block {
+    background: #000;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--accent-purple);
+    white-space: pre-wrap;
+    overflow-x: auto;
+}
+
+/* الجداول */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+
+th, td {
+    text-align: right;
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    color: var(--accent-blue);
+    font-weight: bold;
+}
+
+/* تسميات الصلاحيات */
+.tag {
+    background: rgba(53, 116, 240, 0.1);
+    color: var(--accent-blue);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* أسماء الأدوات (خط أحادي) */
+.tool-name {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-purple);
+    font-weight: bold;
+}
+
+/* النصوص المتوهجة */
+.glow-text {
+    color: var(--accent-purple);
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(187, 134, 252, 0.3);
+    animation: subtle-pulse 2.5s infinite alternate;
+}
+
+@keyframes subtle-pulse {
+    from {
+        opacity: 0.7;
+        text-shadow: 0 0 4px rgba(187, 134, 252, 0.2);
+    }
+    to {
+        opacity: 1;
+        text-shadow: 0 0 12px rgba(187, 134, 252, 0.5);
+    }
+}
+
+/* أزرار النسخ */
+.btn-copy {
+    background: var(--accent-blue);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+    display: inline-block;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.btn-copy:hover {
+    opacity: 0.8;
+}
+
+/* ========================================================= */
+/*  إضافات جديدة لتنسيق المحركات والجداول المتعددة           */
+/* ========================================================= */
+
+/* شارة المحرك */
+.engine-tag {
+    display: inline-block;
+    background: rgba(187, 134, 252, 0.15);
+    color: #bb86fc;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+    font-weight: bold;
+    border: 1px solid rgba(187, 134, 252, 0.2);
+}
+
+/* صف الجدول عند المرور */
+.tool-row:hover {
+    background: rgba(53, 116, 240, 0.05);
+}
+
+/* عنوان كل محرك داخل القسم */
+.engine-section-title {
+    color: var(--accent-green);
+    margin: 25px 0 10px 0;
+    font-size: 1.1rem;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 5px;
+}
+
+/* شارة عامة (للمحركات الأساسية) */
+.badge-general {
+    background: rgba(53, 116, 240, 0.15);
+    color: var(--accent-blue);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    margin: 0 4px;
+}
+
+/* تذييل الصفحة */
+.footer-note {
+    text-align: center;
+    margin-top: 80px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+}
