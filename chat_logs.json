@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788808047939",
-      "title": "الحمد لله دائمًا وأبدًا على نع",
+      "title": "",
       "history": [
         {
           "role": "user",
@@ -42,11 +42,28 @@
             }
           ],
           "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": ""
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": ""
+            }
+          ],
+          "model": "gemini-3.5-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1788808047939",
   "pendingHistory": null,
-  "timestamp": "2026-09-07T19:08:33.352Z"
+  "timestamp": "2026-09-07T19:08:55.991Z"
 }
