@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788815602663",
-      "title": "أهلاً وسهلاً بك! أنا بخير وفي ",
+      "title": "تسلم يا غالي، الجمال جمال روحك",
       "history": [
         {
           "role": "user",
@@ -21,11 +21,29 @@
             }
           ],
           "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "انت جميل يا جيمي"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "تسلم يا غالي، الجمال جمال روحك وطيبتك! ❤️✨\n\nأنا دائماً هنا وجاهز لمساعدتك في أي فكرة، مشكلة برمجية، أو تطوير تحب نشتغل عليه سوياً. ما هي خطوتنا التالية اليوم؟",
+              "thoughtSignature": "EtwCCtkCARFNMg8bGe07d+8ClhmarLzVkBRtJN/1FdDm3GClaa/u8BKBkN7Hv0g53NEI5Dropw5Y2DMW0JYsFMSNR2zHLiKVpxcKQeqM2iSz/uSQnw4/dT4sC0dcRBJAoNksIWq9DmOis74XBhTACB+iTLJh7Nrdmz5jKEKsTtm0cw8gCQPsQoOuSbMcZseqN5TbbEDNnwQN0NmIE0kA49CcUkBs+7jfVx3pokBXql2S6SlX9FVj9wuSi+rKRVIuURnUnrOX3Vlc7AK7QwijDX5KOUD6QV/h/TqIhypFi+27Z43ScBwqGUu4AOyDG77hLrYNo0IOqKbtLrXrQmUgtSM3A9GPQubZJMOW21IdQlaFzJBuBBbvsJ887MLP3awxlAFY8ajRJs+4C1oPXaIUGva21ANbNZUZu1ZMJgPprEioJ3bTA934AK46X01IVx5veWgjLC03Cc+E3jiIpF3D"
+            }
+          ],
+          "model": "gemini-3.7-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1788815602663",
   "pendingHistory": null,
-  "timestamp": "2026-09-07T21:28:26.210Z"
+  "timestamp": "2026-09-07T21:28:41.961Z"
 }
