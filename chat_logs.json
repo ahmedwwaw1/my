@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788815602663",
-      "title": "تسلم يا غالي، الجمال جمال روحك",
+      "title": "أي بلي، أتدلل! أعرف أحچي عراقي",
       "history": [
         {
           "role": "user",
@@ -39,11 +39,29 @@
             }
           ],
           "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "تعرف تحجي عراقي"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أي بلي، أتدلل! أعرف أحچي عراقي زين عيني، شلون ما أعرف؟ 😄❤️\n\nشلونك عيوني؟ شنو ببالك اليوم؟ تگدر تسولف ويايه بالعراقي وتحچي بأي موضوع تحبه، سواء برمجيات، أفكار مشاريع، أو أي شي ثاني. \n\nتأمر أمر!",
+              "thoughtSignature": "EoQDCoEDARFNMg97Kq8SDB2dAyGYLTWzecYJOCPMYZ4laAMOhpqbQxSWS4l3cF8LudupkykrWyTvYMVbzpNUYxiURWdbC128jr3sMDu+eTbw9gOHfo5u6zQVt/qhXipTR9inZsmvdkQZf9rOLK8HX7Ru9G5+4f9McAno6e8in0BSI8SbifMznSYzn7fWCJMBB4vW1fmUwJVC3u1NafdF2uPv7t3lz9utgBU6OeKQJRRzXvsan8g6Awx1q+3iYgVXG5HboFCDP2/814sBPFh1PHzIwu41j5vMn3ZKjEMbHFVJKnIHMkb5xoeNY7I7bOvDX5LjLLT02NaT/potpO0LXMlYOTxb1yDKFKpSiQfK1ljYpcdlQ0mhpCEc4hcLJUeS8z5xN1CZzA6Qb0TKHPoqEtErCCT2rUDj6OdN5H1B3wh4at9X6Kgj5ULE3WpiXsP+tuSO8vVcsWm+WNvBVVGXUBOfOXsu1gyNpyzdVZi8ckUVx/gRGAQBSxDS1z10kItD4vvt9ayJQA=="
+            }
+          ],
+          "model": "gemini-3.6-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1788815602663",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا كيف الحال\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً وسهلاً بك! أنا بخير وفي أتم الاستعداد والجاهزية، شكراً لسؤالك.\\n\\nكيف يمكنني مساعدتك اليوم في مشروعك أو في مهام التطوير والبرمجة؟\",\"thoughtSignature\":\"EuECCt4CARFNMg/qOOzTQxNssGu9b+cMgsGRWlyvAHKz4w5IPfK6oBYCZDQCPzSiZPF/NN+rSpRkM1GkI2kqlCe4BH93Hpvh86FsK7eU+TZNnWV1NZPlv9/K0ziqWVAjZJ7hMLm58fB8/6tCkppbzAypPTLXtYGWX0fuPU6NSVA+0CrAomHYrHLZaM49tbtLLOwGKVDpwBpZIszCsP4N5ZAYrC11Px2Q02m3ulNMyoZW5VtNhk2HI8Ts07vIAqAvAW8+OstBbVnl3kftoGZ6CDnmktIyr0QZOl5GdpiL9JLz6iNzKOTSnahVZESjipo7OgPD88fe5OzjCnyCNWVjx4lFjIEUY8mJL8zx7PWStxUYQ19fWOqMGud+s/7dmPWkxMB6ILhOaxdyDgmC9WZ7Ttd82PGj46vR2hJpCiOKgoQcloS+OLSyOAZYgE+InxR8XF6FTm5Kqcn/aPAtBNbC3jXyokU=\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"انت جميل يا جيمي\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"تسلم يا غالي، الجمال جمال روحك وطيبتك! ❤️✨\\n\\nأنا دائماً هنا وجاهز لمساعدتك في أي فكرة، مشكلة برمجية، أو تطوير تحب نشتغل عليه سوياً. ما هي خطوتنا التالية اليوم؟\",\"thoughtSignature\":\"EtwCCtkCARFNMg8bGe07d+8ClhmarLzVkBRtJN/1FdDm3GClaa/u8BKBkN7Hv0g53NEI5Dropw5Y2DMW0JYsFMSNR2zHLiKVpxcKQeqM2iSz/uSQnw4/dT4sC0dcRBJAoNksIWq9DmOis74XBhTACB+iTLJh7Nrdmz5jKEKsTtm0cw8gCQPsQoOuSbMcZseqN5TbbEDNnwQN0NmIE0kA49CcUkBs+7jfVx3pokBXql2S6SlX9FVj9wuSi+rKRVIuURnUnrOX3Vlc7AK7QwijDX5KOUD6QV/h/TqIhypFi+27Z43ScBwqGUu4AOyDG77hLrYNo0IOqKbtLrXrQmUgtSM3A9GPQubZJMOW21IdQlaFzJBuBBbvsJ887MLP3awxlAFY8ajRJs+4C1oPXaIUGva21ANbNZUZu1ZMJgPprEioJ3bTA934AK46X01IVx5veWgjLC03Cc+E3jiIpF3D\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"تعرف تحجي عراقي\"}]}]",
-  "timestamp": "2026-09-07T21:28:57.925Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا كيف الحال\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً وسهلاً بك! أنا بخير وفي أتم الاستعداد والجاهزية، شكراً لسؤالك.\\n\\nكيف يمكنني مساعدتك اليوم في مشروعك أو في مهام التطوير والبرمجة؟\",\"thoughtSignature\":\"EuECCt4CARFNMg/qOOzTQxNssGu9b+cMgsGRWlyvAHKz4w5IPfK6oBYCZDQCPzSiZPF/NN+rSpRkM1GkI2kqlCe4BH93Hpvh86FsK7eU+TZNnWV1NZPlv9/K0ziqWVAjZJ7hMLm58fB8/6tCkppbzAypPTLXtYGWX0fuPU6NSVA+0CrAomHYrHLZaM49tbtLLOwGKVDpwBpZIszCsP4N5ZAYrC11Px2Q02m3ulNMyoZW5VtNhk2HI8Ts07vIAqAvAW8+OstBbVnl3kftoGZ6CDnmktIyr0QZOl5GdpiL9JLz6iNzKOTSnahVZESjipo7OgPD88fe5OzjCnyCNWVjx4lFjIEUY8mJL8zx7PWStxUYQ19fWOqMGud+s/7dmPWkxMB6ILhOaxdyDgmC9WZ7Ttd82PGj46vR2hJpCiOKgoQcloS+OLSyOAZYgE+InxR8XF6FTm5Kqcn/aPAtBNbC3jXyokU=\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"انت جميل يا جيمي\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"تسلم يا غالي، الجمال جمال روحك وطيبتك! ❤️✨\\n\\nأنا دائماً هنا وجاهز لمساعدتك في أي فكرة، مشكلة برمجية، أو تطوير تحب نشتغل عليه سوياً. ما هي خطوتنا التالية اليوم؟\",\"thoughtSignature\":\"EtwCCtkCARFNMg8bGe07d+8ClhmarLzVkBRtJN/1FdDm3GClaa/u8BKBkN7Hv0g53NEI5Dropw5Y2DMW0JYsFMSNR2zHLiKVpxcKQeqM2iSz/uSQnw4/dT4sC0dcRBJAoNksIWq9DmOis74XBhTACB+iTLJh7Nrdmz5jKEKsTtm0cw8gCQPsQoOuSbMcZseqN5TbbEDNnwQN0NmIE0kA49CcUkBs+7jfVx3pokBXql2S6SlX9FVj9wuSi+rKRVIuURnUnrOX3Vlc7AK7QwijDX5KOUD6QV/h/TqIhypFi+27Z43ScBwqGUu4AOyDG77hLrYNo0IOqKbtLrXrQmUgtSM3A9GPQubZJMOW21IdQlaFzJBuBBbvsJ887MLP3awxlAFY8ajRJs+4C1oPXaIUGva21ANbNZUZu1ZMJgPprEioJ3bTA934AK46X01IVx5veWgjLC03Cc+E3jiIpF3D\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"تعرف تحجي عراقي\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أي بلي، أتدلل! أعرف أحچي عراقي زين عيني، شلون ما أعرف؟ 😄❤️\\n\\nشلونك عيوني؟ شنو ببالك اليوم؟ تگدر تسولف ويايه بالعراقي وتحچي بأي موضوع تحبه، سواء برمجيات، أفكار مشاريع، أو أي شي ثاني. \\n\\nتأمر أمر!\",\"thoughtSignature\":\"EoQDCoEDARFNMg97Kq8SDB2dAyGYLTWzecYJOCPMYZ4laAMOhpqbQxSWS4l3cF8LudupkykrWyTvYMVbzpNUYxiURWdbC128jr3sMDu+eTbw9gOHfo5u6zQVt/qhXipTR9inZsmvdkQZf9rOLK8HX7Ru9G5+4f9McAno6e8in0BSI8SbifMznSYzn7fWCJMBB4vW1fmUwJVC3u1NafdF2uPv7t3lz9utgBU6OeKQJRRzXvsan8g6Awx1q+3iYgVXG5HboFCDP2/814sBPFh1PHzIwu41j5vMn3ZKjEMbHFVJKnIHMkb5xoeNY7I7bOvDX5LjLLT02NaT/potpO0LXMlYOTxb1yDKFKpSiQfK1ljYpcdlQ0mhpCEc4hcLJUeS8z5xN1CZzA6Qb0TKHPoqEtErCCT2rUDj6OdN5H1B3wh4at9X6Kgj5ULE3WpiXsP+tuSO8vVcsWm+WNvBVVGXUBOfOXsu1gyNpyzdVZi8ckUVx/gRGAQBSxDS1z10kItD4vvt9ayJQA==\"}],\"model\":\"gemini-3.6-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"الله يسلمك انت شتعرف سوي بلبرمجة\"}]}]",
+  "timestamp": "2026-09-07T21:29:40.416Z"
 }
