@@ -1,6 +1,49 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788798838640",
+      "title": "ممتاز جداً! ملفات JSON هي اختص",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكن قرائة هاذ الملف"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! بالطبع، يسعدني جداً قراءة أي ملف ترغب في مشاركته معي ومساعدتك في تحليله، تلخيصه، أو تعديله بالطريقة التي تريدها.\n\nيمكنك **رفع الملف** مباشرة هنا في المحادثة، أو **نسخ ولصق محتواه** إذا كان نصياً (مثل الأكواد البرمجية، أو المستندات النصية). \n\nما هو الملف الذي ترغب في أن نقوم بمراجعته اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPxfcrrUNyoBRROnr6uy8PpblNjfPPKGzHnNIN1kPOrD3cyhcNcyDOmOOs+6qVuVPH3uITi5H3d4tJsFeO+IQyMofHOputblkLUcJMgu7QXNsDM4EDKUiG"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ملف json"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "ممتاز جداً! ملفات JSON هي اختصاصي. \n\nيمكنك **رفع ملف الـ JSON** هنا مباشرة، أو **نسخ محتواه ولصقه** في رسالتك القادمة. \n\nبمجرد أن ترسله، يمكنني:\n1. **قراءته وتحليله** وفهم هيكل البيانات بداخله.\n2. **البحث** عن أخطاء في الصياغة (Syntax Errors) إن وجدت وإصلاحها.\n3. **تعديله، تحويله، أو استخراج معلومات محددة** منه بناءً على طلبك.\n\nتفضل بإرساله الآن!",
+              "thoughtSignature": "El4KXAERTTIPiSpo/c5e+HT7l4Lir98ZOPfMjoMtyRGgpnRH/puYbKvDtkZQfFitts3hqkSNkRCe8lvY/f+idjEuzMgB502DRnErM7KjeGlA1e7/Gmo9pT0M4Qs0ZMQC"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788798838640",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكن قرائة هاذ الملف\"}]}]",
-  "timestamp": "2026-09-07T16:34:31.633Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-07T16:34:59.685Z"
 }
