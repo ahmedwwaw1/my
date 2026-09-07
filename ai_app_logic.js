@@ -209,16 +209,22 @@ async function handleFileUpload(event) {
 
         reader.onload = (e) => {
             const base64 = e.target.result.split(',')[1];
-            const fileObj = { id: fileId, name: file.name, type: file.type, base64: base64, content: null };
+            const fileObj = { id: fileId, name: file.name, type: file.type || 'application/json', base64: base64, content: null };
 
-            if (file.type === 'application/json' || file.type.startsWith('text/')) {
+            if (file.type === 'application/json' || file.name.endsWith('.json') || file.type.startsWith('text/')) {
                 const textReader = new FileReader();
-                textReader.onload = (te) => { fileObj.content = te.target.result; };
+                textReader.onload = (te) => { 
+                    fileObj.content = te.target.result; 
+                    selectedFiles.push(fileObj);
+                    renderPreviews();
+                    updateSendButtonState();
+                };
                 textReader.readAsText(file);
+            } else {
+                selectedFiles.push(fileObj);
+                renderPreviews();
+                updateSendButtonState();
             }
-            selectedFiles.push(fileObj);
-            renderPreviews();
-            updateSendButtonState();
         };
         reader.readAsDataURL(file);
     }
