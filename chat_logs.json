@@ -1,6 +1,49 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788800200546",
+      "title": "العفو، على الرحب والسعة دائماً",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا معك العقل الهيمنتي والمصمم المعماري لمنصة **VSA Academy**. \n\nكيف يمكنني مساعدتك اليوم في تطوير، تحسين، أو هندسة مشاريعك ومنصتك الذكية؟ جاهز لكافة المهام البرمجية والتصميمية بأعلى معايير الابتكار والدقة.",
+              "thoughtSignature": "El4KXAERTTIPfJbEiWUleJWX74chhWag9JSXgoML39YtsLU4FYeDeiglwRpe/7t1YWRChkbThfYXKgpwH6EA82VmfKoL54deYUTj06tUSO2RmIGbme7CCMGJrDHFZUG4"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "شكرا لك"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "العفو، على الرحب والسعة دائماً! ✨\n\nأنا في خدمتك في أي وقت، سواء كنت بحاجة لبناء ميزات جديدة، تحسين الأداء، تصميم واجهات مبتكرة، أو فحص وتطوير الكود. \n\nأتمنى لك يوماً رائعاً ومليئاً بالإنجازات! 🚀",
+              "thoughtSignature": "Em0KawERTTIPw5+AJ1C3YVeBQ47sLVYzjaUtdd41ayq/uwO75sQov4SVIWFmLfyaDnPupvRy4s4Ln7BVIqvcvzh8+yTbZUZ8Hvs04eLs9Yk6tclkV6smnqC7q5+nRNfp0cy2fyq1MOAYA9946Rg5"
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788800200546",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-07T16:56:47.418Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-07T18:12:04.293Z"
 }
