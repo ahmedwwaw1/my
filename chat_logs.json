@@ -1,6 +1,52 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788773322995",
+      "title": "أنا بخير وفي أتم الجاهزية، شكر",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أهلاً وسهلاً بك في منصة **VSA Academy**. \n\nأنا **Mastermind**، المساعد والمهندس البرمجي المعماري الذكي للمنصة. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى تطوير ميزة جديدة، تحسين تصميم الواجهات، فحص الكود والتطبيقات، أو أي استفسار آخر، أنا جاهز لخدمتك!",
+              "thoughtSignature": "EmcKZQERTTIPRUlprrTwSG1naOVgoParfAoteTq3pWkiQtpJwvuI/QAuy4ZAuP713NEcUFuaMvRaNvCigcCK38yH5tFyjvWYgofMq/e93vG0ESGAAu+Ek+b0VQV+DHNQDtgYSepC61i8"
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا بخير وفي أتم الجاهزية، شكراً لسؤالك! أتمنى أن تكون أنت أيضاً بأفضل حال وبصحة وعافية.\n\nبص"
+            },
+            {
+              "text": "فتي المساعد التقني والمعماري لمشروع **VSA Academy**، أنا حاضر لمساعدتك في أي مهمة، استفسار، أو تطوير ترغب بالعمل عليه اليوم. \n\nما الذي ترغب في إنجازه معاً؟",
+              "thoughtSignature": "Em0KawERTTIPPQ2T3I77YbEk6+arDae3j1Q8IMwPtHYXqG8BRt5dyvTVFO2j0Z17tIDonB5AsN1Q4ka1ksUe5dH30UPIls/Ro0v7xbZ5xIfNZj3lxm63PzmnLImv2pxgeDDwculmbPTCjFJiHBy1"
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788773322995",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-07T09:29:07.424Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-07T09:29:35.947Z"
 }
