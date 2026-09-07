@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788760224657",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-07T05:50:33.742Z"
+  "sessions": [
+    {
+      "id": "1788760224657",
+      "title": "أهلاً وسهلاً بك! 🌟\n\nأنا جاهز ",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً وسهلاً بك! 🌟\n\nأنا جاهز ومستعد لمساعدتك في أي مهمة برمجية، معمارية، أو تطويرية للمشروع. \n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "ErcCCrQCARFNMg+sehE9fl7Ewx48IUBtIk2UsSzB540tiYO6HuLyCSBjlQjLLW8Ky24ChCtTnEual1vffNKrhx+jj3FMPE6TmJITRI7C6WXTtvxlmEyB9JypGnu9xOoB4SBao9fuXdQ+jjT8GOlncM3BSWfK/+rWAqn9BfNVeMTm0ax6+tQrg4WJFU3A0w1vdyKOZl9YdnhbvYCYjJJqCUGIOvW/kFSiqIatA4k7DK0KYROf/sojxtiCHCyqXDtX/SyS7M1fg7cJguBeIoaZF0S1bAP3Eto9N7U5iVbus8ED2WIMD7tloulIFOkOQE+5/w84IcgmvvNhjtymU3NocWbHv6zo0RzniYxk8HmxDJI2Dq5vHMkktxE2yGbaRTKPThDCKKnOQ/PUo6dbYlFLRep7dFc+9mhhp2s="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788760246193",
+  "pendingHistory": null,
+  "timestamp": "2026-09-07T05:50:46.193Z"
 }
