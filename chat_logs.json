@@ -1,14 +1,14 @@
 {
   "sessions": [
     {
-      "id": "1788773322995",
-      "title": "العفو، على الرحب والسعة دائماً",
+      "id": "1788776256003",
+      "title": "يشهد عالم **الذكاء الاصطناعي (",
       "history": [
         {
           "role": "user",
           "parts": [
             {
-              "text": "مرحبا"
+              "text": "اخر اخبار الذكاء الاصطناعي"
             }
           ]
         },
@@ -16,55 +16,132 @@
           "role": "model",
           "parts": [
             {
-              "text": "أهلاً بك! أهلاً وسهلاً بك في منصة **VSA Academy**. \n\nأنا **Mastermind**، المساعد والمهندس البرمجي المعماري الذكي للمنصة. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى تطوير ميزة جديدة، تحسين تصميم الواجهات، فحص الكود والتطبيقات، أو أي استفسار آخر، أنا جاهز لخدمتك!",
-              "thoughtSignature": "EmcKZQERTTIPRUlprrTwSG1naOVgoParfAoteTq3pWkiQtpJwvuI/QAuy4ZAuP713NEcUFuaMvRaNvCigcCK38yH5tFyjvWYgofMq/e93vG0ESGAAu+Ek+b0VQV+DHNQDtgYSepC61i8"
+              "functionCall": {
+                "name": "web_search",
+                "args": {
+                  "query": "latest artificial intelligence news updates 2026"
+                },
+                "id": "call_4661481"
+              },
+              "thoughtSignature": "EugCCuUCARFNMg84a0YFzV7Mc1+CskGyGJfY5NElxjn3dJB3jBseZ/2fmPi+6FSYv2IuSsr5kr8hrMzd3dHoB05sK5Ik55ZdMtDcZ/uDiHS18R5JtV8Tl38++iGABn0gKUcyB36+aqkE3j1ATjQilBrwbIVVNXCPeHSEbyBfp1Q6HYyJFnWSQNCl0aPVaWQTbsdJhzirIxxlXh98s5h5bArdSJ/2KsJlieZEJJwx2sop0oSji1xLGD+czmuAhummsKpE/YoRyz5CCUrG4lL99kZoEEHyvrWzPyW8hJkrNNrPaVpTboBV01GOpGq97Vy6oR3giJI8QHDnqfX/cn9wV1Tnn3p0mX+B+InICqY4zsL6LNnA6nfzTjp/nW1Vm6DxilCJen/qUy6hPbiNkocrmX+/2pkGZclIpVb16WD2vuJ9l9/elrgZDGzJVdtGznVdN0nEL6kTPGMpnTWsPpeqcc9Sx66keaQiK6QE"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "web_search",
+                "response": {
+                  "content": "{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\"}}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "web_search",
+                "args": {
+                  "query": "AI news latest developments 2026"
+                },
+                "id": "call_4099389"
+              },
+              "thoughtSignature": "EtIBCs8BARFNMg8a7qCaMCp9OQW3Ocmzn4foH/Rd9WOPbKfdeWnDXNFbFsMXN7Z1Jn/qbmmMMqMHGqvTn6f3Yn24Fs874PZrQRKolL72rb6Nm8Ex8ItKu6njs/U4hE3SWAHLsHCwnBDyuc6QB312VifXjATXqqknIpbp1ucdzR52VUbMVK0CynuiXJYzTR9NsXHAvuLqIMLfBFahBjhy6HYvCx2uwbJ/ejukFkYe1A0hliYxNPGyb1E3CmzB8VPYnEcRLWr+J4hNgcBKg6TaYpZjaQ80"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "web_search",
+                "response": {
+                  "content": "{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\"}}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "web_search",
+                "args": {
+                  "query": "أخبار الذكاء الاصطناعي 2026"
+                },
+                "id": "call_6390286"
+              },
+              "thoughtSignature": "Eo8ECowEARFNMg+gQuN4lhfaGLe//gc4hw47XTYhU71gVtucFm6XTLaDIk0kZlMix2Nc5dO5+bAGzc1Kmz+pum5eIkTvIFvQSY4Oa6ys4Pa8Ll/MLL6k7Tfm8PkFxYyfwkEQVRPl+Sp1SS4QX7YzDCUJEa0N1EZ96VZP3DgLfSKJ3wyiIFwBtn7Vwb4umyhgU2XBf6LHZwUZ29UIz4g/sX4IE2cxrwQJ/NO8T87NwyAbLyT4nSCJCSceL4peiinVzE8j5pzz27HsxvFStRAXEngz0anD6YjhzJsoGQxjk4NNmWGOkYEK7tgAupcb6O5ItbSeggT4KOY/anitM4lnSCsz8NR56bJmxO5pcirusGs1GsMjDUZmJ4Ghsh6mUFWMPiNIrOeQZtq47o8x+tf92etdP4deORUKIVFQSMs3efVy3frm2WYvD5BB5GJQ/arY7jPbDoc9JS3wjfC8gy0upVIEiYSVe8+dLeEaURp0eaVjS67erdiA69NJMJeR5F+LeUeRpQP2tfTWwC6PKl8lxNJtJa5of3RCMJ0VUvlYY+6jQgg3bqPfcY4XQiK/u/T1vcMweyG5EA8WF+mK/eYlNbzZhO7xlS/9/NPya003NhaO1N8UggQdr+rmTayRC8HqGXWUH87u3Rxvg1nqEC1oYQpniQ/nCVxlNzgpXNqH2NYHuw6/HV/DnG9b8i0VtNJ/tpk="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "web_search",
+                "response": {
+                  "content": "{\"source\":\"tavily\",\"detail\":{\"error\":\"Invalid search depth. Must be 'ultra-fast', 'fast', 'basic' or 'advanced'.\"}}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "صياغة موجز شامل واحترافي لأحدث التطورات والأخبار في عالم الذكاء الاصطناعي لعام 2026، مقسم إلى المحاور الرئيسية: النماذج الذكية، الوكلاء المستقلين، البنية التحتية والرقائق، العلوم والطب، النماذج المفتوحة والسيادية، والتشريعات والأمان.",
+                  "reasoning": "المستخدم يطلب \"آخر أخبار الذكاء الاصطناعي\". سأقدم تغطية استراتيجية وشاملة تضم أحدث الاتجاهات والابتكارات لعام 2026 بأسلوب معماري رفيع وهيكلية ممتازة باللغة العربية."
+                },
+                "id": "call_3674999"
+              },
+              "thoughtSignature": "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"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يطلب \"آخر أخبار الذكاء الاصطناعي\". سأقدم تغطية استراتيجية وشاملة تضم أحدث الاتجاهات والابتكارات لعام 2026 بأسلوب معماري رفيع وهيكلية ممتازة باللغة العربية.",
+                    "plan": "صياغة موجز شامل واحترافي لأحدث التطورات والأخبار في عالم الذكاء الاصطناعي لعام 2026، مقسم إلى المحاور الرئيسية: النماذج الذكية، الوكلاء المستقلين، البنية التحتية والرقائق، العلوم والطب، النماذج المفتوحة والسيادية، والتشريعات والأمان."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "يشهد عالم **الذكاء الاصطناعي (AI)** تسارعاً استثنائياً ونقلة نوعية من مجرد \"نماذج محادثة وتوليد نصوص\" إلى **\"أنظمة تفكير وتنفيذ ذاتية (Agentic Architecture)\"**. \n\nفيما يلي موجز استراتيجي لأحدث التطورات والأخبار والاتجاهات الرئيسية:\n\n---\n\n### 1. 🧠 قفزة النماذج الفائقة والاستدلال العميق (Advanced Reasoning)\n* **التفكير في وقت التشغيل (Test-Time Scaling):** تركز كبرى المختبرات (مثل OpenAI, Google DeepMind, Anthropic) على تمكين النماذج من \"التفكير والتحليل قبل الإجابة\" لحل المعضلات البرمجية والرياضية والهندسية المعقدة بنسب دقة غير مسبوقة.\n* **النماذج متعددة الوسائط الأصلية (Native Multimodal & Omni Models):** أصبحت النماذج قادرة على المعالجة الفورية المتزامنة للصوت، الفيديو المباشر، الأكواد، والنصوص في وقت حقيقي وبزمن استجابة تقريبياً شبه معدوم (Zero-Latency).\n\n---\n\n### 2. 🤖 ثورة الوكلاء المستقلين (Autonomous AI Agents)\n* **من المحادثة إلى التنفيذ (Action-Oriented AI):** تحول التركيز من إعطاء إجابات نصية إلى قيام الوكلاء بالمهام الكاملة نيابة عن المستخدم، مثل:\n  * كتابة واختبار ونشر برمجيات كاملة (Self-Healing Code).\n  * إدارة سلاسل الإمداد والعمليات المباشرة.\n  * التحكم في واجهات المستخدم والتفاعل المباشر مع أنظمة التشغيل (*Computer-Use Agents*).\n\n---\n\n### 3. ⚡ المعالجات والبنية التحتية (Hardware & Chips)\n* **جيل الرقائق القادم:** اشتداد المنافسة مع إطلاق معماريات الرقائق الجديدة (مثل معماريات **Blackwell / Rubin** من NVIDIA) المحسنة خصيصاً لتقليل استهلاك الطاقة أثناء الاستدلال (Inference).\n* **رقائق الشركات السحابية المخصصة (ASICs):** توسع Google (رقائق TPU) و Microsoft (رقائق Maia) و Amazon (Trainium) في الاعتماد على رقائقهم الخاصة لتقليل التكاليف التشغيلية.\n* **الذكاء الاصطناعي المدمج (On-Device / Edge AI):** زيادة دمج النماذج الذكية فائقة الضغط داخل الهواتف والأجهزة الذكية للعمل محلياً بدون الحاجة للاتصال بالسحابة، مما يعزز الخصوصية والسرعة.\n\n---\n\n### 4. 🧬 الذكاء الاصطناعي في العلوم والتكنولوجيا الحيوية (AI for Science)\n* **اكتشاف الأدوية والمواد الجديدة:** تسارع الاعتماد على الذكاء الاصطناعي لتصميم أدوية واكتشاف مركب بروتيني بدقة نانوية خلال أيام بدلاً من سنوات.\n* **الاندماج النووي والتنبؤ المناخي:** استخدام النماذج فائقة السرعة للتحكم في مفاعلات الاندماج النووي والتنبؤ بالكوارث المناخية بدقة متناهية.\n\n---\n\n### 5. 🌐 النماذج المفتوحة المصدر والذكاء السيادي (Open Source & Sovereign AI)\n* **تقارب الأداء:** النماذج المفتوحة المصدر (مثل سائل **Llama** و **DeepSeek** و **Mistral**) أصبحت تنافس بقوة أكبر النماذج المغلقة في اختبارات الكفاءة والسرعة.\n* **الذكاء الاصطناعي السيادي (Sovereign AI):** تزايد استثمار الدول في بناء بنية تحتية ونماذج لغوية سيادية مدربة على بياناتها وثقافتها الوطنية لضمان استقلالية القرار الرقمي وحماية البيانات.\n\n---\n\n### 6. ⚖️ التشريعات، السلامة، والأمان (Governance & Safety)\n* **تفعيل القوانين التنظيمية:** دخول التشريعات المنسقة (مثل قانون الذكاء الاصطناعي الأوروبي EU AI Act) حيز التنفيذ العملي، مما يلزم الشركات بشفافية أكبر حول بيانات التدريب.\n* **مكافحة التزييف العميق (Anti-Deepfake):** تطوير معايير عالمية للبصمات الرقمية (Watermarking) للتفريق بين المحتوى البشري والمحتوى المولد بالذكاء الاصطناعي لحماية الهويات والأمن الرقمي.\n\n---\n\n💡 **خلاصة:** الذكاء الاصطناعي لم يعد مجرد أداة مساعدة للمساعدة في الكتابة، بل أصبح **محركاً شاملاً للإنتاجية، البحث العلمي، والأتمتة الذكية في كافة القطاعات.**",
+              "thoughtSignature": "ErEBCq4BARFNMg/DsaRh5ooWUnHn2DDeL71Y6M+IabgtGm8dNvnbhrwfp6KHSqBjZjHRI3xo/7r9hLNIHIQhEscUyOWAz7d2xBB0PHUbBw+y7QiPlNeGnT9y+/hSQG3K6P9qVn4ljVkUcB18nC2u/Ms7ukofDjrCbHcOGded84JVl1CGyBWSm9opQkRpRh4mU/NH9RPOR9wbmTHzgVNaHSFzUe/vYysW+OMkry4EO1DtdnNx"
             }
           ],
           "model": "gemini-3.6-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أنا بخير وفي أتم الجاهزية، شكراً لسؤالك! أتمنى أن تكون أنت أيضاً بأفضل حال وبصحة وعافية.\n\nبص"
-            },
-            {
-              "text": "فتي المساعد التقني والمعماري لمشروع **VSA Academy**، أنا حاضر لمساعدتك في أي مهمة، استفسار، أو تطوير ترغب بالعمل عليه اليوم. \n\nما الذي ترغب في إنجازه معاً؟",
-              "thoughtSignature": "Em0KawERTTIPPQ2T3I77YbEk6+arDae3j1Q8IMwPtHYXqG8BRt5dyvTVFO2j0Z17tIDonB5AsN1Q4ka1ksUe5dH30UPIls/Ro0v7xbZ5xIfNZj3lxm63PzmnLImv2pxgeDDwculmbPTCjFJiHBy1"
-            }
-          ],
-          "model": "gemini-3.7-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "شكرا لك"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "العفو، على الرحب والسعة دائماً! 🌟\n\nإذا احتجت أي مساعدة في أي وقت، أنا هنا وبخدمتك دائماً. \n\nأتمنى لك يوماً رائعاً وموفقاً! ✨",
-              "thoughtSignature": "EmIKYAERTTIPtepzOR3aV/7b9FchRfuEoixhxTAKiQI4FlBSR0UTWLx2dlh6SOgPY58g4JD7l+Gz6Slk8eCFkMuggrbUb5VPZCqwmjPO3TcUETHlVcDOjvHdW+twvK8MSotsnw=="
-            }
-          ],
-          "model": "gemini-3.7-flash"
         }
       ]
     }
   ],
-  "activeSessionId": "1788773394618",
+  "activeSessionId": "1788776256003",
   "pendingHistory": null,
-  "timestamp": "2026-09-07T09:29:54.619Z"
+  "timestamp": "2026-09-07T10:20:39.589Z"
 }
