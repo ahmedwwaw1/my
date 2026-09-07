@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788777190043",
-      "title": "إليك أحدث الأخبار والإعلانات ا",
+      "title": "إليك الرابط الرسمي لمحرك البحث",
       "history": [
         {
           "role": "user",
@@ -215,11 +215,29 @@
             }
           ],
           "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ممكن رابط محرك البحث tavily"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "إليك الرابط الرسمي لمحرك البحث والـ API الخاص بـ **Tavily**:\n\n🔗 **الموقع الرسمي:** [https://tavily.com](https://tavily.com)\n\nوهو محرك بحث مخصص ومصمم أساساً لنماذج ووكلاء الذكاء الاصطناعي (AI Agents & LLMs) لجلب معلومات دقيقة وموثوقة من الويب بسرعة وكفاءة عالية.",
+              "thoughtSignature": "EtECCs4CARFNMg83399ZqPQNTXOIlwcJC3S4HhA8Mx03Jki6ot1N1yrivoa/lCpUnmj3f8J7GEeXvRhRgPv1k2vsu6lRDg0Cao1aUv9vRfuXgKfFusYgPNB6gWSGRDAlRCY695cD+ttZsN/7jExzzIxdfqzoeEiZSFBi+gCaOwsPaElzapDir0G2IBTLSoDBI1cwS2pw9VKiogiPDs3nC0vNVy8/wlE3nOZljS/fB4pe3/JY8u8FHXn2iINDxSCz7DE7QK8aaGs5guEKjxDA5cXIMKAyt/mUcdeWLtLptimFr9P0RmrW73JT5e7UEt3rVrPielt54a2MIaio1zM8bLOnUOxuY8Rl0s6W98y1AS2oNvbQEKvtL0g3O2VqATmGY9Pr8lT/Eathb6+JrjBx8gIOiQ8YvVyFwONK+7xW8UQdNJJUYrjX8DtwNGH77VmQKhbPKA=="
+            }
+          ],
+          "model": "gemini-3.7-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1788777190043",
   "pendingHistory": null,
-  "timestamp": "2026-09-07T10:37:04.278Z"
+  "timestamp": "2026-09-07T10:40:33.866Z"
 }
