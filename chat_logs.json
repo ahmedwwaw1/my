@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788816801661",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-07T21:33:48.942Z"
+  "sessions": [
+    {
+      "id": "1788816801661",
+      "title": "أهلاً وسهلاً بك! 👋\n\nأنا جاهز ",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً وسهلاً بك! 👋\n\nأنا جاهز ومستعد لمساعدتك في كل ما يخص المشروع وتطوير المنصة:\n- 🏗️ **التصميم المعماري وتطوير الواجهات (UI/UX)**\n- ⚡ **إضافة وتحسين الميزات والخدمات البرمجية**\n- 🔍 **فحص الأكواد واكتشاف الأخطاء وإصلاحها**\n- 🚀 **إدارة تدفقات العمل والأتمتة والبيانات**\n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "EvACCu0CARFNMg/C5vqAN9z0tzbqrjqGbqcVKKqV36PIcqCKY1md8LD4HEMD9RZ49jy+UgFKndValS1vXrDtAq2SO1k1E5vahkWp8iGB+StT7gG8fbyFsp0WOVHjFhozJ6cLEhfCJEpvXGoayQ9jhf4iBw7bxafJQ3+yHNl7NxatkbKHGMAuEUwRpm88EmzJSWd47EvgWFH7wbkd1Pt0D1Lx2Op776wpaUB/+oK7nXLuB34ctt4pJkFr9fje4cygRq97fj/XRf2X+2zZ0olhXZxw4Q/wDLl6WWcXXa1sKjNWW+wWERgJS4+VPPEle6/D3t7jnpb8SeKfqvFpr0/Z9gtHWylwDxlhkZP5txQP2lBu4GgvYv56I8ug9IKzxpHMvCKhiUR0sHTwujkoq0ytoDpxcnUAtDLtLqobluptGwsAPSaOF+/CGNWzd4ovF8wuQNk2NBHLdJ6iUrs16X5kRtBKDQVXLMeMlt4tlvl2UXa2Ni8="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788816849084",
+  "pendingHistory": null,
+  "timestamp": "2026-09-07T21:34:09.084Z"
 }
