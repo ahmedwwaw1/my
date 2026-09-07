@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788805120049",
+  "sessions": [
+    {
+      "id": "1788808047939",
+      "title": "أهلاً بك! أنا **العقل الموجه و",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا **العقل الموجه والمهندس المعماري لمنظومة VSA Academy (مدعوم بنظام Gemini الذكي لعام 2026)**. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت تريد تطوير الأكاديمية، إضافة ميزات برمجية جديدة، تحسين الواجهات، أو العمل على أي مشروع آخر، أنا هنا وجاهز لتنفيذه بأعلى معايير الدقة والابتكار!",
+              "thoughtSignature": "El4KXAERTTIP2+Xx3R0ffi9eCiaoDl1VbtE10zhhRtTUwmik/dtXnse/kkly/z4ylsd/zxtv8dPVZQeNNJVZotBX/0qUMFgafYF8qNDtDrPYl/T2N7gAyXhiCfzgkI+f"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788808047939",
   "pendingHistory": null,
-  "timestamp": "2026-09-07T18:18:45.225Z"
+  "timestamp": "2026-09-07T19:08:11.694Z"
 }
