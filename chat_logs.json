@@ -1,6 +1,63 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788902343380",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-08T21:19:26.742Z"
+  "sessions": [
+    {
+      "id": "1788902389679",
+      "title": "بالتأكيد! يسعدني جداً فحص ملفا",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل يمكنك فحص ملفاتي"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "plan": "استكشاف الملفات والمجلدات الموجودة في المشروع للتعرف على هيكل المشروع وملفاته.",
+                  "reasoning": "المستخدم يطلب فحص ملفاته، لذا نحتاج أولاً إلى معرفة ما هي الملفات الموجودة في المجلد الجذري للمشروع باستخدام الدالة المناسبة."
+                },
+                "id": "call_222038"
+              },
+              "thoughtSignature": "El4KXAERTTIPj4bwKYxzPSC/DIyFRJL2vZeue+bnycSMsUlsvMu5eJrOn+n5zjR1ACWvCs/A7KwENplGg5Epvnjf8tF03EhVWVpeJekSg4FjfqwfFfbmcJXYPoCIrVor"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يطلب فحص ملفاته، لذا نحتاج أولاً إلى معرفة ما هي الملفات الموجودة في المجلد الجذري للمشروع باستخدام الدالة المناسبة.",
+                    "plan": "استكشاف الملفات والمجلدات الموجودة في المشروع للتعرف على هيكل المشروع وملفاته."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "بالتأكيد! يسعدني جداً فحص ملفات مشروعك وتحليلها، سواء كنت ترغب في مراجعة الأكواد البرمجية، أو فحص هيكل المشروع، أو البحث عن أخطاء ومشاكل وتحسين الأداء.\n\nللبدء، يمكنك إخباري:\n1. **ما هو الهدف من الفحص؟** (مثل: فحص أخطاء، تحسين الأداء، مراجعة الأمان، فهم هيكل المشروع، إلخ).\n2. **هل هناك ملفات أو مسارات معينة** تود أن أركز عليها، أم تفضل أن أقوم بفحص عام لمجلدات المشروع؟\n\nأنا جاهز تماماً للبدء فوراً!",
+              "thoughtSignature": "El4KXAERTTIPZo8IPqL6xc3wQPr+tng3DmspIiGGAbFa27Oz/3uR0yNEGV/DBlVv3xO7kzk3hN2LWCPGV5Sa5vZ0J8jyTKJ55rcp7R8+HEr4SgRuMtqFcpybX/g/G997"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788902389679",
+  "pendingHistory": null,
+  "timestamp": "2026-09-08T21:20:09.835Z"
 }
