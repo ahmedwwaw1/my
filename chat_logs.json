@@ -1,57 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788889398979",
-      "title": "بكل سرور! لقد أجريت مسحاً أولي",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "هل يمكنك فحص ملفاتي"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "functionCall": {
-                "name": "list_files",
-                "args": {},
-                "id": "call_953013"
-              },
-              "thoughtSignature": "EvECCu4CARFNMg/EDFhc4cUB+EkzdUB/go8xKD/wBkKZqdws0HwCq405WOmkinBWkaT4KgkheMdfbKbWo8dIJTdA5YpJboG6op8yTvTePRKS/SpV9bD2RoyghRKCKwIIwTxRlcIVqewq67Mzw1o9yW6Rz3hlzddhS5Q3K9QDBlsrPIYVIPOsbYlwIm3xsAdFdsZMEbIPwXI2rmX/L4qEUOj1WodGV/hPHAWqGqqQtdsDqkSgW+TzTxSzHsadO6r6SI4hzIToR1uiqWpmK+E3J3xnnY+GRU1auZ7wH+pGa3di0X/7MeAlAy0H17iL49ytw0XDn174evS7ZsyYHudgnCwP+QnstOG6TbP5lhzY8LO7nxW4UDzDUIO5Sn3S+GsMfLOa6uVJ/WqxhUyPrsdebanXDNWmVmuYQvUPu6Z+dO16WzVwbJwn4fZjel7ytzPWtsVl8Sn8O6A6m/12ThBsLLlSORMRUHePDdXvloIFE5FcvCw9"
-            }
-          ]
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "functionResponse": {
-                "name": "list_files",
-                "response": {
-                  "content": "محتويات الجذر:\n📁 .artifacts\n📄 .gitattributes\n📁 .github\n📁 .idea\n📁 .vscode\n📄 EMERGENCY_REPAIR_GUIDE.txt\n📁 My location data\n📁 ScriptBot\n📁 ai_mastermind_capabilities\n📁 archive\n📁 bridge\n📄 chat_logs.json\n📄 engine_memory.json\n📁 images\n📄 index.html\n📄 main.js\n📁 my AI\n📁 my file wo\n📄 package-lock.json\n📄 package.json\n📄 preload.js\n📄 remigrate_final.ps1\n📄 steps.jsonl\n📄 system-capabilities.txt\n📄 system_prompt_discussion.txt\n📄 test_engine.py\n📄 دليل_إصلاح_الطوارئ_VSA.txt"
-                }
-              }
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "بكل سرور! لقد أجريت مسحاً أولياً لمجلدات وملفات مشروعك. إليك نظرة عامة على هيكلية النظام الحالية:\n\n---\n\n### 📂 نظرة عامة على محتويات المشروع:\n\n1. **تطبيق Electron / واجهة المستخدم (Core App):**\n   - `main.js`: الملف الرئيسي لتشغيل تطبيق Electron وإدارة النوافذ والعمليات.\n   - `preload.js`: جسر الأمان والتواصل بين الواجهة والنظام.\n   - `index.html`: واجهة المستخدم الرسومية.\n   - `package.json` & `package-lock.json`: إدارة الحزم والاعتماديات.\n\n2. **محركات ونماذج الذكاء الاصطناعي (AI Modules):**\n   - `my AI/` و `ai_mastermind_capabilities/`: وحدات وقدرات الذكاء الاصطناعي ومحركات التفكير.\n   - `engine_memory.json` و `chat_logs.json`: سجلات الذاكرة والمحادثات.\n   - `test_engine.py`: اختبارات وفحص محرك العمليات.\n\n3. **الأدوات والسكربتات المساعدة (Bridge & Automation):**\n   - `bridge/`: وسيط الربط والاتصال بين المكونات.\n   - `ScriptBot/`: نصوص وسكربتات الأتمتة.\n   - `remigrate_final.ps1` و `steps.jsonl`: أدوات الترحيل ومسارات الخطوات.\n\n4. **التوثيق وملفات الطوارئ (Documentation & Safety):**\n   - `دليل_إصلاح_الطوارئ_VSA.txt` / `EMERGENCY_REPAIR_GUIDE.txt`\n   - `system-capabilities.txt` / `system_prompt_discussion.txt`\n\n---\n\n### 🔍 كيف ترغب أن نبدأ الفحص؟\nيمكنني القيام بأي من المهام التالية حسب رغبتك:\n1. **فحص شامل للأخطاء والمشاكل البرمجية (Full Code Audit & Bug Scan)** في `main.js` أو `preload.js` أو سكربتات البايثون.\n2. **فحص الاتصال وتكامل الذكاء الاصطناعي (AI & Bridge Integrity Check)**.\n3. **فحص ملف أو ميزة محددة** (أخبرني باسم الملف أو المشكلة التي تواجهها).\n\nأنا جاهز، حدد لي وجهتك لنبدأ فوراً!",
-              "thoughtSignature": "EogECoUEARFNMg9jYan3d74tIjbvgD38+aU0OXgtfKbxk23MzXESHzBLEbDPs4oiL+wtNnvelbRCVS3zUN2af4bwEO7iKU+o9TPbzNbYwgpTrb7rnp7eyCU0iN9utV3N+OWfRfguoRXQwWtJzgGV0D0Um2y3++n1X8D36z7Pa7j/yINs2Qx9EqJhd6QdxVEm+Zj+N/35NSEcP3tPVsJMchjl+DZ5xdXMkfNSgRnreTQaRrHEu5t+368Ldm8cSlQkOW7/l2ADotl4N9SiaoHikHRmz3lzKPHRN2rq3OlVjuMoOJ2MmtTbFOU6AyDvRU81duyZPGaY4qX5MKTaJGqNsH3zZOwBX/Rwt4W6O2VzRisBUfjKD/vkcbDn462znR1xGBlAi9UW6qk2R5msz/L36v5/1eYzgQxjNeamrHKtlIJaR9SqdbyzfQufOFSN42ibc+v3tXsQNquEBDPPnAg3XMNuIJGKo0zMlB426A2ppbu1AEGnGS6irsDKYSWvrHukpU2hg9cHLQdIKoRdfh6nGqbtBPo+4jyk4QAovGRZoiJPc9KHxu9kNeEjlrHBklimZKxIHqpyzsLRPkrfAD9tcxiDusrSKC3jNRzlVMd8ILbomLEcCzY4MhKpSQOpOJ47galtHC9Cz0Kj4Eyu20sVk4LbFFAc30Pdx3F0MG8cDLI/iq60prTN7WgfZA=="
-            }
-          ],
-          "model": "gemini-3.7-flash"
-        }
-      ]
-    }
-  ],
-  "activeSessionId": "1788889398979",
+  "sessions": [],
+  "activeSessionId": "1788891087932",
   "pendingHistory": null,
-  "timestamp": "2026-09-08T17:43:33.225Z"
+  "timestamp": "2026-09-08T18:11:27.932Z"
 }
