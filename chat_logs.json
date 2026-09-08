@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788859183034",
+  "sessions": [
+    {
+      "id": "1788871372804",
+      "title": "أهلاً وسهلاً بك! أنا بخير وبأت",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا كيف الحا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً وسهلاً بك! أنا بخير وبأتم الجاهزية والاستعداد لمساعدتك. \n\nكيف يمكنني دعمك اليوم في تطوير وتنمية مشروعك أو إنجاز أي مهام برمجية ومعمارية؟ تفضل بما في خاطرك!",
+              "thoughtSignature": "EsMCCsACARFNMg/hpzP91omZZ9BeONPCXf8CDTe6BwRC41Z7e8rdNvWv5HQq0Yzt3mph87DFn+sNAkP36ge70zSVqY715UGFYO7pJgpP1z+6/d09ly6+VIYA2wWsbux36I8DG/MaivY6+G7ipdMITt9ed4yUFaa4H6l1Ep0TXbzuWu+7u72KsxrWkTvvP4SATo9BvZ4PHZRwmO0tGQ30PaZ0EwyZsXxK4YEw+xsB78+TELvBTaMNx5whlDuVx65+/Cc/Ni98faRoPjzj9Og2SN7iYem7TmgsAsYaEHLFJBOMhsH8ZijMU+TzTIQ2+K27ceFHWBBcDSuI+VzSStgA8fZgyWgs0dY/fA1WU1gouA81EmdE2ISwV92qxpnt95yOPLUje5oxWI7QRzlrFC9Tw4jbUnIF4h0XKIGhUx1cx9NqbwV2F90="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788871372804",
   "pendingHistory": null,
-  "timestamp": "2026-09-08T09:19:43.034Z"
+  "timestamp": "2026-09-08T12:43:04.280Z"
 }
