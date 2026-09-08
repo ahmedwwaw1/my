@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788853652717",
+      "title": "أهلاً وسهلاً بك! 👋\n\nأنا **الم",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً وسهلاً بك! 👋\n\nأنا **المعمار البرمجي والذكي الاصطناعي الخاص بك (Mastermind Core)**. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى:\n- 🏗️ **تصميم وتطوير المعماريات البرمجية**\n- 🎨 **تطوير وتحسين واجهات المستخدم (UI/UX)**\n- 🐛 **تصحيح الأخطاء وفحص الأكواد (Debugging & Refactoring)**\n- ⚡ **تحسين الأداء وإدارة المشاريع**\n\nأنا مستعد تماماً لمساعدتك، تفضل بما لديك!",
+              "thoughtSignature": "EpUDCpIDARFNMg+R/x2wMlJrgiYMDUojaOUhCUgtYhpG4wavKM1ucZZo9SYZqxqgfgFk/Vk5wyjbjmYDHLnINOkAJnd5nnqI2fO2nf1lrKA8IwVuUQYkEFM3iqQzlPhOr9fU3uug8Hm5acgU0sx/DZpj8Pl+n4Iq/OMUUo+PipnBA+EolBzWGUqeMUW82J5DN1+uVnPLMHjZAgTkr8wd+bgpvxTMXjoiipjFttr1JIMbZwQXfPo3lrcwzbLa4d1O8ShiB7McbcnWimIAwmSz+/wZwgnglUsW17gZFVi0ByIyH3lp9KzCqGMgD5GxTprgKvyJM92O6gqazu0LtfYOq0wc8PbZdMzqVo/bdGvkNKC3+XBgCBFPfS453fxQgHb56Yv9/w/wkzVp/If9S9Z4+hNcWXCxmk0/cxQdIXGwixWNHXe9UB9qV8WvUo/nnqoX7jxurVxUQk9GNdY3Pi41UWoPwxmgFKzCemY3lVXJGSXwpzykaRNeMhO1G+ldun9kirN15McBzZFhEXy/N0RGcZGop2Vw2Hyp"
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788853652717",
   "pendingHistory": null,
-  "timestamp": "2026-09-08T07:47:32.717Z"
+  "timestamp": "2026-09-08T07:47:50.987Z"
 }
