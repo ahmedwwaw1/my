@@ -1,49 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1788962102171",
-      "title": "أنا بخير والحمد لله، وجاهز تما",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! مرحباً بك في أكاديمية VSA. \n\nكيف يمكنني مساعدتك اليوم في مشروعك أو في بناء وتطوير أي جزء تريده؟ أنا جاهز للبدء.",
-              "thoughtSignature": "Em0KawERTTIPBuv/kf2QKMRykpFxI93M4G0OKtQegvFgR4qZ8TQazJ/slcyjVrIB/8NtcxavnpxiOC/AfCXSwWnsSsP5+y36tg8vhHXjerAp3BETfMlext4CPn4xlww2oOx7hAkpOvwTvyb7DnEw"
-            }
-          ],
-          "model": "gemini-3.7-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أنا بخير والحمد لله، وجاهز تماماً لمساعدتك! \n\nكيف يسير العمل في المشارييع والتطبيقات لديك اليوم؟ هل هناك تحدٍّ برمجي، تحسين للواجهات، أو ميزة جديدة تريد مناقشتها وتطويرها معاً؟",
-              "thoughtSignature": "EmcKZQERTTIPa1KEFqSJ++FwbDYR42UzdgRZCAJJ/vlWsDuBLNMcbtK/fos5od5x4nlJKuzwGxaWcYoqtqEuFliv1qiZrrQe/SadCdZ170GIUA1MkWrd+d6Gw6fBkFKEnh2CQoUW21iT"
-            }
-          ],
-          "model": "gemini-3.6-flash"
-        }
-      ]
-    }
-  ],
-  "activeSessionId": "1788962102171",
+  "sessions": [],
+  "activeSessionId": "1788962763502",
   "pendingHistory": null,
-  "timestamp": "2026-09-09T13:56:59.989Z"
+  "timestamp": "2026-09-09T14:06:03.502Z"
 }
