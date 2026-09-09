@@ -343,14 +343,24 @@ function addToolStepToUi(toolName, args) {
     stepContainer.id = stepId;
 
     stepContainer.innerHTML = `
-        <div class="ai-step-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block'">
+        <div class="ai-step-header is-active" id="${stepId}-header" onclick="toggleStepDetails('${stepId}')">
             <span class="ai-step-icon">${getToolIcon(toolName)}</span>
             <span class="ai-step-name">${toolName.toUpperCase()}</span>
-            <div class="ai-step-status"><div class="status-spinner"></div><span>Executing...</span></div>
+            <div class="ai-step-status">
+                <div class="status-spinner"></div>
+                <span class="status-text">RUNNING</span>
+            </div>
+            <span class="toggle-arrow" style="font-size: 10px; transition: transform 0.3s; margin-right: 8px; opacity: 0.5; transform: rotate(180deg);">▼</span>
         </div>
-        <div class="ai-step-details">
-            <div class="ai-step-args">Arguments: ${JSON.stringify(args, null, 2)}</div>
-            <div class="step-output-area">Waiting for bridge...</div>
+        <div class="ai-step-details" id="${stepId}-details" style="display: block;">
+            <div class="ai-step-args">
+                <div style="font-size: 9px; color: #3574f0; margin-bottom: 2px; font-weight: 900;">PARAMS</div>
+                ${JSON.stringify(args, null, 1)}
+            </div>
+            <div class="step-output-area">
+                <div class="status-spinner" style="display:inline-block; vertical-align:middle; margin-right:8px;"></div>
+                <span style="opacity: 0.6; font-size: 11px;">Waiting for system kernel...</span>
+            </div>
         </div>
     `;
     container.appendChild(stepContainer);
@@ -358,20 +368,55 @@ function addToolStepToUi(toolName, args) {
     return stepId;
 }
 
+function toggleStepDetails(id) {
+    const details = document.getElementById(id + '-details');
+    const header = document.getElementById(id + '-header');
+    const arrow = header.querySelector('.toggle-arrow');
+
+    if (!details || !header) return;
+
+    const isVisible = details.style.display === 'block';
+
+    details.style.display = isVisible ? 'none' : 'block';
+    if (isVisible) {
+        header.classList.remove('is-active');
+        if (arrow) arrow.style.transform = 'rotate(0deg)';
+    } else {
+        header.classList.add('is-active');
+        if (arrow) arrow.style.transform = 'rotate(180deg)';
+    }
+}
+
 function updateToolStepStatus(stepId, success, output) {
     const step = document.getElementById(stepId);
     if (!step) return;
+
     const status = step.querySelector('.ai-step-status');
-    status.innerHTML = success ? '<span class="status-done">✅ COMPLETED</span>' : '<span class="status-error">❌ FAILED</span>';
+    const header = document.getElementById(stepId + '-header');
+
+    status.innerHTML = success ?
+        '<span class="status-done">✅ COMPLETED</span>' :
+        '<span class="status-error">❌ FAILED</span>';
 
     const outputArea = step.querySelector('.step-output-area');
     if (typeof output === 'object' && output.reasoning) {
-        outputArea.innerHTML = `<div class="thought-container"><div class="thought-label">Thought Process</div><div>${escapeHtml(output.reasoning)}</div></div>`;
+        outputArea.innerHTML = `
+            <div class="thought-container">
+                <div class="thought-label">🧠 Autonomous Reasoning</div>
+                <div style="color: #dfe1e5; font-size: 12px; line-height: 1.5;">${escapeHtml(output.reasoning)}</div>
+                ${output.plan ? `<div style="margin-top:10px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.05); color:#888; font-size:11px;"><b>NEXT_STEP:</b> ${escapeHtml(output.plan)}</div>` : ''}
+            </div>
+        `;
     } else {
         const textOut = String(output);
-        outputArea.innerText = textOut;
+        outputArea.innerHTML = `
+            <div style="font-size: 9px; color: #59a869; margin-bottom: 4px; font-weight: 900; opacity: 0.8;">KERNEL_OUTPUT</div>
+            <div style="white-space: pre-wrap; color: #a9b7c6; font-size: 12px;">${escapeHtml(textOut)}</div>
+        `;
     }
-    step.querySelector('.ai-step-details').style.setProperty('display', 'block', 'important');
+
+    const container = document.getElementById('aiMessages');
+    container.scrollTop = container.scrollHeight;
 }
 
 function getToolIcon(name) {

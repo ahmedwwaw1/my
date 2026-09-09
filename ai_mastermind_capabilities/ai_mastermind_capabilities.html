@@ -66,13 +66,13 @@
                     </ul>
                 </div>
                 <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
-                    <h4 style="color: var(--accent-green); margin-top:0;">📡 دالة الربط في ai_engine_core.js</h4>
-                    <p style="font-size: 0.75rem; color: var(--text-dim);">يتم الاتصال عبر دالة <code>callBridge</code> التي تقوم بتغليف الأوامر وإرسالها للجسر:</p>
-                    <div class="constitution-block" style="font-size: 0.7rem; padding: 10px;">
-const BRIDGE_URL = "https://ozcffmadatsfyyldqmdl.../vsa-bridge";
-async function callBridge(action, payload) {
-  // تدمج مفتاح apikey وترسل الطلب للجسر
-}</div>
+                    <h4 style="color: var(--accent-purple); margin-top:0;">🌍 المترجم العالمي (Universal API Translator)</h4>
+                    <p style="font-size: 0.75rem; color: var(--text-dim);">محرك توحيد البروتوكولات عبر دالة <code style="color:var(--accent-purple)">translateToProviderFormat</code>:</p>
+                    <ul style="font-size: 0.75rem; color: var(--text-dim); padding-right: 20px;">
+                        <li><b>دعم متعدد:</b> OpenAI, Anthropic, Google, DeepSeek.</li>
+                        <li><b>توحيد الأدوات:</b> ترجمة تعريفات الفانكشنات لحظياً لكل مزود.</li>
+                        <li><b>نفق سيادي:</b> تجاوز قيود CORS عبر Bridge مدمج.</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -115,6 +115,44 @@ async function callBridge(action, payload) {
         </div>
 
 
+        <!-- محرك الفلترة الذكية (Smart Filtering Engine) -->
+        <div class="card" style="grid-column: span 2; border-color: var(--accent-green);">
+            <h2 style="color: var(--accent-green);">⚡ محرك الفلترة الذكية (Smart Filtering Engine)</h2>
+            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px;">
+                <div>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">
+                        نظام تحليل النوايا عبر دالة <code style="color:var(--accent-green)">getRelevantTools(prompt)</code>
+                        التي تعتمد على <code style="color:var(--accent-purple)">TOOL_GROUPS</code> و <code style="color:var(--accent-purple)">KEYWORD_MAP</code>:
+                    </p>
+                    <div style="font-size: 0.7rem; color: var(--text-dim); background: rgba(0,0,0,0.2); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+                        <b style="color: var(--accent-green);">Logic Matrix:</b> <code>TOOL_GROUPS</code> (التصنيف) + <code>KEYWORD_MAP</code> (الاستشعار)
+                    </div>
+                    <ul style="font-size: 0.75rem; padding-right: 20px; color: var(--text-dim); margin: 0;">
+                        <li><b>كشف النية:</b> مسح الكلمات المفتاحية في <code>KEYWORD_MAP</code> لكل رسالة.</li>
+                        <li><b>CORE Always:</b> حقن دائم لمجموعة <code>TOOL_GROUPS.CORE</code> الجوهرية.</li>
+                        <li><b>Dynamic Injection:</b> تفعيل المجموعات المتخصصة ديناميكياً عند الحاجة.</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border-right: 3px solid var(--accent-purple);">
+                    <h4 style="margin: 0 0 10px 0; color: var(--accent-purple); font-size: 0.9rem;">📊 مقاييس التوفير (Plan Metrics)</h4>
+                    <div style="font-size: 0.75rem; color: var(--text-dim);">
+                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #333; padding:4px 0;">
+                            <span>محادثة عادية</span><b style="color:var(--accent-green);">~75% توفير</b>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #333; padding:4px 0;">
+                            <span>بحث واستكشاف</span><b style="color:var(--accent-blue);">~50% توفير</b>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                            <span>برمجة كاملة</span><b>دقة 100%</b>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.65rem; color: var(--text-dim); margin-top: 10px; font-style: italic;">
+                        * تم الانتهاء من دمج المحركات (7-12) وتفعيل الفلترة الديناميكية بنجاح.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- 3. إعدادات التوليد -->
         <div class="card">
             <h2>⚙️ الإعدادات التقنية (Generation Config)</h2>
@@ -136,6 +174,25 @@ async function callBridge(action, payload) {
                 <li><b style="color: #fff;">Recursive Thought:</b> التحليل المستمر (قبل، أثناء، وبعد) كل أداة.</li>
                 <li><b style="color: #fff;">Auto-Recovery:</b> القدرة على استعادة اللقطات السليمة فوراً.</li>
             </ul>
+        </div>
+
+        <!-- محرك النبض (Evolution & Meta-Diagnostic) - جديد -->
+        <div class="card" style="grid-column: span 2; border: 1px solid var(--accent-purple);">
+            <h2 style="color: var(--accent-purple);">🧬 المحرك 3: النبض (Evolution & Meta-Diagnostic)</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 10px;">
+                <div style="background: rgba(187, 134, 252, 0.05); padding: 10px; border-radius: 8px; border: 1px solid rgba(187, 134, 252, 0.2);">
+                    <h5 style="margin:0; color: var(--accent-purple);">🛠️ patchSystem</h5>
+                    <p style="font-size: 0.65rem; color: var(--text-dim);">حقن رقع برمجية لإصلاح مواطن الضعف لحظياً (Self-Correction).</p>
+                </div>
+                <div style="background: rgba(187, 134, 252, 0.05); padding: 10px; border-radius: 8px; border: 1px solid rgba(187, 134, 252, 0.2);">
+                    <h5 style="margin:0; color: var(--accent-purple);">🚀 selfExpand</h5>
+                    <p style="font-size: 0.65rem; color: var(--text-dim);">غريزة النمو: ابتكار وإضافة أدوات جديدة بناءً على الاحتياجات.</p>
+                </div>
+                <div style="background: rgba(187, 134, 252, 0.05); padding: 10px; border-radius: 8px; border: 1px solid rgba(187, 134, 252, 0.2);">
+                    <h5 style="margin:0; color: var(--accent-purple);">🔍 Evolutionary Audit</h5>
+                    <p style="font-size: 0.65rem; color: var(--text-dim);">مسبار اليقظة: فحص دوري للمحركات لضمان الانسجام المعماري.</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -266,6 +323,21 @@ async function callBridge(action, payload) {
                 <tr class="tool-row"><td>classify_problem</td><td>تصنيف المشكلة البرمجية إلى واحدة من 7 فئات رئيسية (بحث، ترتيب، أمان، ...).</td><td><span class="tag">تحليل</span></td></tr>
                 <tr class="tool-row"><td>estimate_big_o</td><td>تقدير تعقيد الخوارزمية (Big-O) وحظر الأكواد البطيئة (O(n²) وما فوق).</td><td><span class="tag">تحليل</span></td></tr>
                 <tr class="tool-row"><td>detect_bug_signature</td><td>كشف التوقيعات الرقمية للأخطاء الشائعة (undefined, null, memory leaks).</td><td><span class="tag">تشخيص</span></td></tr>
+            </tbody>
+        </table>
+
+        <!-- ========================================================= -->
+        <!--  المحرك 3: النبض التطوري                                      -->
+        <!-- ========================================================= -->
+        <div class="engine-section-title">🧬 المحرك 3: النبض التطوري (التطوير الذاتي)</div>
+        <table>
+            <thead>
+                <tr><th>الأداة (Tool)</th><th>الوظيفة (Description)</th><th>الصلاحية</th></tr>
+            </thead>
+            <tbody>
+                <tr class="tool-row"><td>patchSystem</td><td>حقن رقع برمجية لإصلاح مواطن الضعف لحظياً.</td><td><span class="tag">إصلاح</span></td></tr>
+                <tr class="tool-row"><td>selfExpand</td><td>ابتكار وإضافة أدوات جديدة بناءً على الاحتياجات المتغيرة.</td><td><span class="tag">نمو</span></td></tr>
+                <tr class="tool-row"><td>evolutionary_audit</td><td>فحص دوري للمحركات لضمان أعلى مستويات الانسجام المعماري.</td><td><span class="tag">رقابة</span></td></tr>
             </tbody>
         </table>
 
