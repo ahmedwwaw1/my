@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788962803797",
+  "sessions": [
+    {
+      "id": "1788962844619",
+      "title": "أهلاً بك! أنا مساعدك الذكي وال",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا مساعدك الذكي والمصمم المعماري لأنظمة البرمجة وتطوير التطبيقات (VSA Academy Meta-Cognitive Core). \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت ترغب في تطوير تطبيق، بناء واجهات مستخدم متطورة، كتابة أو مراجعة أكواد برمجية، أو حل مشكلة تقنية، فأنا جاهز تماماً لتنفيذ المهمة بدقة واحترافية. اسأل ما شئت!",
+              "thoughtSignature": "El4KXAERTTIP9BygN9fQuadg8UFtF+UMZMAhlYAIHd1PVrbEzi7waBcvJICSrm5wSzWDkBEmfjqhuL0PjqTkr9zyvBHavaARt6+Z88fxbhVLWACDunKVFjtFtv5WfoIA"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788962844619",
   "pendingHistory": null,
-  "timestamp": "2026-09-09T14:06:43.797Z"
+  "timestamp": "2026-09-09T14:07:33.485Z"
 }
