@@ -7,7 +7,10 @@
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #181818; font-family: Arial, sans-serif; }
-    .calculator { width: 320px; padding: 20px; border-radius: 18px; background: #292929; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+    .app { width: min(360px, 94vw); }
+    .calculator, .currency-box { padding: 20px; border-radius: 18px; background: #292929; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+    .currency-box { margin-top: 15px; }
+    h2 { margin: 0 0 15px; color: #eee; font-size: 20px; text-align: center; }
     #display { width: 100%; height: 70px; margin-bottom: 15px; padding: 10px; border: 1px solid #3b3b3b; border-radius: 10px; background: #151515; color: #eee; font-size: 30px; text-align: left; }
     .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
     button { height: 60px; border: 0; border-radius: 10px; background: #3a3a3a; color: #eee; font-size: 22px; cursor: pointer; }
@@ -18,32 +21,77 @@
     .clear:hover { background: #7b2c2c; }
     .equal { background: #285b35; }
     .equal:hover { background: #316d40; }
+    .currency-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .currency-box input, .currency-box select { width: 100%; height: 48px; border: 1px solid #444; border-radius: 10px; background: #151515; color: #eee; padding: 8px 10px; font-size: 16px; }
+    .currency-box input { text-align: right; }
+    .convert-btn { width: 100%; height: 52px; background: #3d5064; }
+    .convert-btn:hover { background: #49627a; }
+    #currencyResult { margin-top: 12px; min-height: 26px; color: #ddd; text-align: center; font-size: 18px; line-height: 1.5; }
+    #rateInfo { margin-top: 6px; color: #999; text-align: center; font-size: 12px; }
   </style>
 </head>
 <body>
-  <div class="calculator">
-    <input id="display" type="text" value="0" readonly>
-    <div class="buttons">
-      <button class="clear" onclick="clearDisplay()">C</button>
-      <button onclick="deleteLast()">⌫</button>
-      <button class="operator" onclick="appendValue('%')">%</button>
-      <button class="operator" onclick="appendValue('/')">÷</button>
-      <button class="operator" onclick="squareRoot()">√</button>
-      <button onclick="appendValue('7')">7</button>
-      <button onclick="appendValue('8')">8</button>
-      <button onclick="appendValue('9')">9</button>
-      <button class="operator" onclick="appendValue('*')">×</button>
-      <button onclick="appendValue('4')">4</button>
-      <button onclick="appendValue('5')">5</button>
-      <button onclick="appendValue('6')">6</button>
-      <button class="operator" onclick="appendValue('-')">−</button>
-      <button onclick="appendValue('1')">1</button>
-      <button onclick="appendValue('2')">2</button>
-      <button onclick="appendValue('3')">3</button>
-      <button class="operator" onclick="appendValue('+')">+</button>
-      <button onclick="appendValue('0')" style="grid-column: span 2;">0</button>
-      <button onclick="appendValue('.')">.</button>
-      <button class="equal" onclick="calculate()">=</button>
+  <div class="app">
+    <div class="calculator">
+      <input id="display" type="text" value="0" readonly>
+      <div class="buttons">
+        <button class="clear" onclick="clearDisplay()">C</button>
+        <button onclick="deleteLast()">⌫</button>
+        <button class="operator" onclick="appendValue('%')">%</button>
+        <button class="operator" onclick="appendValue('/')">÷</button>
+        <button class="operator" onclick="squareRoot()">√</button>
+        <button onclick="appendValue('7')">7</button>
+        <button onclick="appendValue('8')">8</button>
+        <button onclick="appendValue('9')">9</button>
+        <button class="operator" onclick="appendValue('*')">×</button>
+        <button onclick="appendValue('4')">4</button>
+        <button onclick="appendValue('5')">5</button>
+        <button onclick="appendValue('6')">6</button>
+        <button class="operator" onclick="appendValue('-')">−</button>
+        <button onclick="appendValue('1')">1</button>
+        <button onclick="appendValue('2')">2</button>
+        <button onclick="appendValue('3')">3</button>
+        <button class="operator" onclick="appendValue('+')">+</button>
+        <button onclick="appendValue('0')" style="grid-column: span 2;">0</button>
+        <button onclick="appendValue('.')">.</button>
+        <button class="equal" onclick="calculate()">=</button>
+      </div>
+    </div>
+
+    <div class="currency-box">
+      <h2>تحويل العملات</h2>
+      <div class="currency-row">
+        <input id="currencyAmount" type="number" step="any" min="0" value="1" placeholder="المبلغ">
+        <select id="fromCurrency" aria-label="العملة الأصلية">
+          <option value="IQD">دينار عراقي (IQD)</option>
+          <option value="USD" selected>دولار أمريكي (USD)</option>
+          <option value="EUR">يورو (EUR)</option>
+          <option value="GBP">جنيه إسترليني (GBP)</option>
+          <option value="SAR">ريال سعودي (SAR)</option>
+          <option value="AED">درهم إماراتي (AED)</option>
+          <option value="TRY">ليرة تركية (TRY)</option>
+          <option value="JPY">ين ياباني (JPY)</option>
+          <option value="CAD">دولار كندي (CAD)</option>
+          <option value="AUD">دولار أسترالي (AUD)</option>
+        </select>
+      </div>
+      <div class="currency-row">
+        <select id="toCurrency" aria-label="العملة المستهدفة">
+          <option value="IQD" selected>دينار عراقي (IQD)</option>
+          <option value="USD">دولار أمريكي (USD)</option>
+          <option value="EUR">يورو (EUR)</option>
+          <option value="GBP">جنيه إسترليني (GBP)</option>
+          <option value="SAR">ريال سعودي (SAR)</option>
+          <option value="AED">درهم إماراتي (AED)</option>
+          <option value="TRY">ليرة تركية (TRY)</option>
+          <option value="JPY">ين ياباني (JPY)</option>
+          <option value="CAD">دولار كندي (CAD)</option>
+          <option value="AUD">دولار أسترالي (AUD)</option>
+        </select>
+        <button class="convert-btn" onclick="convertCurrency()">تحويل</button>
+      </div>
+      <div id="currencyResult">أدخل المبلغ ثم اضغط تحويل</div>
+      <div id="rateInfo"></div>
     </div>
   </div>
 
@@ -82,6 +130,48 @@
       }
     }
 
+    async function convertCurrency() {
+      const amount = Number(document.getElementById('currencyAmount').value);
+      const from = document.getElementById('fromCurrency').value;
+      const to = document.getElementById('toCurrency').value;
+      const resultEl = document.getElementById('currencyResult');
+      const rateEl = document.getElementById('rateInfo');
+
+      if (!Number.isFinite(amount) || amount < 0) {
+        resultEl.textContent = 'أدخل مبلغًا صحيحًا';
+        rateEl.textContent = '';
+        return;
+      }
+
+      if (from === to) {
+        resultEl.textContent = `${formatNumber(amount)} ${from} = ${formatNumber(amount)} ${to}`;
+        rateEl.textContent = 'سعر التحويل: 1';
+        return;
+      }
+
+      resultEl.textContent = 'جاري جلب سعر الصرف...';
+      rateEl.textContent = '';
+
+      try {
+        const response = await fetch(`https://api.frankfurter.app/latest?amount=${encodeURIComponent(amount)}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+        if (!response.ok) throw new Error('تعذر جلب سعر الصرف');
+        const data = await response.json();
+        const converted = data.rates && data.rates[to];
+        if (!Number.isFinite(converted)) throw new Error('العملة غير مدعومة');
+
+        const rate = converted / amount;
+        resultEl.textContent = `${formatNumber(amount)} ${from} = ${formatNumber(converted)} ${to}`;
+        rateEl.textContent = `سعر التحويل: 1 ${from} = ${formatNumber(rate)} ${to} • المصدر: Frankfurter`;
+      } catch (error) {
+        resultEl.textContent = 'تعذر جلب سعر الصرف. تحقق من اتصال الإنترنت.';
+        rateEl.textContent = '';
+      }
+    }
+
+    function formatNumber(value) {
+      return new Intl.NumberFormat('en-US', { maximumFractionDigits: 6 }).format(value);
+    }
+
     document.addEventListener('keydown', (event) => {
       const key = event.key;
 
@@ -115,7 +205,6 @@
         return;
       }
 
-      // حرف R لتشغيل الجذر التربيعي من لوحة المفاتيح
       if (key.toLowerCase() === 'r') {
         squareRoot();
         event.preventDefault();
