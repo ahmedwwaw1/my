@@ -1,6 +1,6 @@
 {
   "sessions": [],
   "activeSessionId": "1788982315699",
-  "pendingHistory": null,
-  "timestamp": "2026-09-09T19:31:58.835Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ابحث لي عن اخر اخبار الفوركس\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"أخبار الفوركس اليوم اخر اخبار أسواق العملات\"},\"id\":\"call_246358\"},\"thoughtSignature\":\"El4KXAERTTIPSQoB6rkuskI0L0OWr1XIPYC3hFtgz3rJpPOg6VdO3YBUVar61+QcR4Vad6OTi/2u6AXxdBbgj/jnhQVsx1tHJBde4sLlsO0+zHzUqALEWWBmn4PN10vC\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"🧠 **AI Answer (via Tavily):** الدولار الأمريكي ينخفض مع بيانات اقتصادية أمريكية قادمة. النفط الخام يرتفع مع تصاعد التوترات الجيوسياسية. الذهب يرتفع مع ضعف الدولار وتوقعات التضخم الأمريكية.\\n\\n🔗 **Sources:**\\n- [أخبار الفوركس](https://ar.fxstreet.com/news)\\n- [آخر أخبار العملات اليوم، تحديثات سوق الفوركس والعملات - Arincen](https://arincen.com/forex-news)\\n- [اخبار اقتصادية, اخبار الاسواق والعملات اليوم - FxNewsToday.ae](https://www.fxnewstoday.ae)\\n- [أخبار الفوركس والعملات مباشر اليوم | تحليل الأسواق وتقييم شركات التداول](https://arab.dailyforex.com)\\n- [أخبار الفوركس العاجلة](https://fxbreakingnews.com)\"}}}]}]",
+  "timestamp": "2026-09-09T19:32:23.647Z"
 }
