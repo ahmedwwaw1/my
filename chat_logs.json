@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788957623244",
+      "title": "مرحباً بك! أنا جاهز لمساعدتك. ",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا جاهز لمساعدتك. كيف يمكنني دعمك اليوم في مشروعك أو أي مهام برمجية وهندسية ترغب في العمل عليها؟",
+              "thoughtSignature": "Em0KawERTTIPHDngIzD+ygPRGtgU67u/FPJ5PSKM3qJ9I9UPIOSJ9dm3wintyKXZiekLqZh4u39bOJqfusmLaFD1ekA3lhLiChCvV9i8YaXt+wzpUDXGdDFcO+n/UuaYDw1WGTChN55D19uSs8lB"
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788957623244",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-09T12:40:43.789Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! أنا جاهز لمساعدتك. كيف يمكنني دعمك اليوم في مشروعك أو أي مهام برمجية وهندسية ترغب في العمل عليها؟\",\"thoughtSignature\":\"Em0KawERTTIPHDngIzD+ygPRGtgU67u/FPJ5PSKM3qJ9I9UPIOSJ9dm3wintyKXZiekLqZh4u39bOJqfusmLaFD1ekA3lhLiChCvV9i8YaXt+wzpUDXGdDFcO+n/UuaYDw1WGTChN55D19uSs8lB\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكن البحث في مستودعي عبر اداة الباور شل\"}]}]",
+  "timestamp": "2026-09-09T12:42:44.686Z"
 }
