@@ -28,6 +28,7 @@
       <button onclick="deleteLast()">⌫</button>
       <button class="operator" onclick="appendValue('%')">%</button>
       <button class="operator" onclick="appendValue('/')">÷</button>
+      <button class="operator" onclick="squareRoot()">√</button>
       <button onclick="appendValue('7')">7</button>
       <button onclick="appendValue('8')">8</button>
       <button onclick="appendValue('9')">9</button>
@@ -68,7 +69,6 @@
       } catch { display.value = 'خطأ'; }
     }
 
-    // الجذر التربيعي للرقم الظاهر على الشاشة
     function squareRoot() {
       try {
         const number = Number(display.value);
@@ -82,7 +82,6 @@
       }
     }
 
-    // دعم لوحة المفاتيح والـ NumPad
     document.addEventListener('keydown', (event) => {
       const key = event.key;
 
@@ -112,6 +111,13 @@
 
       if (key === 'Escape' || key.toLowerCase() === 'c') {
         clearDisplay();
+        event.preventDefault();
+        return;
+      }
+
+      // حرف R لتشغيل الجذر التربيعي من لوحة المفاتيح
+      if (key.toLowerCase() === 'r') {
+        squareRoot();
         event.preventDefault();
       }
     });
