@@ -1,6 +1,34 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788961740564",
+      "title": "أهلاً وسهلاً بك! \n\nأنا جاهز لم",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً وسهلاً بك! \n\nأنا جاهز لمساعدتك في أي مهام برمجية، معمارية للأنظمة، أو تطوير واجهات وم"
+            },
+            {
+              "text": "شاريع متكاملة. كيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "EmIKYAERTTIPJ2s2eblomX0vGrYobQSbtU62k7kd5gTD1hyunAThrqvn61VbUkbmD2pCVBRNEwA6w5k7U7LZMVEKtraBI8fpKQr4DYJ6+9kDX5T22kS5tppbGRFBSqai4+SmLg=="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788961740564",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-09T13:49:11.976Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً وسهلاً بك! \\n\\nأنا جاهز لمساعدتك في أي مهام برمجية، معمارية للأنظمة، أو تطوير واجهات وم\"},{\"text\":\"شاريع متكاملة. كيف يمكنني مساعدتك اليوم؟\",\"thoughtSignature\":\"EmIKYAERTTIPJ2s2eblomX0vGrYobQSbtU62k7kd5gTD1hyunAThrqvn61VbUkbmD2pCVBRNEwA6w5k7U7LZMVEKtraBI8fpKQr4DYJ6+9kDX5T22kS5tppbGRFBSqai4+SmLg==\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]}]",
+  "timestamp": "2026-09-09T13:49:25.579Z"
 }
