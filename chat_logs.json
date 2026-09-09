@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788964012353",
+      "title": "مرحباً بك! أنا **المساعد الذكي",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **المساعد الذكي (Mastermind / Sovereign Omni-Architect)** الخاص بـ VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في مشاريعك أو أكوادك أو استفساراتك التقنية والهندسية؟ أنا جاهز للعمل بكامل طاقتي وبأعلى معايير الابتكار والدقة.",
+              "thoughtSignature": "El4KXAERTTIP0WfmnmoOqkXUiF2+zPo6+3/lycYOTMCU8sibqZn2VY3UUlMVyFEHCWX4bgOlGTAw5iJIRoK21IhZJiitYfzoF/wPSWEjty09v828aCgRJI5y4jXgZgcH"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788964012353",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-09T14:26:58.466Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! أنا **المساعد الذكي (Mastermind / Sovereign Omni-Architect)** الخاص بـ VSA Academy. \\n\\nكيف يمكنني مساعدتك اليوم في مشاريعك أو أكوادك أو استفساراتك التقنية والهندسية؟ أنا جاهز للعمل بكامل طاقتي وبأعلى معايير الابتكار والدقة.\",\"thoughtSignature\":\"El4KXAERTTIP0WfmnmoOqkXUiF2+zPo6+3/lycYOTMCU8sibqZn2VY3UUlMVyFEHCWX4bgOlGTAw5iJIRoK21IhZJiitYfzoF/wPSWEjty09v828aCgRJI5y4jXgZgcH\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك فحص ملفاتي\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"يجب استكشاف الملفات المتاحة أولاً لنتمكن من فحصها ومراجعتها.\",\"plan\":\"سرد الملفات الموجودة في المجلد الجذر للمشروع للتعرف على هيكل المشروع وفحصه بناءً على طلب المستخدم.\"},\"id\":\"call_1187885\"},\"thoughtSignature\":\"El4KXAERTTIPNzwb6O5IStArxD0YlgX4PdmBpEGCoh2kiqpBRzSFboZfDOUoWnTEfiacZnWaZxndzF58hxCMUzNaAMy8JSyBYXB83iFiXGp8pH1FeZQyJdjrvObt/uDx\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"يجب استكشاف الملفات المتاحة أولاً لنتمكن من فحصها ومراجعتها.\",\"plan\":\"سرد الملفات الموجودة في المجلد الجذر للمشروع للتعرف على هيكل المشروع وفحصه بناءً على طلب المستخدم.\"}}}}]}]",
+  "timestamp": "2026-09-09T14:27:07.786Z"
 }
