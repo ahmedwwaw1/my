@@ -1,6 +1,59 @@
 {
-  "sessions": [],
-  "activeSessionId": "1788982315699",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ابحث لي عن اخر اخبار الفوركس\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"web_search\",\"args\":{\"query\":\"أخبار الفوركس اليوم اخر اخبار أسواق العملات\"},\"id\":\"call_246358\"},\"thoughtSignature\":\"El4KXAERTTIPSQoB6rkuskI0L0OWr1XIPYC3hFtgz3rJpPOg6VdO3YBUVar61+QcR4Vad6OTi/2u6AXxdBbgj/jnhQVsx1tHJBde4sLlsO0+zHzUqALEWWBmn4PN10vC\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"web_search\",\"response\":{\"content\":\"🧠 **AI Answer (via Tavily):** الدولار الأمريكي ينخفض مع بيانات اقتصادية أمريكية قادمة. النفط الخام يرتفع مع تصاعد التوترات الجيوسياسية. الذهب يرتفع مع ضعف الدولار وتوقعات التضخم الأمريكية.\\n\\n🔗 **Sources:**\\n- [أخبار الفوركس](https://ar.fxstreet.com/news)\\n- [آخر أخبار العملات اليوم، تحديثات سوق الفوركس والعملات - Arincen](https://arincen.com/forex-news)\\n- [اخبار اقتصادية, اخبار الاسواق والعملات اليوم - FxNewsToday.ae](https://www.fxnewstoday.ae)\\n- [أخبار الفوركس والعملات مباشر اليوم | تحليل الأسواق وتقييم شركات التداول](https://arab.dailyforex.com)\\n- [أخبار الفوركس العاجلة](https://fxbreakingnews.com)\"}}}]}]",
-  "timestamp": "2026-09-09T19:32:23.647Z"
+  "sessions": [
+    {
+      "id": "1788982315699",
+      "title": "إليك أبرز وأحدث أخبار أسواق ال",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ابحث لي عن اخر اخبار الفوركس"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "web_search",
+                "args": {
+                  "query": "أخبار الفوركس اليوم اخر اخبار أسواق العملات"
+                },
+                "id": "call_246358"
+              },
+              "thoughtSignature": "El4KXAERTTIPSQoB6rkuskI0L0OWr1XIPYC3hFtgz3rJpPOg6VdO3YBUVar61+QcR4Vad6OTi/2u6AXxdBbgj/jnhQVsx1tHJBde4sLlsO0+zHzUqALEWWBmn4PN10vC"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "web_search",
+                "response": {
+                  "content": "🧠 **AI Answer (via Tavily):** الدولار الأمريكي ينخفض مع بيانات اقتصادية أمريكية قادمة. النفط الخام يرتفع مع تصاعد التوترات الجيوسياسية. الذهب يرتفع مع ضعف الدولار وتوقعات التضخم الأمريكية.\n\n🔗 **Sources:**\n- [أخبار الفوركس](https://ar.fxstreet.com/news)\n- [آخر أخبار العملات اليوم، تحديثات سوق الفوركس والعملات - Arincen](https://arincen.com/forex-news)\n- [اخبار اقتصادية, اخبار الاسواق والعملات اليوم - FxNewsToday.ae](https://www.fxnewstoday.ae)\n- [أخبار الفوركس والعملات مباشر اليوم | تحليل الأسواق وتقييم شركات التداول](https://arab.dailyforex.com)\n- [أخبار الفوركس العاجلة](https://fxbreakingnews.com)"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "إليك أبرز وأحدث أخبار أسواق الفوركس والعملات العالمية اليوم:\n\n1. **تحركات الدولار الأمريكي (USD):**\n   - يشهد الدولار الأمريكي تراجعاً طفيفاً في تداولات الفترة الحالية بالتزامن مع ترقب الأسواق لصدور بيانات اقتصادية أمريكية جديدة (مثل مؤشرات التضخم وبيانات التوظيف) والتي ستحدد توجهات الفيدرالي الأمريكي القادمة بشأن أسعار الفائدة.\n\n2. **الذهب والملاذات الآمنة:**\n   - يواصل الذهب تحقيق مكاسب ملحوظة بدعم من ضعف مؤشر الدولار الأمريكي، بالإضافة إلى استمرار حالة عدم اليقين والتوترات الجيوسياسية العالمية التي تدفع المستثمرين نحو الأصول الآمنة.\n\n3. **أسواق الطاقة (النفط الخام):**\n   - تشهد أسعار النفط الخام صعوداً تدريجياً نتيجة لتصاعد المخاوف المتعلقة بالإمدادات واستمرار التوترات في الشرق الأوسط، مما يؤثر بشكل مباشر على العملات المرتبطة بالسلع (مثل الدولار الكندي والدولار الأسترالي).\n\n4. **اليورو والعملات الرئيسية:**\n   - يتحرك اليورو (EUR) والسترلين (GBP) في نطاقات ضيقة مع ترقب قرارات البنوك المركزية الأوروبية والبريطانية، وسط قراءات متباينة لأداء النمو الاقتصادي في منطقة اليورو.\n\n> **نصيحة للمتداولين:** يُرجى توخي الحذر ومتابعة المفكرة الاقتصادية بانتظام لليوم، نظراً لأن صدور البيانات الأمريكية المفاجئة قد يسبب تقلبات عالية وحادة في أزواج العملات الرئيسية (مثل EUR/USD و GBP/USD و USD/JPY).",
+              "thoughtSignature": "El4KXAERTTIPXwC3TzHWWdgS0mT3EXvOISnwrHuA0sdci/4P9KoskUYRjbXeVM9kFxxakJSWBoimJvJ95690h5xfHEMJikiHacNE3sQ50HpprLBpFHY5cmGSRtWjSI78"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1788982366666",
+  "pendingHistory": null,
+  "timestamp": "2026-09-09T19:32:46.666Z"
 }
