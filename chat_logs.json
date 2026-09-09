@@ -2,8 +2,27 @@
   "sessions": [
     {
       "id": "1788981066163",
-      "title": "محادثة جديدة",
-      "history": []
+      "title": "أهلاً بك! أنا معك بصفتي **المس",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا معك بصفتي **المساعد الذكي والمهندس المعماري لمنصة VSA Academy**. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت ترغب في تطوير ميزة برمجية جديدة، تحسين التصميم، مراجعة الكود، أو إنجاز مهمة متكاملة، أنا جاهز تماماً للبدء!",
+              "thoughtSignature": "El4KXAERTTIPHti6vbwO1ZdtYAYtF+3hXNr/1zZflbSpVFWa8DDi2DBZRBWuNOsVJ/9fGX59/C8J2zy9mcSUfNplEwG9B9lRAJqFz2s24DXbQVykiIj8PE5izZZ/onnb"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
     },
     {
       "id": "1788981042955",
@@ -72,6 +91,6 @@
     }
   ],
   "activeSessionId": "1788981066163",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-09T19:11:20.820Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-09T19:11:32.874Z"
 }
