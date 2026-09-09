@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788962102171",
-      "title": "أهلاً بك! مرحباً بك في أكاديمي",
+      "title": "أنا بخير والحمد لله، وجاهز تما",
       "history": [
         {
           "role": "user",
@@ -21,11 +21,29 @@
             }
           ],
           "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا بخير والحمد لله، وجاهز تماماً لمساعدتك! \n\nكيف يسير العمل في المشارييع والتطبيقات لديك اليوم؟ هل هناك تحدٍّ برمجي، تحسين للواجهات، أو ميزة جديدة تريد مناقشتها وتطويرها معاً؟",
+              "thoughtSignature": "EmcKZQERTTIPa1KEFqSJ++FwbDYR42UzdgRZCAJJ/vlWsDuBLNMcbtK/fos5od5x4nlJKuzwGxaWcYoqtqEuFliv1qiZrrQe/SadCdZ170GIUA1MkWrd+d6Gw6fBkFKEnh2CQoUW21iT"
+            }
+          ],
+          "model": "gemini-3.6-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1788962102171",
   "pendingHistory": null,
-  "timestamp": "2026-09-09T13:55:08.087Z"
+  "timestamp": "2026-09-09T13:56:59.989Z"
 }
