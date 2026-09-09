@@ -83,7 +83,8 @@ function translateToProviderFormat(model, history, tools, config) {
 // --- [Smart Tool Filtering Categories] ---
 const TOOL_GROUPS = {
     CORE: ["read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem"],
-    ENGINE_5_RADAR: ["searchCode", "list_files", "list_local_files", "web_search", "read_url", "analyze_file"],
+    WEB_HUNT: ["web_search", "read_url"], // 🌍 قناص الويب (أخبار، بحث عالمي)
+    LOCAL_DISCOVERY: ["searchCode", "list_files", "list_local_files", "analyze_file"], // 📂 مستكشف الكود المحلي
     ENGINE_7_ARCHIVE: ["store_memory", "vector_search", "compress_context"],
     ENGINE_8_SCALES: ["estimate_cost", "get_usage_metrics", "latency_ping"],
     ENGINE_9_TOUCHSTONE: ["run_virtual_test", "synthesize_test", "self_score_output", "simulate_integration"],
@@ -94,12 +95,13 @@ const TOOL_GROUPS = {
 };
 
 const KEYWORD_MAP = {
-    ENGINE_5_RADAR: ["بحث", "سيرش", "غوغل", "قوقل", "رابط", "موقع", "ملفات", "قائمة", "استكشف", "searchCode", "list_files", "read_url", "analyze_file"],
+    WEB_HUNT: ["بحث", "سيرش", "غوغل", "قوقل", "رابط", "موقع", "أخبار", "فوركس", "تداول", "اقتصاد", "تكنولوجيا", "read_url", "web_search", "ماذا يحدث", "آخر التطورات"],
+    LOCAL_DISCOVERY: ["ملفات", "قائمة", "استكشف", "كود", "مشروع", "searchCode", "list_files", "analyze_file", "هيكل", "ملفاتي"],
     ENGINE_7_ARCHIVE: ["تذكر", "احفظ في الذاكرة", "ذاكرة", "تخزين", "ابحث في ذاكرتك", "ضغط السياق", "تلخيص", "store_memory", "vector_search", "compress_context"],
     ENGINE_8_SCALES: ["تكلفة", "توكن", "بينج", "استهلاك", "قياس الأداء", "estimate_cost", "get_usage_metrics", "latency_ping"],
     ENGINE_9_TOUCHSTONE: ["وحدة", "تكامل", "تقييم ذاتي", "محاكاة", "اختبار", "synthesize_test", "run_virtual_test"],
     ENGINE_10_PULSE: ["نقطة توقف", "خلفية", "استئناف", "إيقاف مؤقت", "graceful_interrupt", "resume_from_checkpoint"],
-    ENGINE_11_MAKER: ["كود", "برمجة", "دالة", "فانكشن", "ثبت", "مكتبة", "تحليل", "big-o", "تعديل جراحي", "نمط معماري", "تعارض", "إصدار", "try-catch", "إعادة بناء", "install_dependency", "auto_lint_and_fix"],
+    ENGINE_11_MAKER: ["برمجة", "دالة", "فانكشن", "ثبت", "مكتبة", "تحليل", "big-o", "تعديل جراحي", "نمط معماري", "تعارض", "إصدار", "try-catch", "إعادة بناء", "install_dependency", "auto_lint_and_fix"],
     ENGINE_12_RAW_INTEL: ["تصنيف مشكلة", "خطأ شائع", "بج", "bug", "ثغرة", "classify_problem", "estimate_big_o"],
     ENGINE_3_EVOLUTION: ["تطور", "إصلاح ذاتي", "فحص دوري", "توسع", "تحسين استباقي", "طفرة", "تحديث المحرك", "ترمنل", "باور شيل", "لقطة", "تراجع", "بوت", "جيت هاب", "run_terminal_command", "patchSystem", "selfExpand"]
 };
