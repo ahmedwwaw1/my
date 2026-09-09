@@ -82,23 +82,25 @@ function translateToProviderFormat(model, history, tools, config) {
 // --- [Smart Tool Filtering Categories] ---
 const TOOL_GROUPS = {
     CORE: ["read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem"],
-    EXPLORER: ["searchCode", "list_files", "list_local_files", "web_search", "read_url", "analyze_file"],
-    ARCHIVE: ["store_memory", "vector_search", "compress_context"],
-    ENGINEERING: ["install_dependency", "auto_lint_and_fix", "run_virtual_test", "generate_docstring", "estimate_big_o", "select_design_pattern", "resolve_version_conflict", "wrap_with_error_handling", "calculate_refactor_threshold"],
-    SYSTEM: ["take_snapshot", "instant_undo", "triggerGithubWorkflow", "os_command", "estimate_cost", "graceful_interrupt", "get_usage_metrics", "latency_ping", "resume_from_checkpoint", "background_async_task"],
-    TESTING: ["synthesize_test", "self_score_output", "simulate_integration"],
-    EVOLUTION: ["patchSystem", "selfExpand", "evolutionary_audit"],
-    INTELLIGENCE: ["classify_problem", "detect_bug_signature"]
+    ENGINE_5_RADAR: ["searchCode", "list_files", "list_local_files", "web_search", "read_url", "analyze_file"],
+    ENGINE_7_ARCHIVE: ["store_memory", "vector_search", "compress_context"],
+    ENGINE_8_SCALES: ["estimate_cost", "get_usage_metrics", "latency_ping"],
+    ENGINE_9_TOUCHSTONE: ["run_virtual_test", "synthesize_test", "self_score_output", "simulate_integration"],
+    ENGINE_10_PULSE: ["graceful_interrupt", "resume_from_checkpoint", "background_async_task"],
+    ENGINE_11_MAKER: ["install_dependency", "auto_lint_and_fix", "generate_docstring", "select_design_pattern", "resolve_version_conflict", "wrap_with_error_handling", "calculate_refactor_threshold"],
+    ENGINE_12_RAW_INTEL: ["classify_problem", "estimate_big_o", "detect_bug_signature"],
+    ENGINE_3_EVOLUTION: ["patchSystem", "selfExpand", "evolutionary_audit", "run_terminal_command", "take_snapshot", "instant_undo", "triggerGithubWorkflow"]
 };
 
 const KEYWORD_MAP = {
-    EXPLORER: ["بحث", "سيرش", "غوغل", "قوقل", "رابط", "موقع", "ملفات", "قائمة", "استكشف"],
-    ARCHIVE: ["تذكر", "احفظ في الذاكرة", "ذاكرة", "تخزين", "ابحث في ذاكرتك", "ضغط السياق", "تلخيص"],
-    ENGINEERING: ["كود", "برمجة", "دالة", "فانكشن", "ثبت", "مكتبة", "اختبار", "تحليل", "big-o", "تعديل جراحي", "نمط معماري", "تعارض", "إصدار", "try-catch", "إعادة بناء"],
-    SYSTEM: ["باور شيل", "تراجع", "لقطة", "تكلفة", "توكن", "بوت", "جيت هاب", "بينج", "استهلاك", "نقطة توقف", "خلفية"],
-    TESTING: ["وحدة", "تكامل", "تقييم ذاتي", "محاكاة"],
-    EVOLUTION: ["تطور", "إصلاح ذاتي", "فحص دوري", "توسع", "تحسين استباقي", "طفرة", "تحديث المحرك"],
-    INTELLIGENCE: ["تصنيف مشكلة", "خطأ شائع", "بج", "bug", "ثغرة"]
+    ENGINE_5_RADAR: ["بحث", "سيرش", "غوغل", "قوقل", "رابط", "موقع", "ملفات", "قائمة", "استكشف"],
+    ENGINE_7_ARCHIVE: ["تذكر", "احفظ في الذاكرة", "ذاكرة", "تخزين", "ابحث في ذاكرتك", "ضغط السياق", "تلخيص"],
+    ENGINE_8_SCALES: ["تكلفة", "توكن", "بينج", "استهلاك", "قياس الأداء"],
+    ENGINE_9_TOUCHSTONE: ["وحدة", "تكامل", "تقييم ذاتي", "محاكاة", "اختبار"],
+    ENGINE_10_PULSE: ["نقطة توقف", "خلفية", "استئناف", "إيقاف مؤقت"],
+    ENGINE_11_MAKER: ["كود", "برمجة", "دالة", "فانكشن", "ثبت", "مكتبة", "تحليل", "big-o", "تعديل جراحي", "نمط معماري", "تعارض", "إصدار", "try-catch", "إعادة بناء"],
+    ENGINE_12_RAW_INTEL: ["تصنيف مشكلة", "خطأ شائع", "بج", "bug", "ثغرة"],
+    ENGINE_3_EVOLUTION: ["تطور", "إصلاح ذاتي", "فحص دوري", "توسع", "تحسين استباقي", "طفرة", "تحديث المحرك", "ترمنل", "باور شيل", "لقطة", "تراجع", "بوت", "جيت هاب"]
 };
 
 function getRelevantTools(prompt) {
@@ -130,7 +132,7 @@ const AI_TOOLS = [{
         { name: "thought", description: "مركز التحليل والمنطق.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" } }, required: ["reasoning", "plan"] } },
         { name: "repairSystem", description: "إصلاح مشاكل الاتصال والتوكن.", parameters: { type: "OBJECT", properties: {} } },
         { name: "triggerGithubWorkflow", description: "تشغيل عمليات البوتات.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
-        { name: "os_command", description: "تنفيذ أوامر PowerShell/CMD على النظام المحلي (يتطلب الجسر المحلي).", parameters: { type: "OBJECT", properties: { command: { type: "STRING" } }, required: ["command"] } },
+        { name: "run_terminal_command", description: "تنفيذ أوامر PowerShell/CMD/Git على النظام المحلي (قوة النخبة).", parameters: { type: "OBJECT", properties: { command: { type: "STRING" } }, required: ["command"] } },
         { name: "list_local_files", description: "سرد ملفات القرص الصلب المحلي (يتطلب الجسر المحلي).", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
         { name: "web_search", description: "البحث في الإنترنت.", parameters: { type: "OBJECT", properties: { query: { type: "STRING" } }, required: ["query"] } },
         { name: "read_url", description: "قراءة محتوى رابط خارجي.", parameters: { type: "OBJECT", properties: { url: { type: "STRING" } }, required: ["url"] } },
@@ -437,7 +439,7 @@ async function runToolLoop(history) {
             else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
             else if (name === "repairSystem") toolResult = await repairSystem();
             else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
-            else if (name === "os_command") toolResult = await callLocalBridge('cmd', { command: args.command });
+            else if (name === "run_terminal_command") toolResult = await callLocalBridge('cmd', { command: args.command });
             else if (name === "list_local_files") toolResult = await callLocalBridge('list', { path: args.path });
             else if (name === "web_search") {
                 const searchResult = await callBridge('web_search', args);
