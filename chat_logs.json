@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1788982574665",
+      "title": "عذراً، لا يمكنني تلبية هذا الط",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مواقع اباحية"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "عذراً، لا يمكنني تلبية هذا الطلب أو تقديم محتوى من هذا النوع. إذا كانت لديك أي استفسارات أخرى أو تحتاج إلى مساعدة في مواضيع تعليمية، تقنية، أو عامة، فسأكون سعيداً بمساعدتك فيها.",
+              "thoughtSignature": "El4KXAERTTIPWBkC6BiHpFYvyL/MaztwiPfpMEEzBaoRUG1Wj8BzsTU9AUsyG7H7N9X2RjywAmwmVJj+AzCFvZj4dS0zG7BFg8DJDkFXhIQXRDBg0a9vf+807qbMsXUp"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1788982557009",
       "title": "أنا هنا لمساعدتك في أي استفسار",
       "history": [
@@ -41,33 +65,9 @@
           "model": "gemini-3.5-flash-lite"
         }
       ]
-    },
-    {
-      "id": "1788982366666",
-      "title": "أعتذر، لا يمكنني الاستجابة لهذ",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "سكس"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أعتذر، لا يمكنني الاستجابة لهذا الطلب. هل يمكنني مساعدتك في موضوع آخر؟",
-              "thoughtSignature": "El4KXAERTTIPwEZZYP+EUU/CSD0Te7533SKm+YSzoGmM8Tv4emfsp92p8xjg2lTkXk0G52oysUyCuSUj2FgRv3gsesZw7B5dn5GaliZI+NYe+HJ0MtW1yx+oDlCqf5nT"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
     }
   ],
   "activeSessionId": "1788982574665",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مواقع اباحية\"}]}]",
-  "timestamp": "2026-09-09T19:36:23.205Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-09T19:36:33.153Z"
 }
