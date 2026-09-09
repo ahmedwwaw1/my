@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1788962844619",
-      "title": "الحمد لله، أنا في أتم الجاهزية",
+      "title": "نعم، بكل تأكيد! لدي القدرة على",
       "history": [
         {
           "role": "user",
@@ -39,11 +39,61 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل لديك القدرة على البحث في الويب"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم يسأل عن قدرتي على البحث في الويب، ولدي أداة web_search متاحة، لذا يجب تأكيد ذلك بحماس واحترافية.",
+                  "plan": "إخبار المستخدم بإمكانيات البحث في الويب وتأكيد جاهزيتها."
+                },
+                "id": "call_1178844"
+              },
+              "thoughtSignature": "El4KXAERTTIP8iqfFypprHNwBQ2cN06ZxOlIb6Q3vsUxuDU/4ilFsB6wBcRKq1c7eGHBa/bntGjDh8e0xuMuiwa9tfNFkHxTz4SC0fHUBwYxBn7O8yvJwAWGbJuetydV"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يسأل عن قدرتي على البحث في الويب، ولدي أداة web_search متاحة، لذا يجب تأكيد ذلك بحماس واحترافية.",
+                    "plan": "إخبار المستخدم بإمكانيات البحث في الويب وتأكيد جاهزيتها."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "نعم، بكل تأكيد! لدي القدرة على البحث في الويب للوصول إلى أحدث المعلومات، الأخبار، الوثائق التقنية، والبيانات المحدثة لحظياً.\n\nإذا كنت بحاجة إلى البحث عن موضوع معين، مقارنة تقنيات حديثة، أو جلب معلومات محددة من الإنترنت، فلا تتردد في طلب ذلك وسأقوم بالبحث عنه فوراً! 🌐✨",
+              "thoughtSignature": "El4KXAERTTIP4XHnwA03d9zfuvo0jyBAiVcMRjuiB/gXFuL1ZmSqRerltXeH1VSfq46JufvB39rMqv7sr8ul5FWanoNmZ055CqzD+5ny3TjugMzvezfofFVw/gkiA0Y7"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1788962844619",
   "pendingHistory": null,
-  "timestamp": "2026-09-09T14:07:41.852Z"
+  "timestamp": "2026-09-09T14:09:28.152Z"
 }
