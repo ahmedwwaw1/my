@@ -15,6 +15,7 @@ let chatHistory = [];
 let chatSessions = JSON.parse(localStorage.getItem('gemini_sessions') || '[]');
 let currentSessionId = localStorage.getItem('gemini_current_session') || Date.now().toString();
 let stopAiRequested = false;
+let aiAbortController = null; // 🛑 نظام القطع الفوري للاتصال
 
 // 📝 دستور النخبة السيادي الشامل (Sovereign Omni-Constitution - 2026 Edition)
 const CONSTITUTION = `
@@ -177,8 +178,14 @@ const AI_TOOLS = [{
 async function callBridge(action, payload) {
     const start = Date.now();
     logToTerminal(`Bridge Call [${action}] initiated...`, "info");
+
+    // إنشاء متحكم جديد لكل طلب لضمان إمكانية الإلغاء
+    if (action === 'chat') {
+        aiAbortController = new AbortController();
+    }
+
     try {
-        const res = await fetch(SUPABASE_BRIDGE_URL, {
+        const fetchOptions = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -186,7 +193,14 @@ async function callBridge(action, payload) {
                 'apikey': SUPABASE_KEY
             },
             body: JSON.stringify({ action, ...payload })
-        });
+        };
+
+        // ربط إشارة الإلغاء بالطلب الفعلي
+        if (aiAbortController && action === 'chat') {
+            fetchOptions.signal = aiAbortController.signal;
+        }
+
+        const res = await fetch(SUPABASE_BRIDGE_URL, fetchOptions);
         const duration = Date.now() - start;
         if (!res.ok) {
             const errorText = await res.text();
@@ -591,7 +605,8 @@ async function sendAiMessage() {
     const sendBtn = document.getElementById('aiSendBtn');
     if (sendBtn.classList.contains('working')) {
         stopAiRequested = true;
-        addMessageToUi('ai', "🛑 إيقاف المحرك...", 'System');
+        if (aiAbortController) aiAbortController.abort(); // 🛑 قطع الاتصال الفوري بالسيرفر
+        addMessageToUi('ai', "🛑 تم قطع الاتصال وإيقاف المحرك فوراً.", 'System');
         return;
     }
     const msgText = input.value.trim();
