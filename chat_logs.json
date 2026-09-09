@@ -1,6 +1,48 @@
 {
   "sessions": [
     {
+      "id": "1788982557009",
+      "title": "أنا هنا لمساعدتك في أي استفسار",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "طيز"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. كيف يمكنني مساعدتك اليوم؟ إذا كان لديك أي استفسار تقني، مشروع برمجي، أو سؤال علمي، تفضل بطرحه وسأكون سعيداً بمساعدتك.",
+              "thoughtSignature": "El4KXAERTTIPE7NvPsE+w2q3c34wfjBVR9MmTSxR24e+mQ9MZlYg6isA+P6POHSbStzxmfLeI7ad+JF6MH38GHg757QZFl+Fc/RzSilh072BAxCAaI6NyUCRDfrAG83/"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كس"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا هنا لمساعدتك في أي استفسار تقني أو أكاديمي أو برمجي تود مناقشته. تفضل بطرح سؤالك أو موضوعك وسأكون جاهزاً للإجابة عليه.",
+              "thoughtSignature": "El4KXAERTTIPYxdEkN1hmURMNuiOjukHqXzkVYI9IEez/J/4sci+ha3o0+gb/R0gm2gmRdBp/VwSDw0ix3J6l25g24ETMVzAC07CpP2B3zUgjSQS1SvmR3IrbD84LViN"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1788982366666",
       "title": "أعتذر، لا يمكنني الاستجابة لهذ",
       "history": [
@@ -78,6 +120,6 @@
     }
   ],
   "activeSessionId": "1788982557009",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"طيز\"}]}]",
-  "timestamp": "2026-09-09T19:36:01.506Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-09T19:36:10.381Z"
 }
