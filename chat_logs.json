@@ -1,12 +1,36 @@
 {
   "sessions": [
     {
+      "id": "1788981042955",
+      "title": "مرحباً بك! أنا **المساعد الذكي",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **المساعد الذكي** الخاص بك والمزود بأحدث قدرات التح هندسية والمعمارية (Gemini 3.x / Mastermind Sovereign Core). \n\nكيف يمكنني مساعدتك اليوم في مشروعك أو في بناء وتحسين الأكواد والأنظمة؟ أنا جاهز للعمل بشكل مستقل وتحقيق أفضل النتائج!",
+              "thoughtSignature": "El4KXAERTTIPZhX/IZZuxIEpy9Uw5nalTLQRbclE2IfeH21EDFD4oIqOaHKRnDyBh7MzGfyftEN73OMdks8LFVrekdlJFefjzuOZmSWfFKYsyfVsOsDr/2BkKFbRT75w"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1788980978012",
       "title": "محادثة جديدة",
       "history": []
     }
   ],
   "activeSessionId": "1788981042955",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-09T19:10:51.602Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! أنا **المساعد الذكي** الخاص بك والمزود بأحدث قدرات التح هندسية والمعمارية (Gemini 3.x / Mastermind Sovereign Core). \\n\\nكيف يمكنني مساعدتك اليوم في مشروعك أو في بناء وتحسين الأكواد والأنظمة؟ أنا جاهز للعمل بشكل مستقل وتحقيق أفضل النتائج!\",\"thoughtSignature\":\"El4KXAERTTIPZhX/IZZuxIEpy9Uw5nalTLQRbclE2IfeH21EDFD4oIqOaHKRnDyBh7MzGfyftEN73OMdks8LFVrekdlJFefjzuOZmSWfFKYsyfVsOsDr/2BkKFbRT75w\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]}]",
+  "timestamp": "2026-09-09T19:10:56.071Z"
 }
