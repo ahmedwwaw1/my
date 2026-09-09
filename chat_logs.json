@@ -1,6 +1,49 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1788960887447",
+      "title": "الحمد لله بخير وعلى أتم الاستع",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا جاهز لمساعدتك في أي مهمة برمجية، معمارية، أو تطويرية تحتاجها في مشروعك. \n\nكيف يمكنني دعمك اليوم؟",
+              "thoughtSignature": "Em0KawERTTIP/TKZ1rXg6A0zBSflg3kdsw1RYHJZnuLTxc+RkmS1BaCmOOUAIn5O8SKfcdGhPyYeVE/G+AcfnwdqSLZBQu6LyhfiCtzHARDLYRuBCXskBo+u123D6dO4XkEkuN1FhFoIEkDkew8X"
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "الحمد لله بخير وعلى أتم الاستعداد! أتمنى أن تكون بأفضل حال أيضاً.\n\nهل نعمل على ميزة جديدة، إصلاح، أو تحسين في المشروع اليوم؟ أخبرني بما يدور في بالك وسنبدأ فوراً.",
+              "thoughtSignature": "Em0KawERTTIPR02iODxLoF/T6IZeK/e4BDfCdb1L3Bdz30G7JL4xXugKlY94MvoU3RYBl3X3nzwpJSHfptfRGQA6r+JhiKnwz44/K/fVFeed6YVrnAvYuVsecLAhqo3JBYcDTqt+2a0ik7nq2nUu"
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1788960887447",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-09T13:34:59.470Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-09T13:35:08.475Z"
 }
