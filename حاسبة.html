@@ -68,6 +68,20 @@
       } catch { display.value = 'خطأ'; }
     }
 
+    // الجذر التربيعي للرقم الظاهر على الشاشة
+    function squareRoot() {
+      try {
+        const number = Number(display.value);
+        if (Number.isNaN(number) || number < 0) {
+          display.value = 'خطأ';
+          return;
+        }
+        display.value = Math.sqrt(number);
+      } catch {
+        display.value = 'خطأ';
+      }
+    }
+
     // دعم لوحة المفاتيح والـ NumPad
     document.addEventListener('keydown', (event) => {
       const key = event.key;
