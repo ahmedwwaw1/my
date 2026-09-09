@@ -61,7 +61,7 @@
     <div class="currency-box">
       <h2>تحويل العملات</h2>
       <div class="currency-row">
-        <input id="currencyAmount" type="number" step="any" min="0" value="1" placeholder="المبلغ">
+        <input id="currencyAmount" type="number" step="any" min="0" value="1" placeholder="المبلغ" aria-label="المبلغ">
         <select id="fromCurrency" aria-label="العملة الأصلية">
           <option value="IQD">دينار عراقي (IQD)</option>
           <option value="USD" selected>دولار أمريكي (USD)</option>
@@ -172,7 +172,17 @@
       return new Intl.NumberFormat('en-US', { maximumFractionDigits: 6 }).format(value);
     }
 
+    // لوحة المفاتيح تخص الحاسبة الرئيسية فقط.
+    // عندما يكون المؤشر داخل تحويل العملات، تبقى الأرقام داخل حقل المبلغ ولا تصل للحاسبة الرئيسية.
     document.addEventListener('keydown', (event) => {
+      if (event.target.closest('.currency-box')) {
+        if (event.target.id === 'currencyAmount' && event.key === 'Enter') {
+          convertCurrency();
+          event.preventDefault();
+        }
+        return;
+      }
+
       const key = event.key;
 
       if (/^[0-9.]$/.test(key)) {
