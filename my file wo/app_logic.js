@@ -247,7 +247,6 @@
             const processCryptoAlerts = async () => {
                 let cryptoAlerts = [];
                 try {
-                    // محاولة جلب التنبيهات من المسار الصحيح للمجلد الفرعي ScriptBot
                     let response = await fetch(`ScriptBot/ScriptBot json/crypto_alerts.json?v=${new Date().getTime()}`);
                     if (!response.ok) {
                         response = await fetch(`crypto_alerts.json?v=${new Date().getTime()}`);
@@ -259,13 +258,21 @@
                         cryptoAlerts = await response.json();
                     }
                     
+                    let deletedAlerts = [];
+                    try {
+                        deletedAlerts = JSON.parse(localStorage.getItem('vsa_deleted_crypto_alerts') || '[]');
+                    } catch(e) {}
+
                     if (cryptoAlerts && cryptoAlerts.length > 0) {
                         cryptoAlerts.forEach(alert => {
+                            const alertId = `crypto-${alert.symbol}-${alert.timestamp}`;
+                            if (deletedAlerts.includes(alertId)) return; // تجاهل المحذوف
+
                             const alertDate = new Date(alert.timestamp);
                             const formattedTime = alertDate.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
                             const formattedDate = alertDate.toLocaleDateString(undefined);
                             allData.push({
-                                id: `crypto-${alert.symbol}-${alert.timestamp}`,
+                                id: alertId,
                                 title: `🚨 حركة قوية على زوج: ${alert.symbol}`,
                                 category: 'high_volume',
                                 content: `💵 السعر الحالي: ${alert.price} USDT\n📊 حجم التداول: ${alert.volume.toLocaleString()}\n📈 نسبة التغيير (24س): ${alert.change_percent}%\n🕒 وقت التنبيه المحلي: ${formattedTime} - ${formattedDate}`,
