@@ -247,8 +247,11 @@
             const processCryptoAlerts = async () => {
                 let cryptoAlerts = [];
                 try {
-                    // محاولة جلب التنبيهات من الجذر الرئيسي أولاً ثم من مجلد الـ json
-                    let response = await fetch(`crypto_alerts.json?v=${new Date().getTime()}`);
+                    // محاولة جلب التنبيهات من المسار الصحيح للمجلد الفرعي ScriptBot
+                    let response = await fetch(`ScriptBot/ScriptBot json/crypto_alerts.json?v=${new Date().getTime()}`);
+                    if (!response.ok) {
+                        response = await fetch(`crypto_alerts.json?v=${new Date().getTime()}`);
+                    }
                     if (!response.ok) {
                         response = await fetch(`${APP_CONFIG.jsonPath}crypto_alerts.json?v=${new Date().getTime()}`);
                     }
