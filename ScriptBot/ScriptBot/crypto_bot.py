@@ -90,21 +90,25 @@ def analyze_crypto_market():
 def save_alerts(new_alerts):
     """
     حفظ التنبيهات الجديدة في crypto_alerts.json مع تجنب التكرار اليومي
-    في المسار المحدد: ScriptBot/ScriptBot json/crypto_alerts.json
+    في كلا المسارين (المجلد الخاص بالبوت والمجلد الرئيسي للموقع) لضمان الربط التام.
     """
-    # تحديد المسار النسبي الدقيق من مكان ملف البوت الحالي
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    target_dir = os.path.join(current_dir, '..', 'ScriptBot json')
     
-    # التأكد من وجود المجلد وإنرائه إن لم يكن موجوداً
-    os.makedirs(target_dir, exist_ok=True)
+    # 1. المسار الأول: ScriptBot/ScriptBot json/crypto_alerts.json
+    target_dir_bot = os.path.join(current_dir, '..', 'ScriptBot json')
+    os.makedirs(target_dir_bot, exist_ok=True)
+    file_path_bot = os.path.join(target_dir_bot, 'crypto_alerts.json')
     
-    file_path = os.path.join(target_dir, 'crypto_alerts.json')
+    # 2. المسار الثاني: بيانات موقعي json/crypto_alerts.json (ليقرأه موقع الويب)
+    target_dir_web = os.path.join(current_dir, '..', '..', 'بيانات موقعي json')
+    os.makedirs(target_dir_web, exist_ok=True)
+    file_path_web = os.path.join(target_dir_web, 'crypto_alerts.json')
+    
     existing_data = []
     
-    # قراءة البيانات القديمة إن وجدت
-    if os.path.exists(file_path):
-        with open(file_path, 'r', encoding='utf-8') as f:
+    # قراءة البيانات القديمة إن وجدت من المسار الأساسي
+    if os.path.exists(file_path_bot):
+        with open(file_path_bot, 'r', encoding='utf-8') as f:
             try:
                 existing_data = json.load(f)
             except json.JSONDecodeError:
@@ -114,7 +118,6 @@ def save_alerts(new_alerts):
     
     # إضافة التنبيهات الجديدة مع منع التكرار لكل عملة في نفس اليوم
     for alert in new_alerts:
-        # التحقق مما إذا كانت العملة قد أُضيفت بالفعل اليوم
         is_already_added_today = any(
             item.get('symbol') == alert['symbol'] and 
             item.get('timestamp', '').startswith(today_date)
@@ -127,13 +130,18 @@ def save_alerts(new_alerts):
         else:
             print(f"ℹ️ تنبيه {alert['symbol']} موجود بالفعل لتاريخ اليوم {today_date}. تخطي الإضافة.")
     
-    # الاحتفاظ بآخر تنبيهين فقط ليبقى الملف خفيفاً
+    # الاحتفاظ بآخر تنبيهين فقط
     existing_data = existing_data[:2]
     
-    # كتابة وحفظ الملف في المسار المحدد
-    with open(file_path, 'w', encoding='utf-8') as f:
+    # حفظ الملف في المسار الأول (ScriptBot json)
+    with open(file_path_bot, 'w', encoding='utf-8') as f:
         json.dump(existing_data, f, ensure_ascii=False, indent=2)
-    print(f"📁 تم حفظ الملف بنجاح في: {file_path}")
+    print(f"📁 تم الحفظ في بوت المجلد: {file_path_bot}")
+    
+    # حفظ النسخة المطابقة في مسار موقع الويب (بيانات موقعي json)
+    with open(file_path_web, 'w', encoding='utf-8') as f:
+        json.dump(existing_data, f, ensure_ascii=False, indent=2)
+    print(f"🌐 تم تحديث نسخة الموقع في: {file_path_web}")
 
 # 🚀 السطرين السحريين لتشغيل البوت فوراً عند استدعاء الملف
 if __name__ == '__main__':
