@@ -1,31 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1789062919574",
-      "title": "العفو يا صديقي! أنا في خدمتك د",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "شكرا لك يا جيمي لقد ضهرو"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "العفو يا صديقي! أنا في خدمتك دائماً وأسعد جداً أن الأمور ظهرت وعملت بالشكل المطلوب معك. 🚀\n\nهل تحتاج إلى أي تعديلات أخرى، أو إضافة ميزات جديدة، أو تحسينات بصرية وبرمجية إضافية؟ أنا جاهز ومتأهب لأي خطوة تالية! ✨",
-              "thoughtSignature": "El4KXAERTTIPLqwq0hvYoDgkiT6ldr/Dggi26A2JRs5uJZR1/NXdPVNM3Un2PYsfaDFJgfZButljK3WnGiNayq/bEKwmgDbk1/da1qSc9w4S2Q+4s8tym+2E1nha2WPl"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    }
-  ],
-  "activeSessionId": "1789062919574",
+  "sessions": [],
+  "activeSessionId": "1789063667927",
   "pendingHistory": null,
-  "timestamp": "2026-09-10T17:55:39.238Z"
+  "timestamp": "2026-09-10T18:07:47.929Z"
 }
