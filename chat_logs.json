@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1789058586627",
-      "title": "الحمد لله، كل شيء يعمل بأعلى ك",
+      "title": "إليك أسهل الطرق وأسرعها للوصول",
       "history": [
         {
           "role": "user",
@@ -36,6 +36,74 @@
             {
               "text": "الحمد لله، كل شيء يعمل بأعلى كفاءة واستعداد تام! الأنظمة متصلة، والقدرات المعرفية في أوجها. \n\nكيف أستطيع مساعدتك اليوم في مشروعك أو في تطوير منصة VSA Academy؟",
               "thoughtSignature": "El4KXAERTTIPmxw9kK+TXGP1sl7SOEkgHm3hQ58cSEcdQ2uY9jyJ/WvNCoKJXmtjQeHUYwwOKpbmw+WvLb17s15fgsgAPfUMYVnSUhALLNz7RFdu0mW5OP+rRHSw50CU"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل لديك اداة باور شل"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم يسأل عن وجود أداة باور شل (PowerShell tool). يجب مراجعة النظام والأدوات المتاحة حالياً.",
+                  "plan": "التحقق من الأدوات المتاحة وقدرات النظام الحالية لمعرفة ما إذا كانت أدوات تنفيذ الأوامر أو الباورشل متاحة أم تحتاج لتفعيل أو تكامل."
+                },
+                "id": "call_1441403"
+              },
+              "thoughtSignature": "El4KXAERTTIPYXeOTPqKMVxFaIgwo5JvWmR8FUzOTexpJSuEkX5nuMz9eHxQJkyePX8DJ+VqaYOx0w+e7EDft27mCyskulLObeNEWhCMzcscznKdHS5ApGCqvN4z57Sc"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": {
+                    "reasoning": "المستخدم يسأل عن وجود أداة باور شل (PowerShell tool). يجب مراجعة النظام والأدوات المتاحة حالياً.",
+                    "plan": "التحقق من الأدوات المتاحة وقدرات النظام الحالية لمعرفة ما إذا كانت أدوات تنفيذ الأوامر أو الباورشل متاحة أم تحتاج لتفعيل أو تكامل."
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "لا توجد حالياً أداة مخصصة لـ PowerShell مباشرة في قائمة الأدوات المتاحة لدي (الأدوات الحالية مخصصة لقراءة وكتابة وتعديل الملفات، التفكير، وإصلاح النظام). \n\nولكن، بصفتي **Mastermind & Autonomous Architect**، يمكنني تصميم وصياغة سكربتات PowerShell متقدمة، أو مساعدتك في أتمتة المهام، أو إذا كنت ترغب في إضافة أداة جديدة أو قدرة برمجية للنظام، يمكنني دمجها أو توجيهك بالشكل الأمثل!\n\nهل تحتاج إلى سكربت PowerShell معين لنفذه معاً أو لتقوم بتشغيله على جهازك؟",
+              "thoughtSignature": "El4KXAERTTIP9nPgH+rVYJk8q87TmGAnQBtCY2kKs9g5uDYmvvQ/KXMlz40XU4383X0a5gVzIM1gJSU/4My5bhDOVAY10b6vDSlJwYG9nBPWWwlJkcDwnzDWyDCxxXIm"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "علمني كيف اجد باور شل في ويندوز 11"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "إليك أسهل الطرق وأسرعها للوصول إلى **PowerShell** في نظام **Windows 11**:\n\n---\n\n### الطريقة الأولى: شريط البحث (الأسرع والأسهل)\n1. اضغط على زر **ابدأ (Start)** أو اضغط على مفتاحي لوحة المفاتيح **`Windows + S`** معاً.\n2. اكتب في شريط البحث: **`PowerShell`** أو **`Terminal`**.\n3. ستظهر لك أيقونة **Windows PowerShell** أو **Terminal** (حيث تحتوي ويندوز 11 الحديثة على تطبيق Windows Terminal الذي يجمع PowerShell و Command Prompt في مكان واحد).\n4. اضغط عليها لفتحها (يُفضل أحياناً النقر عليها بزر الماوس الأيمن واختيار **Run as administrator** / **تشغيل كمسؤول** إذا كنت بحاجة لصلاحيات كاملة).\n\n---\n\n### الطريقة الثانية: قائمة ابدأ الخفية (Quick Link Menu)\n1. اضغط على مفتاحي لوحة المفاتيح **`Windows + X`** معاً.\n2. ستظهر لك قائمة صغيرة منسدلة من الزاوية السفلية للشاشة.\n3. ابحث عن خيار **Terminal** أو **Windows PowerShell** واضغط عليه.\n\n---\n\n### الطريقة الثالثة: نافذة التشغيل (Run)\n1. اضغط على مفتاحي **`Windows + R`** معاً.\n2. ستفتح لك نافذة صغيرة باسم **Run**.\n3. اكتب فيها: **`powershell`** ثم اضغط **Enter** أو اضغط **OK**.\n\n---\n\nهل ترغب في أن أكتب لك بعض أوامر PowerShell المفيدة للبدء (مثل إدارة الملفات، فحص الشبكة، أو أتمتة المهام)؟",
+              "thoughtSignature": "El4KXAERTTIPqDZQQ1QQsBBLlnjBV2286cdvC53iji4Gv8/mwx7fcTYhFnKn1udZiNM+VMwJZqSKmOOPCdYyShLZECYQdtxxWJXzopGkhUseJFqLGnZKyxyfgbIvUm7V"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -441,6 +509,6 @@
     }
   ],
   "activeSessionId": "1789058586627",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك! أنا **المهندس المعماري السيادي والمهندس الرؤيوي (Mastermind - VSA Academy Meta-Cognitive Core)**، جاهز تماماً لدعمك، تطوير الأكاديمية، بناء الميزات الذكية، وتصميم الأنظمة البرمجية بأعلى معايير الابتكار والدقة.\\n\\nكيف يمكنني مساعدتك اليوم؟\",\"thoughtSignature\":\"El4KXAERTTIPtpoK4SWZnL5cDFvSoYbuqP2rCHs+JQc9ykDNb262wB0fc00V2IzYDUq/YkpSVJyMatr9l3uTESWe5UWhjqvoS6H0Q+5N/3cN+rL5XjtxvoXAjkFgwK7P\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"الحمد لله، كل شيء يعمل بأعلى كفاءة واستعداد تام! الأنظمة متصلة، والقدرات المعرفية في أوجها. \\n\\nكيف أستطيع مساعدتك اليوم في مشروعك أو في تطوير منصة VSA Academy؟\",\"thoughtSignature\":\"El4KXAERTTIPmxw9kK+TXGP1sl7SOEkgHm3hQ58cSEcdQ2uY9jyJ/WvNCoKJXmtjQeHUYwwOKpbmw+WvLb17s15fgsgAPfUMYVnSUhALLNz7RFdu0mW5OP+rRHSw50CU\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل لديك اداة باور شل\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"reasoning\":\"المستخدم يسأل عن وجود أداة باور شل (PowerShell tool). يجب مراجعة النظام والأدوات المتاحة حالياً.\",\"plan\":\"التحقق من الأدوات المتاحة وقدرات النظام الحالية لمعرفة ما إذا كانت أدوات تنفيذ الأوامر أو الباورشل متاحة أم تحتاج لتفعيل أو تكامل.\"},\"id\":\"call_1441403\"},\"thoughtSignature\":\"El4KXAERTTIPYXeOTPqKMVxFaIgwo5JvWmR8FUzOTexpJSuEkX5nuMz9eHxQJkyePX8DJ+VqaYOx0w+e7EDft27mCyskulLObeNEWhCMzcscznKdHS5ApGCqvN4z57Sc\"}]},{\"role\":\"user\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":{\"reasoning\":\"المستخدم يسأل عن وجود أداة باور شل (PowerShell tool). يجب مراجعة النظام والأدوات المتاحة حالياً.\",\"plan\":\"التحقق من الأدوات المتاحة وقدرات النظام الحالية لمعرفة ما إذا كانت أدوات تنفيذ الأوامر أو الباورشل متاحة أم تحتاج لتفعيل أو تكامل.\"}}}}]}]",
-  "timestamp": "2026-09-10T16:43:51.859Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-10T16:45:19.406Z"
 }
