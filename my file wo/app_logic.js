@@ -1193,12 +1193,6 @@
             updateModalNavButtons();
 
             document.getElementById('modalTitle').innerText = selectedItem.title || '';
-            
-            // إضافة زر حذف داخل العنوان إذا كان التنبيه من فئة الكريبتو
-            if (selectedItem.category === 'high_volume') {
-                document.getElementById('modalTitle').innerHTML = `${selectedItem.title || ''} <button onclick="deleteCryptoAlert(event, '${selectedItem.id}'); closeModal();" style="background:#ff3d00; color:white; border:none; padding:4px 10px; border-radius:6px; font-size:12px; cursor:pointer; margin-right:10px; vertical-align:middle;">🗑️ حذف التنبيه</button>`;
-            }
-
             document.getElementById('modalContent').innerText = selectedItem.content || '';
 
             const videoContainer = document.getElementById('popupVideoContainer');
