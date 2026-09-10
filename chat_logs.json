@@ -351,6 +351,6 @@
     }
   ],
   "activeSessionId": "1789058537003",
-  "pendingHistory": null,
-  "timestamp": "2026-09-10T16:42:17.003Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"باور شل\"}]}]",
+  "timestamp": "2026-09-10T16:42:35.734Z"
 }
