@@ -1,31 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1789055447488",
-      "title": "أهلاً وسهلاً بك! كيف يمكنني مس",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً وسهلاً بك! كيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "Eo0CCooCARFNMg/z+O/K6FxNz/BlhAkfFO8Yoi7QOalF9RGZoFlKwqeQdMTvHnaQdeKbBk9kJo5tov6FP+kE/ozeXp/BK3Kjpj/BHbqz1Vu9/5LgZmV4i18zCLkQbnEAHterLE5z2Kfs97V/SXuE2lWXh+DdwVMgMrcmwkR3NVeohx4+5NyHWZPd1prEiTfBUsViyFq29bQOJxakufZxfl0qFmZM7PMErL6pGTqAoVbUFh02Z6pi/+YDlUaLJfQHcpQ/DDm6oeB5MSwuWxs3BIRjjW2d2u3eThj5Co90EBwQcMfUv7sZiPvneWOKhbXBZuqWtlOwKiq4tOyIJAZRQzcvJXaAJgogoOkQUdGwszI="
-            }
-          ],
-          "model": "gemini-3.7-flash"
-        }
-      ]
-    }
-  ],
+  "sessions": [],
   "activeSessionId": "1789055447488",
   "pendingHistory": null,
-  "timestamp": "2026-09-10T15:50:59.411Z"
+  "timestamp": "2026-09-10T15:51:05.112Z"
 }
