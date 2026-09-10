@@ -247,8 +247,15 @@
             const processCryptoAlerts = async () => {
                 let cryptoAlerts = [];
                 try {
-                    // استخدام الدالة الموحدة لضمان المسار الصحيح
-                    cryptoAlerts = await fetchLocalJSON('crypto_alerts.json');
+                    // محاولة جلب التنبيهات من الجذر الرئيسي أولاً ثم من مجلد الـ json
+                    let response = await fetch(`crypto_alerts.json?v=${new Date().getTime()}`);
+                    if (!response.ok) {
+                        response = await fetch(`${APP_CONFIG.jsonPath}crypto_alerts.json?v=${new Date().getTime()}`);
+                    }
+                    if (response.ok) {
+                        cryptoAlerts = await response.json();
+                    }
+                    
                     if (cryptoAlerts && cryptoAlerts.length > 0) {
                         cryptoAlerts.forEach(alert => {
                             const alertDate = new Date(alert.timestamp);
@@ -263,7 +270,7 @@
                             });
                         });
                     }
-                } catch (e) { console.warn("Could not load crypto_alerts.json"); }
+                } catch (e) { console.warn("Could not load crypto_alerts.json", e); }
             };
 
             try {
