@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1789058561451",
+      "title": "أهلاً بك! بصفتي **المهندس المع",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "باور شل"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! بصفتي **المهندس المعماري السيادي والـ Mastermind** لأنظمة الذكاء الاصطناعي والأكاديمية، أنا جاهز لمساعدتك في كل ما يتعلق بـ **PowerShell**؛ سواء كنت تريد:\n\n1. **كتابة وتطوير سكربتات معقدة** لإدارة الأنظمة، الأتمتة (Automation)، أو معالجة البيانات.\n2. **إدارة الخوادم والشبكات** (Active Directory, Azure, IIS, Network configurations).\n3. **حل أخطاء السكربتات** (Debugging & Troubleshooting).\n4. **بناء أدوات وأوامر مخصصة (Custom Functions & Modules)**.\n\nكيف يمكنني مساعدتك في مجال PowerShell اليوم؟ اطرح أمرك أو مشروعك وسنبدأ التنفيذ فوراً!",
+              "thoughtSignature": "El4KXAERTTIPR/3+eCxo3Iwj8nPAxlz1w8btX/mj+IVsnizYYqvVpH4RrnsYx5mOR3/5iTI234UG/KZWF5uZR9545kiwckSiIGdUsnHi/Xy7DffBNgUATjtdmZjP84zr"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1789058537003",
       "title": "أهلاً بك! بصفتي **المهندس المع",
       "history": [
@@ -374,7 +398,7 @@
       ]
     }
   ],
-  "activeSessionId": "1789058561451",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"باور شل\"}]}]",
-  "timestamp": "2026-09-10T16:43:01.079Z"
+  "activeSessionId": "1789058586627",
+  "pendingHistory": null,
+  "timestamp": "2026-09-10T16:43:06.627Z"
 }
