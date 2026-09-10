@@ -358,10 +358,10 @@
             dataArray.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = 'card';
+                // Add staggered animation delay
                 card.style.animationDelay = `${index * 0.05}s`;
 
-                card.addEventListener('click', function (e) {
-                    if (e.target.closest('.delete-crypto-btn')) return;
+                card.addEventListener('click', function () {
                     openDetails(item.id);
                 });
 
@@ -372,17 +372,7 @@
                     mediaContent = `<div class="card-media-top"><img src="https://via.placeholder.com/360x203/222/0088cc?text=VSA+Academy" alt="VSA" loading="lazy"></div>`;
                 }
 
-                let deleteBtnHtml = '';
-                if (item.category === 'high_volume') {
-                    deleteBtnHtml = `
-                        <button class="delete-crypto-btn" title="حذف هذا التنبيه" onclick="deleteCryptoAlert(event, '${item.id}')" style="position: absolute; top: 10px; left: 10px; background: rgba(255, 61, 0, 0.85); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; font-size: 14px; transition: 0.2s;" onmouseover="this.style.background='#ff3d00'; this.style.transform='scale(1.1)';" onmouseout="this.style.background='rgba(255, 61, 0, 0.85)'; this.style.transform='scale(1)';">
-                            🗑️
-                        </button>
-                    `;
-                }
-
                 card.innerHTML = `
-                ${deleteBtnHtml}
                 ${mediaContent}
                 <div class="card-body-container">
                     <h3>${item.title || 'بدون عنوان'}</h3>
@@ -393,30 +383,6 @@
             });
             mainGrid.appendChild(fragment);
         }
-
-        // دالة حذف تنبيه كريبتو واحد
-        window.deleteCryptoAlert = function(event, alertId) {
-            event.stopPropagation();
-            if (!confirm("هل أنت متأكد من حذف هذا التنبيه؟")) return;
-
-            try {
-                let deletedAlerts = [];
-                try {
-                    deletedAlerts = JSON.parse(localStorage.getItem('vsa_deleted_crypto_alerts') || '[]');
-                } catch(e) {}
-
-                if (!deletedAlerts.includes(alertId)) {
-                    deletedAlerts.push(alertId);
-                    localStorage.setItem('vsa_deleted_crypto_alerts', JSON.stringify(deletedAlerts));
-                }
-
-                // إزالة من allData وإعادة العرض
-                allData = allData.filter(d => d.id !== alertId);
-                handleRoute();
-            } catch (err) {
-                console.error("فشل حذف التنبيه:", err);
-            }
-        };
         // اضافة قسم  دالة التوجه بين الاقسام
         function handleRoute() {
             const hash = window.location.hash || '#/';
