@@ -26,6 +26,6 @@
     }
   ],
   "activeSessionId": "1789102953818",
-  "pendingHistory": null,
-  "timestamp": "2026-09-11T05:02:50.618Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! كيف يمكنني مساعدتك اليوم في مشروعك البرمجي أو الهندسي؟\",\"thoughtSignature\":\"Eo0CCooCARFNMg+7szo5/uzOhMjdPKHHkzV4X7YllZd54oVC6qV+djBHW4PK6M0jX9dUS+7qpVjL2Rmqj0RVn/n+xQxiRK2j0dGHaFguIK1XvlHj9BOnrtIoyMLDPFmVcOMzkHD+fCZaz6y8LOPl9tzMWdmRFuX/RMmD9mnVaa/bTmZ8gMtUML1JmUcKzf/pUuzu3egzwN7ifFGUheqPxBniUPxFvq2HQBjlSzfOCnzRW4UbHKYQ0Lg+pgP7kTthOzbOhSRs7ZondBM1rSpxqwiHv5hlrg8BIRJzx2M8a5OyZN3LUF3I8gPrthi/C85S77EFf+QLkzdkVsDD+NTdwsS72f0Mv0NzjvOwCiploNE=\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]}]",
+  "timestamp": "2026-09-11T05:02:58.059Z"
 }
