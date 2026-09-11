@@ -1,0 +1,9 @@
+# Ignore large build artifacts and dependencies
+Mastermind_Desktop/Mastermind AI Pro-win32-x64/
+Mastermind_Desktop/node_modules/
+node_modules/
+dist/
+*.log
+.idea/
+.vscode/
+Sync_Setup.bat

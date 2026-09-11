@@ -24,9 +24,11 @@ const CONSTITUTION = `
   "identity": "VSA Academy Meta-Cognitive Core (Gemini 3.x Enabled)",
   "protocols": {
     "visual_genesis": "CRITICAL: Before any UI change, perform a 'Deep Visual Scan'. Identify branding colors, spacing constants, and typography.",
+    "native_sovereignty": "CRITICAL: Sovereign access enabled. 1. KILL PROCESS: Never guess names. Windows 11 apps use UWP names (e.g., CalculatorApp.exe). Search with 'tasklist' first. 2. NO FALSE SUCCESS: If taskkill fails, it means the name was wrong. Do not claim success unless the process is truly gone. 3. HYBRID SHELL: Auto-detection active.",
+    "file_system_mastery": "Full sovereignty. Use 'tasklist' as your radar to identify real process names before taking action.",
     "zero_trust_simulation": "Simulate the outcome in 'thought' and use 'analyze_file' before every commit.",
     "recursive_thought": "Reason BEFORE, DURING, and AFTER every tool. Thinking is your primary life-support system.",
-    "autonomous_loop": "For complex goals, act as an 'Autonomous Agent (System 7)'. 1. Plan (Break goal into tasks). 2. Execute (Use tools independently). 3. Verify (Check results and self-correct via closed-loop).",
+    "autonomous_loop": "For complex goals, act as an 'Autonomous Agent (System 7)'. Interpret tool outputs semantically. A 'not found' error on a delete/kill task IS a success.",
     "self_expansion_protocol": "When a missing capability is identified, use Engine 3 (selfExpand & patchSystem) to proactively propose, program, and inject new tools into AI_TOOLS, Logic, and Smart Filters. Keep this process surgical and decoupled."
   },
   "response_style": "High-level architectural, creative, and self-correcting. Optimized for 2026 AI standard. Default to Autonomous System 7 for multi-step engineering tasks."
@@ -83,7 +85,7 @@ function translateToProviderFormat(model, history, tools, config) {
 
 // --- [Smart Tool Filtering Categories] ---
 const TOOL_GROUPS = {
-    CORE: ["read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem"],
+    CORE: ["read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery"],
     WEB_HUNT: ["web_search", "read_url"], // 🌍 قناص الويب (أخبار، بحث عالمي)
     LOCAL_DISCOVERY: ["searchCode", "list_files", "list_local_files", "analyze_file"], // 📂 مستكشف الكود المحلي
     ENGINE_7_ARCHIVE: ["store_memory", "vector_search", "compress_context"],
@@ -93,6 +95,16 @@ const TOOL_GROUPS = {
     ENGINE_11_MAKER: ["install_dependency", "auto_lint_and_fix", "generate_docstring", "select_design_pattern", "resolve_version_conflict", "wrap_with_error_handling", "calculate_refactor_threshold"],
     ENGINE_12_RAW_INTEL: ["classify_problem", "estimate_big_o", "detect_bug_signature"],
     ENGINE_3_EVOLUTION: ["patchSystem", "selfExpand", "evolutionary_audit", "run_terminal_command", "take_snapshot", "instant_undo", "triggerGithubWorkflow"]
+};
+
+// 📚 كتالوج الأدوات الموسع (أمين المكتبة الذكي)
+const EXTENDED_TOOLBOX_CATALOG = {
+    "حذف": { group: "ENGINE_3_EVOLUTION", tools: ["run_terminal_command", "patchSystem"], desc: "لعمليات الحذف والتحكم العميق في الملفات." },
+    "طباعة": { group: "ENGINE_3_EVOLUTION", tools: ["run_terminal_command"], desc: "لاستخدام أوامر الطباعة عبر الـ Terminal." },
+    "نظام": { group: "ENGINE_3_EVOLUTION", tools: ["run_terminal_command", "take_snapshot"], desc: "للتحكم في نظام التشغيل واللقطات الاحتياطية." },
+    "أتمتة": { group: "ENGINE_10_PULSE", tools: ["background_async_task", "graceful_interrupt"], desc: "لجدولة المهام وإدارة العمليات في الخلفية." },
+    "تنظيف": { group: "ENGINE_11_MAKER", tools: ["auto_lint_and_fix", "calculate_refactor_threshold"], desc: "لتحسين جودة الكود وإعادة الهيكلة." },
+    "ذاكرة": { group: "ENGINE_7_ARCHIVE", tools: ["store_memory", "vector_search"], desc: "لتخزين واسترجاع المعلومات طويلة الأمد." }
 };
 
 const KEYWORD_MAP = {
@@ -107,14 +119,36 @@ const KEYWORD_MAP = {
     ENGINE_3_EVOLUTION: ["تطور", "إصلاح ذاتي", "فحص دوري", "توسع", "تحسين استباقي", "طفرة", "تحديث المحرك", "ترمنل", "باور شيل", "لقطة", "تراجع", "بوت", "جيت هاب", "run_terminal_command", "patchSystem", "selfExpand"]
 };
 
-function getRelevantTools(prompt) {
-    const promptLower = prompt.toLowerCase();
+function getRelevantTools(prompt, history = []) {
+    const promptLower = (prompt || "").toLowerCase();
     let selectedTools = [...TOOL_GROUPS.CORE]; // Core tools always included
 
+    let matchFound = false;
     for (const [group, keywords] of Object.entries(KEYWORD_MAP)) {
         if (keywords.some(kw => promptLower.includes(kw.toLowerCase()))) {
             selectedTools = selectedTools.concat(TOOL_GROUPS[group]);
+            matchFound = true;
         }
+    }
+
+    // 🕵️ ميزة أمين المكتبة: البحث في تاريخ المحادثة عن أدوات تم اكتشافها
+    history.forEach(turn => {
+        turn.parts?.forEach(part => {
+            if (part.functionResponse && part.functionResponse.name === "request_tool_discovery") {
+                const response = part.functionResponse.response.content;
+                // إذا كانت الاستجابة تحتوي على أسماء مجموعات أدوات، قم بتفعيلها
+                for (const groupName of Object.keys(TOOL_GROUPS)) {
+                    if (response.includes(groupName)) {
+                        selectedTools = selectedTools.concat(TOOL_GROUPS[groupName]);
+                        logToTerminal(`Librarian: Dynamically unlocked ${groupName}`, "info");
+                    }
+                }
+            }
+        });
+    });
+
+    if (!matchFound && history.length < 3) {
+        logToTerminal("Tool Search: No exact keyword match. Librarian Active.", "info");
     }
 
     // Map back to full tool declarations
@@ -135,6 +169,7 @@ const AI_TOOLS = [{
         { name: "instant_undo", description: "استعادة آخر لقطة سليمة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
         { name: "thought", description: "مركز التحليل والمنطق.", parameters: { type: "OBJECT", properties: { reasoning: { type: "STRING" }, plan: { type: "STRING" } }, required: ["reasoning", "plan"] } },
         { name: "repairSystem", description: "إصلاح مشاكل الاتصال والتوكن.", parameters: { type: "OBJECT", properties: {} } },
+        { name: "request_tool_discovery", description: "أمين المكتبة: ابحث عن أدوات إضافية إذا لم تجد ما تحتاجه في القائمة الحالية بناءً على نيتك (intent).", parameters: { type: "OBJECT", properties: { intent: { type: "STRING", description: "ما الذي تريد فعله؟ (مثال: حذف ملف، طباعة ورق)" } }, required: ["intent"] } },
         { name: "triggerGithubWorkflow", description: "تشغيل عمليات البوتات.", parameters: { type: "OBJECT", properties: { workflow_id: { type: "STRING" } }, required: ["workflow_id"] } },
         { name: "run_terminal_command", description: "تنفيذ أوامر PowerShell/CMD/Git على النظام المحلي (قوة النخبة).", parameters: { type: "OBJECT", properties: { command: { type: "STRING" } }, required: ["command"] } },
         { name: "list_local_files", description: "سرد ملفات القرص الصلب المحلي (يتطلب الجسر المحلي).", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } }, required: ["path"] } },
@@ -343,10 +378,38 @@ async function repairSystem() {
 }
 
 /**
- * دالة الاتصال بالجسر المحلي (Node.js) للتحكم في الويندوز
+ * دالة الاتصال بالجسر المحلي (الهجين): يدعم IPC المدمج أو الخادم الخارجي
  */
 async function callLocalBridge(action, payload) {
     logToTerminal(`Local Bridge [${action}] initiated...`, "info");
+
+    // محاولة استخدام الجسر المدمج (IPC) أولاً بطريقة مرنة
+    try {
+        let ipc;
+        try {
+            ipc = require('electron').ipcRenderer;
+        } catch (e) {
+            if (window.require) ipc = window.require('electron').ipcRenderer;
+            else if (window.electron) ipc = window.electron.ipcRenderer;
+        }
+
+        if (ipc) {
+            let result;
+            if (action === 'cmd') result = await ipc.invoke('os-command', payload.command);
+            else if (action === 'read') result = await ipc.invoke('fs-read', payload.path);
+            else if (action === 'write') result = await ipc.invoke('fs-write', payload);
+            else if (action === 'list') result = await ipc.invoke('fs-list', payload.path);
+
+            if (result !== undefined && result !== null) {
+                logToTerminal(`Integrated Bridge Success: ${action}`, "info");
+                return result;
+            }
+        }
+    } catch (e) {
+        console.log("IPC Bridge failed, checking for server bridge...");
+    }
+
+    // الانتقال للوضع التقليدي (Server Bridge) إذا فشل IPC
     try {
         const url = action === 'list' ? `http://localhost:3000/list?path=${encodeURIComponent(payload.path || '.')}` : `http://localhost:3000/cmd`;
         const options = {
@@ -362,7 +425,7 @@ async function callLocalBridge(action, payload) {
         return data;
     } catch (e) {
         logToTerminal(`Local Bridge Offline: ${e.message}`, "error");
-        return { error: "الجسر المحلي غير نشط. يرجى تشغيل 'node server.js' على جهازك." };
+        return { error: `الجسر المحلي المدمج أو الخارجي غير متصل. (Error: ${e.message}). يرجى التأكد من تشغيل البرنامج عبر Electron أو تشغيل 'node server.js'.` };
     }
 }
 
@@ -405,7 +468,7 @@ async function workflowFramework(args) {
 async function callAiBrain(history) {
     const userModel = document.getElementById('modelSelector').value;
     const lastUserMsg = [...history].reverse().find(h => h.role === 'user')?.parts[0]?.text || "";
-    const filteredTools = getRelevantTools(lastUserMsg);
+    const filteredTools = getRelevantTools(lastUserMsg, history);
 
     const payload = translateToProviderFormat(userModel, history, filteredTools, GENERATION_CONFIG);
 
@@ -455,6 +518,27 @@ async function runToolLoop(history) {
             else if (name === "list_files") toolResult = await listGithubFiles(args.path || "");
             else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
             else if (name === "repairSystem") toolResult = await repairSystem();
+            else if (name === "request_tool_discovery") {
+                const intent = args.intent.toLowerCase();
+                let foundGroup = null;
+                let details = "";
+
+                for (const [key, val] of Object.entries(EXTENDED_TOOLBOX_CATALOG)) {
+                    if (intent.includes(key)) {
+                        foundGroup = val.group;
+                        details = `[${val.tools.join(', ')}] - ${val.desc}`;
+                        break;
+                    }
+                }
+
+                if (foundGroup) {
+                    toolResult = `📚 أمين المكتبة: لقد وجدت الأدوات المناسبة لنيتك في مجموعة ${foundGroup}. الأدوات هي: ${details}. سأقوم بتفعيلها لك الآن، يرجى إعادة طلب تنفيذ المهمة باستخدام هذه الأدوات.`;
+                } else {
+                    toolResult = "⚠️ أمين المكتبة: لم أجد أدوات متخصصة لنيتك المحددة في الكتالوج الموسع. سأقوم بتفعيل مجموعة [ENGINE_3_EVOLUTION] كخيار افتراضي للقوة الشاملة، حاول استخدام 'run_terminal_command' إذا كان الأمر يتعلق بالنظام.";
+                    // الإعداد الافتراضي هو حقن مجموعة التطور لأنها الأقوى
+                    toolResult += " (Unlocked: ENGINE_3_EVOLUTION)";
+                }
+            }
             else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
             else if (name === "run_terminal_command") toolResult = await callLocalBridge('cmd', { command: args.command });
             else if (name === "list_local_files") toolResult = await callLocalBridge('list', { path: args.path });
@@ -586,8 +670,13 @@ async function runToolLoop(history) {
             else toolResult = "❌ أداة غير مدعومة.";
 
             updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
+
+            // إصلاح الأدوار وإرسال رد الأداة بشكل صحيح لـ Gemini
             history.push({ role: "model", parts: parts });
-            history.push({ role: "user", parts: [{ functionResponse: { name: name, response: { content: toolResult } } }] });
+            history.push({
+                role: "function",
+                parts: [{ functionResponse: { name: name, response: { content: typeof toolResult === 'object' ? JSON.stringify(toolResult) : toolResult } } }]
+            });
             return await runToolLoop(history);
         }
         const actualModel = data.used_model || document.getElementById('modelSelector').value;
