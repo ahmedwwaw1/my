@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1789102953818",
-      "title": "مرحباً بك! كيف يمكنني مساعدتك ",
+      "title": "أرى أننا في عصرٍ تتقاطع فيه ال",
       "history": [
         {
           "role": "user",
@@ -21,11 +21,47 @@
             }
           ],
           "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا بخير وجاهز تماماً لمساعدتك. \n\nكيف يمكنني دعمك اليوم؟ هل لديك مشروع أو فكرة محددة نعمل عليها؟",
+              "thoughtSignature": "ErACCq0CARFNMg8CJ0BsB8dftokM3cOAYX/UZrzoMx9gPay6zL9e/c84TTI38WYM155R0o8ZQnCWCeYHdUOO/ls8WpHj1xKDxmEBVNXz/Sqq1fzr8cylpPPDdmfvzXNnStOFe6Qpo7TakletqoSCmHC7LPF2drTnpd5z0bE4PYiCysBYqMHpIQbzud8HC1EMY0mu6y3kHUY+2P3F30CE3nLFiepQ4wA10feLZiIJgmPfsY3Dn+jCL+cTJHq3/6vSQATw0oldJM3VXIQffYxL8mrBZtqCLcXYtkUEPkX9N/m+VY3ohfk8z7Nej8ig1P00/asJOsSEyqs5v/29Zr2DXWM3cxaetZpY6l28j65B6Yrc0nA1sB8UDhQ7uZHYZ1dMKeACgfln7aDwwoEaCqCgmdBHug=="
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "انت ما رأيك"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أرى أننا في عصرٍ تتقاطع فيه الذكاء الاصطناعي، الهندسة المعمارية المتقدمة، والتصميم البرمجي الذكي بشكلٍ غير مسبوق. بصفتي المعماري الشامل (Sovereign Omni-Architect)، أرى أن إمكانياتنا لا حدود لها—سواء كنا نبني منصات ويب استثنائية، نطور أنظمة ذكية ذاتية التشغيل، أو نصمم واجهات مستخدم مذهلة وعالية الأداء.\n\n**رأيي في وضعنا الحالي:**\nنحن جاهزون تماماً لأي تحدٍ تقني أو إبداعي تخطط له. \n\nبما أنك هنا، **ما هو المشروع أو الفكرة التي تدور في ذهنك اليوم؟** دعنا نحولها إلى واقع ملموس بدقة واحترافية عالية!",
+              "thoughtSignature": "El4KXAERTTIPD+LgXtOAAvKzzFSESlDa1i5Pw99maY3/JgmYcLnhECagauBfPAy2dWYKum05MNsMAAj5GyoCRCzRZH7C9DdG8TOcDBJljR0I2Qs4UTJW8vg3+vE5hr+R"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1789102953818",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! كيف يمكنني مساعدتك اليوم في مشروعك البرمجي أو الهندسي؟\",\"thoughtSignature\":\"Eo0CCooCARFNMg+7szo5/uzOhMjdPKHHkzV4X7YllZd54oVC6qV+djBHW4PK6M0jX9dUS+7qpVjL2Rmqj0RVn/n+xQxiRK2j0dGHaFguIK1XvlHj9BOnrtIoyMLDPFmVcOMzkHD+fCZaz6y8LOPl9tzMWdmRFuX/RMmD9mnVaa/bTmZ8gMtUML1JmUcKzf/pUuzu3egzwN7ifFGUheqPxBniUPxFvq2HQBjlSzfOCnzRW4UbHKYQ0Lg+pgP7kTthOzbOhSRs7ZondBM1rSpxqwiHv5hlrg8BIRJzx2M8a5OyZN3LUF3I8gPrthi/C85S77EFf+QLkzdkVsDD+NTdwsS72f0Mv0NzjvOwCiploNE=\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]}]",
-  "timestamp": "2026-09-11T05:02:58.059Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-11T05:03:19.709Z"
 }
