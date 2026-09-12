@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = userInput.value.trim();
         if (!text) return;
 
+        const selectedModel = modelSelector.value;
+
         // Add user message to UI
         addMessage('user', text);
         userInput.value = '';
@@ -55,14 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const response = await runToolLoop(chatHistory);
-            updateMessage(aiMsgId, response.text);
+            updateMessage(aiMsgId, response.text, response.used_model || selectedModel);
             chatHistory.push({ role: 'model', parts: [{ text: response.text }] });
         } catch (e) {
             updateMessage(aiMsgId, "Error: " + e.message);
         }
     }
 
-    function addMessage(role, text) {
+    function addMessage(role, text, modelName = null) {
         const id = 'msg-' + Date.now();
         const msgDiv = document.createElement('div');
         msgDiv.className = `message ${role}`;
@@ -74,7 +76,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const content = document.createElement('div');
         content.className = 'content';
-        content.textContent = text;
+
+        const textDiv = document.createElement('div');
+        textDiv.className = 'text-content';
+        textDiv.textContent = text;
+        content.appendChild(textDiv);
+
+        if (role === 'ai') {
+            const badge = document.createElement('div');
+            badge.className = 'model-badge';
+            badge.style.display = modelName ? 'block' : 'none';
+            badge.textContent = modelName || '';
+            content.appendChild(badge);
+        }
 
         msgDiv.appendChild(avatar);
         msgDiv.appendChild(content);
@@ -88,11 +102,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return id;
     }
 
-    function updateMessage(id, text) {
+    function updateMessage(id, text, modelName = null) {
         const msgDiv = document.getElementById(id);
         if (msgDiv) {
-            const content = msgDiv.querySelector('.content');
-            content.textContent = text;
+            const textContent = msgDiv.querySelector('.text-content');
+            if (textContent) {
+                textContent.textContent = text;
+            } else {
+                // Fallback for older messages if structure changed mid-session
+                const content = msgDiv.querySelector('.content');
+                content.textContent = text;
+            }
+
+            if (modelName) {
+                let badge = msgDiv.querySelector('.model-badge');
+                if (badge) {
+                    badge.textContent = modelName;
+                    badge.style.display = 'block';
+                }
+            }
+
+            // Move message to bottom so it appears after tools
+            chatMessages.appendChild(msgDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     }
@@ -175,6 +206,11 @@ function addToolStepToUi(toolName, args) {
         </div>
     `;
     container.appendChild(stepContainer);
+
+    // Ensure the "Thinking" indicator stays at the bottom
+    const thinkingMsg = Array.from(container.querySelectorAll('.message.ai')).reverse().find(m => m.textContent.includes('Thinking...'));
+    if (thinkingMsg) container.appendChild(thinkingMsg);
+
     container.scrollTop = container.scrollHeight;
     return stepId;
 }

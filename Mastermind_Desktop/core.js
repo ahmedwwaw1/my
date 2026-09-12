@@ -30,9 +30,22 @@ const GENERATION_CONFIG = { temperature: 0, topP: 0.1, maxOutputTokens: 4096 };
 
 // --- [Universal API Translator Logic] ---
 const MODEL_MAPPING = {
+    'gemini-3.7-flash': { provider: 'google' },
+    'gemini-3.6-flash': { provider: 'google' },
+    'gemini-3.5-flash': { provider: 'google' },
+    'gemini-3.5-flash-lite': { provider: 'google' },
+    'gemini-3.1-flash-lite': { provider: 'google' },
+    'gemini-3-flash-preview': { provider: 'google' },
+    'gemini-2.5-pro': { provider: 'google' },
+    'gemini-2.5-flash': { provider: 'google' },
+    'gemini-2.5-flash-lite': { provider: 'google' },
     'gemini-1.5-pro': { provider: 'google' },
     'gemini-1.5-flash': { provider: 'google' },
     'gemini-2.0-flash-exp': { provider: 'google' },
+    'gemini-omni-1.1-flash': { provider: 'google' },
+    'gemini-3.1-flash-lite-image': { provider: 'google' },
+    'gemini-3-pro-image': { provider: 'google' },
+    'gemini-3.1-flash-image': { provider: 'google' },
     'gpt-4o': { provider: 'openai' },
     'gpt-4-turbo': { provider: 'openai' },
     'claude-3-5-sonnet': { provider: 'anthropic' },
@@ -363,16 +376,24 @@ async function runToolLoop(history) {
 
         updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
 
+        const actualModel = data.used_model || userModel;
         history.push(candidate.content);
         history.push({
             role: "function",
             parts: [{ functionResponse: { name, response: { content: typeof toolResult === 'object' ? JSON.stringify(toolResult) : toolResult } } }]
         });
 
-        return await runToolLoop(history);
+        const nextLoopResult = await runToolLoop(history);
+        return {
+            text: nextLoopResult.text,
+            used_model: nextLoopResult.used_model || actualModel
+        };
     }
 
-    return { text: textPart ? textPart.text : "Done." };
+    return {
+        text: textPart ? textPart.text : "Done.",
+        used_model: data.used_model || userModel
+    };
 }
 
 function logToTerminal(msg, type = "info") {

@@ -281,8 +281,10 @@ function handleKeydown(e) {
 
 function addMessageToUi(sender, text, modelName = null, thought = null, images = []) {
     const container = document.getElementById('aiMessages');
+    const id = 'msg-' + Date.now();
     const div = document.createElement('div');
     div.className = `msg ${sender}`;
+    div.id = id;
 
     if (sender === 'ai' && thought) {
         const toggle = document.createElement('div');
@@ -318,6 +320,7 @@ function addMessageToUi(sender, text, modelName = null, thought = null, images =
 
     if (text) {
         const textPart = document.createElement('div');
+        textPart.className = 'text-part';
         textPart.innerHTML = (sender === 'user') ? text : marked.parse(text);
         contentDiv.appendChild(textPart);
     }
@@ -333,6 +336,7 @@ function addMessageToUi(sender, text, modelName = null, thought = null, images =
 
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
+    return id;
 }
 
 function addToolStepToUi(toolName, args) {
@@ -364,6 +368,11 @@ function addToolStepToUi(toolName, args) {
         </div>
     `;
     container.appendChild(stepContainer);
+
+    // Ensure any "Processing" or "Thinking" AI message stays at the bottom
+    const processingMsg = Array.from(container.querySelectorAll('.msg.ai')).reverse().find(m => m.innerText.includes('جاري المعالجة') || m.innerText.includes('Thinking'));
+    if (processingMsg) container.appendChild(processingMsg);
+
     container.scrollTop = container.scrollHeight;
     return stepId;
 }
@@ -480,4 +489,33 @@ function logToTerminal(msg, type = "info") {
     div.innerText = `> [${new Date().toLocaleTimeString()}] ${msg}`;
     out.appendChild(div);
     out.scrollTop = out.scrollHeight;
+}
+
+function updateMessage(id, text, modelName = null) {
+    const msgDiv = document.getElementById(id);
+    if (msgDiv) {
+        const contentDiv = msgDiv.querySelector('.msg-content');
+        if (contentDiv) {
+            const textPart = contentDiv.querySelector('.text-part') || contentDiv;
+            const isUser = msgDiv.classList.contains('user');
+            textPart.innerHTML = isUser ? text : marked.parse(text);
+        }
+
+        if (modelName) {
+            let badge = msgDiv.querySelector('.model-badge');
+            if (badge) {
+                badge.innerText = modelName;
+            } else {
+                badge = document.createElement('div');
+                badge.className = 'model-badge';
+                badge.innerText = modelName;
+                msgDiv.appendChild(badge);
+            }
+        }
+
+        // Move to bottom
+        const container = document.getElementById('aiMessages');
+        container.appendChild(msgDiv);
+        container.scrollTop = container.scrollHeight;
+    }
 }

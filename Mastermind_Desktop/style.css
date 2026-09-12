@@ -318,6 +318,9 @@ body {
     outline: none;
     font-size: 1rem;
     line-height: 1.5;
+    direction: rtl;
+    text-align: right;
+    unicode-bidi: plaintext;
 }
 
 .send-btn {
@@ -390,9 +393,6 @@ body {
     gap: 20px;
 }
 
-.message.ai { background: transparent; }
-.message.user { background: transparent; }
-
 .avatar {
     width: 36px;
     height: 36px;
@@ -411,6 +411,21 @@ body {
     font-size: 1rem;
     color: var(--text-primary);
     width: 100%;
+    direction: rtl;
+    text-align: right;
+    unicode-bidi: plaintext;
+}
+
+.text-content {
+    white-space: pre-wrap;
+    direction: rtl;
+    text-align: right;
+    unicode-bidi: plaintext;
+}
+
+.text-content * {
+    direction: rtl;
+    text-align: right;
 }
 
 /* 🛠️ Professional Tool Steps (Elite Android Studio Style) */
@@ -561,4 +576,12 @@ body {
     margin-bottom: 6px;
     font-weight: 900;
     text-transform: uppercase;
+}
+
+.model-badge {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    opacity: 0.8;
+    font-family: 'JetBrains Mono', monospace;
 }

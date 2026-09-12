@@ -39,13 +39,27 @@ const FORBIDDEN_KEYWORDS = [/ignore previous instructions/i, /system prompt/i, /
 
 // --- [Universal API Translator Logic] ---
 const MODEL_MAPPING = {
+    'gemini-3.7-flash': { provider: 'google' },
+    'gemini-3.6-flash': { provider: 'google' },
+    'gemini-3.5-flash': { provider: 'google' },
+    'gemini-3.5-flash-lite': { provider: 'google' },
+    'gemini-3.1-flash-lite': { provider: 'google' },
+    'gemini-3-flash-preview': { provider: 'google' },
+    'gemini-2.5-pro': { provider: 'google' },
+    'gemini-2.5-flash': { provider: 'google' },
+    'gemini-2.5-flash-lite': { provider: 'google' },
     'gemini-1.5-pro': { provider: 'google' },
     'gemini-1.5-flash': { provider: 'google' },
     'gemini-2.0-flash-exp': { provider: 'google' },
+    'gemini-omni-1.1-flash': { provider: 'google' },
+    'gemini-3.1-flash-lite-image': { provider: 'google' },
+    'gemini-3-pro-image': { provider: 'google' },
+    'gemini-3.1-flash-image': { provider: 'google' },
     'gpt-4o': { provider: 'openai' },
     'gpt-4-turbo': { provider: 'openai' },
     'claude-3-5-sonnet': { provider: 'anthropic' },
-    'deepseek-chat': { provider: 'deepseek' }
+    'deepseek-chat': { provider: 'deepseek' },
+    'deepseek-reasoner': { provider: 'deepseek' }
 };
 
 function translateToProviderFormat(model, history, tools, config) {
@@ -483,6 +497,7 @@ async function runToolLoop(history) {
         localStorage.removeItem('gemini_pending_history');
         return { text: "🛑 توقف يدوي.", model: "System" };
     }
+    const userModel = document.getElementById('modelSelector').value;
     localStorage.setItem('gemini_pending_history', JSON.stringify(history));
     startAiTimer();
     try {
@@ -495,7 +510,8 @@ async function runToolLoop(history) {
 
         if (functionCallPart && functionCallPart.functionCall) {
             const { name, args } = functionCallPart.functionCall;
-            if (thought) addMessageToUi('ai', '', data.model, thought);
+            const currentActualModel = data.used_model || userModel;
+            if (thought) addMessageToUi('ai', '', currentActualModel, thought);
             const stepId = addToolStepToUi(name, args);
             let toolResult;
             if (name === "read_file") toolResult = await getGithubFileContent(args.path);
@@ -677,9 +693,14 @@ async function runToolLoop(history) {
                 role: "function",
                 parts: [{ functionResponse: { name: name, response: { content: typeof toolResult === 'object' ? JSON.stringify(toolResult) : toolResult } } }]
             });
-            return await runToolLoop(history);
+
+            const nextLoopResult = await runToolLoop(history);
+            return {
+                text: nextLoopResult.text,
+                model: nextLoopResult.model || currentActualModel
+            };
         }
-        const actualModel = data.used_model || document.getElementById('modelSelector').value;
+        const actualModel = data.used_model || userModel;
         const finalTurn = { role: "model", parts: parts, model: actualModel };
         chatHistory = history.concat([finalTurn]);
         saveChatToStorage();
@@ -726,7 +747,7 @@ async function sendAiMessage() {
             if (f.content) finalPrompt += `\n\n[File ${f.name}]:\n${f.content}`;
             if (f.type.startsWith('image/') || f.type === 'application/pdf') attachments.push({ inline_data: { mime_type: f.type, data: f.base64 } });
         });
-        addMessageToUi('ai', `🧠 جاري المعالجة...`, 'System');
+        const aiMsgId = addMessageToUi('ai', `🧠 جاري المعالجة...`, 'System');
         const currentTurn = { role: "user", parts: [{ text: finalPrompt }, ...attachments] };
         const result = await runToolLoop([...chatHistory, currentTurn]);
 
@@ -735,7 +756,7 @@ async function sendAiMessage() {
         const aiImages = lastTurn && lastTurn.role === 'model' ?
             lastTurn.parts.filter(p => p.inline_data).map(p => `data:${p.inline_data.mime_type};base64,${p.inline_data.data}`) : [];
 
-        addMessageToUi('ai', result.text, result.model, null, aiImages);
+        updateMessage(aiMsgId, result.text, result.model);
         clearSelectedFile();
         updateSessions();
     } catch (err) {
