@@ -107,13 +107,15 @@
 
             <footer class="chat-footer">
                 <div class="input-container">
+                    <div id="filePreviewContainer" class="file-preview-container" style="display: none; padding: 8px; gap: 8px; border-bottom: 1px solid var(--border); flex-wrap: wrap;"></div>
                     <div class="input-toolbar">
-                        <button class="tool-btn"><i class="fas fa-paperclip"></i></button>
+                        <button class="tool-btn" id="attachBtn"><i class="fas fa-paperclip"></i></button>
                         <button class="tool-btn"><i class="fas fa-microchip"></i></button>
                     </div>
                     <textarea id="userInput" placeholder="Ask anything..."></textarea>
                     <button id="sendBtn" class="send-btn"><i class="fas fa-arrow-up"></i></button>
                 </div>
+                <input type="file" id="fileInput" multiple style="display: none;">
                 <p class="footer-note">Optimized for Windows. Local execution enabled via Bridge.</p>
             </footer>
         </main>
@@ -126,16 +128,25 @@
         </div>
         <div id="terminalLog" class="terminal-content"></div>
     </div>
-    <script src="logic.js"></script>
+    <!-- <script src="logic.js"></script> -->
     <script>
         // 🔄 محرك التحميل الهجين: يضمن أن الـ EXE يقرأ دائماً أحدث التعديلات من ملفاتك المفتوحة
-        function injectCoreDynamically() {
-            const script = document.createElement('script');
-            script.src = 'core.js?update=' + Date.now();
-            document.body.appendChild(script);
-            console.log('💎 Mastermind Hybrid Core Activated.');
+        function injectScriptsDynamically() {
+            const timestamp = Date.now();
+
+            // تحميل المنطق الرسومي
+            const logicScript = document.createElement('script');
+            logicScript.src = 'logic.js?v=' + timestamp;
+            document.body.appendChild(logicScript);
+
+            // تحميل محرك الـ Core
+            const coreScript = document.createElement('script');
+            coreScript.src = 'core.js?v=' + timestamp;
+            document.body.appendChild(coreScript);
+
+            console.log('💎 Mastermind Hybrid Engine: Logic & Core Injected.');
         }
-        window.addEventListener('load', injectCoreDynamically);
+        window.addEventListener('load', injectScriptsDynamically);
     </script>
 </body>
 </html>

@@ -1,11 +1,48 @@
 // UI Logic for Mastermind Desktop Pro
 
-document.addEventListener('DOMContentLoaded', () => {
+function initMastermindUi() {
+    console.log("🚀 Initializing Mastermind UI Engine...");
+
     const userInput = document.getElementById('userInput');
     const sendBtn = document.getElementById('sendBtn');
     const chatMessages = document.getElementById('chatMessages');
     const newChatBtn = document.getElementById('newChatBtn');
     const modelSelector = document.getElementById('modelSelector');
+
+    if (!userInput) {
+        console.warn("⚠️ UI elements not found yet, retrying...");
+        setTimeout(initMastermindUi, 100);
+        return;
+    }
+
+    // 🛠️ Robust Element Discovery
+    let attachBtn = document.getElementById('attachBtn');
+    if (!attachBtn) {
+        const icon = document.querySelector('.fa-paperclip');
+        if (icon) attachBtn = icon.closest('button');
+    }
+
+    let fileInput = document.getElementById('fileInput');
+    if (!fileInput) {
+        fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.id = 'fileInput';
+        fileInput.multiple = true;
+        fileInput.style.display = 'none';
+        document.body.appendChild(fileInput);
+    }
+
+    let filePreviewContainer = document.getElementById('filePreviewContainer');
+    if (!filePreviewContainer) {
+        filePreviewContainer = document.createElement('div');
+        filePreviewContainer.id = 'filePreviewContainer';
+        filePreviewContainer.className = 'file-preview-container';
+        filePreviewContainer.style.cssText = 'display: none; padding: 8px; gap: 8px; border-bottom: 1px solid var(--border); flex-wrap: wrap;';
+        const inputContainer = document.querySelector('.input-container');
+        if (inputContainer) inputContainer.prepend(filePreviewContainer);
+    }
+
+    let selectedFiles = [];
 
     // Auto-resize textarea
     userInput.addEventListener('input', () => {
@@ -13,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         userInput.style.height = userInput.scrollHeight + 'px';
     });
 
-    // Send message on Enter (but Shift+Enter for newline)
+    // ⚡ Send message on Enter (Fixed)
     userInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -21,39 +58,124 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    sendBtn.addEventListener('click', handleSend);
+    if (sendBtn) sendBtn.onclick = handleSend;
 
-    newChatBtn.addEventListener('click', () => {
-        chatMessages.innerHTML = `
-            <div class="welcome-screen">
-                <div class="app-logo">M</div>
-                <h1>Mastermind AI</h1>
-                <p>New Session Started • Ready for instructions</p>
-            </div>
-        `;
-        chatHistory = [];
-        if (chatMessages) chatMessages.style.display = 'block';
-        const chatFooter = document.querySelector('.chat-footer');
-        if (chatFooter) chatFooter.style.display = 'block';
-        const pluginsView = document.getElementById('pluginsView');
-        if (pluginsView) pluginsView.style.display = 'none';
-    });
+    if (attachBtn) {
+        attachBtn.onclick = () => {
+            console.log("📎 Attach button clicked");
+            fileInput.click();
+        };
+    }
+
+    fileInput.onchange = (e) => {
+        const files = Array.from(e.target.files);
+        console.log("📂 Files selected:", files.length);
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const base64 = event.target.result.split(',')[1];
+                const fileObj = {
+                    name: file.name,
+                    type: file.type,
+                    base64: base64,
+                    id: Date.now() + Math.random()
+                };
+
+                if (file.type.startsWith('text/') || file.name.endsWith('.json') || file.name.endsWith('.js') || file.name.endsWith('.css')) {
+                    const textReader = new FileReader();
+                    textReader.onload = (te) => {
+                        fileObj.content = te.target.result;
+                        selectedFiles.push(fileObj);
+                        renderPreviews();
+                    };
+                    textReader.readAsText(file);
+                } else {
+                    selectedFiles.push(fileObj);
+                    renderPreviews();
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+        fileInput.value = '';
+    };
+
+    function renderPreviews() {
+        if (!filePreviewContainer) return;
+        filePreviewContainer.innerHTML = '';
+        filePreviewContainer.style.display = selectedFiles.length > 0 ? 'flex' : 'none';
+
+        selectedFiles.forEach(file => {
+            const item = document.createElement('div');
+            item.className = 'preview-item';
+
+            if (file.type.startsWith('image/')) {
+                item.innerHTML = `<img src="data:${file.type};base64,${file.base64}">`;
+            } else {
+                item.innerHTML = `<i class="fas fa-file-alt"></i>`;
+                item.title = file.name;
+            }
+
+            const removeBtn = document.createElement('div');
+            removeBtn.className = 'remove-btn';
+            removeBtn.innerHTML = '×';
+            removeBtn.onclick = (event) => {
+                event.stopPropagation();
+                selectedFiles = selectedFiles.filter(f => f.id !== file.id);
+                renderPreviews();
+            };
+            item.appendChild(removeBtn);
+            filePreviewContainer.appendChild(item);
+        });
+    }
+
+    if (newChatBtn) {
+        newChatBtn.onclick = () => {
+            chatMessages.innerHTML = `
+                <div class="welcome-screen">
+                    <div class="app-logo">M</div>
+                    <h1>Mastermind AI</h1>
+                    <p>New Session Started • Ready for instructions</p>
+                </div>
+            `;
+            chatHistory = [];
+            if (chatMessages) chatMessages.style.display = 'block';
+            const chatFooter = document.querySelector('.chat-footer');
+            if (chatFooter) chatFooter.style.display = 'block';
+            const pluginsView = document.getElementById('pluginsView');
+            if (pluginsView) pluginsView.style.display = 'none';
+        };
+    }
 
     async function handleSend() {
         const text = userInput.value.trim();
-        if (!text) return;
+        if (!text && selectedFiles.length === 0) return;
 
-        const selectedModel = modelSelector.value;
+        const selectedModel = modelSelector ? modelSelector.value : 'gemini-1.5-pro';
 
-        // Add user message to UI
-        addMessage('user', text);
+        const images = selectedFiles
+            .filter(f => f.type.startsWith('image/'))
+            .map(f => `data:${f.type};base64,${f.base64}`);
+
+        addMessage('user', text, null, images);
         userInput.value = '';
         userInput.style.height = 'auto';
 
-        // Add thinking indicator
+        let finalPrompt = text;
+        let attachments = [];
+
+        selectedFiles.forEach(f => {
+            if (f.content) finalPrompt += `\n\n[File: ${f.name}]\n${f.content}`;
+            if (f.type.startsWith('image/') || f.type === 'application/pdf') {
+                attachments.push({ inline_data: { mime_type: f.type, data: f.base64 } });
+            }
+        });
+
+        selectedFiles = [];
+        renderPreviews();
+
         const aiMsgId = addMessage('ai', 'Thinking...');
 
-        chatHistory.push({ role: 'user', parts: [{ text }] });
+        chatHistory.push({ role: 'user', parts: [{ text: finalPrompt }, ...attachments] });
 
         try {
             const response = await runToolLoop(chatHistory);
@@ -64,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function addMessage(role, text, modelName = null) {
+    function addMessage(role, text, modelName = null, images = []) {
         const id = 'msg-' + Date.now();
         const msgDiv = document.createElement('div');
         msgDiv.className = `message ${role}`;
@@ -76,6 +198,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const content = document.createElement('div');
         content.className = 'content';
+
+        if (images && images.length > 0) {
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'chat-images-container';
+            images.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = 'chat-image-msg';
+                imgContainer.appendChild(img);
+            });
+            content.appendChild(imgContainer);
+        }
 
         const textDiv = document.createElement('div');
         textDiv.className = 'text-content';
@@ -93,7 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
         msgDiv.appendChild(avatar);
         msgDiv.appendChild(content);
 
-        // Remove welcome screen if present
         const welcome = chatMessages.querySelector('.welcome-screen');
         if (welcome) welcome.remove();
 
@@ -109,9 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (textContent) {
                 textContent.textContent = text;
             } else {
-                // Fallback for older messages if structure changed mid-session
                 const content = msgDiv.querySelector('.content');
-                content.textContent = text;
+                if (content) content.textContent = text;
             }
 
             if (modelName) {
@@ -122,21 +254,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Move message to bottom so it appears after tools
             chatMessages.appendChild(msgDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     }
 
-    // Sidebar navigation switching between Chat and Plugins views
+    // Sidebar navigation
     document.querySelectorAll('.nav-item, .recent-chat-item').forEach(item => {
-        item.addEventListener('click', () => {
+        item.onclick = () => {
             document.querySelectorAll('.nav-item, .recent-chat-item').forEach(i => i.classList.remove('active'));
             item.classList.add('active');
-
             const text = item.textContent.trim();
-            logToTerminal(`Navigated to: ${text}`, "info");
-
             const chatFooter = document.querySelector('.chat-footer');
             const pluginsView = document.getElementById('pluginsView');
 
@@ -149,31 +277,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (chatFooter) chatFooter.style.display = 'block';
                 if (pluginsView) pluginsView.style.display = 'none';
             }
-        });
+        };
     });
 
-    // Connect Button Event Handler
-    const connectGithubBtn = document.getElementById('connectGithubBtn');
-    if (connectGithubBtn) {
-        connectGithubBtn.addEventListener('click', () => {
-            logToTerminal("Initiating GitHub OAuth via Desktop Bridge...", "info");
-            alert("GitHub OAuth Consent requested via Desktop Bridge.");
-            connectGithubBtn.innerHTML = '<i class="fas fa-check"></i> Connected';
-            connectGithubBtn.style.background = '#10b981';
-        });
+    const bridgeStatus = document.getElementById('bridgeStatus');
+    if (bridgeStatus) {
+        bridgeStatus.onclick = () => {
+            const terminal = document.getElementById('terminalOverlay');
+            terminal.classList.toggle('open');
+        };
     }
 
-    // Bridge Status Toggle simulation
-    const bridgeStatus = document.getElementById('bridgeStatus');
-    bridgeStatus.addEventListener('click', () => {
-        const terminal = document.getElementById('terminalOverlay');
-        terminal.classList.toggle('open');
-    });
+    const closeTerminal = document.getElementById('closeTerminal');
+    if (closeTerminal) {
+        closeTerminal.onclick = () => {
+            document.getElementById('terminalOverlay').classList.remove('open');
+        };
+    }
+}
 
-    document.getElementById('closeTerminal').addEventListener('click', () => {
-        document.getElementById('terminalOverlay').classList.remove('open');
-    });
-});
+// 🚦 Boot Sequence
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMastermindUi);
+} else {
+    initMastermindUi();
+}
+
 
 // --- [Advanced UI Functions for Tools] ---
 

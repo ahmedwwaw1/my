@@ -48,8 +48,15 @@ function saveModelSelection() {
 function toggleHistory() {
     const sidebar = document.getElementById('aiHistorySidebar');
     if (sidebar) {
-        sidebar.classList.toggle('open');
-        if (sidebar.classList.contains('open')) renderHistory();
+        const isOpen = sidebar.classList.contains('open');
+        if (isOpen) {
+            sidebar.classList.remove('open');
+            sidebar.style.display = 'none';
+        } else {
+            sidebar.classList.add('open');
+            sidebar.style.display = 'flex';
+            renderHistory();
+        }
     }
 }
 
@@ -478,7 +485,10 @@ function updateHealthUI(online, text) {
 
 function toggleTerminal() {
     const term = document.getElementById('aiTerminal');
-    if (term) term.style.display = term.style.display === 'flex' ? 'none' : 'flex';
+    if (term) {
+        const isHidden = window.getComputedStyle(term).display === 'none';
+        term.style.display = isHidden ? 'flex' : 'none';
+    }
 }
 
 function logToTerminal(msg, type = "info") {
