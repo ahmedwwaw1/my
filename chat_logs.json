@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1789228816670",
-      "title": "أهلاً بك! مرحباً ألف! \n\nأنا بخ",
+      "title": "الحمد لله، كل شيء ممتاز وجاهز ",
       "history": [
         {
           "role": "user",
@@ -47,11 +47,29 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "الحمد لله، كل شيء ممتاز وجاهز تماماً للعمل! \n\nكيف حالك أنت؟ طمني عنك، وش حاب ننجز أو نناقش اليوم؟",
+              "thoughtSignature": "El4KXAERTTIPoOnXEkt9tff/p8X1J2j+biDtw+ZwexbDh6OpgftrW3y5okZ5DXnIg1TQjgvGRKUE5HAcjUdMe2caA91dVp87dn5tfKuuWHtU9dXEVZ01FN//XPga14xH"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1789228816670",
   "pendingHistory": null,
-  "timestamp": "2026-09-12T16:02:25.614Z"
+  "timestamp": "2026-09-12T16:02:31.117Z"
 }
