@@ -1,6 +1,6 @@
 {
   "sessions": [],
   "activeSessionId": "1789198192075",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ماهو MCP\"}]}]",
-  "timestamp": "2026-09-12T07:30:37.786Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"ماهو MCP\"}]},{\"role\":\"model\",\"parts\":[],\"model\":\"gemini-3.6-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"ماهو MCP\"}]}]",
+  "timestamp": "2026-09-12T07:30:51.065Z"
 }
