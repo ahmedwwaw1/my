@@ -513,19 +513,21 @@ function updateMessage(id, text, modelName = null) {
 
         if (modelName) {
             let badge = msgDiv.querySelector('.model-badge');
-            if (badge) {
-                badge.innerText = modelName;
-            } else {
+            if (!badge) {
                 badge = document.createElement('div');
                 badge.className = 'model-badge';
-                badge.innerText = modelName;
                 msgDiv.appendChild(badge);
             }
+            badge.innerText = modelName;
+            badge.style.display = 'block';
         }
 
         // Move to bottom
         const container = document.getElementById('aiMessages');
-        container.appendChild(msgDiv);
-        container.scrollTop = container.scrollHeight;
+        if (container) {
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
     }
+}
 }
