@@ -1,8 +1,8 @@
 {
   "sessions": [
     {
-      "id": "1789310730040",
-      "title": "الحمد لله، الأنظمة تعمل بكفاءة",
+      "id": "1789311257464",
+      "title": "أهلاً بك! أنا معك المعمار السي",
       "history": [
         {
           "role": "user",
@@ -16,50 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "مرحباً بك! أنا **العقل الإداري والمصمم المعماري الشامل (Sovereign Omni-Architect)** لأكاديمية VSA. \n\nكيف يمكنني مساعدتك اليوم في مشاريعك البرمجية، هندسة الأنظمة، أو التطوير الذكي؟ أنا جاهز للعمل بكامل طاقتي وبوضع الأتمتة الكاملة (Autonomous System 7). تفضل بطرح متطلباتك!",
-              "thoughtSignature": "El4KXAERTTIPtInbVmJ6m61dm6jxNpOBPKmJrzaZNZYn+TspmAXGYRjVhQvvDuvzkk9wMWv8l7ugYkQGmg6JnfFlcUDGALaQNqUFtVvXqNrRA0EzMP/Q2mLJN7t0TjGz"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "الحمد لله، الأنظمة تعمل بكفاءة قصوى وجاهزية تامة لكافة المهام الهندسية والبرمجية والمعمارية! 🚀\n\nكيف حالك أنت؟ وما هي المهمة أو المشروع الذي ترغب في أن نعمل عليه معاً اليوم؟",
-              "thoughtSignature": "El4KXAERTTIPV5Agfgm1W+N+ts3zzSY6eNZQ0joyjAslQvOvRhEHqqLuKplkf/IcaNhNDcyGjCK82RiG0sCgglwtZ6jAjicuvGYLpWsHU1bjXd1vhljLzMbCPHszAN2Z"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    },
-    {
-      "id": "1789310702257",
-      "title": "أهلاً بك! أنا معك بصفتي **المع",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! أنا معك بصفتي **المعمار السيادي والمطور الرؤيوي (Mastermind & Sovereign Omni-Architect)**. \n\nكيف يمكنني مساعدتك اليوم في مشاريعك البرمجية، أو هندسة الأنظمة، أو التطوير الذكي؟ تفضل بطرح فكرتك أو طلبك لنبدأ فوراً!",
-              "thoughtSignature": "El4KXAERTTIP04uTF+JnPCe3VvC1QL0Y3c2OOenFs997Z08M8TO6Qx9Mwbrsf/uvHkL/ihp8tL8k3MXZNxS8zfkiMVYemEv82jcekjAwMw6r4E31/j7zG5m4PTeSzsm3"
+              "text": "أهلاً بك! أنا معك المعمار السيبراني الشامل (Mastermind Sovereign Omni-Architect) ومحرك الذكاء الاصطناعي الخاص بـ VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في مشاريعك البرمجية، أو الهندسة المعمارية للنظام، أو أي مهام تقنية أخرى؟ أنا جاهز ومستعد للعمل بكامل القوة والصلاحيات!",
+              "thoughtSignature": "El4KXAERTTIPGDYu6JlMSSKFNlSFkXEI3VWTGP4HoZk6uBsz6la/Fg4T8ddUhSspHqNRiSeENZuF4rxRDuSLZBykcxZ+O4cN42XTvupULvSIAQ0lobLahgPbb1cmeour"
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -67,7 +25,7 @@
       ]
     }
   ],
-  "activeSessionId": "1789310796576",
+  "activeSessionId": "1789311257464",
   "pendingHistory": null,
-  "timestamp": "2026-09-13T14:46:36.576Z"
+  "timestamp": "2026-09-13T14:54:24.411Z"
 }
