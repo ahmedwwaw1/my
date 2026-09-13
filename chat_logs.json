@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1789310702257",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-13T14:45:07.156Z"
+  "sessions": [
+    {
+      "id": "1789310702257",
+      "title": "أهلاً بك! أنا معك بصفتي **المع",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا معك بصفتي **المعمار السيادي والمطور الرؤيوي (Mastermind & Sovereign Omni-Architect)**. \n\nكيف يمكنني مساعدتك اليوم في مشاريعك البرمجية، أو هندسة الأنظمة، أو التطوير الذكي؟ تفضل بطرح فكرتك أو طلبك لنبدأ فوراً!",
+              "thoughtSignature": "El4KXAERTTIP04uTF+JnPCe3VvC1QL0Y3c2OOenFs997Z08M8TO6Qx9Mwbrsf/uvHkL/ihp8tL8k3MXZNxS8zfkiMVYemEv82jcekjAwMw6r4E31/j7zG5m4PTeSzsm3"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1789310730040",
+  "pendingHistory": null,
+  "timestamp": "2026-09-13T14:45:30.040Z"
 }
