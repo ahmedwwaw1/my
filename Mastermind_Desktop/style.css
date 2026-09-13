@@ -314,13 +314,14 @@ body {
     resize: none;
     min-height: 40px;
     max-height: 200px;
-    padding: 8px;
+    padding: 8px 15px; /* حماية الجوانب */
     outline: none;
     font-size: 1rem;
     line-height: 1.5;
     direction: rtl;
     text-align: right;
     unicode-bidi: plaintext;
+    box-sizing: border-box;
 }
 
 .send-btn {
@@ -478,6 +479,7 @@ body {
     direction: rtl;
     text-align: right;
     unicode-bidi: plaintext;
+    padding-left: 10px; /* مسافة أمان لمنع التلاصق باليسار */
 }
 
 .text-content * {

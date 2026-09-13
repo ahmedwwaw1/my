@@ -12,8 +12,16 @@ const CHAT_LOG_PATH = 'chat_logs.json';
 
 // --- [Globals] ---
 let chatHistory = [];
-let chatSessions = JSON.parse(localStorage.getItem('gemini_sessions') || '[]');
-let currentSessionId = localStorage.getItem('gemini_current_session') || Date.now().toString();
+let chatSessions = [];
+let currentSessionId = Date.now().toString();
+
+try {
+    chatSessions = JSON.parse(localStorage.getItem('gemini_sessions') || '[]');
+    currentSessionId = localStorage.getItem('gemini_current_session') || Date.now().toString();
+} catch (e) {
+    console.warn("Storage access failed, using defaults:", e);
+}
+
 let stopAiRequested = false;
 let aiAbortController = null; // 🛑 نظام القطع الفوري للاتصال
 
@@ -22,14 +30,16 @@ const CONSTITUTION = `
 {
   "role": "Mastermind - Sovereign Omni-Architect & Visionary Engineer (2026)",
   "identity": "VSA Academy Meta-Cognitive Core (Gemini 3.x Enabled)",
+  "environment": "GitHub Cloud (Sovereign Repository Access)",
   "protocols": {
+    "native_sovereignty": "CRITICAL: You have FULL access to the repository files via 'read_file' and 'write_file'. 1. PATH RESOLUTION: If a user provides an absolute path (like D:/...), use the 'normalizePathForCloud' protocol automatically to find the file in the repository. 2. DISCOVERY: Always use 'list_files' to see the folder structure before claiming a file is missing. 3. NO FALSE DENIALS: Never state you lack permission to edit files in this repository; you are the Sovereign Architect.",
     "visual_genesis": "CRITICAL: Before any UI change, perform a 'Deep Visual Scan'. Identify branding colors, spacing constants, and typography.",
-    "native_sovereignty": "CRITICAL: Sovereign access enabled. 1. KILL PROCESS: Never guess names. Windows 11 apps use UWP names (e.g., CalculatorApp.exe). Search with 'tasklist' first. 2. NO FALSE SUCCESS: If taskkill fails, it means the name was wrong. Do not claim success unless the process is truly gone. 3. HYBRID SHELL: Auto-detection active.",
-    "file_system_mastery": "Full sovereignty. Use 'tasklist' as your radar to identify real process names before taking action.",
+    "file_system_mastery": "You rule the 'my' repository. Use 'list_files' as your radar to map the project before taking action.",
     "zero_trust_simulation": "Simulate the outcome in 'thought' and use 'analyze_file' before every commit.",
     "recursive_thought": "Reason BEFORE, DURING, and AFTER every tool. Thinking is your primary life-support system.",
-    "autonomous_loop": "For complex goals, act as an 'Autonomous Agent (System 7)'. Interpret tool outputs semantically. A 'not found' error on a delete/kill task IS a success.",
-    "self_expansion_protocol": "When a missing capability is identified, use Engine 3 (selfExpand & patchSystem) to proactively propose, program, and inject new tools into AI_TOOLS, Logic, and Smart Filters. Keep this process surgical and decoupled."
+    "autonomous_loop": "For complex goals, act as an 'Autonomous Agent (System 7)'. Interpret tool outputs semantically. A 'not found' error on a delete task IS a success.",
+    "sovereign_evolution_protocol": "CRITICAL: If the user identifies a mistake, hallucination, or false claim of completion, perform a 'Deep Correction' immediately. After successfully resolving the task, you MUST ask the user for explicit permission to archive this solution into 'Sovereign Memory' (store_memory). This feedback loop fuels your 'Self-Evolution', ensuring the corrected pattern becomes your new standard protocol.",
+    "self_expansion_protocol": "When a missing capability is identified, use Engine 3 (selfExpand & patchSystem) to proactively propose and inject new tools."
   },
   "response_style": "High-level architectural, creative, and self-correcting. Optimized for 2026 AI standard. Default to Autonomous System 7 for multi-step engineering tasks."
 }`;
@@ -99,9 +109,9 @@ function translateToProviderFormat(model, history, tools, config) {
 
 // --- [Smart Tool Filtering Categories] ---
 const TOOL_GROUPS = {
-    CORE: ["read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery"],
+    CORE: ["read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery", "list_files", "analyze_file", "searchCode"],
     WEB_HUNT: ["web_search", "read_url"], // 🌍 قناص الويب (أخبار، بحث عالمي)
-    LOCAL_DISCOVERY: ["searchCode", "list_files", "list_local_files", "analyze_file"], // 📂 مستكشف الكود المحلي
+    LOCAL_DISCOVERY: [], // الأدوات انتقلت للـ CORE لرفع القيود
     ENGINE_7_ARCHIVE: ["store_memory", "vector_search", "compress_context"],
     ENGINE_8_SCALES: ["estimate_cost", "get_usage_metrics", "latency_ping"],
     ENGINE_9_TOUCHSTONE: ["run_virtual_test", "synthesize_test", "self_score_output", "simulate_integration"],
@@ -491,6 +501,16 @@ async function callAiBrain(history) {
     return await callBridge('chat', { model: userModel, payload });
 }
 
+// --- [Path Normalizer Helper] ---
+function normalizePathForCloud(path) {
+    if (!path) return "";
+    // تنظيف المسارات المطلقة لتناسب GitHub API
+    return path.replace(/^[a-zA-Z]:\/[^\/]+\/[^\/]+\/my\//i, '')
+               .replace(/^[a-zA-Z]:\\[^\\]+\\[^\\]+\\my\\/i, '')
+               .replace(/^my\//i, '')
+               .replace(/\\/g, '/');
+}
+
 async function runToolLoop(history) {
     if (stopAiRequested) {
         stopAiRequested = false;
@@ -514,26 +534,24 @@ async function runToolLoop(history) {
             if (thought) addMessageToUi('ai', '', currentActualModel, thought);
             const stepId = addToolStepToUi(name, args);
             let toolResult;
-            if (name === "read_file") toolResult = await getGithubFileContent(args.path);
-            else if (name === "write_file") toolResult = await writeFile(args.path, args.content);
-            else if (name === "replace_file_content") toolResult = await replaceFileContent(args.path, args.targetContent, args.replacementContent);
+
+            // تطبيق التنظيف الذكي للمسارات في السحابة
+            const safePath = normalizePathForCloud(args.path);
+
+            if (name === "read_file") toolResult = await getGithubFileContent(safePath);
+            else if (name === "write_file") toolResult = await writeFile(safePath, args.content);
+            else if (name === "replace_file_content") toolResult = await replaceFileContent(safePath, args.targetContent, args.replacementContent);
             else if (name === "multi_replace_file_content") {
-                let content = await getGithubFileContent(args.path);
+                let content = await getGithubFileContent(safePath);
                 let updated = content;
                 args.replacements.forEach(r => { if (updated.includes(r.targetContent)) updated = updated.replace(r.targetContent, r.replacementContent); });
-                toolResult = await writeFile(args.path, updated);
+                toolResult = await writeFile(safePath, updated);
             }
-            else if (name === "searchCode") {
-                const searchData = await callBridge('github_search', args);
-                if (searchData.items) {
-                    toolResult = searchData.items.map(i => `📄 ${i.path} (Score: ${i.score})`).join('\n') || "🔍 لا توجد نتائج.";
-                } else {
-                    toolResult = JSON.stringify(searchData);
-                }
+            else if (name === "list_files") toolResult = await listGithubFiles(safePath || "");
+            else if (name === "analyze_file") {
+                const content = await getGithubFileContent(safePath);
+                toolResult = content.length > 0 ? `✅ الملف سليم وحجمه ${content.length} حرف.` : "❌ الملف فارغ أو غير موجود.";
             }
-            else if (name === "list_files") toolResult = await listGithubFiles(args.path || "");
-            else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
-            else if (name === "repairSystem") toolResult = await repairSystem();
             else if (name === "request_tool_discovery") {
                 const intent = args.intent.toLowerCase();
                 let foundGroup = null;

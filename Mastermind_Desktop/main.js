@@ -69,29 +69,6 @@ ipcMain.handle('os-command', async (event, command) => {
   });
 });
 
-ipcMain.handle('fs-read', async (event, filePath) => {
-  try {
-    return fs.readFileSync(filePath, 'utf8');
-  } catch (e) { return `❌ فشل القراءة: ${e.message}`; }
-});
-
-ipcMain.handle('fs-write', async (event, { path: filePath, content }) => {
-  try {
-    fs.writeFileSync(filePath, content, 'utf8');
-    return "✅ تم الحفظ بنجax.";
-  } catch (e) { return `❌ فشل الحفظ: ${e.message}`; }
-});
-
-ipcMain.handle('fs-list', async (event, dirPath) => {
-  try {
-    const targetPath = dirPath || '.';
-    console.log(`Listing directory: ${targetPath}`);
-    if (!fs.existsSync(targetPath)) return `❌ المسار غير موجود: ${targetPath}`;
-    const files = fs.readdirSync(targetPath);
-    return files.join('\n');
-  } catch (e) { return `❌ فشل سرد الملفات: ${e.message}`; }
-});
-
 ipcMain.handle('ping', async () => {
   return "pong";
 });

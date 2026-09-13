@@ -27,10 +27,12 @@ async function initKeys() {
             const sendBtn = document.getElementById('aiSendBtn');
             if (sendBtn && !sendBtn.classList.contains('working')) {
                 try {
-                    const status = await repairSystem();
-                    const isOnline = !status.includes('❌');
-                    updateHealthUI(isOnline, isOnline ? `BRIDGE: OK | ONLINE (2026)` : `BRIDGE: OFFLINE`);
-                    if (!isOnline) logToTerminal(status, "error");
+                    if (typeof repairSystem === 'function') {
+                        const status = await repairSystem();
+                        const isOnline = !status.includes('❌');
+                        updateHealthUI(isOnline, isOnline ? `BRIDGE: OK | ONLINE (2026)` : `BRIDGE: OFFLINE`);
+                        if (!isOnline) logToTerminal(status, "error");
+                    }
                 } catch (e) {
                     updateHealthUI(false, `BRIDGE: ERROR`);
                     logToTerminal(`Heartbeat failed: ${e.message}`, "error");
@@ -39,6 +41,7 @@ async function initKeys() {
         }, 60000);
     }
 }
+window.initKeys = initKeys;
 
 function saveModelSelection() {
     const selectedModel = document.getElementById('modelSelector').value;
@@ -174,9 +177,10 @@ async function toggleAiChat() {
         const container = document.getElementById('aiMessages');
         container.scrollTop = container.scrollHeight;
         await initKeys();
-        initResizer();
+        if (typeof initResizer === 'function') initResizer();
     }
 }
+window.toggleAiChat = toggleAiChat;
 
 function toggleMaximizeAi() {
     const chatBox = document.getElementById('aiChatBox');
@@ -529,5 +533,4 @@ function updateMessage(id, text, modelName = null) {
             container.scrollTop = container.scrollHeight;
         }
     }
-}
 }
