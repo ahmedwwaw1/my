@@ -1,31 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1789311257464",
-      "title": "أهلاً بك! أنا معك المعمار السي",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! أنا معك المعمار السيبراني الشامل (Mastermind Sovereign Omni-Architect) ومحرك الذكاء الاصطناعي الخاص بـ VSA Academy. \n\nكيف يمكنني مساعدتك اليوم في مشاريعك البرمجية، أو الهندسة المعمارية للنظام، أو أي مهام تقنية أخرى؟ أنا جاهز ومستعد للعمل بكامل القوة والصلاحيات!",
-              "thoughtSignature": "El4KXAERTTIPGDYu6JlMSSKFNlSFkXEI3VWTGP4HoZk6uBsz6la/Fg4T8ddUhSspHqNRiSeENZuF4rxRDuSLZBykcxZ+O4cN42XTvupULvSIAQ0lobLahgPbb1cmeour"
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    }
-  ],
-  "activeSessionId": "1789311257464",
-  "pendingHistory": null,
-  "timestamp": "2026-09-13T14:54:24.411Z"
+  "sessions": [],
+  "activeSessionId": "1789311265972",
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
+  "timestamp": "2026-09-13T14:54:33.668Z"
 }
