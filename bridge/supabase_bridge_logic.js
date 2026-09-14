@@ -104,28 +104,26 @@ serve(async (req) => {
       throw new Error(`كافة النماذج المتاحة استهلكت حصتها. آخر خطأ: ${lastError}`);
     }
 
-    if (action === 'github' || action === 'github_search') {
-      const githubToken = Deno.env.get("GITHUB_TOKEN")
-      let finalEndpoint = endpoint || requestData.endpoint;
-
-      if (action === 'github_search') {
+    // تم استدعاء البحث عبر الجسر بنجاح
+    if (action === 'github_search') {
+        const githubToken = Deno.env.get("GITHUB_TOKEN")
         const repo = Deno.env.get("GITHUB_REPO") || "ahmedwwaw1/my";
         const query = payload.query || requestData.query;
-        finalEndpoint = `https://api.github.com/search/code?q=${encodeURIComponent(query)}+repo:${repo}`;
+        
+        // البحث المباشر في المستودع
+        const finalEndpoint = `https://api.github.com/search/code?q=${encodeURIComponent(query)}+repo:${repo}`;
+        
+        const res = await fetch(finalEndpoint, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${githubToken}`,
+            'Accept': 'application/vnd.github+json',
+            'Content-Type': 'application/json',
+          }
+        })
+        const data = await res.json()
+        return new Response(JSON.stringify(data), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
       }
-
-      const res = await fetch(finalEndpoint, {
-        method: method || 'GET',
-        headers: {
-          'Authorization': `Bearer ${githubToken}`,
-          'Accept': 'application/vnd.github+json',
-          'Content-Type': 'application/json',
-        },
-        body: body ? JSON.stringify(body) : undefined
-      })
-      const data = await res.json()
-      return new Response(JSON.stringify(data), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
-    }
 
     if (action === 'web_search' || action === 'read_url') {
       if (action === 'read_url') {
