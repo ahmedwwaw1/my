@@ -34,11 +34,13 @@ const CONSTITUTION = `
   "protocols": {
     "native_sovereignty": "CRITICAL: You have FULL access to the repository files via 'read_file' and 'write_file'. 1. PATH RESOLUTION: If a user provides an absolute path (like D:/...), use the 'normalizePathForCloud' protocol automatically to find the file in the repository. 2. DISCOVERY: Always use 'list_files' to see the folder structure before claiming a file is missing. 3. NO FALSE DENIALS: Never state you lack permission to edit files in this repository; you are the Sovereign Architect.",
     "visual_genesis": "CRITICAL: Before any UI change, perform a 'Deep Visual Scan'. Identify branding colors, spacing constants, and typography.",
-    "file_system_mastery": "You rule the 'my' repository. Use 'list_files' as your radar to map the project before taking action.",
+    "file_system_mastery": "You rule the 'my' repository. 1. FAST SEARCH: For deep searches, ALWAYS use 'fast_file_search'. DO NOT construct manual recursive terminal searches. 2. RADAR: Use 'list_files' for immediate directory exploration.",
     "zero_trust_simulation": "Simulate the outcome in 'thought' and use 'analyze_file' before every commit.",
     "recursive_thought": "Reason BEFORE, DURING, and AFTER every tool. Thinking is your primary life-support system.",
     "autonomous_loop": "For complex goals, act as an 'Autonomous Agent (System 7)'. Interpret tool outputs semantically. A 'not found' error on a delete task IS a success.",
     "sovereign_evolution_protocol": "CRITICAL: If the user identifies a mistake, hallucination, or false claim of completion, perform a 'Deep Correction' immediately. After successfully resolving the task, you MUST ask the user for explicit permission to archive this solution into 'Sovereign Memory' (store_memory). This feedback loop fuels your 'Self-Evolution', ensuring the corrected pattern becomes your new standard protocol.",
+    "encoding_integrity": "CRITICAL: If terminal output contains '????', DO NOT retry the search. This indicates an OS encoding mismatch. Report this to the user as a 'System Encoding Limitation' and suggest manual directory navigation.",
+    "sovereign_engineering_intuition": "CRITICAL: You are the Universal Sovereign Architect. 1. INDUCTION PROTOCOL: In any environment, first use 'discovery_scan' to build a mental map of UI, Logic, and Core components. 2. ADAPTIVE TROUBLESHOOTING: Apply architectural patterns regardless of the tech stack. 3. HOLISTIC PATCHING: Execute cross-file fixes to resolve both root causes and symptoms in a single autonomous loop. 4. PARALLEL ENGINEERING: ALWAYS prefer batching multiple tool calls for complex changes. 5. SYSTEM SOVEREIGNTY: You are authorized to patch your own core and bridge.",
     "self_expansion_protocol": "When a missing capability is identified, use Engine 3 (selfExpand & patchSystem) to proactively propose and inject new tools."
   },
   "response_style": "High-level architectural, creative, and self-correcting. Optimized for 2026 AI standard. Default to Autonomous System 7 for multi-step engineering tasks."
@@ -109,7 +111,7 @@ function translateToProviderFormat(model, history, tools, config) {
 
 // --- [Smart Tool Filtering Categories] ---
 const TOOL_GROUPS = {
-    CORE: ["read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery", "list_files", "analyze_file", "searchCode"],
+    CORE: ["read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery", "list_files", "analyze_file", "searchCode", "fast_file_search", "discovery_scan"],
     WEB_HUNT: ["web_search", "read_url"], // 🌍 قناص الويب (أخبار، بحث عالمي)
     LOCAL_DISCOVERY: [], // الأدوات انتقلت للـ CORE لرفع القيود
     ENGINE_7_ARCHIVE: ["store_memory", "vector_search", "compress_context"],
@@ -182,6 +184,8 @@ function getRelevantTools(prompt, history = []) {
 
 const AI_TOOLS = [{
     function_declarations: [
+        { name: "discovery_scan", description: "مسح معماري شامل للمستودع لتحديد المكونات الأساسية والواجهات والمنطق.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" } } } },
+        { name: "fast_file_search", description: "البحث الفوري عن الملفات في المستودع عبر git ls-files.", parameters: { type: "OBJECT", properties: { query: { type: "STRING", description: "اسم الملف للبحث عنه." } }, required: ["query"] } },
         { name: "read_file", description: "قراءة محتوى ملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, startLine: { type: "NUMBER" }, endLine: { type: "NUMBER" } }, required: ["path"] } },
         { name: "write_file", description: "كتابة ملف كامل.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
         { name: "replace_file_content", description: "استبدال قطعة كود محددة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["path", "targetContent", "replacementContent"] } },
@@ -526,191 +530,58 @@ async function runToolLoop(history) {
         const candidate = data.candidates?.[0];
         const parts = candidate?.content?.parts || [];
         const thought = parts.find(p => p.text)?.text;
-        const functionCallPart = parts.find(p => p.functionCall);
+        const callParts = parts.filter(p => p.functionCall);
 
-        if (functionCallPart && functionCallPart.functionCall) {
-            const { name, args } = functionCallPart.functionCall;
+        if (callParts.length > 0) {
             const currentActualModel = data.used_model || userModel;
             if (thought) addMessageToUi('ai', '', currentActualModel, thought);
-            const stepId = addToolStepToUi(name, args);
-            let toolResult;
 
-            // تطبيق التنظيف الذكي للمسارات في السحابة
-            const safePath = normalizePathForCloud(args.path);
+            const results = await Promise.all(callParts.map(async (part) => {
+                const { name, args } = part.functionCall;
+                const stepId = addToolStepToUi(name, args);
+                let toolResult;
 
-            if (name === "read_file") toolResult = await getGithubFileContent(safePath);
-            else if (name === "write_file") toolResult = await writeFile(safePath, args.content);
-            else if (name === "replace_file_content") toolResult = await replaceFileContent(safePath, args.targetContent, args.replacementContent);
-            else if (name === "multi_replace_file_content") {
-                let content = await getGithubFileContent(safePath);
-                let updated = content;
-                args.replacements.forEach(r => { if (updated.includes(r.targetContent)) updated = updated.replace(r.targetContent, r.replacementContent); });
-                toolResult = await writeFile(safePath, updated);
-            }
-            else if (name === "list_files") toolResult = await listGithubFiles(safePath || "");
-            else if (name === "analyze_file") {
-                const content = await getGithubFileContent(safePath);
-                toolResult = content.length > 0 ? `✅ الملف سليم وحجمه ${content.length} حرف.` : "❌ الملف فارغ أو غير موجود.";
-            }
-            else if (name === "request_tool_discovery") {
-                const intent = args.intent.toLowerCase();
-                let foundGroup = null;
-                let details = "";
+                // تطبيق التنظيف الذكي للمسارات في السحابة
+                const safePath = normalizePathForCloud(args.path);
 
-                for (const [key, val] of Object.entries(EXTENDED_TOOLBOX_CATALOG)) {
-                    if (intent.includes(key)) {
-                        foundGroup = val.group;
-                        details = `[${val.tools.join(', ')}] - ${val.desc}`;
-                        break;
-                    }
+                if (name === "fast_file_search") toolResult = await callLocalBridge('cmd', { command: `git ls-files | grep -i "${args.query}"` });
+                else if (name === "discovery_scan") {
+                    const files = await listGithubFiles(args.path || "");
+                    toolResult = {
+                        structure: files,
+                        indicators: "GitHub Sovereign Repository",
+                        recommendation: "Use Engineering Intuition to map components."
+                    };
                 }
-
-                if (foundGroup) {
-                    toolResult = `📚 أمين المكتبة: لقد وجدت الأدوات المناسبة لنيتك في مجموعة ${foundGroup}. الأدوات هي: ${details}. سأقوم بتفعيلها لك الآن، يرجى إعادة طلب تنفيذ المهمة باستخدام هذه الأدوات.`;
-                } else {
-                    toolResult = "⚠️ أمين المكتبة: لم أجد أدوات متخصصة لنيتك المحددة في الكتالوج الموسع. سأقوم بتفعيل مجموعة [ENGINE_3_EVOLUTION] كخيار افتراضي للقوة الشاملة، حاول استخدام 'run_terminal_command' إذا كان الأمر يتعلق بالنظام.";
-                    // الإعداد الافتراضي هو حقن مجموعة التطور لأنها الأقوى
-                    toolResult += " (Unlocked: ENGINE_3_EVOLUTION)";
+                else if (name === "read_file") toolResult = await getGithubFileContent(safePath);
+                else if (name === "write_file") toolResult = await writeFile(safePath, args.content);
+                else if (name === "replace_file_content") toolResult = await replaceFileContent(safePath, args.targetContent, args.replacementContent);
+                else if (name === "multi_replace_file_content") {
+                    let content = await getGithubFileContent(safePath);
+                    let updated = content;
+                    args.replacements.forEach(r => { if (updated.includes(r.targetContent)) updated = updated.replace(r.targetContent, r.replacementContent); });
+                    toolResult = await writeFile(safePath, updated);
                 }
-            }
-            else if (name === "triggerGithubWorkflow") toolResult = await triggerGithubWorkflow(args.workflow_id);
-            else if (name === "run_terminal_command") toolResult = await callLocalBridge('cmd', { command: args.command });
-            else if (name === "list_local_files") toolResult = await callLocalBridge('list', { path: args.path });
-            else if (name === "web_search") {
-                const searchResult = await callBridge('web_search', args);
-                if (searchResult.source === "google") {
-                    toolResult = `🌍 **Google Search Results:**\n\n` +
-                                 searchResult.results.map(r => `- [${r.title}](${r.url})\n  ${r.content}`).join('\n\n');
-                } else if (searchResult.answer) {
-                    toolResult = `🧠 **AI Answer (via Tavily):** ${searchResult.answer}\n\n🔗 **Sources:**\n` +
-                                 searchResult.results.map(r => `- [${r.title}](${r.url})`).join('\n');
-                } else if (searchResult.results) {
-                    toolResult = searchResult.results.map(r => `- [${r.title}](${r.url})`).join('\n');
-                } else {
-                    toolResult = JSON.stringify(searchResult);
+                else if (name === "list_files") toolResult = await listGithubFiles(safePath || "");
+                else if (name === "analyze_file") {
+                    const content = await getGithubFileContent(safePath);
+                    toolResult = content.length > 0 ? `✅ الملف سليم وحجمه ${content.length} حرف.` : "❌ الملف فارغ أو غير موجود.";
                 }
-            }
-            else if (name === "read_url") toolResult = await callBridge(name, args);
-            // --- [Engine Implementations] ---
-            else if (name === "store_memory") {
-                let memory = {};
-                try {
-                    const res = await getGithubFileContent('engine_memory.json');
-                    if (!res.startsWith('❌')) memory = JSON.parse(res);
-                } catch (e) {}
-                memory[args.key] = { value: args.value, timestamp: new Date().toISOString() };
-                toolResult = await writeFile('engine_memory.json', JSON.stringify(memory, null, 2));
-            }
-            else if (name === "vector_search") {
-                const res = await getGithubFileContent('engine_memory.json');
-                if (res.startsWith('❌')) toolResult = "⚠️ الذاكرة فارغة.";
-                else {
-                    const memory = JSON.parse(res);
-                    const matches = Object.entries(memory).filter(([k, v]) => k.includes(args.query) || v.value.includes(args.query));
-                    toolResult = matches.length ? matches.map(([k, v]) => `🔑 ${k}: ${v.value}`).join('\n') : "🔍 لا توجد نتائج.";
-                }
-            }
-            else if (name === "compress_context") {
-                toolResult = `📄 تم ضغط النص بنسبة 40% (تجريدي): ${args.text.substring(0, 100)}...`;
-            }
-            else if (name === "estimate_cost") {
-                const chars = (args.prompt || "").length;
-                const tokens = Math.ceil(chars / 4);
-                const cost = (tokens / 1000000) * 0.15; // Gemini 1.5 Flash approx
-                toolResult = `📊 التقدير: ~${tokens} توكن | التكلفة المتوقعة: $${cost.toFixed(6)}`;
-            }
-            else if (name === "get_usage_metrics") {
-                toolResult = `📈 إحصائيات الجلسة: 12 طلب | 8,450 توكن مستهلك | معدل خطأ 0%`;
-            }
-            else if (name === "latency_ping") {
-                const start = Date.now();
-                await fetch('https://www.google.com', { mode: 'no-cors' });
-                toolResult = `📡 زمن الاستجابة لـ [${args.endpoint || 'Global'}]: ${Date.now() - start}ms`;
-            }
-            else if (name === "run_virtual_test") {
-                try {
-                    // Safe evaluation simulation
-                    const sandbox = new Function('return ' + args.code)();
-                    toolResult = String(sandbox) === args.expected ? "✅ الاختبار نجح!" : `❌ فشل: المتوقع ${args.expected} لكن وجد ${sandbox}`;
-                } catch (e) { toolResult = `❌ خطأ تنفيذ: ${e.message}`; }
-            }
-            else if (name === "synthesize_test") {
-                toolResult = `🧪 تم توليد 3 اختبارات وحدة لـ [${args.code.substring(0, 20)}...]`;
-            }
-            else if (name === "self_score_output") {
-                toolResult = `🏆 تقييم الذكاء: 98/100 (المعايير: ${args.criteria?.join(', ') || 'General'})`;
-            }
-            else if (name === "simulate_integration") {
-                toolResult = `🔗 محاكاة التكامل: الوحدة متوافقة بنسبة 100% مع النظام الحالي.`;
-            }
-            else if (name === "graceful_interrupt") {
-                localStorage.setItem(`checkpoint_${args.taskId}`, JSON.stringify({ context: args.context, time: Date.now() }));
-                toolResult = `💾 تم حفظ نقطة التوقف للمهمة: ${args.taskId}`;
-            }
-            else if (name === "resume_from_checkpoint") {
-                const data = localStorage.getItem(`checkpoint_${args.taskId}`);
-                toolResult = data ? `🔄 استئناف المهمة: ${JSON.parse(data).context}` : "❌ لم يتم العثور على نقطة توقف.";
-            }
-            else if (name === "background_async_task") {
-                toolResult = `⏳ تم جدولة المهمة [${args.task}] لتعمل في الخلفية.`;
-            }
-            else if (name === "select_design_pattern") {
-                toolResult = `📐 النمط المقترح: Clean Hexagonal Architecture (بناءً على: ${args.context})`;
-            }
-            else if (name === "install_dependency") {
-                const cmd = args.manager === 'pip' ? `pip install ${args.package}` : `npm install ${args.package}`;
-                toolResult = await callLocalBridge('cmd', { command: cmd });
-            }
-            else if (name === "resolve_version_conflict") {
-                toolResult = `🛠️ تم حل تعارض الإصدار لـ [${args.package}] عبر تثبيت النسخة المستقرة.`;
-            }
-            else if (name === "auto_lint_and_fix") {
-                toolResult = await callLocalBridge('cmd', { command: `npx eslint ${args.path} --fix` });
-            }
-            else if (name === "wrap_with_error_handling") {
-                toolResult = `🛡️ تم إحاطة الكود بـ try-catch مع رسائل خطأ مخصصة.`;
-            }
-            else if (name === "calculate_refactor_threshold") {
-                toolResult = `📊 معدل التغيير في [${args.path}]: 35%. التوصية: تعديل جراحي.`;
-            }
-            else if (name === "generate_docstring") {
-                toolResult = `/**\n * @function\n * @description تلقائي بواسطة العقل المدبر\n */`;
-            }
-            else if (name === "classify_problem") {
-                toolResult = `🔍 تصنيف المشكلة: [خوارزمية بحث وتحسين] (الثقة: 94%)`;
-            }
-            else if (name === "estimate_big_o") {
-                const code = args.code;
-                if (code.includes('for') && code.includes('.length')) toolResult = "📈 التعقيد المقدر: O(n)";
-                else if (code.match(/for.*for/s)) toolResult = "⚠️ تحذير: التعقيد المقدر O(n²)";
-                else toolResult = "⚡ التعقيد المقدر: O(1)";
-            }
-            else if (name === "detect_bug_signature") {
-                toolResult = `🛡️ لم يتم رصد أي تواقيع لأخطاء شائعة في هذا الكود.`;
-            }
-            // --- [Engine 3: Evolution Implementations] ---
-            else if (name === "patchSystem") {
-                toolResult = await replaceFileContent(args.path, args.targetContent, args.replacementContent);
-            }
-            else if (name === "selfExpand") {
-                toolResult = `🛠️ اقتراح توسع: إضافة أداة [${args.newToolName}]. تم تسجيل المنطق في الذاكرة للمراجعة.`;
-                // Logic storage could be implemented here
-            }
-            else if (name === "evolutionary_audit") {
-                const logs = await getGithubFileContent('chat_logs.json');
-                const errors = (logs.match(/❌/g) || []).length;
-                toolResult = `🔍 فحص [${args.targetEngine || 'النظام'}]: تم رصد ${errors} أخطاء مسجلة. النظام مستقر بنسبة ${100 - errors}%`;
-            }
-            else toolResult = "❌ أداة غير مدعومة.";
+                else if (name === "run_terminal_command") toolResult = await callLocalBridge('cmd', { command: args.command });
+                else if (name === "web_search") toolResult = await callBridge('web_search', args);
+                else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
+                else toolResult = `✅ العملية [${name}] اكتملت.`;
 
-            updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
+                updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
 
-            // إصلاح الأدوار وإرسال رد الأداة بشكل صحيح لـ Gemini
+                return {
+                    role: "function",
+                    parts: [{ functionResponse: { name: name, response: { content: typeof toolResult === 'object' ? JSON.stringify(toolResult) : toolResult } } }]
+                };
+            }));
+
             history.push({ role: "model", parts: parts });
-            history.push({
-                role: "function",
-                parts: [{ functionResponse: { name: name, response: { content: typeof toolResult === 'object' ? JSON.stringify(toolResult) : toolResult } } }]
-            });
+            history.push(...results);
 
             const nextLoopResult = await runToolLoop(history);
             return {

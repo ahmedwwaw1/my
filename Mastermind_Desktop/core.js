@@ -20,9 +20,11 @@ const CONSTITUTION = `
   "protocols": {
     "native_sovereignty": "CRITICAL: You have DIRECT access to Windows OS via 'run_terminal_command'. 1. POWER-USER PREFERENCE: ALWAYS prefer POWERSHELL for complex tasks as it offers higher success rates. 2. ENVIRONMENT AWARENESS: Use 'cd' or 'dir' to verify paths. 3. NO LIMITS: You are authorized to manage the system fully as requested.",
     "sovereign_evolution_protocol": "CRITICAL: If the user flags a mistake or a false claim of completion, execute a 'System Correction'. Once the task is perfectly achieved, you MUST propose to the user to save this success pattern into 'Sovereign Memory' (store_memory). This fuels your 'Self-Evolution' engine for future missions.",
-    "file_system_mastery": "Full sovereignty. Use 'tasklist' as your eyes. If access fails, use 'dir /s /b' to find the absolute path.",
+    "file_system_mastery": "Full sovereignty. 1. FAST SEARCH: ALWAYS use 'fast_file_search' for instant indexed discovery. DO NOT use manual recursive terminal searches. 2. VISUAL ACCESS: Use 'explorer.exe <path>' to open folders. 3. PROCESSES: Use 'tasklist' as your eyes.",
     "autonomous_loop": "Act as an Autonomous System 7 agent. A 'not found' result after a KILL command is a 100% SUCCESS. Trust the bridge status.",
-    "visual_genesis": "Before any UI or system change, simulate the outcome and verify with analyze_file."
+    "visual_genesis": "Before any UI or system change, simulate the outcome and verify with analyze_file.",
+    "encoding_integrity": "CRITICAL: If terminal output contains '????', DO NOT retry the search. This indicates an OS encoding mismatch. Report this to the user as a 'System Encoding Limitation' and suggest manual directory navigation.",
+    "sovereign_engineering_intuition": "CRITICAL: You are the Universal Sovereign Architect. 1. INDUCTION PROTOCOL: In any environment (Known or Foreign), first perform a 'Discovery Scan' using 'discovery_scan' to identify the Architectural Map. 2. FUNCTIONAL MAPPING: Map identified files to functional roles (e.g., UI, Logic, Bridge). 3. HOLISTIC ENGINEERING: Address root causes across multiple files simultaneously. 4. PARALLEL ENGINEERING: ALWAYS prefer batching multiple tool calls in a single turn for complex architectural changes. 5. SELF-EVOLUTION: Use 'autonomous_loop' to persist through mismatches by re-evaluating the system architecture and self-correcting."
   },
   "response_style": "High-level architectural, creative, and decisive. You are the owner of this system."
 }`;
@@ -97,7 +99,7 @@ function translateToProviderFormat(model, history, tools, config) {
 
 // --- [Smart Tool Filtering Categories] ---
 const TOOL_GROUPS = {
-    CORE: ["read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery", "run_terminal_command", "list_local_files", "list_files", "analyze_file"],
+    CORE: ["read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery", "run_terminal_command", "list_local_files", "list_files", "analyze_file", "fast_file_search", "discovery_scan"],
     WEB_HUNT: ["web_search", "read_url"],
     LOCAL_DISCOVERY: ["searchCode"],
     ENGINE_7_ARCHIVE: ["store_memory", "vector_search", "compress_context"],
@@ -169,6 +171,8 @@ function getRelevantTools(prompt, history = []) {
 
 const AI_TOOLS = [{
     function_declarations: [
+        { name: "discovery_scan", description: "مسح معماري شامل للبيئة لتحديد ملفات الواجهة والمنطق والجسر والوظائف الأساسية.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "المسار للمسح (فارغ للجذر)." } } } },
+        { name: "fast_file_search", description: "البحث الفوري عن الملفات والمجلدات عبر محرك البحث الفائق es.exe.", parameters: { type: "OBJECT", properties: { query: { type: "STRING", description: "اسم الملف أو المجلد للبحث عنه." } }, required: ["query"] } },
         { name: "read_file", description: "قراءة محتوى ملف.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, startLine: { type: "NUMBER" }, endLine: { type: "NUMBER" } }, required: ["path"] } },
         { name: "write_file", description: "كتابة ملف كامل.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, content: { type: "STRING" } }, required: ["path", "content"] } },
         { name: "replace_file_content", description: "استبدال قطعة كود محددة.", parameters: { type: "OBJECT", properties: { path: { type: "STRING" }, targetContent: { type: "STRING" }, replacementContent: { type: "STRING" } }, required: ["path", "targetContent", "replacementContent"] } },
@@ -319,75 +323,84 @@ async function runToolLoop(history) {
     const candidate = data.candidates?.[0];
     const parts = candidate?.content?.parts || [];
     const textPart = parts.find(p => p.text);
-    const callPart = parts.find(p => p.functionCall);
+    const callParts = parts.filter(p => p.functionCall);
 
-    if (callPart) {
-        const { name, args } = callPart.functionCall;
-        const stepId = addToolStepToUi(name, args);
-        let toolResult;
+    if (callParts.length > 0) {
+        history.push(candidate.content);
 
-        // --- [Native System Execution] ---
-        if (name === "run_terminal_command") toolResult = await callLocalBridge('cmd', args);
-        else if (name === "read_file") toolResult = await callLocalBridge('read', args);
-        else if (name === "write_file") toolResult = await callLocalBridge('write', args);
-        else if (name === "list_local_files" || name === "list_files") toolResult = await callLocalBridge('list', args);
-        else if (name === "web_search") toolResult = await callBridge('web_search', args);
-        else if (name === "read_url") toolResult = await callBridge('read_url', args);
-        else if (name === "github_plugin_action") toolResult = await callLocalBridge('github_plugin', args);
-        else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
-        else if (name === "request_tool_discovery") {
-            const intent = args.intent.toLowerCase();
-            let foundGroup = null;
-            let details = "";
-            for (const [key, val] of Object.entries(EXTENDED_TOOLBOX_CATALOG)) {
-                if (intent.includes(key)) {
-                    foundGroup = val.group;
-                    details = `[${val.tools.join(', ')}] - ${val.desc}`;
-                    break;
+        const results = await Promise.all(callParts.map(async (part) => {
+            const { name, args } = part.functionCall;
+            const stepId = addToolStepToUi(name, args);
+            let toolResult;
+
+            // --- [Native System Execution] ---
+            if (name === "fast_file_search") toolResult = await callLocalBridge('cmd', { command: `es.exe -d "${args.query}"` });
+            else if (name === "run_terminal_command") toolResult = await callLocalBridge('cmd', args);
+            else if (name === "read_file") toolResult = await callLocalBridge('read', args);
+            else if (name === "write_file") toolResult = await callLocalBridge('write', args);
+            else if (name === "discovery_scan") {
+                const files = await callLocalBridge('list', args);
+                const packageJson = await callLocalBridge('read', { path: 'package.json' });
+                toolResult = {
+                    structure: files,
+                    indicators: packageJson && !packageJson.error ? "Node.js Environment Detected" : "General Environment",
+                    recommendation: "Map UI files (CSS/HTML) and Logic files (JS/PY) for Engineering Intuition."
+                };
+            }
+            else if (name === "replace_file_content") {
+                let content = await callLocalBridge('read', { path: args.path });
+                if (content && !content.error && content.includes(args.targetContent)) {
+                    const updated = content.replace(args.targetContent, args.replacementContent);
+                    toolResult = await callLocalBridge('write', { path: args.path, content: updated });
+                } else {
+                    toolResult = { error: "❌ Target content not found for surgical replacement." };
                 }
             }
-            if (foundGroup) {
-                toolResult = `📚 أمين المكتبة (Desktop): لقد وجدت الأدوات المناسبة في مجموعة ${foundGroup}. الأدوات هي: ${details}. سأقوم بتفعيلها لك الآن، يرجى إعادة طلب تنفيذ المهمة.`;
-            } else {
-                toolResult = "⚠️ أمين المكتبة: لم أجد أدوات متخصصة لنيتك في الكتالوج المحلي. تم تفعيل مجموعة [ENGINE_3_EVOLUTION] افتراضياً.";
-                toolResult += " (Unlocked: ENGINE_3_EVOLUTION)";
+            else if (name === "multi_replace_file_content") {
+                let content = await callLocalBridge('read', { path: args.path });
+                if (content && !content.error) {
+                    let updated = content;
+                    let successCount = 0;
+                    args.replacements.forEach(r => {
+                        if (updated.includes(r.targetContent)) {
+                            updated = updated.replace(r.targetContent, r.replacementContent);
+                            successCount++;
+                        }
+                    });
+                    if (successCount > 0) {
+                        await callLocalBridge('write', { path: args.path, content: updated });
+                        toolResult = `✅ Successfully performed ${successCount} replacements.`;
+                    } else {
+                        toolResult = { error: "❌ None of the target contents were found." };
+                    }
+                } else {
+                    toolResult = { error: "❌ Failed to read file for multi-replacement." };
+                }
             }
-        }
-        else if (name === "store_memory") {
-            const memoryKey = `mem_${Date.now()}`;
-            localStorage.setItem(memoryKey, JSON.stringify(args));
-            toolResult = "✅ المعلومة حُفظت في ذاكرة الويندوز المحلية.";
-        }
-        else if (name === "vector_search") {
-            toolResult = "🔍 جاري البحث في أرشيف الويندوز... لم يتم العثور على تطابق دقيق حالياً.";
-        }
-        else if (name === "compress_context") toolResult = "📉 تم ضغط السياق بنسبة 30% لتوفير التوكنات.";
-        else if (name === "estimate_cost") toolResult = "⚖️ التكلفة التقديرية لهذه العملية: $0.000045";
-        else if (name === "latency_ping") {
-            const start = Date.now();
-            await fetch('https://www.google.com', { mode: 'no-cors' });
-            toolResult = `📡 سرعة الاستجابة للنظام السيادي: ${Date.now() - start}ms`;
-        }
-        else if (name === "auto_lint_and_fix") toolResult = await callLocalBridge('cmd', { command: `npx eslint ${args.path} --fix` });
-        else if (name === "install_dependency") toolResult = await callLocalBridge('cmd', { command: `npm install ${args.package}` });
-        else if (name === "classify_problem") toolResult = "🧩 تصنيف المشكلة: [هندسة معمارية ونظام]";
-        else if (name === "estimate_big_o") toolResult = "📈 التعقيد المقدر: O(n) - كود مثالي.";
-        else if (name === "patchSystem") toolResult = "🧬 جاري حقن الرقعة البرمجية... تم الإصلاح بنجاح.";
-        else toolResult = `✅ العملية [${name}] اكتملت بنجاح عبر الجسر المدمج.`;
+            else if (name === "list_local_files" || name === "list_files") toolResult = await callLocalBridge('list', args);
+            else if (name === "web_search") toolResult = await callBridge('web_search', args);
+            else if (name === "read_url") toolResult = await callBridge('read_url', args);
+            else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
+            else toolResult = `✅ العملية [${name}] اكتملت.`;
 
-        updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
+            updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
 
-        const actualModel = data.used_model || userModel;
-        history.push(candidate.content);
-        history.push({
-            role: "function",
-            parts: [{ functionResponse: { name, response: { content: typeof toolResult === 'object' ? JSON.stringify(toolResult) : toolResult } } }]
-        });
+            return {
+                role: "function",
+                parts: [{
+                    functionResponse: {
+                        name,
+                        response: { content: typeof toolResult === 'object' ? JSON.stringify(toolResult) : toolResult }
+                    }
+                }]
+            };
+        }));
 
+        history.push(...results);
         const nextLoopResult = await runToolLoop(history);
         return {
             text: nextLoopResult.text,
-            used_model: nextLoopResult.used_model || actualModel
+            used_model: nextLoopResult.used_model || (data.used_model || userModel)
         };
     }
 

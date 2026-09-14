@@ -1,0 +1,12 @@
+[
+  {
+    "value": "es.exe \"{SEARCH_TERM}\"",
+    "key": "UNIVERSAL_FILE_SEARCH_V2",
+    "timestamp": "2026-09-13T23:45:00.000Z"
+  },
+  {
+    "key": "EVERYTHING_CLI_PATH",
+    "value": "C:\\Tools\\es.exe",
+    "timestamp": "2026-09-13T23:45:00.000Z"
+  }
+]
