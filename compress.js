@@ -1,22 +1,26 @@
-const fs = require('fs');
+const { exec } = require('child_process');
 const path = require('path');
-const { execSync } = require('child_process');
+const fs = require('fs');
 
-const sourceDir = path.join(__dirname, 'Mastermind_Desktop');
-const outputZip = path.join(__dirname, 'Mastermind_Desktop.zip');
+const sourceDir = 'Mastermind_Desktop';
+const outputZip = 'Mastermind_Desktop.zip';
 
-console.log('بدء عملية الضغط...');
+console.log('جاري ضغط المجلد باستخدام أدوات النظام...');
 
-// محاولة استخدام أمر النظام الافتراضي للضغط
-try {
-    if (process.platform === 'win32') {
-        execSync(`powershell Compress-Archive -Path "${sourceDir}" -DestinationPath "${outputZip}" -Force`);
-    } else {
-        execSync(`zip -r "${outputZip}" "Mastermind_Desktop"`);
-    }
-    console.log('تم الضغط بنجاح باستخدام أوامر النظام!');
-} catch (error) {
-    console.log('فشلت أوامر النظام، جاري المحاولة عبر Node.js...');
-    // إذا لم تنجح أوامر النظام، يمكن استخدام مكتبة مدمجة أو إشعار المستخدم
-    console.error('يرجى تشغيل السكربت في بيئة تدعم PowerShell أو zip.');
+// التحقق من وجود المجلد
+if (!fs.existsSync(sourceDir)) {
+    console.error(`خطأ: المجلد ${sourceDir} غير موجود.`);
+    process.exit(1);
 }
+
+// استخدام أمر zip المدمج في بيئات Linux/GitHub
+exec(`zip -r ${outputZip} ${sourceDir}`, (error, stdout, stderr) => {
+    if (error) {
+        console.error(`فشل الضغط: ${error.message}`);
+        return;
+    }
+    if (stderr) {
+        console.log(`تنبيه: ${stderr}`);
+    }
+    console.log(`✅ تم ضغط المجلد بنجاح إلى: ${outputZip}`);
+});
