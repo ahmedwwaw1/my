@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1789426148424",
+      "title": "أهلاً وسهلاً بك! أنا جاهز تمام",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً وسهلاً بك! أنا جاهز تماماً لمساعدتك. \n\nكيف يمكنني دعمك اليوم في تطوير، هندسة، أو مراجعة مشاريعك البرمجية والمعمارية؟",
+              "thoughtSignature": "EmIKYAERTTIP/kgmpxs3aEjHjtngxUmT0fhw2+vJdYcTOleznennXKsRa+HAwyrptBZ8dme57ZNTYkHO2dF1KJKxxbFNJwCt/3Tihp8r2LKVtTMSzFgyPElCHS/Hkaw1B871dw=="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1789426148424",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-14T22:49:22.857Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً وسهلاً بك! أنا جاهز تماماً لمساعدتك. \\n\\nكيف يمكنني دعمك اليوم في تطوير، هندسة، أو مراجعة مشاريعك البرمجية والمعمارية؟\",\"thoughtSignature\":\"EmIKYAERTTIP/kgmpxs3aEjHjtngxUmT0fhw2+vJdYcTOleznennXKsRa+HAwyrptBZ8dme57ZNTYkHO2dF1KJKxxbFNJwCt/3Tihp8r2LKVtTMSzFgyPElCHS/Hkaw1B871dw==\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك جلب لي اسم ملف واحد من المستودع\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"list_files\",\"args\":{},\"id\":\"call_5134118\"},\"thoughtSignature\":\"EqcDCqQDARFNMg8+77m4Lf+mCDvCE4+oCjE695hrNrTdIKY8XKVYtAMaF9yS9ajAUl67XSh3Ku5keaZmtKTU9Pv3T9b6HDUdKy9IXYt+7T6b1ZUTPQ0AUVG4/1GBHVImRsVgexWKzvz7abMr3FHrOKsOe4YQ9OIYgKSaabffAIP80nvVF8KCFhz3vFR0xKb94t6QKi1LxvO/8x+/NWPm9v8YF8Av76+OC3Hwa5cL0PX6TRhs9klRB/Fmz0jQQvkaPaOaHh8OzzD0Fp3Kc85V+bP0tu3ob8EKNYDfDHJa/r2jboWTAKVjPxBqk878/j/ljo54BD2O1jqojGRh1XFe+FgjVyaZoG1toj9s7XVAtMLgXPjymtBExLFoki/IRePerwDTaeTgTh7aiSgckJMwYHcRR7OeM/nGn2Qv4jouY1Ifs0LAPO2Pk2qThogtv02vH7nPkV+gecSMmZY6iQcq80SGGDTcOONFswFlpoKUQMpa2ql01tb+4lnrk77qSVWh7uqoF03F1SimnHZZzVXFEL6W+Vk5BKaVE6hqqxrPNpfy2Pm03AU8YSHz\"}]},{\"role\":\"function\",\"parts\":[{\"functionResponse\":{\"name\":\"list_files\",\"response\":{\"content\":\"محتويات الجذر:\\n📁 .artifacts\\n📄 .gitattributes\\n📁 .github\\n📄 .gitignore\\n📄 EMERGENCY_REPAIR_GUIDE.txt\\n📁 Mastermind_Desktop\\n📁 My location data\\n📄 README.md\\n📁 ScriptBot\\n📁 ai_mastermind_capabilities\\n📁 archive\\n📁 bridge\\n📄 chat_logs.json\\n📄 compress.js\\n📄 compress_mastermind.ps1\\n📄 compressor.html\\n📄 direct_compress.js\\n📄 engine_memory.json\\n📁 images\\n📄 index.html\\n📄 main.js\\n📁 my file wo\\n📁 my_AI\\n📄 package-lock.json\\n📄 package.json\\n📄 preload.js\\n📄 remigrate_final.ps1\\n📄 steps.jsonl\\n📄 system-capabilities.txt\\n📄 system_prompt_discussion.txt\\n📄 test.txt\\n📄 test_engine.py\\n📄 المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md\\n📄 حاسبة.html\\n📄 دليل_إصلاح_الطوارئ_VSA.txt\"}}}]}]",
+  "timestamp": "2026-09-14T22:49:40.644Z"
 }
