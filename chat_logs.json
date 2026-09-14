@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1789426148424",
-      "title": "لقد قمت بفحص ملف `bridge/Worke",
+      "title": "لقد قمت بتحليل ملف `bridge/sup",
       "history": [
         {
           "role": "user",
@@ -331,11 +331,57 @@
             }
           ],
           "model": "gemini-3.1-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ملاحضة انت الان تتصل معي من خلال  bridge/supabase_bridge_logic.js"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "read_file",
+                "args": {
+                  "path": "bridge/supabase_bridge_logic.js"
+                },
+                "id": "call_5808458"
+              },
+              "thoughtSignature": "EnEKbwERTTIPqNT5iOQMDRAFP2WwM/of/7/mlC7RagFc6w4nQc82EuElg3v9QbTzuCrNBQVnPn6BbCitTZ7kZhbsPvm02u0TLuI/56fMU4bTsJOaMS8Z3n5mxN7C92iwUijIUTUWBYx+0KTYG5oaaDTInw=="
+            }
+          ]
+        },
+        {
+          "role": "function",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "read_file",
+                "response": {
+                  "content": "/**\n * VSA Academy Sovereign Bridge - TRANSPARENT RESILIENCE ENGINE\n * ---------------------------------------------------------------\n * هذا الإصدار يضمن الشفافية المطلقة في ذكر اسم الموديل الذي رد فعلياً.\n */\n\nimport { serve } from \"https://deno.land/std@0.168.0/http/server.ts\"\n\nconst corsHeaders = {\n  'Access-Control-Allow-Origin': '*',\n  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',\n  'Access-Control-Allow-Methods': 'POST, OPTIONS'\n}\n\n// 🎯 قائمة النماذج السيادية لعام 2026\nconst MODEL_ROUTES = [\n    { key: \"gemini-3.7-flash\", id: \"gemini-3.7-flash\" },\n    { key: \"gemini-3.6-flash\", id: \"gemini-3.6-flash\" },\n    { key: \"gemini-3.5-flash-lite\", id: \"gemini-3.5-flash-lite\" },\n    { key: \"gemini-3.5-flash\", id: \"gemini-3.5-flash\" },\n    { key: \"gemini-3.1-flash-lite\", id: \"gemini-3.1-flash-lite\" },\n    { key: \"gemini-3-flash-preview\", id: \"gemini-3-flash-preview\" },\n    { key: \"gemini-2.5-pro\", id: \"gemini-2.5-pro\" },\n    { key: \"gemini-2.5-flash-lite\", id: \"gemini-2.5-flash-lite\" },\n    { key: \"gemini-2.5-flash\", id: \"gemini-2.5-flash\" },\n    { key: \"gemini-omni-1.1-flash\", id: \"gemini-omni-1.1-flash\" },\n    { key: \"gemini-3.1-flash-lite-image\", id: \"gemini-3.1-flash-lite-image\" },\n    { key: \"gemini-3-pro-image\", id: \"gemini-3-pro-image\" },\n    { key: \"gemini-3.1-flash-image\", id: \"gemini-3.1-flash-image\" }\n];\n\nserve(async (req) => {\n  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })\n\n  try {\n    const requestData = await req.json();\n    const { action, model: requestedModel, endpoint, method, body } = requestData;\n    const payload = requestData.payload || requestData;\n\n    if (action === 'health_check') {\n        return new Response(JSON.stringify({ status: \"ok\", message: \"VSA Bridge 2026 Online\" }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })\n    }\n\n    if (action === 'chat') {\n      const apiKey = Deno.env.get(\"GEMINI_API_KEY\")\n\n      let rawId = String(requestedModel || \"\").trim().toLowerCase();\n\n      // العثور على الفهرس المختار لبدء اللوب منه ومن ثم النزول لأسفل\n      let startIndex = MODEL_ROUTES.findIndex(r => rawId.includes(r.key));\n      if (startIndex === -1) startIndex = 0;\n\n      const allModelIds = [];\n      // إضافة النموذج المختار وما يليه في القائمة (حسب طلب المستخدم: يبدأ من تحت النموذج المحدد)\n      for (let i = startIndex; i < MODEL_ROUTES.length; i++) {\n          allModelIds.push(MODEL_ROUTES[i].id);\n      }\n      // إذا أردت تدوير اللوب ليعود للبداية في حال فشل الجميع (اختياري)\n      for (let i = 0; i < startIndex; i++) {\n          allModelIds.push(MODEL_ROUTES[i].id);\n      }\n\n      const userPreference = MODEL_ROUTES[startIndex].id;\n      let lastError = null;\n\n      for (const modelId of allModelIds) {\n          try {\n              const fetchWithVersion = async (version) => {\n                  const url = `https://generativelanguage.googleapis.com/${version}/models/${modelId}:generateContent?key=${apiKey}`;\n                  return await fetch(url, {\n                      method: 'POST',\n                      headers: { 'Content-Type': 'application/json' },\n                      body: JSON.stringify({\n                          system_instruction: payload.system_instruction,\n                          contents: payload.contents,\n                          tools: payload.tools,\n                          generation_config: payload.generationConfig || { maxOutputTokens: 4096 }\n                      })\n                  });\n              };\n\n              let response = await fetchWithVersion('v1beta');\n              if (response.status === 404) response = await fetchWithVersion('v1');\n\n              const data = await response.json();\n\n              if (!response.ok) {\n                  lastError = data.error?.message || \"Model Unavailable\";\n                  continue;\n              }\n\n              // ✅ الشفافية: نرسل اسم الموديل الذي نجح فعلياً في المتغير used_model\n              return new Response(JSON.stringify({\n                  ...data,\n                  used_model: modelId,\n                  fallback_active: userPreference !== modelId\n              }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });\n\n          } catch (err) {\n              lastError = err.message;\n              continue;\n          }\n      }\n      throw new Error(`كافة النماذج المتاحة استهلكت حصتها. آخر خطأ: ${lastError}`);\n    }\n\n    if (action === 'github' || action === 'github_search') {\n      const githubToken = Deno.env.get(\"GITHUB_TOKEN\")\n      let finalEndpoint = endpoint || requestData.endpoint;\n\n      if (action === 'github_search') {\n        const repo = Deno.env.get(\"GITHUB_REPO\") || \"ahmedwwaw1/my\";\n        const query = payload.query || requestData.query;\n        finalEndpoint = `https://api.github.com/search/code?q=${encodeURIComponent(query)}+repo:${repo}`;\n      }\n\n      const res = await fetch(finalEndpoint, {\n        method: method || 'GET',\n        headers: {\n          'Authorization': `Bearer ${githubToken}`,\n          'Accept': 'application/vnd.github+json',\n          'Content-Type': 'application/json',\n        },\n        body: body ? JSON.stringify(body) : undefined\n      })\n      const data = await res.json()\n      return new Response(JSON.stringify(data), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })\n    }\n\n    if (action === 'web_search' || action === 'read_url') {\n      if (action === 'read_url') {\n          const url = payload.url || requestData.url;\n          const res = await fetch(url);\n          const text = await res.text();\n          return new Response(JSON.stringify({ content: text }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })\n      }\n\n      const query = payload.query || requestData.query;\n      const googleKey = Deno.env.get(\"GOOGLE_SEARCH_KEY\");\n      const googleCx = Deno.env.get(\"GOOGLE_CX\"); // معرف محرك البحث المخصص\n      const tavilyKey = Deno.env.get(\"TAVILY_API_KEY\");\n\n      // 1. المحاولة عبر Google Search API كمحرك أساسي\n      if (googleKey && googleCx) {\n        try {\n          const googleUrl = `https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${googleCx}&q=${encodeURIComponent(query)}`;\n          const res = await fetch(googleUrl);\n          const data = await res.json();\n          if (data.items) {\n             return new Response(JSON.stringify({\n               source: \"google\",\n               results: data.items.map(i => ({ title: i.title, url: i.link, content: i.snippet }))\n             }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });\n          }\n        } catch (e) { console.error(\"Google Search Failed, falling back to Tavily...\"); }\n      }\n\n      // 2. المحاولة عبر Tavily API كمحرك ثانوي (أو أساسي في حال فشل جوجل)\n      if (tavilyKey) {\n        try {\n          const response = await fetch(\"https://api.tavily.com/search\", {\n            method: \"POST\",\n            headers: { \"Content-Type\": \"application/json\" },\n            body: JSON.stringify({\n              api_key: tavilyKey,\n              query: query,\n              search_depth: \"advanced\",\n              include_answer: true,\n              max_results: 5\n            })\n          });\n          const data = await response.json();\n          return new Response(JSON.stringify({ source: \"tavily\", ...data }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });\n        } catch (err) {\n          return new Response(JSON.stringify({ error: `All search engines failed: ${err.message}` }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });\n        }\n      }\n\n      return new Response(JSON.stringify({ error: \"No Search API keys configured\" }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });\n    }\n\n    // استجابة افتراضية في حال لم يتطابق أي إجراء\n    return new Response(JSON.stringify({ error: `Action '${action}' not supported by bridge.` }), {\n      status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }\n    })\n\n  } catch (error) {\n    return new Response(JSON.stringify({ error: error.message }), {\n      status: 500, headers: corsHeaders\n    })\n  }\n})\n"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "لقد قمت بتحليل ملف `bridge/supabase_bridge_logic.js` بدقة، وهذا يغير فهمنا تماماً لكيفية عمل النظام. أنت محق، هذا هو \"العقل المدبر\" للاتصالات في بيئتي.\n\n### تحليل معماري لـ `supabase_bridge_logic.js`:\n\n1.  **محرك مرن (Resilience Engine):** هذا الجسر مصمم ليكون \"سيادياً\" (Sovereign)، حيث يحتوي على قائمة `MODEL_ROUTES` التي تسمح لي بالتبديل التلقائي بين نماذج Gemini (من `gemini-3.7-flash` وصولاً إلى `gemini-3.1-flash-image`) في حال فشل أحدها.\n2.  **تعدد المهام (Multi-Action Bridge):** الجسر لا يقتصر على الدردشة فقط، بل يدير:\n    *   **`github` / `github_search`:** هذا هو المفتاح! الجسر لديه صلاحية الوصول إلى GitHub API مباشرة باستخدام `GITHUB_TOKEN` و `GITHUB_REPO`.\n    *   **`web_search`:** يدير عمليات البحث عبر Google Custom Search أو Tavily.\n3.  **لماذا فشلت أداة `fast_file_search` سابقاً؟**\n    *   لأن أداة `fast_file_search` كانت تحاول الاتصال بـ `localhost` (خادم محلي)، بينما الجسر الذي نستخدمه الآن هو **Deno Deploy** (سحابي).\n    *   الجسر الحالي لا يملك دالة `fs.readdir` (لأن Deno في بيئة Edge لا تملك وصولاً مباشراً لنظام الملفات المحلي للمستودع إلا عبر GitHub API).\n\n### كيف سنقوم بالبحث الآن؟\nبما أن الجسر يمتلك `action: 'github_search'`، يمكنني الآن استبدال أداة `fast_file_search` المعطلة بطلب مباشر عبر الجسر إلى GitHub API.\n\n**هل تريد مني أن أقوم بتجربة البحث عن ملف `test.txt` باستخدام `github_search` عبر الجسر مباشرة؟** (هذا سيثبت أننا نستخدم الجسر بشكل صحيح للوصول إلى ملفات المستودع).",
+              "thoughtSignature": "EnEKbwERTTIP3zjXgAl/wDowdwlBfoH4NaDS+E3NjdFu1jcKNg3BywXlqswGFgNNxy4crsW0iExwnxyfM09dr3MGqpN+qvgtTQhnHOs/2ua0JDJBVef0S9gFwy9UgSLBcknyqe7oGm2wBXLuMXawXGKOjg=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1789426148424",
   "pendingHistory": null,
-  "timestamp": "2026-09-14T23:03:37.612Z"
+  "timestamp": "2026-09-14T23:06:03.765Z"
 }
