@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1789426148424",
-      "title": "تحليلك دقيق جداً ويدل على فهم ",
+      "title": "لقد قمت بفحص ملف `bridge/Worke",
       "history": [
         {
           "role": "user",
@@ -257,11 +257,85 @@
             }
           ],
           "model": "gemini-3.1-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "اجل قم بلفحص"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "list_files",
+                "args": {
+                  "path": "bridge"
+                },
+                "id": "call_6749406"
+              },
+              "thoughtSignature": "EnEKbwERTTIP26fzA0/YYHTTWrmZ1Y2OGJDeCtqqohh75AniJKghjtso7c7nCQdtmrXWa4zkXgtXSas4rXGexh7jYMKHES7+c/ol/y9utE/Se0/F80FZsbmntn+iQAJIUw01cOeqyy+bsA8SQXJ5arPRXA=="
+            }
+          ]
+        },
+        {
+          "role": "function",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "list_files",
+                "response": {
+                  "content": "محتويات bridge:\n📄 bridge/Worker.js\n📄 bridge/supabase_bridge_logic.js"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "read_file",
+                "args": {
+                  "path": "bridge/Worker.js"
+                },
+                "id": "call_5006621"
+              },
+              "thoughtSignature": "EnEKbwERTTIPAsw7UNcFcSQnZoA2pdJwExGWrg6POkeBGlR0dFN939U7e4L53/vaZYY7khX99UKbtR/E9Z8ZCyu5AzckykmkKxc7zxp2yCTQOcknutaGTFq07XqtxJGCVztJ3i8RJKM4efqcz6A7rkJYRQ=="
+            }
+          ]
+        },
+        {
+          "role": "function",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "read_file",
+                "response": {
+                  "content": "// ============================================================\n//  🚀 VSA Universal Bridge V5.1 - OFFICIAL SDK (Edge Compatible)\n//  التحديث: إصلاح مشكلة الاستيراد في Cloudflare\n// ============================================================\n\n// استيراد النسخة المتوافقة مع Edge من مكتبة جوجل الرسمية\nimport { GoogleGenAI } from \"@google/generative-ai\";\n\nexport default {\n    async fetch(request, env) {\n        const url = new URL(request.url);\n        const path = url.pathname;\n\n        const corsHeaders = {\n            'Access-Control-Allow-Origin': '*',\n            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',\n            'Access-Control-Allow-Headers': 'Content-Type, Authorization, User-Agent',\n            'Access-Control-Expose-Headers': '*',\n        };\n\n        if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders });\n\n        // 1. مسار Gemini API عبر المكتبة الرسمية\n        if (path.startsWith('/gemini')) {\n            const apiKey = env.GEMINI_API_KEY;\n            if (!apiKey) return errorResponse('GEMINI_API_KEY not set', 500, corsHeaders);\n\n            try {\n                const body = await request.json();\n                const requestedModel = (body.model || 'gemini-1.5-flash').toLowerCase().trim();\n\n                // تهيئة المكتبة الرسمية\n                const genAI = new GoogleGenAI(apiKey);\n                const model = genAI.getGenerativeModel({ model: requestedModel });\n\n                // إرسال الطلب (المكتبة تتكفل بالباقي)\n                const result = await model.generateContent(body.contents);\n                const response = await result.response;\n                const text = response.text();\n\n                return new Response(JSON.stringify({\n                    candidates: [{ content: { role: \"model\", parts: [{ text: text }] } }]\n                }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });\n\n            } catch (e) {\n                return errorResponse(`Official SDK Error: ${e.message}`, 400, corsHeaders);\n            }\n        }\n\n        // مسار البحث كما هو\n        if (path === '/search') {\n            const query = url.searchParams.get('q');\n            if (!query) return errorResponse('Missing query', 400, corsHeaders);\n            let combinedResults = \"\";\n            try {\n                const gRes = await fetch(`https://www.googleapis.com/customsearch/v1?key=${env.GOOGLE_SEARCH_KEY}&cx=${env.GOOGLE_SEARCH_CX}&q=${encodeURIComponent(query)}&num=5`);\n                const gData = await gRes.json();\n                if (gData.items) {\n                    combinedResults += \"🔍 **نتائج البحث:**\\n\\n\";\n                    gData.items.forEach((item, i) => { combinedResults += `${i+1}. ${item.title}\\n   🔗 ${item.link}\\n\\n`; });\n                }\n            } catch (e) {}\n            return new Response(JSON.stringify({ success: true, results: combinedResults }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });\n        }\n\n        return new Response('🚀 VSA Bridge V5.1 Active.', { status: 200, headers: corsHeaders });\n    }\n};\n\nfunction errorResponse(message, status, corsHeaders) {\n    return new Response(JSON.stringify({ error: message }), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });\n}\n"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "لقد قمت بفحص ملف `bridge/Worker.js`، والنتائج مثيرة للاهتمام وتؤكد فرضيتك:\n\n### التحليل المعماري:\n1.  **طبيعة الجسر:** هذا الملف ليس \"خادماً محلياً\" (Localhost) تقليدياً، بل هو **Cloudflare Worker** (Edge Function). هذا يعني أنه مصمم للعمل في بيئة سحابية موزعة وليس على جهاز كمبيوتر محلي.\n2.  **وظيفة الجسر:** الجسر الحالي يركز بشكل أساسي على:\n    *   توجيه طلبات `Gemini API` عبر مكتبة `GoogleGenAI` الرسمية.\n    *   إجراء عمليات بحث عبر `Google Custom Search API`.\n3.  **الفجوة (The Missing Link):** لا يوجد في هذا الملف أي منطق برمجي للتعامل مع **نظام الملفات (File System Indexing)**. هو لا يحتوي على دوال مثل `fs.readdir` أو `glob` التي تقوم بفهرسة الملفات محلياً.\n\n### لماذا فشلت أداة `fast_file_search`؟\nبما أن الأداة تحاول الاتصال بـ `localhost` (كما ظهر في رسالة الخطأ السابقة)، فهذا يعني أن هناك **تضارباً في التكوين (Configuration Mismatch)**:\n*   النظام يحاول البحث عن \"خادم فهرسة محلي\" (Local Indexer) غير موجود.\n*   بينما \"الجسر\" الموجود في المستودع هو \"خادم سحابي\" (Cloud Worker) لا يملك صلاحية الوصول إلى ملفات المستودع مباشرة.\n\n### التوصية الهندسية:\nلإصلاح هذا، لدينا خياران:\n1.  **تطوير الجسر:** إضافة منطق \"فهرسة الملفات\" إلى `Worker.js` (وهذا صعب في بيئة Cloudflare لأنها لا تملك وصولاً مباشراً للملفات).\n2.  **تغيير استراتيجية البحث:** الاعتماد على أداة `list_files` (التي نستخدمها الآن) وتطوير \"مُفهرس ذكي\" (Smart Indexer) يقوم بإنشاء ملف `index.json` داخل المستودع، بحيث أقرأ أنا هذا الملف بدلاً من محاولة الاتصال بخادم خارجي.\n\n**ما رأيك؟ هل نبدأ بإنشاء \"مُفهرس ذكي\" (Smart Indexer) يقوم بمسح المستودع وحفظ أسماء الملفات في ملف `index.json` لتسهيل البحث مستقبلاً؟**",
+              "thoughtSignature": "EnEKbwERTTIPEHL7ThSGwtoyWtg8tsbVW3X9wBvorUa6Jt9EyFS62/j5cB5ydIRLixH5OtTGaYaQvIkWAZGemdObxdeQj+HKMs/fD+qtbrHtaJ9lda1jTEhZrWlNwI4W21Dv8XpEcKz1BRSEnnlW2QYJIA=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1789426148424",
   "pendingHistory": null,
-  "timestamp": "2026-09-14T23:01:40.350Z"
+  "timestamp": "2026-09-14T23:03:37.612Z"
 }
