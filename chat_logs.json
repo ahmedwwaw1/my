@@ -101,6 +101,6 @@
     }
   ],
   "activeSessionId": "1789381405599",
-  "pendingHistory": null,
-  "timestamp": "2026-09-14T10:23:25.600Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك ضغط ملف اذا طلبت منك\"}]}]",
+  "timestamp": "2026-09-14T10:23:39.751Z"
 }
