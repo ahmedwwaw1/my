@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mastermind Compressor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <h1>أداة الضغط السيادية</h1>
+    <button onclick="compress()">اضغط المجلد الآن</button>
+    <script>
+        async function compress() {
+            const zip = new JSZip();
+            // ملاحظة: هذه الأداة ستعمل إذا قمت بوضع الملفات يدوياً أو إذا كان المتصفح يملك صلاحية الوصول
+            alert("هذه الأداة تعمل داخل المتصفح. يرجى التأكد من رفع الملفات المطلوبة.");
+            zip.file("hello.txt", "مرحباً، هذا ملف مضغوط من المعماري السيادي!");
+            zip.generateAsync({type:"blob"}).then(function(content) {
+                saveAs(content, "Mastermind_Desktop.zip");
+            });
+        }
+    </script>
+</body>
+</html>
