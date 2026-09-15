@@ -1,3 +1,4 @@
+# one-shot re-upgrade trigger
 name: Re-upgrade Cloud Discovery Scan
 
 on:
@@ -18,34 +19,17 @@ jobs:
         run: |
           node <<'NODE'
           const fs = require('fs');
-
           const corePath = 'my_AI/ai_engine_core.js';
           const enginePath = 'my_AI/discovery_scan_engine.js';
           const marker = '// --- [AI Engine Logic] ---';
-
           const core = fs.readFileSync(corePath, 'utf8');
           const engine = fs.readFileSync(enginePath, 'utf8').trim();
-
-          if (core.includes('const CLOUD_ARCH_SCAN_LIMITS')) {
-            throw new Error('Core already contains the cloud discovery engine. Refusing duplicate insertion.');
-          }
-
-          if (!core.includes(marker)) {
-            throw new Error(`Core marker not found: ${marker}`);
-          }
-
+          if (core.includes('const CLOUD_ARCH_SCAN_LIMITS')) throw new Error('Core already contains the cloud discovery engine.');
+          if (!core.includes(marker)) throw new Error(`Core marker not found: ${marker}`);
           let patched = core.replace(marker, `${engine}\n\n${marker}`);
-
-          const discoveryRegex = /(else if \(name === ["']discovery_scan["']\) \{)[\\s\\S]*?(?=\\n\\s*else if \(name === )/;
-          if (!discoveryRegex.test(patched)) {
-            throw new Error('Existing discovery_scan branch was not found; refusing an unsafe patch.');
-          }
-
-          patched = patched.replace(
-            discoveryRegex,
-            `$1\n        try {\n            toolResult = await performCloudArchitectureDiscovery(safePath || "");\n        } catch (scanError) {\n            toolResult = {\n                error: "Cloud discovery scan failed.",\n                details: scanError?.message || String(scanError),\n                fallback: await listGithubFiles(safePath || "")\n            };\n        }\n    }`
-          );
-
+          const discoveryRegex = /(else if \(name === ["']discovery_scan["']\) \{)[\s\S]*?(?=\n\s*else if \(name === )/;
+          if (!discoveryRegex.test(patched)) throw new Error('Existing discovery_scan branch was not found.');
+          patched = patched.replace(discoveryRegex, `$1\n        try {\n            toolResult = await performCloudArchitectureDiscovery(safePath || "");\n        } catch (scanError) {\n            toolResult = {\n                error: "Cloud discovery scan failed.",\n                details: scanError?.message || String(scanError),\n                fallback: await listGithubFiles(safePath || "")\n            };\n        }\n    }`);
           fs.writeFileSync(corePath, patched, 'utf8');
           NODE
 
