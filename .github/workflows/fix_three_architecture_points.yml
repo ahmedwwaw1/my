@@ -39,7 +39,7 @@ jobs:
             if (!s.includes('const UNIVERSAL_API_TESTING_VERSION')) {
               const anchor = 'const AI_TOOLS = [{';
               if (!s.includes(anchor)) throw new Error(`API insertion anchor missing: ${file}`);
-              s = s.replace(anchor, `${apiSource}\n\n${anchor}`);
+              s = s.replace(anchor, () => `${apiSource}\n\n${anchor}`);
             }
 
             const repairSig = 'function architectRepairPlan(validation, design) {';
@@ -48,7 +48,6 @@ jobs:
             }
             const badRepair = "        architectureExpansion,\n        stages:";
             if (!s.includes(badRepair)) throw new Error(`Architecture expansion repair-stage anchor missing: ${file}`);
-            s = s.replace(badRepair, "        architectureExpansion,\n        stages:");
 
             const oldOrder = "    const validation = architectValidationPlan(design, snapshot);\n    const repair = architectRepairPlan(validation, design);\n    const architectureExpansion = runUniversalArchitectureExpansion";
             const newOrder = "    const validation = architectValidationPlan(design, snapshot);\n    const architectureExpansion = runUniversalArchitectureExpansion";
@@ -56,13 +55,10 @@ jobs:
               s = s.replace(oldOrder, newOrder);
               const marker = "    const architectureExpansion = runUniversalArchitectureExpansion";
               const pos = s.indexOf(marker);
-              const lineEnd = s.indexOf('\n', pos);
-              const expansionLine = s.slice(pos, lineEnd < 0 ? s.length : lineEnd);
               const tailMarker = "    return {\n        loopVersion:";
               const returnPos = s.indexOf(tailMarker, pos);
               if (returnPos < 0) throw new Error(`Architect return anchor missing: ${file}`);
-              const insertAt = returnPos;
-              s = s.slice(0, insertAt) + "    const repair = architectRepairPlan(validation, design, architectureExpansion);\n" + s.slice(insertAt);
+              s = s.slice(0, returnPos) + "    const repair = architectRepairPlan(validation, design, architectureExpansion);\n" + s.slice(returnPos);
             } else if (!s.includes('const repair = architectRepairPlan(validation, design, architectureExpansion);')) {
               throw new Error(`Architect ordering anchor missing: ${file}`);
             }
@@ -80,8 +76,8 @@ jobs:
           cp.execFileSync(process.execPath, ['--check', 'Mastermind_Desktop/universal_api_testing_engine.js'], { stdio: 'inherit' });
 
           const verify = [
-            ['my_AI/ai_engine_core.js', ['runClosedRuntimeRepairLoop','runUniversalApiContractTesting','architectureExpansion']],
-            ['Mastermind_Desktop/core.js', ['runClosedRuntimeRepairLoop','runUniversalApiContractTesting','architectureExpansion']],
+            ['my_AI/ai_engine_core.js', ['runClosedRuntimeRepairLoop','runUniversalApiContractTesting','architectureExpansion','architectRepairPlan(validation, design, architectureExpansion)']],
+            ['Mastermind_Desktop/core.js', ['runClosedRuntimeRepairLoop','runUniversalApiContractTesting','architectureExpansion','architectRepairPlan(validation, design, architectureExpansion)']],
             ['my_AI/universal_api_testing_engine.js', ['runUniversalApiContractTesting']],
             ['Mastermind_Desktop/universal_api_testing_engine.js', ['runUniversalApiContractTesting']]
           ];
