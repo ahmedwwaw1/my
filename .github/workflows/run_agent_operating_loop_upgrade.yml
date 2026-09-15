@@ -9,6 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Adapt upgrader for desktop layout
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/upgrade_agent_operating_loop.js')
+          s=p.read_text()
+          old="""  const anchor=s.includes('async function callAiBrain(history)')?'async function callAiBrain(history)':(s.includes('async function callAiBrain')?'async function callAiBrain':null);"""
+          new="""  const anchor=s.includes('async function callAiBrain(history)')?'async function callAiBrain(history)':(s.includes('async function callAiBrain')?'async function callAiBrain':(s.includes('async function runToolLoop(history)')?'async function runToolLoop(history)':null));"""
+          if old not in s: raise SystemExit('anchor patch target not found')
+          p.write_text(s.replace(old,new))
+          PY
       - name: Apply upgrade
         run: node scripts/upgrade_agent_operating_loop.js
       - name: Verify syntax
