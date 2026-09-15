@@ -1,0 +1,112 @@
+name: Bind Evidence Engine
+
+on:
+  push:
+    paths:
+      - '.github/workflows/bind_evidence_loop.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  bind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bind evidence engine
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const cores=[
+            ['my_AI/ai_engine_core.js','my_AI/universal_evidence_engine.js','GitHub Cloud'],
+            ['Mastermind_Desktop/core.js','Mastermind_Desktop/universal_evidence_engine.js','Windows Desktop']
+          ];
+          function endOfFunction(s,marker){
+            const start=s.indexOf(marker); if(start<0) throw Error('Missing '+marker);
+            const open=s.indexOf('{',start); if(open<0) throw Error('Missing body');
+            let d=0,q=null,e=false,line=false,block=false,end=-1;
+            for(let i=open;i<s.length;i++){
+              const c=s[i],n=s[i+1];
+              if(line){if(c==='\n')line=false;continue;}
+              if(block){if(c==='*'&&n==='/'){block=false;i++;}continue;}
+              if(q){if(e){e=false;continue;}if(c==='\\'){e=true;continue;}if(c===q)q=null;continue;}
+              if(c==='/'&&n==='/'){line=true;i++;continue;}
+              if(c==='/'&&n==='*'){block=true;i++;continue;}
+              if(c==='\''||c==='"'||c==='`'){q=c;continue;}
+              if(c==='{')d++; else if(c==='}'&&--d===0){end=i+1;break;}
+            }
+            if(end<0)throw Error('Unbalanced '+marker); return {start,end};
+          }
+          const adapter=String.raw`
+/** Universal Evidence Adapter 1.0 */
+const UNIVERSAL_EVIDENCE_ADAPTER_VERSION='1.0-bound';
+async function runUniversalAgentOperatingLoop(options={}){
+ const environment=options.environment||'Unknown';
+ const root=typeof normalizePathForCloud==='function'?normalizePathForCloud(options.root||''):(options.root||'');
+ const missionOptions={...options,environment,root,verify:options.verify!==false};
+ const mission=createUniversalEvidenceMission(missionOptions);
+ const discover=async()=>{
+  if(environment==='GitHub Cloud'&&typeof performCloudArchitectureDiscovery==='function')return await Promise.resolve(performCloudArchitectureDiscovery(root));
+  if(typeof performArchitectureDiscovery==='function')return await Promise.resolve(performArchitectureDiscovery(root));
+  return null;
+ };
+ const baseline=await discover();
+ let result;
+ try{ result=await runUniversalAgentOperatingLoopLegacy(missionOptions); }
+ catch(e){ result={status:'failed',error:String(e?.message||e),implementation:{changed:false,executions:[]}}; }
+ const post=await discover();
+ const finalized=finalizeUniversalEvidenceMission(mission,missionOptions,result,baseline,post,typeof architectNormalizeSnapshot==='function'?architectNormalizeSnapshot:null);
+ return {...result,available:true,version:UNIVERSAL_EVIDENCE_ADAPTER_VERSION,status:finalized.acceptance.verdict,success:finalized.state==='completed',mission:finalized,acceptance:finalized.acceptance,evidence:finalized.evidence,checkpoint:finalized.checkpoint,successReason:finalized.acceptance.confidence.reasons.join(' '),failureReason:finalized.state==='failed'?finalized.acceptance.confidence.reasons.join(' '):null};
+}
+`;
+          for(const [core,engine,env] of cores){
+            let s=fs.readFileSync(core,'utf8');
+            if(!s.includes('const UNIVERSAL_EVIDENCE_ENGINE_VERSION')){
+              const e=fs.readFileSync(engine,'utf8').replace(/\nif\s*\(typeof module[^]*$/,'');
+              const fn=endOfFunction(s,'async function runUniversalAgentOperatingLoop');
+              const pre=s.slice(0,fn.start).replace(/\s+$/,'');
+              const old=s.slice(fn.start,fn.end).replace('async function runUniversalAgentOperatingLoop','async function runUniversalAgentOperatingLoopLegacy');
+              const post=s.slice(fn.end);
+              s=pre+'\n\n'+e+'\n\n'+old+'\n\n'+adapter+'\n'+post;
+            }
+            fs.writeFileSync(core,s,'utf8');
+            console.log('bound',core,env);
+          }
+          // Verification semantics: unknown is no longer a pass when verification is requested.
+          for(const f of ['my_AI/universal_evidence_engine.js','Mastermind_Desktop/universal_evidence_engine.js']){
+            let s=fs.readFileSync(f,'utf8');
+            s=s.replace("!verify || verificationStatus === 'pass' || verificationStatus === 'unknown'","!verify || verificationStatus === 'pass'");
+            fs.writeFileSync(f,s,'utf8');
+          }
+          NODE
+      - name: Verify syntax and binding
+        run: |
+          node --check my_AI/ai_engine_core.js
+          node --check Mastermind_Desktop/core.js
+          node --check my_AI/universal_evidence_engine.js
+          node --check Mastermind_Desktop/universal_evidence_engine.js
+          node <<'NODE'
+          const fs=require('fs');
+          for(const f of ['my_AI/ai_engine_core.js','Mastermind_Desktop/core.js']){
+            const s=fs.readFileSync(f,'utf8');
+            if((s.match(/async function runUniversalAgentOperatingLoop\(/g)||[]).length!==1)throw Error('wrapper count '+f);
+            if((s.match(/async function runUniversalAgentOperatingLoopLegacy\(/g)||[]).length!==1)throw Error('legacy count '+f);
+            if(!s.includes('UNIVERSAL_EVIDENCE_ADAPTER_VERSION'))throw Error('adapter missing '+f);
+            if(!s.includes('finalizeUniversalEvidenceMission'))throw Error('evidence binding missing '+f);
+          }
+          for(const f of ['my_AI/universal_evidence_engine.js','Mastermind_Desktop/universal_evidence_engine.js']){
+            const s=fs.readFileSync(f,'utf8');
+            if(s.includes("verificationStatus === 'unknown'"))throw Error('unknown verification still accepted '+f);
+          }
+          console.log('Evidence binding verification passed.');
+          NODE
+      - name: Commit and cleanup
+        shell: bash
+        run: |
+          rm -f .github/workflows/bind_evidence_loop.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add my_AI/ai_engine_core.js Mastermind_Desktop/core.js my_AI/universal_evidence_engine.js Mastermind_Desktop/universal_evidence_engine.js .github/workflows/bind_evidence_loop.yml
+          git commit -m 'Bind evidence engine into operating loop'
+          git push
