@@ -1,0 +1,207 @@
+name: Integrate Empirical Runtime Verification
+on:
+  push:
+    paths:
+      - '.github/workflows/integrate_empirical_runtime.yml'
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Integrate runtime verification engine
+        shell: bash
+        run: |
+          cat > /tmp/universal_runtime_verification_engine.js <<'EOF'
+          /**
+           * Universal Empirical Runtime Verification Engine 1.0
+           * Actual execution layer for build/test/runtime/process/port/API evidence.
+           */
+          const UNIVERSAL_RUNTIME_VERIFICATION_VERSION = '1.0-empirical';
+          function urvArray(v){return Array.isArray(v)?v:[];}
+          function urvString(v){return typeof v==='string'?v:'';}
+          function urvRedact(value){
+            let s=typeof value==='string'?value:JSON.stringify(value??'');
+            return s
+              .replace(/(api[_-]?key|token|secret|password|authorization|bearer)\\s*[:=]\\s*([^\\s,;]+)/gi,'$1=[REDACTED]')
+              .replace(/(sk-[A-Za-z0-9_-]{10,})/g,'[REDACTED_KEY]');
+          }
+          function urvIsWindows(environment=''){return /windows|desktop/i.test(environment)||(/^[A-Z]:[\\\\/]/.test(environment));}
+          function urvProjectScripts(snapshot={}){return snapshot.project&&snapshot.project.scripts&&typeof snapshot.project.scripts==='object'?snapshot.project.scripts:{};}
+          function urvCommandForScript(scriptName,scripts){return scripts[scriptName]?`npm run ${scriptName}`:null;}
+          function urvNormalizeExecution(raw,phase,command,startedAt){
+            const elapsedMs=Date.now()-startedAt;
+            let text='';let exitCode=null;let ok=null;let error=null;
+            if(raw&&typeof raw==='object'){
+              if(typeof raw.exitCode==='number') exitCode=raw.exitCode;
+              if(typeof raw.code==='number'&&exitCode===null) exitCode=raw.code;
+              if(typeof raw.success==='boolean') ok=raw.success;
+              if(typeof raw.ok==='boolean'&&ok===null) ok=raw.ok;
+              text=[raw.stdout,raw.stderr,raw.output,raw.result,raw.message,typeof raw==='string'?raw:''].filter(Boolean).join('\\n');
+              if(raw.error) error=raw.error?.message||String(raw.error);
+            }else text=String(raw??'');
+            const lower=text.toLowerCase();
+            if(ok===null&&exitCode!==null) ok=exitCode===0;
+            if(ok===null) ok=!/\\b(error|failed|fatal|exception)\\b|❌/i.test(text);
+            return {phase,command,ok:Boolean(ok),exitCode,elapsedMs,output:urvRedact(text).slice(-12000),error:error?urvRedact(error):null,signals:{syntax:/syntaxerror|unexpected token/i.test(lower),moduleMissing:/cannot find module|module not found|err_module_not_found/i.test(lower),testFailure:/test(s)? failed|failing|assertion/i.test(lower),buildFailure:/build failed|compilation failed|ts\(\\d+\)|webpack.*error|vite.*error/i.test(lower),portFailure:/econnrefused|connection refused|failed to connect/i.test(lower)}};
+          }
+          async function urvExecute(options,phase,command){
+            const startedAt=Date.now();
+            try{
+              const raw=await options.execute(command,{phase,timeoutMs:options.timeoutMs||120000});
+              return urvNormalizeExecution(raw,phase,command,startedAt);
+            }catch(error){
+              return urvNormalizeExecution({success:false,error:error?.message||String(error)},phase,command,startedAt);
+            }
+          }
+          function urvFailureClass(evidence){
+            const text=urvString(evidence?.output).toLowerCase();
+            if(evidence?.signals?.syntax)return 'syntax-error';
+            if(evidence?.signals?.moduleMissing)return 'dependency-or-import-error';
+            if(evidence?.signals?.buildFailure)return 'build-error';
+            if(evidence?.signals?.testFailure)return 'test-failure';
+            if(evidence?.signals?.portFailure)return 'runtime-connectivity-error';
+            if(/permission denied|access is denied|eacces/.test(text))return 'permission-error';
+            if(/enoent|not recognized as an internal or external command/.test(text))return 'environment-or-command-error';
+            return 'runtime-verification-failure';
+          }
+          function urvCommands(snapshot,options){
+            const scripts=urvProjectScripts(snapshot);const commands=[];const add=(phase,command,reason)=>{if(command&&!commands.some(x=>x.phase===phase&&x.command===command))commands.push({phase,command,reason});};
+            const entry=urvArray(snapshot.project?.entryPoints).find(p=>/\\.(js|mjs|cjs)$/.test(p));
+            if(entry&&options.syntax!==false)add('syntax',`node --check "${entry}"`,'Validate the primary JavaScript entry point before execution.');
+            if(options.installDependencies)add('dependencies','npm install --ignore-scripts','Install repository dependencies when explicitly requested.');
+            const testCommand=options.testCommand||urvCommandForScript('test',scripts);if(options.runTests!==false&&testCommand)add('tests',testCommand,'Execute the repository test suite.');
+            const lintCommand=options.lintCommand||urvCommandForScript('lint',scripts);if(options.runLint&&lintCommand)add('lint',lintCommand,'Execute the configured linter.');
+            const typeCommand=options.typecheckCommand||urvCommandForScript('typecheck',scripts);if(options.runTypecheck&&typeCommand)add('typecheck',typeCommand,'Execute the configured type checker.');
+            const buildCommand=options.buildCommand||urvCommandForScript('build',scripts);if(options.runBuild!==false&&buildCommand)add('build',buildCommand,'Execute the configured production build.');
+            return commands;
+          }
+          function urvStartCommand(environment,root,startCommand,logFile){
+            const isWin=urvIsWindows(environment);
+            if(isWin){const escapedRoot=String(root||'.').replace(/'/g,"''");const cmd=startCommand||'npm start';const wrapped=`Set-Location -LiteralPath '${escapedRoot}'; $p=Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','${cmd.replace(/'/g,"''")} > ${logFile} 2>&1' -PassThru; $p.Id`;return `powershell -NoProfile -Command "${wrapped.replace(/"/g,'\\"')}"`;}
+            return `cd "${String(root||'.').replace(/"/g,'\\"')}" && (${startCommand||'npm start'} > "${logFile}" 2>&1 & echo $!)`;
+          }
+          function urvMonitorCommand(environment,pid){return urvIsWindows(environment)?`powershell -NoProfile -Command "if (Get-Process -Id ${String(pid).replace(/\\D/g,'')} -ErrorAction SilentlyContinue) { 'RUNNING' } else { 'STOPPED' }"`:`kill -0 ${String(pid).replace(/\\D/g,'')} 2>/dev/null && echo RUNNING || echo STOPPED`;}
+          function urvPortsCommand(environment){return urvIsWindows(environment)?`powershell -NoProfile -Command "(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Select-Object -ExpandProperty LocalPort | Sort-Object -Unique) -join ','"`:`ss -ltnH 2>/dev/null | awk '{print $4}' | sed 's/.*://g' | sort -n | uniq | paste -sd, -`;}
+          function urvStopCommand(environment,pid){return urvIsWindows(environment)?`powershell -NoProfile -Command "Stop-Process -Id ${String(pid).replace(/\\D/g,'')} -Force -ErrorAction SilentlyContinue"`:`kill ${String(pid).replace(/\\D/g,'')} 2>/dev/null || true`;}
+          function urvLogCommand(environment,root,logFile){return urvIsWindows(environment)?`powershell -NoProfile -Command "Set-Location -LiteralPath '${String(root||'.').replace(/'/g,"''")}'; if (Test-Path '${logFile.replace(/'/g,"''")}') { Get-Content '${logFile.replace(/'/g,"''")}' -Tail 120 }"`:`cd "${String(root||'.').replace(/"/g,'\\"')}" && tail -n 120 "${logFile}" 2>/dev/null || true`;}
+          function urvHttpCommand(environment,url){return urvIsWindows(environment)?`curl.exe -sS -o NUL -w "%{http_code}" --max-time 10 "${url.replace(/"/g,'\\"')}"`:`curl -sS -o /dev/null -w '%{http_code}' --max-time 10 "${url.replace(/"/g,'\\"')}"`;}
+          async function urvRunPhaseWithRetry(options,phase,command){
+            const attempts=[];const maxRetries=Math.max(0,Number(options.maxRetries??1));
+            for(let i=0;i<=maxRetries;i++){const result=await urvExecute(options,phase,command);result.attempt=i+1;attempts.push(result);if(result.ok)break;}
+            return attempts[attempts.length-1];
+          }
+          async function runUniversalRuntimeVerification(options={}){
+            if(typeof options.execute!=='function')return {available:false,version:UNIVERSAL_RUNTIME_VERIFICATION_VERSION,error:'No runtime command executor was supplied.'};
+            const environment=options.environment||'Unknown';const snapshot=options.snapshot||{};const root=options.root||snapshot.root||'.';const phases=[];const commands=urvCommands(snapshot,options);
+            for(const item of commands){const evidence=await urvRunPhaseWithRetry({...options,root},item.phase,item.command);phases.push({...item,evidence});if(!evidence.ok&&options.stopOnFailure!==false)break;}
+            let pid=null;let runtimeStarted=false;let health=[];let ports=[];let runtimeLog=null;
+            const startCommand=options.startCommand||urvProjectScripts(snapshot).start||urvProjectScripts(snapshot).dev;
+            try{
+              if(startCommand&&options.runRuntime!==false&&phases.every(p=>p.evidence.ok)){
+                const logFile=options.logFile||'.agent-runtime.log';const startEvidence=await urvExecute(options,'start',urvStartCommand(environment,root,startCommand,logFile));phases.push({phase:'start',command:startEvidence.command,evidence:startEvidence});
+                const pidMatch=startEvidence.output.match(/\\b(\\d{1,12})\\b/g);pid=pidMatch?.[pidMatch.length-1]||null;runtimeStarted=Boolean(pid)&&startEvidence.ok;
+                if(runtimeStarted){
+                  const checks=Math.max(1,Number(options.runtimeChecks??3));
+                  for(let i=0;i<checks;i++){
+                    const monitor=await urvExecute(options,'process-monitor',urvMonitorCommand(environment,pid));phases.push({phase:'process-monitor',command:monitor.command,evidence:monitor});
+                    const portEvidence=await urvExecute(options,'port-monitor',urvPortsCommand(environment));phases.push({phase:'port-monitor',command:portEvidence.command,evidence:portEvidence});
+                    ports=urvString(portEvidence.output).split(/[,\\s]+/).filter(x=>/^\\d+$/.test(x));
+                    if(options.healthUrl)health.push(await urvExecute(options,'api-smoke',urvHttpCommand(environment,options.healthUrl)));
+                    else if(options.apiPath&&ports[0])health.push(await urvExecute(options,'api-smoke',urvHttpCommand(environment,`http://127.0.0.1:${ports[0]}${options.apiPath}`)));
+                    if(health.length&&health[health.length-1].ok)break;
+                  }
+                  runtimeLog=await urvExecute(options,'runtime-log',urvLogCommand(environment,root,options.logFile||'.agent-runtime.log'));phases.push({phase:'runtime-log',command:runtimeLog.command,evidence:runtimeLog});
+                }
+              }
+            }finally{if(pid){const stopEvidence=await urvExecute(options,'stop',urvStopCommand(environment,pid));phases.push({phase:'stop',command:stopEvidence.command,evidence:stopEvidence});}}
+            const failed=[...phases.map(p=>p.evidence).filter(e=>!e.ok),...health.filter(e=>!e.ok)];
+            const firstFailure=failed[0]||null;const status=failed.length?'failed':'passed';
+            const classification=firstFailure?urvFailureClass(firstFailure):null;
+            let postSnapshot=null;let architectureDiff=null;
+            if(typeof options.discover==='function'){
+              try{postSnapshot=await options.discover();if(typeof ua2ArchitectureDiff==='function')architectureDiff=ua2ArchitectureDiff(options.baseline||snapshot,postSnapshot?.architecture?postSnapshot:postSnapshot);}
+              catch(error){postSnapshotError=urvRedact(error?.message||String(error));}
+            }
+            return {
+              available:true,version:UNIVERSAL_RUNTIME_VERIFICATION_VERSION,status,classification,
+              summary:{executedPhases:phases.length,failedPhases:failed.length,retriesUsed:phases.reduce((n,p)=>n+Math.max(0,(p.evidence?.attempt||1)-1),0),runtimeStarted,observedPorts:ports,apiChecks:health.length},
+              phases,healthChecks:health,runtimeLog,postSnapshot,architectureDiff,
+              repair:{required:status==='failed',rootCauseClass:classification,action:status==='failed'?'Use the first failing phase and its captured output as empirical evidence; repair the root cause, then rerun runtime verification.':'No repair required.'},
+              capability:'empirical-runtime-execution'
+            };
+          }
+          if(typeof module!=='undefined')module.exports={UNIVERSAL_RUNTIME_VERIFICATION_VERSION,runUniversalRuntimeVerification,urvFailureClass,urvCommands};
+          EOF
+
+          cp /tmp/universal_runtime_verification_engine.js my_AI/universal_runtime_verification_engine.js
+          cp /tmp/universal_runtime_verification_engine.js Mastermind_Desktop/universal_runtime_verification_engine.js
+
+          node <<'NODE'
+          const fs=require('fs');
+          const engine=fs.readFileSync('/tmp/universal_runtime_verification_engine.js','utf8');
+          const targets=[
+            {path:'Mastermind_Desktop/core.js',env:'Windows Desktop',discover:'performArchitectureDiscovery',scanArgs:'args?.path || "."'},
+            {path:'my_AI/ai_engine_core.js',env:'GitHub Cloud',discover:'performCloudArchitectureDiscovery',scanArgs:'safePath || ""'}
+          ];
+          for(const target of targets){
+            let code=fs.readFileSync(target.path,'utf8');
+            if(!code.includes('UNIVERSAL_RUNTIME_VERIFICATION_VERSION')){
+              const runMarker='async function runToolLoop(history) {';
+              if(!code.includes(runMarker)) throw new Error(`runToolLoop marker not found in ${target.path}`);
+              code=code.replace(runMarker,engine+'\n\n'+runMarker);
+            }
+            if(!/name: "runtime_verify"/.test(code)){
+              const archToolRe=/\{ name: "architecture_loop", description: [^\n]+\n/;
+              const m=code.match(archToolRe);
+              if(!m) throw new Error(`architecture tool declaration not found in ${target.path}`);
+              const original=m[0];
+              const replacement=original.replace(/parameters: \{ type: "OBJECT", properties: \{ path: \{ type: "STRING", description: "مسار المشروع أو المجلد المراد تحليله\." \}, objective: \{ type: "STRING", description: "الهدف المعماري المطلوب\." \}, constraints: \{ type: "OBJECT", description: "قيود اختيارية مثل الحفاظ على API والبيانات وتقليل الاعتماديات\." \} \} \} \}/,
+                'parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "مسار المشروع أو المجلد المراد تحليله." }, objective: { type: "STRING", description: "الهدف المعماري المطلوب." }, constraints: { type: "OBJECT", description: "قيود اختيارية مثل الحفاظ على API والبيانات وتقليل الاعتماديات." }, executeValidation: { type: "BOOLEAN", description: "تشغيل التحقق التنفيذي الحقيقي بعد التحليل: Tests/Build/Runtime/Ports/API وإرجاع الأدلة." } } } }')+
+                '        { name: "runtime_verify", description: "طبقة تحقق تجريبية فعلية: تشغيل Tests وBuild ثم تشغيل المشروع، مراقبة العملية والمنافذ، اختبار API، قراءة السجلات، تصنيف الخطأ، وإعادة الفحص المعماري بعد التنفيذ.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "مسار المشروع أو المجلد." }, runBuild: { type: "BOOLEAN" }, runTests: { type: "BOOLEAN" }, runRuntime: { type: "BOOLEAN" }, startCommand: { type: "STRING" }, healthUrl: { type: "STRING" }, apiPath: { type: "STRING" }, maxRetries: { type: "INTEGER" }, runtimeChecks: { type: "INTEGER" } } } } },\n');
+              code=code.replace(original,replacement);
+            }
+            if(!code.includes('toolNameRuntimeVerification')){
+              const branchMarker='else if (name === "read_file")';
+              if(!code.includes(branchMarker)) throw new Error(`read_file dispatch marker not found in ${target.path}`);
+              const branch=`else if (name === "runtime_verify") {\n                try {\n                    const runtimeRoot = args?.path || ${target.scanArgs};\n                    const initialScan = ${target.discover}(runtimeRoot);\n                    toolResult = await runUniversalRuntimeVerification({\n                        environment: "${target.env}",\n                        root: runtimeRoot,\n                        snapshot: initialScan,\n                        baseline: initialScan,\n                        objective: args?.objective || "",\n                        runBuild: args?.runBuild !== false,\n                        runTests: args?.runTests !== false,\n                        runRuntime: args?.runRuntime !== false,\n                        startCommand: args?.startCommand || "",\n                        healthUrl: args?.healthUrl || "",\n                        apiPath: args?.apiPath || "",\n                        maxRetries: Number.isInteger(args?.maxRetries) ? args.maxRetries : 1,\n                        runtimeChecks: Number.isInteger(args?.runtimeChecks) ? args.runtimeChecks : 3,\n                        execute: async (command) => callLocalBridge('cmd', { command }),\n                        discover: async () => ${target.discover}(runtimeRoot)\n                    });\n                } catch (runtimeError) {\n                    toolResult = { error: "Empirical runtime verification failed.", details: runtimeError?.message || String(runtimeError) };\n                }\n            }\n            ${branchMarker}`;
+              code=code.replace(branchMarker,branch);
+            }
+            if(!code.includes('executeValidation: true')){
+              const old=`toolResult = runUniversalArchitectLoop(scanResult, { environment: "${target.env}", objective: args?.objective || "", constraints: args?.constraints || {} });`;
+              const newer=`const architectResult = runUniversalArchitectLoop(scanResult, { environment: "${target.env}", objective: args?.objective || "", constraints: args?.constraints || {} });\n                    if (args?.executeValidation) {\n                        architectResult.runtimeVerification = await runUniversalRuntimeVerification({\n                            environment: "${target.env}",\n                            root: ${target.scanArgs},\n                            snapshot: scanResult,\n                            baseline: scanResult,\n                            objective: args?.objective || "",\n                            execute: async (command) => callLocalBridge('cmd', { command }),\n                            discover: async () => ${target.discover}(${target.scanArgs})\n                        });\n                    }\n                    toolResult = architectResult;`;
+              if(!code.includes(old)) throw new Error(`architecture loop dispatch line not found in ${target.path}`);
+              code=code.replace(old,newer);
+            }
+            code=code.replace('CORE: ["architecture_loop",','CORE: ["architecture_loop", "runtime_verify",');
+            fs.writeFileSync(target.path,code);
+          }
+          NODE
+
+          node --check my_AI/universal_runtime_verification_engine.js
+          node --check my_AI/ai_engine_core.js
+          node --check Mastermind_Desktop/universal_runtime_verification_engine.js
+          node --check Mastermind_Desktop/core.js
+
+          # Add the runtime keyword to the smart-tool activation layer once.
+          python3 - <<'PY'
+          from pathlib import Path
+          for p in [Path('my_AI/ai_engine_core.js'),Path('Mastermind_Desktop/core.js')]:
+              s=p.read_text()
+              s=s.replace('"run_terminal_command", "patchSystem", "selfExpand"]','"run_terminal_command", "patchSystem", "selfExpand", "runtime_verify", "empirical runtime", "تشغيل المشروع", "تشغيل الاختبارات"]')
+              p.write_text(s)
+          PY
+
+          node --check my_AI/ai_engine_core.js
+          node --check Mastermind_Desktop/core.js
+
+          rm -f .github/workflows/inspect_runtime_integration.yml
+          rm -f .github/workflows/integrate_empirical_runtime.yml
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add my_AI/universal_runtime_verification_engine.js Mastermind_Desktop/universal_runtime_verification_engine.js my_AI/ai_engine_core.js Mastermind_Desktop/core.js .github/workflows
+          git commit -m 'Add empirical runtime verification loop' || exit 0
+          git push
