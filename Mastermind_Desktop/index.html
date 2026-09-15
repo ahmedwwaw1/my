@@ -130,29 +130,28 @@
     </div>
     <!-- <script src="logic.js"></script> -->
     <script>
-        // 🔄 محرك التحميل الهجين: يضمن أن الـ EXE يقرأ دائماً أحدث التعديلات من ملفاتك المفتوحة
-        function injectScriptsDynamically() {
+        // 🔄 محرك التحميل الهجين: تحميل تسلسلي لضمان وجود الـCore قبل طبقة Evidence
+        function loadScriptSequentially(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.body.appendChild(script);
+            });
+        }
+
+        async function injectScriptsDynamically() {
             const timestamp = Date.now();
-
-            const logicScript = document.createElement('script');
-            logicScript.src = 'logic.js?v=' + timestamp;
-            document.body.appendChild(logicScript);
-
-            const coreScript = document.createElement('script');
-            coreScript.src = 'core.js?v=' + timestamp;
-            document.body.appendChild(coreScript);
-
-            const evidenceEngineScript = document.createElement('script');
-            evidenceEngineScript.src = 'universal_evidence_engine.js?v=' + timestamp;
-            document.body.appendChild(evidenceEngineScript);
-
-            evidenceEngineScript.onload = () => {
-                const adapterScript = document.createElement('script');
-                adapterScript.src = 'evidence_operating_loop_adapter.js?v=' + timestamp;
-                document.body.appendChild(adapterScript);
-            };
-
-            console.log('💎 Mastermind Hybrid Engine: Logic, Core & Evidence Layer Injected.');
+            try {
+                await loadScriptSequentially('logic.js?v=' + timestamp);
+                await loadScriptSequentially('core.js?v=' + timestamp);
+                await loadScriptSequentially('universal_evidence_engine.js?v=' + timestamp);
+                await loadScriptSequentially('evidence_operating_loop_adapter.js?v=' + timestamp);
+                console.log('💎 Mastermind Hybrid Engine: Logic → Core → Evidence → Adapter loaded.');
+            } catch (error) {
+                console.error('Mastermind Hybrid Engine loading failed:', error);
+            }
         }
         window.addEventListener('load', injectScriptsDynamically);
     </script>
