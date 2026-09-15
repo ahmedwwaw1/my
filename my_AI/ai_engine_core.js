@@ -1112,6 +1112,7 @@ function architectValidationPlan(design, snapshot) {
 function architectRepairPlan(validation, design) {
     return {
         policy: 'Failure classification first; repair root cause, then affected dependants, then re-validate.',
+        architectureExpansion,
         stages: [
             'Classify failure as syntax, dependency, contract, integration, runtime, or environment issue.',
             'Rollback only the smallest unsafe change when the architecture cannot be safely repaired in place.',
@@ -1131,6 +1132,7 @@ function runUniversalArchitectLoop(scanResult, options = {}) {
     const implementation = architectImplementationPlan(design, snapshot);
     const validation = architectValidationPlan(design, snapshot);
     const repair = architectRepairPlan(validation, design);
+    const architectureExpansion = runUniversalArchitectureExpansion(scanResult, { environment: options.environment || 'Unknown', baseline: options.baseline || null, runtimeEvidence: options.runtimeEvidence || null });
 
     return {
         loopVersion: UNIVERSAL_ARCHITECT_VERSION,
@@ -1166,6 +1168,54 @@ function runUniversalArchitectLoop(scanResult, options = {}) {
         ]
     };
 }
+
+/**
+ * Universal Architecture Expansion 2.0
+ * Runtime + Infrastructure + Framework/Language + Diff + Validation.
+ */
+const UNIVERSAL_ARCHITECTURE_EXPANSION_VERSION = '2.0-universal';
+function ua2Array(value){return Array.isArray(value)?value:[];}
+function ua2String(value){return typeof value==='string'?value:'';}
+function ua2Lower(value){return ua2String(value).toLowerCase();}
+function ua2Unique(values){return [...new Set(ua2Array(values).filter(Boolean))];}
+function ua2ClassifyArtifact(filePath=''){
+ const p=ua2Lower(filePath).replace(/\\/g,'/'),name=p.split('/').pop()||p;
+ if(/dockerfile|docker-compose|compose\.ya?ml/.test(name))return'docker';
+ if(/\.ya?ml$/.test(name)&&/(k8s|kube|kubernetes|helm|deployment|service|ingress|statefulset|daemonset|configmap|secret)/.test(p))return'kubernetes';
+ if(/(^|\/)(helm|charts)(\/|$)/.test(p)||/chart\.ya?ml|values\.ya?ml/.test(name))return'helm';
+ if(/\.tf$|\.tfvars$/.test(name)||/(^|\/)terraform(\/|$)/.test(p))return'terraform';
+ if(/\.github\/workflows\/.+\.ya?ml$/.test(p))return'github-actions';
+ if(/nginx|caddy|traefik|haproxy/.test(name))return'proxy';
+ if(/systemd|\.service$/.test(name))return'systemd';
+ if(/serverless|template\.ya?ml|sam/.test(name))return'serverless';
+ if(/package\.json|package-lock\.json|pnpm-lock\.yaml|yarn\.lock/.test(name))return'node-runtime';
+ if(/requirements\.txt|pyproject\.toml|poetry\.lock|pipfile/.test(name))return'python-runtime';
+ if(/pom\.xml|build\.gradle|settings\.gradle|gradlew/.test(name))return'java-runtime';
+ if(/cargo\.toml|cargo\.lock/.test(name))return'rust-runtime';
+ if(/go\.mod|go\.sum/.test(name))return'go-runtime';
+ if(/gemfile|gemspec/.test(name))return'ruby-runtime';
+ return'other';
+}
+function ua2DetectLanguagesAndFrameworks(components=[],project={}){
+ const languages=new Map(),frameworks=new Set(),add=(x,n=1)=>languages.set(x,(languages.get(x)||0)+n);
+ for(const c of ua2Array(components)){const p=ua2Lower(c.path);
+  if(/\.(js|mjs|cjs)$/.test(p))add('JavaScript'); else if(/\.tsx?$/.test(p))add('TypeScript'); else if(/\.jsx$/.test(p)){add('JavaScript');frameworks.add('React');} else if(/\.py$/.test(p))add('Python'); else if(/\.(java|kt|kts)$/.test(p))add(/\.kt|kts/.test(p)?'Kotlin':'Java'); else if(/\.go$/.test(p))add('Go'); else if(/\.rs$/.test(p))add('Rust'); else if(/\.rb$/.test(p))add('Ruby'); else if(/\.(c|h)$/.test(p))add('C'); else if(/\.(cpp|cc|hpp)$/.test(p))add('C++'); else if(/\.cs$/.test(p))add('C#'); else if(/\.php$/.test(p))add('PHP'); else if(/\.swift$/.test(p))add('Swift'); else if(/\.dart$/.test(p)){add('Dart');frameworks.add('Flutter');}
+  if(/vite\.config|vite\./.test(p))frameworks.add('Vite'); if(/next\.config|(^|\/)next\.json$/.test(p))frameworks.add('Next.js'); if(/angular\.json/.test(p))frameworks.add('Angular'); if(/svelte\.config|\.svelte$/.test(p))frameworks.add('Svelte'); if(/electron/.test(p))frameworks.add('Electron'); if(/express|koa|fastify|nest/.test(p))frameworks.add('Node.js Web'); if(/django|flask|fastapi/.test(p))frameworks.add('Python Web'); if(/spring/.test(p))frameworks.add('Spring'); if(/\.csproj$|\.sln$/.test(p))frameworks.add('.NET');
+ }
+ for(const dep of Object.keys(project.dependencies||{})){const d=ua2Lower(dep);if(d==='react'||d.startsWith('react-'))frameworks.add('React ecosystem');if(d==='vue'||d.startsWith('vue-'))frameworks.add('Vue ecosystem');if(d.includes('electron'))frameworks.add('Electron');if(['express','fastify','koa','@nestjs/core'].includes(d))frameworks.add('Node backend');}
+ return{languages:[...languages.entries()].sort((a,b)=>b[1]-a[1]).map(([name,files])=>({name,files})),frameworks:[...frameworks].sort()};
+}
+function ua2ExtractInfrastructure(components=[]){
+ const x={artifacts:[],providers:new Set(),deploymentModels:new Set(),orchestration:new Set(),ciCd:[],services:[],runtimeConfig:[]};
+ for(const c of ua2Array(components)){const type=ua2ClassifyArtifact(c.path);if(type==='other')continue;x.artifacts.push({path:c.path,type});const p=ua2Lower(c.path);
+  if(type==='docker'){x.orchestration.add('Docker');x.deploymentModels.add('containerized');} if(type==='kubernetes'){x.orchestration.add('Kubernetes');x.deploymentModels.add('container-orchestrated');} if(type==='helm')x.orchestration.add('Helm'); if(type==='terraform'){x.providers.add('Terraform');x.deploymentModels.add('infrastructure-as-code');} if(type==='github-actions')x.ciCd.push(c.path); if(type==='proxy')x.services.push({kind:'edge-proxy',path:c.path}); if(type==='systemd')x.services.push({kind:'system-service',path:c.path}); if(type.endsWith('-runtime'))x.runtimeConfig.push({kind:type,path:c.path}); if(/aws|amazon/.test(p))x.providers.add('AWS');if(/azure/.test(p))x.providers.add('Azure');if(/gcp|google-cloud/.test(p))x.providers.add('GCP');if(/vercel/.test(p))x.providers.add('Vercel');if(/supabase/.test(p))x.providers.add('Supabase');
+ }
+ return{artifacts:x.artifacts,providers:[...x.providers].sort(),deploymentModels:[...x.deploymentModels].sort(),orchestration:[...x.orchestration].sort(),ciCd:ua2Unique(x.ciCd),services:x.services,runtimeConfig:x.runtimeConfig};
+}
+function ua2InferRuntimeTopology(snapshot={}){const t={processes:[],boundaries:[],entrypoints:ua2Array(snapshot.project?.entryPoints).slice(0,50),ports:[],envReferences:[],confidence:'low'};for(const c of ua2Array(snapshot.components)){const p=ua2Lower(c.path);if(/server|api|worker|daemon|service|consumer|producer|main|electron/.test(p))t.processes.push({path:c.path,role:c.role||'Other'});for(const ext of ua2Array(c.externalDependencies))if(/(redis|postgres|mysql|mongodb|kafka|rabbitmq|nats|sqs|sns|sqlite|supabase|firebase|grpc|graphql)/i.test(ext))t.boundaries.push({from:c.path,target:ext,kind:'external-service'});}t.processes=t.processes.slice(0,100);t.boundaries=t.boundaries.slice(0,200);t.confidence=t.processes.length||t.boundaries.length?'inferred':'unknown';return t;}
+function ua2BuildValidationProtocol(snapshot={},environment='Unknown'){const commands=[],scripts=snapshot.project?.scripts||{},add=(kind,command,reason)=>{if(command&&!commands.some(x=>x.command===command))commands.push({kind,command,reason});};add('syntax','node --check <changed-js-files>','Fast JavaScript syntax validation when Node is available.');if(scripts.test)add('tests','npm test','Run repository test suite.');if(scripts.lint)add('lint','npm run lint','Run repository linter.');if(scripts.build)add('build','npm run build','Verify production/build integration.');if(scripts.typecheck)add('typecheck','npm run typecheck','Verify static type contracts.');if(environment==='Desktop')add('runtime','node --version && npm --version','Confirm local runtime availability.');if(environment==='GitHub Cloud')add('ci','git diff --check','Detect patch formatting errors in CI context.');return{environment,commands,strategy:'syntax -> dependency graph -> tests -> lint/typecheck -> build -> runtime smoke -> architecture rescan',failurePolicy:'Classify the first failing layer, repair the root cause, and re-run only affected checks before the full gate.'};}
+function ua2ArchitectureDiff(previous=null,current={}){if(!previous||typeof previous!=='object')return{available:false,reason:'No baseline architecture model supplied.'};const p=new Map(ua2Array(previous.components).map(x=>[x.path,x])),c=new Map(ua2Array(current.components).map(x=>[x.path,x])),added=[...c.keys()].filter(k=>!p.has(k)),removed=[...p.keys()].filter(k=>!c.has(k)),changed=[];for(const[path,now]of c){const before=p.get(path);if(!before)continue;const bd=JSON.stringify(ua2Unique(before.localDependencies||[]).sort()),nd=JSON.stringify(ua2Unique(now.localDependencies||[]).sort()),br=before.role||'Other',nr=now.role||'Other';if(bd!==nd||br!==nr)changed.push({path,fromRole:br,toRole:nr,dependenciesChanged:bd!==nd});}const risk=removed.length>10||changed.length>25?'high':(added.length||removed.length||changed.length?'review':'low');return{available:true,added,removed,changed,risk,summary:{added:added.length,removed:removed.length,changed:changed.length}};}
+function runUniversalArchitectureExpansion(scanResult={},options={}){const a=scanResult.architecture||{},current={components:ua2Array(a.components),layers:a.layers||{},relations:ua2Array(a.relations),externalDependencies:ua2Array(a.externalDependencies),project:scanResult.project||{}};const stack=ua2DetectLanguagesAndFrameworks(current.components,current.project),infrastructure=ua2ExtractInfrastructure(current.components),runtimeTopology=ua2InferRuntimeTopology(current),validationProtocol=ua2BuildValidationProtocol(current,options.environment||'Unknown'),diff=ua2ArchitectureDiff(options.baseline||null,current),unknowns=[];if(!infrastructure.artifacts.length)unknowns.push('No infrastructure/deployment manifests were discovered.');if(runtimeTopology.confidence==='unknown')unknowns.push('Runtime process topology is not directly observable from the static repository scan.');if(!diff.available)unknowns.push('No architecture baseline was supplied, so post-change architectural drift cannot yet be measured.');return{version:UNIVERSAL_ARCHITECTURE_EXPANSION_VERSION,stack,infrastructure,runtimeTopology,architectureDiff:diff,validationProtocol,unknowns,capabilityMatrix:{staticArchitecture:'high',infrastructureAnalysis:infrastructure.artifacts.length?'detected':'not-observed',runtimeTopology:runtimeTopology.confidence,frameworkDetection:stack.frameworks.length?'detected':'limited',languageDetection:stack.languages.length?'detected':'limited',architectureDriftDetection:diff.available?'enabled':'awaiting-baseline',empiricalRuntimeVerification:options.runtimeEvidence?'available':'requires-runtime-evidence'}};}
 
 // --- [AI Engine Logic] ---
 
