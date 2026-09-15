@@ -1,13 +1,15 @@
 name: Upgrade Cloud Discovery Scan
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
 
 permissions:
   contents: write
 
 jobs:
   upgrade:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -46,18 +48,12 @@ jobs:
           node --check my_AI/ai_engine_core.js
           node --check my_AI/discovery_scan_engine.js
 
-      - name: Commit upgrade
+      - name: Commit upgrade and remove one-shot workflow
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add my_AI/ai_engine_core.js
-          git commit -m "Upgrade cloud discovery_scan integration" || exit 0
-          git push
-
-      - name: Remove one-shot workflow
-        shell: bash
-        run: |
           git rm .github/workflows/upgrade_cloud_discovery_scan.yml
-          git commit -m "Remove one-shot discovery upgrade workflow"
+          git commit -m "Upgrade cloud discovery_scan integration"
           git push
