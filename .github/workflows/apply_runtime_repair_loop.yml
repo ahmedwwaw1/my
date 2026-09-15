@@ -1,0 +1,26 @@
+name: Apply Runtime Repair Loop
+on:
+  push:
+    paths:
+      - '.github/workflows/apply_runtime_repair_loop.yml'
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply patch
+        run: |
+          node .runtime_repair_patch.js
+          node --check my_AI/universal_runtime_verification_engine.js
+          node --check Mastermind_Desktop/universal_runtime_verification_engine.js
+          node --check my_AI/ai_engine_core.js
+          node --check Mastermind_Desktop/core.js
+          rm -f .runtime_repair_patch.js .github/workflows/apply_runtime_repair_loop.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add my_AI/universal_runtime_verification_engine.js Mastermind_Desktop/universal_runtime_verification_engine.js my_AI/ai_engine_core.js Mastermind_Desktop/core.js .github/workflows .runtime_repair_patch.js
+          git commit -m 'Close autonomous runtime repair loop'
+          git push
