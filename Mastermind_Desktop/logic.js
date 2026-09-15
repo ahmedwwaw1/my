@@ -566,8 +566,6 @@ function escapeHtml(text) {
         };
     }
 
-    const originalBridge = window.callLocalBridge;
-    const originalStep = window.addToolStepToUi;
     let activeTool = null;
 
     function install() {
@@ -591,9 +589,7 @@ function escapeHtml(text) {
             if (action === 'list' && (activeTool === 'discovery_scan' || window.__activeToolName === 'discovery_scan')) {
                 const target = payload?.path || '.';
                 const result = scan(target);
-                if (result && !result.error) {
-                    console.log('🧭 Architecture Discovery v2.0:', result.summary);
-                }
+                if (result && !result.error) console.log('🧭 Architecture Discovery v2.0:', result.summary);
                 return result;
             }
             return bridge.apply(this, arguments);
@@ -602,6 +598,5 @@ function escapeHtml(text) {
         console.log('🧭 Architecture Discovery Engine v2.0 installed.');
     }
 
-    if (originalBridge && originalStep) install();
-    else window.addEventListener('load', install);
+    install();
 })();
