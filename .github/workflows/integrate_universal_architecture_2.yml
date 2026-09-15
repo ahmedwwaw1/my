@@ -25,8 +25,9 @@ jobs:
           for (const file of paths) {
             let code = fs.readFileSync(file,'utf8');
             if (!code.includes('UNIVERSAL_ARCHITECTURE_EXPANSION_VERSION')) {
-              const anchor = '// --- [AI Engine Logic] ---';
-              if (!code.includes(anchor)) throw new Error(`Expansion anchor not found in ${file}`);
+              const anchors = ['// --- [AI Engine Logic] ---','const AI_TOOLS = [{'];
+              const anchor = anchors.find(candidate => code.includes(candidate));
+              if (!anchor) throw new Error(`Expansion anchor not found in ${file}`);
               code = code.replace(anchor, `${expansion}\n\n${anchor}`);
             }
             if (!code.includes('const architectureExpansion = runUniversalArchitectureExpansion(')) {
@@ -45,12 +46,12 @@ jobs:
           node --check my_AI/universal_architecture_expansion.js
           node --check my_AI/ai_engine_core.js
           node --check Mastermind_Desktop/core.js
-      - name: Commit integrated cores and remove workflow
+      - name: Commit integrated cores and remove temporary files
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add my_AI/ai_engine_core.js Mastermind_Desktop/core.js
-          git rm .github/workflows/integrate_universal_architecture_2.yml
+          git rm -f .github/workflows/integrate_universal_architecture_2.yml ARCH2_TRIGGER.txt || true
           git commit -m "Integrate Universal Architecture 2.0 into architect loop"
           git push
