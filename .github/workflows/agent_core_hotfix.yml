@@ -26,14 +26,16 @@ jobs:
             const second = first >= 0 ? s.indexOf(marker, first + marker.length) : -1;
             if (first >= 0 && second >= 0) s = s.slice(0, first) + s.slice(second);
 
-            s = s.replace(/(\b(?:const|let|var)\s+initialScan\s*=\s*)(?!await\s+)performCloudArchitectureDiscovery\(runtimeRoot\)\s*;/g, '$1await performCloudArchitectureDiscovery(runtimeRoot);');
+            s = s.replace(/(\b(?:const|let|var)\s+initialScan\s*=\s*)(?!await\s+)(?:performCloudArchitectureDiscovery|performArchitectureDiscovery)\(runtimeRoot\)\s*;/g, '$1await $&'.replace('$&','')); 
+            s = s.replace('const initialScan = performCloudArchitectureDiscovery(runtimeRoot);','const initialScan = await performCloudArchitectureDiscovery(runtimeRoot);');
+            s = s.replace('const initialScan = performArchitectureDiscovery(runtimeRoot);','const initialScan = await performArchitectureDiscovery(runtimeRoot);');
             s = s.replace(/expectedStatus:2(?!\d)/g, 'expectedStatus:200');
             s = s.replace('security:op.security??doc.security??null});', 'security:op.security??doc.security??null,openApiDocument:doc});');
             s = s.replace('responseSchema:apiResolveSchema(c.responseSchema||c.responses?.[String(response.status)]?.content?.[\'application/json\']?.schema||null,c)', 'responseSchema:apiResolveSchema(c.openApiDocument||{},c.responseSchema||c.responses?.[String(response.status)]?.content?.[\'application/json\']?.schema||null)');
             fs.writeFileSync(file,s);
 
             const remaining = s.split(marker).length - 1;
-            const okAwait = /\binitialScan\s*=\s*await\s+performCloudArchitectureDiscovery\(runtimeRoot\)\s*;/.test(s);
+            const okAwait = /\binitialScan\s*=\s*await\s+(?:performCloudArchitectureDiscovery|performArchitectureDiscovery)\(runtimeRoot\)\s*;/.test(s);
             const okStatus = !/expectedStatus:2(?!\d)/.test(s);
             const okSchema = !s.includes("responseSchema:apiResolveSchema(c.responseSchema||c.responses?.[String(response.status)]?.content?.['application/json']?.schema||null,c)");
             if (remaining !== 1 || !okAwait || !okStatus || !okSchema) throw new Error(`${file}: static verification failed before=${beforeCount} after=${remaining} await=${okAwait} status=${okStatus} schema=${okSchema}`);
