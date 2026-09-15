@@ -1,0 +1,90 @@
+name: Upgrade Universal Architect Loop
+
+on:
+  push:
+
+permissions:
+  contents: write
+
+jobs:
+  upgrade:
+    if: ${{ !contains(github.event.head_commit.message, 'Upgrade Universal Architect Loop') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inject architect loop into both cores
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const engine = fs.readFileSync('my_AI/universal_architect_engine.js', 'utf8').trim();
+          const targets = [
+            { path: 'my_AI/ai_engine_core.js', environment: 'GitHub Cloud', scanCall: 'performCloudArchitectureDiscovery(safePath || "")' },
+            { path: 'Mastermind_Desktop/core.js', environment: 'Windows Desktop', scanCall: 'performArchitectureDiscovery(args?.path || ".")' }
+          ];
+
+          const declaration = `{ name: "architecture_loop", description: "وكيل معماري شامل يحول Discovery إلى دورة هندسية كاملة: فهم المعمارية، تحليل القيود، التخطيط، التصميم، التنفيذ متعدد الملفات، التحقق، والإصلاح.", parameters: { type: "OBJECT", properties: { path: { type: "STRING", description: "مسار المشروع أو المجلد المراد تحليله." }, objective: { type: "STRING", description: "الهدف المعماري المطلوب." }, constraints: { type: "OBJECT", description: "قيود اختيارية مثل الحفاظ على API والبيانات وتقليل الاعتماديات." } } } }`;
+
+          for (const target of targets) {
+            const core = fs.readFileSync(target.path, 'utf8');
+            if (core.includes('const UNIVERSAL_ARCHITECT_VERSION')) continue;
+
+            const marker = target.path.includes('ai_engine_core') ? '// --- [AI Engine Logic] ---' : '// --- [Main Run Tool Loop] ---';
+            if (!core.includes(marker)) throw new Error(`Marker not found in ${target.path}: ${marker}`);
+
+            let patched = core.replace(marker, `${engine}\\n\\n${marker}`);
+
+            if (!patched.includes('"architecture_loop"')) {
+              patched = patched.replace(
+                /CORE:\s*\[/,
+                'CORE: ["architecture_loop",'
+              );
+            }
+
+            if (!patched.includes('name: "architecture_loop"')) {
+              const declAnchor = /\{ name: "discovery_scan",[\\s\\S]*?\n/;
+              if (!declAnchor.test(patched)) throw new Error(`Tool declaration anchor not found in ${target.path}`);
+              patched = patched.replace(declAnchor, `${declaration},\\n        ` + '$&');
+            }
+
+            if (!patched.includes('universal_architecture_loop')) {
+              const responseMarker = /\n\s*"response_style":/;
+              if (responseMarker.test(patched)) {
+                patched = patched.replace(responseMarker, '\n  "universal_architecture_loop": "For non-trivial engineering tasks execute the Universal Architect Loop: Discovery -> Architecture Understanding -> Constraint Analysis -> Architecture Planning -> Design -> Cross-file Implementation -> Validation -> Repair. Treat the returned architecture model as the source of truth, inspect before writing, validate after coherent batches, and re-scan after changes.",\n  "response_style":');
+              } else {
+                throw new Error(`Constitution response_style marker not found in ${target.path}`);
+              }
+            }
+
+            if (!patched.includes('else if (name === "architecture_loop")')) {
+              const branchRegex = /(else if \(name === ["']discovery_scan["']\) \{)[\\s\\S]*?(?=\\n\s*else if \(name === )/;
+              const match = patched.match(branchRegex);
+              if (!match) throw new Error(`Discovery branch anchor not found in ${target.path}`);
+              const branch = match[0].replace(/\s+$/, '');
+              const archBranch = `\\n            else if (name === "architecture_loop") {\\n                try {\\n                    const scanResult = await (async () => { return ${target.scanCall}; })();\\n                    toolResult = runUniversalArchitectLoop(scanResult, { environment: "${target.environment}", objective: args?.objective || "", constraints: args?.constraints || {} });\\n                } catch (architectureError) {\\n                    toolResult = { error: "Universal architecture loop failed.", details: architectureError?.message || String(architectureError) };\\n                }\\n            }`;
+              patched = patched.replace(match[0], branch + archBranch + '\\n            ');
+            }
+
+            fs.writeFileSync(target.path, patched, 'utf8');
+          }
+          NODE
+
+      - name: Validate JavaScript
+        run: |
+          node --check my_AI/ai_engine_core.js
+          node --check my_AI/universal_architect_engine.js
+          node --check Mastermind_Desktop/core.js
+          node --check Mastermind_Desktop/universal_architect_engine.js
+
+      - name: Copy shared architect engine and commit
+        shell: bash
+        run: |
+          cp my_AI/universal_architect_engine.js Mastermind_Desktop/universal_architect_engine.js
+          git add my_AI/ai_engine_core.js my_AI/universal_architect_engine.js Mastermind_Desktop/core.js Mastermind_Desktop/universal_architect_engine.js
+          git rm .github/workflows/upgrade_universal_architect_loop.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Upgrade Universal Architect Loop"
+          git push
