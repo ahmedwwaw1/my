@@ -26,6 +26,6 @@
     }
   ],
   "activeSessionId": "1789495274802",
-  "pendingHistory": null,
-  "timestamp": "2026-09-15T18:01:20.630Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك! أنا المهندس المعماري السيادي (Sovereign Omni-Architect) ومساعدك التقني المتقدم. \\n\\nكيف يمكنني مساعدتك اليوم في مشروعك؟ هل ترغب في استكشاف المستودع، بناء ميزة جديدة، أو حل مشكلة برمجية؟ تفضل بطرح طلبك وسأبدأ العمل فوراً!\",\"thoughtSignature\":\"El4KXAERTTIPlvz1usz40yi7fM+ZbtoDr3FAPkahiePTeobc2OZRrP+M1+9JRcn2Kjn7BZxuX4QJ2T/P5cVIm9oRhT9xWZlE+7dlA7REYdAwbF/glM7t+NOlCtaqsVQ4\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]}]",
+  "timestamp": "2026-09-15T18:01:39.015Z"
 }
