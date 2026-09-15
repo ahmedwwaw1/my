@@ -1,7 +1,9 @@
 name: Bind Evidence Engine
 
 on:
-  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/bind_evidence_loop.yml'
 
 permissions:
   contents: write
