@@ -1,6 +1,49 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1789474389638",
+      "title": "أنا في حالة ممتازة، وجاهز تمام",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. بصفتي المهندس المعماري السيادي (Sovereign Architect) لهذا النظام، أنا في حالة استعداد تام للعمل.\n\nكيف يمكنني مساعدتك اليوم في تطوير أو هندسة هذا المستودع؟ هل نبدأ بمسح معماري (Discovery Scan) للملفات الحالية، أم لديك مهمة محددة تود البدء بها؟",
+              "thoughtSignature": "EnEKbwERTTIPKM9+DCdY9AlYVqA/8joYaG4W9txDPM2kOYujt7Kpd7x3rJ8d/SaRmp7IUv3TeBdJcMgNWWWoaoftCXayub4+YL5D5pkggwJQgp3c/xtXArm/Dbd2yPAzDVk9jnI9bkuImA1XnWQtpswECQ=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا في حالة ممتازة، وجاهز تماماً للعمل. أنظمتي تعمل بكامل طاقتها، والمنطق المعماري لدي في حالة استقرار تام.\n\nبصفتي \"المهندس المعماري السيادي\"، أنا هنا لأضمن أن كل سطر كود نكتبه أو نعدله يتماشى مع أعلى معايير الكفاءة والاستدامة.\n\nكيف حالك أنت؟ وهل هناك مشروع أو تحدٍ تقني تود أن نبدأ العمل عليه الآن؟",
+              "thoughtSignature": "EnEKbwERTTIPnn9oBTy223Xg0Zgfz5TTYugJy+WdJj+32FzVQbD6vGRMvK9WfqK6OqIb/lMZ8exbIHUD6EKAzACdHEYplVfzHZ3NBLr4kaPgRtsrCj+cXh7+3UQ1sxakk3PPQo9VfuY8FWIAFSq1oH33Aw=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1789474389638",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-15T12:13:23.660Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-15T12:13:36.022Z"
 }
