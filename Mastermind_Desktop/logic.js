@@ -15,7 +15,6 @@ function initMastermindUi() {
         return;
     }
 
-    // 🛠️ Robust Element Discovery
     let attachBtn = document.getElementById('attachBtn');
     if (!attachBtn) {
         const icon = document.querySelector('.fa-paperclip');
@@ -44,13 +43,11 @@ function initMastermindUi() {
 
     let selectedFiles = [];
 
-    // Auto-resize textarea
     userInput.addEventListener('input', () => {
         userInput.style.height = 'auto';
         userInput.style.height = userInput.scrollHeight + 'px';
     });
 
-    // ⚡ Send message on Enter (Fixed)
     userInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -259,7 +256,6 @@ function initMastermindUi() {
         }
     }
 
-    // Sidebar navigation
     document.querySelectorAll('.nav-item, .recent-chat-item').forEach(item => {
         item.onclick = () => {
             document.querySelectorAll('.nav-item, .recent-chat-item').forEach(i => i.classList.remove('active'));
@@ -296,13 +292,11 @@ function initMastermindUi() {
     }
 }
 
-// 🚦 Boot Sequence
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initMastermindUi);
 } else {
     initMastermindUi();
 }
-
 
 // --- [Advanced UI Functions for Tools] ---
 
@@ -336,7 +330,6 @@ function addToolStepToUi(toolName, args) {
     `;
     container.appendChild(stepContainer);
 
-    // Ensure the "Thinking" indicator stays at the bottom
     const thinkingMsg = Array.from(container.querySelectorAll('.message.ai')).reverse().find(m => m.textContent.includes('Thinking...'));
     if (thinkingMsg) container.appendChild(thinkingMsg);
 
@@ -405,3 +398,210 @@ function escapeHtml(text) {
     div.innerText = text;
     return div.innerHTML;
 }
+
+// --- [Architecture Discovery Upgrade] ---
+(function installArchitectureDiscovery() {
+    const fs = (typeof require === 'function') ? require('fs') : null;
+    const path = (typeof require === 'function') ? require('path') : null;
+    if (!fs || !path) return;
+
+    const ignoredDirs = new Set(['.git', '.hg', '.svn', 'node_modules', 'dist', 'build', 'out', 'coverage', '.cache', '.idea', '.vscode']);
+    const textExts = new Set(['.js','.jsx','.ts','.tsx','.mjs','.cjs','.json','.html','.htm','.css','.scss','.sass','.less','.py','.java','.kt','.kts','.cs','.cpp','.c','.h','.hpp','.go','.rs','.php','.vue','.svelte']);
+
+    const roleRules = [
+        ['UI', [/\.html?$/i,/\.css$/i,/\.scss$/i,/\.sass$/i,/\.less$/i,/\.jsx$/i,/\.tsx$/i,/(^|[\\/])(ui|view|views|components|frontend|renderer|public)([\\/]|$)/i]],
+        ['Bridge', [/(^|[\\/])(bridge|preload)([\\/]|$)/i,/preload\.(js|ts)$/i,/(ipc|bridge)/i]],
+        ['Backend', [/\.(py|java|kt|kts|cs|go|rs)$/i,/(^|[\\/])(server|backend|api)([\\/]|$)/i]],
+        ['Config', [/package(-lock)?\.json$/i,/(^|[\\/])(vite|webpack|rollup|tsconfig|eslint|prettier|electron)[^\\/]*\.(json|js|cjs|mjs)$/i]],
+        ['Data', [/\.json$/i,/(^|[\\/])(data|assets|fixtures)([\\/]|$)/i]],
+        ['Logic', [/\.(js|ts|mjs|cjs)$/i,/(^|[\\/])(logic|core|service|services|lib|utils)([\\/]|$)/i]]
+    ];
+
+    function rel(root, file) { return path.relative(root, file).split(path.sep).join('/'); }
+    function addUnique(arr, value) { if (value && !arr.includes(value)) arr.push(value); }
+    function roleOf(file) {
+        for (const [role, patterns] of roleRules) if (patterns.some(re => re.test(file))) return role;
+        return 'Other';
+    }
+    function readText(file, maxBytes = 180000) {
+        try {
+            const stat = fs.statSync(file);
+            if (!stat.isFile() || stat.size > maxBytes) return '';
+            return fs.readFileSync(file, 'utf8');
+        } catch (_) { return ''; }
+    }
+    function collect(root) {
+        const out = [], stack = [root];
+        while (stack.length) {
+            const current = stack.pop();
+            let entries;
+            try { entries = fs.readdirSync(current, { withFileTypes: true }); } catch (_) { continue; }
+            for (const entry of entries) {
+                if (ignoredDirs.has(entry.name)) continue;
+                const full = path.join(current, entry.name);
+                if (entry.isDirectory()) { stack.push(full); continue; }
+                const rp = rel(root, full);
+                let size = 0; try { size = fs.statSync(full).size; } catch (_) {}
+                out.push({ path: rp, extension: path.extname(entry.name).toLowerCase() || '(none)', role: roleOf(rp), size });
+            }
+        }
+        return out.sort((a,b) => a.path.localeCompare(b.path));
+    }
+    function depsFrom(text) {
+        const out = [];
+        const patterns = [
+            /\bimport\s+(?:[^'";]+?\s+from\s+)?['"]([^'"]+)['"]/g,
+            /\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g,
+            /\brequire\s*\(\s*['"]([^'"]+)['"]\s*\)/g,
+            /\bexport\s+(?:[^'";]+?\s+from\s+)?['"]([^'"]+)['"]/g,
+            /<script[^>]+src=["']([^"']+)["']/gi,
+            /<link[^>]+href=["']([^"']+\.css[^"']*)["']/gi,
+            /@import\s+(?:url\()?\s*["']([^"']+)["']/gi
+        ];
+        for (const re of patterns) {
+            let m; while ((m = re.exec(text))) addUnique(out, m[1]);
+        }
+        return out;
+    }
+    function externalDeps(text) {
+        const out = [];
+        for (const spec of depsFrom(text)) {
+            if (!spec || spec.startsWith('.') || spec.startsWith('/') || /^https?:/i.test(spec)) continue;
+            addUnique(out, spec.startsWith('@') ? spec.split('/').slice(0,2).join('/') : spec.split('/')[0]);
+        }
+        return out;
+    }
+    function ipcChannels(text) {
+        const out = [];
+        const patterns = [
+            /ipcMain\.(?:handle|on|removeHandler)\(\s*["']([^"']+)["']/g,
+            /ipcRenderer\.(?:invoke|send|on|once)\(\s*["']([^"']+)["']/g,
+            /ipc\.(?:invoke|send|on)\(\s*["']([^"']+)["']/g
+        ];
+        for (const re of patterns) { let m; while ((m = re.exec(text))) addUnique(out, m[1]); }
+        return out;
+    }
+    function resolveLocal(source, spec, root, known) {
+        if (!spec || !spec.startsWith('.')) return null;
+        const base = path.resolve(path.dirname(path.join(root, source)), spec);
+        const tries = [base];
+        for (const ext of ['.js','.mjs','.cjs','.ts','.tsx','.jsx','.json','.css','.html']) tries.push(base + ext);
+        for (const ext of ['.js','.mjs','.cjs','.ts','.tsx','.jsx','.json','.css','.html']) tries.push(path.join(base, 'index' + ext));
+        for (const candidate of tries) {
+            try {
+                if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+                    const rp = rel(root, candidate); if (known.has(rp)) return rp;
+                }
+            } catch (_) {}
+        }
+        return null;
+    }
+    function scan(scanPath) {
+        const root = path.resolve(scanPath || process.cwd());
+        if (!fs.existsSync(root) || !fs.statSync(root).isDirectory()) return { error: `Architecture scan path is not a directory: ${root}` };
+        const files = collect(root);
+        const known = new Set(files.map(x => x.path));
+        const layers = {};
+        for (const f of files) (layers[f.role] ||= []).push(f.path);
+
+        let pkg = null;
+        const packageText = readText(path.join(root, 'package.json'), 500000);
+        try { if (packageText) pkg = JSON.parse(packageText); } catch (_) {}
+
+        const entryPoints = [];
+        if (pkg?.main) addUnique(entryPoints, String(pkg.main).replace(/\\/g,'/'));
+        if (pkg?.scripts?.start) addUnique(entryPoints, 'package.json#scripts.start');
+        if (pkg?.scripts?.dev) addUnique(entryPoints, 'package.json#scripts.dev');
+        for (const name of ['main.js','index.js','app.js','server.js','index.html','preload.js']) if (known.has(name)) addUnique(entryPoints, name);
+
+        const components = [], relations = [], external = new Set(), ipc = new Set();
+        for (const file of files) {
+            if (!textExts.has(file.extension)) continue;
+            const full = path.join(root, file.path.split('/').join(path.sep));
+            const text = readText(full); if (!text) continue;
+            const imports = depsFrom(text), local = [];
+            for (const spec of imports) {
+                const target = resolveLocal(file.path, spec, root, known);
+                if (target) { addUnique(local, target); relations.push({ from: file.path, to: target, type: 'imports' }); }
+            }
+            for (const dep of externalDeps(text)) external.add(dep);
+            for (const channel of ipcChannels(text)) ipc.add(channel);
+            components.push({ path: file.path, role: file.role, imports: local, externalDependencies: externalDeps(text), ipcChannels: ipcChannels(text) });
+        }
+
+        const relationsUnique = relations.filter((r, i, a) => i === a.findIndex(x => x.from === r.from && x.to === r.to && x.type === r.type));
+        const electronDetected = Boolean((layers.Bridge?.length) || ipc.size || pkg?.dependencies?.electron || pkg?.devDependencies?.electron);
+        const roleCounts = {};
+        for (const [role, list] of Object.entries(layers)) roleCounts[role] = list.length;
+        const warnings = [];
+        if (!pkg) warnings.push('package.json not found; dependency metadata is inferred from source imports.');
+        if (!entryPoints.length) warnings.push('No obvious entry point was detected from package metadata or common filenames.');
+        if (files.length > 8000) warnings.push(`Large project (${files.length} files); downstream model context should rely on the summarized map.`);
+
+        return {
+            scanVersion: '2.0',
+            root,
+            summary: { totalFiles: files.length, roleCounts, relationCount: relationsUnique.length, externalDependencyCount: external.size, ipcChannelCount: ipc.size },
+            project: {
+                name: pkg?.name || path.basename(root),
+                version: pkg?.version || null,
+                type: pkg?.type || null,
+                packageManager: pkg ? 'npm-package' : 'unknown',
+                entryPoints,
+                dependencies: Object.keys({ ...(pkg?.dependencies || {}), ...(pkg?.devDependencies || {}), ...(pkg?.optionalDependencies || {}) })
+            },
+            architecture: {
+                layers,
+                components,
+                relations: relationsUnique.slice(0, 5000),
+                externalDependencies: [...external].sort(),
+                electron: { detected: electronDetected, ipcChannels: [...ipc].sort(), bridgeFiles: layers.Bridge || [] }
+            },
+            recommendations: [
+                'Use the layers and relations as the architectural map before editing files.',
+                'Prefer root-cause components and their direct dependents instead of isolated UI symptoms.',
+                'Read the specific component files before surgical edits.'
+            ],
+            warnings
+        };
+    }
+
+    const originalBridge = window.callLocalBridge;
+    const originalStep = window.addToolStepToUi;
+    let activeTool = null;
+
+    function install() {
+        if (typeof window.callLocalBridge !== 'function' || typeof window.addToolStepToUi !== 'function') {
+            setTimeout(install, 50);
+            return;
+        }
+        if (window.__architectureDiscoveryInstalled) return;
+        window.__architectureDiscoveryInstalled = true;
+
+        const bridge = window.callLocalBridge;
+        const step = window.addToolStepToUi;
+
+        window.addToolStepToUi = function(toolName, args) {
+            activeTool = toolName;
+            window.__activeToolName = toolName;
+            return step.apply(this, arguments);
+        };
+
+        window.callLocalBridge = async function(action, payload) {
+            if (action === 'list' && (activeTool === 'discovery_scan' || window.__activeToolName === 'discovery_scan')) {
+                const target = payload?.path || '.';
+                const result = scan(target);
+                if (result && !result.error) {
+                    console.log('🧭 Architecture Discovery v2.0:', result.summary);
+                }
+                return result;
+            }
+            return bridge.apply(this, arguments);
+        };
+
+        console.log('🧭 Architecture Discovery Engine v2.0 installed.');
+    }
+
+    if (originalBridge && originalStep) install();
+    else window.addEventListener('load', install);
+})();
