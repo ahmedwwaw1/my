@@ -1,3 +1,4 @@
+// Evidence binding migration script. v1.0
 const fs = require('fs');
 
 const targets = [
