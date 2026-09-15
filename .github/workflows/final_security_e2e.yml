@@ -10,14 +10,16 @@ on:
       - 'my_AI/chat_logs.json'
 permissions:
   contents: write
+
 jobs:
-  verify:
+  security-and-agent-e2e:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Remove embedded credentials from current tree
+      - name: Scrub current tree in verification workspace
+        shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -31,7 +33,8 @@ jobs:
               s=jwt.sub('[REDACTED_JWT]',s)
               if s!=original: p.write_text(s,encoding='utf-8')
           PY
-      - name: Wire security config
+      - name: Wire security config in verification workspace
+        shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -45,6 +48,7 @@ jobs:
           p.write_text(s,encoding='utf-8')
           PY
       - name: Static security and syntax gate
+        shell: bash
         run: |
           node --check my_AI/ai_engine_core.js
           node --check Mastermind_Desktop/core.js
@@ -66,6 +70,7 @@ jobs:
           print('Static security and syntax gate passed.')
           PY
       - name: Agent loop E2E harness
+        shell: bash
         run: |
           mkdir -p scripts
           cat > scripts/final_e2e.js <<'NODE'
@@ -80,13 +85,10 @@ jobs:
             const discovery=async()=>({root:'.',summary:{totalFiles:3},project:{name:'e2e'},architecture:{components:[{path:'app.js',role:'Logic',localDependencies:[],externalDependencies:[]}],relations:[],layers:{Logic:['app.js']},externalDependencies:[],electron:{detected:env==='Windows Desktop',ipcChannels:[],bridgeFiles:[]}}});
             ctx.performCloudArchitectureDiscovery=discovery; ctx.performArchitectureDiscovery=discovery;
             ctx.getGithubFileContent=async()=> 'original'; ctx.listGithubFiles=async()=> 'app.js';
-            let bridgeWrites=0;
-            ctx.callLocalBridge=async(action)=>{if(action==='cmd')return 'search-ok'; if(action==='read')return 'original'; if(action==='write'){bridgeWrites++;return 'written';} return 'listed';};
-            let cloudWrites=0;
-            ctx.writeFile=async()=>{cloudWrites++;return '✅ written';};
+            let bridgeWrites=0; ctx.callLocalBridge=async(action)=>{if(action==='cmd')return 'search-ok';if(action==='read')return 'original';if(action==='write'){bridgeWrites++;return 'written';}return 'listed';};
+            let cloudWrites=0; ctx.writeFile=async()=>{cloudWrites++;return '✅ written';};
             ctx.replaceFileContent=async()=> '✅ replaced'; ctx.searchCode=async()=> 'search-ok';
-            let n=0;
-            ctx.callAiBrain=async()=>{n++;return n===1?{candidates:[{content:{parts:[{functionCall:{name:'fast_file_search',args:{query:'app.js'}}},{functionCall:{name:'write_file',args:{path:'app.js',content:'updated'}}}]}}]}:{candidates:[{content:{parts:[{text:'done'}]}}]}};
+            let n=0; ctx.callAiBrain=async()=>{n++;return n===1?{candidates:[{content:{parts:[{functionCall:{name:'fast_file_search',args:{query:'app.js'}}},{functionCall:{name:'write_file',args:{path:'app.js',content:'updated'}}}]}}]}:{candidates:[{content:{parts:[{text:'done'}]}}]}};
             ctx.runClosedRuntimeRepairLoop=async()=>({status:'passed'});
             vm.runInContext(fs.readFileSync(engine,'utf8'),ctx,{filename:engine});
             vm.runInContext(fs.readFileSync(adapter,'utf8'),ctx,{filename:adapter});
@@ -94,33 +96,91 @@ jobs:
             assert.equal(result.available,true); assert.equal(result.success,true); assert.equal(result.acceptance.verdict,'accepted'); assert.equal(result.implementation.changed,true); assert.ok((cloudWrites+bridgeWrites)>0);
             return{env,verdict:result.acceptance.verdict,writes:cloudWrites+bridgeWrites,turns:n};
           }
-          Promise.all([run('GitHub Cloud','my_AI/ai_engine_core.js','my_AI/universal_evidence_engine.js','my_AI/evidence_operating_loop_adapter.js'),run('Windows Desktop','Mastermind_Desktop/core.js','Mastermind_Desktop/universal_evidence_engine.js','Mastermind_Desktop/evidence_operating_loop_adapter.js')]).then(r=>{console.log(JSON.stringify(r));}).catch(e=>{console.error(e);process.exit(1)});
+          Promise.all([run('GitHub Cloud','my_AI/ai_engine_core.js','my_AI/universal_evidence_engine.js','my_AI/evidence_operating_loop_adapter.js'),run('Windows Desktop','Mastermind_Desktop/core.js','Mastermind_Desktop/universal_evidence_engine.js','Mastermind_Desktop/evidence_operating_loop_adapter.js')]).then(r=>console.log(JSON.stringify(r))).catch(e=>{console.error(e);process.exit(1)});
           NODE
           node scripts/final_e2e.js
-      - name: Desktop real startup smoke test
+
+  desktop-windows-e2e:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Desktop syntax gate
+        shell: pwsh
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          cd Mastermind_Desktop
+          node --check Mastermind_Desktop/core.js
+          node --check Mastermind_Desktop/evidence_operating_loop_adapter.js
+          node --check Mastermind_Desktop/main.js
+      - name: Install and launch real Electron desktop app
+        shell: pwsh
+        run: |
+          Set-Location Mastermind_Desktop
           npm ci
-          npx electron --version
-          rm -rf /tmp/mastermind-electron-dist
-          cp -a node_modules/electron/dist /tmp/mastermind-electron-dist
-          sudo chown root:root /tmp/mastermind-electron-dist/chrome-sandbox
-          sudo chmod 4755 /tmp/mastermind-electron-dist/chrome-sandbox
-          cat > ci_smoke_main.js <<'NODE'
-          const { app } = require('electron');
-          app.commandLine.appendSwitch('disable-gpu');
-          require('./main.js');
-          NODE
-          timeout 20s xvfb-run -a /tmp/mastermind-electron-dist/electron ci_smoke_main.js > /tmp/mastermind-electron.log 2>&1 || rc=$?
-          if [ "${rc:-0}" != "124" ] && [ "${rc:-0}" != "0" ]; then cat /tmp/mastermind-electron.log; exit "${rc}"; fi
-          tail -n 80 /tmp/mastermind-electron.log || true
-      - name: Commit security fix and clean test files
+          $stdout = Join-Path $env:TEMP 'mastermind-electron.stdout.log'
+          $stderr = Join-Path $env:TEMP 'mastermind-electron.stderr.log'
+          $proc = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','npx electron .' -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru -WindowStyle Hidden
+          Start-Sleep -Seconds 12
+          if ($proc.HasExited) {
+            Get-Content $stdout -ErrorAction SilentlyContinue
+            Get-Content $stderr -ErrorAction SilentlyContinue
+            throw "Mastermind Electron exited early with code $($proc.ExitCode)."
+          }
+          Stop-Process -Id $proc.Id -Force
+          Write-Host 'Mastermind Electron desktop process stayed alive for 12 seconds on Windows.'
+          Get-Content $stdout -ErrorAction SilentlyContinue
+          Get-Content $stderr -ErrorAction SilentlyContinue
+
+  finalize:
+    needs: [security-and-agent-e2e, desktop-windows-e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply verified security cleanup to main tree
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          text_ext={'.js','.json','.md','.html','.css','.yml','.yaml','.txt'}
+          jwt=re.compile(r'eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+')
+          for p in [p for p in Path('.').rglob('*') if p.is_file() and '.git' not in p.parts and p.suffix.lower() in text_ext]:
+              s=p.read_text(encoding='utf-8',errors='ignore')
+              if p.name in {'ai_engine_core.js','core.js'}:
+                  s=re.sub(r"^const SUPABASE_KEY\s*=.*;\s*$", "const SUPABASE_KEY = (typeof window !== 'undefined' && typeof window.__SUPABASE_PUBLIC_KEY__ === 'string') ? window.__SUPABASE_PUBLIC_KEY__ : '';", s, count=1, flags=re.M)
+              s=jwt.sub('[REDACTED_JWT]',s)
+              p.write_text(s,encoding='utf-8')
+          for path in ['my_AI/security_config.js','Mastermind_Desktop/security_config.js']:
+              Path(path).write_text("/* Public/anon configuration only. Never store service-role credentials here. */\nwindow.__SUPABASE_PUBLIC_KEY__ = window.__SUPABASE_PUBLIC_KEY__ || '';\n",encoding='utf-8')
+          p=Path('index.html'); s=p.read_text(encoding='utf-8');
+          if 'my_AI/security_config.js' not in s: s=s.replace('<script src="my_AI/ai_engine_core.js?v=2026.2"></script>','<script src="my_AI/security_config.js?v=2026.3"></script>\n    <script src="my_AI/ai_engine_core.js?v=2026.3"></script>',1)
+          p.write_text(s,encoding='utf-8')
+          p=Path('Mastermind_Desktop/index.html'); s=p.read_text(encoding='utf-8');
+          if 'security_config.js' not in s: s=s.replace('<!-- <script src="logic.js"></script> -->','<!-- <script src="logic.js"></script> -->\n    <script src="security_config.js?v=2026.3"></script>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Verify final tree and remove temporary workflow
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          jwt=re.compile(r'eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+')
+          bad=[]
+          for root in (Path('my_AI'),Path('Mastermind_Desktop')):
+              for p in root.rglob('*'):
+                  if p.is_file() and p.suffix.lower() in {'.js','.json','.md','.html','.css','.yml','.yaml','.txt'}:
+                      if jwt.search(p.read_text(encoding='utf-8',errors='ignore')): bad.append(str(p))
+          if bad: raise SystemExit(f'JWT-like credential remains in current tree: {bad}')
+          PY
+          node --check my_AI/ai_engine_core.js
+          node --check Mastermind_Desktop/core.js
+          rm -f .github/workflows/final_security_e2e.yml
+      - name: Commit verified security cleanup
+        shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          rm -f scripts/final_e2e.js .github/workflows/final_security_e2e.yml Mastermind_Desktop/ci_smoke_main.js
           git add -A my_AI Mastermind_Desktop index.html .github/workflows/final_security_e2e.yml
-          git commit -m 'Remove embedded credentials and verify agent end-to-end'
+          git commit -m 'Remove embedded credentials after security and E2E verification'
           git push
