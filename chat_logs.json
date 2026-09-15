@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1789504455785",
-      "title": "نعم، أنا بأفضل حال ومستعد تمام",
+      "title": "اسم ملف من المستودع هو: `READM",
       "history": [
         {
           "role": "user",
@@ -57,6 +57,80 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "اجلب لي اسم ملف فقط اي اسم من المستودع"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "fast_file_search",
+                "args": {
+                  "query": "*"
+                },
+                "id": "call_49083"
+              },
+              "thoughtSignature": "El4KXAERTTIPRhdXvk2iUAoT6hUGqrQSTP2qmUu3Byx8IeZM4JLZVSqbxgwyG0WfDTEO6oG/Y66QuGF18dE9M8u4BXkaHp/k0mUDgdIr6Y7AesCguR6qFX3SbezyNI5/"
+            }
+          ]
+        },
+        {
+          "role": "function",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "fast_file_search",
+                "response": {
+                  "content": "{\"error\":\"الجسر المحلي المدمج أو الخارجي غير متصل. (Error: Failed to fetch). يرجى التأكد من تشغيل البرنامج عبر Electron أو تشغيل 'node server.js'.\"}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "list_files",
+                "args": {
+                  "path": "."
+                },
+                "id": "call_115254"
+              },
+              "thoughtSignature": "EnEKbwERTTIPv+8nw3twtUfha4Dj3ESp0nwHZ8sZzRD7h0OuPg4Yx5M9bUTEkc58yPfgpBNN7V+tPlNcEupngrxmrksqEM1rDb6FGLtZr/eTx4vtMtBCeXUhApDhwwpo1ds7UCXE1wItfvfxTJBKoJlEPw=="
+            }
+          ]
+        },
+        {
+          "role": "function",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "list_files",
+                "response": {
+                  "content": "محتويات .:\n📁 .artifacts\n📄 .gitattributes\n📁 .github\n📄 .gitignore\n📄 EMERGENCY_REPAIR_GUIDE.txt\n📁 Mastermind_Desktop\n📁 My location data\n📄 README.md\n📁 ScriptBot\n📁 ai_mastermind_capabilities\n📁 archive\n📁 bridge\n📄 chat_logs.json\n📄 compress.js\n📄 compress_mastermind.ps1\n📄 compressor.html\n📄 direct_compress.js\n📄 engine_memory.json\n📁 images\n📄 index.html\n📄 main.js\n📁 my file wo\n📁 my_AI\n📄 package-lock.json\n📄 package.json\n📄 preload.js\n📄 remigrate_final.ps1\n📄 steps.jsonl\n📄 system-capabilities.txt\n📄 system_prompt_discussion.txt\n📄 test.txt\n📄 test_engine.py\n📄 المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md\n📄 حاسبة.html\n📄 دليل_إصلاح_الطوارئ_VSA.txt"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "اسم ملف من المستودع هو: `README.md`",
+              "thoughtSignature": "EnEKbwERTTIPMY0rNzLRffQfPCzj1l3mo9gyrZClpCKdVriB84x5632GRSvPIFpmeqq5zJoWcGsZX/7qJmQ2uC/75Ufr3DLkm3cQPGYzr3a9aGIXPtG562g2Y2juNNiF8Ox/jeVEGSOkIM46TvtlzQhR1g=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
         }
       ]
     },
@@ -123,5 +197,5 @@
   ],
   "activeSessionId": "1789504455785",
   "pendingHistory": null,
-  "timestamp": "2026-09-15T20:34:32.121Z"
+  "timestamp": "2026-09-15T20:34:55.325Z"
 }
