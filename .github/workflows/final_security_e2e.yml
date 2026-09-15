@@ -104,7 +104,9 @@ jobs:
           cd Mastermind_Desktop
           npm ci
           npx electron --version
-          timeout 20s xvfb-run -a env ELECTRON_DISABLE_SANDBOX=1 npx electron . > /tmp/mastermind-electron.log 2>&1 || rc=$?
+          sudo chown root:root node_modules/electron/dist/chrome-sandbox
+          sudo chmod 4755 node_modules/electron/dist/chrome-sandbox
+          timeout 20s xvfb-run -a npx electron . > /tmp/mastermind-electron.log 2>&1 || rc=$?
           if [ "${rc:-0}" != "124" ] && [ "${rc:-0}" != "0" ]; then cat /tmp/mastermind-electron.log; exit "${rc}"; fi
           tail -n 80 /tmp/mastermind-electron.log || true
       - name: Commit security fix and clean test files
