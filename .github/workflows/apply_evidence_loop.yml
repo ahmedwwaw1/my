@@ -1,0 +1,28 @@
+name: Apply evidence driven loop
+on:
+  push:
+    paths:
+      - '.github/workflows/apply_evidence_loop.yml'
+      - 'scripts/upgrade_evidence_loop.js'
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply upgrade
+        run: |
+          sed -i '$d' scripts/upgrade_evidence_loop.js
+          node scripts/upgrade_evidence_loop.js
+          node --check my_AI/ai_engine_core.js
+          node --check Mastermind_Desktop/core.js
+      - name: Commit and cleanup
+        run: |
+          rm -f scripts/upgrade_evidence_loop.js .github/workflows/apply_evidence_loop.yml
+          printf '{"status":"patched","evidenceLoop":"2.0-evidence-driven"}\n' > evidence_loop_upgrade.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add my_AI/ai_engine_core.js Mastermind_Desktop/core.js evidence_loop_upgrade.json scripts/upgrade_evidence_loop.js .github/workflows/apply_evidence_loop.yml
+          git commit -m 'Add evidence driven agent operating loop'
+          git push
