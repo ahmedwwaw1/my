@@ -25,15 +25,15 @@ jobs:
             const first = s.indexOf(marker);
             const second = first >= 0 ? s.indexOf(marker, first + marker.length) : -1;
             if (first >= 0 && second >= 0) s = s.slice(0, first) + s.slice(second);
-            const oldScan = 'const initialScan = performCloudArchitectureDiscovery(runtimeRoot);';
-            const newScan = 'const initialScan = await performCloudArchitectureDiscovery(runtimeRoot);';
-            s = s.replace(oldScan, newScan);
-            s = s.replaceAll('expectedStatus:2', 'expectedStatus:200');
+
+            s = s.replace(/(\b(?:const|let|var)\s+initialScan\s*=\s*)(?!await\s+)performCloudArchitectureDiscovery\(runtimeRoot\)\s*;/g, '$1await performCloudArchitectureDiscovery(runtimeRoot);');
+            s = s.replace(/expectedStatus:2(?!\d)/g, 'expectedStatus:200');
             s = s.replace('security:op.security??doc.security??null});', 'security:op.security??doc.security??null,openApiDocument:doc});');
             s = s.replace('responseSchema:apiResolveSchema(c.responseSchema||c.responses?.[String(response.status)]?.content?.[\'application/json\']?.schema||null,c)', 'responseSchema:apiResolveSchema(c.openApiDocument||{},c.responseSchema||c.responses?.[String(response.status)]?.content?.[\'application/json\']?.schema||null)');
             fs.writeFileSync(file,s);
+
             const remaining = s.split(marker).length - 1;
-            const okAwait = s.includes(newScan);
+            const okAwait = /\binitialScan\s*=\s*await\s+performCloudArchitectureDiscovery\(runtimeRoot\)\s*;/.test(s);
             const okStatus = !/expectedStatus:2(?!\d)/.test(s);
             const okSchema = !s.includes("responseSchema:apiResolveSchema(c.responseSchema||c.responses?.[String(response.status)]?.content?.['application/json']?.schema||null,c)");
             if (remaining !== 1 || !okAwait || !okStatus || !okSchema) throw new Error(`${file}: static verification failed before=${beforeCount} after=${remaining} await=${okAwait} status=${okStatus} schema=${okSchema}`);
