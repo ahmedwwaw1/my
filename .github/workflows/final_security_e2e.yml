@@ -24,8 +24,7 @@ jobs:
           import re
           text_ext={'.js','.json','.md','.html','.css','.yml','.yaml','.txt'}
           jwt=re.compile(r'eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+')
-          files=[p for p in Path('.').rglob('*') if p.is_file() and '.git' not in p.parts and p.suffix.lower() in text_ext]
-          for p in files:
+          for p in [p for p in Path('.').rglob('*') if p.is_file() and '.git' not in p.parts and p.suffix.lower() in text_ext]:
               s=p.read_text(encoding='utf-8',errors='ignore'); original=s
               if p.name in {'ai_engine_core.js','core.js'}:
                   s=re.sub(r"^const SUPABASE_KEY\s*=.*;\s*$", "const SUPABASE_KEY = (typeof window !== 'undefined' && typeof window.__SUPABASE_PUBLIC_KEY__ === 'string') ? window.__SUPABASE_PUBLIC_KEY__ : '';", s, count=1, flags=re.M)
@@ -75,8 +74,27 @@ jobs:
           base.localStorage={getItem:()=>null,setItem:()=>{},removeItem:()=>{}};
           base.document={getElementById:()=>({value:'gemini-2.5-flash',classList:{add:()=>{},remove:()=>{},contains:()=>false},style:{},innerHTML:'',appendChild:()=>{},scrollTop:0,scrollHeight:0}),querySelector:()=>null};
           base.window=base;base.window.addEventListener=()=>{};base.logToTerminal=()=>{};
-          async function run(env,core,engine,adapter){const c={...base};c.window=c;const ctx=vm.createContext(c);vm.runInContext(fs.readFileSync(core,'utf8'),ctx,{filename:core});const discovery=async()=>({root:'.',summary:{totalFiles:3},project:{name:'e2e'},architecture:{components:[{path:'app.js',role:'Logic',localDependencies:[],externalDependencies:[]}],relations:[],layers:{Logic:['app.js']},externalDependencies:[],electron:{detected:env==='Windows Desktop',ipcChannels:[],bridgeFiles:[]}}});ctx.performCloudArchitectureDiscovery=discovery;ctx.performArchitectureDiscovery=discovery;ctx.getGithubFileContent=async()=> 'original';ctx.listGithubFiles=async()=> 'app.js';ctx.callLocalBridge=async(action)=>action==='cmd'?'search-ok':action==='read'?'original':action==='write'?'written':'listed';const writes=[];ctx.writeFile=async(path,content)=>{writes.push({path,content});return '✅ written';};ctx.replaceFileContent=async()=> '✅ replaced';ctx.searchCode=async()=> 'search-ok';let n=0;ctx.callAiBrain=async()=>{n++;return n===1?{candidates:[{content:{parts:[{functionCall:{name:'fast_file_search',args:{query:'app.js'}}},{functionCall:{name:'write_file',args:{path:'app.js',content:'updated'}}}]}}]}:{candidates:[{content:{parts:[{text:'done'}]}}]}};ctx.runClosedRuntimeRepairLoop=async()=>({status:'passed'});vm.runInContext(fs.readFileSync(engine,'utf8'),ctx,{filename:engine});vm.runInContext(fs.readFileSync(adapter,'utf8'),ctx,{filename:adapter});const result=await ctx.runUniversalAgentOperatingLoop({environment:env,root:'.',objective:'E2E mission',verify:true});assert.equal(result.available,true);assert.equal(result.success,true);assert.equal(result.acceptance.verdict,'accepted');assert.equal(result.implementation.changed,true);assert.ok(writes.length>0);return{env,verdict:result.acceptance.verdict,writes:writes.length,turns:n};}
-          Promise.all([run('GitHub Cloud','my_AI/ai_engine_core.js','my_AI/universal_evidence_engine.js','my_AI/evidence_operating_loop_adapter.js'),run('Windows Desktop','Mastermind_Desktop/core.js','Mastermind_Desktop/universal_evidence_engine.js','Mastermind_Desktop/evidence_operating_loop_adapter.js')]).then(r=>console.log(JSON.stringify(r))).catch(e=>{console.error(e);process.exit(1)});
+          async function run(env,core,engine,adapter){
+            const c={...base}; c.window=c; const ctx=vm.createContext(c);
+            vm.runInContext(fs.readFileSync(core,'utf8'),ctx,{filename:core});
+            const discovery=async()=>({root:'.',summary:{totalFiles:3},project:{name:'e2e'},architecture:{components:[{path:'app.js',role:'Logic',localDependencies:[],externalDependencies:[]}],relations:[],layers:{Logic:['app.js']},externalDependencies:[],electron:{detected:env==='Windows Desktop',ipcChannels:[],bridgeFiles:[]}}});
+            ctx.performCloudArchitectureDiscovery=discovery; ctx.performArchitectureDiscovery=discovery;
+            ctx.getGithubFileContent=async()=> 'original'; ctx.listGithubFiles=async()=> 'app.js';
+            let bridgeWrites=0;
+            ctx.callLocalBridge=async(action)=>{if(action==='cmd')return 'search-ok'; if(action==='read')return 'original'; if(action==='write'){bridgeWrites++;return 'written';} return 'listed';};
+            let cloudWrites=0;
+            ctx.writeFile=async()=>{cloudWrites++;return '✅ written';};
+            ctx.replaceFileContent=async()=> '✅ replaced'; ctx.searchCode=async()=> 'search-ok';
+            let n=0;
+            ctx.callAiBrain=async()=>{n++;return n===1?{candidates:[{content:{parts:[{functionCall:{name:'fast_file_search',args:{query:'app.js'}}},{functionCall:{name:'write_file',args:{path:'app.js',content:'updated'}}}]}}]}:{candidates:[{content:{parts:[{text:'done'}]}}]}};
+            ctx.runClosedRuntimeRepairLoop=async()=>({status:'passed'});
+            vm.runInContext(fs.readFileSync(engine,'utf8'),ctx,{filename:engine});
+            vm.runInContext(fs.readFileSync(adapter,'utf8'),ctx,{filename:adapter});
+            const result=await ctx.runUniversalAgentOperatingLoop({environment:env,root:'.',objective:'E2E mission',verify:true});
+            assert.equal(result.available,true); assert.equal(result.success,true); assert.equal(result.acceptance.verdict,'accepted'); assert.equal(result.implementation.changed,true); assert.ok((cloudWrites+bridgeWrites)>0);
+            return{env,verdict:result.acceptance.verdict,writes:cloudWrites+bridgeWrites,turns:n};
+          }
+          Promise.all([run('GitHub Cloud','my_AI/ai_engine_core.js','my_AI/universal_evidence_engine.js','my_AI/evidence_operating_loop_adapter.js'),run('Windows Desktop','Mastermind_Desktop/core.js','Mastermind_Desktop/universal_evidence_engine.js','Mastermind_Desktop/evidence_operating_loop_adapter.js')]).then(r=>{console.log(JSON.stringify(r));}).catch(e=>{console.error(e);process.exit(1)});
           NODE
           node scripts/final_e2e.js
       - name: Desktop real startup smoke test
