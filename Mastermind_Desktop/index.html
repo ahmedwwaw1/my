@@ -134,17 +134,25 @@
         function injectScriptsDynamically() {
             const timestamp = Date.now();
 
-            // تحميل المنطق الرسومي
             const logicScript = document.createElement('script');
             logicScript.src = 'logic.js?v=' + timestamp;
             document.body.appendChild(logicScript);
 
-            // تحميل محرك الـ Core
             const coreScript = document.createElement('script');
             coreScript.src = 'core.js?v=' + timestamp;
             document.body.appendChild(coreScript);
 
-            console.log('💎 Mastermind Hybrid Engine: Logic & Core Injected.');
+            const evidenceEngineScript = document.createElement('script');
+            evidenceEngineScript.src = 'universal_evidence_engine.js?v=' + timestamp;
+            document.body.appendChild(evidenceEngineScript);
+
+            evidenceEngineScript.onload = () => {
+                const adapterScript = document.createElement('script');
+                adapterScript.src = 'evidence_operating_loop_adapter.js?v=' + timestamp;
+                document.body.appendChild(adapterScript);
+            };
+
+            console.log('💎 Mastermind Hybrid Engine: Logic, Core & Evidence Layer Injected.');
         }
         window.addEventListener('load', injectScriptsDynamically);
     </script>
