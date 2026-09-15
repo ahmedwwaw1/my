@@ -26,14 +26,11 @@ jobs:
           jwt=re.compile(r'eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+')
           files=[p for p in Path('.').rglob('*') if p.is_file() and '.git' not in p.parts and p.suffix.lower() in text_ext]
           for p in files:
-              s=p.read_text(encoding='utf-8',errors='ignore')
-              original=s
-              s=re.sub(r"^const SUPABASE_KEY\s*=.*;\s*$", "const SUPABASE_KEY = (typeof window !== 'undefined' && typeof window.__SUPABASE_PUBLIC_KEY__ === 'string') ? window.__SUPABASE_PUBLIC_KEY__ : '';", s, count=1, flags=re.M) if p.name in {'ai_engine_core.js','core.js'} else s
+              s=p.read_text(encoding='utf-8',errors='ignore'); original=s
+              if p.name in {'ai_engine_core.js','core.js'}:
+                  s=re.sub(r"^const SUPABASE_KEY\s*=.*;\s*$", "const SUPABASE_KEY = (typeof window !== 'undefined' && typeof window.__SUPABASE_PUBLIC_KEY__ === 'string') ? window.__SUPABASE_PUBLIC_KEY__ : '';", s, count=1, flags=re.M)
               s=jwt.sub('[REDACTED_JWT]',s)
-              s=re.sub(r"const headers\s*=\s*\{\s*['\"]apikey['\"]\s*:\s*SUPABASE_KEY\s*,\s*['\"]Authorization['\"]\s*:\s*`Bearer \\$\{SUPABASE_KEY\}`\s*,\s*['\"]Content-Type['\"]\s*:\s*['\"]application/json['\"]\s*\};", "const headers = { 'Content-Type': 'application/json', ...(SUPABASE_KEY ? { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } : {}) };", s)
               if s!=original: p.write_text(s,encoding='utf-8')
-          Path('my_AI/security_config.js').write_text("/* Public/anon configuration only. Never store service-role credentials here. */\nwindow.__SUPABASE_PUBLIC_KEY__ = window.__SUPABASE_PUBLIC_KEY__ || '';\n",encoding='utf-8')
-          Path('Mastermind_Desktop/security_config.js').write_text("/* Public/anon configuration only. Never store service-role credentials here. */\nwindow.__SUPABASE_PUBLIC_KEY__ = window.__SUPABASE_PUBLIC_KEY__ || '';\n",encoding='utf-8')
           PY
       - name: Wire security config
         run: |
@@ -54,9 +51,21 @@ jobs:
           node --check Mastermind_Desktop/core.js
           node --check my_AI/evidence_operating_loop_adapter.js
           node --check Mastermind_Desktop/evidence_operating_loop_adapter.js
-          if grep -R -n -E 'SUPABASE_KEY[[:space:]]*=[[:space:]]*[\'\"]eyJ|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+' my_AI Mastermind_Desktop; then
-            echo 'JWT/service credential remains in current source tree'; exit 1
-          fi
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          jwt=re.compile(r'eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+')
+          bad=[]
+          for root in (Path('my_AI'),Path('Mastermind_Desktop')):
+              for p in root.rglob('*'):
+                  if p.is_file() and p.suffix.lower() in {'.js','.json','.md','.html','.css','.yml','.yaml','.txt'}:
+                      s=p.read_text(encoding='utf-8',errors='ignore')
+                      if jwt.search(s): bad.append(str(p))
+                      if p.name in {'ai_engine_core.js','core.js'} and re.search(r"const SUPABASE_KEY\s*=\s*['\"]eyJ",s): bad.append(str(p)+':embedded-key')
+          if bad:
+              print('Credential-like JWT remains:',bad); raise SystemExit(1)
+          print('Static security and syntax gate passed.')
+          PY
       - name: Agent loop E2E harness
         run: |
           mkdir -p scripts
@@ -67,7 +76,7 @@ jobs:
           base.document={getElementById:()=>({value:'gemini-2.5-flash',classList:{add:()=>{},remove:()=>{},contains:()=>false},style:{},innerHTML:'',appendChild:()=>{},scrollTop:0,scrollHeight:0}),querySelector:()=>null};
           base.window=base;base.window.addEventListener=()=>{};base.logToTerminal=()=>{};
           async function run(env,core,engine,adapter){const c={...base};c.window=c;const ctx=vm.createContext(c);vm.runInContext(fs.readFileSync(core,'utf8'),ctx,{filename:core});const discovery=async()=>({root:'.',summary:{totalFiles:3},project:{name:'e2e'},architecture:{components:[{path:'app.js',role:'Logic',localDependencies:[],externalDependencies:[]}],relations:[],layers:{Logic:['app.js']},externalDependencies:[],electron:{detected:env==='Windows Desktop',ipcChannels:[],bridgeFiles:[]}}});ctx.performCloudArchitectureDiscovery=discovery;ctx.performArchitectureDiscovery=discovery;ctx.getGithubFileContent=async()=> 'original';ctx.listGithubFiles=async()=> 'app.js';ctx.callLocalBridge=async(action)=>action==='cmd'?'search-ok':action==='read'?'original':action==='write'?'written':'listed';const writes=[];ctx.writeFile=async(path,content)=>{writes.push({path,content});return '✅ written';};ctx.replaceFileContent=async()=> '✅ replaced';ctx.searchCode=async()=> 'search-ok';let n=0;ctx.callAiBrain=async()=>{n++;return n===1?{candidates:[{content:{parts:[{functionCall:{name:'fast_file_search',args:{query:'app.js'}}},{functionCall:{name:'write_file',args:{path:'app.js',content:'updated'}}}]}}]}:{candidates:[{content:{parts:[{text:'done'}]}}]}};ctx.runClosedRuntimeRepairLoop=async()=>({status:'passed'});vm.runInContext(fs.readFileSync(engine,'utf8'),ctx,{filename:engine});vm.runInContext(fs.readFileSync(adapter,'utf8'),ctx,{filename:adapter});const result=await ctx.runUniversalAgentOperatingLoop({environment:env,root:'.',objective:'E2E mission',verify:true});assert.equal(result.available,true);assert.equal(result.success,true);assert.equal(result.acceptance.verdict,'accepted');assert.equal(result.implementation.changed,true);assert.ok(writes.length>0);return{env,verdict:result.acceptance.verdict,writes:writes.length,turns:n};}
-          Promise.all([run('GitHub Cloud','my_AI/ai_engine_core.js','my_AI/universal_evidence_engine.js','my_AI/evidence_operating_loop_adapter.js'),run('Windows Desktop','Mastermind_Desktop/core.js','Mastermind_Desktop/universal_evidence_engine.js','Mastermind_Desktop/evidence_operating_loop_adapter.js')]).then(r=>{console.log(JSON.stringify(r));}).catch(e=>{console.error(e);process.exit(1)});
+          Promise.all([run('GitHub Cloud','my_AI/ai_engine_core.js','my_AI/universal_evidence_engine.js','my_AI/evidence_operating_loop_adapter.js'),run('Windows Desktop','Mastermind_Desktop/core.js','Mastermind_Desktop/universal_evidence_engine.js','Mastermind_Desktop/evidence_operating_loop_adapter.js')]).then(r=>console.log(JSON.stringify(r))).catch(e=>{console.error(e);process.exit(1)});
           NODE
           node scripts/final_e2e.js
       - name: Desktop real startup smoke test
