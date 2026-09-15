@@ -102,7 +102,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb
           cd Mastermind_Desktop
-          npm ci --ignore-scripts
+          npm ci
           npx electron --version
           timeout 20s xvfb-run -a npx electron . > /tmp/mastermind-electron.log 2>&1 || rc=$?
           if [ "${rc:-0}" != "124" ] && [ "${rc:-0}" != "0" ]; then cat /tmp/mastermind-electron.log; exit "${rc}"; fi
