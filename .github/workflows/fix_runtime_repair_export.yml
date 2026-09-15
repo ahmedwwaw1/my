@@ -1,0 +1,32 @@
+name: Fix Runtime Repair Export
+on:
+  push:
+    paths:
+      - '.github/workflows/fix_runtime_repair_export.yml'
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix exports and validate
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          old = 'module.exports={UNIVERSAL_RUNTIME_VERIFICATION_VERSION,runUniversalRuntimeVerification,urvFailureClass,urvCommands};'
+          new = 'module.exports={UNIVERSAL_RUNTIME_VERIFICATION_VERSION,runUniversalRuntimeVerification,runClosedRuntimeRepairLoop,urvFailureClass,urvCommands};'
+          for name in ['my_AI/universal_runtime_verification_engine.js','Mastermind_Desktop/universal_runtime_verification_engine.js']:
+              p=Path(name); s=p.read_text();
+              if old not in s: raise SystemExit(f'export marker missing: {name}')
+              p.write_text(s.replace(old,new,1))
+          PY
+          node --check my_AI/universal_runtime_verification_engine.js
+          node --check Mastermind_Desktop/universal_runtime_verification_engine.js
+          rm -f .github/workflows/fix_runtime_repair_export.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add my_AI/universal_runtime_verification_engine.js Mastermind_Desktop/universal_runtime_verification_engine.js .github/workflows
+          git commit -m 'Export closed runtime repair loop'
+          git push
