@@ -26,7 +26,6 @@ jobs:
             const second = first >= 0 ? s.indexOf(marker, first + marker.length) : -1;
             if (first >= 0 && second >= 0) s = s.slice(0, first) + s.slice(second);
 
-            s = s.replace(/(\b(?:const|let|var)\s+initialScan\s*=\s*)(?!await\s+)(?:performCloudArchitectureDiscovery|performArchitectureDiscovery)\(runtimeRoot\)\s*;/g, '$1await $&'.replace('$&','')); 
             s = s.replace('const initialScan = performCloudArchitectureDiscovery(runtimeRoot);','const initialScan = await performCloudArchitectureDiscovery(runtimeRoot);');
             s = s.replace('const initialScan = performArchitectureDiscovery(runtimeRoot);','const initialScan = await performArchitectureDiscovery(runtimeRoot);');
             s = s.replace(/expectedStatus:2(?!\d)/g, 'expectedStatus:200');
