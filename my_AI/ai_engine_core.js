@@ -163,8 +163,8 @@ function getRelevantTools(prompt, history = []) {
     const selected = new Set(TOOL_GROUPS.CORE || []);
     const matchedGroups = new Map();
 
-    // Intent Router: semantic aliases + exact tool mentions.
-    // This is intentionally local/deterministic so routing adds no model round-trip latency.
+    // Confidence-aware local Intent Router.
+    // No extra model call: routing remains deterministic and zero-round-trip.
     const INTENT_PROFILES = {
         WEB_HUNT: ['بحث', 'سيرش', 'غوغل', 'قوقل', 'ويب', 'الانترنت', 'الإنترنت', 'رابط', 'موقع', 'أخبار', 'خبر', 'فوركس', 'تداول', 'اقتصاد', 'اسعار', 'أسعار', 'news', 'search', 'web', 'url', 'forex', 'crypto'],
         LOCAL_DISCOVERY: ['ملفات', 'ملفاتي', 'ملف', 'مشروع', 'كود', 'كودات', 'هيكل', 'استكشف', 'بحث داخل', 'ابحث في الملفات', 'قرص', 'بارتيشن', 'c:', 'd:', 'e:', 'file', 'files', 'project', 'codebase', 'repository'],
@@ -186,43 +186,67 @@ function getRelevantTools(prompt, history = []) {
         matchedGroups.set(group, current);
     };
 
-    // 1) Exact tool names are the strongest signal.
+    // 1) Explicit tool names are the strongest signal.
     for (const [group, tools] of Object.entries(TOOL_GROUPS)) {
         for (const tool of (tools || [])) {
-            if (tool && text.includes(String(tool).toLowerCase())) addScore(group, 5, `tool:${tool}`);
+            if (tool && text.includes(String(tool).toLowerCase())) addScore(group, 6, `tool:${tool}`);
         }
     }
 
-    // 2) Semantic intent profiles.
+    // 2) Local intent profiles.
     for (const [group, signals] of Object.entries(INTENT_PROFILES)) {
         for (const signal of signals) {
             if (text.includes(signal.toLowerCase())) addScore(group, 2, `signal:${signal}`);
         }
     }
 
-    // 3) Existing KEYWORD_MAP remains the fast path and backwards compatibility layer.
+    // 3) Existing keyword layer remains a compatibility/fast-path signal.
     for (const [group, keywords] of Object.entries(KEYWORD_MAP || {})) {
         for (const keyword of (keywords || [])) {
-            if (text.includes(String(keyword).toLowerCase())) addScore(group, 2, `keyword:${keyword}`);
+            if (text.includes(String(keyword).toLowerCase())) addScore(group, 1, `keyword:${keyword}`);
         }
     }
 
-    // 4) Extended toolbox aliases become real intent hints instead of unused metadata.
+    // 4) Extended catalog aliases participate in routing.
     for (const [alias, entry] of Object.entries(EXTENDED_TOOLBOX_CATALOG || {})) {
         if (text.includes(String(alias).toLowerCase()) && entry?.group) addScore(entry.group, 3, `catalog:${alias}`);
     }
 
-    // 5) Open the strongest relevant groups. One strong intent can open one group;
-    // multiple genuinely present intents can open up to three groups.
     const ranked = [...matchedGroups.entries()]
         .filter(([group]) => group !== 'CORE' && Array.isArray(TOOL_GROUPS[group]))
         .sort((a, b) => b[1].score - a[1].score);
-    const strong = ranked.filter(([, info]) => info.score >= 2).slice(0, 3);
-    for (const [group] of strong) {
-        for (const tool of TOOL_GROUPS[group]) selected.add(tool);
+    const top = ranked[0]?.[1]?.score || 0;
+    const second = ranked[1]?.[1]?.score || 0;
+    const gap = Math.max(0, top - second);
+
+    // Explicit/discovered groups are always allowed to survive confidence routing.
+    for (const [group] of ranked) {
+        if ((matchedGroups.get(group)?.reasons || []).some(r => r.startsWith('tool:'))) {
+            for (const tool of TOOL_GROUPS[group]) selected.add(tool);
+        }
     }
 
-    // 6) Preserve discovered capabilities across the current conversation.
+    // High confidence: narrow routing.
+    // Medium confidence: broaden to the strongest few intents.
+    // Low confidence: fail open instead of becoming a gatekeeper.
+    let mode = 'low';
+    if (top >= 8 && gap >= 2) {
+        mode = 'high';
+        for (const [group] of ranked.slice(0, 2)) for (const tool of TOOL_GROUPS[group]) selected.add(tool);
+    } else if (top >= 4) {
+        mode = 'medium';
+        for (const [group, info] of ranked) {
+            if (info.score >= Math.max(2, top - 2)) for (const tool of TOOL_GROUPS[group]) selected.add(tool);
+        }
+    } else {
+        // Ambiguous task: expose all groups rather than hide the right capability.
+        for (const [group, tools] of Object.entries(TOOL_GROUPS)) {
+            if (group === 'CORE') continue;
+            for (const tool of (tools || [])) selected.add(tool);
+        }
+    }
+
+    // Preserve capabilities discovered earlier in the same conversation.
     for (const turn of history) {
         for (const part of (turn.parts || [])) {
             if (!part.functionResponse || part.functionResponse.name !== 'request_tool_discovery') continue;
@@ -230,20 +254,13 @@ function getRelevantTools(prompt, history = []) {
             for (const groupName of Object.keys(TOOL_GROUPS)) {
                 if (response.includes(groupName)) {
                     for (const tool of TOOL_GROUPS[groupName]) selected.add(tool);
-                    addScore(groupName, 1, 'history-discovery');
                 }
             }
         }
     }
 
     const declarations = AI_TOOLS[0].function_declarations.filter(td => selected.has(td.name));
-    const topIntent = ranked[0]?.[0] || 'CORE';
-    const topScore = ranked[0]?.[1]?.score || 0;
-    if (!topScore && history.length < 3) {
-        logToTerminal('Intent Router: low-confidence intent; CORE + tool discovery retained.', 'info');
-    } else if (topScore) {
-        logToTerminal(`Intent Router: ${topIntent} score=${topScore}; tools=${declarations.length}`, 'info');
-    }
+    logToTerminal(`Intent Router: mode=${mode}, top=${top}, gap=${gap}, tools=${declarations.length}`, 'info');
     return [{ function_declarations: declarations }];
 }
 
