@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1789430540185",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل الread_file يمتلك قوة مثل  GitHub API\"}]}]",
-  "timestamp": "2026-09-15T00:03:20.433Z"
+  "sessions": [
+    {
+      "id": "1789452654041",
+      "title": "أداة **`discovery_scan`** (الم",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ماهو discovery_scan"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أداة **`discovery_scan`** (المسح المعماري الشامل) هي إحدى الأدوات الأساسية والبروتوكولات الرئيسية التي أستخدمها كمُهندس ومُعمار ذكاء اصطناعي لبناء **خريطة ذهنية وهيكلية شاملة للمستودع (Repository)**.\n\n---\n\n### 🎯 الهدف والوظيفة الرئيسية:\n1. **استكشاف البنية المعمارية:** تقوم الأداة بمسح المجلدات والملفات في المشروع لتحديد المكونات الهيكلية الرئيسية (Core Components)، والواجهات (Interfaces / UI)، والمنطق البرمجي (Business Logic).\n2. **بروتوكول الاستقراء (Induction Protocol):** يُعد تشغيل المسح المعماري الخصوصي الخطوة الأولى عند التعامل مع أي بيئة برمجة جديدة، لمعرفة كيف تتصل الأجزاء المختلفة ببعضها قبل البدء بالتعديل أو التطوير.\n3. **توفير السياق البرمجي (Architectural Context):** تُساعد في منع الأخطاء أو التضارب عبر فهم علاقات الملفات والمكونات والأنماط المعمارية المتبعة في المشروع.\n\n---\n\n### 💡 متى وكيف تُستخدم؟\n* **في بداية المهام التأسيسية:** لفهم هيكلية المشروع ككل.\n* **عند حل المشكلات المعقدة:** لمعرفة الأماكن المتأثرة والتأكد من إجراء التعديلات في المكان الصحيح دون كسر أجزاء أخرى من النظام.",
+              "thoughtSignature": "EsoKCscKARFNMg/AFUtBUCo5/ZDUT7XL8b8zHrPE+sT7mndW5dTOwP7t/l1EkpEs4TNXh5RVYM99YkoXrY+dIdO8joBlhRC7TbEJ9TyRm1loUUgc2pfAdxCERLbsW609ZYPjy8zdKdjkL3BbcyRKPBsZtpkjnKu/hdUJ8Ky3UGM1hfaK/XowTlqEuLCDFGTUCY7KZq32Xw5la3JLGQZAsXqsbOsE2QjMdU1cqmFfJhcodebrMVHYzJYLOih46Llo5Cafvb8EHutkAWK1qbFs8u5RscK9X+DJqMXxbCfb0twRV9pJ12XC5Cju8HqCDwRLyNPnQQ6dgEJjf9hCyVG+2mlgB98sngo4Ur1gy/NnOm2WmZsGiJO3lY/7UlvUr8xSUeMyiMkW422SWDZUFNAeC9KHSpbo3DskY8oHaxkj+LCFjhcrup7ZusgWxUlzZcLweDJImdT9LtWeq3iWo7/CRhCuNCpNCIzVpiCCl+aw7o4boSfwXzgEc6eeIrXOQ1QYQzWNA/DOHWc1f7wICLRyQRXgEgB6hxvYC0Z9EPKCj1eqQPpmXQY0LnosK2ZacWWs6meTpm5ZnurDsHJMCjlnODsgy5lbsHn/ikP29PpEpFvrRxjmCaoorQ/8kgr5ryk9pqB8urEtcTFcl2qmLkvA4kiFYSEpByUZ9mBRl56bV6rc021BUZnKxg2NcT6fDSTaKQYtAeMoBIaUgNnFR72xMyoEpaiN8xpO8naVCaqy8w4CzVvHtVK5xgCT2jaHdzeUu0YIIgmmiyqmlKOE0dePPZQZ/7fsToCjvRWFzQN3/eHO9yYCG1QnZekwXiglJR6dwqIXkS6tqW6RUuNbRHUIx/151+odF1UUiJaYsPu5OZrbMyDcmxnusvR1gv1WLvSqfw9aoYsqfKVvmM/t+aQ9VXVlXSNB+KZ+kd+4D6jFf06Wi1emUKBDIO4BJMXNgAY4jVCBc7TjEDxdVcHN6U8eKuQj5hNBDtDt+RXY6X1VlXgxrRm7SMAC0Z9gFIp4vcT5Q21PncRqYO18yqX5u+RDNPfzUfRTzWF6Tzal/hfiWVou7MqLERYQC/6RRo8ZN4NMpfiXzIKFuMMChptORAGVYSGJfjjYjk0ZoGSzC2bbMIGtCzm8XXzGQ1OQXgYTa0PQkkLCSyecTNtrgOTHPjzd72Y5E0vFutlea3tpV8pA9zBeEA3ZMxsFeRpdF7QH/1jTGjgasq+mBPKkjjJoLaUIebEK2G+RiTp8K0avnUtvzrysLOyW90ZI6/qibIIxz6sTfmsVTukmHnyElp3tB9YqLvMJD2ZD7eeTcxZfNYvDIJc5QsqBotHbmbRZOzG6G00yGteT/n3L8TZa9U+/rZheH6Xcbygx2ZXmsz61+mC0A3jTDr2ulPvfyNe6bVsZoqJhOPwGzn+r3cZCKGr7piVJ9n+ht03+4TdwZ5KX7suvSRZ+LDjEiEvVS5C/c2hju3GRr0jHDD2NdlUOkLlEh8++4FAMA8s2f84gFnk0EHAHdQ6eo7PT9/eHOM+QRYbJXUoOBB1vvT4YefbdvDQWGTTO+GuD4QamzeMfx5UYs4S6KqEKhOhXhdmxkBRQGDNQB+ObPvGCvm7GqK45wga0jyyQLtOQra2gO+7XcTEYdnzXr3bVtPDkFgsTU4NFsOOY5zRtcv4S0h9CLy5lNHQIJNc1QD66acKljSZ4PWnTqki9yEnJ43Uje+QdGq8fzmU+2QywlhxR14kAJsCNnTaxw5LDptEtfdVdMNnx/p9HzXQATbTji4I/jwr+hFFGfC0U9V2pV11T8rbvnqj9Z6JdHA=="
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1789452654041",
+  "pendingHistory": null,
+  "timestamp": "2026-09-15T06:25:41.960Z"
 }
