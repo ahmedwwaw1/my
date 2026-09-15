@@ -21,11 +21,10 @@ jobs:
           for (const file of files) {
             let s = fs.readFileSync(file,'utf8');
             const marker = 'async function runClosedRuntimeRepairLoop(options={})';
+            const beforeCount = s.split(marker).length - 1;
             const first = s.indexOf(marker);
             const second = first >= 0 ? s.indexOf(marker, first + marker.length) : -1;
-            if (first >= 0 && second >= 0) {
-              s = s.slice(0, first) + s.slice(second);
-            }
+            if (first >= 0 && second >= 0) s = s.slice(0, first) + s.slice(second);
             const oldScan = 'const initialScan = performCloudArchitectureDiscovery(runtimeRoot);';
             const newScan = 'const initialScan = await performCloudArchitectureDiscovery(runtimeRoot);';
             s = s.replace(oldScan, newScan);
@@ -33,14 +32,13 @@ jobs:
             s = s.replace('security:op.security??doc.security??null});', 'security:op.security??doc.security??null,openApiDocument:doc});');
             s = s.replace('responseSchema:apiResolveSchema(c.responseSchema||c.responses?.[String(response.status)]?.content?.[\'application/json\']?.schema||null,c)', 'responseSchema:apiResolveSchema(c.openApiDocument||{},c.responseSchema||c.responses?.[String(response.status)]?.content?.[\'application/json\']?.schema||null)');
             fs.writeFileSync(file,s);
-            const dup = (s.match(new RegExp(marker.replace(/[.*+?^${}()|[\\]\\]/g,'\\$&'),'g'))||[]).length;
+            const remaining = s.split(marker).length - 1;
             const okAwait = s.includes(newScan);
-            const okStatus = !s.includes('expectedStatus:2');
+            const okStatus = !/expectedStatus:2(?!\d)/.test(s);
             const okSchema = !s.includes("responseSchema:apiResolveSchema(c.responseSchema||c.responses?.[String(response.status)]?.content?.['application/json']?.schema||null,c)");
-            if (dup !== 1 || !okAwait || !okStatus || !okSchema) throw new Error(`${file}: static verification failed dup=${dup} await=${okAwait} status=${okStatus} schema=${okSchema}`);
-            report.push({file,duplicateCount:dup,awaitFixed:okAwait,routeStatusFixed:okStatus,schemaResolverFixed:okSchema});
+            if (remaining !== 1 || !okAwait || !okStatus || !okSchema) throw new Error(`${file}: static verification failed before=${beforeCount} after=${remaining} await=${okAwait} status=${okStatus} schema=${okSchema}`);
+            report.push({file,beforeClosedRepairDefinitions:beforeCount,afterClosedRepairDefinitions:remaining,awaitFixed:okAwait,routeStatusFixed:okStatus,schemaResolverFixed:okSchema});
           }
-          fs.writeFileSync('/tmp/report.json', JSON.stringify(report,null,2));
           console.log(JSON.stringify(report,null,2));
           NODE
       - name: Syntax check
@@ -59,5 +57,5 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           rm -f .github/workflows/agent_core_hotfix.yml
           git add my_AI/ai_engine_core.js my_AI/universal_api_testing_engine.js Mastermind_Desktop/core.js Mastermind_Desktop/universal_api_testing_engine.js .github/workflows/agent_core_hotfix.yml
-          git commit -m 'Complete agent architecture runtime hotfix' || exit 0
+          git commit -m 'Complete agent architecture runtime hotfix'
           git push
