@@ -49,7 +49,7 @@ jobs:
           node --check Mastermind_Desktop/core.js
           node --check my_AI/evidence_operating_loop_adapter.js
           node --check Mastermind_Desktop/evidence_operating_loop_adapter.js
-          if grep -R -n -E 'service_role|SUPABASE_KEY[[:space:]]*=[[:space:]]*['"']eyJ' my_AI Mastermind_Desktop; then
+          if grep -R -n -E "service_role|SUPABASE_KEY[[:space:]]*=[[:space:]]*['\"]eyJ" my_AI Mastermind_Desktop; then
             echo 'Embedded service-role credential still present'; exit 1
           fi
       - name: Agent loop E2E harness
@@ -67,6 +67,8 @@ jobs:
           node scripts/final_e2e.js
       - name: Desktop real startup smoke test
         run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
           cd Mastermind_Desktop
           npm ci --ignore-scripts
           npx electron --version
