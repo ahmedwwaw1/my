@@ -1,0 +1,25 @@
+name: Run Agent Operating Loop Upgrade
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply upgrade
+        run: node scripts/upgrade_agent_operating_loop.js
+      - name: Verify syntax
+        run: |
+          node --check my_AI/ai_engine_core.js
+          node --check Mastermind_Desktop/core.js
+      - name: Commit changes and remove workflow
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm -f scripts/upgrade_agent_operating_loop.js .github/workflows/run_agent_operating_loop_upgrade.yml
+          git add my_AI/ai_engine_core.js Mastermind_Desktop/core.js scripts/upgrade_agent_operating_loop.js .github/workflows/run_agent_operating_loop_upgrade.yml
+          git commit -m 'Upgrade architecture loop to closed agent operating loop'
+          git push
