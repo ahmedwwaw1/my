@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1789471982871",
+      "title": "أهلاً وسهلاً بك! 👋\n\nأنا **الم",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً وسهلاً بك! 👋\n\nأنا **المعمار السيادي للأنظمة (Mastermind Omni-Architect)**. جاهز ومستعد لمساعدتك في أي مهمة هندسية، سواء كانت:\n\n- 🏗️ **تطوير وبناء المعماريات المتقدمة** وتحليل البرمجيات.\n- 🎨 **تصميم وتحسين واجهات المستخدم (UI/UX)** بطابع بصري احترافي.\n- 🔍 **استكشاف وفحص كود المستودع** وإصلاح الأخطاء والجذور المعقدة.\n- ⚡ **تحسين الأداء وإعادة الهيكلة (Refactoring)** عبر ملفات متعددة.\n\nكيف يمكنني مساعدتك اليوم في مشروعك؟",
+              "thoughtSignature": "EuwCCukCARFNMg9tKIhlCpk9cBsuARrpn3VCc+VvAvcCD/etbWvryXK4p953PhcO/kb2SFn6CRSJRs95qIfkgnS3v0M/ynZoT8GOXkoyTUCFQQ73XuEuM9uoG/NBbRJgoE+SgcG7KHYa7QLWNDHyD9zZYR1BoejaUG83o2o/mTVNXVz/BWKklyBH9o34sNFVpv4Z4/DleIsVs1UCU0EZpoy1copc+jeJskCBayfXrzKSX8UuCHnmhg7SwQenYQURjC8q7xmG9F3U3xxvg3C4xU7pU5XRm4U1P2NvAJZp+c6Y0068j/cVxWTkH7GMR+HUDAvp+tktVUKwZ59NTvvl4QgLHeLjSBzb5M7ceVC+6YuQC+VngB+eZnRZ1eXUCQuNO13k/PF6YuobWnJ8dQAe2I9wVLODsou6/8eoF4gZnZS5PijPDNtNw/tuiHuZ+6Q5KCC66MEuCQZQgiy0MKqU/9Is8zwNOybFeChzvvoXzw=="
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        }
+      ]
+    },
+    {
       "id": "1789471900520",
       "title": "الشكر لله ثم لك! يسعدني جداً ذ",
       "history": [
@@ -103,7 +127,7 @@
       ]
     }
   ],
-  "activeSessionId": "1789471982871",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-15T11:33:15.895Z"
+  "activeSessionId": "1789472059422",
+  "pendingHistory": null,
+  "timestamp": "2026-09-15T11:34:19.422Z"
 }
