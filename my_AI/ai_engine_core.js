@@ -1317,7 +1317,7 @@ async function runToolLoop(history) {
                 try {
                     const runtimeRoot = args?.path || safePath || "";
                     const initialScan = performCloudArchitectureDiscovery(runtimeRoot);
-                    toolResult = await runUniversalRuntimeVerification({
+                    toolResult = await runClosedRuntimeRepairLoop({
                         environment: "GitHub Cloud",
                         root: runtimeRoot,
                         snapshot: initialScan,
@@ -1330,7 +1330,22 @@ async function runToolLoop(history) {
                         apiPath: args?.apiPath || "",
                         maxRetries: Number.isInteger(args?.maxRetries) ? args.maxRetries : 1,
                         runtimeChecks: Number.isInteger(args?.runtimeChecks) ? args.runtimeChecks : 3,
+                        maxRepairAttempts: 2,
                         execute: async (command) => callLocalBridge('cmd', { command }),
+                        repair: async ({ failure }) => {
+                            const repairHistory = [{ role: 'user', parts: [{ text: `Autonomous runtime repair task. Repair ONLY the first root cause evidenced below. Do not redesign unrelated code. Do not call runtime_verify. Start by inspecting the implicated file(s), then apply the smallest safe code change. Runtime evidence: ${JSON.stringify(failure).slice(-14000)}` }] }];
+                            let applied=false; const results=[];
+                            for(let turn=0;turn<3;turn++){
+                                const response=await callAiBrain(repairHistory);
+                                const candidate=response?.candidates?.[0]; if(!candidate?.content?.parts?.length) break;
+                                repairHistory.push(candidate.content);
+                                const calls=candidate.content.parts.filter(p=>p.functionCall);
+                                if(!calls.length) break;
+                                for(const part of calls.slice(0,4)){const {name,args}=part.functionCall;if(!['read_file','write_file','replace_file_content','analyze_file'].includes(name))continue;let result;if(name==='read_file'||name==='analyze_file')result=await getGithubFileContent(normalizePathForCloud(args.path));else if(name==='write_file')result=await writeFile(normalizePathForCloud(args.path), args.content);else result=await replaceFileContent(normalizePathForCloud(args.path),args.targetContent,args.replacementContent);results.push({name,result});if(name==='write_file'||name==='replace_file_content')applied=true;repairHistory.push({role:'function',parts:[{functionResponse:{name,response:{content:typeof result==='string'?result:JSON.stringify(result)}}}]});}
+                                if(applied) break;
+                            }
+                            return {applied,results};
+                        },
                         discover: async () => performCloudArchitectureDiscovery(runtimeRoot)
                     });
                 } catch (runtimeError) {

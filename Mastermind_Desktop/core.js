@@ -902,7 +902,7 @@ async function runToolLoop(history) {
                 try {
                     const runtimeRoot = args?.path || args?.path || ".";
                     const initialScan = performArchitectureDiscovery(runtimeRoot);
-                    toolResult = await runUniversalRuntimeVerification({
+                    toolResult = await runClosedRuntimeRepairLoop({
                         environment: "Windows Desktop",
                         root: runtimeRoot,
                         snapshot: initialScan,
@@ -915,7 +915,22 @@ async function runToolLoop(history) {
                         apiPath: args?.apiPath || "",
                         maxRetries: Number.isInteger(args?.maxRetries) ? args.maxRetries : 1,
                         runtimeChecks: Number.isInteger(args?.runtimeChecks) ? args.runtimeChecks : 3,
+                        maxRepairAttempts: 2,
                         execute: async (command) => callLocalBridge('cmd', { command }),
+                        repair: async ({ failure }) => {
+                            const repairHistory = [{ role: 'user', parts: [{ text: `Autonomous runtime repair task. Repair ONLY the first root cause evidenced below. Do not redesign unrelated code. Do not call runtime_verify. Start by inspecting the implicated file(s), then apply the smallest safe code change. Runtime evidence: ${JSON.stringify(failure).slice(-14000)}` }] }];
+                            let applied=false; const results=[];
+                            for(let turn=0;turn<3;turn++){
+                                const response=await callAiBrain(repairHistory);
+                                const candidate=response?.candidates?.[0]; if(!candidate?.content?.parts?.length) break;
+                                repairHistory.push(candidate.content);
+                                const calls=candidate.content.parts.filter(p=>p.functionCall);
+                                if(!calls.length) break;
+                                for(const part of calls.slice(0,4)){const {name,args}=part.functionCall;if(!['read_file','write_file','replace_file_content','analyze_file'].includes(name))continue;let result;if(name==='read_file'||name==='analyze_file')result=await callLocalBridge('read', args);else if(name==='write_file')result=await callLocalBridge('write', args);else result=await (async a=>{const current=await callLocalBridge('read',{path:a.path});const content=current?.content??current?.output??current;if(typeof content!=='string'||!content.includes(a.targetContent))return '❌ target not found';return await callLocalBridge('write',{path:a.path,content:content.replace(a.targetContent,a.replacementContent)});})(args);results.push({name,result});if(name==='write_file'||name==='replace_file_content')applied=true;repairHistory.push({role:'function',parts:[{functionResponse:{name,response:{content:typeof result==='string'?result:JSON.stringify(result)}}}]});}
+                                if(applied) break;
+                            }
+                            return {applied,results};
+                        },
                         discover: async () => performArchitectureDiscovery(runtimeRoot)
                     });
                 } catch (runtimeError) {
