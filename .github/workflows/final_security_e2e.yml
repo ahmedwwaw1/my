@@ -104,14 +104,16 @@ jobs:
           cd Mastermind_Desktop
           npm ci
           npx electron --version
+          rm -rf /tmp/mastermind-electron-dist
+          cp -a node_modules/electron/dist /tmp/mastermind-electron-dist
+          sudo chown root:root /tmp/mastermind-electron-dist/chrome-sandbox
+          sudo chmod 4755 /tmp/mastermind-electron-dist/chrome-sandbox
           cat > ci_smoke_main.js <<'NODE'
           const { app } = require('electron');
-          app.commandLine.appendSwitch('no-sandbox');
-          app.commandLine.appendSwitch('disable-setuid-sandbox');
           app.commandLine.appendSwitch('disable-gpu');
           require('./main.js');
           NODE
-          timeout 20s xvfb-run -a npx electron ci_smoke_main.js > /tmp/mastermind-electron.log 2>&1 || rc=$?
+          timeout 20s xvfb-run -a /tmp/mastermind-electron-dist/electron ci_smoke_main.js > /tmp/mastermind-electron.log 2>&1 || rc=$?
           if [ "${rc:-0}" != "124" ] && [ "${rc:-0}" != "0" ]; then cat /tmp/mastermind-electron.log; exit "${rc}"; fi
           tail -n 80 /tmp/mastermind-electron.log || true
       - name: Commit security fix and clean test files
