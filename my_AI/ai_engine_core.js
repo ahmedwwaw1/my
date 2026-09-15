@@ -159,41 +159,94 @@ const KEYWORD_MAP = {
 };
 
 function getRelevantTools(prompt, history = []) {
-    const promptLower = (prompt || "").toLowerCase();
-    let selectedTools = [...TOOL_GROUPS.CORE]; // Core tools always included
+    const text = String(prompt || '').toLowerCase();
+    const selected = new Set(TOOL_GROUPS.CORE || []);
+    const matchedGroups = new Map();
 
-    let matchFound = false;
-    for (const [group, keywords] of Object.entries(KEYWORD_MAP)) {
-        if (keywords.some(kw => promptLower.includes(kw.toLowerCase()))) {
-            selectedTools = selectedTools.concat(TOOL_GROUPS[group]);
-            matchFound = true;
+    // Intent Router: semantic aliases + exact tool mentions.
+    // This is intentionally local/deterministic so routing adds no model round-trip latency.
+    const INTENT_PROFILES = {
+        WEB_HUNT: ['بحث', 'سيرش', 'غوغل', 'قوقل', 'ويب', 'الانترنت', 'الإنترنت', 'رابط', 'موقع', 'أخبار', 'خبر', 'فوركس', 'تداول', 'اقتصاد', 'اسعار', 'أسعار', 'news', 'search', 'web', 'url', 'forex', 'crypto'],
+        LOCAL_DISCOVERY: ['ملفات', 'ملفاتي', 'ملف', 'مشروع', 'كود', 'كودات', 'هيكل', 'استكشف', 'بحث داخل', 'ابحث في الملفات', 'قرص', 'بارتيشن', 'c:', 'd:', 'e:', 'file', 'files', 'project', 'codebase', 'repository'],
+        ENGINE_7_ARCHIVE: ['ذاكرة', 'تذكر', 'احفظ', 'تخزين', 'استرجع', 'سياق', 'تلخيص', 'memory', 'remember', 'store', 'retrieve', 'context'],
+        ENGINE_8_SCALES: ['تكلفة', 'توكن', 'استهلاك', 'اداء', 'أداء', 'زمن', 'تأخير', 'سرعة', 'latency', 'cost', 'tokens', 'usage', 'metrics', 'performance'],
+        ENGINE_9_TOUCHSTONE: ['اختبار', 'اختبر', 'تأكد', 'تحقق', 'محاكاة', 'وحدة', 'تكامل', 'test', 'verify', 'validation', 'simulation', 'integration'],
+        ENGINE_10_PULSE: ['توقف', 'استئناف', 'نقطة توقف', 'خلفية', 'مهمة خلفية', 'مؤقت', 'إيقاف مؤقت', 'interrupt', 'resume', 'checkpoint', 'background', 'async'],
+        ENGINE_11_MAKER: ['برمجة', 'دالة', 'فانكشن', 'مكتبة', 'تثبيت', 'ثبت', 'اعتماد', 'dependency', 'lint', 'refactor', 'نمط معماري', 'تعارض', 'إصدار', 'try-catch', 'design pattern', 'package'],
+        ENGINE_12_RAW_INTEL: ['تصنيف مشكلة', 'تصنيف الخطأ', 'bug', 'بج', 'خطأ', 'ثغرة', 'تعقيد', 'big-o', 'problem classification', 'bug signature'],
+        ENGINE_3_EVOLUTION: ['تطور', 'إصلاح ذاتي', 'إصلاح النظام', 'توسع', 'تحسين استباقي', 'طفرة', 'تحديث المحرك', 'ترمنل', 'طرفية', 'باور شيل', 'powershell', 'cmd', 'جيت هاب', 'github', 'لقطة', 'تراجع', 'تشغيل المشروع', 'تشغيل الاختبارات', 'فتح برنامج', 'ويندوز', 'file explorer', 'terminal'],
+        ENGINE_6_CONNECTORS: ['موصل', 'كونكتور', 'plugin', 'connector', 'github action', 'external app']
+    };
+
+    const addScore = (group, score, reason) => {
+        if (!TOOL_GROUPS[group]) return;
+        const current = matchedGroups.get(group) || { score: 0, reasons: [] };
+        current.score += score;
+        if (reason && !current.reasons.includes(reason)) current.reasons.push(reason);
+        matchedGroups.set(group, current);
+    };
+
+    // 1) Exact tool names are the strongest signal.
+    for (const [group, tools] of Object.entries(TOOL_GROUPS)) {
+        for (const tool of (tools || [])) {
+            if (tool && text.includes(String(tool).toLowerCase())) addScore(group, 5, `tool:${tool}`);
         }
     }
 
-    // 🕵️ ميزة أمين المكتبة: البحث في تاريخ المحادثة عن أدوات تم اكتشافها
-    history.forEach(turn => {
-        turn.parts?.forEach(part => {
-            if (part.functionResponse && part.functionResponse.name === "request_tool_discovery") {
-                const response = part.functionResponse.response.content;
-                // إذا كانت الاستجابة تحتوي على أسماء مجموعات أدوات، قم بتفعيلها
-                for (const groupName of Object.keys(TOOL_GROUPS)) {
-                    if (response.includes(groupName)) {
-                        selectedTools = selectedTools.concat(TOOL_GROUPS[groupName]);
-                        logToTerminal(`Librarian: Dynamically unlocked ${groupName}`, "info");
-                    }
-                }
-            }
-        });
-    });
-
-    if (!matchFound && history.length < 3) {
-        logToTerminal("Tool Search: No exact keyword match. Librarian Active.", "info");
+    // 2) Semantic intent profiles.
+    for (const [group, signals] of Object.entries(INTENT_PROFILES)) {
+        for (const signal of signals) {
+            if (text.includes(signal.toLowerCase())) addScore(group, 2, `signal:${signal}`);
+        }
     }
 
-    // Map back to full tool declarations
-    const declarations = AI_TOOLS[0].function_declarations.filter(td => selectedTools.includes(td.name));
+    // 3) Existing KEYWORD_MAP remains the fast path and backwards compatibility layer.
+    for (const [group, keywords] of Object.entries(KEYWORD_MAP || {})) {
+        for (const keyword of (keywords || [])) {
+            if (text.includes(String(keyword).toLowerCase())) addScore(group, 2, `keyword:${keyword}`);
+        }
+    }
+
+    // 4) Extended toolbox aliases become real intent hints instead of unused metadata.
+    for (const [alias, entry] of Object.entries(EXTENDED_TOOLBOX_CATALOG || {})) {
+        if (text.includes(String(alias).toLowerCase()) && entry?.group) addScore(entry.group, 3, `catalog:${alias}`);
+    }
+
+    // 5) Open the strongest relevant groups. One strong intent can open one group;
+    // multiple genuinely present intents can open up to three groups.
+    const ranked = [...matchedGroups.entries()]
+        .filter(([group]) => group !== 'CORE' && Array.isArray(TOOL_GROUPS[group]))
+        .sort((a, b) => b[1].score - a[1].score);
+    const strong = ranked.filter(([, info]) => info.score >= 2).slice(0, 3);
+    for (const [group] of strong) {
+        for (const tool of TOOL_GROUPS[group]) selected.add(tool);
+    }
+
+    // 6) Preserve discovered capabilities across the current conversation.
+    for (const turn of history) {
+        for (const part of (turn.parts || [])) {
+            if (!part.functionResponse || part.functionResponse.name !== 'request_tool_discovery') continue;
+            const response = String(part.functionResponse.response?.content || '');
+            for (const groupName of Object.keys(TOOL_GROUPS)) {
+                if (response.includes(groupName)) {
+                    for (const tool of TOOL_GROUPS[groupName]) selected.add(tool);
+                    addScore(groupName, 1, 'history-discovery');
+                }
+            }
+        }
+    }
+
+    const declarations = AI_TOOLS[0].function_declarations.filter(td => selected.has(td.name));
+    const topIntent = ranked[0]?.[0] || 'CORE';
+    const topScore = ranked[0]?.[1]?.score || 0;
+    if (!topScore && history.length < 3) {
+        logToTerminal('Intent Router: low-confidence intent; CORE + tool discovery retained.', 'info');
+    } else if (topScore) {
+        logToTerminal(`Intent Router: ${topIntent} score=${topScore}; tools=${declarations.length}`, 'info');
+    }
     return [{ function_declarations: declarations }];
 }
+
 
 /** Universal API Contract & Integration Testing Engine 1.0 */
 const UNIVERSAL_API_TESTING_VERSION='1.0-contract-integration';
