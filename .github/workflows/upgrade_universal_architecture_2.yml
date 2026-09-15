@@ -1,0 +1,307 @@
+name: Upgrade Universal Architecture 2.0
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Inject universal architecture expansion
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+
+          const expansion = String.raw`/**
+           * Universal Architecture Expansion 2.0
+           * Runtime + Infrastructure + Framework/Language + Diff + Validation.
+           */
+          const UNIVERSAL_ARCHITECTURE_EXPANSION_VERSION = '2.0-universal';
+
+          function ua2Array(value) { return Array.isArray(value) ? value : []; }
+          function ua2String(value) { return typeof value === 'string' ? value : ''; }
+          function ua2Lower(value) { return ua2String(value).toLowerCase(); }
+          function ua2Unique(values) { return [...new Set(ua2Array(values).filter(Boolean))]; }
+
+          function ua2ClassifyArtifact(filePath = '') {
+              const p = ua2Lower(filePath).replace(/\\/g, '/');
+              const name = p.split('/').pop() || p;
+              if (/dockerfile|docker-compose|compose\.ya?ml/.test(name)) return 'docker';
+              if (/\.ya?ml$/.test(name) && /(k8s|kube|kubernetes|helm|deployment|service|ingress|statefulset|daemonset|configmap|secret)/.test(p)) return 'kubernetes';
+              if (/(^|\/)(helm|charts)(\/|$)/.test(p) || /chart\.ya?ml|values\.ya?ml/.test(name)) return 'helm';
+              if (/\.tf$|\.tfvars$/.test(name) || /(^|\/)terraform(\/|$)/.test(p)) return 'terraform';
+              if (/\.github\/workflows\/.+\.ya?ml$/.test(p)) return 'github-actions';
+              if (/nginx|caddy|traefik|haproxy/.test(name)) return 'proxy';
+              if (/systemd|\.service$/.test(name)) return 'systemd';
+              if (/serverless|template\.ya?ml|sam/.test(name)) return 'serverless';
+              if (/package\.json|package-lock\.json|pnpm-lock\.yaml|yarn\.lock/.test(name)) return 'node-runtime';
+              if (/requirements\.txt|pyproject\.toml|poetry\.lock|pipfile/.test(name)) return 'python-runtime';
+              if (/pom\.xml|build\.gradle|settings\.gradle|gradlew/.test(name)) return 'java-runtime';
+              if (/cargo\.toml|cargo\.lock/.test(name)) return 'rust-runtime';
+              if (/go\.mod|go\.sum/.test(name)) return 'go-runtime';
+              if (/gemfile|gemspec/.test(name)) return 'ruby-runtime';
+              return 'other';
+          }
+
+          function ua2DetectLanguagesAndFrameworks(components = [], project = {}) {
+              const languages = new Map();
+              const frameworks = new Set();
+              const files = ua2Array(components);
+              const addLang = (language, count = 1) => languages.set(language, (languages.get(language) || 0) + count);
+              for (const component of files) {
+                  const p = ua2Lower(component.path);
+                  if (/\.(js|mjs|cjs)$/.test(p)) addLang('JavaScript');
+                  else if (/\.ts$/.test(p)) addLang('TypeScript');
+                  else if (/\.tsx$/.test(p)) { addLang('TypeScript'); frameworks.add('React'); }
+                  else if (/\.jsx$/.test(p)) { addLang('JavaScript'); frameworks.add('React'); }
+                  else if (/\.py$/.test(p)) addLang('Python');
+                  else if (/\.(java|kt|kts)$/.test(p)) addLang(/\.kt|kts/.test(p) ? 'Kotlin' : 'Java');
+                  else if (/\.go$/.test(p)) addLang('Go');
+                  else if (/\.rs$/.test(p)) addLang('Rust');
+                  else if (/\.rb$/.test(p)) addLang('Ruby');
+                  else if (/\.(c|h)$/.test(p)) addLang('C');
+                  else if (/\.(cpp|cc|hpp)$/.test(p)) addLang('C++');
+                  else if (/\.cs$/.test(p)) addLang('C#');
+                  else if (/\.php$/.test(p)) addLang('PHP');
+                  else if (/\.swift$/.test(p)) addLang('Swift');
+                  else if (/\.dart$/.test(p)) { addLang('Dart'); frameworks.add('Flutter'); }
+                  if (/vite\.config|vite\./.test(p)) frameworks.add('Vite');
+                  if (/next\.config|(^|\/)next\.json$/.test(p)) frameworks.add('Next.js');
+                  if (/nuxt\.config|nuxt\.config\./.test(p)) frameworks.add('Nuxt');
+                  if (/angular\.json|\.angular\.json$/.test(p)) frameworks.add('Angular');
+                  if (/svelte\.config|\.svelte$/.test(p)) frameworks.add('Svelte');
+                  if (/electron/.test(p)) frameworks.add('Electron');
+                  if (/express|koa|fastify|nest/.test(p)) frameworks.add('Node.js Web');
+                  if (/django|flask|fastapi/.test(p)) frameworks.add('Python Web');
+                  if (/spring/.test(p)) frameworks.add('Spring');
+                  if (/\.csproj$|\.sln$/.test(p)) frameworks.add('.NET');
+              }
+              const packageDependencies = project.dependencies || {};
+              for (const dep of Object.keys(packageDependencies)) {
+                  const d = ua2Lower(dep);
+                  if (d === 'react' || d.startsWith('react-')) frameworks.add('React ecosystem');
+                  if (d === 'vue' || d.startsWith('vue-')) frameworks.add('Vue ecosystem');
+                  if (d === 'svelte' || d.startsWith('@svelte/')) frameworks.add('Svelte ecosystem');
+                  if (d.includes('electron')) frameworks.add('Electron');
+                  if (d === 'express' || d === 'fastify' || d === 'koa' || d === '@nestjs/core') frameworks.add('Node backend');
+              }
+              return {
+                  languages: [...languages.entries()].sort((a, b) => b[1] - a[1]).map(([name, files]) => ({ name, files })),
+                  frameworks: [...frameworks].sort()
+              };
+          }
+
+          function ua2ExtractInfrastructure(components = []) {
+              const infrastructure = {
+                  artifacts: [],
+                  providers: new Set(),
+                  deploymentModels: new Set(),
+                  orchestration: new Set(),
+                  ciCd: [],
+                  services: [],
+                  runtimeConfig: []
+              };
+              for (const component of components) {
+                  const type = ua2ClassifyArtifact(component.path);
+                  if (type === 'other') continue;
+                  infrastructure.artifacts.push({ path: component.path, type });
+                  const p = ua2Lower(component.path);
+                  if (type === 'docker') { infrastructure.orchestration.add('Docker'); infrastructure.deploymentModels.add('containerized'); }
+                  if (type === 'kubernetes') { infrastructure.orchestration.add('Kubernetes'); infrastructure.deploymentModels.add('container-orchestrated'); }
+                  if (type === 'helm') infrastructure.orchestration.add('Helm');
+                  if (type === 'terraform') { infrastructure.providers.add('Terraform'); infrastructure.deploymentModels.add('infrastructure-as-code'); }
+                  if (type === 'github-actions') infrastructure.ciCd.push(component.path);
+                  if (type === 'proxy') infrastructure.services.push({ kind: 'edge-proxy', path: component.path });
+                  if (type === 'systemd') infrastructure.services.push({ kind: 'system-service', path: component.path });
+                  if (type.endsWith('-runtime')) infrastructure.runtimeConfig.push({ kind: type, path: component.path });
+                  if (/aws|amazon/.test(p)) infrastructure.providers.add('AWS');
+                  if (/azure/.test(p)) infrastructure.providers.add('Azure');
+                  if (/gcp|google-cloud/.test(p)) infrastructure.providers.add('GCP');
+                  if (/vercel/.test(p)) infrastructure.providers.add('Vercel');
+                  if (/supabase/.test(p)) infrastructure.providers.add('Supabase');
+              }
+              return {
+                  artifacts: infrastructure.artifacts,
+                  providers: [...infrastructure.providers].sort(),
+                  deploymentModels: [...infrastructure.deploymentModels].sort(),
+                  orchestration: [...infrastructure.orchestration].sort(),
+                  ciCd: ua2Unique(infrastructure.ciCd),
+                  services: infrastructure.services,
+                  runtimeConfig: infrastructure.runtimeConfig
+              };
+          }
+
+          function ua2InferRuntimeTopology(snapshot = {}) {
+              const topology = { processes: [], boundaries: [], entrypoints: [], ports: [], envReferences: [], confidence: 'low' };
+              const project = snapshot.project || {};
+              const entryPoints = ua2Array(project.entryPoints);
+              topology.entrypoints = entryPoints.slice(0, 50);
+              for (const component of ua2Array(snapshot.components)) {
+                  const p = ua2Lower(component.path);
+                  if (/server|api|worker|daemon|service|consumer|producer|main|electron/.test(p)) {
+                      topology.processes.push({ path: component.path, role: component.role || 'Other' });
+                  }
+                  for (const ext of ua2Array(component.externalDependencies)) {
+                      if (/(redis|postgres|mysql|mongodb|kafka|rabbitmq|nats|sqs|sns|sqlite|supabase|firebase|grpc|graphql)/i.test(ext)) {
+                          topology.boundaries.push({ from: component.path, target: ext, kind: 'external-service' });
+                      }
+                  }
+              }
+              topology.processes = topology.processes.slice(0, 100);
+              topology.boundaries = topology.boundaries.slice(0, 200);
+              topology.confidence = topology.processes.length || topology.boundaries.length ? 'inferred' : 'unknown';
+              return topology;
+          }
+
+          function ua2BuildValidationProtocol(snapshot = {}, environment = 'Unknown') {
+              const commands = [];
+              const project = snapshot.project || {};
+              const scripts = project.scripts || {};
+              const add = (kind, command, reason) => {
+                  if (command && !commands.some(x => x.command === command)) commands.push({ kind, command, reason });
+              };
+              add('syntax', 'node --check <changed-js-files>', 'Fast JavaScript syntax validation when Node is available.');
+              if (scripts.test) add('tests', 'npm test', 'Run repository test suite.');
+              if (scripts.lint) add('lint', 'npm run lint', 'Run repository linter.');
+              if (scripts.build) add('build', 'npm run build', 'Verify production/build integration.');
+              if (scripts.typecheck) add('typecheck', 'npm run typecheck', 'Verify static type contracts.');
+              if (environment === 'Desktop') add('runtime', 'node --version && npm --version', 'Confirm local runtime availability.');
+              if (environment === 'GitHub Cloud') add('ci', 'git diff --check', 'Detect whitespace and patch formatting errors in CI context.');
+              return {
+                  environment,
+                  commands,
+                  strategy: 'syntax -> dependency graph -> tests -> lint/typecheck -> build -> runtime smoke -> architecture rescan',
+                  failurePolicy: 'Classify the first failing layer, repair the root cause, and re-run only affected checks before the full gate.'
+              };
+          }
+
+          function ua2ArchitectureDiff(previous = null, current = {}) {
+              if (!previous || typeof previous !== 'object') return { available: false, reason: 'No baseline architecture model supplied.' };
+              const prevComponents = new Map(ua2Array(previous.components).map(x => [x.path, x]));
+              const currComponents = new Map(ua2Array(current.components).map(x => [x.path, x]));
+              const added = [...currComponents.keys()].filter(k => !prevComponents.has(k));
+              const removed = [...prevComponents.keys()].filter(k => !currComponents.has(k));
+              const changed = [];
+              for (const [path, now] of currComponents) {
+                  const before = prevComponents.get(path);
+                  if (!before) continue;
+                  const beforeDeps = JSON.stringify(ua2Unique(before.localDependencies || []).sort());
+                  const nowDeps = JSON.stringify(ua2Unique(now.localDependencies || []).sort());
+                  const beforeRole = before.role || 'Other';
+                  const nowRole = now.role || 'Other';
+                  if (beforeDeps !== nowDeps || beforeRole !== nowRole) changed.push({ path, fromRole: beforeRole, toRole: nowRole, dependenciesChanged: beforeDeps !== nowDeps });
+              }
+              const risk = removed.length > 10 || changed.length > 25 ? 'high' : (added.length || removed.length || changed.length ? 'review' : 'low');
+              return { available: true, added, removed, changed, risk, summary: { added: added.length, removed: removed.length, changed: changed.length } };
+          }
+
+          function runUniversalArchitectureExpansion(scanResult = {}, options = {}) {
+              const snapshot = scanResult.architecture || {};
+              const current = {
+                  components: ua2Array(snapshot.components),
+                  layers: snapshot.layers || {},
+                  relations: ua2Array(snapshot.relations),
+                  externalDependencies: ua2Array(snapshot.externalDependencies),
+                  project: scanResult.project || {}
+              };
+              const stack = ua2DetectLanguagesAndFrameworks(current.components, current.project);
+              const infrastructure = ua2ExtractInfrastructure(current.components);
+              const runtimeTopology = ua2InferRuntimeTopology({ ...current, project: current.project });
+              const validationProtocol = ua2BuildValidationProtocol({ ...current, project: current.project }, options.environment || 'Unknown');
+              const diff = ua2ArchitectureDiff(options.baseline || null, current);
+              const unknowns = [];
+              if (!infrastructure.artifacts.length) unknowns.push('No infrastructure/deployment manifests were discovered.');
+              if (runtimeTopology.confidence === 'unknown') unknowns.push('Runtime process topology is not directly observable from the static repository scan.');
+              if (diff.available === false) unknowns.push('No architecture baseline was supplied, so post-change architectural drift cannot yet be measured.');
+              return {
+                  version: UNIVERSAL_ARCHITECTURE_EXPANSION_VERSION,
+                  stack,
+                  infrastructure,
+                  runtimeTopology,
+                  architectureDiff: diff,
+                  validationProtocol,
+                  unknowns,
+                  capabilityMatrix: {
+                      staticArchitecture: 'high',
+                      infrastructureAnalysis: infrastructure.artifacts.length ? 'detected' : 'not-observed',
+                      runtimeTopology: runtimeTopology.confidence,
+                      frameworkDetection: stack.frameworks.length ? 'detected' : 'limited',
+                      languageDetection: stack.languages.length ? 'detected' : 'limited',
+                      architectureDriftDetection: diff.available ? 'enabled' : 'awaiting-baseline',
+                      empiricalRuntimeVerification: options.runtimeEvidence ? 'available' : 'requires-runtime-evidence'
+                  }
+              };
+          }
+          `;
+
+          function injectIntoCore(file, isDesktop) {
+              let text = fs.readFileSync(file, 'utf8');
+              if (!text.includes('UNIVERSAL_ARCHITECTURE_EXPANSION_VERSION')) {
+                  const anchor = isDesktop ? '// --- [AI Engine Logic] ---' : '// --- [AI Engine Logic] ---';
+                  const idx = text.indexOf(anchor);
+                  if (idx < 0) throw new Error(`Architecture expansion anchor not found in ${file}`);
+                  text = text.slice(0, idx) + expansion + '\n\n' + text.slice(idx);
+              }
+
+              text = text.replace("const UNIVERSAL_ARCHITECT_VERSION = '1.0-loop';", "const UNIVERSAL_ARCHITECT_VERSION = '2.0-universal';");
+              text = text.replace(/const architectureResult = runUniversalArchitectLoop\(([\s\S]*?)\);/g, 'const architectureResult = runUniversalArchitectLoop($1);');
+
+              const oldReturn = `    return {\n        loopVersion: UNIVERSAL_ARCHITECT_VERSION,`;
+              if (!text.includes('universalExpansion: runUniversalArchitectureExpansion')) {
+                  const target = `    const repair = architectRepairPlan(validation, design);\n`;
+                  if (!text.includes(target)) throw new Error(`Loop target not found in ${file}`);
+                  text = text.replace(target, target + `    const universalExpansion = runUniversalArchitectureExpansion(scanResult, {\n        environment: options.environment || 'Unknown',\n        baseline: options.baseline || null,\n        runtimeEvidence: options.runtimeEvidence || null\n    });\n`);
+                  text = text.replace(oldReturn, `    return {\n        loopVersion: UNIVERSAL_ARCHITECT_VERSION,\n        universalExpansion,`);
+              }
+
+              fs.writeFileSync(file, text);
+          }
+
+          fs.writeFileSync('my_AI/universal_architecture_expansion.js', expansion.trimStart() + '\n');
+          fs.writeFileSync('Mastermind_Desktop/universal_architecture_expansion.js', expansion.trimStart() + '\n');
+          injectIntoCore('my_AI/ai_engine_core.js', false);
+          injectIntoCore('Mastermind_Desktop/core.js', true);
+          NODE
+
+      - name: Add upgraded architecture tool guidance
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const files = ['my_AI/ai_engine_core.js', 'Mastermind_Desktop/core.js'];
+          for (const file of files) {
+            let text = fs.readFileSync(file, 'utf8');
+            const old = 'For non-trivial engineering tasks execute the Universal Architect Loop: Discovery -> Architecture Understanding -> Constraint Analysis -> Architecture Planning -> Design -> Cross-file Implementation -> Validation -> Repair.';
+            const extra = old + ' Then perform Universal Architecture Expansion 2.0: language/framework detection -> infrastructure/deployment analysis -> runtime-topology inference -> architecture-drift diff when a baseline exists -> empirical validation protocol. Treat unknowns as explicit uncertainty, never as facts.';
+            text = text.replace(old, extra);
+            fs.writeFileSync(file, text);
+          }
+          NODE
+
+      - name: Validate JavaScript
+        run: |
+          node --check my_AI/ai_engine_core.js
+          node --check my_AI/universal_architect_engine.js
+          node --check my_AI/universal_architecture_expansion.js
+          node --check Mastermind_Desktop/core.js
+          node --check Mastermind_Desktop/universal_architect_engine.js
+          node --check Mastermind_Desktop/universal_architecture_expansion.js
+
+      - name: Commit upgrade
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add my_AI/ai_engine_core.js my_AI/universal_architecture_expansion.js Mastermind_Desktop/core.js Mastermind_Desktop/universal_architecture_expansion.js
+          git diff --cached --check
+          git commit -m 'Upgrade Universal Architecture 2.0'
+          git push
+
+      - name: Remove temporary workflow
+        run: |
+          git rm .github/workflows/upgrade_universal_architecture_2.yml
+          git commit -m 'Remove temporary architecture upgrade workflow'
+          git push
