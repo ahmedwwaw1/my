@@ -4,7 +4,7 @@
  */
 
 const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwiaWF0IjoxNzY5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwic3VwZXJiYXNlX3JvbGUiLCJpYXQiOiMTheaderNjc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
 const SUPABASE_BRIDGE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co/functions/v1/vsa-bridge';
 
 // --- [Globals] ---
@@ -57,7 +57,6 @@ const MODEL_MAPPING = {
 
 function translateToProviderFormat(model, history, tools, config) {
     const provider = MODEL_MAPPING[model]?.provider || 'google';
-
     if (provider === 'google') {
         return {
             system_instruction: { parts: [{ text: CONSTITUTION }] },
@@ -66,7 +65,6 @@ function translateToProviderFormat(model, history, tools, config) {
                 if (role === 'model') role = 'model';
                 else if (role === 'function') role = 'function';
                 else role = 'user';
-
                 return { role: role, parts: h.parts };
             }),
             tools: tools,
@@ -92,7 +90,6 @@ function translateToProviderFormat(model, history, tools, config) {
             max_tokens: config.maxOutputTokens
         };
     }
-
     return null;
 }
 
@@ -252,6 +249,7 @@ async function callBridge(action, payload) {
  */
 async function callLocalBridge(action, payload) {
     try {
+        // محاولة الحصول على ipcRenderer بطريقة أكثر مرونة
         let ipc;
         try {
             ipc = require('electron').ipcRenderer;
@@ -282,6 +280,7 @@ async function callLocalBridge(action, payload) {
     } catch (e) {
         logToTerminal(`System Error: ${e.message}`, "error");
 
+        // محاولة أخيرة عبر الجسر الخارجي (الوضع الهجين) إذا كان متاحاً
         try {
             const url = action === 'list' ? `http://localhost:3000/list?path=${encodeURIComponent(payload.path || '.')}` : `http://localhost:3000/cmd`;
             const res = await fetch(url, {
@@ -298,36 +297,16 @@ async function callLocalBridge(action, payload) {
 }
 
 // --- [Architecture Discovery Engine] ---
-const ARCH_SCAN_LIMITS = {
-    maxFiles: 8000,
-    maxRelations: 5000,
-    maxTextBytes: 180000,
-    maxPackageBytes: 500000
-};
+const ARCH_SCAN_LIMITS = { maxFiles: 8000, maxRelations: 5000, maxTextBytes: 180000, maxPackageBytes: 500000 };
+const ARCH_IGNORED_DIRS = new Set(['.git','.hg','.svn','node_modules','dist','build','out','coverage','.cache','.idea','.vscode','.next','.nuxt','.turbo']);
+const ARCH_TEXT_EXTENSIONS = new Set(['.js','.jsx','.ts','.tsx','.mjs','.cjs','.json','.html','.htm','.css','.scss','.sass','.less','.py','.java','.kt','.kts','.cs','.cpp','.c','.h','.hpp','.go','.rs','.php','.vue','.svelte','.md']);
 
-const ARCH_IGNORED_DIRS = new Set([
-    '.git', '.hg', '.svn', 'node_modules', 'dist', 'build', 'out',
-    'coverage', '.cache', '.idea', '.vscode', '.next', '.nuxt', '.turbo'
-]);
-
-const ARCH_TEXT_EXTENSIONS = new Set([
-    '.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs', '.json', '.html', '.htm',
-    '.css', '.scss', '.sass', '.less', '.py', '.java', '.kt', '.kts', '.cs',
-    '.cpp', '.c', '.h', '.hpp', '.go', '.rs', '.php', '.vue', '.svelte', '.md'
-]);
-
-function archNormalizePath(value) {
-    return String(value || '').replace(/\\/g, '/');
-}
-
-function archAddUnique(array, value) {
-    if (value && !array.includes(value)) array.push(value);
-}
+function archNormalizePath(value) { return String(value || '').replace(/\\/g, '/'); }
+function archAddUnique(array, value) { if (value && !array.includes(value)) array.push(value); }
 
 function archRoleOf(filePath) {
     const p = archNormalizePath(filePath);
     const base = p.split('/').pop().toLowerCase();
-
     if (base === 'package.json' || /^(tsconfig|jsconfig)(\.|$)/i.test(base) || /(vite|webpack|rollup|electron|eslint|prettier)\.(js|cjs|mjs|json)$/i.test(base)) return 'Config';
     if (/(^|\/)(preload|bridge|ipc)(\/|$)/i.test(p) || /^preload\.(js|ts|mjs|cjs)$/i.test(base)) return 'Bridge';
     if (/\.(html?|css|scss|sass|less|jsx|tsx)$/i.test(base) || /(^|\/)(ui|views?|components|frontend|renderer|public)(\/|$)/i.test(p)) return 'UI';
@@ -339,12 +318,11 @@ function archRoleOf(filePath) {
 
 function archReadText(filePath, maxBytes = ARCH_SCAN_LIMITS.maxTextBytes) {
     try {
-        const stat = require('fs').statSync(filePath);
+        const fs = require('fs');
+        const stat = fs.statSync(filePath);
         if (!stat.isFile() || stat.size > maxBytes) return '';
-        return require('fs').readFileSync(filePath, 'utf8');
-    } catch (e) {
-        return '';
-    }
+        return fs.readFileSync(filePath, 'utf8');
+    } catch (e) { return ''; }
 }
 
 function archCollectFiles(rootPath) {
@@ -357,34 +335,17 @@ function archCollectFiles(rootPath) {
     while (stack.length && files.length < ARCH_SCAN_LIMITS.maxFiles) {
         const current = stack.pop();
         let entries = [];
-        try {
-            entries = fs.readdirSync(current, { withFileTypes: true });
-        } catch (e) {
-            continue;
-        }
+        try { entries = fs.readdirSync(current, { withFileTypes: true }); } catch (e) { continue; }
 
         for (const entry of entries) {
-            if (files.length >= ARCH_SCAN_LIMITS.maxFiles) {
-                truncated = true;
-                break;
-            }
+            if (files.length >= ARCH_SCAN_LIMITS.maxFiles) { truncated = true; break; }
             if (entry.isDirectory() && ARCH_IGNORED_DIRS.has(entry.name)) continue;
-
             const fullPath = path.join(current, entry.name);
-            if (entry.isDirectory()) {
-                stack.push(fullPath);
-                continue;
-            }
+            if (entry.isDirectory()) { stack.push(fullPath); continue; }
 
             let size = 0;
             try { size = fs.statSync(fullPath).size; } catch (e) {}
-
-            files.push({
-                path: archNormalizePath(path.relative(rootPath, fullPath)),
-                extension: path.extname(entry.name).toLowerCase() || '(none)',
-                role: archRoleOf(path.relative(rootPath, fullPath)),
-                size
-            });
+            files.push({ path: archNormalizePath(path.relative(rootPath, fullPath)), extension: path.extname(entry.name).toLowerCase() || '(none)', role: archRoleOf(path.relative(rootPath, fullPath)), size });
         }
     }
 
@@ -404,7 +365,6 @@ function archExtractDependencies(sourceText) {
         /<link[^>]+href=["']([^"']+\.css[^"']*)["']/gi,
         /@import\s+(?:url\()?\s*["']([^"']+)["']/gi
     ];
-
     for (const regex of patterns) {
         let match;
         while ((match = regex.exec(sourceText))) archAddUnique(result, match[1]);
@@ -414,20 +374,16 @@ function archExtractDependencies(sourceText) {
 
 function archExternalPackage(specifier) {
     if (!specifier || specifier.startsWith('.') || specifier.startsWith('/') || /^([a-z]+:)?\/\//i.test(specifier)) return null;
-    return specifier.startsWith('@')
-        ? specifier.split('/').slice(0, 2).join('/')
-        : specifier.split('/')[0];
+    return specifier.startsWith('@') ? specifier.split('/').slice(0, 2).join('/') : specifier.split('/')[0];
 }
 
 function archResolveLocalImport(sourceFile, specifier, rootPath, knownFiles) {
     if (!specifier || !specifier.startsWith('.')) return null;
-
     const fs = require('fs');
     const path = require('path');
     const base = path.resolve(path.dirname(path.join(rootPath, sourceFile)), specifier);
     const attempts = [base];
-    const extensions = ['.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx', '.json', '.css', '.html'];
-
+    const extensions = ['.js','.mjs','.cjs','.ts','.tsx','.jsx','.json','.css','.html'];
     for (const ext of extensions) attempts.push(base + ext);
     for (const ext of extensions) attempts.push(path.join(base, `index${ext}`));
 
@@ -438,7 +394,6 @@ function archResolveLocalImport(sourceFile, specifier, rootPath, knownFiles) {
             if (knownFiles.has(relative)) return relative;
         } catch (e) {}
     }
-
     return null;
 }
 
@@ -449,7 +404,6 @@ function archDetectIpcChannels(sourceText) {
         /ipcRenderer\.(?:invoke|send|on|once|removeListener)\(\s*["']([^"']+)["']/g,
         /ipc\.(?:invoke|send|on)\(\s*["']([^"']+)["']/g
     ];
-
     for (const regex of patterns) {
         let match;
         while ((match = regex.exec(sourceText))) archAddUnique(channels, match[1]);
@@ -460,7 +414,6 @@ function archDetectIpcChannels(sourceText) {
 function archDetectImportsExports(sourceText) {
     const imports = [];
     const exports = [];
-
     const importPatterns = [
         /\bimport\s+(?:[^'";]+?\s+from\s+)?['"]([^'"]+)['"]/g,
         /\brequire\s*\(\s*['"]([^'"]+)['"]\s*\)/g,
@@ -470,7 +423,6 @@ function archDetectImportsExports(sourceText) {
         /\bexport\s+(?:default\s+)?(?:async\s+)?(?:function|class|const|let|var)\s+([A-Za-z_$][\w$]*)/g,
         /\bmodule\.exports\s*=|\bexports\.[A-Za-z_$][\w$]*/g
     ];
-
     for (const regex of importPatterns) {
         let match;
         while ((match = regex.exec(sourceText))) archAddUnique(imports, match[1]);
@@ -479,14 +431,12 @@ function archDetectImportsExports(sourceText) {
         let match;
         while ((match = regex.exec(sourceText))) archAddUnique(exports, match[1] || 'CommonJS export');
     }
-
     return { imports, exports };
 }
 
 function archReadPackageMetadata(rootPath) {
     const path = require('path');
-    const packagePath = path.join(rootPath, 'package.json');
-    const text = archReadText(packagePath, ARCH_SCAN_LIMITS.maxPackageBytes);
+    const text = archReadText(path.join(rootPath, 'package.json'), ARCH_SCAN_LIMITS.maxPackageBytes);
     if (!text) return null;
     try { return JSON.parse(text); } catch (e) { return null; }
 }
@@ -523,22 +473,16 @@ function performArchitectureDiscovery(scanPath) {
 
     const packageJson = archReadPackageMetadata(root);
     const entryPoints = [];
-
     if (packageJson?.main) archAddUnique(entryPoints, archNormalizePath(packageJson.main));
     if (packageJson?.browser) archAddUnique(entryPoints, archNormalizePath(packageJson.browser));
     if (packageJson?.scripts?.start) archAddUnique(entryPoints, 'package.json#scripts.start');
     if (packageJson?.scripts?.dev) archAddUnique(entryPoints, 'package.json#scripts.dev');
-
-    for (const candidate of [
-        'main.js', 'index.js', 'app.js', 'server.js', 'electron.js',
-        'index.html', 'preload.js', 'src/main.js', 'src/index.js'
-    ]) {
+    for (const candidate of ['main.js','index.js','app.js','server.js','electron.js','index.html','preload.js','src/main.js','src/index.js']) {
         if (knownFiles.has(candidate)) archAddUnique(entryPoints, candidate);
     }
 
     for (const file of files) {
         if (!ARCH_TEXT_EXTENSIONS.has(file.extension)) continue;
-
         const fullPath = path.join(root, file.path.split('/').join(path.sep));
         const source = archReadText(fullPath);
         if (!source) continue;
@@ -554,11 +498,8 @@ function performArchitectureDiscovery(scanPath) {
             const localTarget = archResolveLocalImport(file.path, specifier, root, knownFiles);
             if (localTarget) {
                 archAddUnique(local, localTarget);
-                if (relations.length < ARCH_SCAN_LIMITS.maxRelations) {
-                    relations.push({ from: file.path, to: localTarget, type: 'local-import' });
-                }
+                if (relations.length < ARCH_SCAN_LIMITS.maxRelations) relations.push({ from: file.path, to: localTarget, type: 'local-import' });
             }
-
             archAddUnique(imports, specifier);
             const packageName = archExternalPackage(specifier);
             if (packageName) {
@@ -568,37 +509,18 @@ function performArchitectureDiscovery(scanPath) {
         }
 
         for (const channel of ipc) ipcChannels.add(channel);
-
-        components.push({
-            path: file.path,
-            role: file.role,
-            imports,
-            localDependencies: local,
-            externalDependencies: [...new Set(external)],
-            exports: importExport.exports,
-            ipcChannels: ipc
-        });
+        components.push({ path: file.path, role: file.role, imports, localDependencies: local, externalDependencies: [...new Set(external)], exports: importExport.exports, ipcChannels: ipc });
     }
 
-    const packageDependencies = packageJson ? Object.keys({
-        ...(packageJson.dependencies || {}),
-        ...(packageJson.devDependencies || {}),
-        ...(packageJson.optionalDependencies || {})
-    }) : [];
+    const packageDependencies = packageJson ? Object.keys({ ...(packageJson.dependencies || {}), ...(packageJson.devDependencies || {}), ...(packageJson.optionalDependencies || {}) }) : [];
     for (const dependency of packageDependencies) externalDependencies.add(dependency);
 
-    const electronDependency = Boolean(
-        packageJson?.dependencies?.electron ||
-        packageJson?.devDependencies?.electron ||
-        [...externalDependencies].includes('electron')
-    );
-
+    const electronDependency = Boolean(packageJson?.dependencies?.electron || packageJson?.devDependencies?.electron || [...externalDependencies].includes('electron'));
     const recommendations = [
         'استخدم layers وrelations لتحديد المكوّن المسؤول قبل تعديل أي ملف.',
         'افحص الملف المستهدف والاعتماديات المحلية المباشرة قبل تنفيذ تعديل جراحي.',
         'عند وجود Bridge/IPC، تحقّق من طرفي الاتصال قبل تغيير قناة أو handler.'
     ];
-
     const warnings = [];
     if (!packageJson) warnings.push('لم يتم العثور على package.json صالح في جذر المسح.');
     if (!entryPoints.length) warnings.push('لم يتم اكتشاف نقطة دخول واضحة من metadata أو الأسماء الشائعة.');
@@ -608,32 +530,14 @@ function performArchitectureDiscovery(scanPath) {
     return {
         scanVersion: '3.0',
         root,
-        summary: {
-            totalFiles: files.length,
-            roleCounts,
-            relationCount: relations.length,
-            externalDependencyCount: externalDependencies.size,
-            ipcChannelCount: ipcChannels.size,
-            truncated: collected.truncated
-        },
-        project: {
-            name: packageJson?.name || path.basename(root),
-            version: packageJson?.version || null,
-            type: packageJson?.type || null,
-            packageManager: packageJson ? 'node-package' : 'unknown',
-            entryPoints,
-            dependencies: packageDependencies
-        },
+        summary: { totalFiles: files.length, roleCounts, relationCount: relations.length, externalDependencyCount: externalDependencies.size, ipcChannelCount: ipcChannels.size, truncated: collected.truncated },
+        project: { name: packageJson?.name || path.basename(root), version: packageJson?.version || null, type: packageJson?.type || null, packageManager: packageJson ? 'node-package' : 'unknown', entryPoints, dependencies: packageDependencies },
         architecture: {
             layers,
             components,
             relations,
             externalDependencies: [...externalDependencies].sort(),
-            electron: {
-                detected: electronDependency || bridgeFiles.length > 0 || ipcChannels.size > 0,
-                ipcChannels: [...ipcChannels].sort(),
-                bridgeFiles
-            }
+            electron: { detected: electronDependency || bridgeFiles.length > 0 || ipcChannels.size > 0, ipcChannels: [...ipcChannels].sort(), bridgeFiles }
         },
         recommendations,
         warnings
@@ -652,9 +556,7 @@ async function runToolLoop(history) {
     const filteredTools = getRelevantTools(lastUserMsg, history);
     const payload = translateToProviderFormat(userModel, history, filteredTools, GENERATION_CONFIG);
 
-    if (!payload) {
-        return { text: "❌ Provider mapping unsupported in translator format." };
-    }
+    if (!payload) return { text: "❌ Provider mapping unsupported in translator format." };
 
     const data = await callBridge('chat', { model: userModel, payload });
     if (data.error) return { text: data.error };
@@ -666,7 +568,6 @@ async function runToolLoop(history) {
 
     if (callParts.length > 0) {
         history.push(candidate.content);
-
         const results = await Promise.all(callParts.map(async (part) => {
             const { name, args } = part.functionCall;
             const stepId = addToolStepToUi(name, args);
@@ -677,17 +578,13 @@ async function runToolLoop(history) {
             else if (name === "run_terminal_command") toolResult = await callLocalBridge('cmd', args);
             else if (name === "read_file") toolResult = await callLocalBridge('read', args);
             else if (name === "write_file") toolResult = await callLocalBridge('write', args);
-            else if (name === "discovery_scan") {
-                toolResult = performArchitectureDiscovery(args?.path || ".");
-            }
+            else if (name === "discovery_scan") toolResult = performArchitectureDiscovery(args?.path || ".");
             else if (name === "replace_file_content") {
                 let content = await callLocalBridge('read', { path: args.path });
                 if (content && !content.error && content.includes(args.targetContent)) {
                     const updated = content.replace(args.targetContent, args.replacementContent);
                     toolResult = await callLocalBridge('write', { path: args.path, content: updated });
-                } else {
-                    toolResult = { error: "❌ Target content not found for surgical replacement." };
-                }
+                } else toolResult = { error: "❌ Target content not found for surgical replacement." };
             }
             else if (name === "multi_replace_file_content") {
                 let content = await callLocalBridge('read', { path: args.path });
@@ -695,20 +592,13 @@ async function runToolLoop(history) {
                     let updated = content;
                     let successCount = 0;
                     args.replacements.forEach(r => {
-                        if (updated.includes(r.targetContent)) {
-                            updated = updated.replace(r.targetContent, r.replacementContent);
-                            successCount++;
-                        }
+                        if (updated.includes(r.targetContent)) { updated = updated.replace(r.targetContent, r.replacementContent); successCount++; }
                     });
                     if (successCount > 0) {
                         await callLocalBridge('write', { path: args.path, content: updated });
                         toolResult = `✅ Successfully performed ${successCount} replacements.`;
-                    } else {
-                        toolResult = { error: "❌ None of the target contents were found." };
-                    }
-                } else {
-                    toolResult = { error: "❌ Failed to read file for multi-replacement." };
-                }
+                    } else toolResult = { error: "❌ None of the target contents were found." };
+                } else toolResult = { error: "❌ Failed to read file for multi-replacement." };
             }
             else if (name === "list_local_files" || name === "list_files") toolResult = await callLocalBridge('list', args);
             else if (name === "web_search") toolResult = await callBridge('web_search', args);
@@ -717,30 +607,15 @@ async function runToolLoop(history) {
             else toolResult = `✅ العملية [${name}] اكتملت.`;
 
             updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
-
-            return {
-                role: "function",
-                parts: [{
-                    functionResponse: {
-                        name,
-                        response: { content: typeof toolResult === 'object' ? JSON.stringify(toolResult) : toolResult }
-                    }
-                }]
-            };
+            return { role: "function", parts: [{ functionResponse: { name, response: { content: typeof toolResult === 'object' ? JSON.stringify(toolResult) : toolResult } } }] };
         }));
 
         history.push(...results);
         const nextLoopResult = await runToolLoop(history);
-        return {
-            text: nextLoopResult.text,
-            used_model: nextLoopResult.used_model || (data.used_model || userModel)
-        };
+        return { text: nextLoopResult.text, used_model: nextLoopResult.used_model || (data.used_model || userModel) };
     }
 
-    return {
-        text: textPart ? textPart.text : "Done.",
-        used_model: data.used_model || userModel
-    };
+    return { text: textPart ? textPart.text : "Done.", used_model: data.used_model || userModel };
 }
 
 function logToTerminal(msg, type = "info") {
