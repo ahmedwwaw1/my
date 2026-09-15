@@ -1,0 +1,118 @@
+name: Harden Agent Core
+on:
+  push:
+    paths:
+      - '.github/workflows/harden_agent_core.yml'
+permissions:
+  contents: write
+jobs:
+  harden:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch cloud and desktop cores
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          files = {
+              'my_AI/ai_engine_core.js': 'GitHub Cloud',
+              'Mastermind_Desktop/core.js': 'Windows Desktop',
+          }
+
+          for file, env in files.items():
+              p = Path(file)
+              s = p.read_text(encoding='utf-8')
+
+              # 1) Make tool search executable inside the operating loop.
+              old = "if(name==='read_file'||name==='analyze_file')result="
+              if old in s and "else if(name==='fast_file_search')" not in s:
+                  branch = "else if(name==='fast_file_search'){result=typeof callLocalBridge==='function'?await callLocalBridge('cmd',{command:`es.exe -d \\\"${args.query||''}\\\"`}):((typeof fastFileSearch==='function')?await fastFileSearch(args.query||''):{error:'fast_file_search unavailable'});}\n   "
+                  s = s.replace(old, branch + old, 1)
+
+              # 2) changed=true only after a successful write result.
+              s = s.replace(
+                  "result=typeof writeFile==='function'?await writeFile(path,args.content||'','Universal Agent Operating Loop implementation'):await callLocalBridge('write',{path,content:args.content||''});changed=true;",
+                  "result=typeof writeFile==='function'?await writeFile(path,args.content||'','Universal Agent Operating Loop implementation'):await callLocalBridge('write',{path,content:args.content||''});if(!result||result.error||(typeof result==='string'&&/^❌|error|failed/i.test(result)))throw new Error('write_file failed: '+(typeof result==='string'?result:JSON.stringify(result)));changed=true;"
+              )
+              s = s.replace(
+                  "result=typeof replaceFileContent==='function'?await replaceFileContent(path,args.targetContent||'',args.replacementContent||''):await callLocalBridge('write',{path,content:args.replacementContent||''});changed=true;",
+                  "if(typeof replaceFileContent==='function')result=await replaceFileContent(path,args.targetContent||'',args.replacementContent||'');else{let current=typeof getGithubFileContent==='function'?await getGithubFileContent(path):await callLocalBridge('read',{path});if(current&&typeof current==='object'&&current.content)current=current.content;if(typeof current!=='string'||!current.includes(args.targetContent||''))throw new Error('replace_file_content target not found');const updated=current.replace(args.targetContent||'',args.replacementContent||'');result=typeof writeFile==='function'?await writeFile(path,updated,'Universal Agent Operating Loop surgical replacement'):await callLocalBridge('write',{path,content:updated});}if(!result||result.error||(typeof result==='string'&&/^❌|error|failed/i.test(result)))throw new Error('replace_file_content failed: '+(typeof result==='string'?result:JSON.stringify(result)));changed=true;"
+              )
+
+              # 3) Multi-replace must refuse destructive fallback and require a real target match.
+              pattern = r"else \{let current=typeof getGithubFileContent==='function'\?await getGithubFileContent\(path\):await callLocalBridge\('read',\{path\}\);if\(current&&typeof current==='object'&&current\.content\)current=current\.content;let updated=String\(current\|\|'\'\);for\(const r of \(args\.replacements\|\|\[\]\)\)if\(updated\.includes\(r\.targetContent\)\)updated=updated\.replace\(r\.targetContent,r\.replacementContent\);result=typeof writeFile==='function'\?await writeFile\(path,updated,'Universal Agent Operating Loop batch'\):await callLocalBridge\('write',\{path,content:updated\}\);changed=true;\}"
+              replacement = "else{let current=typeof getGithubFileContent==='function'?await getGithubFileContent(path):await callLocalBridge('read',{path});if(current&&typeof current==='object'&&current.content)current=current.content;if(typeof current!=='string')throw new Error('multi_replace_file_content could not read target file');let updated=current;let matched=0;for(const r of(args.replacements||[])){if(updated.includes(r.targetContent)){updated=updated.replace(r.targetContent,r.replacementContent);matched++;}}if(!matched)throw new Error('multi_replace_file_content: none of the targets matched');result=typeof writeFile==='function'?await writeFile(path,updated,'Universal Agent Operating Loop batch'):await callLocalBridge('write',{path,content:updated});if(!result||result.error||(typeof result==='string'&&/^❌|error|failed/i.test(result)))throw new Error('multi_replace_file_content write failed: '+(typeof result==='string'?result:JSON.stringify(result)));changed=true;}"
+              s, n = re.subn(pattern, replacement, s, count=1)
+
+              # 4) Desktop/cloud path normalization must exist in both cores.
+              if file.startswith('Mastermind_Desktop/') and 'function normalizePathForCloud(path)' not in s:
+                  anchor = "async function runUniversalAgentOperatingLoop(options={})"
+                  helper = "function normalizePathForCloud(path){return String(path||'').replace(/^[a-zA-Z]:\\\\[^\\\\]+\\\\[^\\\\]+\\\\my\\\\/i,'').replace(/^my[\\\\/]/i,'').replace(/\\\\/g,'/');}\n\n"
+                  if anchor not in s: raise SystemExit(f'{file}: operating loop anchor missing')
+                  s = s.replace(anchor, helper + anchor, 1)
+
+              # 5) Security: never ship the Supabase service-role credential in renderer/core code.
+              service_line = re.compile(r"^const SUPABASE_KEY = .*;\n", re.M)
+              s, removed = service_line.subn("const SUPABASE_KEY = (typeof window !== 'undefined' && typeof window.__SUPABASE_PUBLIC_KEY__ === 'string') ? window.__SUPABASE_PUBLIC_KEY__ : '';\n", s, count=1)
+              if removed != 1:
+                  # Desktop may use the same declaration without a space around '='.
+                  s, removed = re.subn(r"^const SUPABASE_KEY=.*;\n", "const SUPABASE_KEY = (typeof window !== 'undefined' && typeof window.__SUPABASE_PUBLIC_KEY__ === 'string') ? window.__SUPABASE_PUBLIC_KEY__ : '';\n", s, count=1, flags=re.M)
+              if removed != 1:
+                  raise SystemExit(f'{file}: SUPABASE_KEY declaration not found')
+
+              p.write_text(s, encoding='utf-8')
+
+          # Remove credential material from repository-visible code paths.
+          scan_files = [Path('my_AI/ai_engine_core.js'), Path('Mastermind_Desktop/core.js')]
+          forbidden = ['service_role', 'SUPABASE_KEY = \'eyJ']
+          for p in scan_files:
+              text=p.read_text(encoding='utf-8')
+              if any(x in text for x in forbidden):
+                  raise SystemExit(f'secret-pattern remains in {p}')
+          PY
+
+      - name: Add public-key configuration seam
+        run: |
+          cat > my_AI/security_config.js <<'EOF'
+          /*
+           * Public configuration seam only.
+           * Never place a Supabase service-role key or any server secret here.
+           * A publishable/anon key may be injected at deploy time when required.
+           */
+          window.__SUPABASE_PUBLIC_KEY__ = window.__SUPABASE_PUBLIC_KEY__ || '';
+          EOF
+          cat > Mastermind_Desktop/security_config.js <<'EOF'
+          /*
+           * Public configuration seam only.
+           * Never place a Supabase service-role key or any server secret here.
+           * A publishable/anon key may be injected at deploy time when required.
+           */
+          window.__SUPABASE_PUBLIC_KEY__ = window.__SUPABASE_PUBLIC_KEY__ || '';
+          EOF
+
+      - name: Verify
+        run: |
+          node --check my_AI/ai_engine_core.js
+          node --check Mastermind_Desktop/core.js
+          node --check my_AI/universal_evidence_engine.js
+          node --check Mastermind_Desktop/universal_evidence_engine.js
+          python3 - <<'PY'
+          from pathlib import Path
+          for f in ['my_AI/ai_engine_core.js','Mastermind_Desktop/core.js']:
+              s=Path(f).read_text(encoding='utf-8')
+              assert "else if(name==='fast_file_search')" in s, f'{f}: fast search dispatch missing'
+              assert 'function normalizePathForCloud(path)' in s, f'{f}: path normalizer missing'
+              assert 'service_role' not in s and 'SUPABASE_KEY = \'eyJ' not in s, f'{f}: secret material remains'
+          print('Static hardening checks passed.')
+          PY
+
+      - name: Commit and remove hardening workflow
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm -f .github/workflows/harden_agent_core.yml
+          git add my_AI/ai_engine_core.js Mastermind_Desktop/core.js my_AI/security_config.js Mastermind_Desktop/security_config.js .github/workflows/harden_agent_core.yml
+          git commit -m 'Harden agent operating loop and remove embedded service credentials'
+          git push
