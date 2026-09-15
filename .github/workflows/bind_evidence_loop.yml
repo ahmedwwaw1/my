@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/bind_evidence_loop.yml'
+      - 'scripts/bind_evidence_loop.js'
 
 permissions:
   contents: write
