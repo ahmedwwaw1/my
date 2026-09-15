@@ -4,7 +4,7 @@
  */
 
 const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTheaderNjc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwiaWF0IjoxNzY5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
 const SUPABASE_BRIDGE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co/functions/v1/vsa-bridge';
 
 // --- [Globals] ---
@@ -58,22 +58,21 @@ const MODEL_MAPPING = {
 function translateToProviderFormat(model, history, tools, config) {
     const provider = MODEL_MAPPING[model]?.provider || 'google';
 
-        if (provider === 'google') {
-            return {
-                system_instruction: { parts: [{ text: CONSTITUTION }] },
-                contents: history.map(h => {
-                    // تصحيح الأدوار لـ Gemini
-                    let role = h.role;
-                    if (role === 'model') role = 'model';
-                    else if (role === 'function') role = 'function';
-                    else role = 'user';
+    if (provider === 'google') {
+        return {
+            system_instruction: { parts: [{ text: CONSTITUTION }] },
+            contents: history.map(h => {
+                let role = h.role;
+                if (role === 'model') role = 'model';
+                else if (role === 'function') role = 'function';
+                else role = 'user';
 
-                    return { role: role, parts: h.parts };
-                }),
-                tools: tools,
-                generationConfig: config
-            };
-        }
+                return { role: role, parts: h.parts };
+            }),
+            tools: tools,
+            generationConfig: config
+        };
+    }
 
     if (provider === 'openai' || provider === 'deepseek') {
         return {
@@ -146,7 +145,6 @@ function getRelevantTools(prompt, history = []) {
         }
     }
 
-    // 🕵️ ميزة أمين المكتبة المكتبية: البحث في تاريخ المحادثة عن أدوات تم اكتشافها
     history.forEach(turn => {
         turn.parts?.forEach(part => {
             if (part.functionResponse && part.functionResponse.name === "request_tool_discovery") {
@@ -254,7 +252,6 @@ async function callBridge(action, payload) {
  */
 async function callLocalBridge(action, payload) {
     try {
-        // محاولة الحصول على ipcRenderer بطريقة أكثر مرونة
         let ipc;
         try {
             ipc = require('electron').ipcRenderer;
@@ -285,7 +282,6 @@ async function callLocalBridge(action, payload) {
     } catch (e) {
         logToTerminal(`System Error: ${e.message}`, "error");
 
-        // محاولة أخيرة عبر الجسر الخارجي (الوضع الهجين) إذا كان متاحاً
         try {
             const url = action === 'list' ? `http://localhost:3000/list?path=${encodeURIComponent(payload.path || '.')}` : `http://localhost:3000/cmd`;
             const res = await fetch(url, {
@@ -299,6 +295,349 @@ async function callLocalBridge(action, payload) {
 
         return { error: `فشل الاتصال بالجسر المدمج (IPC Bridge Offline: ${e.message}). يرجى التأكد من تشغيل البرنامج عبر ملف Launcher.bat.` };
     }
+}
+
+// --- [Architecture Discovery Engine] ---
+const ARCH_SCAN_LIMITS = {
+    maxFiles: 8000,
+    maxRelations: 5000,
+    maxTextBytes: 180000,
+    maxPackageBytes: 500000
+};
+
+const ARCH_IGNORED_DIRS = new Set([
+    '.git', '.hg', '.svn', 'node_modules', 'dist', 'build', 'out',
+    'coverage', '.cache', '.idea', '.vscode', '.next', '.nuxt', '.turbo'
+]);
+
+const ARCH_TEXT_EXTENSIONS = new Set([
+    '.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs', '.json', '.html', '.htm',
+    '.css', '.scss', '.sass', '.less', '.py', '.java', '.kt', '.kts', '.cs',
+    '.cpp', '.c', '.h', '.hpp', '.go', '.rs', '.php', '.vue', '.svelte', '.md'
+]);
+
+function archNormalizePath(value) {
+    return String(value || '').replace(/\\/g, '/');
+}
+
+function archAddUnique(array, value) {
+    if (value && !array.includes(value)) array.push(value);
+}
+
+function archRoleOf(filePath) {
+    const p = archNormalizePath(filePath);
+    const base = p.split('/').pop().toLowerCase();
+
+    if (base === 'package.json' || /^(tsconfig|jsconfig)(\.|$)/i.test(base) || /(vite|webpack|rollup|electron|eslint|prettier)\.(js|cjs|mjs|json)$/i.test(base)) return 'Config';
+    if (/(^|\/)(preload|bridge|ipc)(\/|$)/i.test(p) || /^preload\.(js|ts|mjs|cjs)$/i.test(base)) return 'Bridge';
+    if (/\.(html?|css|scss|sass|less|jsx|tsx)$/i.test(base) || /(^|\/)(ui|views?|components|frontend|renderer|public)(\/|$)/i.test(p)) return 'UI';
+    if (/\.(py|java|kt|kts|cs|go|rs|php)$/i.test(base) || /(^|\/)(server|backend|api)(\/|$)/i.test(p)) return 'Backend';
+    if (/\.(json|ya?ml|toml|xml)$/i.test(base) || /(^|\/)(data|fixtures|assets|resources)(\/|$)/i.test(p)) return 'Data';
+    if (/\.(js|ts|mjs|cjs)$/i.test(base) || /(^|\/)(logic|core|service|services|lib|utils|helpers)(\/|$)/i.test(p)) return 'Logic';
+    return 'Other';
+}
+
+function archReadText(filePath, maxBytes = ARCH_SCAN_LIMITS.maxTextBytes) {
+    try {
+        const stat = require('fs').statSync(filePath);
+        if (!stat.isFile() || stat.size > maxBytes) return '';
+        return require('fs').readFileSync(filePath, 'utf8');
+    } catch (e) {
+        return '';
+    }
+}
+
+function archCollectFiles(rootPath) {
+    const fs = require('fs');
+    const path = require('path');
+    const files = [];
+    const stack = [rootPath];
+    let truncated = false;
+
+    while (stack.length && files.length < ARCH_SCAN_LIMITS.maxFiles) {
+        const current = stack.pop();
+        let entries = [];
+        try {
+            entries = fs.readdirSync(current, { withFileTypes: true });
+        } catch (e) {
+            continue;
+        }
+
+        for (const entry of entries) {
+            if (files.length >= ARCH_SCAN_LIMITS.maxFiles) {
+                truncated = true;
+                break;
+            }
+            if (entry.isDirectory() && ARCH_IGNORED_DIRS.has(entry.name)) continue;
+
+            const fullPath = path.join(current, entry.name);
+            if (entry.isDirectory()) {
+                stack.push(fullPath);
+                continue;
+            }
+
+            let size = 0;
+            try { size = fs.statSync(fullPath).size; } catch (e) {}
+
+            files.push({
+                path: archNormalizePath(path.relative(rootPath, fullPath)),
+                extension: path.extname(entry.name).toLowerCase() || '(none)',
+                role: archRoleOf(path.relative(rootPath, fullPath)),
+                size
+            });
+        }
+    }
+
+    if (stack.length) truncated = true;
+    files.sort((a, b) => a.path.localeCompare(b.path));
+    return { files, truncated };
+}
+
+function archExtractDependencies(sourceText) {
+    const result = [];
+    const patterns = [
+        /\bimport\s+(?:[^'";]+?\s+from\s+)?['"]([^'"]+)['"]/g,
+        /\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g,
+        /\brequire\s*\(\s*['"]([^'"]+)['"]\s*\)/g,
+        /\bexport\s+(?:[^'";]+?\s+from\s+)?['"]([^'"]+)['"]/g,
+        /<script[^>]+src=["']([^"']+)["']/gi,
+        /<link[^>]+href=["']([^"']+\.css[^"']*)["']/gi,
+        /@import\s+(?:url\()?\s*["']([^"']+)["']/gi
+    ];
+
+    for (const regex of patterns) {
+        let match;
+        while ((match = regex.exec(sourceText))) archAddUnique(result, match[1]);
+    }
+    return result;
+}
+
+function archExternalPackage(specifier) {
+    if (!specifier || specifier.startsWith('.') || specifier.startsWith('/') || /^([a-z]+:)?\/\//i.test(specifier)) return null;
+    return specifier.startsWith('@')
+        ? specifier.split('/').slice(0, 2).join('/')
+        : specifier.split('/')[0];
+}
+
+function archResolveLocalImport(sourceFile, specifier, rootPath, knownFiles) {
+    if (!specifier || !specifier.startsWith('.')) return null;
+
+    const fs = require('fs');
+    const path = require('path');
+    const base = path.resolve(path.dirname(path.join(rootPath, sourceFile)), specifier);
+    const attempts = [base];
+    const extensions = ['.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx', '.json', '.css', '.html'];
+
+    for (const ext of extensions) attempts.push(base + ext);
+    for (const ext of extensions) attempts.push(path.join(base, `index${ext}`));
+
+    for (const candidate of attempts) {
+        try {
+            if (!fs.existsSync(candidate) || !fs.statSync(candidate).isFile()) continue;
+            const relative = archNormalizePath(path.relative(rootPath, candidate));
+            if (knownFiles.has(relative)) return relative;
+        } catch (e) {}
+    }
+
+    return null;
+}
+
+function archDetectIpcChannels(sourceText) {
+    const channels = [];
+    const patterns = [
+        /ipcMain\.(?:handle|on|removeHandler)\(\s*["']([^"']+)["']/g,
+        /ipcRenderer\.(?:invoke|send|on|once|removeListener)\(\s*["']([^"']+)["']/g,
+        /ipc\.(?:invoke|send|on)\(\s*["']([^"']+)["']/g
+    ];
+
+    for (const regex of patterns) {
+        let match;
+        while ((match = regex.exec(sourceText))) archAddUnique(channels, match[1]);
+    }
+    return channels;
+}
+
+function archDetectImportsExports(sourceText) {
+    const imports = [];
+    const exports = [];
+
+    const importPatterns = [
+        /\bimport\s+(?:[^'";]+?\s+from\s+)?['"]([^'"]+)['"]/g,
+        /\brequire\s*\(\s*['"]([^'"]+)['"]\s*\)/g,
+        /<script[^>]+src=["']([^"']+)["']/gi
+    ];
+    const exportPatterns = [
+        /\bexport\s+(?:default\s+)?(?:async\s+)?(?:function|class|const|let|var)\s+([A-Za-z_$][\w$]*)/g,
+        /\bmodule\.exports\s*=|\bexports\.[A-Za-z_$][\w$]*/g
+    ];
+
+    for (const regex of importPatterns) {
+        let match;
+        while ((match = regex.exec(sourceText))) archAddUnique(imports, match[1]);
+    }
+    for (const regex of exportPatterns) {
+        let match;
+        while ((match = regex.exec(sourceText))) archAddUnique(exports, match[1] || 'CommonJS export');
+    }
+
+    return { imports, exports };
+}
+
+function archReadPackageMetadata(rootPath) {
+    const path = require('path');
+    const packagePath = path.join(rootPath, 'package.json');
+    const text = archReadText(packagePath, ARCH_SCAN_LIMITS.maxPackageBytes);
+    if (!text) return null;
+    try { return JSON.parse(text); } catch (e) { return null; }
+}
+
+function performArchitectureDiscovery(scanPath) {
+    const fs = require('fs');
+    const path = require('path');
+    const root = path.resolve(scanPath || process.cwd());
+
+    try {
+        if (!fs.existsSync(root)) return { error: `Architecture scan path does not exist: ${root}` };
+        if (!fs.statSync(root).isDirectory()) return { error: `Architecture scan path is not a directory: ${root}` };
+    } catch (e) {
+        return { error: `Unable to access scan path: ${root}`, details: e.message };
+    }
+
+    const collected = archCollectFiles(root);
+    const files = collected.files;
+    const knownFiles = new Set(files.map(file => file.path));
+    const layers = {};
+    const components = [];
+    const relations = [];
+    const externalDependencies = new Set();
+    const ipcChannels = new Set();
+    const bridgeFiles = [];
+    const roleCounts = {};
+
+    for (const file of files) {
+        if (!layers[file.role]) layers[file.role] = [];
+        layers[file.role].push(file.path);
+        roleCounts[file.role] = (roleCounts[file.role] || 0) + 1;
+        if (file.role === 'Bridge') bridgeFiles.push(file.path);
+    }
+
+    const packageJson = archReadPackageMetadata(root);
+    const entryPoints = [];
+
+    if (packageJson?.main) archAddUnique(entryPoints, archNormalizePath(packageJson.main));
+    if (packageJson?.browser) archAddUnique(entryPoints, archNormalizePath(packageJson.browser));
+    if (packageJson?.scripts?.start) archAddUnique(entryPoints, 'package.json#scripts.start');
+    if (packageJson?.scripts?.dev) archAddUnique(entryPoints, 'package.json#scripts.dev');
+
+    for (const candidate of [
+        'main.js', 'index.js', 'app.js', 'server.js', 'electron.js',
+        'index.html', 'preload.js', 'src/main.js', 'src/index.js'
+    ]) {
+        if (knownFiles.has(candidate)) archAddUnique(entryPoints, candidate);
+    }
+
+    for (const file of files) {
+        if (!ARCH_TEXT_EXTENSIONS.has(file.extension)) continue;
+
+        const fullPath = path.join(root, file.path.split('/').join(path.sep));
+        const source = archReadText(fullPath);
+        if (!source) continue;
+
+        const dependencies = archExtractDependencies(source);
+        const imports = [];
+        const external = [];
+        const local = [];
+        const ipc = archDetectIpcChannels(source);
+        const importExport = archDetectImportsExports(source);
+
+        for (const specifier of dependencies) {
+            const localTarget = archResolveLocalImport(file.path, specifier, root, knownFiles);
+            if (localTarget) {
+                archAddUnique(local, localTarget);
+                if (relations.length < ARCH_SCAN_LIMITS.maxRelations) {
+                    relations.push({ from: file.path, to: localTarget, type: 'local-import' });
+                }
+            }
+
+            archAddUnique(imports, specifier);
+            const packageName = archExternalPackage(specifier);
+            if (packageName) {
+                external.push(packageName);
+                externalDependencies.add(packageName);
+            }
+        }
+
+        for (const channel of ipc) ipcChannels.add(channel);
+
+        components.push({
+            path: file.path,
+            role: file.role,
+            imports,
+            localDependencies: local,
+            externalDependencies: [...new Set(external)],
+            exports: importExport.exports,
+            ipcChannels: ipc
+        });
+    }
+
+    const packageDependencies = packageJson ? Object.keys({
+        ...(packageJson.dependencies || {}),
+        ...(packageJson.devDependencies || {}),
+        ...(packageJson.optionalDependencies || {})
+    }) : [];
+    for (const dependency of packageDependencies) externalDependencies.add(dependency);
+
+    const electronDependency = Boolean(
+        packageJson?.dependencies?.electron ||
+        packageJson?.devDependencies?.electron ||
+        [...externalDependencies].includes('electron')
+    );
+
+    const recommendations = [
+        'استخدم layers وrelations لتحديد المكوّن المسؤول قبل تعديل أي ملف.',
+        'افحص الملف المستهدف والاعتماديات المحلية المباشرة قبل تنفيذ تعديل جراحي.',
+        'عند وجود Bridge/IPC، تحقّق من طرفي الاتصال قبل تغيير قناة أو handler.'
+    ];
+
+    const warnings = [];
+    if (!packageJson) warnings.push('لم يتم العثور على package.json صالح في جذر المسح.');
+    if (!entryPoints.length) warnings.push('لم يتم اكتشاف نقطة دخول واضحة من metadata أو الأسماء الشائعة.');
+    if (collected.truncated) warnings.push(`تم الوصول إلى حد ${ARCH_SCAN_LIMITS.maxFiles} ملف؛ خريطة المشروع جزئية.`);
+    if (relations.length >= ARCH_SCAN_LIMITS.maxRelations) warnings.push(`تم قص العلاقات عند ${ARCH_SCAN_LIMITS.maxRelations} علاقة لحماية سياق النموذج.`);
+
+    return {
+        scanVersion: '3.0',
+        root,
+        summary: {
+            totalFiles: files.length,
+            roleCounts,
+            relationCount: relations.length,
+            externalDependencyCount: externalDependencies.size,
+            ipcChannelCount: ipcChannels.size,
+            truncated: collected.truncated
+        },
+        project: {
+            name: packageJson?.name || path.basename(root),
+            version: packageJson?.version || null,
+            type: packageJson?.type || null,
+            packageManager: packageJson ? 'node-package' : 'unknown',
+            entryPoints,
+            dependencies: packageDependencies
+        },
+        architecture: {
+            layers,
+            components,
+            relations,
+            externalDependencies: [...externalDependencies].sort(),
+            electron: {
+                detected: electronDependency || bridgeFiles.length > 0 || ipcChannels.size > 0,
+                ipcChannels: [...ipcChannels].sort(),
+                bridgeFiles
+            }
+        },
+        recommendations,
+        warnings
+    };
 }
 
 // --- [Main Run Tool Loop] ---
@@ -339,13 +678,7 @@ async function runToolLoop(history) {
             else if (name === "read_file") toolResult = await callLocalBridge('read', args);
             else if (name === "write_file") toolResult = await callLocalBridge('write', args);
             else if (name === "discovery_scan") {
-                const files = await callLocalBridge('list', args);
-                const packageJson = await callLocalBridge('read', { path: 'package.json' });
-                toolResult = {
-                    structure: files,
-                    indicators: packageJson && !packageJson.error ? "Node.js Environment Detected" : "General Environment",
-                    recommendation: "Map UI files (CSS/HTML) and Logic files (JS/PY) for Engineering Intuition."
-                };
+                toolResult = performArchitectureDiscovery(args?.path || ".");
             }
             else if (name === "replace_file_content") {
                 let content = await callLocalBridge('read', { path: args.path });
