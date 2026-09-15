@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1789491607527",
+      "title": "أهلاً بك! أنا المهندس المعماري",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا المهندس المعماري السيادي (Sovereign Omni-Architect) ومساعدك الذكي للتطوير البرمجي والهندسي. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت تريد استكشاف المشروع، تعديل ملفات، بناء ميزات جديدة، أو تشخيص وإصلاح الأخطاء، أنا جاهز لتنفيذ ذلك بكفاءة كاملة.",
+              "thoughtSignature": "El4KXAERTTIPmqYVemT6JwKa2QZW7mciS7OiHzugGsuvMdiAeVc80o4w/nAXzv1yI37IR5vDVrievWVzHyV9ZIgbdn+mC01vFFSZ9iybs+D3yL6/LswKMG0NeZzA6yWi"
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1789491607527",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-15T17:00:14.833Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك! أنا المهندس المعماري السيادي (Sovereign Omni-Architect) ومساعدك الذكي للتطوير البرمجي والهندسي. \\n\\nكيف يمكنني مساعدتك اليوم؟ سواء كنت تريد استكشاف المشروع، تعديل ملفات، بناء ميزات جديدة، أو تشخيص وإصلاح الأخطاء، أنا جاهز لتنفيذ ذلك بكفاءة كاملة.\",\"thoughtSignature\":\"El4KXAERTTIPmqYVemT6JwKa2QZW7mciS7OiHzugGsuvMdiAeVc80o4w/nAXzv1yI37IR5vDVrievWVzHyV9ZIgbdn+mC01vFFSZ9iybs+D3yL6/LswKMG0NeZzA6yWi\"}],\"model\":\"gemini-3.5-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"هل يمكنك الاتصال بلويب\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"thought\",\"args\":{\"plan\":\"الرد على طلب الاتصال بالويب وتوضيح قدراتي الحالية في هذا السياق.\",\"reasoning\":\"المستخدم يسأل عما إذا كان بإمكاني الاتصال بالويب (Web browsing/search). كنموذج ذكاء اصطناعي، ليس لدي حالياً أداة تصفح ويب مباشر (Web Search tool) مدمجة في هذه البيئة، ولكن يمكنني تحليل الأكواد، قراءة المستودعات، وتصميم وحل المشاكل البرمجية محلياً في المستودع بمهارة فائقة.\"},\"id\":\"call_241516\"},\"thoughtSignature\":\"El4KXAERTTIPdu1q2FVyV0iqtpNPkCack0ub2ZT87qo2kcqVnu8SCWcdYwefsondg/VYG8I2at1NIKcBtZUevNSW3S8EMsdn25OTob0FoNp2U5kL58gJlMcWZwPc1nyu\"}]},{\"role\":\"function\",\"parts\":[{\"functionResponse\":{\"name\":\"thought\",\"response\":{\"content\":\"{\\\"reasoning\\\":\\\"المستخدم يسأل عما إذا كان بإمكاني الاتصال بالويب (Web browsing/search). كنموذج ذكاء اصطناعي، ليس لدي حالياً أداة تصفح ويب مباشر (Web Search tool) مدمجة في هذه البيئة، ولكن يمكنني تحليل الأكواد، قراءة المستودعات، وتصميم وحل المشاكل البرمجية محلياً في المستودع بمهارة فائقة.\\\",\\\"plan\\\":\\\"الرد على طلب الاتصال بالويب وتوضيح قدراتي الحالية في هذا السياق.\\\"}\"}}}]}]",
+  "timestamp": "2026-09-15T17:01:34.618Z"
 }
