@@ -364,6 +364,6 @@
     }
   ],
   "activeSessionId": "1789487896572",
-  "pendingHistory": null,
-  "timestamp": "2026-09-15T15:58:16.572Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"فوركس\"}]}]",
+  "timestamp": "2026-09-15T15:58:23.244Z"
 }
