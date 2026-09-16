@@ -54,6 +54,7 @@ const CONSTITUTION = `
   "universal_skill_deep_understanding": "Before activating a synthesized Skill, build a semantic model of concepts, relations, procedures, conflicts and evidence. Conflicting source rules must be surfaced, not silently resolved. Deep understanding outputs remain draft until validation passes and activation is explicit.",
   "universal_skill_system": "Skills are first-class declarative capabilities. Discover existing skills before creating duplicates; validate provenance, schema, safety, version, workflow, and evidence requirements before activation. Skills may be imported from GitHub or local files, composed for a task, disabled or quarantined, and upgraded without allowing arbitrary skill code execution.",
   "universal_skill_benchmark_evolution": "Skills must be tested against explicit benchmark cases before activation. Measure contract, evidence, safety, coverage and task outcomes; surface weaknesses; improvements produce a draft version and require re-benchmarking and explicit activation. Never treat an untested or regressed revision as successful.",
+  "universal_skill_execution_sandbox": "Benchmark execution passes through an execution sandbox contract with explicit authorization, bounded time/output, network disabled by default, isolated-workspace intent, redacted evidence, and adapter-enforced isolation. Never claim OS-level isolation unless the runtime adapter proves it." ,
   "memory": "Use Sovereign Memory only for durable engineering patterns or user-approved knowledge. A correction becomes a reusable protocol only after successful verification; do not store unverified assumptions as fact.",
   "encoding_integrity": "If runtime returns unreadable placeholder characters such as ???? and evidence indicates an encoding mismatch, stop repeated blind retries and report the environment limitation until a safe alternate path is available.",
   "tool_discovery": "If the current filtered tool set cannot satisfy the objective, use request_tool_discovery rather than inventing a function name or claiming unavailable capability.",
@@ -129,7 +130,7 @@ function translateToProviderFormat(model, history, tools, config) {
 
 // --- [Smart Tool Filtering Categories] ---
 const TOOL_GROUPS = {
-    CORE: ["skill_benchmark_runner", "skill_benchmark_evolution", "skill_manager", "skill_synthesis", "architecture_loop", "runtime_verify", "read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery", "list_files", "analyze_file", "searchCode", "fast_file_search", "discovery_scan"],
+    CORE: ["skill_execution_sandbox", "skill_benchmark_runner", "skill_benchmark_evolution", "skill_manager", "skill_synthesis", "architecture_loop", "runtime_verify", "read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery", "list_files", "analyze_file", "searchCode", "fast_file_search", "discovery_scan"],
     WEB_HUNT: ["web_search", "read_url"], // 🌍 قناص الويب (أخبار، بحث عالمي)
     LOCAL_DISCOVERY: [], // الأدوات انتقلت للـ CORE لرفع القيود
     ENGINE_7_ARCHIVE: ["store_memory", "vector_search", "compress_context"],
@@ -1540,6 +1541,10 @@ async function runToolLoop(history) {
   },
   readSources: async ({path,options={}}) => {if(typeof getGithubFileContent==='function'){const text=await getGithubFileContent(path);return text?[{path,text:String(text).slice(0,Number(options.maxCharsPerFile||60000))}]:[]}if(typeof callLocalBridge==='function'){const r=await callLocalBridge('read',{path});return r?[{path,text:typeof r==='string'?r:JSON.stringify(r)}]:[]}return[]}
 });
+                else if (name === "skill_execution_sandbox") toolResult = await sandboxManager(args?.action || "prepare", args || {}, { execute: async (command,meta) => {
+                    if (typeof callLocalBridge !== 'function') throw new Error('local execution bridge unavailable');
+                    return await callLocalBridge('cmd', { command, timeoutMs: meta?.timeoutMs, cwd: meta?.workingDirectory });
+                } });
                 else if (name === "skill_benchmark_runner") toolResult = await universalSkillBenchmarkRunnerManager(args?.action || "run", args || {}, { execute: async (command,meta) => {
                     if (typeof callLocalBridge !== 'function') throw new Error('local execution bridge unavailable');
                     return await callLocalBridge('cmd', { command, timeoutMs: meta?.timeoutMs });
@@ -1548,7 +1553,12 @@ async function runToolLoop(history) {
                     if (typeof universalSkillBenchmarkRunnerManager !== 'function') return benchmarkArgs?.executionResults || {};
                     const runner=await universalSkillBenchmarkRunnerManager('run',{cases,execute:benchmarkArgs?.execute}, { execute: async (command,meta) => {
                         if (typeof callLocalBridge !== 'function') throw new Error('local execution bridge unavailable');
-                        return await callLocalBridge('cmd',{command,timeoutMs:meta?.timeoutMs});
+                        const boxed=await sandboxManager('run',{command,allowCommand:true,timeoutMs:meta?.timeoutMs,network:'disabled',filesystem:'isolated-workspace',process:'adapter-isolated'},{execute:async (cmd,smeta)=>{
+                        if (typeof callLocalBridge !== 'function') throw new Error('local execution bridge unavailable');
+                        return await callLocalBridge('cmd',{command:cmd,timeoutMs:smeta?.timeoutMs,cwd:smeta?.workingDirectory});
+                    }});
+                    if(boxed?.evidence) return {success:boxed.ok,exitCode:boxed.evidence.exitCode,stdout:boxed.evidence.output,sandbox:boxed};
+                    return boxed;
                     }});
                     const results={};
                     for (const r of (runner?.results||[])) results[r.caseId]={passed:r.passed,runner:r};
@@ -2161,3 +2171,26 @@ const UNIVERSAL_SKILL_BENCHMARK_RUNNER_ENGINE={version:UNIVERSAL_SKILL_BENCHMARK
 /* --- Integrated Universal Skill Benchmark Runner --- */
 const UNIVERSAL_SKILL_BENCHMARK_RUNNER_TOOL_DECLARATION={name:'skill_benchmark_runner',description:'Run explicitly declared benchmark commands through a safety allowlist, collect runtime evidence, and return results. Imported Skill/source code is never executed.',parameters:{type:'OBJECT',properties:{action:{type:'STRING',enum:['run','execute','benchmark_run','validate_command','normalize_case']},cases:{type:'ARRAY',items:{type:'OBJECT'}},case:{type:'OBJECT'},command:{type:'STRING'}},required:['action']}};
 (function(){if(typeof AI_TOOLS!=='undefined'&&AI_TOOLS[0]?.function_declarations&&!AI_TOOLS[0].function_declarations.some(x=>x.name==='skill_benchmark_runner'))AI_TOOLS[0].function_declarations.push(UNIVERSAL_SKILL_BENCHMARK_RUNNER_TOOL_DECLARATION);})();
+
+
+/* --- Integrated Universal Skill Execution Sandbox --- */
+/** Universal Skill Execution Sandbox 1.0 - Cloud
+ * Policy/execution envelope. OS isolation is supplied by the execution adapter.
+ */
+const UNIVERSAL_SKILL_EXECUTION_SANDBOX_VERSION='1.0-sandbox-contract';
+function usesObj(v){return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}
+function usesStr(v){return typeof v==='string'?v:'';}
+function usesNum(v,d,min,max){const n=Number(v);return Number.isFinite(n)?Math.min(max,Math.max(min,n)):d;}
+function usesId(){return `sandbox-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`;}
+function usesRedact(v){return usesStr(v).replace(/(api[_-]?key|token|secret|password|authorization|bearer)\s*[:=]\s*[^\s,;]+/gi,'$1=[REDACTED]').slice(-12000);}
+function normalizeSandboxSpec(input={}){const x=usesObj(input),limits=usesObj(x.limits);return{timeoutMs:usesNum(limits.timeoutMs??x.timeoutMs,30000,1000,120000),maxOutputBytes:Math.floor(usesNum(limits.maxOutputBytes,12000,1000,200000)),maxFiles:Math.floor(usesNum(limits.maxFiles,200,1,5000)),network: x.network==='enabled'?'enabled':'disabled',filesystem: x.filesystem==='workspace'?'workspace':'isolated-workspace',process: x.process==='native'?'native-adapter':'adapter-isolated',allowCommand:Boolean(x.allowCommand),workingDirectory:usesStr(x.workingDirectory||'sandbox'),cleanup:x.cleanup!==false};}
+function sandboxCreate(input={}){const spec=normalizeSandboxSpec(input);return{id:usesId(),version:UNIVERSAL_SKILL_EXECUTION_SANDBOX_VERSION,status:'prepared',isolationLevel:'adapter-enforced',spec,safety:{networkDefault:'disabled',importedSourceCodeExecuted:false,arbitraryCodeAllowed:false}};}
+function sandboxClampOutput(value,maxBytes){const s=usesRedact(value);if(s.length<=maxBytes)return{value:s,truncated:false};return{value:s.slice(0,maxBytes),truncated:true};}
+async function sandboxExecute(input={},adapter={}){const session=sandboxCreate(input.sandbox||input);if(!session.spec.allowCommand)return{ok:false,session,status:'blocked',failure:'sandbox execution requires explicit allowCommand=true'};if(typeof adapter.execute!=='function')return{ok:false,session,status:'unavailable',failure:'sandbox execution adapter unavailable'};session.status='running';const started=Date.now();try{const raw=await adapter.execute(input.command,{sandboxId:session.id,timeoutMs:session.spec.timeoutMs,maxOutputBytes:session.spec.maxOutputBytes,maxFiles:session.spec.maxFiles,network:session.spec.network,workingDirectory:session.spec.workingDirectory,filesystem:session.spec.filesystem,process:session.spec.process});const r=usesObj(raw),out=sandboxClampOutput([r.stdout,r.stderr,r.output,r.result,r.message].filter(Boolean).join('\n'),session.spec.maxOutputBytes);session.status='completed';return{ok:r.success!==false,status:'completed',session:{...session,status:'completed'},evidence:{command:usesStr(input.command),exitCode:typeof r.exitCode==='number'?r.exitCode:(typeof r.code==='number'?r.code:0),elapsedMs:Date.now()-started,output:out.value,outputTruncated:out.truncated,resourceLimits:session.spec,sourceExecution:{importedSourceCodeExecuted:false,arbitraryCodeAllowed:false},isolation:{level:'adapter-enforced',network:session.spec.network,filesystem:session.spec.filesystem,process:session.spec.process}}};}catch(e){session.status='failed';return{ok:false,status:'failed',session:{...session,status:'failed'},evidence:{command:usesStr(input.command),elapsedMs:Date.now()-started,error:usesRedact(e?.message||String(e)),resourceLimits:session.spec,isolation:{level:'adapter-enforced'}}};}finally{if(session.spec.cleanup)session.status='destroyed';}}
+async function sandboxManager(action,args={},adapter={}){const a=String(action||'prepare').toLowerCase();if(a==='prepare'||a==='create')return sandboxCreate(args);if(a==='execute'||a==='run')return sandboxExecute(args,adapter);if(a==='validate')return{ok:Boolean(usesStr(args.command)),spec:normalizeSandboxSpec(args),contractVersion:UNIVERSAL_SKILL_EXECUTION_SANDBOX_VERSION};if(a==='destroy')return{ok:true,status:'destroyed',sandboxId:usesStr(args.sandboxId)};return{ok:false,error:'unknown_sandbox_action',actions:['prepare','create','execute','run','validate','destroy']};}
+const UNIVERSAL_SKILL_EXECUTION_SANDBOX_ENGINE={version:UNIVERSAL_SKILL_EXECUTION_SANDBOX_VERSION,create:sandboxCreate,execute:sandboxExecute,manage:sandboxManager};
+
+
+/* --- Integrated Universal Skill Execution Sandbox Tool --- */
+const UNIVERSAL_SKILL_EXECUTION_SANDBOX_TOOL_DECLARATION={name:'skill_execution_sandbox',description:'Prepare or execute an explicitly authorized benchmark command through the universal sandbox contract and return evidence with safety boundaries.',parameters:{type:'OBJECT',properties:{action:{type:'STRING',enum:['prepare','create','execute','run','validate','destroy']},command:{type:'STRING'},allowCommand:{type:'BOOLEAN'},timeoutMs:{type:'NUMBER'},workingDirectory:{type:'STRING'},network:{type:'STRING'},filesystem:{type:'STRING'}},required:['action']}};
+(function(){if(typeof AI_TOOLS!=='undefined'&&AI_TOOLS[0]?.function_declarations&&!AI_TOOLS[0].function_declarations.some(x=>x.name==='skill_execution_sandbox'))AI_TOOLS[0].function_declarations.push(UNIVERSAL_SKILL_EXECUTION_SANDBOX_TOOL_DECLARATION);})();
