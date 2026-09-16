@@ -1,0 +1,33 @@
+name: Patch Sandbox Isolation
+on:
+  push:
+    branches: [main]
+jobs:
+  patch:
+    if: !contains(github.event.head_commit.message, 'Integrate Sandbox Isolation 2.0')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Patch and verify
+        run: |
+          node .github/patch_sandbox_isolation.js
+          node --check my_AI/universal_skill_execution_sandbox_engine.js
+          node --check Mastermind_Desktop/universal_skill_execution_sandbox_engine.js
+          node --check my_AI/universal_skill_benchmark_runner_engine.js
+          node --check Mastermind_Desktop/universal_skill_benchmark_runner_engine.js
+          node --check my_AI/ai_engine_core.js
+          node --check Mastermind_Desktop/core.js
+          docker version
+          docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges node:20-alpine node -e "process.stdout.write('sandbox-ok')"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add my_AI/ai_engine_core.js Mastermind_Desktop/core.js
+          git commit -m 'Integrate Sandbox Isolation 2.0'
+          git rm .github/patch_sandbox_isolation.js .github/workflows/patch_sandbox_isolation.yml
+          git commit --amend --no-edit
+          git push
