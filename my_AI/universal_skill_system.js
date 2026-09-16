@@ -1,0 +1,181 @@
+/**
+ * Universal Skill System 1.0
+ * Declarative skill registry, loader, composer, validator and lifecycle manager.
+ * Skills are data/workflow definitions by default; arbitrary code execution is disabled.
+ */
+const UNIVERSAL_SKILL_SYSTEM_VERSION = '1.0-universal-skill-system';
+const UNIVERSAL_SKILL_STORAGE_KEY = 'universal_skill_registry_v1';
+
+function ussArray(v){ return Array.isArray(v) ? v : []; }
+function ussObj(v){ return v && typeof v === 'object' && !Array.isArray(v) ? v : {}; }
+function ussStr(v){ return typeof v === 'string' ? v : ''; }
+function ussUnique(v){ return [...new Set(ussArray(v).filter(Boolean).map(String))]; }
+
+function ussNormalizeSkill(raw={}, source={}){
+    const s = ussObj(raw);
+    return {
+        id: ussStr(s.id).trim(),
+        name: ussStr(s.name || s.title).trim(),
+        version: ussStr(s.version || '1.0.0').trim(),
+        description: ussStr(s.description).trim(),
+        domain: ussStr(s.domain || 'general').trim(),
+        triggers: ussUnique(s.triggers),
+        tags: ussUnique(s.tags),
+        prerequisites: ussUnique(s.prerequisites),
+        instructions: ussArray(s.instructions).map(ussStr).filter(Boolean),
+        workflow: ussArray(s.workflow).map(step => {
+            const x=ussObj(step);
+            return {
+                id: ussStr(x.id),
+                action: ussStr(x.action),
+                purpose: ussStr(x.purpose),
+                tool: ussStr(x.tool),
+                inputs: ussObj(x.inputs),
+                expectedEvidence: ussArray(x.expectedEvidence).map(ussStr).filter(Boolean),
+                stopConditions: ussArray(x.stopConditions).map(ussStr).filter(Boolean)
+            };
+        }),
+        capabilities: ussArray(s.capabilities).map(x=>{
+            const c=ussObj(x);
+            return { id:ussStr(c.id), name:ussStr(c.name), description:ussStr(c.description), tools:ussUnique(c.tools), safe: c.safe !== false };
+        }),
+        constraints: ussUnique(s.constraints),
+        validation: {
+            required: ussArray(ussObj(s.validation).required).map(ussStr).filter(Boolean),
+            commands: ussArray(ussObj(s.validation).commands).map(ussStr).filter(Boolean),
+            evidence: ussArray(ussObj(s.validation).evidence).map(ussStr).filter(Boolean)
+        },
+        outputs: ussArray(s.outputs).map(ussStr).filter(Boolean),
+        safety: {
+            allowNetwork: Boolean(ussObj(s.safety).allowNetwork),
+            allowWrites: Boolean(ussObj(s.safety).allowWrites),
+            allowTerminal: Boolean(ussObj(s.safety).allowTerminal),
+            allowSecrets: false,
+            arbitraryCode: false
+        },
+        provenance: {
+            sourceType: ussStr(source.sourceType || s.provenance?.sourceType || 'inline'),
+            repository: ussStr(source.repository || s.provenance?.repository),
+            path: ussStr(source.path || s.provenance?.path),
+            ref: ussStr(source.ref || s.provenance?.ref || 'main'),
+            importedAt: ussStr(source.importedAt || new Date().toISOString()),
+            checksum: ussStr(source.checksum || s.provenance?.checksum)
+        },
+        status: ussStr(source.status || s.status || 'installed') || 'installed'
+    };
+}
+
+function ussValidateSkill(raw={}){
+    const s=ussNormalizeSkill(raw);
+    const errors=[];
+    if(!s.id) errors.push('id is required');
+    if(!s.name) errors.push('name is required');
+    if(!s.version) errors.push('version is required');
+    if(!s.description) errors.push('description is required');
+    if(!s.instructions.length && !s.workflow.length && !s.capabilities.length) errors.push('skill must define instructions, workflow, or capabilities');
+    if(s.safety.arbitraryCode) errors.push('arbitraryCode is forbidden');
+    for(const c of s.capabilities){ if(c.id && !/^[a-z0-9._-]+$/i.test(c.id)) errors.push(`invalid capability id: ${c.id}`); }
+    return {valid:errors.length===0,errors,normalized:s};
+}
+
+function ussMatchScore(skill,text=''){
+    const q=String(text).toLowerCase(); let score=0;
+    for(const t of [...skill.triggers,...skill.tags,...(skill.domain?[skill.domain]:[])]){
+        const x=String(t).toLowerCase(); if(x && q.includes(x)) score += skill.triggers.includes(t) ? 5 : 2;
+    }
+    if(q.includes(String(skill.name).toLowerCase())) score += 8;
+    return score;
+}
+
+function createUniversalSkillSystem(options={}){
+    const registry = new Map();
+    const storage = options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
+    function persist(){
+        if(!storage) return;
+        try { storage.setItem(UNIVERSAL_SKILL_STORAGE_KEY, JSON.stringify([...registry.values()])); } catch(_e){}
+    }
+    function restore(){
+        if(!storage) return;
+        try {
+            const raw=JSON.parse(storage.getItem(UNIVERSAL_SKILL_STORAGE_KEY)||'[]');
+            for(const item of ussArray(raw)){ const v=ussValidateSkill(item); if(v.valid) registry.set(v.normalized.id,v.normalized); }
+        } catch(_e){}
+    }
+    function register(raw, source={}){
+        const v=ussValidateSkill(raw);
+        if(!v.valid) return {ok:false,operation:'register',errors:v.errors};
+        const skill=ussNormalizeSkill(v.normalized,source);
+        registry.set(skill.id,skill); persist();
+        return {ok:true,operation:'register',skill};
+    }
+    function get(id){ return registry.get(ussStr(id)) || null; }
+    function list(){ return [...registry.values()].map(s=>({id:s.id,name:s.name,version:s.version,domain:s.domain,status:s.status,source:s.provenance})); }
+    function remove(id){ const ok=registry.delete(ussStr(id)); persist(); return {ok,operation:'remove',id}; }
+    function setStatus(id,status){ const s=get(id); if(!s) return {ok:false,error:'skill_not_found'}; s.status=status; registry.set(s.id,s); persist(); return {ok:true,skill:s}; }
+    function compose(taskText='',options={}){
+        const ranked=[...registry.values()].filter(s=>s.status!=='disabled'&&s.status!=='quarantined').map(skill=>({skill,score:ussMatchScore(skill,taskText)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+        const selected=ranked.slice(0,Math.max(1,Number(options.maxSkills||3)));
+        const instructions=[],workflow=[],constraints=[],capabilities=[],sources=[];
+        for(const {skill,score} of selected){
+            instructions.push(...skill.instructions.map(x=>`[${skill.id}] ${x}`));
+            workflow.push(...skill.workflow.map(x=>({...x,skillId:skill.id,matchScore:score})));
+            constraints.push(...skill.constraints.map(x=>`[${skill.id}] ${x}`));
+            capabilities.push(...skill.capabilities.map(x=>({...x,skillId:skill.id})));
+            sources.push(skill.provenance);
+        }
+        return {ok:true,query:taskText,selected:selected.map(x=>({id:x.skill.id,name:x.skill.name,version:x.skill.version,score:x.score})),instructions,workflow,constraints,capabilities,sources};
+    }
+    function scaffold(spec={}){
+        const base=ussObj(spec);
+        return ussNormalizeSkill({
+            id:base.id || `skill.${Date.now()}`,
+            name:base.name || 'New Expert Skill',
+            version:'0.1.0',
+            description:base.description || 'Declarative expert skill',
+            domain:base.domain || 'general',
+            triggers:ussArray(base.triggers),
+            tags:ussArray(base.tags),
+            instructions:ussArray(base.instructions).length?base.instructions:['Define the expert procedure and evidence requirements.'],
+            workflow:ussArray(base.workflow),
+            capabilities:ussArray(base.capabilities),
+            constraints:ussArray(base.constraints),
+            validation:{required:['Skill definition validates before activation'],evidence:['Execution produces observable evidence']},
+            outputs:ussArray(base.outputs),
+            safety:{allowNetwork:false,allowWrites:false,allowTerminal:false}
+        },{sourceType:'generated-scaffold',status:'installed'});
+    }
+    restore();
+    return {version:UNIVERSAL_SKILL_SYSTEM_VERSION,register,get,list,remove,setStatus,compose,scaffold,validate:ussValidateSkill,normalize:ussNormalizeSkill};
+}
+
+const UNIVERSAL_SKILL_SYSTEM = typeof createUniversalSkillSystem === 'function' ? createUniversalSkillSystem() : null;
+
+function universalSkillManager(action,args={},adapter={}){
+    const a=String(action||'').toLowerCase();
+    if(!UNIVERSAL_SKILL_SYSTEM) return {ok:false,error:'skill_system_unavailable'};
+    if(a==='list') return UNIVERSAL_SKILL_SYSTEM.list();
+    if(a==='get'||a==='inspect') return UNIVERSAL_SKILL_SYSTEM.get(args.skillId||args.id);
+    if(a==='validate') return UNIVERSAL_SKILL_SYSTEM.validate(args.definition||args.skill||{});
+    if(a==='register'||a==='install') return UNIVERSAL_SKILL_SYSTEM.register(args.definition||args.skill||{},args.source||{});
+    if(a==='activate') return UNIVERSAL_SKILL_SYSTEM.setStatus(args.skillId||args.id,'active');
+    if(a==='deactivate') return UNIVERSAL_SKILL_SYSTEM.setStatus(args.skillId||args.id,'disabled');
+    if(a==='quarantine') return UNIVERSAL_SKILL_SYSTEM.setStatus(args.skillId||args.id,'quarantined');
+    if(a==='remove') return UNIVERSAL_SKILL_SYSTEM.remove(args.skillId||args.id);
+    if(a==='compose'||a==='resolve') return UNIVERSAL_SKILL_SYSTEM.compose(args.task||args.prompt||'',args);
+    if(a==='build') return {ok:true,skill:UNIVERSAL_SKILL_SYSTEM.scaffold(args)};
+    if(a==='import_github'||a==='import_repo'){
+        if(typeof adapter.fetchText!=='function') return {ok:false,error:'github_adapter_unavailable'};
+        const repo=ussStr(args.repository); const path=ussStr(args.path||'skill.json'); const ref=ussStr(args.ref||'main');
+        if(!repo||!path) return {ok:false,error:'repository_and_path_required'};
+        return Promise.resolve(adapter.fetchText({repository:repo,path,ref})).then(text=>{
+            let def; try{def=JSON.parse(String(text));}catch(e){return {ok:false,error:'skill_source_must_be_valid_json',details:String(e.message||e)}}
+            return UNIVERSAL_SKILL_SYSTEM.register(def,{sourceType:'github',repository:repo,path,ref});
+        });
+    }
+    if(a==='import_local'||a==='import_file'){
+        if(typeof adapter.readText!=='function') return {ok:false,error:'local_adapter_unavailable'};
+        const path=ussStr(args.path); if(!path) return {ok:false,error:'path_required'};
+        return Promise.resolve(adapter.readText(path)).then(text=>{let def;try{def=JSON.parse(String(text));}catch(e){return {ok:false,error:'skill_source_must_be_valid_json',details:String(e.message||e)}}return UNIVERSAL_SKILL_SYSTEM.register(def,{sourceType:'local',path});});
+    }
+    return {ok:false,error:'unknown_skill_action',actions:['list','inspect','validate','register','activate','deactivate','quarantine','remove','compose','build','import_github','import_local']};
+}
