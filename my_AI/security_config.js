@@ -7,7 +7,7 @@ window.__SUPABASE_URL__ = window.__SUPABASE_URL__ || 'https://ozcffmadatsfyyldqm
   // bridge request immediately, so asynchronous script injection creates a
   // race where the public key is sent as Authorization instead of a user JWT.
   try {
-    document.write('<script src="my_AI/bridge_auth.js?v=2026.4-auth"><\/script>');
+    document.write('<script src="my_AI/bridge_auth.js?v=2026.5-google-auth"><\\/script>');
   } catch (_) {}
 
   function load(src){
