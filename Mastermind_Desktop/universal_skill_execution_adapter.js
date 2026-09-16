@@ -1,0 +1,10 @@
+/** Universal Skill Execution Adapter 1.0 - Desktop
+ * Native Node process adapter. Applies shell=false, bounded output and hard timeout.
+ * This is process isolation, not a Windows Job Object or container unless a future host adapter supplies that proof.
+ */
+const { spawn } = require('child_process');
+function str(v){return typeof v==='string'?v:'';}
+function num(v,d,min,max){const n=Number(v);return Number.isFinite(n)?Math.min(max,Math.max(min,n)):d;}
+function runProcess(executable,args=[],opts={}){return new Promise((resolve,reject)=>{const started=Date.now();const child=spawn(executable,args,{cwd:opts.cwd,shell:false,windowsHide:true,stdio:['ignore','pipe','pipe']});let stdout='',stderr='';const max=Number(opts.maxOutputBytes||12000);const timer=setTimeout(()=>{try{child.kill('SIGKILL');}catch(_){}resolve({success:false,exitCode:124,stdout,stderr:stderr+'\nTIMEOUT',elapsedMs:Date.now()-started,timedOut:true});},num(opts.timeoutMs,30000,1000,120000));child.stdout.on('data',b=>{if(stdout.length<max)stdout+=b.toString().slice(0,max-stdout.length);});child.stderr.on('data',b=>{if(stderr.length<max)stderr+=b.toString().slice(0,max-stderr.length);});child.on('error',e=>{clearTimeout(timer);reject(e);});child.on('close',(code,signal)=>{clearTimeout(timer);resolve({success:code===0,exitCode:typeof code==='number'?code:1,signal,stdout,stderr,elapsedMs:Date.now()-started});});});}
+async function executeProcess(command,meta={}){if(!/^(node\s+--check\s+[^\s]+|npm\s+(?:test|run\s+(?:test|lint|build|typecheck))|python(?:3)?\s+-m\s+pytest(?:\s+[^\s]+)*|pytest(?:\s+[^\s]+)*)$/i.test(str(command).trim()))throw new Error('desktop adapter received a command outside the benchmark allowlist');const r=await runProcess(process.platform==='win32'?'cmd.exe':'sh',process.platform==='win32'?['/d','/s','/c',command]:['-c',command],meta);return{...r,isolationLevel:r.timedOut?'process-isolated-timeout':'process-isolated',isolationBackend:'native-child-process',network:'disabled-by-policy',shell:false};}
+module.exports={executeProcess};
