@@ -1,0 +1,13 @@
+name: Skill Benchmark Probe
+on:
+  push:
+    branches:
+      - main
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe
+        run: echo benchmark-probe-ok
