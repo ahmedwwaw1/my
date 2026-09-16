@@ -1,0 +1,82 @@
+/**
+ * Universal Skill Benchmark & Evolution Engine 1.0
+ * Tests declarative Skills against benchmark cases, measures evidence-backed
+ * outcomes, identifies weaknesses, and creates an improved Skill revision.
+ * Imported Skill/source code is never executed by this engine.
+ */
+const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_VERSION='1.0-benchmark-evolution';
+
+function usbeArray(v){return Array.isArray(v)?v:[];}
+function usbeObj(v){return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}
+function usbeStr(v){return typeof v==='string'?v:'';}
+function usbeClean(v){return usbeStr(v).replace(/\r/g,'').replace(/\s+/g,' ').trim();}
+function usbeId(v,fallback='case'){return usbeStr(v).toLowerCase().replace(/[^a-z0-9._-]+/g,'-').replace(/^-+|-+$/g,'')||fallback;}
+function usbeTokens(text=''){return [...new Set(usbeStr(text).toLowerCase().match(/[a-z0-9_\u0600-\u06ff-]{2,}/gi)||[])];}
+function usbeOverlap(a=[],b=[]){const bs=new Set(usbeTokens(b.join(' ')));return usbeTokens(a.join(' ')).filter(x=>bs.has(x));}
+
+function usbeDefaultCases(skill={}){
+  const caps=usbeArray(skill.capabilities);
+  const validation=usbeObj(skill.validation);
+  const concepts=[...usbeArray(skill.triggers),...usbeArray(skill.tags),...caps.map(x=>usbeStr(x.name))].filter(Boolean).slice(0,12);
+  const cases=[];
+  cases.push({id:'contract-schema',name:'Skill contract integrity',type:'structural',input:{skillId:skill.id},expected:{requiredFields:['id','name','version','instructions','workflow','validation','safety']},evaluation:{mode:'required_fields',dimension:'contract'}});
+  cases.push({id:'evidence-gate',name:'Evidence requirements are actionable',type:'structural',input:{validation},expected:{minEvidence:Math.max(1,usbeArray(validation.evidence).length)},evaluation:{mode:'evidence_requirements',dimension:'evidence'}});
+  cases.push({id:'safety-boundary',name:'Safety boundary preservation',type:'structural',input:{safety:usbeObj(skill.safety)},expected:{forbiddenTrue:['arbitraryCode','allowSecrets']},evaluation:{mode:'safety_flags',dimension:'safety'}});
+  if(concepts.length)cases.push({id:'concept-coverage',name:'Domain trigger coverage',type:'structural',input:{concepts},expected:{minConcepts:Math.min(3,concepts.length)},evaluation:{mode:'concept_coverage',dimension:'coverage'}});
+  return cases;
+}
+
+function usbeGenerateCases(skill={}, input={}){
+  const supplied=usbeArray(input.cases);
+  if(supplied.length)return supplied.map((c,i)=>({...usbeObj(c),id:usbeId(c.id,`case-${i+1}`)}));
+  return usbeDefaultCases(skill);
+}
+
+function usbeRequiredFieldCheck(skill,required=[]){return required.every(k=>k.split('.').reduce((o,p)=>o?.[p],skill)!==undefined);}
+function usbeEvaluateCase(skill,benchmarkCase,result={}){
+  const c=usbeObj(benchmarkCase), expected=usbeObj(c.expected), evaluation=usbeObj(c.evaluation), mode=evaluation.mode||'result';
+  let passed=false,score=0.0,evidence=[],weakness='';
+  if(mode==='required_fields'){
+    const required=usbeArray(expected.requiredFields); passed=usbeRequiredFieldCheck(skill,required); score=passed?1:required.filter(k=>k.split('.').reduce((o,p)=>o?.[p],skill)!==undefined).length/Math.max(1,required.length); evidence.push(`required_fields:${required.join(',')}`); if(!passed)weakness='missing required Skill contract fields';
+  } else if(mode==='evidence_requirements'){
+    const actual=usbeArray(skill?.validation?.evidence); const min=Number(expected.minEvidence||1); passed=actual.length>=min; score=Math.min(1,actual.length/Math.max(1,min)); evidence.push(`validation.evidence.count=${actual.length}`); if(!passed)weakness='insufficient evidence requirements';
+  } else if(mode==='safety_flags'){
+    const safety=usbeObj(skill.safety); const forbidden=usbeArray(expected.forbiddenTrue); passed=forbidden.every(k=>safety[k]!==true); score=passed?1:forbidden.filter(k=>safety[k]!==true).length/Math.max(1,forbidden.length); evidence.push(`safe:${JSON.stringify(safety)}`); if(!passed)weakness='unsafe capability flag enabled';
+  } else if(mode==='concept_coverage'){
+    const concepts=usbeArray(expected.concepts||c.input?.concepts); const pool=[...usbeArray(skill.triggers),...usbeArray(skill.tags),...usbeArray(skill.capabilities).map(x=>x.name)]; const overlap=usbeOverlap(concepts,pool); const min=Number(expected.minConcepts||1); passed=overlap.length>=min; score=Math.min(1,overlap.length/Math.max(1,min)); evidence.push(`concept_overlap:${overlap.slice(0,20).join(',')}`); if(!passed)weakness='benchmark concepts not sufficiently represented by the Skill';
+  } else {
+    const suppliedResult=usbeObj(result); const expectedText=usbeArray(expected.contains); const hay=JSON.stringify(suppliedResult).toLowerCase(); const hits=expectedText.filter(x=>hay.includes(usbeStr(x).toLowerCase())); passed=expectedText.length?hits.length===expectedText.length:Boolean(suppliedResult.passed); score=expectedText.length?hits.length/expectedText.length:(passed?1:0); evidence.push('external_result_supplied'); if(!passed)weakness=usbeStr(suppliedResult.weakness||'benchmark execution did not meet the expected evidence');
+  }
+  return {id:c.id,name:c.name,passed,score:Number(score.toFixed(3)),dimension:evaluation.dimension||'general',evidence,weakness};
+}
+
+function usbeAggregate(results=[]){
+  const rs=usbeArray(results); const by={}; for(const r of rs){const d=r.dimension||'general';(by[d]||(by[d]=[])).push(r.score);} const dimensions=Object.fromEntries(Object.entries(by).map(([d,v])=>[d,Number((v.reduce((a,b)=>a+b,0)/Math.max(1,v.length)).toFixed(3))])); const score=Number((rs.reduce((a,b)=>a+b.score,0)/Math.max(1,rs.length)).toFixed(3)); const failures=rs.filter(r=>!r.passed); return {score,dimensions,passed:failures.length===0,caseCount:rs.length,failedCaseIds:failures.map(x=>x.id),weaknesses:[...new Set(failures.map(x=>x.weakness).filter(Boolean))]};
+}
+
+function usbeRun(skill={},cases=[],executionResults={}){const results=usbeArray(cases).map(c=>usbeEvaluateCase(skill,c,executionResults[c.id]||{}));const aggregate=usbeAggregate(results);return {version:UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_VERSION,skillId:skill.id||'unknown',results,aggregate,evidence:{benchmarkCases:cases.map(c=>c.id),evaluatedAt:new Date().toISOString(),executionResultsProvided:Object.keys(executionResults).length>0},verdict:aggregate.passed?'accepted':aggregate.score>=0.6?'partial/needs_review':'failed'};}
+
+function usbeBuildEvolutionPlan(skill={},benchmark={}){
+  const weak=usbeArray(benchmark?.aggregate?.weaknesses); const dims=usbeObj(benchmark?.aggregate?.dimensions); const instructions=[...usbeArray(skill.instructions)]; const constraints=[...usbeArray(skill.constraints)]; const validation=usbeObj(skill.validation); const changes=[];
+  if(weak.length){for(const w of weak.slice(0,8)){const text=`Improve against benchmark weakness: ${w}`; if(!instructions.includes(text))instructions.push(text); changes.push({type:'instruction',reason:w});}}
+  if((dims.evidence||1)<0.8){const ev=usbeArray(validation.evidence); if(!ev.includes('benchmark outcome evidence'))ev.push('benchmark outcome evidence'); validation.evidence=ev; changes.push({type:'validation',reason:'evidence score below target'});}
+  if((dims.safety||1)<1){constraints.push('Preserve strict safety flags: no secrets and no arbitrary code execution.'); changes.push({type:'safety_constraint',reason:'safety benchmark weakness'});}
+  return {changes,instructions,constraints,validation,targetScore:0.85,minimumScoreDelta:0.05};
+}
+
+function usbeEvolve(skill={},benchmark={},input={}){const plan=usbeBuildEvolutionPlan(skill,benchmark);const prior=usbeStr(skill.version||'0.1.0').split('.').map(x=>parseInt(x,10)||0);prior[1]=(prior[1]||0)+1;prior[2]=0;const next={...skill,version:prior.join('.'),instructions:plan.instructions,constraints:[...new Set(plan.constraints)],validation:plan.validation,status:'draft',evolution:{fromVersion:skill.version||'0.1.0',benchmarkScore:benchmark?.aggregate?.score||0,benchmarkVerdict:benchmark?.verdict||'unknown',changes:plan.changes,targetScore:plan.targetScore}};return {skill:next,plan,reason:benchmark?.aggregate?.passed?'preventive refinement':'repair based on benchmark weaknesses'};}
+
+function usbeCompare(prev={},next={}){const a=usbeObj(prev),b=usbeObj(next);const scoreDelta=Number(((b.aggregate?.score||0)-(a.aggregate?.score||0)).toFixed(3));return {previousScore:a.aggregate?.score||0,nextScore:b.aggregate?.score||0,scoreDelta,improved:scoreDelta>0,noRegression:scoreDelta>=0,previousVersion:a.skillId?undefined:a.version,nextVersion:b.version};}
+
+function universalSkillBenchmarkEvolutionManager(action,args={},adapter={}){
+  const a=String(action||'').toLowerCase(); const skill=usbeObj(args.skill);
+  if(a==='generate'||a==='build_cases'||a==='create_cases')return {version:UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_VERSION,skillId:skill.id,cases:usbeGenerateCases(skill,args)};
+  if(a==='run'||a==='benchmark'||a==='test'){const cases=usbeGenerateCases(skill,args);const executionResults=usbeObj(args.executionResults); if(typeof adapter.executeCase==='function'&&args.execute===true)return Promise.resolve(adapter.executeCase({skill,cases,args})).then(r=>usbeRun(skill,cases,r||{})); return usbeRun(skill,cases,executionResults);}
+  if(a==='evaluate'){return usbeAggregate(usbeArray(args.results));}
+  if(a==='evolve'||a==='improve'||a==='repair')return usbeEvolve(skill,args.benchmark||args.result||{},args);
+  if(a==='compare')return usbeCompare(args.previous||{},args.next||{});
+  if(a==='full_cycle'||a==='evolution_cycle'){const cases=usbeGenerateCases(skill,args);const benchmark=usbeRun(skill,cases,usbeObj(args.executionResults));const evolution=usbeEvolve(skill,benchmark,args);return {version:UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_VERSION,skillId:skill.id,cases,benchmark,evolution,workflow:['benchmark generation','skill testing','measurement','weakness analysis','repair/improvement','new draft version'],activationGate:benchmark.aggregate.passed?'explicit activation still required':'retest evolved draft before activation'};}
+  return {ok:false,error:'unknown_benchmark_evolution_action',actions:['generate','build_cases','create_cases','run','benchmark','test','evaluate','evolve','improve','repair','compare','full_cycle','evolution_cycle']};
+}
+
+const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_ENGINE={version:UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_VERSION,generate:usbeGenerateCases,run:usbeRun,evolve:usbeEvolve,compare:usbeCompare,manage:universalSkillBenchmarkEvolutionManager};
