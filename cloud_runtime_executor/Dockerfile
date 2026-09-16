@@ -1,9 +1,10 @@
+# The production executor is intended to run directly on the Docker host.
+# Keeping the executor outside a container avoids exposing /var/run/docker.sock
+# to another container. Use this file only for development image experiments.
 FROM node:20-bookworm-slim
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends docker.io ca-certificates \
-  && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY package.json server.js ./
-USER node
+RUN useradd --system --create-home --uid 10001 mastermind-runtime
+USER mastermind-runtime
 EXPOSE 8787
 CMD ["node", "server.js"]
