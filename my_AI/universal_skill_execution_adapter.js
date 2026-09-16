@@ -1,0 +1,10 @@
+/** Universal Skill Execution Adapter 1.0 - Cloud/Node
+ * Docker-backed adapter. The caller must prove Docker isolation through the returned evidence.
+ */
+const { spawn } = require('child_process');
+function str(v){return typeof v==='string'?v:'';}
+function num(v,d,min,max){const n=Number(v);return Number.isFinite(n)?Math.min(max,Math.max(min,n)):d;}
+function safeName(v){return str(v).replace(/[^a-zA-Z0-9_.-]/g,'_').slice(0,80)||'sandbox';}
+function runProcess(command,args=[],opts={}){return new Promise((resolve,reject)=>{const started=Date.now();const child=spawn(command,args,{cwd:opts.cwd,shell:false,windowsHide:true,stdio:['ignore','pipe','pipe'],env:{PATH:process.env.PATH||''}});let stdout='',stderr='';const max=Number(opts.maxOutputBytes||12000);const timer=setTimeout(()=>{try{child.kill('SIGKILL');}catch(_){}resolve({success:false,exitCode:124,stdout,stderr:stderr+'\nTIMEOUT',elapsedMs:Date.now()-started,timedOut:true});},num(opts.timeoutMs,30000,1000,120000));child.stdout.on('data',b=>{if(stdout.length<max)stdout+=b.toString().slice(0,max-stdout.length);});child.stderr.on('data',b=>{if(stderr.length<max)stderr+=b.toString().slice(0,max-stderr.length);});child.on('error',e=>{clearTimeout(timer);reject(e);});child.on('close',(code,signal)=>{clearTimeout(timer);resolve({success:code===0,exitCode:typeof code==='number'?code:1,signal,stdout,stderr,elapsedMs:Date.now()-started});});});}
+async function executeDocker(command,meta={}){const image=safeName(meta.image||'node:20-alpine');const work=str(meta.workingDirectory||process.cwd());const args=['run','--rm','--network','none','--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--pids-limit','64','--memory','256m','--cpus','1','--tmpfs','/tmp:rw,nosuid,nodev,noexec,size=64m','-v',`${work}:/workspace:rw`,'-w','/workspace',image,'/bin/sh','-c',command];const r=await runProcess('docker',args,meta);return{...r,isolationLevel:r.timedOut?'container-isolated-timeout':'container-isolated',isolationBackend:'docker',network:'disabled',readOnlyRoot:true,capDropAll:true,noNewPrivileges:true};}
+module.exports={executeDocker};
