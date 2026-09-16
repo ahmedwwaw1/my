@@ -1116,7 +1116,16 @@ async function runToolLoop(history) {
                     if (typeof callLocalBridge !== 'function') throw new Error('local execution bridge unavailable');
                     return await callLocalBridge('cmd', { command, timeoutMs: meta?.timeoutMs });
                 } });
-                else if (name === "skill_benchmark_evolution") toolResult = await universalSkillBenchmarkEvolutionManager(args?.action || "full_cycle", args || {}, { executeCase: async ({args:benchmarkArgs}) => benchmarkArgs?.executionResults || {} });
+                else if (name === "skill_benchmark_evolution") toolResult = await universalSkillBenchmarkEvolutionManager(args?.action || "full_cycle", args || {}, { executeCase: async ({skill,cases,args:benchmarkArgs}) => {
+                    if (typeof universalSkillBenchmarkRunnerManager !== 'function') return benchmarkArgs?.executionResults || {};
+                    const runner=await universalSkillBenchmarkRunnerManager('run',{cases,execute:benchmarkArgs?.execute}, { execute: async (command,meta) => {
+                        if (typeof callLocalBridge !== 'function') throw new Error('local execution bridge unavailable');
+                        return await callLocalBridge('cmd',{command,timeoutMs:meta?.timeoutMs});
+                    }});
+                    const results={};
+                    for (const r of (runner?.results||[])) results[r.caseId]={passed:r.passed,runner:r};
+                    return results;
+                } });
                 else if (name === "skill_synthesis") toolResult = await universalSkillSynthesisManager(args?.action || "synthesize", args || {}, {
                     fetchSources: async ({repository,path,ref,options={}}) => {
                         const maxFiles=Number(options.maxFiles||20), maxChars=Number(options.maxCharsPerFile||60000);
