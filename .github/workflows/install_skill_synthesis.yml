@@ -1,0 +1,65 @@
+name: Integrate Universal Skill Synthesis
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Integrate synthesis engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs');
+          const targets=[
+            {core:'my_AI/ai_engine_core.js',engine:'my_AI/universal_skill_synthesis_engine.js',env:'cloud'},
+            {core:'Mastermind_Desktop/core.js',engine:'Mastermind_Desktop/universal_skill_synthesis_engine.js',env:'desktop'}
+          ];
+          const decl=`\nconst UNIVERSAL_SKILL_SYNTHESIS_TOOL_DECLARATION={name:'skill_synthesis',description:'Synthesize a declarative expert Skill from GitHub or local source material; extract evidence, build a draft, and validate it. Imported source code is never executed.',parameters:{type:'OBJECT',properties:{action:{type:'STRING',enum:['synthesize','extract','validate','import_github_sources','import_local_sources']},name:{type:'STRING'},id:{type:'STRING'},domain:{type:'STRING'},topic:{type:'STRING'},description:{type:'STRING'},repository:{type:'STRING'},path:{type:'STRING'},ref:{type:'STRING'},task:{type:'STRING'},sources:{type:'ARRAY',items:{type:'OBJECT'}},result:{type:'OBJECT'},synthesis:{type:'OBJECT'},options:{type:'OBJECT'}},required:['action']}};\n`;
+          for(const t of targets){
+            let core=fs.readFileSync(t.core,'utf8'); const engine=fs.readFileSync(t.engine,'utf8');
+            if(!core.includes('UNIVERSAL_SKILL_SYNTHESIS_VERSION')) core += '\n\n/* --- Integrated Universal Skill Synthesis Engine --- */\n'+engine+'\n';
+            if(!core.includes('UNIVERSAL_SKILL_SYNTHESIS_TOOL_DECLARATION')) core += decl;
+            if(!core.includes('skill_synthesis')){
+              const marker='CORE: ['; const i=core.indexOf(marker); if(i>=0) core=core.slice(0,i)+core.slice(i).replace(marker,'CORE: ["skill_synthesis", '+ '');
+            }
+            const bootstrap=`\n(function(){if(typeof AI_TOOLS!=='undefined'&&AI_TOOLS[0]?.function_declarations&&!AI_TOOLS[0].function_declarations.some(x=>x.name==='skill_synthesis'))AI_TOOLS[0].function_declarations.push(UNIVERSAL_SKILL_SYNTHESIS_TOOL_DECLARATION);})();\n`;
+            if(!core.includes('skill synthesis runtime bridge')) core += '\n/* skill synthesis runtime bridge */'+bootstrap;
+            const li=core.indexOf('async function runToolLoop');
+            if(li>=0 && core.indexOf('universalSkillSynthesisManager(',li)<0){
+              const fi=core.indexOf('else if (name === "skill_manager")',li);
+              const insertAt=fi>=0?fi:core.indexOf('else toolResult =',li);
+              if(insertAt>=0){
+                const branch=`else if (name === "skill_synthesis") toolResult = await universalSkillSynthesisManager(args?.action || "synthesize", args || {}, {\n fetchSources: async ({repository,path,ref,options={}})=>{\n   const maxFiles=Number(options.maxFiles||40); const maxBytes=Number(options.maxCharsPerFile||80000); const root=String(path||'').replace(/\\/$/,'');\n   async function get(p){const endpoint=\`https://api.github.com/repos/\${repository}/contents/\${p}?ref=\${encodeURIComponent(ref||'main')}\`;const d=await callBridge('github',{endpoint,method:'GET'});if(d?.type==='file'&&d.content){const raw=atob(String(d.content).replace(/\\s/g,''));let text=raw;try{text=decodeURIComponent(escape(raw));}catch(_){}return [{path:p,text:String(text).slice(0,maxBytes)}]}if(Array.isArray(d)){const out=[];for(const e of d){if(out.length>=maxFiles)break;if(e.type==='file'&&/\\.(md|markdown|txt|json|ya?ml|js|mjs|cjs|ts|tsx|py|java|kt|go|rs|rb|php|cs|cpp|h)$/i.test(e.name)){const x=await get(e.path);out.push(...x)}else if(e.type==='dir'&&out.length<maxFiles){const x=await get(e.path);out.push(...x)}}return out.slice(0,maxFiles)}return []}\n   return get(root||'');\n },\n readSources: async ({path,options={}})=>{const maxFiles=Number(options.maxFiles||40);if(typeof getGithubFileContent==='function'){const text=await getGithubFileContent(path);return text?[{path,text:String(text).slice(0,Number(options.maxCharsPerFile||80000))}]:[]}if(typeof callLocalBridge==='function'){const r=await callLocalBridge('read',{path});return r?[{path,text:typeof r==='string'?r:String(r)}].slice(0,maxFiles):[]}return []}\n }); `;
+                core=core.slice(0,insertAt)+branch+core.slice(insertAt);
+              }
+            }
+            const constitutionNeedle='  "universal_skill_system": "Skills are first-class declarative capabilities.';
+            if(core.includes(constitutionNeedle)&&!core.includes('universal_skill_synthesis')){
+              core=core.replace(constitutionNeedle,'  "universal_skill_synthesis": "For external or local expert sources, extract source evidence, synthesize a declarative draft Skill, validate provenance/schema/safety, and keep it as draft until explicitly activated. Never execute imported source code as part of synthesis.",\n'+constitutionNeedle);
+            }
+            fs.writeFileSync(t.core,core);
+          }
+          NODE
+      - name: Syntax gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check my_AI/universal_skill_synthesis_engine.js
+          node --check Mastermind_Desktop/universal_skill_synthesis_engine.js
+          node --check my_AI/ai_engine_core.js
+          node --check Mastermind_Desktop/core.js
+      - name: Commit and remove temporary workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/install_skill_synthesis.yml
+          git add my_AI/universal_skill_synthesis_engine.js Mastermind_Desktop/universal_skill_synthesis_engine.js my_AI/ai_engine_core.js Mastermind_Desktop/core.js
+          git commit -m 'Add Universal Skill Synthesis Engine'
+          git push origin HEAD:main
