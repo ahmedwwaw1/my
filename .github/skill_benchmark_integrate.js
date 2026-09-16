@@ -1,58 +1,16 @@
 const fs = require('fs');
 const cp = require('child_process');
-
-const pairs = [
-  ['my_AI/universal_skill_benchmark_evolution_engine.js', 'my_AI/ai_engine_core.js'],
-  ['Mastermind_Desktop/universal_skill_benchmark_evolution_engine.js', 'Mastermind_Desktop/core.js']
-];
-
+const pairs = [['my_AI/universal_skill_benchmark_evolution_engine.js','my_AI/ai_engine_core.js'],['Mastermind_Desktop/universal_skill_benchmark_evolution_engine.js','Mastermind_Desktop/core.js']];
 const declaration = `
 /* --- Integrated Universal Skill Benchmark & Evolution Engine --- */
 const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION={name:'skill_benchmark_evolution',description:'Benchmark a declarative Skill, measure evidence-backed strengths and weaknesses, generate an improvement plan, compare revisions, and produce a new draft version. Never executes imported source code.',parameters:{type:'OBJECT',properties:{action:{type:'STRING',enum:['generate','build_cases','create_cases','run','benchmark','test','evaluate','evolve','improve','repair','compare','full_cycle','evolution_cycle']},skill:{type:'OBJECT'},cases:{type:'ARRAY',items:{type:'OBJECT'}},executionResults:{type:'OBJECT'},results:{type:'ARRAY',items:{type:'OBJECT'}},benchmark:{type:'OBJECT'},result:{type:'OBJECT'},previous:{type:'OBJECT'},next:{type:'OBJECT'},execute:{type:'BOOLEAN'}},required:['action']}};
 (function(){if(typeof AI_TOOLS!=='undefined'&&AI_TOOLS[0]?.function_declarations&&!AI_TOOLS[0].function_declarations.some(x=>x.name==='skill_benchmark_evolution'))AI_TOOLS[0].function_declarations.push(UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION);})();
 `;
-const constitutionLine = '  "universal_skill_benchmark_evolution": "Skills must be tested against explicit benchmark cases before activation. Measure contract, evidence, safety, coverage and task outcomes; surface weaknesses; improvements produce a draft version and require re-benchmarking and explicit activation. Never treat an untested or regressed revision as successful.",\n';
-const adapter = `else if (name === "skill_benchmark_evolution") toolResult = await universalSkillBenchmarkEvolutionManager(args?.action || "full_cycle", args || {}, { executeCase: async ({args:benchmarkArgs}) => benchmarkArgs?.executionResults || {} });\n                `;
-
-function check(label, value){ if(!value) throw new Error(label); }
-
-for (const [enginePath, corePath] of pairs) {
-  const engine = fs.readFileSync(enginePath, 'utf8');
-  let core = fs.readFileSync(corePath, 'utf8');
-  if (!core.includes('const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_VERSION=')) core += '\n\n' + engine + declaration;
-  if (!core.includes('"universal_skill_benchmark_evolution"')) {
-    check(`Constitution anchor missing: ${corePath}`, core.includes('  "memory":'));
-    core = core.replace('  "memory":', constitutionLine + '  "memory":');
-  }
-  if (!core.includes('"skill_benchmark_evolution"')) {
-    check(`TOOL_GROUPS anchor missing: ${corePath}`, core.includes('CORE: ['));
-    core = core.replace('CORE: [', 'CORE: ["skill_benchmark_evolution", ');
-  }
-  if (!core.includes('name === "skill_benchmark_evolution"')) {
-    check(`Dispatcher anchor missing: ${corePath}`, core.includes('else if (name === "skill_synthesis")'));
-    core = core.replace('else if (name === "skill_synthesis")', adapter + 'else if (name === "skill_synthesis")');
-  }
-  fs.writeFileSync(corePath, core, 'utf8');
-  require('child_process').execFileSync(process.execPath, ['--check', enginePath], {stdio:'inherit'});
-  require('child_process').execFileSync(process.execPath, ['--check', corePath], {stdio:'inherit'});
-  console.log(`Validated ${corePath}`);
-}
-
-const engine = fs.readFileSync('my_AI/universal_skill_benchmark_evolution_engine.js','utf8');
-const sandbox = {};
-const exported = new Function(engine + '\nreturn {manager: universalSkillBenchmarkEvolutionManager};')();
-const skill = {id:'skill.test',name:'Test Skill',version:'1.0.0',description:'test',domain:'general',triggers:['test'],tags:['benchmark'],instructions:['test'],workflow:[{id:'x'}],capabilities:[{name:'test'}],constraints:[],validation:{evidence:['source evidence']},safety:{allowSecrets:false,arbitraryCode:false}};
-const cases = exported.manager('generate',{skill}).cases;
-if (!Array.isArray(cases) || cases.length < 3) throw new Error('Benchmark case generation failed');
-const bench = exported.manager('run',{skill,cases});
-if (bench.verdict !== 'accepted') throw new Error('Benchmark execution gate failed');
-const evolved = exported.manager('evolve',{skill,benchmark:bench}).skill;
-if (evolved.status !== 'draft' || evolved.version !== '1.1.0') throw new Error('Skill evolution gate failed');
-console.log('Behavioral gate passed:', JSON.stringify({cases:cases.length,score:bench.aggregate.score,nextVersion:evolved.version}));
-
-cp.execFileSync('git',['config','user.name','github-actions[bot]']);
-cp.execFileSync('git',['config','user.email','41898282+github-actions[bot]@users.noreply.github.com']);
-cp.execFileSync('git',['add','my_AI/ai_engine_core.js','Mastermind_Desktop/core.js','my_AI/universal_skill_benchmark_evolution_engine.js','Mastermind_Desktop/universal_skill_benchmark_evolution_engine.js','.github/skill_benchmark_integrate.js','.github/workflows/install_skill_benchmark_evolution.yml','.github/workflows/skill_benchmark_probe.yml']);
-cp.execFileSync('git',['rm','-f','.github/workflows/install_skill_benchmark_evolution.yml','.github/workflows/skill_benchmark_probe.yml','.github/skill_benchmark_integrate.js']);
-cp.execFileSync('git',['commit','-m','Integrate Universal Skill Benchmark & Evolution']);
-cp.execFileSync('git',['push']);
+const constitutionLine='  "universal_skill_benchmark_evolution": "Skills must be tested against explicit benchmark cases before activation. Measure contract, evidence, safety, coverage and task outcomes; surface weaknesses; improvements produce a draft version and require re-benchmarking and explicit activation. Never treat an untested or regressed revision as successful.",\n';
+const adapter=`else if (name === "skill_benchmark_evolution") toolResult = await universalSkillBenchmarkEvolutionManager(args?.action || "full_cycle", args || {}, { executeCase: async ({args:benchmarkArgs}) => benchmarkArgs?.executionResults || {} });\n                `;
+const check=(label,value)=>{if(!value)throw new Error(label)};
+for(const[enginePath,corePath]of pairs){const engine=fs.readFileSync(enginePath,'utf8');let core=fs.readFileSync(corePath,'utf8');if(!core.includes('const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_VERSION='))core+='\n\n'+engine+declaration;if(!core.includes('"universal_skill_benchmark_evolution"')){check(`Constitution anchor missing: ${corePath}`,core.includes('  "memory":'));core=core.replace('  "memory":',constitutionLine+'  "memory":')}if(!core.includes('"skill_benchmark_evolution"')){check(`TOOL_GROUPS anchor missing: ${corePath}`,core.includes('CORE: ['));core=core.replace('CORE: [','CORE: ["skill_benchmark_evolution", ')}if(!core.includes('name === "skill_benchmark_evolution"')){check(`Dispatcher anchor missing: ${corePath}`,core.includes('else if (name === "skill_synthesis")'));core=core.replace('else if (name === "skill_synthesis")',adapter+'else if (name === "skill_synthesis")')}fs.writeFileSync(corePath,core,'utf8');cp.execFileSync(process.execPath,['--check',enginePath],{stdio:'inherit'});cp.execFileSync(process.execPath,['--check',corePath],{stdio:'inherit'});console.log(`Validated ${corePath}`)}
+const engine=fs.readFileSync('my_AI/universal_skill_benchmark_evolution_engine.js','utf8');const exported=new Function(engine+'\nreturn {manager: universalSkillBenchmarkEvolutionManager};')();
+const skill={id:'skill.test',name:'Test Skill',version:'1.0.0',description:'test',domain:'general',triggers:['test','coverage','evidence'],tags:['benchmark','evolution'],instructions:['test'],workflow:[{id:'x'}],capabilities:[{name:'test'},{name:'coverage'},{name:'evidence'}],constraints:[],validation:{evidence:['source evidence']},safety:{allowNetwork:false,allowWrites:false,allowTerminal:false,allowSecrets:false,arbitraryCode:false}};
+const cases=exported.manager('generate',{skill}).cases;if(!Array.isArray(cases)||cases.length<3)throw new Error('Benchmark case generation failed');const bench=exported.manager('run',{skill,cases});if(bench.verdict!=='accepted')throw new Error(`Benchmark execution gate failed: ${JSON.stringify(bench.aggregate)}`);const evolved=exported.manager('evolve',{skill,benchmark:bench}).skill;if(evolved.status!=='draft'||evolved.version!=='1.1.0')throw new Error('Skill evolution gate failed');console.log('Behavioral gate passed:',JSON.stringify({cases:cases.length,score:bench.aggregate.score,nextVersion:evolved.version}));
+cp.execFileSync('git',['config','user.name','github-actions[bot]']);cp.execFileSync('git',['config','user.email','41898282+github-actions[bot]@users.noreply.github.com']);cp.execFileSync('git',['add','my_AI/ai_engine_core.js','Mastermind_Desktop/core.js','my_AI/universal_skill_benchmark_evolution_engine.js','Mastermind_Desktop/universal_skill_benchmark_evolution_engine.js','.github/skill_benchmark_integrate.js','.github/workflows/install_skill_benchmark_evolution.yml','.github/workflows/benchmark_integrate_runner.yml','.github/workflows/skill_benchmark_probe.yml']);for(const p of['.github/workflows/install_skill_benchmark_evolution.yml','.github/workflows/benchmark_integrate_runner.yml','.github/workflows/skill_benchmark_probe.yml','.github/skill_benchmark_integrate.js'])if(fs.existsSync(p))cp.execFileSync('git',['rm','-f',p]);cp.execFileSync('git',['commit','-m','Integrate Universal Skill Benchmark & Evolution']);cp.execFileSync('git',['push']);
