@@ -35,6 +35,8 @@ const CONSTITUTION = `
   "supabase_bridge": "Use the Supabase Edge Function bridge as the backend boundary for Gemini, GitHub, and Search credentials. Do not bypass the bridge by embedding or reconstructing secret credentials in client-side code.",
   "security_changes": "Do not disable authentication, revoke or rotate credentials, alter security policy, or change production secrets merely because the model thinks it is appropriate. Perform such changes only with explicit authorization and a verified execution path.",
   "self_evolution": "When a capability is genuinely missing, first discover an existing tool. If extension is justified, propose a minimal self-expansion through the evolution engine, preserve backward compatibility, validate the new capability, and never silently rewrite the constitution to hide a failure.",
+  "Universal Skill System constitution contract": true,
+  "universal_skill_system": "Skills are first-class declarative capabilities. Discover existing skills before creating duplicates; validate provenance, schema, safety, version, workflow, and evidence requirements before activation. Skills may be imported from GitHub or local files, composed for a task, disabled or quarantined, and upgraded without allowing arbitrary skill code execution.",
   "memory": "Use Sovereign Memory only for durable engineering patterns or user-approved knowledge. A correction becomes a reusable protocol only after successful verification; do not store unverified assumptions as fact.",
   "encoding_integrity": "If runtime returns unreadable placeholder characters such as ???? and evidence indicates an encoding mismatch, stop repeated blind retries and report the environment limitation until a safe alternate path is available.",
   "tool_discovery": "If the current filtered tool set cannot satisfy the objective, use request_tool_discovery rather than inventing a function name or claiming unavailable capability.",
@@ -115,7 +117,7 @@ function translateToProviderFormat(model, history, tools, config) {
 
 // --- [Smart Tool Filtering Categories] ---
 const TOOL_GROUPS = {
-    CORE: ["architecture_loop", "runtime_verify", "read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery", "run_terminal_command", "list_local_files", "list_files", "analyze_file", "fast_file_search", "discovery_scan"],
+    CORE: ["skill_manager", "architecture_loop", "runtime_verify", "read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery", "run_terminal_command", "list_local_files", "list_files", "analyze_file", "fast_file_search", "discovery_scan"],
     WEB_HUNT: ["web_search", "read_url"],
     LOCAL_DISCOVERY: ["searchCode"],
     ENGINE_7_ARCHIVE: ["store_memory", "vector_search", "compress_context"],
@@ -1125,3 +1127,52 @@ function logToTerminal(msg, type = "info") {
     log.appendChild(div);
     log.scrollTop = log.scrollHeight;
 }
+
+
+/* --- Integrated Universal Skill System --- */
+/**
+ * Universal Skill System 1.0
+ * Shared declarative skill registry, loader, composer, validator and lifecycle manager.
+ */
+const UNIVERSAL_SKILL_SYSTEM_VERSION = '1.0-universal-skill-system';
+const UNIVERSAL_SKILL_STORAGE_KEY = 'universal_skill_registry_v1';
+function ussArray(v){return Array.isArray(v)?v:[]} function ussObj(v){return v&&typeof v==='object'&&!Array.isArray(v)?v:{}} function ussStr(v){return typeof v==='string'?v:''} function ussUnique(v){return[...new Set(ussArray(v).filter(Boolean).map(String))]}
+function ussNormalizeSkill(raw={},source={}){const s=ussObj(raw);return{id:ussStr(s.id).trim(),name:ussStr(s.name||s.title).trim(),version:ussStr(s.version||'1.0.0').trim(),description:ussStr(s.description).trim(),domain:ussStr(s.domain||'general').trim(),triggers:ussUnique(s.triggers),tags:ussUnique(s.tags),prerequisites:ussUnique(s.prerequisites),instructions:ussArray(s.instructions).map(ussStr).filter(Boolean),workflow:ussArray(s.workflow).map(x=>{x=ussObj(x);return{id:ussStr(x.id),action:ussStr(x.action),purpose:ussStr(x.purpose),tool:ussStr(x.tool),inputs:ussObj(x.inputs),expectedEvidence:ussArray(x.expectedEvidence).map(ussStr).filter(Boolean),stopConditions:ussArray(x.stopConditions).map(ussStr).filter(Boolean)}}),capabilities:ussArray(s.capabilities).map(x=>{x=ussObj(x);return{id:ussStr(x.id),name:ussStr(x.name),description:ussStr(x.description),tools:ussUnique(x.tools),safe:x.safe!==false}}),constraints:ussUnique(s.constraints),validation:{required:ussArray(ussObj(s.validation).required).map(ussStr).filter(Boolean),commands:ussArray(ussObj(s.validation).commands).map(ussStr).filter(Boolean),evidence:ussArray(ussObj(s.validation).evidence).map(ussStr).filter(Boolean)},outputs:ussArray(s.outputs).map(ussStr).filter(Boolean),safety:{allowNetwork:Boolean(ussObj(s.safety).allowNetwork),allowWrites:Boolean(ussObj(s.safety).allowWrites),allowTerminal:Boolean(ussObj(s.safety).allowTerminal),allowSecrets:false,arbitraryCode:false},provenance:{sourceType:ussStr(source.sourceType||s.provenance?.sourceType||'inline'),repository:ussStr(source.repository||s.provenance?.repository),path:ussStr(source.path||s.provenance?.path),ref:ussStr(source.ref||s.provenance?.ref||'main'),importedAt:ussStr(source.importedAt||new Date().toISOString()),checksum:ussStr(source.checksum||s.provenance?.checksum)},status:ussStr(source.status||s.status||'installed')||'installed'}}
+function ussValidateSkill(raw={}){const s=ussNormalizeSkill(raw),errors=[];if(!s.id)errors.push('id is required');if(!s.name)errors.push('name is required');if(!s.version)errors.push('version is required');if(!s.description)errors.push('description is required');if(!s.instructions.length&&!s.workflow.length&&!s.capabilities.length)errors.push('skill must define instructions, workflow, or capabilities');if(s.safety.arbitraryCode)errors.push('arbitraryCode is forbidden');for(const c of s.capabilities)if(c.id&&!/^[a-z0-9._-]+$/i.test(c.id))errors.push(`invalid capability id: ${c.id}`);return{valid:errors.length===0,errors,normalized:s}}
+function ussMatchScore(skill,text=''){const q=String(text).toLowerCase();let score=0;for(const t of[...skill.triggers,...skill.tags,...(skill.domain?[skill.domain]:[])]){const x=String(t).toLowerCase();if(x&&q.includes(x))score+=skill.triggers.includes(t)?5:2}if(q.includes(String(skill.name).toLowerCase()))score+=8;return score}
+function createUniversalSkillSystem(options={}){const registry=new Map(),storage=options.storage||(typeof localStorage!=='undefined'?localStorage:null);function persist(){if(!storage)return;try{storage.setItem(UNIVERSAL_SKILL_STORAGE_KEY,JSON.stringify([...registry.values()]))}catch(_e){}}function restore(){if(!storage)return;try{const raw=JSON.parse(storage.getItem(UNIVERSAL_SKILL_STORAGE_KEY)||'[]');for(const item of ussArray(raw)){const v=ussValidateSkill(item);if(v.valid)registry.set(v.normalized.id,v.normalized)}}catch(_e){}}function register(raw,source={}){const v=ussValidateSkill(raw);if(!v.valid)return{ok:false,operation:'register',errors:v.errors};const skill=ussNormalizeSkill(v.normalized,source);registry.set(skill.id,skill);persist();return{ok:true,operation:'register',skill}}function get(id){return registry.get(ussStr(id))||null}function list(){return[...registry.values()].map(s=>({id:s.id,name:s.name,version:s.version,domain:s.domain,status:s.status,source:s.provenance}))}function remove(id){const ok=registry.delete(ussStr(id));persist();return{ok,operation:'remove',id}}function setStatus(id,status){const s=get(id);if(!s)return{ok:false,error:'skill_not_found'};s.status=status;registry.set(s.id,s);persist();return{ok:true,skill:s}}function compose(taskText='',options={}){const ranked=[...registry.values()].filter(s=>s.status!=='disabled'&&s.status!=='quarantined').map(skill=>({skill,score:ussMatchScore(skill,taskText)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);const selected=ranked.slice(0,Math.max(1,Number(options.maxSkills||3)));const instructions=[],workflow=[],constraints=[],capabilities=[],sources=[];for(const{skill,score}of selected){instructions.push(...skill.instructions.map(x=>`[${skill.id}] ${x}`));workflow.push(...skill.workflow.map(x=>({...x,skillId:skill.id,matchScore:score})));constraints.push(...skill.constraints.map(x=>`[${skill.id}] ${x}`));capabilities.push(...skill.capabilities.map(x=>({...x,skillId:skill.id})));sources.push(skill.provenance)}return{ok:true,query:taskText,selected:selected.map(x=>({id:x.skill.id,name:x.skill.name,version:x.skill.version,score:x.score})),instructions,workflow,constraints,capabilities,sources}}function scaffold(spec={}){const base=ussObj(spec);return ussNormalizeSkill({id:base.id||`skill.${Date.now()}`,name:base.name||'New Expert Skill',version:'0.1.0',description:base.description||'Declarative expert skill',domain:base.domain||'general',triggers:ussArray(base.triggers),tags:ussArray(base.tags),instructions:ussArray(base.instructions).length?base.instructions:['Define the expert procedure and evidence requirements.'],workflow:ussArray(base.workflow),capabilities:ussArray(base.capabilities),constraints:ussArray(base.constraints),validation:{required:['Skill definition validates before activation'],evidence:['Execution produces observable evidence']},outputs:ussArray(base.outputs),safety:{allowNetwork:false,allowWrites:false,allowTerminal:false}},{sourceType:'generated-scaffold',status:'installed'})}restore();return{version:UNIVERSAL_SKILL_SYSTEM_VERSION,register,get,list,remove,setStatus,compose,scaffold,validate:ussValidateSkill,normalize:ussNormalizeSkill}}
+const UNIVERSAL_SKILL_SYSTEM=typeof createUniversalSkillSystem==='function'?createUniversalSkillSystem():null;
+function universalSkillManager(action,args={},adapter={}){const a=String(action||'').toLowerCase();if(!UNIVERSAL_SKILL_SYSTEM)return{ok:false,error:'skill_system_unavailable'};if(a==='list')return UNIVERSAL_SKILL_SYSTEM.list();if(a==='get'||a==='inspect')return UNIVERSAL_SKILL_SYSTEM.get(args.skillId||args.id);if(a==='validate')return UNIVERSAL_SKILL_SYSTEM.validate(args.definition||args.skill||{});if(a==='register'||a==='install')return UNIVERSAL_SKILL_SYSTEM.register(args.definition||args.skill||{},args.source||{});if(a==='activate')return UNIVERSAL_SKILL_SYSTEM.setStatus(args.skillId||args.id,'active');if(a==='deactivate')return UNIVERSAL_SKILL_SYSTEM.setStatus(args.skillId||args.id,'disabled');if(a==='quarantine')return UNIVERSAL_SKILL_SYSTEM.setStatus(args.skillId||args.id,'quarantined');if(a==='remove')return UNIVERSAL_SKILL_SYSTEM.remove(args.skillId||args.id);if(a==='compose'||a==='resolve')return UNIVERSAL_SKILL_SYSTEM.compose(args.task||args.prompt||'',args);if(a==='build')return{ok:true,skill:UNIVERSAL_SKILL_SYSTEM.scaffold(args)};if(a==='import_github'||a==='import_repo'){if(typeof adapter.fetchText!=='function')return{ok:false,error:'github_adapter_unavailable'};const repo=ussStr(args.repository),path=ussStr(args.path||'skill.json'),ref=ussStr(args.ref||'main');if(!repo||!path)return{ok:false,error:'repository_and_path_required'};return Promise.resolve(adapter.fetchText({repository:repo,path,ref})).then(text=>{let def;try{def=JSON.parse(String(text))}catch(e){return{ok:false,error:'skill_source_must_be_valid_json',details:String(e.message||e)}}return UNIVERSAL_SKILL_SYSTEM.register(def,{sourceType:'github',repository:repo,path,ref})})}if(a==='import_local'||a==='import_file'){if(typeof adapter.readText!=='function')return{ok:false,error:'local_adapter_unavailable'};const path=ussStr(args.path);if(!path)return{ok:false,error:'path_required'};return Promise.resolve(adapter.readText(path)).then(text=>{let def;try{def=JSON.parse(String(text))}catch(e){return{ok:false,error:'skill_source_must_be_valid_json',details:String(e.message||e)}}return UNIVERSAL_SKILL_SYSTEM.register(def,{sourceType:'local',path})})}return{ok:false,error:'unknown_skill_action',actions:['list','inspect','validate','register','activate','deactivate','quarantine','remove','compose','build','import_github','import_local']}}
+
+
+const UNIVERSAL_SKILL_TOOL_DECLARATION = {
+  name: "skill_manager",
+  description: "Universal Skill System: list, inspect, validate, install, activate, deactivate, quarantine, compose, import or build declarative expert skills. Skills are evidence-driven definitions; arbitrary code execution is forbidden.",
+  parameters: { type: "OBJECT", properties: {
+    action: { type: "STRING", enum: ["list","inspect","validate","register","activate","deactivate","quarantine","remove","compose","build","import_github","import_local"] },
+    skillId: { type: "STRING" },
+    repository: { type: "STRING" },
+    path: { type: "STRING" },
+    ref: { type: "STRING" },
+    task: { type: "STRING" },
+    maxSkills: { type: "INTEGER" },
+    definition: { type: "OBJECT" },
+    source: { type: "OBJECT" },
+    name: { type: "STRING" },
+    id: { type: "STRING" },
+    version: { type: "STRING" },
+    description: { type: "STRING" },
+    domain: { type: "STRING" },
+    triggers: { type: "ARRAY", items: { type: "STRING" } },
+    tags: { type: "ARRAY", items: { type: "STRING" } },
+    instructions: { type: "ARRAY", items: { type: "STRING" } },
+    workflow: { type: "ARRAY", items: { type: "OBJECT" } },
+    capabilities: { type: "ARRAY", items: { type: "OBJECT" } }
+  }, required: ["action"] }
+};
+
+/* --- Universal Skill System runtime bridge --- */
+(function(){
+  if (typeof AI_TOOLS !== 'undefined' && AI_TOOLS[0]?.function_declarations && !AI_TOOLS[0].function_declarations.some(x=>x.name==='skill_manager')) AI_TOOLS[0].function_declarations.push(UNIVERSAL_SKILL_TOOL_DECLARATION);
+  if (typeof TOOL_GROUPS !== 'undefined' && !TOOL_GROUPS.SKILL_SYSTEM) TOOL_GROUPS.SKILL_SYSTEM=['skill_manager'];
+})();
