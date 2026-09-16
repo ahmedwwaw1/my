@@ -215,8 +215,6 @@
 
   function boot(){
     injectStyles();
-    showLoginUi();
-    ensure();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
