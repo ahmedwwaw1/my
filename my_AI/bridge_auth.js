@@ -1,11 +1,11 @@
 /* VSA Bridge browser authentication bootstrap.
- * Uses Supabase Anonymous Auth so the hardened bridge can require a real user JWT
- * without exposing any service credentials in the browser.
+ * Creates/refreshes an anonymous Supabase session so the hardened bridge
+ * can require a real JWT without exposing service credentials.
  */
 (function(){
   const root = typeof globalThis !== 'undefined' ? globalThis : window;
   const url = root.__SUPABASE_URL__ || 'https://ozcffmadatsfyyldqmdl.supabase.co';
-  const publicKey = root.__SUPABASE_PUBLIC_KEY__ || '';
+  const publicKey = root.__SUPABASE_PUBLIC_KEY__ || 'sb_publishable_cxalSwUizaYa60BVEcV0eA_UBJ02cws';
   const bridgePath = '/functions/v1/vsa-bridge';
   const tokenKey = 'vsa_bridge_access_token';
   const refreshKey = 'vsa_bridge_refresh_token';
@@ -50,7 +50,7 @@
     const r = await fetch(`${url}/auth/v1/signup`, {
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':publicKey},
-      body:'{}'
+      body:JSON.stringify({})
     });
     const d = await r.json().catch(()=>({}));
     if (!r.ok || !d?.access_token) {
@@ -87,10 +87,13 @@
     if (!requestUrl || !requestUrl.includes(bridgePath)) return originalFetch(input, init);
 
     const token = await ensure();
+    if (!token) {
+      throw new Error(root.__VSA_BRIDGE_AUTH_ERROR__ || 'VSA Bridge authentication unavailable.');
+    }
     const next = new Request(input, init || {});
     const headers = new Headers(next.headers);
-    if (token) headers.set('Authorization', `Bearer ${token}`);
-    if (publicKey) headers.set('apikey', publicKey);
+    headers.set('Authorization', `Bearer ${token}`);
+    headers.set('apikey', publicKey);
     return originalFetch(new Request(next, {headers}));
   };
 
