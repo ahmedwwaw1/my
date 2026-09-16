@@ -1,6 +1,58 @@
 {
   "sessions": [
     {
+      "id": "1789556410378",
+      "title": "المجلدات الموجودة في المستودع ",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "اجلب لي اسم مجلد في مستودعي"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "list_files",
+                "args": {
+                  "path": ""
+                },
+                "id": "call_16450"
+              },
+              "thoughtSignature": "EuQDCuEDARFNMg/UrjLKkquvI56qSSR0J8g54p1Np/p127VyJFj2jbKdYl5wBApyiibgH97PMpQ4RJUmnftUQsaPUgQ1ngScJTJN256UaT4vLzbcKiqOJFWUPH4CXT8WwcFCwdjSsXK8Ucv9JJ71L2zpy7Hl7B9R8LU36B9S9ujM396FNWKQfZNyUZ8pjvqmQcZiwby57iRavMfEYvlPyybpyTa0WoWWZGpjUtWO9d90zyvIXMDEyTVlrYcCIA8MDY+dnFWVzZZGGwEvFU3NpJCBPknrjBL7iiMmfBYi8MA/GVzkfGxXV+EpixMALQwC0KiBqhHo6bNgDnuolzasho6h4CEn/icKYkraDyMBu1Kb92AVfAdK2pK5rHID/ZczFVQGPtk+jHemMucfP1Brt97/uskQ7J+u3V1wcsgCft2kzOhI9TPUXiOyY/QbT4u7OgMN9FidC4c8XlFtHdPRIoeWfRGb429zHXK+5mUh7rxQAVQQer1dCkd8N3JyNIH5jKD3jFUgmB4JeGvorbz074OpW7YEwXq4rSwJR/B8lum0D9WNOhD+M/Fr1eM9edJ9tktaFcY9DW4BisVWyhiqVwReYFmESbcANsovN4OwTkOzjMa6AsBvG9hc9H3xk+uHywve8mY5eg=="
+            }
+          ]
+        },
+        {
+          "role": "function",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "list_files",
+                "response": {
+                  "content": "محتويات الجذر:\n📁 .artifacts\n📄 .gitattributes\n📁 .github\n📄 .gitignore\n📄 EMERGENCY_REPAIR_GUIDE.txt\n📁 Mastermind_Desktop\n📁 My location data\n📄 README.md\n📁 ScriptBot\n📁 ai_mastermind_capabilities\n📁 archive\n📁 bridge\n📄 chat_logs.json\n📄 compress.js\n📄 compress_mastermind.ps1\n📄 compressor.html\n📄 direct_compress.js\n📄 engine_memory.json\n📁 images\n📄 index.html\n📄 main.js\n📁 my file wo\n📁 my_AI\n📄 package-lock.json\n📄 package.json\n📄 preload.js\n📄 remigrate_final.ps1\n📄 steps.jsonl\n📄 system-capabilities.txt\n📄 system_prompt_discussion.txt\n📄 test.txt\n📄 test_engine.py\n📄 المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md\n📄 حاسبة.html\n📄 دليل_إصلاح_الطوارئ_VSA.txt"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "المجلدات الموجودة في المستودع هي:\n\n*   `.artifacts`\n*   `.github`\n*   `Mastermind_Desktop`\n*   `My location data`\n*   `ScriptBot`\n*   `ai_mastermind_capabilities`\n*   `archive`\n*   `bridge`\n*   `images`\n*   `my file wo`\n*   `my_AI`\n\nهل تود مني القيام بأي عملية داخل أحد هذه المجلدات؟",
+              "thoughtSignature": "EnEKbwERTTIPfmD/6+dz68uuPFPwIcgVp6u1pip7I504RTV8Z1CWqSaPjXekh7Y2/nRtuxcyJUQVA4N6uFlIPeoiOktebwpoTYfVCJ+qivwVQ+4ZI5wzyrG8e1ZNfKAW23lF9nW1IAeQp6L/De0++Zc4nw=="
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1789556290227",
       "title": "نعم، **يمكنني بالتأكيد مساعدتك",
       "history": [
@@ -70,6 +122,6 @@
     }
   ],
   "activeSessionId": "1789556410378",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"اجلب لي اسم مجلد في مستودعي\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"list_files\",\"args\":{\"path\":\"\"},\"id\":\"call_16450\"},\"thoughtSignature\":\"EuQDCuEDARFNMg/UrjLKkquvI56qSSR0J8g54p1Np/p127VyJFj2jbKdYl5wBApyiibgH97PMpQ4RJUmnftUQsaPUgQ1ngScJTJN256UaT4vLzbcKiqOJFWUPH4CXT8WwcFCwdjSsXK8Ucv9JJ71L2zpy7Hl7B9R8LU36B9S9ujM396FNWKQfZNyUZ8pjvqmQcZiwby57iRavMfEYvlPyybpyTa0WoWWZGpjUtWO9d90zyvIXMDEyTVlrYcCIA8MDY+dnFWVzZZGGwEvFU3NpJCBPknrjBL7iiMmfBYi8MA/GVzkfGxXV+EpixMALQwC0KiBqhHo6bNgDnuolzasho6h4CEn/icKYkraDyMBu1Kb92AVfAdK2pK5rHID/ZczFVQGPtk+jHemMucfP1Brt97/uskQ7J+u3V1wcsgCft2kzOhI9TPUXiOyY/QbT4u7OgMN9FidC4c8XlFtHdPRIoeWfRGb429zHXK+5mUh7rxQAVQQer1dCkd8N3JyNIH5jKD3jFUgmB4JeGvorbz074OpW7YEwXq4rSwJR/B8lum0D9WNOhD+M/Fr1eM9edJ9tktaFcY9DW4BisVWyhiqVwReYFmESbcANsovN4OwTkOzjMa6AsBvG9hc9H3xk+uHywve8mY5eg==\"}]},{\"role\":\"function\",\"parts\":[{\"functionResponse\":{\"name\":\"list_files\",\"response\":{\"content\":\"محتويات الجذر:\\n📁 .artifacts\\n📄 .gitattributes\\n📁 .github\\n📄 .gitignore\\n📄 EMERGENCY_REPAIR_GUIDE.txt\\n📁 Mastermind_Desktop\\n📁 My location data\\n📄 README.md\\n📁 ScriptBot\\n📁 ai_mastermind_capabilities\\n📁 archive\\n📁 bridge\\n📄 chat_logs.json\\n📄 compress.js\\n📄 compress_mastermind.ps1\\n📄 compressor.html\\n📄 direct_compress.js\\n📄 engine_memory.json\\n📁 images\\n📄 index.html\\n📄 main.js\\n📁 my file wo\\n📁 my_AI\\n📄 package-lock.json\\n📄 package.json\\n📄 preload.js\\n📄 remigrate_final.ps1\\n📄 steps.jsonl\\n📄 system-capabilities.txt\\n📄 system_prompt_discussion.txt\\n📄 test.txt\\n📄 test_engine.py\\n📄 المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md\\n📄 حاسبة.html\\n📄 دليل_إصلاح_الطوارئ_VSA.txt\"}}}]}]",
-  "timestamp": "2026-09-16T11:00:47.597Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"اجلب لي اسم مجلد في مستودعي\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"list_files\",\"args\":{\"path\":\"\"},\"id\":\"call_16450\"},\"thoughtSignature\":\"EuQDCuEDARFNMg/UrjLKkquvI56qSSR0J8g54p1Np/p127VyJFj2jbKdYl5wBApyiibgH97PMpQ4RJUmnftUQsaPUgQ1ngScJTJN256UaT4vLzbcKiqOJFWUPH4CXT8WwcFCwdjSsXK8Ucv9JJ71L2zpy7Hl7B9R8LU36B9S9ujM396FNWKQfZNyUZ8pjvqmQcZiwby57iRavMfEYvlPyybpyTa0WoWWZGpjUtWO9d90zyvIXMDEyTVlrYcCIA8MDY+dnFWVzZZGGwEvFU3NpJCBPknrjBL7iiMmfBYi8MA/GVzkfGxXV+EpixMALQwC0KiBqhHo6bNgDnuolzasho6h4CEn/icKYkraDyMBu1Kb92AVfAdK2pK5rHID/ZczFVQGPtk+jHemMucfP1Brt97/uskQ7J+u3V1wcsgCft2kzOhI9TPUXiOyY/QbT4u7OgMN9FidC4c8XlFtHdPRIoeWfRGb429zHXK+5mUh7rxQAVQQer1dCkd8N3JyNIH5jKD3jFUgmB4JeGvorbz074OpW7YEwXq4rSwJR/B8lum0D9WNOhD+M/Fr1eM9edJ9tktaFcY9DW4BisVWyhiqVwReYFmESbcANsovN4OwTkOzjMa6AsBvG9hc9H3xk+uHywve8mY5eg==\"}]},{\"role\":\"function\",\"parts\":[{\"functionResponse\":{\"name\":\"list_files\",\"response\":{\"content\":\"محتويات الجذر:\\n📁 .artifacts\\n📄 .gitattributes\\n📁 .github\\n📄 .gitignore\\n📄 EMERGENCY_REPAIR_GUIDE.txt\\n📁 Mastermind_Desktop\\n📁 My location data\\n📄 README.md\\n📁 ScriptBot\\n📁 ai_mastermind_capabilities\\n📁 archive\\n📁 bridge\\n📄 chat_logs.json\\n📄 compress.js\\n📄 compress_mastermind.ps1\\n📄 compressor.html\\n📄 direct_compress.js\\n📄 engine_memory.json\\n📁 images\\n📄 index.html\\n📄 main.js\\n📁 my file wo\\n📁 my_AI\\n📄 package-lock.json\\n📄 package.json\\n📄 preload.js\\n📄 remigrate_final.ps1\\n📄 steps.jsonl\\n📄 system-capabilities.txt\\n📄 system_prompt_discussion.txt\\n📄 test.txt\\n📄 test_engine.py\\n📄 المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md\\n📄 حاسبة.html\\n📄 دليل_إصلاح_الطوارئ_VSA.txt\"}}}]},{\"role\":\"model\",\"parts\":[{\"text\":\"المجلدات الموجودة في المستودع هي:\\n\\n*   `.artifacts`\\n*   `.github`\\n*   `Mastermind_Desktop`\\n*   `My location data`\\n*   `ScriptBot`\\n*   `ai_mastermind_capabilities`\\n*   `archive`\\n*   `bridge`\\n*   `images`\\n*   `my file wo`\\n*   `my_AI`\\n\\nهل تود مني القيام بأي عملية داخل أحد هذه المجلدات؟\",\"thoughtSignature\":\"EnEKbwERTTIPfmD/6+dz68uuPFPwIcgVp6u1pip7I504RTV8Z1CWqSaPjXekh7Y2/nRtuxcyJUQVA4N6uFlIPeoiOktebwpoTYfVCJ+qivwVQ+4ZI5wzyrG8e1ZNfKAW23lF9nW1IAeQp6L/De0++Zc4nw==\"}],\"model\":\"gemini-3.1-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"انا قلت لك اسم واحد\"}]}]",
+  "timestamp": "2026-09-16T11:01:24.008Z"
 }
