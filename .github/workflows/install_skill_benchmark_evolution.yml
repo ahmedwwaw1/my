@@ -6,39 +6,42 @@ permissions:
   contents: write
 jobs:
   integrate:
-    if: github.event.head_commit.message != 'Integrate Universal Skill Benchmark & Evolution'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Integrate engine into Cloud and Desktop cores
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
 
-          repo = Path('.')
           pairs = [
-              ('my_AI/universal_skill_benchmark_evolution_engine.js', 'my_AI/ai_engine_core.js', 'GitHub Cloud via repository tools and the Supabase bridge'),
-              ('Mastermind_Desktop/universal_skill_benchmark_evolution_engine.js', 'Mastermind_Desktop/core.js', 'Windows Desktop via Electron and native runtime bridge')
+              ('my_AI/universal_skill_benchmark_evolution_engine.js', 'my_AI/ai_engine_core.js'),
+              ('Mastermind_Desktop/universal_skill_benchmark_evolution_engine.js', 'Mastermind_Desktop/core.js')
           ]
 
           declaration = r'''
 /* --- Integrated Universal Skill Benchmark & Evolution Engine --- */
 const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION={name:'skill_benchmark_evolution',description:'Benchmark a declarative Skill, measure evidence-backed strengths and weaknesses, generate an improvement plan, compare revisions, and produce a new draft version. Never executes imported source code.',parameters:{type:'OBJECT',properties:{action:{type:'STRING',enum:['generate','build_cases','create_cases','run','benchmark','test','evaluate','evolve','improve','repair','compare','full_cycle','evolution_cycle']},skill:{type:'OBJECT'},cases:{type:'ARRAY',items:{type:'OBJECT'}},executionResults:{type:'OBJECT'},results:{type:'ARRAY',items:{type:'OBJECT'}},benchmark:{type:'OBJECT'},result:{type:'OBJECT'},previous:{type:'OBJECT'},next:{type:'OBJECT'},execute:{type:'BOOLEAN'}},required:['action']}};
-+(function(){if(typeof AI_TOOLS!=='undefined'&&AI_TOOLS[0]?.function_declarations&&!AI_TOOLS[0].function_declarations.some(x=>x.name==='skill_benchmark_evolution'))AI_TOOLS[0].function_declarations.push(UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION);})();
-+'''
+(function(){if(typeof AI_TOOLS!=='undefined'&&AI_TOOLS[0]?.function_declarations&&!AI_TOOLS[0].function_declarations.some(x=>x.name==='skill_benchmark_evolution'))AI_TOOLS[0].function_declarations.push(UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION);})();
+'''
 
           constitution_line = '  "universal_skill_benchmark_evolution": "Skills must be tested against explicit benchmark cases before activation. Measure contract, evidence, safety, coverage and task outcomes; surface weaknesses; improvements produce a draft version and require re-benchmarking and explicit activation. Never treat an untested or regressed revision as successful.",\n'
 
-          for engine_path, core_path, environment in pairs:
+          adapter = r'''else if (name === "skill_benchmark_evolution") toolResult = await universalSkillBenchmarkEvolutionManager(args?.action || "full_cycle", args || {}, {
+                    executeCase: async ({skill,cases,args:benchmarkArgs}) => {
+                        /* Safe execution hook: consumes explicit runtime/model evidence supplied by the caller.
+                           It never recursively executes imported Skill/source code. */
+                        return benchmarkArgs?.executionResults || {};
+                    }
+                });
+                '''
+
+          for engine_path, core_path in pairs:
               engine = Path(engine_path).read_text(encoding='utf-8')
               core_file = Path(core_path)
               core = core_file.read_text(encoding='utf-8')
 
-              marker = 'const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_VERSION='
-              if marker not in core:
+              if 'const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_VERSION=' not in core:
                   core += '\n\n' + engine + '\n' + declaration
 
               if '"universal_skill_benchmark_evolution"' not in core:
@@ -48,9 +51,7 @@ const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION={name:'skill_benchmar
                   core = core.replace(anchor, constitution_line + anchor, 1)
 
               if '"skill_benchmark_evolution"' not in core:
-                  core_anchor = 'const TOOL_GROUPS = {'
-                  pos = core.find(core_anchor)
-                  if pos == -1:
+                  if 'const TOOL_GROUPS = {' not in core or 'CORE: [' not in core:
                       raise SystemExit(f'TOOL_GROUPS anchor missing in {core_path}')
                   core = core.replace('CORE: [', 'CORE: ["skill_benchmark_evolution", ', 1)
 
@@ -58,14 +59,6 @@ const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION={name:'skill_benchmar
                   dispatcher = 'else if (name === "skill_synthesis")'
                   if dispatcher not in core:
                       raise SystemExit(f'dispatcher anchor missing in {core_path}')
-                  adapter = r'''else if (name === "skill_benchmark_evolution") toolResult = await universalSkillBenchmarkEvolutionManager(args?.action || "full_cycle", args || {}, {
-+                    executeCase: async ({skill,cases,args:benchmarkArgs}) => {
-+                        /* Safe execution hook: the benchmark layer consumes explicit runtime/model evidence supplied by the caller.
-+                           It does not recursively execute imported Skill/source code. */
-+                        return benchmarkArgs?.executionResults || {};
-+                    }
-+                });
-+                '''
                   core = core.replace(dispatcher, adapter + dispatcher, 1)
 
               core_file.write_text(core, encoding='utf-8')
@@ -78,8 +71,6 @@ const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION={name:'skill_benchmar
           node --check my_AI/ai_engine_core.js
           node --check Mastermind_Desktop/core.js
       - name: Commit integration and remove installer
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
