@@ -118,7 +118,7 @@ function translateToProviderFormat(model, history, tools, config) {
 
 // --- [Smart Tool Filtering Categories] ---
 const TOOL_GROUPS = {
-    CORE: ["skill_manager", "architecture_loop", "runtime_verify", "read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery", "run_terminal_command", "list_local_files", "list_files", "analyze_file", "fast_file_search", "discovery_scan"],
+    CORE: ["skill_manager", "skill_synthesis", "architecture_loop", "runtime_verify", "read_file", "write_file", "replace_file_content", "multi_replace_file_content", "thought", "repairSystem", "request_tool_discovery", "run_terminal_command", "list_local_files", "list_files", "analyze_file", "fast_file_search", "discovery_scan"],
     WEB_HUNT: ["web_search", "read_url"],
     LOCAL_DISCOVERY: ["searchCode"],
     ENGINE_7_ARCHIVE: ["store_memory", "vector_search", "compress_context"],
@@ -1102,7 +1102,26 @@ async function runToolLoop(history) {
                         if (typeof callLocalBridge === "function") return await callLocalBridge("read", { path: filePath });
                         return "";
                     }
-                }); toolResult = `✅ العملية [${name}] اكتملت.`;
+                });
+                else if (name === "skill_synthesis") toolResult = await universalSkillSynthesisManager(args?.action || "synthesize", args || {}, {
+                    fetchSources: async ({repository,path,ref,options={}}) => {
+                        const maxFiles=Number(options.maxFiles||20), maxChars=Number(options.maxCharsPerFile||60000);
+                        async function walk(p){
+                            const endpoint=`https://api.github.com/repos/${repository}/contents/${p||''}?ref=${encodeURIComponent(ref||'main')}`;
+                            const data=await callBridge('github',{endpoint,method:'GET'});
+                            if(data?.type==='file'&&data.content){const raw=atob(String(data.content).replace(/\s/g,''));let text=raw;try{text=decodeURIComponent(escape(raw));}catch(_){}return [{path:p,text:String(text).slice(0,maxChars)}];}
+                            if(!Array.isArray(data))return []; const out=[];
+                            for(const e of data){if(out.length>=maxFiles)break;if(e.type==='file'&&/\.(md|markdown|txt|json|ya?ml|js|mjs|cjs|ts|tsx|py|java|kt|go|rs|rb|php|cs|cpp|h)$/i.test(e.name)){const xs=await walk(e.path);out.push(...xs.slice(0,maxFiles-out.length));}else if(e.type==='dir'){const xs=await walk(e.path);out.push(...xs.slice(0,maxFiles-out.length));}}
+                            return out;
+                        }
+                        return walk(String(path||''));
+                    },
+                    readSources: async ({path,options={}}) => {
+                        if(typeof getGithubFileContent==='function'){const text=await getGithubFileContent(path);return text?[{path,text:String(text).slice(0,Number(options.maxCharsPerFile||60000))}]:[];}
+                        if(typeof callLocalBridge==='function'){const r=await callLocalBridge('read',{path});return r?[{path,text:typeof r==='string'?r:JSON.stringify(r)}]:[];}
+                        return [];
+                    }
+                });
 
             updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
 
@@ -1212,3 +1231,4 @@ const UNIVERSAL_SKILL_SYNTHESIS_TOOL_DECLARATION={name:'skill_synthesis',descrip
 
 /* skill synthesis runtime bridge */
 (function(){if(typeof AI_TOOLS!=='undefined'&&AI_TOOLS[0]?.function_declarations&&!AI_TOOLS[0].function_declarations.some(x=>x.name==='skill_synthesis'))AI_TOOLS[0].function_declarations.push(UNIVERSAL_SKILL_SYNTHESIS_TOOL_DECLARATION);})();
+
