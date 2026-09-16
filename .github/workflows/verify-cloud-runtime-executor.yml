@@ -1,0 +1,46 @@
+name: Verify Cloud Runtime Executor
+
+on:
+  push:
+    paths:
+      - 'cloud_runtime_executor/**'
+      - '.github/workflows/verify-cloud-runtime-executor.yml'
+  workflow_dispatch:
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Syntax checks
+        working-directory: cloud_runtime_executor
+        run: |
+          node --check server.js
+          node --check smoke-test.js
+      - name: Start executor
+        working-directory: cloud_runtime_executor
+        env:
+          RUNTIME_SHARED_SECRET: ci-runtime-secret-verified
+          PORT: 8787
+        run: |
+          node server.js > /tmp/mastermind-runtime.log 2>&1 &
+          echo $! > /tmp/mastermind-runtime.pid
+          for i in {1..20}; do
+            curl -fsS http://127.0.0.1:8787/health && break
+            sleep 1
+          done
+      - name: End-to-end runtime verification
+        working-directory: cloud_runtime_executor
+        env:
+          RUNTIME_URL: http://127.0.0.1:8787
+          RUNTIME_SHARED_SECRET: ci-runtime-secret-verified
+        run: node smoke-test.js
+      - name: Cleanup
+        if: always()
+        run: |
+          if [ -f /tmp/mastermind-runtime.pid ]; then kill "$(cat /tmp/mastermind-runtime.pid)" || true; fi
+          cat /tmp/mastermind-runtime.log || true
