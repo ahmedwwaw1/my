@@ -1,0 +1,26 @@
+name: verify-sandbox-runtime-binding
+on:
+  push:
+    branches: [main]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax and adapter checks
+        run: |
+          node --check Mastermind_Desktop/runtime_sandbox_binding.js
+          node --check Mastermind_Desktop/universal_skill_execution_adapter.js
+          node -e "const a=require('./Mastermind_Desktop/universal_skill_execution_adapter.js'); if(typeof a.executeProcess!=='function'||typeof a.verifyRuntime!=='function') process.exit(2); console.log('desktop adapter exports verified')"
+      - name: Verify sandbox binding contract
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const s=fs.readFileSync('Mastermind_Desktop/runtime_sandbox_binding.js','utf8');
+          for(const x of ['universal_skill_execution_sandbox','executeProcess','allowCommand','unrestricted bridge execution is disabled']){}
+          if(!s.includes('executeProcess')||!s.includes('allowCommand')||!s.includes('unrestricted bridge execution is disabled')) process.exit(3);
+          NODE
+      - name: Protected files unchanged
+        run: |
+          test "$(git rev-parse HEAD:Mastermind_Desktop/logic.js)" = "45bfdebb5fe8cfce1311c0028f7e9aca97246ebd"
+          test "$(git rev-parse HEAD:Mastermind_Desktop/main.js)" = "f64ef223f29ab07fde26740e85d937e3f1888fe2"
