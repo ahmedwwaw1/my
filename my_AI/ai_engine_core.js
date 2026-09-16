@@ -1517,7 +1517,19 @@ async function runToolLoop(history) {
                 else if (name === "run_terminal_command") toolResult = await callLocalBridge('cmd', { command: args.command });
                 else if (name === "web_search") toolResult = await callBridge('web_search', args);
                 else if (name === "thought") toolResult = { reasoning: args.reasoning, plan: args.plan };
-                else toolResult = `✅ العملية [${name}] اكتملت.`;
+                else if (name === "skill_manager") toolResult = await universalSkillManager(args?.action || "list", args || {}, {
+                    fetchText: async ({repository,path,ref}) => {
+                        const endpoint = `https://api.github.com/repos/${repository}/contents/${path}?ref=${encodeURIComponent(ref || "main")}`;
+                        const data = await callBridge("github", { endpoint, method: "GET" });
+                        const raw = data?.content ? atob(String(data.content).replace(/\s/g, "")) : (typeof data === "string" ? data : JSON.stringify(data));
+                        try { return decodeURIComponent(escape(raw)); } catch (_) { return raw; }
+                    },
+                    readText: async filePath => {
+                        if (typeof getGithubFileContent === "function") return await getGithubFileContent(filePath);
+                        if (typeof callLocalBridge === "function") return await callLocalBridge("read", { path: filePath });
+                        return "";
+                    }
+                }); toolResult = `✅ العملية [${name}] اكتملت.`;
 
                 updateToolStepStatus(stepId, !String(toolResult).includes('❌'), toolResult);
 
