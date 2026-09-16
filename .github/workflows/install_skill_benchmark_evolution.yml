@@ -1,80 +1,50 @@
 name: Integrate Universal Skill Benchmark & Evolution
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 permissions:
   contents: write
 jobs:
   integrate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Integrate engine into Cloud and Desktop cores
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          pairs = [
-              ('my_AI/universal_skill_benchmark_evolution_engine.js', 'my_AI/ai_engine_core.js'),
-              ('Mastermind_Desktop/universal_skill_benchmark_evolution_engine.js', 'Mastermind_Desktop/core.js')
-          ]
-
-          declaration = r'''
-/* --- Integrated Universal Skill Benchmark & Evolution Engine --- */
-const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION={name:'skill_benchmark_evolution',description:'Benchmark a declarative Skill, measure evidence-backed strengths and weaknesses, generate an improvement plan, compare revisions, and produce a new draft version. Never executes imported source code.',parameters:{type:'OBJECT',properties:{action:{type:'STRING',enum:['generate','build_cases','create_cases','run','benchmark','test','evaluate','evolve','improve','repair','compare','full_cycle','evolution_cycle']},skill:{type:'OBJECT'},cases:{type:'ARRAY',items:{type:'OBJECT'}},executionResults:{type:'OBJECT'},results:{type:'ARRAY',items:{type:'OBJECT'}},benchmark:{type:'OBJECT'},result:{type:'OBJECT'},previous:{type:'OBJECT'},next:{type:'OBJECT'},execute:{type:'BOOLEAN'}},required:['action']}};
-(function(){if(typeof AI_TOOLS!=='undefined'&&AI_TOOLS[0]?.function_declarations&&!AI_TOOLS[0].function_declarations.some(x=>x.name==='skill_benchmark_evolution'))AI_TOOLS[0].function_declarations.push(UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION);})();
-'''
-
-          constitution_line = '  "universal_skill_benchmark_evolution": "Skills must be tested against explicit benchmark cases before activation. Measure contract, evidence, safety, coverage and task outcomes; surface weaknesses; improvements produce a draft version and require re-benchmarking and explicit activation. Never treat an untested or regressed revision as successful.",\n'
-
-          adapter = r'''else if (name === "skill_benchmark_evolution") toolResult = await universalSkillBenchmarkEvolutionManager(args?.action || "full_cycle", args || {}, {
-                    executeCase: async ({skill,cases,args:benchmarkArgs}) => {
-                        /* Safe execution hook: consumes explicit runtime/model evidence supplied by the caller.
-                           It never recursively executes imported Skill/source code. */
-                        return benchmarkArgs?.executionResults || {};
-                    }
-                });
-                '''
-
-          for engine_path, core_path in pairs:
-              engine = Path(engine_path).read_text(encoding='utf-8')
-              core_file = Path(core_path)
-              core = core_file.read_text(encoding='utf-8')
-
-              if 'const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_VERSION=' not in core:
-                  core += '\n\n' + engine + '\n' + declaration
-
-              if '"universal_skill_benchmark_evolution"' not in core:
-                  anchor = '  "memory":'
-                  if anchor not in core:
-                      raise SystemExit(f'constitution anchor missing in {core_path}')
-                  core = core.replace(anchor, constitution_line + anchor, 1)
-
-              if '"skill_benchmark_evolution"' not in core:
-                  if 'const TOOL_GROUPS = {' not in core or 'CORE: [' not in core:
-                      raise SystemExit(f'TOOL_GROUPS anchor missing in {core_path}')
-                  core = core.replace('CORE: [', 'CORE: ["skill_benchmark_evolution", ', 1)
-
-              if 'name === "skill_benchmark_evolution"' not in core:
-                  dispatcher = 'else if (name === "skill_synthesis")'
-                  if dispatcher not in core:
-                      raise SystemExit(f'dispatcher anchor missing in {core_path}')
-                  core = core.replace(dispatcher, adapter + dispatcher, 1)
-
-              core_file.write_text(core, encoding='utf-8')
-              print(f'Integrated benchmark evolution into {core_path}: {len(core)} bytes')
-          PY
-      - name: Syntax gate
-        run: |
-          node --check my_AI/universal_skill_benchmark_evolution_engine.js
-          node --check Mastermind_Desktop/universal_skill_benchmark_evolution_engine.js
-          node --check my_AI/ai_engine_core.js
-          node --check Mastermind_Desktop/core.js
-      - name: Commit integration and remove installer
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          rm -f .github/workflows/install_skill_benchmark_evolution.yml
-          git add my_AI/ai_engine_core.js Mastermind_Desktop/core.js my_AI/universal_skill_benchmark_evolution_engine.js Mastermind_Desktop/universal_skill_benchmark_evolution_engine.js .github/workflows/install_skill_benchmark_evolution.yml
-          git commit -m 'Integrate Universal Skill Benchmark & Evolution' || exit 0
-          git push
+      - name: Integrate benchmark engine
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const repo = context.repo;
+            const files = [
+              ['my_AI/universal_skill_benchmark_evolution_engine.js','my_AI/ai_engine_core.js'],
+              ['Mastermind_Desktop/universal_skill_benchmark_evolution_engine.js','Mastermind_Desktop/core.js']
+            ];
+            const declaration = `\n/* --- Integrated Universal Skill Benchmark & Evolution Engine --- */\nconst UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION={name:'skill_benchmark_evolution',description:'Benchmark a declarative Skill, measure evidence-backed strengths and weaknesses, generate an improvement plan, compare revisions, and produce a new draft version. Never executes imported source code.',parameters:{type:'OBJECT',properties:{action:{type:'STRING',enum:['generate','build_cases','create_cases','run','benchmark','test','evaluate','evolve','improve','repair','compare','full_cycle','evolution_cycle']},skill:{type:'OBJECT'},cases:{type:'ARRAY',items:{type:'OBJECT'}},executionResults:{type:'OBJECT'},results:{type:'ARRAY',items:{type:'OBJECT'}},benchmark:{type:'OBJECT'},result:{type:'OBJECT'},previous:{type:'OBJECT'},next:{type:'OBJECT'},execute:{type:'BOOLEAN'}},required:['action']}};\n(function(){if(typeof AI_TOOLS!=='undefined'&&AI_TOOLS[0]?.function_declarations&&!AI_TOOLS[0].function_declarations.some(x=>x.name==='skill_benchmark_evolution'))AI_TOOLS[0].function_declarations.push(UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_TOOL_DECLARATION);})();\n`;
+            const constitutionLine = '  "universal_skill_benchmark_evolution": "Skills must be tested against explicit benchmark cases before activation. Measure contract, evidence, safety, coverage and task outcomes; surface weaknesses; improvements produce a draft version and require re-benchmarking and explicit activation. Never treat an untested or regressed revision as successful.",\\n';
+            const adapter = 'else if (name === "skill_benchmark_evolution") toolResult = await universalSkillBenchmarkEvolutionManager(args?.action || "full_cycle", args || {}, { executeCase: async ({args:benchmarkArgs}) => benchmarkArgs?.executionResults || {} });\\n                ';
+            for (const [enginePath, corePath] of files) {
+              const engineRes = await github.rest.repos.getContent({ ...repo, path: enginePath, ref: 'main' });
+              const coreRes = await github.rest.repos.getContent({ ...repo, path: corePath, ref: 'main' });
+              const engine = Buffer.from(engineRes.data.content, 'base64').toString('utf8');
+              let core = Buffer.from(coreRes.data.content, 'base64').toString('utf8');
+              if (!core.includes('const UNIVERSAL_SKILL_BENCHMARK_EVOLUTION_VERSION=')) core += '\\n\\n' + engine + declaration;
+              if (!core.includes('"universal_skill_benchmark_evolution"')) {
+                const anchor = '  "memory":';
+                if (!core.includes(anchor)) throw new Error(`Constitution anchor missing: ${corePath}`);
+                core = core.replace(anchor, constitutionLine + anchor, 1);
+              }
+              if (!core.includes('"skill_benchmark_evolution"')) {
+                const anchor = 'CORE: [';
+                if (!core.includes(anchor)) throw new Error(`TOOL_GROUPS anchor missing: ${corePath}`);
+                core = core.replace(anchor, 'CORE: ["skill_benchmark_evolution", ', 1);
+              }
+              if (!core.includes('name === "skill_benchmark_evolution"')) {
+                const anchor = 'else if (name === "skill_synthesis")';
+                if (!core.includes(anchor)) throw new Error(`Dispatcher anchor missing: ${corePath}`);
+                core = core.replace(anchor, adapter + anchor, 1);
+              }
+              try { new Function(engine); new Function(core); } catch (err) { throw new Error(`Syntax gate failed for ${corePath}: ${err.message}`); }
+              await github.rest.repos.createOrUpdateFileContents({ ...repo, path: corePath, branch: 'main', message: 'Integrate Universal Skill Benchmark & Evolution', content: Buffer.from(core).toString('base64'), sha: coreRes.data.sha });
+            }
+            const workflow = await github.rest.repos.getContent({ ...repo, path: '.github/workflows/install_skill_benchmark_evolution.yml', ref: 'main' });
+            await github.rest.repos.deleteFile({ ...repo, path: '.github/workflows/install_skill_benchmark_evolution.yml', branch: 'main', message: 'Remove temporary Skill Benchmark installer', sha: workflow.data.sha });
+            core.info('Universal Skill Benchmark & Evolution integrated and installer removed.');
