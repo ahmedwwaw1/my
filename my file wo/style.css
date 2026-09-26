@@ -92,9 +92,9 @@
         }
 
         .video-container-wrapper {
-            width: 50%;
-            max-width: 650px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: none;
+            margin: 0;
             aspect-ratio: 16 / 9;
             border-radius: 16px;
             overflow: hidden;
@@ -110,6 +110,47 @@
             height: 100%;
             border: none;
             display: block;
+        }
+
+        /* 🔎 بحث الفهارس الموضوعية */
+        .thematic-search-wrap {
+            position: relative;
+            margin: 0 0 14px 0;
+        }
+
+        .thematic-search-input {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px 14px;
+            background: #111217;
+            color: #f1f1f1;
+            border: 1px solid #2d2d35;
+            border-radius: 10px;
+            outline: none;
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            direction: rtl;
+        }
+
+        .thematic-search-input::placeholder {
+            color: #777;
+        }
+
+        .thematic-search-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.08);
+        }
+
+        .thematic-search-empty {
+            display: none;
+            padding: 12px;
+            text-align: center;
+            color: #777;
+            background: #111217;
+            border: 1px solid #2d2d35;
+            border-radius: 10px;
+            font-size: 0.85rem;
         }
 
         .links-container-wrapper {
