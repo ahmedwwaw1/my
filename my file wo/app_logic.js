@@ -1,20 +1,88 @@
         // --- إعدادات المسارات العالمية ---
+        // المسارات تُبنى نسبةً إلى الصفحة الحالية، لذلك يعمل الموقع على GitHub Pages
+        // داخل /my/ وكذلك عند التشغيل محلياً.
         const APP_CONFIG = {
-            // استخدام المسار المطلق لضمان الوصول للملفات مهما كان عمق المجلدات
-            jsonPath: window.location.origin + '/بيانات موقعي json/'
+            jsonPath: new URL('My location data/', document.baseURI).href,
+            cryptoPath: new URL('ScriptBot/ScriptBot json/crypto_alerts.json', document.baseURI).href
         };
 
-        // دالة موحدة لجلب ملفات JSON المحلية
-        async function fetchLocalJSON(fileName) {
-            try {
-                const response = await fetch(`${APP_CONFIG.jsonPath}${fileName}?v=${new Date().getTime()}`);
-                if (!response.ok) return [];
-                return await response.json();
-            } catch (e) {
-                console.warn(`⚠️ فشل جلب الملف: ${fileName}`, e);
-                return [];
+        async function fetchLocalJSON(path) {
+            const url = new URL(path, document.baseURI);
+            url.searchParams.set('_v', Date.now().toString());
+
+            const response = await fetch(url.href, {
+                cache: 'no-store',
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} ${response.statusText}`);
             }
+
+            const data = await response.json();
+            return Array.isArray(data) ? data : [data];
         }
+
+        // توحيد بنية البطاقات الواردة من ملفات JSON المختلفة.
+        // بعض السجلات القديمة لا تحتوي على id، لذلك ننشئ معرفاً ثابتاً لها.
+        function normalizeDataItem(item, sourceName, index) {
+            const raw = (item && typeof item === 'object') ? item : {};
+            const title = String(raw.title || '').trim();
+            const slug = title
+                .toLowerCase()
+                .replace(/[^\\w\\u0600-\\u06FF]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .slice(0, 80);
+
+            const id = raw.id != null && String(raw.id).trim() !== ''
+                ? String(raw.id)
+                : `${sourceName}-${slug || 'item'}-${index + 1}`;
+
+            const normalizeAssetList = (value) => {
+                if (!Array.isArray(value)) return [];
+                return value.flatMap(entry => {
+                    if (typeof entry === 'string') return entry.trim() ? [entry] : [];
+                    if (!entry || typeof entry !== 'object') return [];
+
+                    if (entry.url) return [entry];
+
+                    // دعم الصيغة القديمة في PDF-images.json عندما يكون الرابط
+                    // داخل links بدلاً من url مباشر.
+                    if (Array.isArray(entry.links)) {
+                        return entry.links
+                            .filter(link => link && link.url)
+                            .map(link => ({
+                                url: link.url,
+                                title: link.text || entry.title || 'ملف'
+                            }));
+                    }
+
+                    return [];
+                });
+            };
+
+            return {
+                ...raw,
+                id,
+                title: title || 'بدون عنوان',
+                category: String(raw.category || 'vsa').trim(),
+                content: raw.content == null ? '' : String(raw.content),
+                links: Array.isArray(raw.links) ? raw.links.filter(Boolean) : [],
+                images: normalizeAssetList(raw.images),
+                pdfs: normalizeAssetList(raw.pdfs),
+                videos: Array.isArray(raw.videos) ? raw.videos : null,
+                recommendations: Array.isArray(raw.recommendations) ? raw.recommendations : [],
+                thematic_index: Array.isArray(raw.thematic_index) ? raw.thematic_index : null
+            };
+        }
+
+        const LOCAL_JSON_SOURCES = [
+            { file: 'data.json', name: 'data' },
+            { file: 'vsa.json', name: 'vsa' },
+            { file: 'technical-analysis.json', name: 'technical-analysis' },
+            { file: 'Time-analysis.json', name: 'time-analysis' },
+            { file: 'PDF-images.json', name: 'pdf-images' }
+        ];
 
         let allData = [];
         let isDataLoaded = false;
@@ -233,110 +301,125 @@
                 thematicSection.style.display = 'none';
             }
         }
-        // اضافة ملف json
-        // دالة جلب ومعالجة البيانات مع نظام استرداد احتياطي (Fallback) للعمل على GitHub
+        // تحميل جميع أقسام الموقع من ملفات JSON في مستودع GitHub.
+        // لا يعتمد هذا المسار على Supabase أو أي مفتاح سري داخل المتصفح.
+        let dataLoadPromise = null;
+
         async function loadWebsiteData() {
-            const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-            const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
+            if (dataLoadPromise) return dataLoadPromise;
 
-            const headers = {
-                'apikey': SERVICE_ROLE_KEY,
-                'Authorization': `Bearer ${SERVICE_ROLE_KEY}`
-            };
-
-            const processCryptoAlerts = async () => {
-                let cryptoAlerts = [];
+            dataLoadPromise = (async () => {
                 try {
-                    let response = await fetch(`ScriptBot/ScriptBot json/crypto_alerts.json?v=${new Date().getTime()}`);
-                    if (!response.ok) {
-                        response = await fetch(`crypto_alerts.json?v=${new Date().getTime()}`);
-                    }
-                    if (!response.ok) {
-                        response = await fetch(`${APP_CONFIG.jsonPath}crypto_alerts.json?v=${new Date().getTime()}`);
-                    }
-                    if (response.ok) {
-                        cryptoAlerts = await response.json();
-                    }
-                    
-                    if (cryptoAlerts && cryptoAlerts.length > 0) {
-                        cryptoAlerts.forEach(alert => {
-                            const alertDate = new Date(alert.timestamp);
-                            const formattedTime = alertDate.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
-                            const formattedDate = alertDate.toLocaleDateString(undefined);
+                    statusMsg.innerText = '⏳ جاري تحميل بيانات الموقع...';
+
+                    const results = await Promise.allSettled(
+                        LOCAL_JSON_SOURCES.map(async (source) => {
+                            const rows = await fetchLocalJSON(
+                                new URL(source.file, APP_CONFIG.jsonPath).href
+                            );
+                            return rows.map((item, index) =>
+                                normalizeDataItem(item, source.name, index)
+                            );
+                        })
+                    );
+
+                    const loaded = [];
+                    const failed = [];
+
+                    results.forEach((result, index) => {
+                        if (result.status === 'fulfilled') {
+                            loaded.push(...result.value);
+                        } else {
+                            failed.push({
+                                file: LOCAL_JSON_SOURCES[index].file,
+                                error: result.reason?.message || String(result.reason)
+                            });
+                        }
+                    });
+
+                    allData = loaded;
+
+                    // تنبيهات الكريبتو من ملف JSON المنفصل.
+                    try {
+                        const cryptoAlerts = await fetchLocalJSON(APP_CONFIG.cryptoPath);
+
+                        cryptoAlerts.forEach((alert, index) => {
+                            if (!alert || typeof alert !== 'object') return;
+
+                            const alertDate = alert.timestamp ? new Date(alert.timestamp) : null;
+                            const validDate = alertDate && !isNaN(alertDate.getTime());
+
+                            const formattedTime = validDate
+                                ? alertDate.toLocaleTimeString(undefined, {
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                    hour12: true
+                                })
+                                : '';
+
+                            const formattedDate = validDate
+                                ? alertDate.toLocaleDateString(undefined)
+                                : '';
+
+                            const volume = Number(alert.volume);
+
                             allData.push({
-                                id: `crypto-${alert.symbol}-${alert.timestamp}`,
-                                title: `🚨 حركة قوية على زوج: ${alert.symbol}`,
+                                id: `${alert.symbol || 'asset'}-${alert.timestamp || index}`,
+                                title: `🚨 حركة قوية على زوج: ${alert.symbol || 'غير محدد'}`,
                                 category: 'high_volume',
-                                content: `💵 السعر الحالي: ${alert.price} USDT\n📊 حجم التداول: ${alert.volume.toLocaleString()}\n📈 نسبة التغيير (24س): ${alert.change_percent}%\n🕒 وقت التنبيه المحلي: ${formattedTime} - ${formattedDate}`,
-                                image: '', videos: null, links: [], images: null, pdfs: null, recommendations: [], thematic_index: null
+                                content:
+                                    `💵 السعر الحالي: ${alert.price ?? '-'} USDT\\n` +
+                                    `📊 حجم التداول: ${Number.isFinite(volume) ? volume.toLocaleString() : (alert.volume ?? '-')}\\n` +
+                                    `📈 نسبة التغيير (24س): ${alert.change_percent ?? '-'}%\\n` +
+                                    `🕒 وقت التنبيه المحلي: ${formattedTime} - ${formattedDate}`,
+                                image: '',
+                                videos: null,
+                                links: [],
+                                images: [],
+                                pdfs: [],
+                                recommendations: [],
+                                thematic_index: null
                             });
                         });
+                    } catch (error) {
+                        failed.push({
+                            file: 'ScriptBot/ScriptBot json/crypto_alerts.json',
+                            error: error?.message || String(error)
+                        });
                     }
-                } catch (e) { console.warn("Could not load crypto_alerts.json", e); }
-            };
-
-            try {
-                // محاولة جلب البيانات من Supabase
-                const [cardsRes, videosRes, chaptersRes, assetsRes] = await Promise.all([
-                    fetch(`${SUPABASE_URL}/rest/v1/cards?select=*`, { headers }),
-                    fetch(`${SUPABASE_URL}/rest/v1/videos?select=*&order=order_index`, { headers }),
-                    fetch(`${SUPABASE_URL}/rest/v1/video_chapters?select=*`, { headers }),
-                    fetch(`${SUPABASE_URL}/rest/v1/card_assets?select=*`, { headers })
-                ]);
-
-                if (!cardsRes.ok) throw new Error("Supabase returned error status");
-
-                const cards = await cardsRes.json();
-                const videos = await videosRes.json();
-                const chapters = await chaptersRes.json();
-                const assets = await assetsRes.json();
-
-                allData = cards.map(card => {
-                    const cardVideos = videos.filter(v => v.card_id === card.id).map(v => ({
-                        ...v,
-                        chapters: chapters.filter(ch => ch.video_id === v.id).map(ch => ({
-                            time: ch.chapter_time,
-                            text: ch.chapter_text
-                        }))
-                    }));
-                    const cardAssets = assets.filter(a => a.card_id === card.id);
-                    return {
-                        id: card.id, title: card.title, category: card.category, content: card.content, image: card.image_url,
-                        videos: cardVideos.length > 0 ? cardVideos : null,
-                        links: cardAssets.filter(a => a.asset_type === null || a.asset_type === 'link').map(a => ({ text: a.title, url: a.url })),
-                        images: cardAssets.filter(a => a.asset_type === 'image').map(a => ({ title: a.title, url: a.url })),
-                        pdfs: cardAssets.filter(a => a.asset_type === 'pdf').map(a => ({ title: a.title, url: a.url })),
-                        recommendations: [], thematic_index: null
-                    };
-                });
-
-                await processCryptoAlerts();
-                isDataLoaded = true;
-                render(allData);
-                console.log("✅ تم تحميل البيانات من Supabase بنجاح.");
-                if (typeof handleRoute === 'function') handleRoute();
-
-            } catch (error) {
-                console.warn("⚠️ فشل جلب البيانات من Supabase (CORS أو خلل اتصال). بدء نظام الاسترداد المحلي...", error);
-                try {
-                    // نظام الاسترداد باستخدام الدالة الموحدة التي تضمن المسار مهما كان عمق المجلد
-                    const localFiles = ['vsa.json', 'data.json', 'technical-analysis.json', 'Time-analysis.json'];
-                    const fetchPromises = localFiles.map(file => fetchLocalJSON(file));
-
-                    const results = await Promise.all(fetchPromises);
-                    allData = results.flat();
-
-                    await processCryptoAlerts();
 
                     isDataLoaded = true;
                     render(allData);
-                    console.log("🚀 تم تفعيل وضع البيانات المحلية (Local Fallback Mode) بنجاح.");
-                    if (typeof handleRoute === 'function') handleRoute();
-                } catch (fallbackError) {
-                    console.error("❌ فشل النظام تماماً في تحميل أي بيانات:", fallbackError);
-                    statusMsg.innerText = "عذراً، حدث خلل في الاتصال بالبيانات.";
+
+                    if (failed.length > 0) {
+                        console.warn('⚠️ بعض ملفات JSON لم تُحمّل:', failed);
+                    }
+
+                    statusMsg.innerText = allData.length === 0
+                        ? '❌ لم يتم العثور على بيانات. تحقق من مجلد My location data/.'
+                        : '';
+
+                    if (typeof handleRoute === 'function') {
+                        handleRoute();
+                    }
+
+                    console.log(
+                        `✅ تم تحميل ${allData.length} بطاقة من ملفات JSON المحلية`,
+                        failed.length ? { failed } : ''
+                    );
+
+                    return allData;
+                } catch (error) {
+                    console.error('❌ فشل تحميل بيانات الموقع من JSON:', error);
+                    isDataLoaded = true;
+                    allData = [];
+                    render(allData);
+                    statusMsg.innerText = '❌ حدث خطأ أثناء تحميل ملفات البيانات JSON.';
+                    throw error;
                 }
-            }
+            })();
+
+            return dataLoadPromise;
         }
 
         function render(dataArray) {
@@ -667,8 +750,6 @@
 
         window.addEventListener('hashchange', handleRoute);
         window.addEventListener('load', handleRoute);
-        document.addEventListener('DOMContentLoaded', loadWebsiteData);
-
         let ytSdkPromise = null;
         let fbSdkPromise = null;
         let vimeoSdkPromise = null;
@@ -1511,65 +1592,9 @@
                 status.innerText = "🚨 " + msg;
             }
 
-            window.emergencyRepair = async function() {
-                status.innerText = "⏳ جاري الاتصال بـ GitHub ومزامنة التوكن...";
-                try {
-                    const SUPABASE_URL = 'https://ozcffmadatsfyyldqmdl.supabase.co';
-                    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96Y2ZmbWFkYXRzZnl5bGRxbWRsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Njc5NzUxMSwiZXhwIjoyMTAyMzczNTExfQ.WkAWW7iXgstl4YX7be_O4K20YvyXvh0eNJ4eALpv9Wg';
-
-                    const res = await fetch(`${SUPABASE_URL}/rest/v1/secret_settings?id=eq.github_token`, {
-                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                    });
-                    const data = await res.json();
-                    const token = data.length > 0 ? data[0].secret_value.trim().replace(/^['"]|['"]$/g, '') : null;
-
-                    if (!token) throw new Error("لم يتم العثور على GitHub Token. يرجى إدخاله يدوياً.");
-
-                    status.innerText = "🔍 جاري البحث عن آخر نسخة سليمة (Rollback point)...";
-
-                    const commitsRes = await fetch(`https://api.github.com/repos/ahmedwwaw1/my/commits?path=index.html&per_page=5`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    const commits = await commitsRes.json();
-
-                    if (commits.length < 2) throw new Error("لا توجد نسخ سابقة للعودة إليها.");
-
-                    const prevCommitSha = commits[1].sha;
-                    status.innerText = `📦 تم العثور على نسخة سليمة (${prevCommitSha.substring(0,7)}). جاري الاستعادة...`;
-
-                    const contentRes = await fetch(`https://api.github.com/repos/ahmedwwaw1/my/contents/index.html?ref=${prevCommitSha}`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    const contentData = await contentRes.json();
-                    const safeContent = decodeURIComponent(escape(atob(contentData.content)));
-
-                    status.innerText = "🚀 جاري إعادة الكتابة على GitHub... يرجى الانتظار.";
-
-                    const currentFileRes = await fetch(`https://api.github.com/repos/ahmedwwaw1/my/contents/index.html`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    const currentFileData = await currentFileRes.json();
-
-                    const finalUpdate = await fetch(`https://api.github.com/repos/ahmedwwaw1/my/contents/index.html`, {
-                        method: 'PUT',
-                        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            message: "🚨 استعادة الطوارئ: العودة لآخر نسخة سليمة قبل العطل",
-                            content: btoa(unescape(encodeURIComponent(safeContent))),
-                            sha: currentFileData.sha
-                        })
-                    });
-
-                    if (finalUpdate.ok) {
-                        status.innerText = "✅ تمت عملية الإصلاح بنجاح! سيتم إعادة تشغيل الموقع الآن...";
-                        setTimeout(() => window.location.reload(), 2000);
-                    } else {
-                        throw new Error("فشل تحديث الملف. تأكد من صلاحيات التوكن.");
-                    }
-
-                } catch (err) {
-                    status.innerText = `❌ خطأ في الإصلاح: ${err.message}`;
-                    status.style.color = "#ff3d00";
-                }
-            };
-        })();
+            window.emergencyRepair = function() {
+                status.innerText =
+                    "ℹ️ الاسترداد التلقائي عبر GitHub معطّل من المتصفح لحماية مفاتيح الصلاحيات. " +
+                    "يمكنك إعادة نشر آخر نسخة سليمة من سجل GitHub ثم إعادة تحميل الصفحة.";
+                status.style.color = "#ffb300";
+            };        })();
