@@ -30,7 +30,7 @@
             const title = String(raw.title || '').trim();
             const slug = title
                 .toLowerCase()
-                .replace(/[^\\w\\u0600-\\u06FF]+/g, '-')
+                .replace(/[^A-Za-z0-9\\u0600-\\u06FF]+/g, '-')
                 .replace(/^-+|-+$/g, '')
                 .slice(0, 80);
 
