@@ -97,6 +97,37 @@
             loadWebsiteData();
         });
 
+        // 🔎 البحث داخل الفهارس الموضوعية (العناوين + النصوص + الطوابع الزمنية + video_id).
+        function filterThematicIndex() {
+            const input = document.getElementById('thematicSearch');
+            const container = document.getElementById('thematicContainer');
+            const empty = document.getElementById('thematicSearchEmpty');
+            if (!input || !container) return;
+
+            const term = input.value.toLowerCase().trim();
+            const topicBlocks = Array.from(container.children);
+            let visibleCount = 0;
+
+            topicBlocks.forEach(block => {
+                const searchableText = (block.textContent || '').toLowerCase();
+                const visible = !term || searchableText.includes(term);
+                block.style.display = visible ? '' : 'none';
+                if (visible) visibleCount++;
+            });
+
+            if (empty) {
+                empty.style.display = term && visibleCount === 0 ? 'block' : 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const thematicSearch = document.getElementById('thematicSearch');
+            if (thematicSearch) {
+                thematicSearch.addEventListener('input', filterThematicIndex);
+                thematicSearch.addEventListener('search', filterThematicIndex);
+            }
+        });
+
         // مصفوفة تتبع تاريخ ومسار التنقل داخل الـ Modal
         let modalHistory = [];
         let modalHistoryIndex = -1;
@@ -274,7 +305,7 @@
                     topicDiv.innerHTML = `<h4 style="color: var(--accent-color); margin: 10px 0 8px 0;">📌 ${topic.topic_name}</h4>`;
                     const chaptersDiv = document.createElement('div');
                     chaptersDiv.className = 'chapters-flex-list';
-                    chaptersDiv.style.maxHeight = '200px';
+                    chaptersDiv.style.maxHeight = '360px';
                     topic.chapters.forEach(ch => {
                         const chapBtn = document.createElement('button');
                         chapBtn.className = 'chapter-row-btn';
@@ -1288,6 +1319,10 @@
             const imagesContainer = document.getElementById('imagesContainer');
             const pdfsSection = document.getElementById('pdfsSection');
             const pdfsContainer = document.getElementById('pdfsContainer');
+            const globalSearchContainer = document.querySelector('.search-container');
+
+            // إخفاء البحث العام خلف نافذة العرض حتى لا يظهر فوق مشغل الفيديو.
+            if (globalSearchContainer) globalSearchContainer.style.display = 'none';
 
             if (videoContainer) { videoContainer.innerHTML = ''; videoContainer.style.display = 'none'; }
             if (linksContainer) { linksContainer.innerHTML = ''; }
@@ -1296,6 +1331,10 @@
             if (playlistSection) { playlistSection.style.display = 'none'; }
             if (playlistContainer) { playlistContainer.innerHTML = ''; }
             if (thematicSection) { thematicSection.style.display = 'none'; }
+            const thematicSearchInput = document.getElementById('thematicSearch');
+            const thematicSearchEmpty = document.getElementById('thematicSearchEmpty');
+            if (thematicSearchInput) thematicSearchInput.value = '';
+            if (thematicSearchEmpty) thematicSearchEmpty.style.display = 'none';
             if (thematicContainer) { thematicContainer.innerHTML = ''; }
             if (imagesSection) { imagesSection.style.display = 'none'; }
             if (imagesContainer) { imagesContainer.innerHTML = ''; }
@@ -1551,6 +1590,8 @@
 
         function closeModal() {
             document.getElementById('myModal').style.display = "none";
+            const globalSearchContainer = document.querySelector('.search-container');
+            if (globalSearchContainer) globalSearchContainer.style.display = '';
             UnifiedPlayer.cleanup();
             modalHistory = [];
             modalHistoryIndex = -1;
