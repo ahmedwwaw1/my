@@ -1435,7 +1435,7 @@
                     topicDiv.innerHTML = `<h4 style="color: var(--accent-color); margin: 10px 0 8px 0;">📌 ${topic.topic_name}</h4>`;
                     const chaptersDiv = document.createElement('div');
                     chaptersDiv.className = 'chapters-flex-list';
-                    chaptersDiv.style.maxHeight = '200px';
+                    chaptersDiv.style.maxHeight = '360px';
                     topic.chapters.forEach(ch => {
                         const chapBtn = document.createElement('button');
                         chapBtn.className = 'chapter-row-btn';
