@@ -475,7 +475,7 @@ function manageKey(x){
 function clearManageSelection(){
   manageState.selections=[];
   document.body.classList.remove('mm-manage-mode');
-  document.querySelectorAll('[data-mm-manage-check]').forEach(x=>x.checked=false);
+  document.querySelectorAll('[data-mm-manage-check]').forEach(x=>x.dataset.checked='0');
   document.querySelectorAll('[data-mm-manage-item]').forEach(x=>x.classList.remove('mm-manage-selected'));
   updateManagePanel();
 }
@@ -498,50 +498,24 @@ function currentSelections(){
 function addManageSelection(desc, el, checked){
   const key=manageKey(desc);
   manageState.selections=manageState.selections.filter(x=>manageKey(x)!==key);
+  const check=el.querySelector('[data-mm-manage-check]');
   if(checked){
     desc.el=el;
     manageState.selections.push(desc);
     document.body.classList.add('mm-manage-mode');
     el.classList.add('mm-manage-selected');
+    if(check){check.dataset.checked='1';check.setAttribute('aria-checked','true');}
   }else{
     el.classList.remove('mm-manage-selected');
+    if(check){check.dataset.checked='0';check.setAttribute('aria-checked','false');}
   }
+  if(manageState.selections.length===0) document.body.classList.remove('mm-manage-mode');
   updateManagePanel();
 }
 
 function removeSelectionFromState(desc){
   const key=manageKey(desc);
   manageState.selections=manageState.selections.filter(x=>manageKey(x)!==key);
-}
-
-function makeManageCheck(desc, el){
-  if(el.querySelector('[data-mm-manage-check]')) return;
-  el.dataset.mmManageItem='1';
-  el.classList.add('mm-manage-target');
-  if(!el.style.position) el.style.position='relative';
-
-  const wrap=document.createElement('label');
-  wrap.className='mm-manage-check-wrap';
-  wrap.title='تحديد العنصر';
-  wrap.dataset.mmManageCheckWrap='1';
-  const input=document.createElement('input');
-  input.type='checkbox';
-  input.dataset.mmManageCheck='1';
-
-  const selected=manageState.selections.some(x=>manageKey(x)===manageKey(desc));
-  input.checked=selected;
-  if(selected) el.classList.add('mm-manage-selected');
-
-  input.addEventListener('click',e=>{
-    e.stopPropagation();
-  });
-  input.addEventListener('change',e=>{
-    e.stopPropagation();
-    addManageSelection({...desc},el,input.checked);
-  });
-
-  wrap.appendChild(input);
-  el.appendChild(wrap);
 }
 
 function decorateManageItems(){
@@ -688,7 +662,7 @@ function toggleSelectAllManage(){
     const desc=readManageDescriptor(el);
     if(desc) manageState.selections.push({...desc,el});
     const cb=el.querySelector('[data-mm-manage-check]');
-    if(cb) cb.checked=true;
+    if(cb) { cb.dataset.checked='1'; cb.setAttribute('aria-checked','true'); }
     el.classList.add('mm-manage-selected');
   });
   document.body.classList.add('mm-manage-mode');
@@ -712,25 +686,33 @@ function makeManageCheck(desc, el){
   el.classList.add('mm-manage-target');
   if(!el.style.position) el.style.position='relative';
 
-  const wrap=document.createElement('label');
+  const wrap=document.createElement('span');
   wrap.className='mm-manage-check-wrap';
   wrap.title='تحديد العنصر';
-  wrap.dataset.mmManageCheckWrap='1';
-  const input=document.createElement('input');
-  input.type='checkbox';
-  input.dataset.mmManageCheck='1';
+  wrap.dataset.mmManageCheck='1';
+  wrap.dataset.checked=manageState.selections.some(x=>manageKey(x)===manageKey(desc))?'1':'0';
+  wrap.setAttribute('role','checkbox');
+  wrap.setAttribute('aria-label','تحديد العنصر');
+  wrap.tabIndex=0;
 
-  const selected=manageState.selections.some(x=>manageKey(x)===manageKey(desc));
-  input.checked=selected;
-  if(selected) el.classList.add('mm-manage-selected');
+  const box=document.createElement('span');
+  box.className='mm-manage-check-box';
+  wrap.appendChild(box);
 
-  input.addEventListener('click',e=>{e.stopPropagation();});
-  input.addEventListener('change',e=>{
-    e.stopPropagation();
-    addManageSelection({...desc},el,input.checked);
+  const toggle=()=>{
+    const checked=wrap.dataset.checked!=='1';
+    wrap.dataset.checked=checked?'1':'0';
+    wrap.setAttribute('aria-checked',String(checked));
+    addManageSelection({...desc},el,checked);
+  };
+
+  wrap.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();toggle();});
+  wrap.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();toggle();}
   });
 
-  wrap.appendChild(input);
+  if(wrap.dataset.checked==='1') el.classList.add('mm-manage-selected');
+  wrap.setAttribute('aria-checked',wrap.dataset.checked==='1'?'true':'false');
   el.appendChild(wrap);
 }
 
@@ -940,12 +922,12 @@ function installManageStyles(){
   s.id='mm-manage-style';
   s.textContent=`
 .mm-manage-target{transition:box-shadow .16s ease,outline .16s ease,background .16s ease}
-.mm-manage-check-wrap{position:absolute;z-index:12;top:50%;inset-inline-end:8px;transform:translateY(-50%);width:22px;height:22px;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .15s ease}
+.mm-manage-check-wrap{position:absolute;z-index:12;top:50%;inset-inline-end:8px;transform:translateY(-50%);width:24px;height:24px;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .15s ease;cursor:pointer}
 .mm-manage-target:hover .mm-manage-check-wrap,
 body.mm-manage-mode .mm-manage-check-wrap{opacity:1;pointer-events:auto}
-.mm-manage-check-wrap input{appearance:none;width:18px;height:18px;border-radius:4px;border:1px solid rgba(255,255,255,.55);background:rgba(10,12,18,.90);box-shadow:0 2px 8px rgba(0,0,0,.35);cursor:pointer;margin:0}
-.mm-manage-check-wrap input:checked{background:#0891b2;border-color:#67e8f9;box-shadow:0 0 0 2px rgba(103,232,249,.15)}
-.mm-manage-check-wrap input:checked::after{content:'✓';display:block;color:#fff;font-size:13px;line-height:17px;text-align:center;font-weight:900}
+.mm-manage-check-box{display:block;width:17px;height:17px;border-radius:4px;border:1px solid rgba(255,255,255,.62);background:rgba(10,12,18,.94);box-shadow:0 2px 8px rgba(0,0,0,.36);box-sizing:border-box}
+.mm-manage-check-wrap[data-checked='1'] .mm-manage-check-box{background:#0891b2;border-color:#67e8f9;box-shadow:0 0 0 2px rgba(103,232,249,.15)}
+.mm-manage-check-wrap[data-checked='1'] .mm-manage-check-box::after{content:'✓';display:block;color:#fff;font-size:13px;line-height:16px;text-align:center;font-weight:900}
 .mm-manage-selected{outline:2px solid rgba(56,189,248,.75)!important;box-shadow:0 0 0 4px rgba(56,189,248,.10)!important}
 .mm-manage-panel{position:fixed;z-index:210000;top:145px;inset-inline-end:18px;width:260px;box-sizing:border-box;background:rgba(18,20,27,.98);border:1px solid #343a48;border-radius:16px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.55);color:#f8fafc;direction:rtl}
 .mm-manage-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px}
