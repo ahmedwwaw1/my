@@ -320,6 +320,32 @@
 
         buildRegistry();
 
+        let courseStructure = null;
+        try {
+            const data = typeof allData !== 'undefined' && Array.isArray(allData) ? allData : [];
+            const current = state.course ? data.find(x => safeString(x.id) === state.course.id) : null;
+            if (current) {
+                const base = pointerForCourse(current);
+                courseStructure = {
+                    lessons: Array.isArray(current.videos)
+                        ? current.videos.map((video, index) => ({
+                            index,
+                            id: safeString(video.id),
+                            title: safeString(video.title),
+                            jsonPointer: base + '/videos/' + index
+                        }))
+                        : [],
+                    thematicTopics: Array.isArray(current.thematic_index)
+                        ? current.thematic_index.map((topic, index) => ({
+                            index,
+                            title: safeString(topic.topic_name),
+                            jsonPointer: base + '/thematic_index/' + index
+                        }))
+                        : []
+                };
+            }
+        } catch (_) {}
+
         return {
             currentUrl: window.location.href,
             route: state.route,
@@ -327,6 +353,7 @@
             lesson: state.lesson,
             chapter: state.chapter,
             thematic: state.thematic,
+            courseStructure,
             registrySummary: {
                 entities: window.MASTERMIND_SITE_REGISTRY.entities.length,
                 sources: Object.keys(SOURCE_FILES)
@@ -389,6 +416,11 @@
                 (c.thematic.chapter ? ' | chapter=' + c.thematic.chapter.title + ' | time=' + c.thematic.chapter.time : '') +
                 ' | pointer=' + c.thematic.jsonPointer
             ) : 'الفهرس الموضوعي: غير محدد',
+            c.courseStructure ? (
+                'هيكل الكورس المتاح للتوجيه:' +
+                '\\nالدروس: ' + (c.courseStructure.lessons.map(x => '#' + x.index + ' ' + x.title + ' -> ' + x.jsonPointer).join(' | ') || 'لا يوجد') +
+                '\\nالفهارس: ' + (c.courseStructure.thematicTopics.map(x => '#' + x.index + ' ' + x.title + ' -> ' + x.jsonPointer).join(' | ') || 'لا يوجد')
+            ) : 'هيكل الكورس: غير متاح',
             ...matchLines,
             'قاعدة التنفيذ: استخدم السياق الحالي وهوية الكيان المطابقة للطلب، اقرأ ملف JSON المستهدف أولاً، وطابق id/pointer قبل أي كتابة. لا تعدّل ملفاً آخر بالاعتماد على اسم مشابه فقط.',
             '[/MASTERmind SITE CONTEXT]'
