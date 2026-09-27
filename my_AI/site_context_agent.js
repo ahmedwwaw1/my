@@ -339,7 +339,7 @@
         buildRegistry();
         const q = safeString(query).toLowerCase().trim();
         if (!q || !window.MASTERMIND_SITE_REGISTRY?.entities) return [];
-        const tokens = q.split(/[^a-z0-9\\u0600-\\u06ff]+/i).filter(t => t.length >= 2);
+        const tokens = q.split(/[^a-z0-9\u0600-\u06ff]+/i).filter(t => t.length >= 2);
         const scored = window.MASTERMIND_SITE_REGISTRY.entities.map(entity => {
             const title = safeString(entity.title).toLowerCase();
             const id = safeString(entity.id).toLowerCase();
