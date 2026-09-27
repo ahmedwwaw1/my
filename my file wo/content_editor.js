@@ -353,21 +353,21 @@ function thematicSeriesEditor(){
   const item=thematicOwner();
   if(!item) return alert('افتح بطاقة الدورة أولاً.');
 
-  const html=\`
+  const html=`
     <label class="mm-editor-label">اسم السلسلة / الموضوع</label>
     <input class="mm-editor-input" name="topicName" maxlength="240" required placeholder="مثال: 🔥 سلسلة حجم التداول العالي (High Volume)">
-    <div class="mm-editor-hint">ستُضاف كسلسلة جديدة داخل <code>thematic_index[]</code> بنفس البنية الحالية، وتبدأ بقائمة <code>chapters: []</code>.</div>\`;
+    <div class="mm-editor-hint">ستُضاف كسلسلة جديدة داخل <code>thematic_index[]</code> بنفس البنية الحالية، وتبدأ بقائمة <code>chapters: []</code>.</div>`;
 
   dialog(
     '🧠 إضافة سلسلة جديدة',
-    \`الدورة: <b>\${esc(item.title||item.id)}</b><br>سيتم إنشاء سلسلة جديدة داخل نفس ملف JSON.\`,
+    `الدورة: <b>${esc(item.title||item.id)}</b><br>سيتم إنشاء سلسلة جديدة داخل نفس ملف JSON.`,
     html,
     async(fd,status)=>{
       const topicName=String(fd.get('topicName')||'').trim();
       if(!topicName) throw new Error('اكتب اسم السلسلة.');
       if(Array.isArray(item.thematic_index)&&item.thematic_index.some(t=>String(t?.topic_name||'').trim()===topicName))
         throw new Error('هذه السلسلة موجودة بالفعل.');
-      if(!confirm(\`ستُضاف سلسلة جديدة:\\n\\n\${topicName}\\n\\nهل تريد حفظها؟\`)){
+      if(!confirm(`ستُضاف سلسلة جديدة:\\n\\n${topicName}\\n\\nهل تريد حفظها؟`)){
         status.textContent='تم إلغاء الحفظ.'; return;
       }
       status.textContent='⏳ يتم إنشاء السلسلة في JSON...';
@@ -386,23 +386,23 @@ async function chapterEditor(){
   const av=activeVideo(currentItem);
   if(!currentItem||!av) return alert('اختر درساً من قائمة الدروس أو شغّل فيديو الدرس أولاً.');
 
-  const html=\`
+  const html=`
     <label class="mm-editor-label">الطابع الزمني</label>
     <input class="mm-editor-input" name="time" required maxlength="12" dir="ltr" placeholder="12:35">
     <label class="mm-editor-label">العنوان</label>
     <input class="mm-editor-input" name="text" required maxlength="500" placeholder="عنوان الفصل أو النقطة">
-    <div class="mm-editor-hint">تمت تعبئة الوقت تلقائياً من موضع الفيديو الحالي. ويمكنك تعديله يدوياً قبل الحفظ.<br>سيُحفظ بنفس الصيغة <code>{ time, text }</code> داخل <code>videos[].chapters[]</code>.</div>\`;
+    <div class="mm-editor-hint">تمت تعبئة الوقت تلقائياً من موضع الفيديو الحالي. ويمكنك تعديله يدوياً قبل الحفظ.<br>سيُحفظ بنفس الصيغة <code>{ time, text }</code> داخل <code>videos[].chapters[]</code>.</div>`;
 
   const modal=dialog(
     '⏱️ إضافة فصل / طابع زمني',
-    \`الدرس الحالي: <b>\${esc(av.video.title||av.video.id)}</b><br>سيتم الحفظ في نفس ملف JSON.\`,
+    `الدرس الحالي: <b>${esc(av.video.title||av.video.id)}</b><br>سيتم الحفظ في نفس ملف JSON.`,
     html,
     async(fd,status)=>{
       const time=String(fd.get('time')||'').trim();
       const text=String(fd.get('text')||'').trim();
       if(!validTime(time)) throw new Error('الوقت غير صالح. استخدم MM:SS أو H:MM:SS.');
       if(!text) throw new Error('اكتب عنوان الفصل.');
-      if(!confirm(\`سيُضاف للفيديو "\${av.video.title||av.video.id}":\\n\\n\${time} — \${text}\\n\\nهل تريد الحفظ؟\`)){
+      if(!confirm(`سيُضاف للفيديو "${av.video.title||av.video.id}":\\n\\n${time} — ${text}\\n\\nهل تريد الحفظ؟`)){
         status.textContent='تم إلغاء الحفظ.'; return;
       }
       status.textContent='⏳ يتم حفظ الفصل في JSON...';
