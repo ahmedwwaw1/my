@@ -993,5 +993,5 @@ function init(){
 
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
 
-window.mastermindJsonEditor={version:'2.0.0',refresh:sync,close:()=>state.modal?.remove()};
+window.mastermindJsonEditor={version:'2.1.0',refresh:sync,close:()=>state.modal?.remove()};
 })();
