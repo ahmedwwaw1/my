@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1790513828073",
+      "title": "مرحباً بك! أنا **Mastermind**،",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **Mastermind**، المهندس المعماري السيادي والأنظمة الذكية.\n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى:\n- استكشاف وبناء معمارية برمجية جديدة أو تحليل مستودع كود (Repository Architecture).\n- حل مشكلات تقنية معقدة وتصحيح الأخطاء (Debugging & Refactoring).\n- تنفيذ مهام تطوير متكاملة متعددة الملفات واختبارها.\n- إدارة وتوليد المهارات الذكية (Declarative Skills System).\n\nأنا جاهز، تفضل بطرح هدفك أو مشروعك لنبدأ العمل مباشرة.",
+              "thoughtSignature": "EuAFCt0FAWkUfROiliKdYCFBDJZ+uDKI82U1VB4Wi0j29SyBSOyzSHcWDk/iH95IeJJ2RWcTUw5En1QAZs4TCNLXzWjEsEg14OU/ND7QgBn5eiacNhWqgn85GziPmU5Lkv97ywKo+mUpUrJ3NJo7m0fKrDcI+VUJc5VDnI1oo+6WngcuTQLoPek+b4uOXw4kWHWvRsroB4k1npyoUpncBdpUqy7lIHjCXgqO3ecvQFy1pM5cGCF5SZeBiyReNaexU/JbACsfEc5diNRqNfLuZGFDEGlXg4jO34ZFERDeWPZAUYFX3UbPNTm33hh9RqtQrPxctHbVsxs7M2yOwvCx+gQit4mq618eM8GfjN6b1SDgtCYLWsnRrOhEFrVGnqS4rZfs01jGM22b/Ti/YpnvlEu4gha44UIJXEb994Lj0dG2yAyv4kpDzsFNAZrXmiN1wSfUP3ApovFqKkIQ3J8JzWuXT6+qODSY7EfK3e8EuN9gQf1iOkVH4vU8od0UJh4RhuGkjknmG6puOPTDuREx2ciudFxHku90rjywcP5W0xQ1UaOj24FiAYRPltaVLutXQDlFoSLQ1hJDUNFR9/EkMePnZsNuEPx48iGWAxDiDo8JkTzz8DxuEfuBuvfgUkWSjEWCzJJqIoSsPShVGCtwwGFzVw5+uIwy3hs2Zwe6KKk5nNJW4dvSzCtPno/weN6Iz/Ecda7i66Q2XhM/CU2l9Uupkwd2eFSUmGY6bLb/4cIt1SYL0fBY1NDmrJRHhx+3a7Ff2c94K3SBfc/KUtizTf+0xJXz5VxK5BYt39UGLFv5oMjk2R9G/cgQx6KI5pYNqtweviuyvYHrKrHonwrbsfTiLYmJyf4GwyqT26kXjn3PS5DJK3AWtq63BekLoglJdj9k3HsM8AyyPCTp6Z3wL0SzfOXOlTwCNhMt8JtGpEvVZYRvxNxeW8PE3p9lO7fBisAF1qKfSoIK0IjA5N2Bi0ys/g=="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    },
+    {
       "id": "1790513792314",
       "title": "أنا أعمل كـ **\"Mastermind - So",
       "history": [
@@ -121,5 +145,5 @@
   ],
   "activeSessionId": "1790513828073",
   "pendingHistory": null,
-  "timestamp": "2026-09-27T12:57:08.073Z"
+  "timestamp": "2026-09-27T12:57:30.918Z"
 }
