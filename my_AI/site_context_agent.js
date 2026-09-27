@@ -335,8 +335,34 @@
         };
     }
 
-    function getPromptContext() {
+    function resolveEntities(query = '') {
+        buildRegistry();
+        const q = safeString(query).toLowerCase().trim();
+        if (!q || !window.MASTERMIND_SITE_REGISTRY?.entities) return [];
+        const tokens = q.split(/[^a-z0-9\\u0600-\\u06ff]+/i).filter(t => t.length >= 2);
+        const scored = window.MASTERMIND_SITE_REGISTRY.entities.map(entity => {
+            const title = safeString(entity.title).toLowerCase();
+            const id = safeString(entity.id).toLowerCase();
+            let score = 0;
+            if (q === title || q === id) score += 100;
+            if (title.includes(q) || id.includes(q)) score += 50;
+            for (const token of tokens) {
+                if (title.includes(token)) score += 8;
+                if (id.includes(token)) score += 5;
+            }
+            return { entity, score };
+        }).filter(x => x.score > 0).sort((a, b) => b.score - a.score);
+        return scored.slice(0, 8).map(x => x.entity);
+    }
+
+    function getPromptContext(userRequest = '') {
         const c = getContext();
+        const matches = resolveEntities(userRequest);
+        const matchLines = matches.length
+            ? ['مطابقات من خريطة بيانات الموقع لطلب المستخدم:',
+                ...matches.map(e => '- ' + e.type + ' | ' + e.title + ' | id=' + e.id + ' | JSON=' + e.sourceFile + ' | pointer=' + e.jsonPointer)]
+            : ['لا توجد مطابقة مباشرة في خريطة البيانات؛ استخدم السياق الحالي والبحث داخل JSON.'];
+
         return [
             '[MASTERmind SITE CONTEXT]',
             'المكان الحالي: ' + safeString(c.route?.title),
@@ -363,7 +389,8 @@
                 (c.thematic.chapter ? ' | chapter=' + c.thematic.chapter.title + ' | time=' + c.thematic.chapter.time : '') +
                 ' | pointer=' + c.thematic.jsonPointer
             ) : 'الفهرس الموضوعي: غير محدد',
-            'قاعدة التنفيذ: استخدم السياق الحالي كهوية الهدف، اقرأ ملف JSON المستهدف أولاً، وطابق id/pointer قبل أي كتابة. لا تعدّل ملفاً آخر بالاعتماد على اسم مشابه فقط.',
+            ...matchLines,
+            'قاعدة التنفيذ: استخدم السياق الحالي وهوية الكيان المطابقة للطلب، اقرأ ملف JSON المستهدف أولاً، وطابق id/pointer قبل أي كتابة. لا تعدّل ملفاً آخر بالاعتماد على اسم مشابه فقط.',
             '[/MASTERmind SITE CONTEXT]'
         ].join('\\n');
     }
@@ -528,6 +555,7 @@
         version: '1.0.0',
         getContext,
         getPromptContext,
+        resolveEntities,
         buildRegistry,
         setCourse,
         setLesson,
