@@ -93,8 +93,13 @@ function allVideos(owner){
 function activeVideo(item){
   const b=document.querySelector('#playlistContainer .chapter-row-btn.active');
   if(b){
-    const m=String(b.id||'').match(/^playlist-item-(\\d+)$/);
-    if(m && item?.videos?.[Number(m[1])]) return {index:Number(m[1]),video:item.videos[Number(m[1])],item};
+    const rawId=String(b.id||'');
+    const prefix='playlist-item-';
+    if(rawId.startsWith(prefix)){
+      const idx=Number(rawId.slice(prefix.length));
+      if(Number.isInteger(idx) && idx>=0 && item?.videos?.[idx])
+        return {index:idx,video:item.videos[idx],item};
+    }
   }
 
   try {
@@ -119,9 +124,15 @@ function activeVideo(item){
 }
 
 function extractYouTubeId(url){
-  const s=String(url||'');
-  const m=s.match(/(?:youtu\\.be\\/|youtube\\.com\\/(?:watch\\?v=|embed\\/|shorts\\/))([A-Za-z0-9_-]{6,})/i);
-  return m?m[1]:'';
+  try{
+    const u=new URL(String(url||'').trim());
+    const host=u.hostname.toLowerCase();
+    if(host==='youtu.be') return u.pathname.split('/').filter(Boolean)[0]||'';
+    if(host==='youtube.com'||host==='www.youtube.com'||host.endsWith('.youtube.com')){
+      return u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).pop() || '';
+    }
+  }catch(_){}
+  return '';
 }
 
 async function getCurrentPlaybackSeconds(){
