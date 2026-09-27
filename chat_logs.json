@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1790515745254",
+      "title": "أهلاً بك. أنا \"Mastermind\"، وك",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. أنا \"Mastermind\"، وكيلك المعماري ومهندس البرمجيات المستقل. أنا هنا لمساعدتك في إدارة وتطوير مشاريعك البرمجية وفق منهجية هندسية دقيقة تعتمد على الأدلة والتحقق المستمر.\n\nكيف يمكنني مساعدتك اليوم؟ هل لديك مشروع تود البدء فيه، أو مشكلة تقنية تحتاج إلى تحليل معماري وإصلاح؟",
+              "thoughtSignature": "EnMKcQFpFH0TMd8pDUuKv7GTYlxMxiSy3YrPk/meK5s4lgiZGJarmttHVgNMZ8ED09U2TNfaY9+5p/DKvsNvMmNcWeZgy2LdYP2/YLbOlSC6+7V7+9qYG21y6TCtkC/g/TS8Z2EhMelDqKQ6fBxDUjyMAGvF"
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1790515745254",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-27T13:29:16.783Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك. أنا \\\"Mastermind\\\"، وكيلك المعماري ومهندس البرمجيات المستقل. أنا هنا لمساعدتك في إدارة وتطوير مشاريعك البرمجية وفق منهجية هندسية دقيقة تعتمد على الأدلة والتحقق المستمر.\\n\\nكيف يمكنني مساعدتك اليوم؟ هل لديك مشروع تود البدء فيه، أو مشكلة تقنية تحتاج إلى تحليل معماري وإصلاح؟\",\"thoughtSignature\":\"EnMKcQFpFH0TMd8pDUuKv7GTYlxMxiSy3YrPk/meK5s4lgiZGJarmttHVgNMZ8ED09U2TNfaY9+5p/DKvsNvMmNcWeZgy2LdYP2/YLbOlSC6+7V7+9qYG21y6TCtkC/g/TS8Z2EhMelDqKQ6fBxDUjyMAGvF\"}],\"model\":\"gemini-3.1-flash-lite\"},{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]}]",
+  "timestamp": "2026-09-27T13:29:24.347Z"
 }
