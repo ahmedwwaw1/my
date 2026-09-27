@@ -660,7 +660,10 @@ function toggleSelectAllManage(){
   manageState.selections=[];
   targets.forEach(el=>{
     const desc=readManageDescriptor(el);
-    if(desc) manageState.selections.push({...desc,el});
+    if(desc){
+      const item=allItems().find(x=>String(x?.id)===String(desc.ownerId))||findItem();
+      manageState.selections.push({...desc,item,el});
+    }
     const cb=el.querySelector('[data-mm-manage-check]');
     if(cb) { cb.dataset.checked='1'; cb.setAttribute('aria-checked','true'); }
     el.classList.add('mm-manage-selected');
@@ -678,7 +681,7 @@ function readManageDescriptor(el){
 
 function makeManageCheck(desc, el){
   if(el.querySelector('[data-mm-manage-check]')){
-    el.dataset.mmManageMeta=JSON.stringify({...desc});
+    el.dataset.mmManageMeta=JSON.stringify({type:desc.type,ownerId:desc.ownerId,videoIndex:desc.videoIndex??null,topicIndex:desc.topicIndex??null,index:desc.index??null,title:desc.title||''});
     return;
   }
   el.dataset.mmManageItem='1';
