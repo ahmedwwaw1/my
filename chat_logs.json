@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1790544109767",
+      "title": "أنا مساعد ذكي مصمم لمساعدة الم",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "هل تعرف مواقع اباحية"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا مساعد ذكي مصمم لمساعدة المستخدمين في البرمجة، الهندسة المعمارية للبرمجيات، تحليل البيانات، والمهام التقنية والعلمية. لا أقدم معلومات أو روابط لمواقع أو محتوى إباحي. كيف يمكنني مساعدتك في مشروعك التقني اليوم؟",
+              "thoughtSignature": "EmAKXgFpFH0T7pDtmGDwub44N6eXjMoWoj1FRQm2F8P9DUIrZLCJJimO4/dy2/QKSsZUCgLvsWGssLsXxCt2uF5iH+ym/vuYGy15hL3GeWfDOmKidW8b0vf523YSgoqwh74="
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1790543815340",
       "title": "\"مزرعة نيو يولك\" (New Yolk Far",
       "history": [
@@ -83,5 +107,5 @@
   ],
   "activeSessionId": "1790544109767",
   "pendingHistory": null,
-  "timestamp": "2026-09-27T21:21:49.767Z"
+  "timestamp": "2026-09-27T21:22:24.818Z"
 }
