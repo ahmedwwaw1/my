@@ -206,7 +206,9 @@ async function readJson(file){
 }
 
 async function saveJson(file,data,message){
-  const result=await writeFile(file,JSON.stringify(data,null,2)+'\\n',message);
+  const payload=JSON.stringify(data,null,2);
+  try{ JSON.parse(payload); }catch(e){ throw new Error('تم إيقاف الحفظ لأن البيانات الناتجة ليست JSON صالحًا: '+e.message); }
+  const result=await writeFile(file,payload+'\n',message);
   if(typeof result!=='string' || !result.startsWith('✅')) throw new Error(result||'فشل حفظ ملف JSON.');
   return result;
 }
@@ -253,7 +255,7 @@ function dialog(title,target,html,submit){
 function validUrl(v){
   try{const u=new URL(String(v||'').trim());return u.protocol==='http:'||u.protocol==='https:';}catch(_){return false;}
 }
-function validTime(v){return /^\\d{1,3}:\\d{2}(?::\\d{2})?$/.test(String(v||'').trim());}
+function validTime(v){return /^\d{1,3}:\d{2}(?::\d{2})?$/.test(String(v||'').trim());}
 
 function nextVideoId(item){
   const used=new Set((item?.videos||[]).map(v=>String(v?.id||'')));
