@@ -594,6 +594,129 @@ function decorateManageItems(){
   }
 }
 
+function manageClampGeometry(p, requested){
+  const pad=12, minW=230, minH=220;
+  const vw=Math.max(320,window.innerWidth||320), vh=Math.max(320,window.innerHeight||320);
+  const maxW=Math.max(minW,vw-pad*2), maxH=Math.max(minH,vh-pad*2);
+  let x=Number(requested?.x), y=Number(requested?.y), w=Number(requested?.w), h=Number(requested?.h);
+  if(!Number.isFinite(w)) w=p?.offsetWidth||280;
+  if(!Number.isFinite(h)) h=p?.offsetHeight||360;
+  if(!Number.isFinite(x)) x=vw-w-18;
+  if(!Number.isFinite(y)) y=145;
+  w=Math.min(Math.max(w,minW),maxW);
+  h=Math.min(Math.max(h,minH),maxH);
+  x=Math.min(Math.max(x,pad),Math.max(pad,vw-w-pad));
+  y=Math.min(Math.max(y,pad),Math.max(pad,vh-h-pad));
+  return {x,y,w,h};
+}
+
+function applyManageGeometry(p,g){
+  if(!p||!g) return;
+  p.style.left=Math.round(g.x)+'px';
+  p.style.top=Math.round(g.y)+'px';
+  p.style.width=Math.round(g.w)+'px';
+  p.style.height=Math.round(g.h)+'px';
+}
+
+function readSavedManageGeometry(){
+  try{
+    const raw=localStorage.getItem('mmManagePanelGeometry');
+    if(raw) return JSON.parse(raw);
+  }catch(_){}
+  return null;
+}
+
+function saveManageGeometry(p){
+  if(!p) return;
+  try{
+    const r=p.getBoundingClientRect();
+    localStorage.setItem('mmManagePanelGeometry',JSON.stringify({x:r.left,y:r.top,w:r.width,h:r.height}));
+  }catch(_){}
+}
+
+function installManagePanelInteractions(p){
+  if(!p||p.__mmInteractive) return;
+  p.__mmInteractive=true;
+
+  const saved=readSavedManageGeometry();
+  const initial=manageClampGeometry(p,saved||{});
+  applyManageGeometry(p,initial);
+
+  const head=p.querySelector('.mm-manage-panel-head');
+  const startDrag=(e)=>{
+    if(e.button!==0 || e.target.closest('button,.mm-manage-resize-handle')) return;
+    const r=p.getBoundingClientRect();
+    const start={x:e.clientX,y:e.clientY,left:r.left,top:r.top,w:r.width,h:r.height};
+    const move=ev=>{
+      const g=manageClampGeometry(p,{x:start.left+(ev.clientX-start.x),y:start.top+(ev.clientY-start.y),w:start.w,h:start.h});
+      applyManageGeometry(p,g);
+    };
+    const end=()=>{
+      p.classList.remove('mm-dragging');
+      window.removeEventListener('pointermove',move);
+      window.removeEventListener('pointerup',end);
+      window.removeEventListener('pointercancel',end);
+      saveManageGeometry(p);
+    };
+    p.classList.add('mm-dragging');
+    window.addEventListener('pointermove',move);
+    window.addEventListener('pointerup',end,{once:false});
+    window.addEventListener('pointercancel',end,{once:false});
+    e.preventDefault();
+  };
+  if(head) head.addEventListener('pointerdown',startDrag);
+
+  p.querySelectorAll('.mm-manage-resize-handle').forEach(handle=>{
+    handle.addEventListener('pointerdown',e=>{
+      if(e.button!==0) return;
+      e.preventDefault(); e.stopPropagation();
+      const edge=String(handle.dataset.edge||'');
+      const r=p.getBoundingClientRect();
+      const start={x:e.clientX,y:e.clientY,left:r.left,top:r.top,w:r.width,h:r.height,right:r.right,bottom:r.bottom};
+      p.classList.add('mm-resizing');
+      const move=ev=>{
+        let left=start.left, top=start.top, right=start.right, bottom=start.bottom;
+        const dx=ev.clientX-start.x, dy=ev.clientY-start.y;
+        if(edge.includes('e')) right=start.right+dx;
+        if(edge.includes('w')) left=start.left+dx;
+        if(edge.includes('s')) bottom=start.bottom+dy;
+        if(edge.includes('n')) top=start.top+dy;
+        const minW=230,minH=220,pad=12,vw=window.innerWidth||320,vh=window.innerHeight||320;
+        if(right-left<minW){ if(edge.includes('w')) left=right-minW; else right=left+minW; }
+        if(bottom-top<minH){ if(edge.includes('n')) top=bottom-minH; else bottom=top+minH; }
+        const maxW=Math.max(minW,vw-pad*2), maxH=Math.max(minH,vh-pad*2);
+        if(right-left>maxW){ if(edge.includes('w')) left=right-maxW; else right=left+maxW; }
+        if(bottom-top>maxH){ if(edge.includes('n')) top=bottom-maxH; else bottom=top+maxH; }
+        const g=manageClampGeometry(p,{x:left,y:top,w:right-left,h:bottom-top});
+        applyManageGeometry(p,g);
+      };
+      const end=()=>{
+        p.classList.remove('mm-resizing');
+        window.removeEventListener('pointermove',move);
+        window.removeEventListener('pointerup',end);
+        window.removeEventListener('pointercancel',end);
+        saveManageGeometry(p);
+      };
+      window.addEventListener('pointermove',move);
+      window.addEventListener('pointerup',end,{once:false});
+      window.addEventListener('pointercancel',end,{once:false});
+    });
+  });
+
+  head?.addEventListener('dblclick',()=>{
+    try{localStorage.removeItem('mmManagePanelGeometry');}catch(_){}
+    applyManageGeometry(p,manageClampGeometry(p,{x:(window.innerWidth||320)-298,y:145,w:280,h:p.offsetHeight||360}));
+  });
+
+  window.addEventListener('resize',()=>{
+    if(!document.body.contains(p)) return;
+    const r=p.getBoundingClientRect();
+    const g=manageClampGeometry(p,{x:r.left,y:r.top,w:r.width,h:r.height});
+    applyManageGeometry(p,g);
+    saveManageGeometry(p);
+  });
+}
+
 function ensureManagePanel(){
   if(manageState.panel && document.body.contains(manageState.panel)) return manageState.panel;
   const p=document.createElement('aside');
@@ -604,6 +727,14 @@ function ensureManagePanel(){
       <strong>إدارة العناصر</strong>
       <button type="button" class="mm-manage-close" title="إلغاء التحديد">✕</button>
     </div>
+    <span class="mm-manage-resize-handle" data-edge="n" aria-hidden="true"></span>
+    <span class="mm-manage-resize-handle" data-edge="s" aria-hidden="true"></span>
+    <span class="mm-manage-resize-handle" data-edge="e" aria-hidden="true"></span>
+    <span class="mm-manage-resize-handle" data-edge="w" aria-hidden="true"></span>
+    <span class="mm-manage-resize-handle" data-edge="ne" aria-hidden="true"></span>
+    <span class="mm-manage-resize-handle" data-edge="nw" aria-hidden="true"></span>
+    <span class="mm-manage-resize-handle" data-edge="se" aria-hidden="true"></span>
+    <span class="mm-manage-resize-handle" data-edge="sw" aria-hidden="true"></span>
     <div class="mm-manage-count">تم تحديد <b data-mm-count>0</b></div>
     <div class="mm-manage-selected-list" data-mm-selected-list></div>
     <div class="mm-manage-actions">
@@ -622,6 +753,7 @@ function ensureManagePanel(){
   p.querySelector('[data-mm-action="down"]').onclick=()=>manageMoveSelected(1);
   document.body.appendChild(p);
   manageState.panel=p;
+  installManagePanelInteractions(p);
   return p;
 }
 
@@ -932,11 +1064,14 @@ body.mm-manage-mode .mm-manage-check-wrap{opacity:1;pointer-events:auto}
 .mm-manage-check-wrap[data-checked='1'] .mm-manage-check-box{background:#0891b2;border-color:#67e8f9;box-shadow:0 0 0 2px rgba(103,232,249,.15)}
 .mm-manage-check-wrap[data-checked='1'] .mm-manage-check-box::after{content:'✓';display:block;color:#fff;font-size:13px;line-height:16px;text-align:center;font-weight:900}
 .mm-manage-selected{outline:2px solid rgba(56,189,248,.75)!important;box-shadow:0 0 0 4px rgba(56,189,248,.10)!important}
-.mm-manage-panel{position:fixed;z-index:210000;top:145px;inset-inline-end:18px;width:260px;box-sizing:border-box;background:rgba(18,20,27,.98);border:1px solid #343a48;border-radius:16px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.55);color:#f8fafc;direction:rtl}
-.mm-manage-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px}
-.mm-manage-close{border:0;background:transparent;color:#9ca3af;cursor:pointer;font-size:18px}
+.mm-manage-panel{position:fixed;z-index:210000;left:calc(100vw - 298px);top:145px;width:280px;height:auto;min-width:230px;min-height:220px;max-width:calc(100vw - 24px);max-height:calc(100vh - 24px);box-sizing:border-box;background:rgba(18,20,27,.98);border:1px solid #343a48;border-radius:16px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.55);color:#f8fafc;direction:rtl;overflow:hidden}
+.mm-manage-panel.mm-dragging{user-select:none;cursor:grabbing;box-shadow:0 24px 70px rgba(0,0,0,.65)}
+.mm-manage-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;cursor:grab;user-select:none}
+.mm-manage-panel-head:active{cursor:grabbing}
+.mm-manage-panel-head strong{flex:1}
+.mm-manage-close{border:0;background:transparent;color:#9ca3af;cursor:pointer;font-size:18px;flex:0 0 auto}
 .mm-manage-count{margin-top:9px;padding:8px 10px;border-radius:9px;background:#0f1219;color:#cbd5e1;font-size:12px}
-.mm-manage-selected-list{margin-top:8px;max-height:115px;overflow:auto;color:#aab4c3;font-size:11px;line-height:1.7}
+.mm-manage-selected-list{margin-top:8px;max-height:calc(100% - 185px);min-height:24px;overflow:auto;color:#aab4c3;font-size:11px;line-height:1.7}
 .mm-manage-selected-list div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mm-manage-more{color:#67e8f9!important}
 .mm-manage-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
@@ -945,8 +1080,21 @@ body.mm-manage-mode .mm-manage-check-wrap{opacity:1;pointer-events:auto}
 .mm-manage-actions button.danger{border-color:rgba(248,113,113,.55);color:#fecaca}
 .mm-manage-actions button:disabled{opacity:.4;cursor:not-allowed}
 .mm-manage-select-all{width:100%;margin-top:8px}
+.mm-manage-resize-handle{position:absolute;z-index:30;opacity:0}
+.mm-manage-panel:hover .mm-manage-resize-handle,.mm-manage-panel.mm-resizing .mm-manage-resize-handle{opacity:1}
+.mm-manage-resize-handle[data-edge="n"],.mm-manage-resize-handle[data-edge="s"]{left:10px;right:10px;height:8px;cursor:ns-resize}
+.mm-manage-resize-handle[data-edge="n"]{top:-4px}
+.mm-manage-resize-handle[data-edge="s"]{bottom:-4px}
+.mm-manage-resize-handle[data-edge="e"],.mm-manage-resize-handle[data-edge="w"]{top:10px;bottom:10px;width:8px;cursor:ew-resize}
+.mm-manage-resize-handle[data-edge="e"]{right:-4px}
+.mm-manage-resize-handle[data-edge="w"]{left:-4px}
+.mm-manage-resize-handle[data-edge="ne"],.mm-manage-resize-handle[data-edge="nw"],.mm-manage-resize-handle[data-edge="se"],.mm-manage-resize-handle[data-edge="sw"]{width:14px;height:14px}
+.mm-manage-resize-handle[data-edge="ne"]{top:-4px;right:-4px;cursor:nesw-resize}
+.mm-manage-resize-handle[data-edge="nw"]{top:-4px;left:-4px;cursor:nwse-resize}
+.mm-manage-resize-handle[data-edge="se"]{bottom:-4px;right:-4px;cursor:nwse-resize}
+.mm-manage-resize-handle[data-edge="sw"]{bottom:-4px;left:-4px;cursor:nesw-resize}
 @media(max-width:760px){
-  .mm-manage-panel{left:10px;right:10px;inset-inline-end:10px;top:auto;bottom:12px;width:auto}
+  .mm-manage-panel{left:12px;top:90px;width:min(280px,calc(100vw - 24px));}
 }
 `;
   document.head.appendChild(s);
