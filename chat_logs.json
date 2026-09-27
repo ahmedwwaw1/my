@@ -44,6 +44,6 @@
     }
   ],
   "activeSessionId": "1790513770114",
-  "pendingHistory": null,
-  "timestamp": "2026-09-27T12:56:10.115Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"اين نحن الان\"}]},{\"role\":\"model\",\"parts\":[{\"functionCall\":{\"name\":\"list_files\",\"args\":{\"path\":\".\"},\"id\":\"call_1377972\"},\"thoughtSignature\":\"EnMKcQFpFH0TxmSMARvNS9pX9ut24Eoh2HQ1a/bm1Mt+A0Yw9uOeuc+Ch+LTu0Pi/CW41FEvyDrFyiYiOtgEkCM8yC2ml0MUqpiUAFoeOfTgk7FfbIN1sW1T1rf2VNd7MbQ5eDN1OYJ/++ROOJ54WnYxueDq\"}]},{\"role\":\"function\",\"parts\":[{\"functionResponse\":{\"name\":\"list_files\",\"response\":{\"content\":\"محتويات .:\\n📁 .artifacts\\n📄 .gitattributes\\n📁 .github\\n📄 .gitignore\\n📄 EMERGENCY_REPAIR_GUIDE.txt\\n📁 Mastermind_Desktop\\n📁 My location data\\n📄 README.md\\n📄 Screenshot 2026-09-20 185502.png\\n📁 ScriptBot\\n📁 ai_mastermind_capabilities\\n📁 archive\\n📁 bridge\\n📄 chat_logs.json\\n📁 cloud_runtime_executor\\n📄 compress.js\\n📄 compress_mastermind.ps1\\n📄 compressor.html\\n📄 direct_compress.js\\n📄 engine_memory.json\\n📁 images\\n📄 index.html\\n📄 main.js\\n📁 my file wo\\n📁 my_AI\\n📄 package-lock.json\\n📄 package.json\\n📄 preload.js\\n📄 remigrate_final.ps1\\n📄 steps.jsonl\\n📁 supabase\\n📄 system-capabilities.txt\\n📄 system_prompt_discussion.txt\\n📄 test.txt\\n📄 test_engine.py\\n📄 المخطط_الهندسي_لإنشاء_نموذج_ذكاء_اصطناعي_متطور.md\\n📄 حاسبة.html\\n📄 دليل_إصلاح_الطوارئ_VSA.txt\"}}}]}]",
+  "timestamp": "2026-09-27T12:56:23.129Z"
 }
