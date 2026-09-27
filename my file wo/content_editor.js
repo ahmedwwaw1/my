@@ -436,7 +436,7 @@ function sync(){
   if(visible(document.getElementById('playlistSection')))
     addHeader('playlistSection','lesson','➕ إضافة درس',lessonEditor);
 
-  if(av && document.getElementById('chaptersSection')){
+  if(item?.videos?.length && document.getElementById('chaptersSection')){
     const chaptersSection=document.getElementById('chaptersSection');
     chaptersSection.style.display='block';
     addHeader('chaptersSection','chapter','➕ إضافة طابع',chapterEditor);
@@ -493,5 +493,5 @@ function init(){
 
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
 
-window.mastermindJsonEditor={version:'1.3.0',refresh:sync,close:()=>state.modal?.remove()};
+window.mastermindJsonEditor={version:'1.4.0',refresh:sync,close:()=>state.modal?.remove()};
 })();
