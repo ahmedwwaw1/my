@@ -448,6 +448,8 @@ function sync(){
     addHeader('thematicSection','series','➕ إضافة سلسلة',thematicSeriesEditor);
   }
 
+  installManageUi();
+
   if(visible(thematicSection)&&Array.isArray(owner?.thematic_index)){
     document.querySelectorAll('#thematicContainer > div > h4').forEach((h,i)=>{
       if(owner.thematic_index[i]&&!h.querySelector('[data-mm-topic]')){
@@ -457,6 +459,519 @@ function sync(){
       }
     });
   }
+}
+
+
+const manageState = {
+  selections: [],
+  panel: null,
+  installed: false
+};
+
+function manageKey(x){
+  return [x.type,x.ownerId||'',x.videoIndex??'',x.topicIndex??'',x.index??''].join('|');
+}
+
+function clearManageSelection(){
+  manageState.selections=[];
+  document.body.classList.remove('mm-manage-mode');
+  document.querySelectorAll('[data-mm-manage-check]').forEach(x=>x.checked=false);
+  document.querySelectorAll('[data-mm-manage-item]').forEach(x=>x.classList.remove('mm-manage-selected'));
+  updateManagePanel();
+}
+
+function currentOwner(){
+  return thematicOwner() || findItem();
+}
+
+function selectionLabel(s){
+  if(s.type==='lesson') return '📚 '+(s.title||'الدرس');
+  if(s.type==='series') return '🧠 '+(s.title||'السلسلة');
+  if(s.type==='chapter') return '⏱️ '+(s.title||'الفصل');
+  return '🧠⏱️ '+(s.title||'طابع موضوعي');
+}
+
+function currentSelections(){
+  return manageState.selections.slice();
+}
+
+function addManageSelection(desc, el, checked){
+  const key=manageKey(desc);
+  manageState.selections=manageState.selections.filter(x=>manageKey(x)!==key);
+  if(checked){
+    desc.el=el;
+    manageState.selections.push(desc);
+    document.body.classList.add('mm-manage-mode');
+    el.classList.add('mm-manage-selected');
+  }else{
+    el.classList.remove('mm-manage-selected');
+  }
+  updateManagePanel();
+}
+
+function removeSelectionFromState(desc){
+  const key=manageKey(desc);
+  manageState.selections=manageState.selections.filter(x=>manageKey(x)!==key);
+}
+
+function makeManageCheck(desc, el){
+  if(el.querySelector('[data-mm-manage-check]')) return;
+  el.dataset.mmManageItem='1';
+  el.classList.add('mm-manage-target');
+  if(!el.style.position) el.style.position='relative';
+
+  const wrap=document.createElement('label');
+  wrap.className='mm-manage-check-wrap';
+  wrap.title='تحديد العنصر';
+  wrap.dataset.mmManageCheckWrap='1';
+  const input=document.createElement('input');
+  input.type='checkbox';
+  input.dataset.mmManageCheck='1';
+
+  const selected=manageState.selections.some(x=>manageKey(x)===manageKey(desc));
+  input.checked=selected;
+  if(selected) el.classList.add('mm-manage-selected');
+
+  input.addEventListener('click',e=>{
+    e.stopPropagation();
+  });
+  input.addEventListener('change',e=>{
+    e.stopPropagation();
+    addManageSelection({...desc},el,input.checked);
+  });
+
+  wrap.appendChild(input);
+  el.appendChild(wrap);
+}
+
+function decorateManageItems(){
+  const owner=currentOwner();
+  if(!owner) return;
+
+  // 📚 الدروس داخل قائمة الدروس
+  const playlist=document.getElementById('playlistContainer');
+  if(playlist && Array.isArray(owner.videos)){
+    playlist.querySelectorAll('.chapter-row-btn').forEach((el,i)=>{
+      if(owner.videos[i]){
+        makeManageCheck({
+          type:'lesson',
+          ownerId:String(owner.id),
+          index:i,
+          title:owner.videos[i].title,
+          item:owner
+        },el);
+      }
+    });
+  }
+
+  // ⏱️ الفصول العادية للفيديو المحدد
+  const item=findItem();
+  const av=activeVideo(item);
+  const chapters=document.getElementById('chaptersContainer');
+  if(chapters && av?.video && Array.isArray(av.video.chapters)){
+    chapters.querySelectorAll('.chapter-row-btn').forEach((el,i)=>{
+      if(av.video.chapters[i]){
+        makeManageCheck({
+          type:'chapter',
+          ownerId:String(item.id),
+          videoIndex:av.index,
+          index:i,
+          title:av.video.chapters[i].text,
+          item
+        },el);
+      }
+    });
+  }
+
+  // 🧠 السلاسل والفهارس
+  const thematic=document.getElementById('thematicContainer');
+  const thematicOwnerItem=currentOwner();
+  if(thematic && thematicOwnerItem && Array.isArray(thematicOwnerItem.thematic_index)){
+    const topicBlocks=Array.from(thematic.children);
+    topicBlocks.forEach((block,topicIndex)=>{
+      const topic=thematicOwnerItem.thematic_index[topicIndex];
+      if(!topic) return;
+
+      const h4=block.querySelector('h4');
+      if(h4) makeManageCheck({
+        type:'series',
+        ownerId:String(thematicOwnerItem.id),
+        topicIndex,
+        title:topic.topic_name,
+        item:thematicOwnerItem
+      },h4);
+
+      const chapterList=block.querySelector('.chapters-flex-list');
+      if(chapterList && Array.isArray(topic.chapters)){
+        chapterList.querySelectorAll('.chapter-row-btn').forEach((el,i)=>{
+          if(topic.chapters[i]){
+            makeManageCheck({
+              type:'thematicChapter',
+              ownerId:String(thematicOwnerItem.id),
+              topicIndex,
+              index:i,
+              title:topic.chapters[i].text,
+              item:thematicOwnerItem
+            },el);
+          }
+        });
+      }
+    });
+  }
+}
+
+function ensureManagePanel(){
+  if(manageState.panel && document.body.contains(manageState.panel)) return manageState.panel;
+  const p=document.createElement('aside');
+  p.id='mmManagePanel';
+  p.className='mm-manage-panel';
+  p.innerHTML=`
+    <div class="mm-manage-panel-head">
+      <strong>إدارة العناصر</strong>
+      <button type="button" class="mm-manage-close" title="إلغاء التحديد">✕</button>
+    </div>
+    <div class="mm-manage-count">تم تحديد <b data-mm-count>0</b></div>
+    <div class="mm-manage-selected-list" data-mm-selected-list></div>
+    <div class="mm-manage-actions">
+      <button type="button" data-mm-action="edit">✏️ تعديل</button>
+      <button type="button" data-mm-action="delete" class="danger">🗑️ حذف</button>
+      <button type="button" data-mm-action="up">⬆️ أعلى</button>
+      <button type="button" data-mm-action="down">⬇️ أسفل</button>
+    </div>
+    <button type="button" class="mm-manage-select-all">☑️ تحديد كل العناصر</button>
+  `;
+  p.querySelector('.mm-manage-close').onclick=clearManageSelection;
+  p.querySelector('.mm-manage-select-all').onclick=toggleSelectAllManage;
+  p.querySelector('[data-mm-action="edit"]').onclick=manageEditSelected;
+  p.querySelector('[data-mm-action="delete"]').onclick=manageDeleteSelected;
+  p.querySelector('[data-mm-action="up"]').onclick=()=>manageMoveSelected(-1);
+  p.querySelector('[data-mm-action="down"]').onclick=()=>manageMoveSelected(1);
+  document.body.appendChild(p);
+  manageState.panel=p;
+  return p;
+}
+
+function updateManagePanel(){
+  const p=ensureManagePanel();
+  const n=manageState.selections.length;
+  p.style.display=n?'block':'none';
+  const count=p.querySelector('[data-mm-count]');
+  if(count) count.textContent=String(n);
+
+  const list=p.querySelector('[data-mm-selected-list]');
+  if(list){
+    list.innerHTML=manageState.selections.slice(-8).map(s=>'<div>'+esc(selectionLabel(s))+'</div>').join('');
+    if(n>8) list.insertAdjacentHTML('afterbegin','<div class="mm-manage-more">… و '+(n-8)+' أخرى</div>');
+  }
+
+  const edit=p.querySelector('[data-mm-action="edit"]');
+  const up=p.querySelector('[data-mm-action="up"]');
+  const down=p.querySelector('[data-mm-action="down"]');
+  if(edit) edit.disabled=n!==1;
+  if(up) up.disabled=n!==1;
+  if(down) down.disabled=n!==1;
+  const all=p.querySelector('.mm-manage-select-all');
+  if(all) all.textContent=n ? '☐ إلغاء تحديد الكل' : '☑️ تحديد كل العناصر';
+}
+
+function allManageTargets(){
+  return Array.from(document.querySelectorAll('[data-mm-manage-item]'));
+}
+
+function toggleSelectAllManage(){
+  const targets=allManageTargets();
+  const shouldSelect=manageState.selections.length===0 || manageState.selections.length<targets.length;
+  if(!shouldSelect){ clearManageSelection(); return; }
+
+  manageState.selections=[];
+  targets.forEach(el=>{
+    const desc=readManageDescriptor(el);
+    if(desc) manageState.selections.push({...desc,el});
+    const cb=el.querySelector('[data-mm-manage-check]');
+    if(cb) cb.checked=true;
+    el.classList.add('mm-manage-selected');
+  });
+  document.body.classList.add('mm-manage-mode');
+  updateManagePanel();
+}
+
+function readManageDescriptor(el){
+  try{
+    const raw=el.dataset.mmManageMeta;
+    return raw?JSON.parse(raw):null;
+  }catch(_){return null;}
+}
+
+function makeManageCheck(desc, el){
+  if(el.querySelector('[data-mm-manage-check]')){
+    el.dataset.mmManageMeta=JSON.stringify({...desc});
+    return;
+  }
+  el.dataset.mmManageItem='1';
+  el.dataset.mmManageMeta=JSON.stringify({...desc});
+  el.classList.add('mm-manage-target');
+  if(!el.style.position) el.style.position='relative';
+
+  const wrap=document.createElement('label');
+  wrap.className='mm-manage-check-wrap';
+  wrap.title='تحديد العنصر';
+  wrap.dataset.mmManageCheckWrap='1';
+  const input=document.createElement('input');
+  input.type='checkbox';
+  input.dataset.mmManageCheck='1';
+
+  const selected=manageState.selections.some(x=>manageKey(x)===manageKey(desc));
+  input.checked=selected;
+  if(selected) el.classList.add('mm-manage-selected');
+
+  input.addEventListener('click',e=>{e.stopPropagation();});
+  input.addEventListener('change',e=>{
+    e.stopPropagation();
+    addManageSelection({...desc},el,input.checked);
+  });
+
+  wrap.appendChild(input);
+  el.appendChild(wrap);
+}
+
+function managerItemsFor(owner){
+  return Array.isArray(owner?.videos)?owner.videos:[];
+}
+
+function editDialogFor(desc){
+  if(desc.type==='lesson'){
+    const v=desc.item.videos?.[desc.index];
+    if(!v) return alert('الدرس المحدد غير موجود.');
+    const html=`
+      <label class="mm-editor-label">اسم الدرس</label>
+      <input class="mm-editor-input" name="title" required maxlength="240" value="${esc(v.title||'')}">
+      <label class="mm-editor-label">رابط الدرس</label>
+      <input class="mm-editor-input" name="url" required maxlength="2000" dir="ltr" value="${esc(v.url||v.videoUrl||'')}">
+      <div class="mm-editor-hint">سيتم تعديل نفس عنصر <code>videos[]</code> دون إنشاء عنصر جديد.</div>`;
+    dialog('✏️ تعديل درس',`الدورة: <b>${esc(desc.item.title||desc.item.id)}</b>`,html,async(fd,status)=>{
+      const title=String(fd.get('title')||'').trim(),url=String(fd.get('url')||'').trim();
+      if(!title) throw new Error('اكتب اسم الدرس.');
+      if(!validUrl(url)) throw new Error('رابط الدرس غير صالح.');
+      if(!confirm(`تعديل الدرس إلى:\\n\\n${title}\\n${url}\\n\\nهل تريد الحفظ؟`)){status.textContent='تم إلغاء التعديل.';return;}
+      const file=await mutate(desc.item,desc.index,'✏️ تعديل درس من واجهة VSA Academy',row=>{
+        const v=row.videos?.[desc.index]; if(!v) throw new Error('الدرس غير موجود.');
+        v.title=title; v.url=url;
+      });
+      status.textContent='✅ تم التعديل في '+file;
+      manageState.selections=[]; updateLive(desc.item);
+      setTimeout(()=>{state.modal?.remove();state.modal=null;},500);
+    });
+    return;
+  }
+
+  if(desc.type==='series'){
+    const owner=desc.item, topic=owner.thematic_index?.[desc.topicIndex];
+    if(!topic) return alert('السلسلة المحددة غير موجودة.');
+    const html=`
+      <label class="mm-editor-label">اسم السلسلة</label>
+      <input class="mm-editor-input" name="topicName" required maxlength="240" value="${esc(topic.topic_name||'')}">
+      <div class="mm-editor-hint">سيتم تعديل <code>topic_name</code> في نفس <code>thematic_index[]</code>.</div>`;
+    dialog('✏️ تعديل سلسلة موضوعية',`السلسلة الحالية: <b>${esc(topic.topic_name||'')}</b>`,html,async(fd,status)=>{
+      const topicName=String(fd.get('topicName')||'').trim();
+      if(!topicName) throw new Error('اكتب اسم السلسلة.');
+      if(!confirm(`تغيير اسم السلسلة إلى:\\n\\n${topicName}\\n\\nهل تريد الحفظ؟`)){status.textContent='تم إلغاء التعديل.';return;}
+      const file=await mutate(owner,-1,'✏️ تعديل سلسلة موضوعية من واجهة VSA Academy',row=>{
+        const t=row.thematic_index?.[desc.topicIndex]; if(!t) throw new Error('السلسلة غير موجودة.');
+        t.topic_name=topicName;
+      });
+      status.textContent='✅ تم التعديل في '+file;
+      manageState.selections=[]; updateLive(owner);
+      setTimeout(()=>{state.modal?.remove();state.modal=null;},500);
+    });
+    return;
+  }
+
+  if(desc.type==='chapter'){
+    const item=desc.item, video=item.videos?.[desc.videoIndex], ch=video?.chapters?.[desc.index];
+    if(!video||!ch) return alert('الفصل المحدد غير موجود.');
+    const html=`
+      <label class="mm-editor-label">الطابع الزمني</label>
+      <input class="mm-editor-input" name="time" required maxlength="12" dir="ltr" value="${esc(ch.time||'')}">
+      <label class="mm-editor-label">العنوان</label>
+      <input class="mm-editor-input" name="text" required maxlength="500" value="${esc(ch.text||'')}">
+      <div class="mm-editor-hint">سيتم تعديل نفس السجل داخل <code>videos[].chapters[]</code>.</div>`;
+    dialog('✏️ تعديل فصل / طابع زمني',`الدرس: <b>${esc(video.title||video.id)}</b>`,html,async(fd,status)=>{
+      const time=String(fd.get('time')||'').trim(),text=String(fd.get('text')||'').trim();
+      if(!validTime(time)||!text) throw new Error('تحقق من الوقت والعنوان.');
+      if(!confirm(`تعديل الفصل إلى:\\n\\n${time} — ${text}\\n\\nهل تريد الحفظ؟`)){status.textContent='تم إلغاء التعديل.';return;}
+      const file=await mutate(item,-1,'✏️ تعديل فصل من واجهة VSA Academy',row=>{
+        const v=row.videos?.[desc.videoIndex],x=v?.chapters?.[desc.index]; if(!x) throw new Error('الفصل غير موجود.');
+        x.time=time;x.text=text;
+      });
+      status.textContent='✅ تم التعديل في '+file;
+      manageState.selections=[]; updateLive(item);
+      setTimeout(()=>{state.modal?.remove();state.modal=null;},500);
+    });
+    return;
+  }
+
+  if(desc.type==='thematicChapter'){
+    const owner=desc.item, topic=owner.thematic_index?.[desc.topicIndex], ch=topic?.chapters?.[desc.index];
+    if(!topic||!ch) return alert('الطابع الموضوعي المحدد غير موجود.');
+    const catalog=allVideos(owner);
+    const opts=catalog.map(e=>`<option value="${esc(e.id)}"${String(e.id)===String(ch.video_id)?' selected':''}>${esc((e.sourceTitle?e.sourceTitle+' › ':'')+(e.video?.title||e.id))} — ${esc(e.id)}</option>`).join('');
+    const html=`
+      <label class="mm-editor-label">مصدر الفيديو</label>
+      <select class="mm-editor-select" name="videoId" required>${opts}</select>
+      <label class="mm-editor-label">الطابع الزمني</label>
+      <input class="mm-editor-input" name="time" required maxlength="12" dir="ltr" value="${esc(ch.time||'')}">
+      <label class="mm-editor-label">العنوان</label>
+      <input class="mm-editor-input" name="text" required maxlength="500" value="${esc(ch.text||'')}">
+      <div class="mm-editor-hint">سيُعدل نفس السجل <code>{ video_id, time, text }</code> داخل السلسلة.</div>`;
+    dialog('✏️ تعديل طابع الفهرس الموضوعي',`السلسلة: <b>${esc(topic.topic_name||'')}</b>`,html,async(fd,status)=>{
+      const videoId=String(fd.get('videoId')||'').trim(),time=String(fd.get('time')||'').trim(),text=String(fd.get('text')||'').trim();
+      if(!videoId||!validTime(time)||!text) throw new Error('تحقق من المصدر والوقت والعنوان.');
+      if(!confirm(`تعديل الطابع إلى:\\n\\n${time} — ${text}\\nالمصدر: ${videoId}\\n\\nهل تريد الحفظ؟`)){status.textContent='تم إلغاء التعديل.';return;}
+      const file=await mutate(owner,-1,'✏️ تعديل طابع موضوعي من واجهة VSA Academy',row=>{
+        const x=row.thematic_index?.[desc.topicIndex]?.chapters?.[desc.index]; if(!x) throw new Error('الطابع غير موجود.');
+        x.video_id=videoId;x.time=time;x.text=text;
+      });
+      status.textContent='✅ تم التعديل في '+file;
+      manageState.selections=[]; updateLive(owner);
+      setTimeout(()=>{state.modal?.remove();state.modal=null;},500);
+    });
+  }
+}
+
+function manageEditSelected(){
+  if(manageState.selections.length!==1) return;
+  editDialogFor(manageState.selections[0]);
+}
+
+function selectionText(s){
+  return selectionLabel(s);
+}
+
+async function manageDeleteSelected(){
+  const sels=currentSelections();
+  if(!sels.length) return;
+  const names=sels.slice(0,8).map(selectionText).join('\\n');
+  const more=sels.length>8?'\\n… و '+(sels.length-8)+' أخرى':'';
+  if(!confirm(`سيتم حذف ${sels.length} عنصر:\\n\\n${names}${more}\\n\\n⚠️ لا يمكن التراجع عن هذا الحذف من الواجهة. هل تريد المتابعة؟`)) return;
+
+  // نفّذ الحذف لكل ملف/سجل مرة واحدة، مع ترتيب المؤشرات تنازلياً.
+  const groups=new Map();
+  for(const s of sels){
+    const item=s.item||findItem();
+    const file=await sourceFile(item);
+    const key=file+'|'+String(item.id);
+    if(!groups.has(key)) groups.set(key,{file,item,ops:[]});
+    groups.get(key).ops.push(s);
+  }
+
+  try{
+    for(const g of groups.values()){
+      const data=await readJson(g.file);
+      const row=data.find(x=>x&&String(x.id)===String(g.item.id));
+      if(!row) throw new Error('السجل الأساسي غير موجود في '+g.file);
+      const normal=g.ops.filter(x=>x.type!=='chapter'&&x.type!=='thematicChapter');
+      const chapters=g.ops.filter(x=>x.type==='chapter');
+      const thematicChapters=g.ops.filter(x=>x.type==='thematicChapter');
+
+      [...normal].sort((a,b)=>(b.type==='series'?b.topicIndex:b.index)-(a.type==='series'?a.topicIndex:a.index)).forEach(s=>{
+        if(s.type==='lesson' && Array.isArray(row.videos)) row.videos.splice(s.index,1);
+        if(s.type==='series' && Array.isArray(row.thematic_index)) row.thematic_index.splice(s.topicIndex,1);
+      });
+
+      chapters.sort((a,b)=>b.videoIndex-a.videoIndex||b.index-a.index).forEach(s=>{
+        const v=row.videos?.[s.videoIndex];
+        if(v?.chapters) v.chapters.splice(s.index,1);
+      });
+
+      thematicChapters.sort((a,b)=>b.topicIndex-a.topicIndex||b.index-a.index).forEach(s=>{
+        const t=row.thematic_index?.[s.topicIndex];
+        if(t?.chapters) t.chapters.splice(s.index,1);
+      });
+
+      await saveJson(g.file,data,'🗑️ حذف عناصر من محرر المحتوى');
+    }
+
+    manageState.selections=[];
+    const refreshItem=thematicOwner()||findItem();
+    if(refreshItem) updateLive(refreshItem);
+    setTimeout(()=>{clearManageSelection();},350);
+  }catch(e){
+    alert('❌ فشل الحذف: '+(e?.message||String(e)));
+  }
+}
+
+async function manageMoveSelected(delta){
+  if(manageState.selections.length!==1) return;
+  const s=manageState.selections[0];
+  const item=s.item||findItem();
+  if(!item) return;
+  try{
+    let file=await sourceFile(item);
+    const data=await readJson(file);
+    const row=data.find(x=>x&&String(x.id)===String(item.id));
+    if(!row) throw new Error('السجل غير موجود.');
+
+    let arr=null, idx=null;
+    if(s.type==='lesson'){arr=row.videos;idx=s.index;}
+    else if(s.type==='series'){arr=row.thematic_index;idx=s.topicIndex;}
+    else if(s.type==='chapter'){arr=row.videos?.[s.videoIndex]?.chapters;idx=s.index;}
+    else if(s.type==='thematicChapter'){arr=row.thematic_index?.[s.topicIndex]?.chapters;idx=s.index;}
+
+    if(!Array.isArray(arr)||idx==null) throw new Error('العنصر لا يدعم إعادة الترتيب.');
+    const next=Number(idx)+delta;
+    if(next<0||next>=arr.length){
+      alert(delta<0?'العنصر موجود بالفعل في أعلى القائمة.':'العنصر موجود بالفعل في أسفل القائمة.');
+      return;
+    }
+
+    [arr[idx],arr[next]]=[arr[next],arr[idx]];
+    await saveJson(file,data,delta<0?'⬆️ تغيير ترتيب عنصر إلى أعلى':'⬇️ تغيير ترتيب عنصر إلى أسفل');
+    manageState.selections=[];
+    updateLive(item);
+    setTimeout(clearManageSelection,350);
+  }catch(e){
+    alert('❌ فشل تغيير الترتيب: '+(e?.message||String(e)));
+  }
+}
+
+function installManageStyles(){
+  if(document.getElementById('mm-manage-style')) return;
+  const s=document.createElement('style');
+  s.id='mm-manage-style';
+  s.textContent=`
+.mm-manage-target{transition:box-shadow .16s ease,outline .16s ease,background .16s ease}
+.mm-manage-check-wrap{position:absolute;z-index:12;top:50%;inset-inline-end:8px;transform:translateY(-50%);width:22px;height:22px;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .15s ease}
+.mm-manage-target:hover .mm-manage-check-wrap,
+body.mm-manage-mode .mm-manage-check-wrap{opacity:1;pointer-events:auto}
+.mm-manage-check-wrap input{appearance:none;width:18px;height:18px;border-radius:4px;border:1px solid rgba(255,255,255,.55);background:rgba(10,12,18,.90);box-shadow:0 2px 8px rgba(0,0,0,.35);cursor:pointer;margin:0}
+.mm-manage-check-wrap input:checked{background:#0891b2;border-color:#67e8f9;box-shadow:0 0 0 2px rgba(103,232,249,.15)}
+.mm-manage-check-wrap input:checked::after{content:'✓';display:block;color:#fff;font-size:13px;line-height:17px;text-align:center;font-weight:900}
+.mm-manage-selected{outline:2px solid rgba(56,189,248,.75)!important;box-shadow:0 0 0 4px rgba(56,189,248,.10)!important}
+.mm-manage-panel{position:fixed;z-index:210000;top:145px;inset-inline-end:18px;width:260px;box-sizing:border-box;background:rgba(18,20,27,.98);border:1px solid #343a48;border-radius:16px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.55);color:#f8fafc;direction:rtl}
+.mm-manage-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px}
+.mm-manage-close{border:0;background:transparent;color:#9ca3af;cursor:pointer;font-size:18px}
+.mm-manage-count{margin-top:9px;padding:8px 10px;border-radius:9px;background:#0f1219;color:#cbd5e1;font-size:12px}
+.mm-manage-selected-list{margin-top:8px;max-height:115px;overflow:auto;color:#aab4c3;font-size:11px;line-height:1.7}
+.mm-manage-selected-list div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm-manage-more{color:#67e8f9!important}
+.mm-manage-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.mm-manage-actions button,.mm-manage-select-all{appearance:none;border:1px solid #343a48;background:#202530;color:#eef2f7;border-radius:9px;padding:9px 7px;font-size:11px;font-weight:700;cursor:pointer}
+.mm-manage-actions button:hover,.mm-manage-select-all:hover{background:#2a3140}
+.mm-manage-actions button.danger{border-color:rgba(248,113,113,.55);color:#fecaca}
+.mm-manage-actions button:disabled{opacity:.4;cursor:not-allowed}
+.mm-manage-select-all{width:100%;margin-top:8px}
+@media(max-width:760px){
+  .mm-manage-panel{left:10px;right:10px;inset-inline-end:10px;top:auto;bottom:12px;width:auto}
+}
+`;
+  document.head.appendChild(s);
+}
+
+function installManageUi(){
+  installManageStyles();
+  ensureManagePanel();
+  decorateManageItems();
+  updateManagePanel();
 }
 
 function hook(){
@@ -493,5 +1008,5 @@ function init(){
 
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
 
-window.mastermindJsonEditor={version:'1.4.0',refresh:sync,close:()=>state.modal?.remove()};
+window.mastermindJsonEditor={version:'2.0.0',refresh:sync,close:()=>state.modal?.remove()};
 })();
