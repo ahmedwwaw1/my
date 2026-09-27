@@ -1649,7 +1649,7 @@ async function sendAiMessage() {
         // الصفحة/الكورس/الدرس/الفهرس وملف JSON المقصود قبل استخدام أدوات الكتابة.
         try {
             if (window.MastermindSiteContext?.getPromptContext) {
-                finalPrompt += '\n\n' + window.MastermindSiteContext.getPromptContext();
+                finalPrompt += '\n\n' + window.MastermindSiteContext.getPromptContext(msgText);
             }
         } catch (contextError) {
             console.warn('Site Context Agent unavailable:', contextError);
