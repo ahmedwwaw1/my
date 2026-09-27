@@ -157,7 +157,7 @@ function formatPlaybackTime(seconds){
   return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
 }
 
-function sourceFile(item){
+async function sourceFile(item){
   if(!item?.id) throw new Error('لم يتم تحديد الدورة الحالية.');
   const id=String(item.id);
   if(state.source.has(id)) return state.source.get(id);
