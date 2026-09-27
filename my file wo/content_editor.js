@@ -9,7 +9,7 @@ const FILES = [
   'My location data/PDF-images.json'
 ];
 
-const state = { item:null, modal:null, busy:false, source:new Map(), timer:null };
+const state = { item:null, owner:null, modal:null, busy:false, source:new Map(), timer:null };
 
 const esc = v => String(v ?? '')
   .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -60,12 +60,34 @@ function addHeader(id,key,label,fn){
   const b=addBtn(label,fn); b.dataset.mmEditor=key; h.appendChild(b);
 }
 
+function allItems(){
+  try { if(typeof allData!=='undefined' && Array.isArray(allData)) return allData; } catch(_){}
+  return [];
+}
+
 function findItem(){
   const title=document.getElementById('modalTitle')?.textContent?.trim();
   if(state.item && (!title || String(state.item.title||'').trim()===title)) return state.item;
-  let data=[];
-  try { if(typeof allData!=='undefined' && Array.isArray(allData)) data=allData; } catch(_){}
+  const data=allItems();
   return data.find(x=>String(x.title||'').trim()===title) || state.item;
+}
+
+function thematicOwner(){ return state.owner || findItem(); }
+
+function allVideos(owner){
+  const data=allItems();
+  const ordered=owner ? [owner,...data.filter(x=>x!==owner)] : data;
+  const out=[], seen=new Set();
+  ordered.forEach(item=>{
+    if(!Array.isArray(item?.videos)) return;
+    item.videos.forEach((video,index)=>{
+      const id=String(video?.id||'').trim();
+      if(!id || seen.has(id)) return;
+      seen.add(id);
+      out.push({id,video,item,index,sourceTitle:String(item.title||'').trim()});
+    });
+  });
+  return out;
 }
 
 function activeVideo(item){
@@ -216,10 +238,16 @@ function lessonEditor(){
 }
 
 function thematicEditor(topicIndex){
-  const item=findItem(), topic=item?.thematic_index?.[topicIndex];
+  const item=thematicOwner(), topic=item?.thematic_index?.[topicIndex];
   if(!item||!topic) return alert('تعذر تحديد الفهرس الموضوعي.');
-  if(!Array.isArray(item.videos)||!item.videos.length) return alert('لا توجد دروس لاختيار مصدر الفيديو.');
-  const opts=item.videos.map((v,i)=>`<option value="${esc(v.id||'')}"${i===activeVideo(item)?.index?' selected':''}>${esc(v.title||('الدرس '+(i+1)))} — ${esc(v.id||'')}</option>`).join('');
+  const catalog=allVideos(item);
+  if(!catalog.length) return alert('لا توجد مصادر فيديو متاحة لاختيار المصدر.');
+  const current=activeVideo(findItem())?.video?.id || '';
+  const opts=catalog.map((entry,i)=>{
+    const selected=String(entry.id)===String(current)?' selected':'';
+    const label=entry.sourceTitle ? `${entry.sourceTitle} › ${entry.video?.title||entry.id}` : (entry.video?.title||entry.id);
+    return `<option value="${esc(entry.id)}"${selected}>${esc(label)} — ${esc(entry.id)}</option>`;
+  }).join('');
   const html=`
     <label class="mm-editor-label">مصدر الفيديو</label>
     <select class="mm-editor-select" name="videoId" required>${opts}</select>
@@ -280,13 +308,14 @@ function sync(){
   const item=findItem();
   if(!item) return;
   state.item=item;
+  const owner=thematicOwner();
 
   if(visible(document.getElementById('playlistSection'))) addHeader('playlistSection','lesson','➕ إضافة درس',lessonEditor);
   if(visible(document.getElementById('chaptersSection'))&&activeVideo(item)) addHeader('chaptersSection','chapter','➕ إضافة طابع',chapterEditor);
 
-  if(visible(document.getElementById('thematicSection'))&&Array.isArray(item.thematic_index)){
+  if(visible(document.getElementById('thematicSection'))&&Array.isArray(owner?.thematic_index)){
     document.querySelectorAll('#thematicContainer > div > h4').forEach((h,i)=>{
-      if(item.thematic_index[i]&&!h.querySelector('[data-mm-topic]')){
+      if(owner.thematic_index[i]&&!h.querySelector('[data-mm-topic]')){
         const b=addBtn('➕ إضافة طابع',()=>thematicEditor(i));
         b.dataset.mmTopic=String(i); h.appendChild(b);
       }
@@ -300,7 +329,10 @@ function hook(){
     const wrapped=function(id,...args){
       const result=original.call(this,id,...args);
       try{
-        if(typeof allData!=='undefined'&&Array.isArray(allData)) state.item=allData.find(x=>String(x.id)===String(id))||state.item;
+        if(typeof allData!=='undefined'&&Array.isArray(allData)) {
+          state.item=allData.find(x=>String(x.id)===String(id))||state.item;
+          state.owner=state.item;
+        }
       }catch(_){}
       setTimeout(sync,80);
       return result;
@@ -325,5 +357,5 @@ function init(){
 
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
 
-window.mastermindJsonEditor={version:'1.1.0',refresh:sync,close:()=>state.modal?.remove()};
+window.mastermindJsonEditor={version:'1.2.0',refresh:sync,close:()=>state.modal?.remove()};
 })();
