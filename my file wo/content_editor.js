@@ -94,12 +94,70 @@ function activeVideo(item){
   const b=document.querySelector('#playlistContainer .chapter-row-btn.active');
   if(b){
     const m=String(b.id||'').match(/^playlist-item-(\\d+)$/);
-    if(m && item?.videos?.[Number(m[1])]) return {index:Number(m[1]),video:item.videos[Number(m[1])]};
+    if(m && item?.videos?.[Number(m[1])]) return {index:Number(m[1]),video:item.videos[Number(m[1])],item};
   }
-  return item?.videos?.length===1 ? {index:0,video:item.videos[0]} : null;
+
+  try {
+    if (typeof UnifiedPlayer !== 'undefined') {
+      if (UnifiedPlayer.currentType==='youtube' && UnifiedPlayer.apiPlayer && typeof UnifiedPlayer.apiPlayer.getVideoData==='function') {
+        const id=String(UnifiedPlayer.apiPlayer.getVideoData()?.video_id||'').trim();
+        if(id && Array.isArray(item?.videos)){
+          const hit=item.videos.findIndex(v=>extractYouTubeId(v?.url||v?.videoUrl||'')===id);
+          if(hit>=0) return {index:hit,video:item.videos[hit],item};
+        }
+      }
+      if (UnifiedPlayer.currentType==='html5' && UnifiedPlayer.element && Array.isArray(item?.videos)) {
+        const current=String(UnifiedPlayer.element.currentSrc||UnifiedPlayer.element.src||'').split('?')[0];
+        const hit=item.videos.findIndex(v=>String(v?.videoDirectUrl||v?.url||v?.videoUrl||'').split('?')[0]===current);
+        if(hit>=0) return {index:hit,video:item.videos[hit],item};
+      }
+    }
+  } catch(_) {}
+
+  if (item?.videos?.length===1) return {index:0,video:item.videos[0],item};
+  return null;
 }
 
-async function sourceFile(item){
+function extractYouTubeId(url){
+  const s=String(url||'');
+  const m=s.match(/(?:youtu\\.be\\/|youtube\\.com\\/(?:watch\\?v=|embed\\/|shorts\\/))([A-Za-z0-9_-]{6,})/i);
+  return m?m[1]:'';
+}
+
+async function getCurrentPlaybackSeconds(){
+  try{
+    if(typeof UnifiedPlayer==='undefined') return null;
+    if(UnifiedPlayer.currentType==='youtube' && UnifiedPlayer.apiPlayer && typeof UnifiedPlayer.apiPlayer.getCurrentTime==='function'){
+      const n=Number(UnifiedPlayer.apiPlayer.getCurrentTime());
+      return Number.isFinite(n)?Math.max(0,Math.floor(n)):null;
+    }
+    if(UnifiedPlayer.currentType==='vimeo' && UnifiedPlayer.apiPlayer && typeof UnifiedPlayer.apiPlayer.getCurrentTime==='function'){
+      const n=Number(await UnifiedPlayer.apiPlayer.getCurrentTime());
+      return Number.isFinite(n)?Math.max(0,Math.floor(n)):null;
+    }
+    if(UnifiedPlayer.currentType==='facebook' && UnifiedPlayer.apiPlayer){
+      const fn=UnifiedPlayer.apiPlayer.getCurrentPosition||UnifiedPlayer.apiPlayer.getCurrentTime;
+      if(typeof fn==='function'){
+        const n=Number(await fn.call(UnifiedPlayer.apiPlayer));
+        return Number.isFinite(n)?Math.max(0,Math.floor(n)):null;
+      }
+    }
+    if(UnifiedPlayer.currentType==='html5' && UnifiedPlayer.element){
+      const n=Number(UnifiedPlayer.element.currentTime);
+      return Number.isFinite(n)?Math.max(0,Math.floor(n)):null;
+    }
+  }catch(_){}
+  return null;
+}
+
+function formatPlaybackTime(seconds){
+  const s=Math.max(0,Math.floor(Number(seconds)||0));
+  const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60;
+  if(h>0) return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+  return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+
+function sourceFile(item){
   if(!item?.id) throw new Error('لم يتم تحديد الدورة الحالية.');
   const id=String(item.id);
   if(state.source.has(id)) return state.source.get(id);
@@ -273,31 +331,84 @@ function thematicEditor(topicIndex){
     status.textContent='✅ تمت إضافة الطابع إلى '+file;
     setTimeout(()=>{if(state.modal){state.modal.remove();state.modal=null;}},500);
   });
+  getCurrentPlaybackSeconds().then(sec=>{
+    const input=state.modal?.querySelector('input[name="time"]');
+    if(input && sec!==null) input.value=formatPlaybackTime(sec);
+  });
+
 }
 
-function chapterEditor(){
-  const item=findItem(), av=activeVideo(item);
-  if(!item||!av) return alert('اختر درساً من قائمة الدروس أولاً.');
-  const html=`
+function thematicSeriesEditor(){
+  const item=thematicOwner();
+  if(!item) return alert('افتح بطاقة الدورة أولاً.');
+
+  const html=\`
+    <label class="mm-editor-label">اسم السلسلة / الموضوع</label>
+    <input class="mm-editor-input" name="topicName" maxlength="240" required placeholder="مثال: 🔥 سلسلة حجم التداول العالي (High Volume)">
+    <div class="mm-editor-hint">ستُضاف كسلسلة جديدة داخل <code>thematic_index[]</code> بنفس البنية الحالية، وتبدأ بقائمة <code>chapters: []</code>.</div>\`;
+
+  dialog(
+    '🧠 إضافة سلسلة جديدة',
+    \`الدورة: <b>\${esc(item.title||item.id)}</b><br>سيتم إنشاء سلسلة جديدة داخل نفس ملف JSON.\`,
+    html,
+    async(fd,status)=>{
+      const topicName=String(fd.get('topicName')||'').trim();
+      if(!topicName) throw new Error('اكتب اسم السلسلة.');
+      if(Array.isArray(item.thematic_index)&&item.thematic_index.some(t=>String(t?.topic_name||'').trim()===topicName))
+        throw new Error('هذه السلسلة موجودة بالفعل.');
+      if(!confirm(\`ستُضاف سلسلة جديدة:\\n\\n\${topicName}\\n\\nهل تريد حفظها؟\`)){
+        status.textContent='تم إلغاء الحفظ.'; return;
+      }
+      status.textContent='⏳ يتم إنشاء السلسلة في JSON...';
+      const file=await mutate(item,-1,'🧠 إضافة سلسلة جديدة إلى الفهرس الموضوعي',row=>{
+        if(!Array.isArray(row.thematic_index)) row.thematic_index=[];
+        row.thematic_index.push({topic_name:topicName,chapters:[]});
+      });
+      status.textContent='✅ تمت إضافة السلسلة إلى '+file;
+      setTimeout(()=>{if(state.modal){state.modal.remove();state.modal=null;}},500);
+    }
+  );
+}
+
+async function chapterEditor(){
+  const currentItem=findItem();
+  const av=activeVideo(currentItem);
+  if(!currentItem||!av) return alert('اختر درساً من قائمة الدروس أو شغّل فيديو الدرس أولاً.');
+
+  const html=\`
     <label class="mm-editor-label">الطابع الزمني</label>
     <input class="mm-editor-input" name="time" required maxlength="12" dir="ltr" placeholder="12:35">
     <label class="mm-editor-label">العنوان</label>
     <input class="mm-editor-input" name="text" required maxlength="500" placeholder="عنوان الفصل أو النقطة">
-    <div class="mm-editor-hint">سيُحفظ بنفس الصيغة الحالية <code>{ time, text }</code> داخل <code>videos[].chapters[]</code>.</div>`;
-  dialog('⏱️ إضافة فصل / طابع زمني',`الدرس الحالي: <b>${esc(av.video.title||av.video.id)}</b><br>سيتم الحفظ في نفس ملف JSON.`,html,async(fd,status)=>{
-    const time=String(fd.get('time')||'').trim(), text=String(fd.get('text')||'').trim();
-    if(!validTime(time)) throw new Error('الوقت غير صالح. استخدم MM:SS أو H:MM:SS.');
-    if(!text) throw new Error('اكتب عنوان الفصل.');
-    if(!confirm(`سيُضاف للفيديو "${av.video.title||av.video.id}":\\n\\n${time} — ${text}\\n\\nهل تريد الحفظ؟`)){status.textContent='تم إلغاء الحفظ.';return;}
-    status.textContent='⏳ يتم حفظ الفصل في JSON...';
-    const file=await mutate(item,av.index,'⏱️ إضافة فصل جديد من واجهة VSA Academy',row=>{
-      const video=row.videos?.[av.index];
-      if(!video) throw new Error('الفيديو المحدد غير موجود في ملف JSON.');
-      if(!Array.isArray(video.chapters)) video.chapters=[];
-      video.chapters.push({time,text});
-    });
-    status.textContent='✅ تمت إضافة الفصل إلى '+file;
-    setTimeout(()=>{if(state.modal){state.modal.remove();state.modal=null;}},500);
+    <div class="mm-editor-hint">تمت تعبئة الوقت تلقائياً من موضع الفيديو الحالي. ويمكنك تعديله يدوياً قبل الحفظ.<br>سيُحفظ بنفس الصيغة <code>{ time, text }</code> داخل <code>videos[].chapters[]</code>.</div>\`;
+
+  const modal=dialog(
+    '⏱️ إضافة فصل / طابع زمني',
+    \`الدرس الحالي: <b>\${esc(av.video.title||av.video.id)}</b><br>سيتم الحفظ في نفس ملف JSON.\`,
+    html,
+    async(fd,status)=>{
+      const time=String(fd.get('time')||'').trim();
+      const text=String(fd.get('text')||'').trim();
+      if(!validTime(time)) throw new Error('الوقت غير صالح. استخدم MM:SS أو H:MM:SS.');
+      if(!text) throw new Error('اكتب عنوان الفصل.');
+      if(!confirm(\`سيُضاف للفيديو "\${av.video.title||av.video.id}":\\n\\n\${time} — \${text}\\n\\nهل تريد الحفظ؟\`)){
+        status.textContent='تم إلغاء الحفظ.'; return;
+      }
+      status.textContent='⏳ يتم حفظ الفصل في JSON...';
+      const file=await mutate(av.item||currentItem,av.index,'⏱️ إضافة فصل جديد من واجهة VSA Academy',row=>{
+        const video=row.videos?.[av.index];
+        if(!video) throw new Error('الفيديو المحدد غير موجود في ملف JSON.');
+        if(!Array.isArray(video.chapters)) video.chapters=[];
+        video.chapters.push({time,text});
+      });
+      status.textContent='✅ تمت إضافة الفصل إلى '+file;
+      setTimeout(()=>{if(state.modal){state.modal.remove();state.modal=null;}},500);
+    }
+  );
+
+  getCurrentPlaybackSeconds().then(sec=>{
+    const input=modal?.querySelector('input[name="time"]');
+    if(input && sec!==null) input.value=formatPlaybackTime(sec);
   });
 }
 
@@ -309,15 +420,29 @@ function sync(){
   if(!item) return;
   state.item=item;
   const owner=thematicOwner();
+  const av=activeVideo(item);
 
-  if(visible(document.getElementById('playlistSection'))) addHeader('playlistSection','lesson','➕ إضافة درس',lessonEditor);
-  if(visible(document.getElementById('chaptersSection'))&&activeVideo(item)) addHeader('chaptersSection','chapter','➕ إضافة طابع',chapterEditor);
+  if(visible(document.getElementById('playlistSection')))
+    addHeader('playlistSection','lesson','➕ إضافة درس',lessonEditor);
 
-  if(visible(document.getElementById('thematicSection'))&&Array.isArray(owner?.thematic_index)){
+  if(av && document.getElementById('chaptersSection')){
+    const chaptersSection=document.getElementById('chaptersSection');
+    chaptersSection.style.display='block';
+    addHeader('chaptersSection','chapter','➕ إضافة طابع',chapterEditor);
+  }
+
+  const thematicSection=document.getElementById('thematicSection');
+  if(owner?.videos?.length && thematicSection){
+    thematicSection.style.display='block';
+    addHeader('thematicSection','series','➕ إضافة سلسلة',thematicSeriesEditor);
+  }
+
+  if(visible(thematicSection)&&Array.isArray(owner?.thematic_index)){
     document.querySelectorAll('#thematicContainer > div > h4').forEach((h,i)=>{
       if(owner.thematic_index[i]&&!h.querySelector('[data-mm-topic]')){
         const b=addBtn('➕ إضافة طابع',()=>thematicEditor(i));
-        b.dataset.mmTopic=String(i); h.appendChild(b);
+        b.dataset.mmTopic=String(i);
+        h.appendChild(b);
       }
     });
   }
@@ -357,5 +482,5 @@ function init(){
 
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
 
-window.mastermindJsonEditor={version:'1.2.0',refresh:sync,close:()=>state.modal?.remove()};
+window.mastermindJsonEditor={version:'1.3.0',refresh:sync,close:()=>state.modal?.remove()};
 })();
