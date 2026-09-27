@@ -72,7 +72,10 @@
                 pdfs: normalizeAssetList(raw.pdfs),
                 videos: Array.isArray(raw.videos) ? raw.videos : null,
                 recommendations: Array.isArray(raw.recommendations) ? raw.recommendations : [],
-                thematic_index: Array.isArray(raw.thematic_index) ? raw.thematic_index : null
+                thematic_index: Array.isArray(raw.thematic_index) ? raw.thematic_index : null,
+                // هوية المصدر المطلوبة لعقل الموقع لتحديد ملف JSON وموضع السجل بدقة.
+                _mmSource: String(sourceName || ''),
+                _mmIndex: Number(index)
             };
         }
 
@@ -214,6 +217,10 @@
                 return;
             }
 
+            if (window.MastermindSiteContext?.setLesson) {
+                window.MastermindSiteContext.setLesson(targetItem, videoIndex, seekSeconds);
+            }
+
             // *** التغيير الجوهري: لا نغلق الـ Modal، بل نقوم بتحديث محتوياته ديناميكياً ***
             // 1. تحديث العنوان والوصف ليعكس البطاقة الجديدة (إذا اختلفت)
             document.getElementById('modalTitle').innerText = targetItem.title || '';
@@ -270,6 +277,11 @@
                 videoObj.chapters.forEach(ch => {
                     const btn = document.createElement('button');
                     btn.className = 'chapter-row-btn';
+                    btn.dataset.mmEntity = 'chapter';
+                    btn.dataset.mmCourseId = String(targetItem.id || '');
+                    btn.dataset.mmVideoIndex = String(videoIndex);
+                    btn.dataset.mmChapterIndex = String(Array.isArray(videoObj.chapters) ? videoObj.chapters.indexOf(ch) : 0);
+                    btn.dataset.mmSeek = String(parseTimeToSeconds(ch.time));
                     btn.innerHTML = `<span>${ch.text}</span><span class="chapter-time-badge">${ch.time}</span>`;
                     const secs = parseTimeToSeconds(ch.time);
 
@@ -306,9 +318,14 @@
                     const chaptersDiv = document.createElement('div');
                     chaptersDiv.className = 'chapters-flex-list';
                     chaptersDiv.style.maxHeight = '360px';
-                    topic.chapters.forEach(ch => {
+                    topic.chapters.forEach((ch, chapterIndex) => {
                         const chapBtn = document.createElement('button');
                         chapBtn.className = 'chapter-row-btn';
+                        chapBtn.dataset.mmEntity = 'thematic-chapter';
+                        chapBtn.dataset.mmCourseId = String(selectedItem.id || '');
+                        chapBtn.dataset.mmTopicIndex = String(topicIndex);
+                        chapBtn.dataset.mmChapterIndex = String(chapterIndex);
+                        chapBtn.dataset.mmSeek = String(parseTimeToSeconds(ch.time));
                         chapBtn.style.padding = '8px 12px';
                         chapBtn.innerHTML = `
                         <span>${ch.text}</span>
@@ -409,7 +426,9 @@
                                 images: [],
                                 pdfs: [],
                                 recommendations: [],
-                                thematic_index: null
+                                thematic_index: null,
+                                _mmSource: 'crypto',
+                                _mmIndex: index
                             });
                         });
                     } catch (error) {
@@ -472,6 +491,11 @@
             dataArray.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = 'card';
+                // ربط البطاقة بمصدرها وهويتها حتى يستطيع Site Context Agent تتبع الهدف.
+                card.dataset.mmEntity = 'course';
+                card.dataset.mmId = String(item.id || '');
+                card.dataset.mmSource = String(item._mmSource || '');
+                card.dataset.mmIndex = String(item._mmIndex ?? index);
                 // Add staggered animation delay
                 card.style.animationDelay = `${index * 0.05}s`;
 
@@ -1288,6 +1312,10 @@
             const selectedItem = allData.find(item => String(item.id) === String(id));
             if (!selectedItem) return;
 
+            if (window.MastermindSiteContext?.setCourse) {
+                window.MastermindSiteContext.setCourse(selectedItem);
+            }
+
             if (!isHistoryNavigation) {
                 if (modalHistory.length === 0 || document.getElementById('myModal').style.display !== "block") {
                     modalHistory = [String(id)];
@@ -1382,6 +1410,9 @@
                         const rowBtn = document.createElement('button');
                         rowBtn.className = 'chapter-row-btn';
                         rowBtn.id = `playlist-item-${idx}`;
+                        rowBtn.dataset.mmEntity = 'lesson';
+                        rowBtn.dataset.mmCourseId = String(targetItem.id || '');
+                        rowBtn.dataset.mmVideoIndex = String(idx);
                         rowBtn.style.marginBottom = '8px';
                         rowBtn.innerHTML = `<span>▶️ ${vid.title || `الدرس ${idx + 1}`}</span>`;
                         rowBtn.addEventListener('click', () => {
@@ -1429,9 +1460,12 @@
                 originalThematicItem = selectedItem;
                 if (thematicSection) thematicSection.style.display = 'block';
                 thematicContainer.innerHTML = '';
-                selectedItem.thematic_index.forEach(topic => {
+                selectedItem.thematic_index.forEach((topic, topicIndex) => {
                     const topicDiv = document.createElement('div');
                     topicDiv.style.marginBottom = '20px';
+                    topicDiv.dataset.mmEntity = 'thematic-topic';
+                    topicDiv.dataset.mmCourseId = String(selectedItem.id || '');
+                    topicDiv.dataset.mmTopicIndex = String(topicIndex);
                     topicDiv.innerHTML = `<h4 style="color: var(--accent-color); margin: 10px 0 8px 0;">📌 ${topic.topic_name}</h4>`;
                     const chaptersDiv = document.createElement('div');
                     chaptersDiv.className = 'chapters-flex-list';
