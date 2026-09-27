@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1790513649427",
+  "sessions": [
+    {
+      "id": "1790513708090",
+      "title": "أهلاً بك. أنا \"Mastermind\"، وك",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك. أنا \"Mastermind\"، وكيلك المعماري ومهندس البرمجيات المستقل. أنا هنا لمساعدتك في إدارة وتطوير مشاريعك البرمجية وفق منهجية هندسية دقيقة تعتمد على الأدلة والتحقق المستمر.\n\nكيف يمكنني مساعدتك اليوم؟ هل لديك مشروع تود البدء فيه، أو مشكلة تقنية تحتاج إلى تحليل معماري وإصلاح؟",
+              "thoughtSignature": "EnMKcQFpFH0TwI4y5rL/kRVYxADvw+MzUlnTqEKk0trCnvVpPaqyB21ltittZ1kflp/43olYqtx70uxti5f2ytR07LWdDKB86cp3quFtifDsqHmlKa6JpyZ/aouPp/PVm0Fq+Wh7vdLm+4349vBG+FSo3CgH"
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1790513708090",
   "pendingHistory": null,
-  "timestamp": "2026-09-27T12:54:09.427Z"
+  "timestamp": "2026-09-27T12:55:22.088Z"
 }
