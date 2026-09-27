@@ -1644,6 +1644,17 @@ async function sendAiMessage() {
         sendBtn.classList.add('working');
         let finalPrompt = msgText;
         let attachments = [];
+
+        // 🧠 أضف سياق الموقع الحالي تلقائياً إلى الطلب حتى يعرف Mastermind
+        // الصفحة/الكورس/الدرس/الفهرس وملف JSON المقصود قبل استخدام أدوات الكتابة.
+        try {
+            if (window.MastermindSiteContext?.getPromptContext) {
+                finalPrompt += '\n\n' + window.MastermindSiteContext.getPromptContext();
+            }
+        } catch (contextError) {
+            console.warn('Site Context Agent unavailable:', contextError);
+        }
+
         selectedFiles.forEach(f => {
             if (f.content) finalPrompt += `\n\n[File ${f.name}]:\n${f.content}`;
             if (f.type.startsWith('image/') || f.type === 'application/pdf') attachments.push({ inline_data: { mime_type: f.type, data: f.base64 } });
