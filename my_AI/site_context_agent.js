@@ -51,7 +51,7 @@
     }
 
     function pointerSegment(value) {
-        return safeString(value).replace(/~/g, '~0').replace(/\\//g, '~1');
+        return safeString(value).replace(/~/g, '~0').replace(/\//g, '~1');
     }
 
     function pointerForCourse(item) {
