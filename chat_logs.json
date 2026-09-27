@@ -1,6 +1,11 @@
 {
   "sessions": [
     {
+      "id": "1790513907001",
+      "title": "محادثة جديدة",
+      "history": []
+    },
+    {
       "id": "1790513828073",
       "title": "مرحباً بك! أنا **Mastermind**،",
       "history": [
@@ -144,6 +149,6 @@
     }
   ],
   "activeSessionId": "1790513907001",
-  "pendingHistory": null,
-  "timestamp": "2026-09-27T12:58:27.001Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"هل نحن الان داخل كورس vsa وائل احمد\"}]}]",
+  "timestamp": "2026-09-27T13:01:13.497Z"
 }
