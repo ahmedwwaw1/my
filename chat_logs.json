@@ -1,6 +1,48 @@
 {
   "sessions": [
     {
+      "id": "1790801839028",
+      "title": "الحمد لله، أنا بخير وأتم الاست",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً ومرحباً بك! 👋\n\nأنا جاهز لمساعدتك في أي مهام برمجية أو معمارية، تحليل المشاريع، أو حل المشكلات الهندسية والتطويرية. \n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "EuUCCuICAWkUfROJSFIxVnLW9SYfNKyb7JJBrau9JEpiiC0Tbl+B/EBt8wSJKASpwO64DMr0NlygdPNxFYrHa7A6k8M6/+kgcgCK2q35NkjBEvrEQ13OjhmQ3HKwsbk5rxQA2sVhtD216ErVAW3z1hSVpynCSQw5NqdjT1YMaZd9pJG2DvSygS5vS6bhRRplMKjgPrPqYTmQozxvbTZAaDyEMTLuo0SxfuwdpyY3vjWM27RQqjOE4C87jOkSvC3LYmWiCD8mLf0MOFIdvF192/Y/0HAUUqI0LtSZUvXDDInOiZ3aVafj9fPEanYBvCPO9Cw1UCS4ClSJrSS7SsFxKJc94Rbl2srGjp6raGE/p1vqqOKUB4xGxGtG8rGlF21fHIXvBg5VFrFZqBXf9UrodoHtU8k+cOy0Oe1TB27u9Q7sOr9daPPFQaVLM78FNWU9HGCobIJNgv6lBeF82cxYJyNESBfHV0jA"
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "الحمد لله، أنا بخير وأتم الاستعداد لمساعدتك! 🚀\n\nكيف يمكنني دعمك اليوم في مشروعك أو أي مهمة برمجية ومعمارية تعمل عليها؟",
+              "thoughtSignature": "EogCCoUCAWkUfRP0cTZDRtPlwHiXfyIPAH/ZlUN3CsB3Tl6gr+xluInt1/bM56J2fTOFkDpW+scRKW+77+aQHeqmDLdym4W3OiuWirLxmj9I/+ZgipJKHaF0v2Q3EtaGbxEdM9IodIQ1+MRI0yUh18DR8ZRAQjZ5aol/U96TPRn5N/2j+mzqVW9YWgHB1ACMo8SLwkta809BuornGKWgRDY/up0q8z+FPlQfY2h4qQ47dve0iC7G1Pji6Gk+nfd1V2QC2161MTLw0U0izBVmseAFLpier6ih0u2XwbyeNtHK8oH1pn1TLS1oabL1xJODtAyfTSB5OGdbDks+Wj4fQ38or7Mc4HV8ICio"
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        }
+      ]
+    },
+    {
       "id": "1790801450383",
       "title": "بناءً على المسح المعماري للمست",
       "history": [
@@ -143,6 +185,6 @@
     }
   ],
   "activeSessionId": "1790801839028",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-30T20:57:24.599Z"
+  "pendingHistory": null,
+  "timestamp": "2026-09-30T20:57:31.435Z"
 }
