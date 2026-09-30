@@ -1,6 +1,34 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1790801164250",
+      "title": "أهلاً بك! كيف يمكنني مساعدتك ا",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! كيف يمكنني مساعدتك اليوم؟ \n\nسواء كنت بحاجة إلى تحليل معماري لمشروعك، أو كتابة وتطوير كود، أو فحص وإصلاح أخطاء، أو تنفيذ تغييرات متعددة الملفات، أنا جاهز لمساعدتك. أخبرني بالمهام أو التحديات البر"
+            },
+            {
+              "text": "مجية التي تعمل عليها!",
+              "thoughtSignature": "EvACCu0CAWkUfRMFxMpWQuzsp4Kco3pQ4A6MYhNo4uQKEV5xleh2n/J+z2y62oGhiqtIDc1a8U0iUTScYyNCkZXyqRCQsvkXTBNchHJeOI2x+ggiGLNpbAW2O9h6wY5w16NB0Jd8zD0l1afodzZ/y74rAPl1DS9VllaQo2aei6upiC2WrnNtG2WhzuVINVaAZnXAbtXfTZ7gI0rkegkcXpbcRI8RUOIBEpNXFpMRLZdUD8OiGnjpgu6xNU6ltq4zPVpI/fb9SewuyrKppKa53wfsTUo3b7Rd4zKgrJr5D+eXQqh4CjC8RLMpmPREFJT2DsJKei2RdkH+cK7AQ6p0zT9P4EZgGk3RW7kS/QJHDy4PUVYyYmfaCZyvFUJ+2fJ+8x81yYSiafcmc2mnibA9BKTC9CTAmwFVQsw6f/09iAqniHX0fXM1Wd7WVlcJjN59gQnMS+8+X2+VCTICiXglb7SsqChCFXOSPMjJD7nj+fA7aec="
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1790801164250",
   "pendingHistory": null,
-  "timestamp": "2026-09-30T20:46:04.250Z"
+  "timestamp": "2026-09-30T20:46:12.683Z"
 }
