@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1790801164250",
-      "title": "أهلاً بك! كيف يمكنني مساعدتك ا",
+      "title": "أنا بخير والحمد لله، وجاهز تما",
       "history": [
         {
           "role": "user",
@@ -24,11 +24,29 @@
             }
           ],
           "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا بخير والحمد لله، وجاهز تماماً لمساعدتك! \n\nكيف يمكنني دعمك اليوم في مشروعاتك البرمجية أو استشاراتك المعمارية؟",
+              "thoughtSignature": "EqYCCqMCAWkUfRPTy5abYkButXYiWvGWg66ysgP1tzQF2mJ1ByvynfEHZXwKjxLqW47dDjCYJECse8pREZWPTfkkwcjm9ATZQxECcSbkOh88hV/P6C71k2u9ngmQzuJqIibuVHiPdIk3aUnsX166HlmLn1nBIwGrMmtKe3czqsJvY34kykoOvsHpjDh5gekW4GoILTzfLAMkRwBveN3HhCJcT62xsssGtyot+XNAd8j7YSHqnxh7aV/5PBRXN9logUK1MOkhzHehoNVUiDdLpeSai5v1Y12a4I/57KMOSRcpYtjfQAvdjRbvpKZpZMnVmtn6BeOysVWS0pydGQbXpjEv4ELaU/1UOLF9YcuPYc4Lmw3pvdhgWTeseXLJfAkGoJBNgUoqAVQk"
+            }
+          ],
+          "model": "gemini-3.6-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1790801164250",
   "pendingHistory": null,
-  "timestamp": "2026-09-30T20:46:12.683Z"
+  "timestamp": "2026-09-30T20:46:20.540Z"
 }
