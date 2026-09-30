@@ -143,6 +143,6 @@
     }
   ],
   "activeSessionId": "1790801839028",
-  "pendingHistory": null,
-  "timestamp": "2026-09-30T20:57:19.029Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
+  "timestamp": "2026-09-30T20:57:24.599Z"
 }
