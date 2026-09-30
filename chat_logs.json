@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1790801872068",
-      "title": "أهلاً بك! أنا **Mastermind** -",
+      "title": "أهلاً بك مجدداً! 😊\n\nتفضل، كيف",
       "history": [
         {
           "role": "user",
@@ -18,6 +18,24 @@
             {
               "text": "أهلاً بك! أنا **Mastermind** - المهندس البرمجي الخبير والمعماري التقني. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى:\n- تحليل وتصميم المعمارية الخاصة بالمشروع (Architecture Analysis & Planning).\n- كتابة أو تعديل كود أو إصلاح أخطاء (Implementation & Bug Fixing).\n- فحص واختبار المكونات والتركيبات (Testing & Validation).\n- أو أي استفسار تقني آخر.\n\nأنا جاهز لمساعدتك، تفضل بشرح ما تريد العمل عليه!",
               "thoughtSignature": "EqoDCqcDAWkUfRMRW8HRust1Wc2kj/Q9k5Q3zNM6SMj1kmGkRCMU+nKi45udcWJk0ASCMEHsSZrmUoXSS2rb1OA6b2sypSGmHbcqfbtlLifeuApI6b8v6RDEWrPxHL11CyjGnDhTBhGSpSi1YJTg/fvZ3Q7TwYmg7enqPt9y14mI5quFMnLR69/IGQNJxalvZ69ijh+3AQlIVNj77CMw2V9n5uhOaj9NGtekzpYjzOQbgcj08qMxlmt9O+m6Cd4Oe18vOuzIKSrlvZ0gRyI7FXGa/yuKSf5G80jsKbBVvJwXOEfzH6nvhFVqs7BPNW3UrTMFLoaNbyxBucKerodyLzMhaM5rEcbLy3uQLp08F+GrlOyo+lr7OWb0bx0PUn/A5VW6vm/4tbfHu0IRZRqJR9I8VAHFTnTNCaoZ6kWCs+g3V6+PSrFbQySB5d2JOriXzDLwY29ET6Mq5wn7K5iozq+jkuOdaUWq/9rI8NoSo4nDb5qlrpJKXQlZmUOXiBwyrX6fZSGLEPg0XiJse14xjlyN5TYW66lGmPya6m3V7eHXta9ZaY1kxGVZ5/fe"
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك مجدداً! 😊\n\nتفضل، كيف يمكنني تقديم المساعدة لك اليوم؟ يمكنك مشاركة تفاصيل الميزة التي تريد بنائها، الخطأ الذي تريد إصلاحه، أو السؤال الذي تدور حوله فكرتك.",
+              "thoughtSignature": "Er4CCrsCAWkUfRPFoPuxQbphxu/Y3OuvODMVk7Ph5qa519WPwTSDU8qL363z/4wfICP0gnhHQ94TYKb9vykBaxMpUA+y5m7gz5OzuxD/bxFwkGWSkgmK9mKaiDmtP/3W5EV9PFH2X0leJd5jevKuv7eUGwlCgdhiU70vDdoyQUrjOmnM+ewxSubSqlWNIxeAduUVgO2vRPRzcp/6qhKlYxW5IZGm7Hr8fvdeIOw+azrkzrJjl+9HALMg//QhgPHylN/KUiFYk+Bk5h2I2IqDP3EuQL7CigxRb+57RW9fYgYbauXDVBzgL1nA8KxKwYYnMwSNFcwcRRLBf57hsB6Gjnkhv79MtgXxsLdX0yuB9KigSAEAozqcwmfhYZ0Qo77DE467FBkXw9GJs81/waYMf8OTYwTUro9wpceP8LJMJ4kJ"
             }
           ],
           "model": "gemini-3.6-flash"
@@ -208,7 +226,7 @@
       ]
     }
   ],
-  "activeSessionId": "1790801872068",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"أهلاً بك! أنا **Mastermind** - المهندس البرمجي الخبير والمعماري التقني. \\n\\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى:\\n- تحليل وتصميم المعمارية الخاصة بالمشروع (Architecture Analysis & Planning).\\n- كتابة أو تعديل كود أو إصلاح أخطاء (Implementation & Bug Fixing).\\n- فحص واختبار المكونات والتركيبات (Testing & Validation).\\n- أو أي استفسار تقني آخر.\\n\\nأنا جاهز لمساعدتك، تفضل بشرح ما تريد العمل عليه!\",\"thoughtSignature\":\"EqoDCqcDAWkUfRMRW8HRust1Wc2kj/Q9k5Q3zNM6SMj1kmGkRCMU+nKi45udcWJk0ASCMEHsSZrmUoXSS2rb1OA6b2sypSGmHbcqfbtlLifeuApI6b8v6RDEWrPxHL11CyjGnDhTBhGSpSi1YJTg/fvZ3Q7TwYmg7enqPt9y14mI5quFMnLR69/IGQNJxalvZ69ijh+3AQlIVNj77CMw2V9n5uhOaj9NGtekzpYjzOQbgcj08qMxlmt9O+m6Cd4Oe18vOuzIKSrlvZ0gRyI7FXGa/yuKSf5G80jsKbBVvJwXOEfzH6nvhFVqs7BPNW3UrTMFLoaNbyxBucKerodyLzMhaM5rEcbLy3uQLp08F+GrlOyo+lr7OWb0bx0PUn/A5VW6vm/4tbfHu0IRZRqJR9I8VAHFTnTNCaoZ6kWCs+g3V6+PSrFbQySB5d2JOriXzDLwY29ET6Mq5wn7K5iozq+jkuOdaUWq/9rI8NoSo4nDb5qlrpJKXQlZmUOXiBwyrX6fZSGLEPg0XiJse14xjlyN5TYW66lGmPya6m3V7eHXta9ZaY1kxGVZ5/fe\"}],\"model\":\"gemini-3.6-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-09-30T21:00:13.662Z"
+  "activeSessionId": "1790802027556",
+  "pendingHistory": null,
+  "timestamp": "2026-09-30T21:00:27.556Z"
 }
