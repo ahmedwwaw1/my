@@ -431,7 +431,7 @@ async function chapterEditor(){
    🧩 منشئ الأقسام المستقلة
    ينشئ: مجلد/HTML + CSS + JS + JSON، ثم يضيف رابط القسم إلى nav.
    ============================================================ */
-const MM_ROOT_INDEX = 'index.html';
+const MM_SECTION_REGISTRY = 'site_sections.json';
 const MM_SECTION_ALLOWED = /^[A-Za-z0-9_\-\u0600-\u06FF][A-Za-z0-9_\-\u0600-\u06FF \-]*$/;
 
 function mmNormalizeFileName(value, extension){
@@ -570,25 +570,40 @@ function mmSectionDialog(){
         const result=await writeFile(payload[0],payload[1],payload[2]);
         if(typeof result!=='string'||!result.startsWith('✅')) throw new Error(result||('فشل إنشاء '+payload[0]));
       }
-      status.textContent='⏳ يتم إضافة رابط القسم إلى index.html...';
-      const root=await getGithubFileContent(MM_ROOT_INDEX);
-      if(!root||String(root).startsWith('❌')) throw new Error('تعذر قراءة index.html لإضافة رابط القسم.');
-      const marker='        <!-- MM_DYNAMIC_SECTIONS -->';
-      if(!root.includes(marker)) throw new Error('لم أجد نقطة إدراج الأقسام في index.html.');
-      const escapedFolder=esc(folder);
-      if(root.includes('data-mm-section-folder="'+escapedFolder+'"')) throw new Error('القسم مسجل بالفعل في index.html.');
-      const link='        <a href="'+encodeURI(folder+'/'+html)+'" data-mm-section-folder="'+escapedFolder+'" title="'+esc(name)+'">'+esc(name)+'</a>\\n';
-      const updatedRoot=root.replace(marker,marker+'\\n'+link);
-      const rootResult=await writeFile(MM_ROOT_INDEX,updatedRoot,'🧭 إضافة رابط قسم جديد إلى شريط التنقل');
-      if(typeof rootResult!=='string'||!rootResult.startsWith('✅')) throw new Error(rootResult||'فشل تحديث شريط التنقل.');
-      mmAddSectionNavLink({name:name,folder:folder,html:html});
-      status.textContent='✅ تم إنشاء القسم بالكامل: '+folder+'/';
-      setTimeout(close,900);
+      status.textContent='⏳ يتم تسجيل القسم في سجل الأقسام...';
+      const registryRaw=await getGithubFileContent(MM_SECTION_REGISTRY);
+      if(!registryRaw || String(registryRaw).startsWith('❌')) throw new Error('تعذر قراءة سجل الأقسام.');
+      let registry;
+      try{registry=JSON.parse(registryRaw);}catch(_){throw new Error('سجل الأقسام JSON غير صالح.');}
+      if(!Array.isArray(registry)) throw new Error('سجل الأقسام يجب أن يكون مصفوفة.');
+      if(registry.some(function(item){return String(item&&item.folder||'').toLowerCase()===folder.toLowerCase();}))
+        throw new Error('القسم مسجل بالفعل.');
+      const section={name:name,folder:folder,html:html,css:css,js:js,json:json,createdAt:new Date().toISOString()};
+      registry.push(section);
+      const registryResult=await writeFile(MM_SECTION_REGISTRY,JSON.stringify(registry,null,2)+'\\n','🧭 تسجيل قسم جديد في سجل الموقع');
+      if(typeof registryResult!=='string'||!registryResult.startsWith('✅'))
+        throw new Error(registryResult||'فشل تحديث سجل الأقسام.');
+      mmAddSectionNavLink(section);
+      status.textContent='✅ تم إنشاء القسم بالكامل: '+folder+'/';      setTimeout(close,900);
     }catch(err){
       status.textContent='❌ '+(err&&err.message||String(err));
       save.disabled=false; cancel.disabled=false;
     }finally{state.busy=false;}
   });
+}
+
+async function mmLoadExistingSectionLinks(){
+  const nav=document.querySelector('nav');
+  if(!nav || typeof getGithubFileContent!=='function') return;
+  try{
+    const raw=await getGithubFileContent(MM_SECTION_REGISTRY);
+    if(!raw || String(raw).startsWith('❌')) return;
+    const sections=JSON.parse(raw);
+    if(!Array.isArray(sections)) return;
+    sections.forEach(function(section){
+      if(section && section.folder && section.html) mmAddSectionNavLink(section);
+    });
+  }catch(_){}
 }
 
 function installSectionCreator(){
@@ -1316,8 +1331,9 @@ function hook(){
 function init(){
   styles();
   installSectionCreator();
+  mmLoadExistingSectionLinks();
   hook();
-  setTimeout(function(){installSectionCreator();hook();},300);
+  setTimeout(function(){installSectionCreator();mmLoadExistingSectionLinks();hook();},300);
   setTimeout(sync,500);
 }
 
