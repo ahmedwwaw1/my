@@ -286,6 +286,33 @@
     <script src="my_AI/universal_evidence_engine.js?v=2026.2"></script>
     <script src="my_AI/evidence_operating_loop_adapter.js?v=2026.2"></script>
     <script src="my_AI/ai_app_logic.js?v=2026.2"></script>
+    <script>
+    // 🧭 تحميل الأقسام المنشأة من سجل JSON مباشرة من GitHub Pages
+    (async function(){
+        try{
+            const res=await fetch('site_sections.json?_v='+Date.now(),{cache:'no-store'});
+            if(!res.ok) return;
+            const sections=await res.json();
+            if(!Array.isArray(sections)) return;
+            const nav=document.querySelector('nav');
+            const addBtn=document.getElementById('mm-add-section-btn');
+            if(!nav) return;
+            sections.forEach(function(section){
+                if(!section || !section.folder || !section.html) return;
+                const exists=Array.from(nav.querySelectorAll('a[data-mm-section-folder]')).some(function(a){
+                    return String(a.dataset.mmSectionFolder||'')===String(section.folder);
+                });
+                if(exists) return;
+                const a=document.createElement('a');
+                a.dataset.mmSectionFolder=String(section.folder);
+                a.href=encodeURI(String(section.folder)+'/'+String(section.html));
+                a.textContent=String(section.name||section.folder);
+                a.title='فتح قسم '+String(section.name||section.folder);
+                if(addBtn) nav.insertBefore(a,addBtn); else nav.appendChild(a);
+            });
+        }catch(_){}
+    })();
+    </script>
     <script src="my%20file%20wo/content_editor.js?v=2026.10.03"></script>
 </body>
 
