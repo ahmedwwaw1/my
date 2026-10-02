@@ -494,6 +494,19 @@ function mmSectionJsTemplate(){
     + 'load();\\n})();\\n';
 }
 
+function mmBuildSectionNavScript(registry){
+  return '(function(){\\n"use strict";\\n'
+    + 'const sections='+JSON.stringify(Array.isArray(registry)?registry:[])+';\\n'
+    + 'const nav=document.querySelector("nav");if(!nav)return;\\n'
+    + 'const addBtn=document.getElementById("mm-add-section-btn");\\n'
+    + 'sections.forEach(function(section){if(!section||!section.folder||!section.html)return;'
+    + 'const exists=Array.from(nav.querySelectorAll("a[data-mm-section-folder]")).some(function(a){return String(a.dataset.mmSectionFolder||"")===String(section.folder);});'
+    + 'if(exists)return;const a=document.createElement("a");a.dataset.mmSectionFolder=String(section.folder);'
+    + 'a.href=encodeURI(String(section.folder)+"/"+String(section.html));a.textContent=String(section.name||section.folder);'
+    + 'a.title="فتح قسم "+String(section.name||section.folder);if(addBtn)nav.insertBefore(a,addBtn);else nav.appendChild(a);});\\n'
+    + '})();\\n';
+}
+
 async function mmGithubPathExists(path){
   if(typeof safeGithubFetch!=='function') throw new Error('محرك GitHub غير متاح حالياً.');
   const res=await safeGithubFetch('contents/'+path);
@@ -583,6 +596,10 @@ function mmSectionDialog(){
       const registryResult=await writeFile(MM_SECTION_REGISTRY,JSON.stringify(registry,null,2)+'\\n','🧭 تسجيل قسم جديد في سجل الموقع');
       if(typeof registryResult!=='string'||!registryResult.startsWith('✅'))
         throw new Error(registryResult||'فشل تحديث سجل الأقسام.');
+      status.textContent='⏳ يتم تحديث شريط التنقل...';
+      const navScriptResult=await writeFile('site_sections_nav.js',mmBuildSectionNavScript(registry),'🧭 تحديث روابط الأقسام في شريط التنقل');
+      if(typeof navScriptResult!=='string'||!navScriptResult.startsWith('✅'))
+        throw new Error(navScriptResult||'فشل تحديث محرك شريط التنقل.');
       mmAddSectionNavLink(section);
       status.textContent='✅ تم إنشاء القسم بالكامل: '+folder+'/';      setTimeout(close,900);
     }catch(err){
