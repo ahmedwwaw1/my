@@ -1,6 +1,52 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1790977521789",
+      "title": "أنا بخير وبكامل الجاهزية والتر",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا **Mastermind** —"
+            },
+            {
+              "text": " المهندس المعماري المساعد والمهندس البرمجي الذكي.\n\nكيف يمكنني مساعدتك اليوم؟ يمكنك تكليفي بأي مهمة هندسية مثل:\n- **تحليل المجمعات المعمارية (Architecture Discovery)** واستكشاف هيكلية المشروع.\n- **تطوير وتعديل الكود** وكتابة الميزات الجديدة وإصلاح الأخطاء (Debugging & Refactoring).\n- **إجراء الفحوصات واختبارات الأداء والتحقق (Validation & Testing)**.\n- **إدارة المهارات البرمجية والأنظمة التقنية (Skill System & Evolution)**.\n\nتفضل بتحديد ما تريد العمل عليه وسنبدأ فوراً!",
+              "thoughtSignature": "EooFCocFAWkUfROhg/hcS7DW1Y27DJm2NMz0hMO4rzqMaVIQ0QRax3SYibedUYV3AbGPgklTt9rZ92TQ/pa11jAK+qLWjPEi+4rd0cEmcvQoydQzt2PxXVMANsAXO9SpWVQTZnvI8sGP1b0mCmJ4u6Hzp5NhwIOAF7CXGU1IWzpjiQ6C+pbe4bzpCx2uZvIPIaFIFvq/RTqHJ+/NhIGpQA5Pow8Za+or0y5zcc5Jueo63N8bUmO6bkFUriat2LmsidUromJqxERMYqRMKhKKhaAHvQJUAEgZS8Nnf1dienLEOxnIveNnKnCfnEPUAe8UtQ0JqDjM31m+y1zkQTT0P+K+ETpd6Kn2bV9nvSQBzjohV3Vf0h3oBEzajM8D0RFNe0+o/6lW3CZWMBBu5xfkMj7TJgtozXMXoILWaqXOs6O76KqVkfmZt4xIURcJu9Ft5FsZkU5KEwzutDD9naCPJLGZl4k2Mow2HvX1NeewwiUOfvE5sKx0q5z5W1LYLxs9sOjrVIs2ooTBpGhJskDz7D+MJECiV3yD+IBtKHy17TkORQR42YJPSFfYJlDM8iVksUJOv78BrbagzcmqHuOe9uXMU6ASuhKazNcIelFSPostseymZLcl0VXEvD0lcbK+Zqsr3xacd79A6dcdE3iicu2KH2NSfeehaRMlVk2MfMxZ0l0jjqZhm00DgxXOBdIn6qJhPdrBK5hX2u55GZyzLZpNlZrnDVC0riTbG19PVIl1W3BOOL/tfokgnsMUrh5CeUVo4U5nliG/d65KgchieUYirRajQ++/D0lI4Q9j0voGHTIrngsfDwphoh7e+SmzGSS8d0SRH57Eth8mNmWAD84XOhZwFFPAEsypPhQ="
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا بخير وبكامل الجاهزية والتركيز، شكراً لسؤالك! \n\nجميع المحركات البرمجية والأنظمة المعمارية جاهزة للعمل. كيف أستطيع خدمتك في مشروعك اليوم؟",
+              "thoughtSignature": "EvQCCvECAWkUfRMWG3WpU3WHGgUfnWK6ekY418zNKzhiK2L7wp0qWZpDO5Kl58QzPrbad9n0gpwO7tfUz4Wn+FzqRk++GfE4ZMA008YV1BSC/W+DlrVEuAc33bS1rEWUpHOZ+sLu0YbuyzDKsBj7hHZ7aevnf/OZyLw2msihJBOjJeHgkHinvBSghi4XvxhVc7y06XhoxlaDemeWbAtXm2CA4vW5n0WmpAlAmUg5ixZBjIJ9JCRFGTyhEbBzEjp3kMeKzFLMq5Y9/MAvwi5jvvI62l+MvUzjgxQnlm9LDa7bFBR02q7gKkrrHzi6+KFOeniheN13DgnYIO/2vxNIDIwU2sKUWo5a1trNRptMJRggVchU8U7VUDNMQWVVBteCFl9yxW1JNyj44qD2goyHFpv/CuqRvgYhd4NzWBHlQdo/yUDomEHxXv4fn9zrxi6O/admcoz1HmKpffZjOgnkREEn1wGH9QR2g9K0dSP1bQnYQL1fqxCL"
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1790977521789",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-10-02T21:45:45.014Z"
+  "pendingHistory": null,
+  "timestamp": "2026-10-02T21:45:53.477Z"
 }
