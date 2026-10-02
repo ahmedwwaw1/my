@@ -1,31 +1,6 @@
 {
-  "sessions": [
-    {
-      "id": "1790925097354",
-      "title": "أهلاً وسهلاً بك! \n\nأنا **Maste",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً وسهلاً بك! \n\nأنا **Mastermind** - المهندس المعماري المطور والمستشار البرمجي. كيف يمكنني مساعدتك اليوم؟ \n\nسواء كنت بحاجة إلى:\n- تصميم أو تحليل معمارية البرمجيات والنظم (Architecture)\n- تطوير أو إصلاح كود برمجي (Refactoring / Bug Fixing)\n- مراجعة وتحسين الأداء والأمان (Code Audit & Security)\n- بناء ميزات جديدة أو تخطيط مشاريع متكاملة\n\nأنا جاهز لمساعدتك! ما الذي تود العمل عليه اليوم؟",
-              "thoughtSignature": "ErgDCrUDAWkUfRNBhuou3OU7bzCQ6II78vbFqoIfq5hwL5nik5GSKVtw22UHbMQysD8aswem4d65r4pEQqbljlZ22aH70bU27EHzlGwCmyFBscNw5GF8UJBi4qWYv/mX7+JBx3vdqDA9D3q9P310SuSOg7nxR0ZaQvBChdusDHKtPZ2RrPfdvct4F3rJ4pxJDDyApRUT469uIM6WuHgv+JwAbhw2de0icyhvTK+7gaZACQmUQV/mG+wI8iX+Gdx6RRXHekOeHSkRwfyUQ/tAdWTXk/5FOFdtDH96bvvDwLCsqvSoLjZOgGcSKP8cMWged1CBS9tNTq1KxtKD7cbyUFAtkr0J/YYj4M3VI6fMn0+s6s3Zki5I1TpJ6/olFU8O1tirUSKUle9Ha0w036p9qmST4cYkpcBZ1zS3mAbZpt97rjjrHS2OfAq3oehigUS4i332LzX/PylUADvY81R53lvIDsJ/PNXfJsZV7Kfeq3V16GppSbk5gqRS8buw/QG3kibFD6zscPuzYvnrVj2XPMTLogey0ibDQsjConBTZh0w1ycFNcaR6+6eBGJtaeYzD9JkY2LY0j1msPY="
-            }
-          ],
-          "model": "gemini-3.6-flash"
-        }
-      ]
-    }
-  ],
-  "activeSessionId": "1790925122812",
-  "pendingHistory": null,
-  "timestamp": "2026-10-02T07:12:02.812Z"
+  "sessions": [],
+  "activeSessionId": "1790977521789",
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
+  "timestamp": "2026-10-02T21:45:45.014Z"
 }
