@@ -27,7 +27,7 @@ function styles(){
   s.id='mm-json-editor-style';
   s.textContent=`
 .mm-json-add-btn{appearance:none;border:1px solid rgba(56,189,248,.45);background:rgba(56,189,248,.10);color:#67e8f9;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:700;cursor:pointer;transition:.2s;white-space:nowrap;margin-inline-start:8px}
-.mm-json-add-btn:hover{background:rgba(56,189,248,.18);transform:translateY(-1px)}
+.mm-json-add-btn:hover{background:rgba(56,189,248,.18);transform:translateY(-1px)}\n#mm-add-section-btn{appearance:none;border:1px solid rgba(56,189,248,.45);background:rgba(56,189,248,.10);color:#67e8f9;border-radius:8px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap;transition:.2s}#mm-add-section-btn:hover{background:rgba(56,189,248,.18);transform:translateY(-1px)}
 .mm-editor-overlay{position:fixed;inset:0;z-index:200000;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.72);backdrop-filter:blur(5px);direction:rtl}
 .mm-editor-dialog{width:min(560px,96vw);max-height:90vh;overflow:auto;background:#15161c;border:1px solid #303544;border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.6);color:#f1f5f9}
 .mm-editor-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid #272a34}
