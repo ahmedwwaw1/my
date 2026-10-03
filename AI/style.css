@@ -149,3 +149,11 @@ h1{text-align:center;margin:0 0 16px;color:#fff}
 .save-card-btn{background:#0891b2;color:#fff}
 .cancel-card-btn{background:#252936;color:#d1d5db}
 .form-status{min-height:20px;margin-top:10px;color:#94a3b8;font-size:12px;white-space:pre-wrap}
+
+.image-input-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.image-input-row label{margin-bottom:0!important}
+#cardForm input[type="file"]{padding:9px 10px;font-size:12px;cursor:pointer}
+.image-input-hint{margin:-3px 0 13px;color:#7d8797;font-size:11px;line-height:1.6}
+.image-preview{display:flex;align-items:center;gap:10px;margin:-2px 0 13px;padding:8px 10px;background:#0f1117;border:1px solid #303542;border-radius:10px;color:#aeb8c7;font-size:11px}
+.image-preview img{width:54px;height:40px;object-fit:cover;border-radius:6px;background:#000;border:1px solid #2d2d35}
+@media(max-width:620px){.image-input-row{grid-template-columns:1fr}}
