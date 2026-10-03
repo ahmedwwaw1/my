@@ -104,6 +104,36 @@ async function bridgeGithub(path,method,body){
   return data;
 }
 
+function fileToBase64(file){
+  return new Promise(function(resolve,reject){
+    const reader=new FileReader();
+    reader.onload=function(){
+      const value=String(reader.result||'');
+      const comma=value.indexOf(',');
+      if(comma<0){reject(new Error('تعذر قراءة الصورة.'));return;}
+      resolve(value.slice(comma+1));
+    };
+    reader.onerror=function(){reject(new Error('فشل قراءة الصورة من الجهاز.'));};
+    reader.readAsDataURL(file);
+  });
+}
+
+function fileExtension(name,type){
+  const lower=String(name||'').toLowerCase();
+  const map={png:'.png',jpg:'.jpg',jpeg:'.jpg',webp:'.webp',gif:'.gif'};
+  for(const key in map) if(lower.endsWith('.'+key)) return map[key];
+  const byType={ 'image/png':'.png','image/jpeg':'.jpg','image/webp':'.webp','image/gif':'.gif' };
+  return byType[type]||'.png';
+}
+
+async function uploadImage(path,base64){
+  const saved=await bridgeGithub(path,'PUT',{
+    message:'🖼️ رفع صورة من الكمبيوتر لبطاقة قسم AI',
+    content:base64
+  });
+  if(!saved||!saved.content) throw new Error('GitHub لم يؤكد رفع الصورة.');
+}
+
 async function saveJson(items){
   const endpoint=CONFIG.path;
   const current=await bridgeGithub(endpoint,'GET');
@@ -132,6 +162,23 @@ function closeModal(){
 document.getElementById('addCardBtn').addEventListener('click',openModal);
 document.getElementById('closeCardModal').addEventListener('click',closeModal);
 document.getElementById('cancelCardBtn').addEventListener('click',closeModal);
+const imageFileInput=form.elements.imageFile;
+const imagePreview=document.getElementById('imagePreview');
+if(imageFileInput&&imagePreview){
+  imageFileInput.addEventListener('change',function(){
+    const file=imageFileInput.files&&imageFileInput.files[0];
+    if(!file){imagePreview.hidden=true;imagePreview.innerHTML='';return;}
+    if(!file.type.startsWith('image/')||file.size>4*1024*1024){
+      imagePreview.hidden=true;imagePreview.innerHTML='';
+      return;
+    }
+    const url=URL.createObjectURL(file);
+    imagePreview.hidden=false;
+    imagePreview.innerHTML='<img src="'+url+'" alt="معاينة الصورة"><span>'+escHtml(file.name)+'</span>';
+  });
+}
+
+
 modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
 
 form.addEventListener('submit',async function(e){
@@ -141,11 +188,16 @@ form.addEventListener('submit',async function(e){
   const title=String(form.elements.title.value||'').trim();
   const content=String(form.elements.content.value||'');
   const image=String(form.elements.image.value||'').trim();
+  const imageFile=form.elements.imageFile.files && form.elements.imageFile.files[0] ? form.elements.imageFile.files[0] : null;
   const url=String(form.elements.url.value||'').trim();
 
   if(!title){formStatus.textContent='❌ اكتب عنوان البطاقة.';return;}
   if(!validUrl(image)){formStatus.textContent='❌ رابط الصورة غير صالح.';return;}
   if(!validUrl(url)){formStatus.textContent='❌ الرابط غير صالح.';return;}
+  if(imageFile){
+    if(!imageFile.type.startsWith('image/')){formStatus.textContent='❌ الملف المحدد ليس صورة.';return;}
+    if(imageFile.size>4*1024*1024){formStatus.textContent='❌ حجم الصورة يجب ألا يتجاوز 4MB.';return;}
+  }
 
   saveBtn.disabled=true;
   formStatus.textContent='⏳ قراءة قاعدة البيانات...';
@@ -156,11 +208,22 @@ form.addEventListener('submit',async function(e){
       const n=Number(item&&item.id);
       return Number.isFinite(n)?Math.max(max,n):max;
     },0);
+    let finalImage=image;
+    if(imageFile){
+      formStatus.textContent='⏳ يتم رفع الصورة إلى AI/images/...';
+      const base64=await fileToBase64(imageFile);
+      const ext=fileExtension(imageFile.name,imageFile.type);
+      const safeName='card-'+Date.now()+ext;
+      const imagePath='AI/images/'+safeName;
+      await uploadImage(imagePath,base64);
+      finalImage='images/'+safeName;
+    }
+
     items.push({
       id:String(maxId+1),
       title:title,
       content:content,
-      image:image,
+      image:finalImage,
       url:url
     });
 
