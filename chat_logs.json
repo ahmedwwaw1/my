@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1791027693652",
+      "title": "أهلاً بك! أنا **Mastermind** —",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا **Mastermind** — المساعد المعماري والمهندس البرمجي المستقل. \n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى:\n- **تحليل أو تصميم معمارية برمجية**\n- **تطوير واستكشاف الكود أو إضافة ميزات جديدة**\n- **إصلاح الأخطاء وتنفيذ الاختبارات (Debugging & Testing)**\n- **تحسين الأداء وإعادة الهيكلة (Refactoring)**\n\nأنا جاهز، يُرجى تزويدي بالطلب أو تفاصيل المهمة لنبدأ فوراً!",
+              "thoughtSignature": "Eo0ECooEAWkUfRNiB+rANmSM9yrl3iKDXwbA5c2F3wKe+0AqBR2MX9WK3g82eKz9YkK5Puleh+SW/upS9YXmxVVR47OYlwarDzS3IazNK8Uuh0PnXjCpBYAQPkAWpyuekCNOFKAcy1V0+P1eM7a67bEB+8qH6Zj0Kd3GB5GkpksAQNTa7PzvSpAN3uuMcN7byvN2UMmJ/Th7978wtAtJUZbYNmErGD/GeXsH0Iu+WYFo3SNwG2/W1sSmv1sAbLdqUVK9769ntmfKu4+2akoR9ZERPRAGa46eAaU8v1W4k1l4RElG/5nMNCxd4CfftCFiNkHLXQDVZBZHEBo0UEHQVMfBxaD54tspsnpYHreQPZy22Uy7fU48KCqbSF5B14sgDShMkYUqWYQZlUTNqGGPq9Ye3UM5EqiVEsKaSPHp/Ed1q+SredQ91A/MjjlwvAxy5H9sywBkgjLzdK8OU4rudMHfFeMEAq8kgua9AbzujT1kwZgI2UHp/QoSeMenGOI2hZDhkxD/IToEdMLTGEj0HGn+mHqTEfJMqsjRhAhRMjp/xVFqr0dUAsbObYRy7Co1wTHrVhh8iPwNJmZdGh2rGwE337Nd9lfao+s+Qag5xm39a5iLse/UMUD49PMlPE3E7wptmEK7r0x8WJbrozj7/mWLlfD/h8EIxp/6kKjDVtubjgTEmhVMrDUW5bboSQCg"
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1791027693652",
   "pendingHistory": null,
-  "timestamp": "2026-10-03T11:41:33.653Z"
+  "timestamp": "2026-10-03T11:41:46.173Z"
 }
