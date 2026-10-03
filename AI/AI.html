@@ -1,1 +1,53 @@
-<!DOCTYPE html>\n<html lang="ar" dir="rtl">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>AI</title>\n  <link rel="stylesheet" href="./style.css">\n</head>\n<body>\n  <nav class="section-nav">\n    <a href="../index.html">⬅️ الموقع الرئيسي</a>\n    <span class="section-nav-title">AI</span>\n  </nav>\n  <main class="section-container">\n    <h1 id="sectionTitle">AI</h1>\n    <p id="sectionStatus" class="section-status">⏳ جارٍ تحميل بيانات القسم...</p>\n    <section id="sectionGrid" class="section-grid" aria-live="polite"></section>\n  </main>\n  <script>window.MM_SECTION_CONFIG={name:"AI",dataFile:"data.json"};</script>\n  <script src="./ai.js"></script>\n</body>\n</html>\n
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI</title>
+  <link rel="stylesheet" href="./style.css?v=2026.10.03.2">
+</head>
+<body>
+  <nav class="section-nav">
+    <a href="../index.html">⬅️ الموقع الرئيسي</a>
+    <span class="section-nav-title">AI</span>
+    <button type="button" id="addCardBtn" class="add-card-btn">➕ إضافة بطاقة</button>
+  </nav>
+
+  <main class="section-container">
+    <h1 id="sectionTitle">AI</h1>
+    <p id="sectionStatus" class="section-status">⏳ جارٍ تحميل بيانات القسم...</p>
+    <section id="sectionGrid" class="section-grid" aria-live="polite"></section>
+  </main>
+
+  <div id="cardModal" class="card-modal" hidden>
+    <div class="card-dialog" role="dialog" aria-modal="true" aria-labelledby="cardDialogTitle">
+      <div class="dialog-head">
+        <h2 id="cardDialogTitle">➕ إضافة بطاقة</h2>
+        <button type="button" id="closeCardModal" class="dialog-close" aria-label="إغلاق">✕</button>
+      </div>
+      <form id="cardForm">
+        <label>عنوان البطاقة
+          <input name="title" maxlength="240" required>
+        </label>
+        <label>المحتوى
+          <textarea name="content" rows="5" maxlength="4000"></textarea>
+        </label>
+        <label>رابط الصورة (اختياري)
+          <input name="image" type="url" dir="ltr" placeholder="https://...">
+        </label>
+        <label>الرابط (اختياري)
+          <input name="url" type="url" dir="ltr" placeholder="https://...">
+        </label>
+        <div class="dialog-actions">
+          <button type="submit" id="saveCardBtn" class="save-card-btn">💾 حفظ البطاقة</button>
+          <button type="button" id="cancelCardBtn" class="cancel-card-btn">إلغاء</button>
+        </div>
+        <div id="cardFormStatus" class="form-status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../my_AI/security_config.js?v=2026.10.03.2"></script>
+  <script src="./ai.js?v=2026.10.03.2"></script>
+</body>
+</html>
