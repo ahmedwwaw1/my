@@ -92,7 +92,7 @@ async function bridgeGithub(path,method,body){
     },
     body:JSON.stringify({
       action:'github',
-      endpoint:'https://api.github.com/repos/'+CONFIG.repo+'/'+path,
+      endpoint:'https://api.github.com/repos/'+CONFIG.repo+'/contents/'+path,
       method:method,
       body:body
     })
