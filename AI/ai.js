@@ -174,7 +174,7 @@ form.addEventListener('submit',async function(e){
   }finally{
     saveBtn.disabled=false;
   }
-}
+});
 
 readJson()
   .then(render)
