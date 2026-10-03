@@ -214,9 +214,9 @@ form.addEventListener('submit',async function(e){
       const base64=await fileToBase64(imageFile);
       const ext=fileExtension(imageFile.name,imageFile.type);
       const safeName='card-'+Date.now()+ext;
-      const imagePath='AI/images/'+safeName;
+      const imagePath='AI/'+safeName;
       await uploadImage(imagePath,base64);
-      finalImage='images/'+safeName;
+      finalImage=safeName;
     }
 
     items.push({
