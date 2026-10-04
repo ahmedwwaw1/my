@@ -27,6 +27,15 @@
     "title": "مهارات Skills",
     "content": "",
     "image": "images/card-1791142313777.jpg",
-    "links": []
+    "links": [
+      {
+        "title": "سوق مهارات الذكاء الاصطناعي AI Skills Marketplace",
+        "url": "https://www.maharaai.com/ar",
+        "image": "images/link-1791142475607.png"
+      }
+    ],
+    "url": "https://www.maharaai.com/ar",
+    "linkTitle": "سوق مهارات الذكاء الاصطناعي AI Skills Marketplace",
+    "linkImage": "images/link-1791142475607.png"
   }
 ]
