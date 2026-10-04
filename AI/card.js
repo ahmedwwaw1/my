@@ -149,6 +149,7 @@ function renderLinks(){
   links.forEach(function(link,index){
     const item=document.createElement('article');
     item.className='detail-link-item';
+    item.dataset.index=String(index);
 
     const linkCard=document.createElement('a');
     linkCard.className='detail-link-card';
@@ -175,16 +176,11 @@ function renderLinks(){
     const title=document.createElement('strong');
     title.textContent=String(link.title||'فتح الرابط');
     body.appendChild(title);
-
-    const openText=document.createElement('span');
-    openText.className='detail-link-open';
-    openText.textContent='فتح الرابط ↗';
-    body.appendChild(openText);
-
     linkCard.appendChild(body);
 
     const actions=document.createElement('div');
     actions.className='detail-link-actions';
+    actions.setAttribute('aria-hidden','true');
 
     const edit=document.createElement('button');
     edit.type='button';
@@ -212,6 +208,52 @@ function renderLinks(){
     item.appendChild(linkCard);
     item.appendChild(actions);
     frag.appendChild(item);
+
+    let pressTimer=null;
+    let longPressTriggered=false;
+
+    function cancelLongPress(){
+      if(pressTimer){
+        clearTimeout(pressTimer);
+        pressTimer=null;
+      }
+    }
+
+    function startLongPress(e){
+      if(e.button!==undefined && e.button!==0 && e.pointerType!=='touch') return;
+      longPressTriggered=false;
+      cancelLongPress();
+      pressTimer=setTimeout(function(){
+        pressTimer=null;
+        longPressTriggered=true;
+        document.querySelectorAll('.detail-link-item.link-actions-visible').forEach(function(other){
+          if(other!==item) other.classList.remove('link-actions-visible');
+        });
+        item.classList.add('link-actions-visible');
+        actions.setAttribute('aria-hidden','false');
+        if(navigator.vibrate) navigator.vibrate(30);
+      },650);
+    }
+
+    function finishPress(){
+      cancelLongPress();
+      if(longPressTriggered){
+        setTimeout(function(){longPressTriggered=false;},50);
+      }
+    }
+
+    linkCard.addEventListener('pointerdown',startLongPress);
+    linkCard.addEventListener('pointerup',finishPress);
+    linkCard.addEventListener('pointerleave',cancelLongPress);
+    linkCard.addEventListener('pointercancel',cancelLongPress);
+
+    linkCard.addEventListener('click',function(e){
+      if(longPressTriggered){
+        e.preventDefault();
+        e.stopPropagation();
+        longPressTriggered=false;
+      }
+    });
   });
 
   linksGrid.appendChild(frag);
