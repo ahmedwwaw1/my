@@ -11,8 +11,12 @@ const CONFIG={
 
 const params=new URLSearchParams(location.search);
 const cardId=String(params.get('id')||'');
-const root=document.getElementById('cardDetail');
+
 const status=document.getElementById('detailStatus');
+const detailTitle=document.getElementById('detailTitle');
+const linksGrid=document.getElementById('linksGrid');
+const linksEmpty=document.getElementById('linksEmpty');
+
 const linkModal=document.getElementById('linkModal');
 const linkForm=document.getElementById('linkForm');
 const linkStatus=document.getElementById('linkFormStatus');
@@ -68,6 +72,7 @@ async function bridgeGithub(path,method,body){
       body:body
     })
   });
+
   const text=await res.text();
   let data=null;
   try{data=JSON.parse(text)}catch(_){data={error:text}};
@@ -88,12 +93,14 @@ async function saveJson(nextItems){
   const current=await bridgeGithub(CONFIG.path,'GET');
   const sha=current&&current.sha;
   if(!sha) throw new Error('تعذر الحصول على SHA لملف JSON.');
+
   const content=JSON.stringify(nextItems,null,2)+'\n';
   const saved=await bridgeGithub(CONFIG.path,'PUT',{
     message:editingIndex>=0?'✏️ تعديل رابط في بطاقة AI':'🔗 إضافة رابط إلى بطاقة AI',
     content:btoa(unescape(encodeURIComponent(content))),
     sha:sha
   });
+
   if(!saved||!saved.content) throw new Error('GitHub لم يؤكد حفظ ملف JSON.');
 }
 
@@ -115,70 +122,40 @@ function normalizeLinks(item){
       };
     });
   }
+
   if(item&&item.url){
     return [{
-      title:String(item.linkTitle||'الرابط'),
+      title:String(item.linkTitle||item.title||'الرابط'),
       url:String(item.url||''),
       image:String(item.linkImage||'')
     }];
   }
+
   return [];
 }
 
-function renderCard(){
-  root.innerHTML='';
-
-  const article=document.createElement('article');
-  article.className='detail-card';
-
-  if(card.image){
-    const img=document.createElement('img');
-    img.className='detail-card-image';
-    img.src=String(card.image);
-    img.alt=String(card.title||'');
-    img.loading='eager';
-    article.appendChild(img);
-  }
-
-  const body=document.createElement('div');
-  body.className='detail-card-body';
-
-  const title=document.createElement('h1');
-  title.textContent=String(card.title||'بدون عنوان');
-  body.appendChild(title);
-
-  if(String(card.content||'').trim()){
-    const content=document.createElement('p');
-    content.className='detail-card-content';
-    content.textContent=String(card.content||'');
-    body.appendChild(content);
-  }
-
-  article.appendChild(body);
-  root.appendChild(article);
-}
-
 function renderLinks(){
-  const linksGrid=document.getElementById('linksGrid');
   linksGrid.innerHTML='';
   const links=normalizeLinks(card);
 
   if(!links.length){
-    document.getElementById('linksEmpty').hidden=false;
+    linksEmpty.hidden=false;
     return;
   }
-  document.getElementById('linksEmpty').hidden=true;
 
+  linksEmpty.hidden=true;
   const frag=document.createDocumentFragment();
-  links.forEach(function(link,index){
-    const wrap=document.createElement('div');
-    wrap.className='detail-link-row';
 
-    const a=document.createElement('a');
-    a.className='detail-link-card';
-    a.href=String(link.url||'#');
-    a.target='_blank';
-    a.rel='noopener noreferrer';
+  links.forEach(function(link,index){
+    const item=document.createElement('article');
+    item.className='detail-link-item';
+
+    const linkCard=document.createElement('a');
+    linkCard.className='detail-link-card';
+    linkCard.href=String(link.url||'#');
+    linkCard.target='_blank';
+    linkCard.rel='noopener noreferrer';
+    linkCard.title='فتح '+String(link.title||'الرابط')+' في صفحة جديدة';
 
     if(link.image){
       const img=document.createElement('img');
@@ -189,7 +166,7 @@ function renderLinks(){
       img.addEventListener('error',function(){
         img.style.display='none';
       });
-      a.appendChild(img);
+      linkCard.appendChild(img);
     }
 
     const body=document.createElement('span');
@@ -199,18 +176,12 @@ function renderLinks(){
     title.textContent=String(link.title||'فتح الرابط');
     body.appendChild(title);
 
-    const urlText=document.createElement('span');
-    urlText.className='detail-link-url';
-    urlText.textContent=String(link.url||'');
-    body.appendChild(urlText);
-
     const openText=document.createElement('span');
     openText.className='detail-link-open';
-    openText.textContent='فتح في صفحة جديدة ↗';
+    openText.textContent='فتح الرابط ↗';
     body.appendChild(openText);
 
-    a.appendChild(body);
-    wrap.appendChild(a);
+    linkCard.appendChild(body);
 
     const actions=document.createElement('div');
     actions.className='detail-link-actions';
@@ -219,22 +190,43 @@ function renderLinks(){
     edit.type='button';
     edit.className='edit-link-btn';
     edit.textContent='✏️ تعديل';
-    edit.addEventListener('click',function(){openLinkModal(index);});
+    edit.addEventListener('click',function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      openLinkModal(index);
+    });
 
     const del=document.createElement('button');
     del.type='button';
     del.className='delete-link-btn';
     del.textContent='🗑️ حذف';
-    del.addEventListener('click',function(){deleteLink(index);});
+    del.addEventListener('click',function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      deleteLink(index);
+    });
 
     actions.appendChild(edit);
     actions.appendChild(del);
-    wrap.appendChild(actions);
 
-    frag.appendChild(wrap);
+    item.appendChild(linkCard);
+    item.appendChild(actions);
+    frag.appendChild(item);
   });
 
   linksGrid.appendChild(frag);
+}
+
+function syncLegacyFields(links){
+  if(links[0]){
+    card.url=links[0].url;
+    card.linkTitle=links[0].title;
+    card.linkImage=links[0].image;
+  }else{
+    delete card.url;
+    delete card.linkTitle;
+    delete card.linkImage;
+  }
 }
 
 function openLinkModal(index){
@@ -249,6 +241,7 @@ function openLinkModal(index){
   linkImageFileInput.value='';
   linkStatus.textContent='';
   document.getElementById('linkDialogTitle').textContent=index>=0?'✏️ تعديل الرابط':'🔗 إنشاء رابط';
+
   updateLinkPreview();
   setTimeout(function(){linkForm.elements.linkTitle.focus()},0);
 }
@@ -273,35 +266,32 @@ function updateLinkPreview(){
   }
 
   linkImagePreview.hidden=false;
+
   const img=document.createElement('img');
   img.src=src;
   img.alt='معاينة صورة الرابط';
+
   const span=document.createElement('span');
   span.textContent=file?file.name:'معاينة صورة الرابط';
+
   linkImagePreview.appendChild(img);
   linkImagePreview.appendChild(span);
 }
 
 async function deleteLink(index){
   const links=normalizeLinks(card);
-  if(!links[index])return;
-  if(!confirm('هل تريد حذف هذا الرابط من البطاقة؟'))return;
+  if(!links[index]) return;
+  if(!confirm('هل تريد حذف هذا الرابط من البطاقة؟')) return;
 
   status.textContent='⏳ يتم حذف الرابط...';
+
   try{
     links.splice(index,1);
     card.links=links;
-    delete card.url;
-    delete card.linkTitle;
-    delete card.linkImage;
-
-    if(links[0]){
-      card.url=links[0].url;
-      card.linkTitle=links[0].title;
-      card.linkImage=links[0].image;
-    }
+    syncLegacyFields(links);
 
     await saveJson(items);
+
     status.textContent='✅ تم حذف الرابط.';
     renderLinks();
   }catch(error){
@@ -312,14 +302,18 @@ async function deleteLink(index){
 document.getElementById('backToAI').addEventListener('click',function(){
   location.href='AI.html';
 });
+
 document.getElementById('addLinkBtn').addEventListener('click',function(){
   openLinkModal(-1);
 });
+
 document.getElementById('closeLinkModal').addEventListener('click',closeLinkModal);
 document.getElementById('cancelLinkBtn').addEventListener('click',closeLinkModal);
+
 linkModal.addEventListener('click',function(e){
   if(e.target===linkModal)closeLinkModal();
 });
+
 linkForm.elements.linkImage.addEventListener('input',updateLinkPreview);
 linkImageFileInput.addEventListener('change',updateLinkPreview);
 
@@ -334,6 +328,7 @@ linkForm.addEventListener('submit',async function(e){
   if(!title){linkStatus.textContent='❌ اكتب عنوان الرابط.';return;}
   if(!validUrl(url)){linkStatus.textContent='❌ رابط الموقع غير صالح.';return;}
   if(imageUrl&&!validUrl(imageUrl)){linkStatus.textContent='❌ رابط صورة الرابط غير صالح.';return;}
+
   if(imageFile){
     if(!imageFile.type.startsWith('image/')){linkStatus.textContent='❌ الملف المحدد ليس صورة.';return;}
     if(imageFile.size>4*1024*1024){linkStatus.textContent='❌ حجم صورة الرابط يجب ألا يتجاوز 4MB.';return;}
@@ -351,20 +346,21 @@ linkForm.addEventListener('submit',async function(e){
       const base64=await fileToBase64(imageFile);
       const ext=fileExtension(imageFile.name,imageFile.type);
       const safeName='link-'+Date.now()+ext;
+
       await uploadImage('AI/images/'+safeName,base64);
       finalImage='images/'+safeName;
     }
 
     const entry={title:title,url:url,image:finalImage};
+
     if(editingIndex>=0) links[editingIndex]=entry;
     else links.push(entry);
 
     card.links=links;
-    card.url=links[0] ? links[0].url : '';
-    card.linkTitle=links[0] ? links[0].title : '';
-    card.linkImage=links[0] ? links[0].image : '';
+    syncLegacyFields(links);
 
     await saveJson(items);
+
     renderLinks();
     closeLinkModal();
     status.textContent='✅ تم حفظ الرابط بنجاح.';
@@ -378,11 +374,17 @@ linkForm.addEventListener('submit',async function(e){
 (async function(){
   try{
     if(!cardId) throw new Error('معرّف البطاقة غير موجود.');
-    status.textContent='⏳ جارٍ تحميل البطاقة...';
+
+    status.textContent='⏳ جارٍ تحميل الروابط...';
     items=await readJson();
-    card=items.find(function(item){return String(item&&item.id||'')===cardId;});
+
+    card=items.find(function(item){
+      return String(item&&item.id||'')===cardId;
+    });
+
     if(!card) throw new Error('لم يتم العثور على البطاقة.');
-    renderCard();
+
+    detailTitle.textContent='روابط: '+String(card.title||'البطاقة');
     renderLinks();
     status.textContent='';
   }catch(error){
