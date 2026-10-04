@@ -157,3 +157,19 @@ h1{text-align:center;margin:0 0 16px;color:#fff}
 .image-preview{display:flex;align-items:center;gap:10px;margin:-2px 0 13px;padding:8px 10px;background:#0f1117;border:1px solid #303542;border-radius:10px;color:#aeb8c7;font-size:11px}
 .image-preview img{width:54px;height:40px;object-fit:cover;border-radius:6px;background:#000;border:1px solid #2d2d35}
 @media(max-width:620px){.image-input-row{grid-template-columns:1fr}}
+
+.card-dialog-note{margin:-2px 0 13px;padding:9px 11px;border:1px solid #2d3442;border-radius:9px;background:#10131a;color:#94a3b8;font-size:11px;line-height:1.6}
+.create-link-btn,.edit-link-btn{
+  border:0;border-radius:9px;padding:9px 12px;cursor:pointer;font:inherit;font-weight:700;margin-top:10px;
+}
+.create-link-btn{background:#0e7490;color:#fff}
+.edit-link-btn{background:#252936;color:#d1d5db;margin-inline-start:6px}
+.create-link-btn:hover{filter:brightness(1.08)}.edit-link-btn:hover{background:#303544}
+.card-link-preview{
+  display:flex;flex-direction:column;overflow:hidden;margin-top:12px;border:1px solid #303642;border-radius:11px;background:#101217;color:#fff;text-decoration:none;transition:border-color .2s ease,transform .2s ease,background .2s ease
+}
+.card-link-preview:hover{border-color:#00d4ff;background:#171a20;transform:translateY(-1px)}
+.card-link-image{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000}
+.card-link-body{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px}
+.card-link-body strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e8faff}
+.card-link-action{font-size:11px;color:#67e8f9;white-space:nowrap}
