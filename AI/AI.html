@@ -42,14 +42,44 @@
         </div>
         <div id="imagePreview" class="image-preview" hidden></div>
         <div class="image-input-hint">اختر رابط صورة أو صورة من جهاز الكمبيوتر. الصورة المرفوعة سيتم حفظها داخل مجلد <code>AI/images/</code> في المستودع.</div>
-        <label>الرابط (اختياري)
-          <input name="url" type="url" dir="ltr" placeholder="https://...">
-        </label>
+        <div class="card-dialog-note">🔗 يمكنك إنشاء الرابط لاحقًا من داخل البطاقة عبر زر «إنشاء رابط».</div>
         <div class="dialog-actions">
           <button type="submit" id="saveCardBtn" class="save-card-btn">💾 حفظ البطاقة</button>
           <button type="button" id="cancelCardBtn" class="cancel-card-btn">إلغاء</button>
         </div>
         <div id="cardFormStatus" class="form-status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="linkModal" class="card-modal" hidden>
+    <div class="card-dialog" role="dialog" aria-modal="true" aria-labelledby="linkDialogTitle">
+      <div class="dialog-head">
+        <h2 id="linkDialogTitle">🔗 إنشاء رابط</h2>
+        <button type="button" id="closeLinkModal" class="dialog-close" aria-label="إغلاق">✕</button>
+      </div>
+      <form id="linkForm">
+        <label>عنوان الرابط
+          <input name="linkTitle" maxlength="240" required placeholder="مثال: موقع Gemini">
+        </label>
+        <label>رابط الموقع
+          <input name="linkUrl" type="url" dir="ltr" required placeholder="https://...">
+        </label>
+        <div class="image-input-row">
+          <label>رابط صورة الرابط (اختياري)
+            <input name="linkImage" type="url" dir="ltr" placeholder="https://...">
+          </label>
+          <label>رفع صورة للرابط من الكمبيوتر (اختياري)
+            <input name="linkImageFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+          </label>
+        </div>
+        <div id="linkImagePreview" class="image-preview" hidden></div>
+        <div class="image-input-hint">الصورة المرفوعة للرابط سيتم حفظها داخل مجلد <code>AI/images/</code> في المستودع.</div>
+        <div class="dialog-actions">
+          <button type="submit" id="saveLinkBtn" class="save-card-btn">💾 حفظ الرابط</button>
+          <button type="button" id="cancelLinkBtn" class="cancel-card-btn">إلغاء</button>
+        </div>
+        <div id="linkFormStatus" class="form-status" aria-live="polite"></div>
       </form>
     </div>
   </div>
