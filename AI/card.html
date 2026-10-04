@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تفاصيل بطاقة AI</title>
+  <link rel="stylesheet" href="./style.css?v=2026.10.04.2">
+</head>
+<body>
+  <nav class="section-nav">
+    <button type="button" id="backToAI" class="back-to-ai-btn">⬅️ العودة إلى AI</button>
+    <span class="section-nav-title">تفاصيل البطاقة</span>
+  </nav>
+
+  <main class="detail-container">
+    <p id="detailStatus" class="section-status">⏳ جارٍ تحميل البطاقة...</p>
+    <section id="cardDetail"></section>
+
+    <section class="links-section">
+      <div class="links-section-head">
+        <h2>🔗 روابط البطاقة</h2>
+        <button type="button" id="addLinkBtn" class="add-link-btn">➕ إنشاء رابط</button>
+      </div>
+      <p id="linksEmpty" class="links-empty">لا توجد روابط لهذه البطاقة بعد.</p>
+      <div id="linksGrid" class="links-grid"></div>
+    </section>
+  </main>
+
+  <div id="linkModal" class="card-modal" hidden>
+    <div class="card-dialog" role="dialog" aria-modal="true" aria-labelledby="linkDialogTitle">
+      <div class="dialog-head">
+        <h2 id="linkDialogTitle">🔗 إنشاء رابط</h2>
+        <button type="button" id="closeLinkModal" class="dialog-close" aria-label="إغلاق">✕</button>
+      </div>
+      <form id="linkForm">
+        <label>عنوان الرابط
+          <input name="linkTitle" maxlength="240" required placeholder="مثال: موقع Gemini">
+        </label>
+        <label>رابط الموقع
+          <input name="linkUrl" type="url" dir="ltr" required placeholder="https://...">
+        </label>
+        <div class="image-input-row">
+          <label>رابط صورة الرابط (اختياري)
+            <input name="linkImage" type="url" dir="ltr" placeholder="https://...">
+          </label>
+          <label>رفع صورة للرابط من الكمبيوتر (اختياري)
+            <input name="linkImageFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+          </label>
+        </div>
+        <div id="linkImagePreview" class="image-preview" hidden></div>
+        <div class="image-input-hint">الصورة المرفوعة للرابط سيتم حفظها داخل مجلد <code>AI/images/</code>.</div>
+        <div class="dialog-actions">
+          <button type="submit" id="saveLinkBtn" class="save-card-btn">💾 حفظ الرابط</button>
+          <button type="button" id="cancelLinkBtn" class="cancel-card-btn">إلغاء</button>
+        </div>
+        <div id="linkFormStatus" class="form-status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../my_AI/bridge_auth.js?v=2026.10.03"></script>
+  <script src="./card.js?v=2026.10.04.2"></script>
+</body>
+</html>
