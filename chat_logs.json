@@ -1,6 +1,31 @@
 {
-  "sessions": [],
-  "activeSessionId": "1792011104791",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-10-14T20:51:52.070Z"
+  "sessions": [
+    {
+      "id": "1792011104791",
+      "title": "مرحباً بك! أنا **Mastermind**،",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا **Mastermind**، النواة الهندسية والمعمارية للمنظومة. \n\nجاهز لمساعدتك في أي مهمة برمجية أو معمارية، مثل:\n- استكشاف وتحليل بنية المشاريع والكود (`Discovery` & `Architecture`).\n- تصميم وتنفيذ التعديلات والميزات عبر الملفات المختلفة.\n- فحص الأخطاء، التصحيح (`Debugging`)، وتوليد الاختبارات والتحقق البرمجي.\n- إدارة المهارات والتحسين المستمر للنظام.\n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "EvACCu0CAWkUfRNKopqyePf1Kc1LK2z9RWlJXi+26VN2uHzhhntscAFwXeOC7MetsRatwQIIyk7u5/HOSb/vev8xPtk69/4r843wZjm1rNd5ADi7S2u/+p9fBYM7fB1uh6S7c/ckRlJ5pLDEgR4/lAIFMcpEfjtD0JzLioR5MMfMUlYP7Rq0yR8v6G1xM8JEQRzMfyomVOh/8GD3SAZ8FfWAOScagfP6ovaHwnwHkXqxDvzx33dRmaw2RZ8sMicGyzdrrFaYXklTHLZHIoEG5C/i9IylhLvNlq5F/TaEXbm7dVTsxKItHTKcbpt3fXsK8UMBjPyZa3AE3qK+STABHnZVtjy6GJpraSKusaFelupT7YQbmk966+eUhGR+COIsIu/6KBNGIJRs72+fJQXJd45SUDzrrr6rFfu0Fo8/Ymt5tW7Xgz3LbyVQfZLvf2SZd3COBL4v1f2vpXcQIkdVUbdMhzEjeypvrxf7YDPKpJJjQKs="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
+  "activeSessionId": "1792012684043",
+  "pendingHistory": null,
+  "timestamp": "2026-10-14T21:18:04.043Z"
 }
