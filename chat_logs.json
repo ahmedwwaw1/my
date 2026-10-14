@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1792012684043",
+      "title": "مرحباً بك! أنا في خدمتك. \n\nبصف",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا في خدمتك. \n\nبصفتي مهندس برمجيات ومعمارياً سيادياً، أنا جاهز لمساعدتك في:\n- تحليل وهندسة معمارية النظم والمستودعات البرمجية.\n- كتابة وفحص وتنقيح الأكواد بدقة وأمان.\n- استكشاف الأخطاء وإصلاحها عبر حلقة التحقق والبرهان الهندسي.\n- بناء المهارات والمكونات البرمجية أو إدارة وتطوير المشاريع.\n\nكيف يمكنني مساعدتك في مشروعك اليوم؟",
+              "thoughtSignature": "EtICCs8CAWkUfRP1od4tSeIovo+UM0wTTpAl8yTkdPLsNlldVnA61rYqYyv/jxFbyXZWaVztG8xdGlA6x/UJGCwCZ+8d45qKqahoix+nCJ4fk+NGZHKYloH3HBVA7Gvqfl3o0YxygRj7Q9zc1HqldHRaipSSjSLwVA0XsdW9ZA+Af+Z3+P/MgF2z2G9wuSRQrsYdW1UNJQfzopRkBhgGZwnbttIqJGzsbHHh62fDL+sEr1m2sVTDFJdRWYIeAC3fFr9YabXRfqqRxjI2WaLF4WVs6Fj980gBkjLwQHWLjS5cEe2DdaMTkYtvtKDA/exNLvOSGf91eeNfV1eaTtJJDyzLRoWypa46y0JAWB+YvSeSVquACj3SpFL0GfqQdL92myt2+FlTMPDoHlABDFbMpe5Wr9sjrXWte8lzq4DJjUOSJcKqn+/TL+UYH2hfwWxvF6l3Fzs="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    },
+    {
       "id": "1792011104791",
       "title": "مرحباً بك! أنا **Mastermind**،",
       "history": [
@@ -26,6 +50,6 @@
     }
   ],
   "activeSessionId": "1792012684043",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-10-14T21:18:13.850Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"مرحباً بك! أنا في خدمتك. \\n\\nبصفتي مهندس برمجيات ومعمارياً سيادياً، أنا جاهز لمساعدتك في:\\n- تحليل وهندسة معمارية النظم والمستودعات البرمجية.\\n- كتابة وفحص وتنقيح الأكواد بدقة وأمان.\\n- استكشاف الأخطاء وإصلاحها عبر حلقة التحقق والبرهان الهندسي.\\n- بناء المهارات والمكونات البرمجية أو إدارة وتطوير المشاريع.\\n\\nكيف يمكنني مساعدتك في مشروعك اليوم؟\",\"thoughtSignature\":\"EtICCs8CAWkUfRP1od4tSeIovo+UM0wTTpAl8yTkdPLsNlldVnA61rYqYyv/jxFbyXZWaVztG8xdGlA6x/UJGCwCZ+8d45qKqahoix+nCJ4fk+NGZHKYloH3HBVA7Gvqfl3o0YxygRj7Q9zc1HqldHRaipSSjSLwVA0XsdW9ZA+Af+Z3+P/MgF2z2G9wuSRQrsYdW1UNJQfzopRkBhgGZwnbttIqJGzsbHHh62fDL+sEr1m2sVTDFJdRWYIeAC3fFr9YabXRfqqRxjI2WaLF4WVs6Fj980gBkjLwQHWLjS5cEe2DdaMTkYtvtKDA/exNLvOSGf91eeNfV1eaTtJJDyzLRoWypa46y0JAWB+YvSeSVquACj3SpFL0GfqQdL92myt2+FlTMPDoHlABDFbMpe5Wr9sjrXWte8lzq4DJjUOSJcKqn+/TL+UYH2hfwWxvF6l3Fzs=\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"\"}]}]",
+  "timestamp": "2026-10-14T21:20:19.557Z"
 }
