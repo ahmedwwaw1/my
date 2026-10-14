@@ -1,6 +1,48 @@
 {
   "sessions": [
     {
+      "id": "1792012930026",
+      "title": "تفضل هذا هو الكود بلغة C++:\n\n`",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "مرحباً بك! أنا جاهز لمساعدتك في أي مهمة هندسية، تطوير برمجي، تحليل معماري، أو استكشاف وحل المشكلات في المستودع. \n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "ErACCq0CAWkUfRM1EIIuo3taauW/DWTz7O3ygbb+Iat8dXD3tbaHd9msJFwdjOeLip0Yy0E7+O3791ZVWbj13jTooUR1JlNXznJB8/P9ETo0RkaXVr9zvrN/fTMmOxeuZQuhg4AG1k+O6s+2XSSamg4YGvkC638yu++i3g7BkwXmE9E1w/ahJKOgi9UgzJ36ka6Y+EPTxVgdTVDSXDf19oAYC188YcArlioZDylDbMXsRTFh/jbR/VHYAfpg9NVnVIB5Idw6St35PipZ7z/hnPfG1kVg5ZwNg67wKWz6sC6qPKbtmupcuT0em6OfA4NGhXvF9tRwKa5orsZglLO4P7x1x1RuIvp9cb2Ovyrtp3JxkL2b9PAbh1MhIQ8JQeX1GjoWb6pPu1+p+vsT8Ya3pH6Qhg=="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ممكن تكتب لي سطر كود بلغة c++ عن طلب اسم من المستخدم  يقول له اهلا بك با اسمه"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "تفضل هذا هو الكود بلغة C++:\n\n```cpp\n#include <iostream>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    string name;\n    \n    cout << \"ما هو اسمك؟ \";\n    getline(cin, name); // لاستقبال الاسم (حتى لو كان يحتوي على مسافات)\n    \n    cout << \"أهلاً بك يا \" << name << \"!\" << endl;\n    \n    return 0;\n}\n```\n\nإذا كنت تريد **سطرًا واحدًا** فقط للطلب والترحيب ضمن برنامج جاهز، فيمكنك اختصاره هكذا:\n```cpp\nstring name; cout << \"أدخل اسمك: \"; cin >> name; cout << \"أهلاً بك يا \" << name << \"!\\n\";\n```",
+              "thoughtSignature": "EmAKXgFpFH0TPHtXtyoM83IwfDXxHBkyqdiB604SQjyJ5/yrhWZx/etfT0yOdVHYlQVkhrHLeIfz+0t2xNcy3ktKFVj8GqxfFhOc0wiTMlc70j8Q+iJdVkA4chp3RclBhnQ="
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1792012684043",
       "title": "",
       "history": [
@@ -119,6 +161,6 @@
     }
   ],
   "activeSessionId": "1792012930026",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"مرحبا\"}]}]",
-  "timestamp": "2026-10-14T21:22:16.849Z"
+  "pendingHistory": null,
+  "timestamp": "2026-10-14T21:23:24.759Z"
 }
