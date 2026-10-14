@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1792012684043",
-      "title": "عذراً، لم تظهر لي أي صورة! \n\nي",
+      "title": "",
       "history": [
         {
           "role": "user",
@@ -73,6 +73,23 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": ""
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": ""
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
         }
       ]
     },
@@ -103,5 +120,5 @@
   ],
   "activeSessionId": "1792012684043",
   "pendingHistory": null,
-  "timestamp": "2026-10-14T21:21:51.048Z"
+  "timestamp": "2026-10-14T21:22:03.958Z"
 }
