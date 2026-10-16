@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1792184183959",
-      "title": "90 × 90 = **8100**",
+      "title": "70 × 70 = **4900**",
       "history": [
         {
           "role": "user",
@@ -21,11 +21,47 @@
             }
           ],
           "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "80*80="
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "80 × 80 = **6400**",
+              "thoughtSignature": "EpEBCo4BAWkUfRNniJsb9fkzQe9fWj/1CdtN/1nFlyMmY7XrLg1QZ80P2YMJov7wmS83knkZhD33nc8/7enIGTsK979E/6sYZs8ED2mFU6TPoHlrrOBkqsYP+H8DzO/xpLcy7sXBNBk8DhXs/hu4FXAbrLzIt61vfgctl55ZfY3/bHrUcLOxB4roXZWi8wWUnU7wVg=="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "70*70="
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "70 × 70 = **4900**",
+              "thoughtSignature": "EmAKXgFpFH0TXHyn5V6yCiC90oLsf/FHwa14zR5jTiI0vDFeSq5yiEXtVMYjG3/VW8a3lPwOL4Kzr7a/O1UsZ742Yr8wDFhFcha//m9/HNEzWpj13GBOB7nyjCHdiiJsuOo="
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1792184183959",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"90*90=\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"90 × 90 = **8100**\",\"thoughtSignature\":\"EtwBCtkBAWkUfRMoCtVi5WHA0ZCxVtcCPg4vNVoj7mbdYHv3EH/CZavOswxIgGYPFysbqUu3J5V/MU9YM76+QY0aJ2Ka/P4DfbIsOP4LHTXxm44KDuA9End9X3452xMhY3qtaQ0bavWWjOSfnQLZVl/zyADl2sdaB6MqNxrrN0iBBMjvsyC4B/TlTKskB65In9ubZMMbmutdZ3JEmZuciRADwJZmJFuhzxrKQKKSsPwqt32o7oeZ/oj0usbtBOAcBNgvEBTmXX9Y2T+qYHinp5Ir6LbVTHDRCKvxYmyLaw==\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"80*80=\"}]}]",
-  "timestamp": "2026-10-16T21:21:53.882Z"
+  "pendingHistory": null,
+  "timestamp": "2026-10-16T21:22:16.745Z"
 }
