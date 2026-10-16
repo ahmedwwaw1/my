@@ -1,6 +1,31 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "1792184183959",
+      "title": "90 × 90 = **8100**",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "90*90="
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "90 × 90 = **8100**",
+              "thoughtSignature": "EtwBCtkBAWkUfRMoCtVi5WHA0ZCxVtcCPg4vNVoj7mbdYHv3EH/CZavOswxIgGYPFysbqUu3J5V/MU9YM76+QY0aJ2Ka/P4DfbIsOP4LHTXxm44KDuA9End9X3452xMhY3qtaQ0bavWWjOSfnQLZVl/zyADl2sdaB6MqNxrrN0iBBMjvsyC4B/TlTKskB65In9ubZMMbmutdZ3JEmZuciRADwJZmJFuhzxrKQKKSsPwqt32o7oeZ/oj0usbtBOAcBNgvEBTmXX9Y2T+qYHinp5Ir6LbVTHDRCKvxYmyLaw=="
+            }
+          ],
+          "model": "gemini-3.7-flash"
+        }
+      ]
+    }
+  ],
   "activeSessionId": "1792184183959",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"90*90=\"}]}]",
-  "timestamp": "2026-10-16T21:21:01.961Z"
+  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"90*90=\"}]},{\"role\":\"model\",\"parts\":[{\"text\":\"90 × 90 = **8100**\",\"thoughtSignature\":\"EtwBCtkBAWkUfRMoCtVi5WHA0ZCxVtcCPg4vNVoj7mbdYHv3EH/CZavOswxIgGYPFysbqUu3J5V/MU9YM76+QY0aJ2Ka/P4DfbIsOP4LHTXxm44KDuA9End9X3452xMhY3qtaQ0bavWWjOSfnQLZVl/zyADl2sdaB6MqNxrrN0iBBMjvsyC4B/TlTKskB65In9ubZMMbmutdZ3JEmZuciRADwJZmJFuhzxrKQKKSsPwqt32o7oeZ/oj0usbtBOAcBNgvEBTmXX9Y2T+qYHinp5Ir6LbVTHDRCKvxYmyLaw==\"}],\"model\":\"gemini-3.7-flash\"},{\"role\":\"user\",\"parts\":[{\"text\":\"80*80=\"}]}]",
+  "timestamp": "2026-10-16T21:21:53.882Z"
 }
