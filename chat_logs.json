@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1792166752867",
+      "title": "أهلاً وسهلاً بك! معك **Masterm",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "مرحبا"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً وسهلاً بك! معك **Mastermind** من VSA Academy.\n\nكيف يمكنني مساعدتك اليوم في الهندسة البرمجية، تحليلات المعمارية، تطوير الكود، أو حل المشكلات التقنية؟",
+              "thoughtSignature": "Ev0DCvoDAWkUfRNVJ2fEcwp2BUlqQ1LRT0Z6OsECXldi3iBFvawbI5YYRDY5NaztmWN0VCJa2+Eg6qAt7O34iZ2J89Z0seLyBWvz3pHjFB5WCgnlYcrGen1mHRI2aD7/0yTmhE5Sapw0fRoffCZBpqQb8VVu5+KP78DAgtFrsp7FJka6aE1YLr5OC9pLkENRvfHkmJ3Gmwl4mjrJRBaoPRhBhukOgBM6MYBUhW6tPHK2Zwoz0EoTkjqY9IZK2rKwy4/gd2Dtux/7RnQnnjpVDHrxl6Y/4Rx4QtB9/KsDmjHQDHI3Gwo6kP40m1utLe08sD+RrQ4b7F5OUALRb4OLllZpXI7+GJD3uyWb//3mLpReTq7nZPoDu2dLuRuCGZMP2mBwbiM4g9wl6WwVwBd+eF/CFpf8pPX8Wvh1NM3JijTQT1HYPpOIUFSCoDVD3Nnsrb6Ll8wKoAW+in6d6kwpnr1KUHi8lvtaLpZjkDp7S+1td7n0CEvYrSU8rkIQ9Ud/DuAJDZ0dpyRUrVLzZHlDtfjXQH9EZda/GF8YulpWbE96IpCW4ozEKdKOOyg03LHfAnh1o700MDvhF+spaPeLJKPO6RGDp0Skoi9JnDyV8EDsq+sCJkjxHq37JZo2P6WF8ZQHKU5+JFtdOJTGe9ALA9YLvUpyCDWhb/m2xVkBqrs="
+            }
+          ],
+          "model": "gemini-3.6-flash"
+        }
+      ]
+    },
+    {
       "id": "1792166709762",
       "title": "أهلاً وسهلاً بك! 👋\n\nأنا **Mas",
       "history": [
@@ -27,5 +51,5 @@
   ],
   "activeSessionId": "1792166752867",
   "pendingHistory": null,
-  "timestamp": "2026-10-16T16:05:52.867Z"
+  "timestamp": "2026-10-16T17:30:24.931Z"
 }
