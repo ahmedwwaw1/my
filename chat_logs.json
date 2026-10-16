@@ -1,8 +1,8 @@
 {
   "sessions": [
     {
-      "id": "1792012930026",
-      "title": "تفضل هذا هو الكود بلغة C++:\n\n`",
+      "id": "1792166709762",
+      "title": "أهلاً وسهلاً بك! 👋\n\nأنا **Mas",
       "history": [
         {
           "role": "user",
@@ -16,151 +16,16 @@
           "role": "model",
           "parts": [
             {
-              "text": "مرحباً بك! أنا جاهز لمساعدتك في أي مهمة هندسية، تطوير برمجي، تحليل معماري، أو استكشاف وحل المشكلات في المستودع. \n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "ErACCq0CAWkUfRM1EIIuo3taauW/DWTz7O3ygbb+Iat8dXD3tbaHd9msJFwdjOeLip0Yy0E7+O3791ZVWbj13jTooUR1JlNXznJB8/P9ETo0RkaXVr9zvrN/fTMmOxeuZQuhg4AG1k+O6s+2XSSamg4YGvkC638yu++i3g7BkwXmE9E1w/ahJKOgi9UgzJ36ka6Y+EPTxVgdTVDSXDf19oAYC188YcArlioZDylDbMXsRTFh/jbR/VHYAfpg9NVnVIB5Idw6St35PipZ7z/hnPfG1kVg5ZwNg67wKWz6sC6qPKbtmupcuT0em6OfA4NGhXvF9tRwKa5orsZglLO4P7x1x1RuIvp9cb2Ovyrtp3JxkL2b9PAbh1MhIQ8JQeX1GjoWb6pPu1+p+vsT8Ya3pH6Qhg=="
+              "text": "أهلاً وسهلاً بك! 👋\n\nأنا **Mastermind**، المساعد الهندسي والمعماري البرمجي المستقل.\n\nكيف يمكنني مساعدتك اليوم؟ سواء كنت بحاجة إلى:\n- **تحليل وتصميم المعماريات البرمجية** (System Architecture & Design)\n- **مراجعة وفحص الكود** (Code Review & Quality Audit)\n- **إصلاح الأخطاء وتطوير الميزات** (Bug Fixing & Feature Engineering)\n- **تحسين الأداء والتكامل** (Performance & Integration)\n\nأنا جاهز للبدء. تفضل بطرح سؤالك أو وصف المهمة المطلوبة!",
+              "thoughtSignature": "EpkECpYEAWkUfRMo/8Vj2HzMfI2YOqraa4aOkS7YwhToc7EDyR7u5gryRuhg/z63lHGyTSxXpdFNWbtIda9OFLLnkspJ4ikGf5Rupje1z030Lm/5RDly4CHIQ17VE61H2w0x8S+9dgyIDidxakU43gVDGd/qO3CZbgIwTSRWQcj5ol5IiSmLk+j3oS7kKOMQ/YbORqNquNn0WP+DOY80zF+Lo2/+t23LZX9ji9JjUAifsbiMQi3K/Qrl5M9TlrFuo5OalP9sJbV9kqEV+FgNjIpgcphxC5aCPMslSirodqOa6GviY2aNfulhkXlZFcjzoj2n2dLWcLUwVDdKr+d7w2b4U35Mb6vlEodVzQRFBE8vVmqGHfOEPuUFOXfzZiwxinfdPaFVeVknCZdjfI5+MQvNkSRMk4kRhqiKsjT8009dKlRL/JedZ1wA+TIcifODc381uddMXkTtTAKDn/dIvNpHb/q+xaB6DzT5wf506cKs3ncvDpn8HNGJz5yFz06hKcXggYMdMS5B244wkHHtUhosVZlvbYeVzRrfrKZ3rOfKZycKR8HbFVAqTDHuUqTvk+hXZ3gDEePHXHd8qPK3gpWztL2aTYlnB+M4maXeTN2q/TmwAjhu6sek2GH2UI/6E4XYvCoqnSNHrXnbiEx7gKgwB3mGPmGCmkak5fmtKDUPHZcHqu//h8ERSmwkCsRgD6Lqn38+EdPEjZtb"
             }
           ],
-          "model": "gemini-3.7-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "ممكن تكتب لي سطر كود بلغة c++ عن طلب اسم من المستخدم  يقول له اهلا بك با اسمه"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "تفضل هذا هو الكود بلغة C++:\n\n```cpp\n#include <iostream>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    string name;\n    \n    cout << \"ما هو اسمك؟ \";\n    getline(cin, name); // لاستقبال الاسم (حتى لو كان يحتوي على مسافات)\n    \n    cout << \"أهلاً بك يا \" << name << \"!\" << endl;\n    \n    return 0;\n}\n```\n\nإذا كنت تريد **سطرًا واحدًا** فقط للطلب والترحيب ضمن برنامج جاهز، فيمكنك اختصاره هكذا:\n```cpp\nstring name; cout << \"أدخل اسمك: \"; cin >> name; cout << \"أهلاً بك يا \" << name << \"!\\n\";\n```",
-              "thoughtSignature": "EmAKXgFpFH0TPHtXtyoM83IwfDXxHBkyqdiB604SQjyJ5/yrhWZx/etfT0yOdVHYlQVkhrHLeIfz+0t2xNcy3ktKFVj8GqxfFhOc0wiTMlc70j8Q+iJdVkA4chp3RclBhnQ="
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    },
-    {
-      "id": "1792012684043",
-      "title": "",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "مرحباً بك! أنا في خدمتك. \n\nبصفتي مهندس برمجيات ومعمارياً سيادياً، أنا جاهز لمساعدتك في:\n- تحليل وهندسة معمارية النظم والمستودعات البرمجية.\n- كتابة وفحص وتنقيح الأكواد بدقة وأمان.\n- استكشاف الأخطاء وإصلاحها عبر حلقة التحقق والبرهان الهندسي.\n- بناء المهارات والمكونات البرمجية أو إدارة وتطوير المشاريع.\n\nكيف يمكنني مساعدتك في مشروعك اليوم؟",
-              "thoughtSignature": "EtICCs8CAWkUfRP1od4tSeIovo+UM0wTTpAl8yTkdPLsNlldVnA61rYqYyv/jxFbyXZWaVztG8xdGlA6x/UJGCwCZ+8d45qKqahoix+nCJ4fk+NGZHKYloH3HBVA7Gvqfl3o0YxygRj7Q9zc1HqldHRaipSSjSLwVA0XsdW9ZA+Af+Z3+P/MgF2z2G9wuSRQrsYdW1UNJQfzopRkBhgGZwnbttIqJGzsbHHh62fDL+sEr1m2sVTDFJdRWYIeAC3fFr9YabXRfqqRxjI2WaLF4WVs6Fj980gBkjLwQHWLjS5cEe2DdaMTkYtvtKDA/exNLvOSGf91eeNfV1eaTtJJDyzLRoWypa46y0JAWB+YvSeSVquACj3SpFL0GfqQdL92myt2+FlTMPDoHlABDFbMpe5Wr9sjrXWte8lzq4DJjUOSJcKqn+/TL+UYH2hfwWxvF6l3Fzs="
-            }
-          ],
-          "model": "gemini-3.7-flash"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": ""
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": " هل نبدأ باستكشاف المستودع (Discovery) أم لديك مهمة محددة؟"
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": ""
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": ""
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "ما هاذه الصورة"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "عذراً، لم تظهر لي أي صورة! \n\nيبدو أنك لم تقم بإرفاق أو رفع الصورة بعد. يرجى رفع الصورة أو مشاركة رابطها، وسأقوم بتحليلها وفحصها لك فوراً بكل دقة (سواء كانت تصميماً معمارياً، كود برمجياً، واجهة مستخدم، أو أي رسم توضيحي آخر).",
-              "thoughtSignature": "EmAKXgFpFH0Trtp9Ffjw5Aig0Rk/6s+hBNPnm0Klqe877Ef+xD6GjKpJeOe7o72OzaNh/f3aWlyvvDPsw5CtYpYzPb6Jbh0VzF7LXaoE18DJDWQSrRuAflEv8Nhi4//4WjE="
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        },
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": ""
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": ""
-            }
-          ],
-          "model": "gemini-3.1-flash-lite"
-        }
-      ]
-    },
-    {
-      "id": "1792011104791",
-      "title": "مرحباً بك! أنا **Mastermind**،",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "مرحبا"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "مرحباً بك! أنا **Mastermind**، النواة الهندسية والمعمارية للمنظومة. \n\nجاهز لمساعدتك في أي مهمة برمجية أو معمارية، مثل:\n- استكشاف وتحليل بنية المشاريع والكود (`Discovery` & `Architecture`).\n- تصميم وتنفيذ التعديلات والميزات عبر الملفات المختلفة.\n- فحص الأخطاء، التصحيح (`Debugging`)، وتوليد الاختبارات والتحقق البرمجي.\n- إدارة المهارات والتحسين المستمر للنظام.\n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "EvACCu0CAWkUfRNKopqyePf1Kc1LK2z9RWlJXi+26VN2uHzhhntscAFwXeOC7MetsRatwQIIyk7u5/HOSb/vev8xPtk69/4r843wZjm1rNd5ADi7S2u/+p9fBYM7fB1uh6S7c/ckRlJ5pLDEgR4/lAIFMcpEfjtD0JzLioR5MMfMUlYP7Rq0yR8v6G1xM8JEQRzMfyomVOh/8GD3SAZ8FfWAOScagfP6ovaHwnwHkXqxDvzx33dRmaw2RZ8sMicGyzdrrFaYXklTHLZHIoEG5C/i9IylhLvNlq5F/TaEXbm7dVTsxKItHTKcbpt3fXsK8UMBjPyZa3AE3qK+STABHnZVtjy6GJpraSKusaFelupT7YQbmk966+eUhGR+COIsIu/6KBNGIJRs72+fJQXJd45SUDzrrr6rFfu0Fo8/Ymt5tW7Xgz3LbyVQfZLvf2SZd3COBL4v1f2vpXcQIkdVUbdMhzEjeypvrxf7YDPKpJJjQKs="
-            }
-          ],
-          "model": "gemini-3.7-flash"
+          "model": "gemini-3.6-flash"
         }
       ]
     }
   ],
-  "activeSessionId": "1792013251303",
+  "activeSessionId": "1792166709762",
   "pendingHistory": null,
-  "timestamp": "2026-10-14T21:27:31.303Z"
+  "timestamp": "2026-10-16T16:05:37.497Z"
 }
