@@ -1,6 +1,30 @@
 {
   "sessions": [
     {
+      "id": "1792257535738",
+      "title": "أهلاً بك! أنا بخير ولله الحمد،",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "كيف الحال"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أهلاً بك! أنا بخير ولله الحمد، جاهز تماماً لمساعدتك في أي مهمة برمجية، معمارية، أو هندسية تحتاجها. \n\nكيف يمكنني مساعدتك اليوم؟",
+              "thoughtSignature": "EmAKXgFpFH0Ts8Z/9hl7Zb7seZold+eGJ6Y9AqeBXRo+lK4rAhzqfbp/Da0l08FlgNFkbNzZNiA1st1HgGBbe4IVDipeDp+HOJ/kW82zgKkgZKSH06/cWQTfUk8jmcfeQ1o="
+            }
+          ],
+          "model": "gemini-3.5-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1792257526658",
       "title": "أهلاً بك! أنا **Mastermind**، ",
       "history": [
@@ -25,7 +49,7 @@
       ]
     }
   ],
-  "activeSessionId": "1792257535738",
-  "pendingHistory": "[{\"role\":\"user\",\"parts\":[{\"text\":\"كيف الحال\"}]}]",
-  "timestamp": "2026-10-17T17:19:01.518Z"
+  "activeSessionId": "1792257543433",
+  "pendingHistory": null,
+  "timestamp": "2026-10-17T17:19:03.433Z"
 }
