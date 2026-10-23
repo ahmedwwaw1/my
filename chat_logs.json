@@ -1,6 +1,87 @@
 {
   "sessions": [
     {
+      "id": "1792764755758",
+      "title": "إليك ملخص لأبرز أخبار وتطورات ",
+      "history": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "اخبار الكريبتو"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "thought",
+                "args": {
+                  "reasoning": "المستخدم يسأل عن \"اخبار الكريبتو\" (Cryptocurrency news). نحتاج لتقديم نظرة عامة شاملة ومحدثة عن سوق العملات الرقمية وأبرز التطورات الحالية.",
+                  "plan": "استعراض أحدث أخبار الكريبتو وتحليل الوضع الحالي للسوق باستخدام البحث أو جلب المعلومات المتاحة."
+                },
+                "id": "call_683229"
+              },
+              "thoughtSignature": "EmAKXgFpFH0Tk+rk6gXRPhjXdavTk6YixiaKExGpRgnPH0h3YloByY44uC6LLU3aZFKfULXQ9x09DftDT8Y++w+j8BgB6JoaoiM/jpSA6Tsdk1zplQTnV/Rai6eOvFD2YTI="
+            }
+          ]
+        },
+        {
+          "role": "function",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "thought",
+                "response": {
+                  "content": "{\"reasoning\":\"المستخدم يسأل عن \\\"اخبار الكريبتو\\\" (Cryptocurrency news). نحتاج لتقديم نظرة عامة شاملة ومحدثة عن سوق العملات الرقمية وأبرز التطورات الحالية.\",\"plan\":\"استعراض أحدث أخبار الكريبتو وتحليل الوضع الحالي للسوق باستخدام البحث أو جلب المعلومات المتاحة.\"}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "web_search",
+                "args": {
+                  "query": "latest cryptocurrency news today"
+                },
+                "id": "call_606344"
+              },
+              "thoughtSignature": "EnMKcQFpFH0TAvX/Z6nQHkclzj8XPrlNr5StqGvZy6jmsNsZ+4nlfXQHWFyzFaATHXDKHWQBii0UWc8eSGW/dKbeMtNLO6C3VPduJMHbfpa5hlwOzxA1UOJKJLUTVqgLUZjbQfd/4pL3w19PwwgBgNt018Wd"
+            }
+          ]
+        },
+        {
+          "role": "function",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "web_search",
+                "response": {
+                  "content": "{\"source\":\"tavily\",\"query\":\"latest cryptocurrency news today\",\"follow_up_questions\":null,\"answer\":\"According to the sources, Bitcoin has gained more than 2% to $84.8k as risk sentiment prevails, and EOS climbed 10% in bullish trade. Cardano is rebounding toward $0.216 amid whale selling and falling open interest. Singapore's Monetary Authority has united three central banks under a stablecoin settlement plan. Bitcoin reclaimed $82,500 as improved ETF flows lifted market sentiment. UNI's price swung 3.29% due to macro risk, Uniswap's Aggregator Hooks launch, and CME UNI futures trading. Dash surged 3.03% on privacy coin rotation and a $74k Kraken buy order. Filecoin consolidated post-Solstice upgrade and vesting end. XRP declined 3.4% amid whale deposits, weak ETF flows, and technical resistance. Monero surged 12% on leveraged longs and a privacy narrative.\",\"images\":[],\"results\":[{\"url\":\"https://www.newsnow.co.uk/h/Business+&+Finance/Cryptocurrencies\",\"title\":\"Crypto News Today | Cryptocurrency News - NewsNow\",\"content\":\"Advertisement\\n\\n#### About our Crypto News Today\\n\\nLatest news on cryptocurrency and crypto: Bitcoin, Ethereum, XRP, Solana, stablecoins, altcoins, ETFs, DeFi, NFTs, blockchain, regulation and price movements.\\n\\nCryptocurrency has grown from an experiment into a major part of the global financial conversation. Bitcoin, created by the pseudonymous Satoshi Nakamoto and launched in January 2009, pioneered decentralised digital money on a blockchain, and Bitcoin and Ethereum remain the largest assets by market value. [...] Cardano rebounds toward $0.216 amid whale selling and falling OI  Invezz   11:54\\n\\nIn the last 15 minutes\\n\\nAli Martinez Flags $73,000 as Key Bitcoin (BTC) Level Before November 3 Midterms  Coinotag   11:48\\n\\nIn the last half hour\\n\\nXRP Ledger Finally Back: 119.6% Increase Is Here  U.Today   11:42\\n\\nCysic Bridge Attacker Sends $744,000 in Ether to Tornado Cash  Coinotag   11:38\\n\\nIn the last hour\\n\\nSingapore's MAS Unites Three Central Banks Under BLOOM Stablecoin Settlement Plan  Coinotag   11:28\\n\\nCardano's Next Major Upgrade Begins Testing as Dijkstra Testnet Goes Live  U.Today   11:22\\n\\nJPMorgan (JPM) Puts Its Two Tokenized Money Market Funds on Solana (SOL)  Coinotag   11:18\\n\\nBitget expands CFD offering with 8 new metals, energy and global index instruments  Invezz   11:18\\n\\nAdvertisement [...] Staying informed matters when prices can move within minutes. Our NewsNow crypto feed collects the latest headlines from reliable sources on Bitcoin, Ethereum, XRP, Solana and other coins, plus stablecoins, ETFs, DeFi, security incidents and regulation, so you can follow the whole market in one place.\",\"score\":0.8737439,\"raw_content\":null,\"id\":\"e7c455-00\"},{\"url\":\"https://economictimes.indiatimes.com/markets/cryptocurrency\",\"title\":\"Crypto Prices Today LIVE (23 October 2026): Check Crypto Price News Today & Latest Crypto Coins Updates | ET Markets\",\"content\":\"Nifty22,600.00-87.66\\n\\nFEATURED FUNDS\\n\\n★★★★★\\n\\nUTI Aggressive Hybrid Fund Regular Plan-Growth\\n\\n5Y Return\\n\\n8.69 %\\n\\nInvest NowFEATURED FUNDS\\n\\n★★★★★\\n\\nMotilal Oswal Midcap Fund Direct-Growth\\n\\n5Y Return\\n\\n18.25 %\\n\\nInvest Now\\n\\nThe Economic TimesET Markets\\n\\nEnglish EditionEnglish Editionहिन्दीગુજરાતીमराठीবাংলাಕನ್ನಡമലയാളംதமிழ்తెలుగు\\n\\n | 23 October, 2026, 05:17 PM IST | Today's ePaper\\n\\nMy Watchlist Subscribe)\\n\\nSign In)\\n\\nBusiness News›Markets›Crypto\\n\\nBitcoin\\n\\n₹77,46,171\\n\\n-0.19%\\n\\nEthereum\\n\\n₹2,27,784\\n\\n-0.04%\\n\\nTether\\n\\n₹94.80\\n\\n0.02%\\n\\nBNB\\n\\n₹70,764\\n\\n1.73%\\n\\nXRP\\n\\n₹125\\n\\n-0.56%\\n\\nUSDC\\n\\n₹94.86\\n\\n0.04%\\n\\nDeFi Tracker\\n\\n-2.12%\\n\\nNFT & Metaverse Tracker\\n\\n1.95%\\n\\nBTC 50 :: ETH 50\\n\\n1.81%\\n\\nAI Tracker\\n\\n-0.26%\\n\\nSmart Contract Tracker\\n\\n1.00%\\n\\nCrypto Blue Chip - 5\\n\\n1.85%\\n\\nWeb3 Tracker\\n\\n-3.13% [...] 1.00%\\n\\nCrypto Blue Chip - 5\\n\\n1.85%\\n\\nWeb3 Tracker\\n\\n-3.13%\\n\\nLIVE - 05:15 PM | Oct 23, 202605:15 PM | Oct 23, 202605:15 PM | Oct 23, 2026\\n\\nBitcoin₹77,46,171-0.19%\\n\\nEthereum₹2,27,784-0.04%\\n\\nBNB₹70,7641.73%\\n\\nLoading\\n\\n Top Coins\\n\\n |  |  |\\n   --- |\\n  | Bitcoin | 77,48,934 (-0.09%) |\\n  | Ethereum | 2,27,956 (0.11%) |\\n  | Tether | 94.80 (0.01%) |\\n  | BNB | 70,792 (1.80%) |\\n  | XRP | 125 (-0.40%) |\\n\\n Gainers\\n Losers\\n Volumes\\n\\n |  |  |\\n   --- |\\n  | Akedo | 3.24 (20.71%) |\\n  | Pepe | 0.00 (13.33%) |\\n  | Beldex | 7.44 (7.60%) |\\n  | Bitway | 170 (5.97%) |\\n  | Dash | 4,981 (4.59%) |\\n\\n  Gainers\\n |  |  |\\n   --- |\\n  | Pearl | 196 (-8.49%) |\\n  | Lighter | 323 (-8.15%) |\\n  | Quant | 17,354 (-5.73%) |\\n  | Venice Token | 2,482 (-5.37%) |\\n  | Stacks | 30.49 (-5.14%) | [...] Despite a decline in crypto trading activities, there is a rising interest in traditional assets among investors. Open interest in real-world asset contracts has increased to $9 billion, claiming 14% of total volume. The transition marks a significant change in the derivatives markets as crypto inroads are being utilized for traditional trading. This shift indicates a maturation of the digital asset space, making it more accessible to mainstream investors.\\n\\nBitcoin holds near $81,200, Ethereum at $2,415 as institutional inflows cushion global market pressure\\n\\nBitcoin reclaims $82,500 as improved ETF flows lift market sentiment. Here is what experts sayBitcoin reclaims $82,500 as improved ETF flows lift market sentiment. Here is what experts say\",\"score\":0.8286204,\"raw_content\":null,\"id\":\"7d5eaf-01\"},{\"url\":\"https://www.investing.com/news/cryptocurrency-news\",\"title\":\"Cryptocurrency News - Investing.com\",\"content\":\"Advertisement\\n\\n# Cryptocurrency News\\n\\nInvesting.com's crypto news section is providing the latest cryptocurrency news - stay up-to-date with breaking news on major cryptocurrencies, including Bitcoin, Ethereum, Litecoin, Ripple and ICOs.\\n\\n \\n\\n  \\n\\n  Bitcoin gains more than 2% to $84.8k as risk sentiment prevails\\n\\n  Investing.com -- Bitcoin advanced more than 2% on Wednesday, extending gains into a second straight session as risk sentiment on...\\n\\n  + ByInvesting.com•\\n  •+ 2\\n \\n\\n  \\n\\n  Bitcoin tests $84,500 Fibonacci resistance: Live levels\\n\\n  Latest update: Oct 21, 2026, 07:17 PM UTCThis article is regularly updated during market hours\\n  Bitcoin’s 5-hour chart has price...\\n\\n  + ByInvesting.com•\\n \\n\\n  \\n\\n  EOS Climbs 10% In Bullish Trade\",\"score\":0.81133276,\"raw_content\":null,\"id\":\"673f28-02\"},{\"url\":\"https://coinmarketcap.com/top-stories\",\"title\":\"Crypto Market News Today | CoinMarketCap\",\"content\":\"Portfolio\\n\\nWatchlist\\n\\nSearch\\n\\n/\\n\\nLog In\\n\\nImage 60\\n\\nCrypto Market News Today\\n\\nWhat’s happening today in the crypto market? Read the latest crypto market news stories for major cryptocurrency coins, tokens and companies. 24h coverage with new content added throughout the day. CoinMarketCap uses a complex AI + human process to bring you the very latest news and analysis, with new content added 24/7.\\n\\n3 hours ago\\n\\nImage 61: UNI Volatility Explained: Macro Risk, Aggregator Hooks, CME Futures\\n\\nUNI Volatility Explained: Macro Risk, Aggregator Hooks, CME FuturesUNI's 3.29% price swing tied to macro risk off, Uniswap's Aggregator Hooks launch, and CME UNI futures trading. Understand the catalysts behind UNI's recent volatility.\\n\\nImage 62: Uniswap Uniswap\\n\\n8 hours ago [...] Dash (DASH) Surges 3.03% on Privacy Coin Rotation and Kraken BuyDash (DASH) rose 3.03% in 13 hours, driven by sector rotation into privacy coins and a $74k Kraken buy order. Zcash's NU7 upgrade and ZEC's rally likely pulled speculative flows into DASH.\\n\\nImage 120: Dash Dash\\n\\n1 day ago\\n\\nImage 121: Filecoin Consolidates Post-Solstice Upgrade and Vesting End\\n\\nFilecoin Consolidates Post-Solstice Upgrade and Vesting EndFilecoin (FIL) shows a 3.19% move as the market digests Solstice upgrade and the end of major vesting schedules, reducing new FIL issuance by 75%.\\n\\nImage 122: Filecoin Filecoin\\n\\n1 day ago\\n\\nImage 123: Polkadot (DOT) Price Movement Explained: Wallet Security Incident [...] XRP Declines 3.4% Amid Whale Deposits, Weak ETF FlowsXRP fell 3.4% as whale deposits to Binance surged, ETF flows cooled, and technical resistance held firm. Broader crypto risk-off sentiment amplified the drop.\\n\\nImage 72: XRP XRP\\n\\n9 hours ago\\n\\nImage 73: Monero Surges 12% on Leveraged Longs, Privacy Narrative\\n\\nMonero Surges 12% on Leveraged Longs, Privacy NarrativeMonero (XMR) jumped 12% amid $300M in futures open interest and a privacy coin narrative. The move is driven by technical breakout and aggressive derivatives positioning, not new fundamentals.\\n\\nImage 74: Monero Monero\\n\\n11 hours ago\\n\\nImage 75: WLFI Declines 3.5% Amid Trump Scam Allegations\",\"score\":0.80698997,\"raw_content\":null,\"id\":\"4c0c71-03\"},{\"url\":\"https://finance.yahoo.com/markets/crypto\",\"title\":\"Cryptocurrency pricing, market & regulation news - Yahoo Finance\",\"content\":\"Associated Press • 1d ago\\n\\n### Latest News\\n\\n ### Circle jumps 40 places on the Roundtable 100 after $73.3B milestone\\n\\n  TheStreet • 53m ago\\n ### As blockchain investing falls out of vogue, a16z Crypto rebrands as a16z Frontier\\n\\n  TechCrunch • 1h ago \\n\\n  COIN -4.51%\\n ### Crypto Market Today, Oct. 22: Bitcoin and Altcoins Slide as Wall Street Fears Spill Into Crypto Markets\\n\\n  Motley Fool • 2h ago \\n\\n  ETH-USD -3.53%\\n ### Can Uniswap (UNI) Get Back to $10 After a 21% Monthly Drop? Get Back to $10 After a 21% Monthly Drop?\\\")\\n\\n  24/7 Wall St. • 2h ago \\n\\n  UNI7083-USD -6.12%\\n\\nalt text\\n\\n## Decrypt\\n\\n a16z Drops Crypto From Its Name, Widens Bets to AI and Frontier Tech \\n\\n  ### a16z Drops Crypto From Its Name, Widens Bets to AI and Frontier Tech\\n\\n  decrypt • 4h ago\",\"score\":0.78054583,\"raw_content\":null,\"id\":\"47b5a2-04\"}],\"response_time\":4.07,\"request_id\":\"6f9c3b4b-ebbc-4b03-a43a-84bb0e9a3ff6\"}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "إليك ملخص لأبرز أخبار وتطورات سوق العملات الرقمية (الكريبتو) اليوم:\n\n### **1. أداء البيتكوين (Bitcoin):**\n*   **الاستقرار والنمو:** شهد البيتكوين تحركات إيجابية مؤخراً، حيث استعاد مستويات فوق **82,500 دولار**، مع تسجيل مكاسب تجاوزت 2% في بعض الفترات ليصل إلى حوالي **84,800 دولار**.\n*   **المحركات:** يعود هذا التحسن بشكل رئيسي إلى زيادة تدفقات الاستثمار في صناديق المؤشرات المتداولة (ETFs) للبيتكوين، مما عزز من معنويات المستثمرين.\n\n### **2. أبرز تحركات العملات البديلة (Altcoins):**\n*   **عملات الخصوصية:** شهدت عملة **مونيرو (Monero - XMR)** ارتفاعاً ملحوظاً بنسبة 12% مدفوعة بعمليات شراء في العقود الآجلة، كما ارتفعت **داش (Dash - DASH)** بنسبة تزيد عن 3% نتيجة توجه المستثمرين نحو عملات الخصوصية.\n*   **عملات أخرى:** سجلت **EOS** ارتفاعاً قوياً بنسبة 10% في تداولات اتسمت بالتفاؤل، بينما شهدت **XRP** تراجعاً بنسبة 3.4% بسبب ضغوط بيعية من \"الحيتان\" وضعف في تدفقات صناديق الاستثمار الخاصة بها.\n*   **Uniswap (UNI):** شهدت العملة تذبذباً سعرياً مرتبطاً بإطلاق ميزات جديدة (Aggregator Hooks) وتداول العقود الآجلة لها في بورصة CME.\n\n### **3. أخبار المؤسسات والتنظيم:**\n*   **التبني المؤسسي:** قامت شركة **JPMorgan** بوضع اثنين من صناديق أسواق المال المرمزة (Tokenized Money Market Funds) على شبكة **سولانا (Solana)**، مما يعكس استمرار اهتمام المؤسسات المالية الكبرى بتقنية البلوكشين.\n*   **الاستقرار المالي:** أعلنت سلطة النقد في سنغافورة عن خطة لتوحيد ثلاثة بنوك مركزية تحت مظلة مشروع لتسوية العملات المستقرة (Stablecoin Settlement Plan)، مما يشير إلى تقدم في استخدام العملات الرقمية في الأنظمة المالية التقليدية.\n*   **تغيرات استراتيجية:** قامت شركة الاستثمار الشهيرة **a16z Crypto** بتغيير علامتها التجارية إلى **a16z Frontier**، في خطوة تعكس توسيع نطاق استثماراتها لتشمل الذكاء الاصطناعي وتقنيات أخرى بجانب الكريبتو.\n\n### **4. نظرة عامة على السوق:**\n*   هناك تحول ملحوظ في اهتمام المستثمرين نحو **الأصول الواقعية (Real-World Assets - RWA)**، حيث زاد الاهتمام بعقود هذه الأصول لتصل إلى 9 مليارات دولار، مما يشير إلى نضج أكبر في سوق الأصول الرقمية وربطها بالتمويل التقليدي.\n\n**ملاحظة:** سوق العملات الرقمية يتسم بالتقلب الشديد. هذه المعلومات هي ملخص للأحداث الحالية ولا تعتبر نصيحة استثمارية. يُنصح دائماً بإجراء بحثك الخاص قبل اتخاذ أي قرارات مالية.",
+              "thoughtSignature": "EnMKcQFpFH0TBP36/sjWkuPwB5guOEX3zILjZ1kV1+acTDLQX+c8CduEtjSBZ1BBvQMmUc/jDb2MPOkvaYR8Vg973T/8ot7QbecMnqnDf7B2kbdRFYFrv0Vf0SXaaSBoai6Sko7qL5sefcREdlWWovHEtbZA"
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
+        }
+      ]
+    },
+    {
       "id": "1792764655677",
       "title": "تتراوح درجة الحرارة في بغداد ا",
       "history": [
@@ -73,5 +154,5 @@
   ],
   "activeSessionId": "1792764755758",
   "pendingHistory": null,
-  "timestamp": "2026-10-23T14:12:35.758Z"
+  "timestamp": "2026-10-23T14:13:04.382Z"
 }
