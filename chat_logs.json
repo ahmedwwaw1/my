@@ -1,32 +1,8 @@
 {
   "sessions": [
     {
-      "id": "1792257535738",
-      "title": "أهلاً بك! أنا بخير ولله الحمد،",
-      "history": [
-        {
-          "role": "user",
-          "parts": [
-            {
-              "text": "كيف الحال"
-            }
-          ]
-        },
-        {
-          "role": "model",
-          "parts": [
-            {
-              "text": "أهلاً بك! أنا بخير ولله الحمد، جاهز تماماً لمساعدتك في أي مهمة برمجية، معمارية، أو هندسية تحتاجها. \n\nكيف يمكنني مساعدتك اليوم؟",
-              "thoughtSignature": "EmAKXgFpFH0Ts8Z/9hl7Zb7seZold+eGJ6Y9AqeBXRo+lK4rAhzqfbp/Da0l08FlgNFkbNzZNiA1st1HgGBbe4IVDipeDp+HOJ/kW82zgKkgZKSH06/cWQTfUk8jmcfeQ1o="
-            }
-          ],
-          "model": "gemini-3.5-flash-lite"
-        }
-      ]
-    },
-    {
-      "id": "1792257526658",
-      "title": "أهلاً بك! أنا **Mastermind**، ",
+      "id": "1792764655677",
+      "title": "أهلاً بك! أنا جاهز تماماً. بصف",
       "history": [
         {
           "role": "user",
@@ -40,8 +16,8 @@
           "role": "model",
           "parts": [
             {
-              "text": "أهلاً بك! أنا **Mastermind**، وكيل هندسي سيادي وخبير تطوير برمجيات متكامل (Omni-Architect & Autonomous Software Engineer) مدعوم بنظام المعمارية الذكية التابع لـ VSA Academy.\n\nأنا هنا لمساعدتك في أي مهمة برمجية، سواء كان ذلك:\n- استكشاف وفهم بنية المستودع الحالي (`discovery_scan`).\n- تخطيط وتصميم الحلول الهندسية المعقدة وتطبيقها عبر الملفات.\n- كتابة وتعديل الكود البرمجي بأمان وسوقية عالية.\n- تشغيل واختبار الأكواد والتحقق من سلامتها.\n\nكيف يمكنني مساعدتك اليوم؟ يرجى توضيح الهدف أو المشروع الذي نعمل عليه لنبدأ دورة التشغيل الهندسية (Discovery -> Architecture -> Implementation -> Validation).",
-              "thoughtSignature": "EmAKXgFpFH0ToL63zSppFe1h3S66d2L49JNoeJCov5gMpml4JK7Mhq8z7SALa3Ju7BPXDgrc65vDq1QrjQbSl7fKrKjnLORbxcxER2R3XoaozDK4dtXp54eL6R5gYTrzJKQ="
+              "text": "أهلاً بك! أنا جاهز تماماً. بصفتي المساعد المعماري والمهندس البرمجائي الذكي (Mastermind Omni-Architect)، كيف يمكنني مساعدتك في مشروعك اليوم؟ هل نبدأ بمسح معماري (Discovery) أم لديك مهمة برمجية أو هندسية محددة لننفذها معاً عبر حلقة التشغيل المنهجية؟",
+              "thoughtSignature": "EmAKXgFpFH0To6RYOaOXvlOk/EzxcHByGTaxr1tuB4LRnZoHCBDOF88MHw4oEWfaPttibYYMONOPTOhuNqMst47tKrm3qWRp0QAF3r577ACDAmBMQW1DhRpFHVH6OmvHPSc="
             }
           ],
           "model": "gemini-3.5-flash-lite"
@@ -49,7 +25,7 @@
       ]
     }
   ],
-  "activeSessionId": "1792257543433",
+  "activeSessionId": "1792764655677",
   "pendingHistory": null,
-  "timestamp": "2026-10-17T17:19:03.433Z"
+  "timestamp": "2026-10-23T14:11:13.704Z"
 }
