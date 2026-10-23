@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1792764655677",
-      "title": "أهلاً بك! أنا جاهز تماماً. بصف",
+      "title": "تتراوح درجة الحرارة في بغداد ا",
       "history": [
         {
           "role": "user",
@@ -21,11 +21,57 @@
             }
           ],
           "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "درجة حرارة بغداد"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "web_search",
+                "args": {
+                  "query": "درجة حرارة بغداد الآن"
+                },
+                "id": "call_705368"
+              },
+              "thoughtSignature": "EmAKXgFpFH0TAi3apQkaKRlGRv16YYSQSJjbMpxflUD16Yku4ApcSBjm3lEFx/JrFPVAxiPXGsmkilqvRSLFuhwgszd/7qL18ntltlautCU0AOqG/6jJbRwz9AgYgL56oBo="
+            }
+          ]
+        },
+        {
+          "role": "function",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "web_search",
+                "response": {
+                  "content": "{\"source\":\"tavily\",\"query\":\"درجة حرارة بغداد الآن\",\"follow_up_questions\":null,\"answer\":\"According to the sources, the current temperature in Baghdad on 23 October 2026 is reported differently by different sources. One source states it is 32°C with a perceived temperature of 29°C, while another source reports it as 26°C with a wind speed of 4 km/h. Another source indicates a temperature of 33°C with a perceived temperature of 30°C. The discrepancies in the temperature readings suggest varying conditions in Baghdad on this date.\",\"images\":[],\"results\":[{\"url\":\"https://www.aqi.in/weather/ar/iraq/baghdad/baghdad\",\"title\":\"أحوال الطقس في Baghdad: درجة الحرارة | توقعات 30 يومًا\",\"content\":\"Iraq flagBaghdad, Baghdad\\n\\nIraq flag\\n\\n32 °C\\n\\ncloudyCloudy\\n\\ncloudy\\n\\nHumidity Icon21%\\n\\nHumidity Icon\\n\\nUV Icon0.1\\n\\nUV Icon\\n\\n11.5 kmph /  NW\\n\\n2.\\n\\nIraq flagAl Amarah, Maysan\\n\\nIraq flag\\n\\n29 °C\\n\\ndust stormDust storm\\n\\ndust storm\\n\\nHumidity Icon24%\\n\\nHumidity Icon\\n\\nUV Icon0\\n\\nUV Icon\\n\\n14 kmph /  W\\n\\n3.\\n\\nIraq flagHalabjah, As Sulaymaniyah\\n\\nIraq flag\\n\\n17 °C\\n\\novercastOvercast\\n\\novercast\\n\\nHumidity Icon38%\\n\\nHumidity Icon\\n\\nUV Icon0\\n\\nUV Icon\\n\\n8.6 kmph /  WSW\\n\\nآخر تحديث:  23 Oct 2026, 02:08 PM\\n\\n## FAQs About Baghdad Weather Conditions\\n\\n1. ما درجة الحرارة الحالية في Baghdad اليوم - 23 أكتوبر 2026?\\n\\nدرجة الحرارة الحالية في Baghdad هي 32°C، مع درجة حرارة يشعر بها 29°C. تُظهر توقعات اليوم ارتفاعاً بـ 33°C وانخفاضاً بـ 23°C، مما يمنح فارقاً بمقدار 10 درجة خلال اليوم اعتباراً من 05:00 PM 23 أكتوبر 2026. [...] 2. ما هي معاملات الطقس الحالية في Baghdad اليوم?\\n\\nإليك نظرة شاملة على أحوال الطقس الحالية في Baghdad اعتباراً من 05:00 PM 23 أكتوبر 2026:\\nالحالة : Cloudy\\nدرجة الحرارة : 32°C حار (تبدو مثل 29°C)\\nالرطوبة : 21%\\nسرعة الرياح : 11.5 كم/س من NW (322 درجة)، هبوب 3.2 م/ث\\nمؤشر الأشعة فوق البنفسجية : 0.1 (Low\\nضغط الهواء : 1014 مللي بار\\nتغطية السحاب : 68%\\nمدى الرؤية : 10 كم\\nهطول الأمطار : 0 مم (3% احتمال مطر)\\n\\n3. ما هو توقعات الطقس لـ 10 أيام لـ Baghdad من 05:00 PM 23 أكتوبر 2026? [...] من 05:00 PM 23 أكتوبر 2026، تُظهر توقعات الطقس لـ 10 أيام لـ Baghdad هذا الاتجاه:\\nاليوم (أكتوبر 23) : الحرارة 29°C، الرطوبة 31% وحالة Sunny.\\nالسبت (أكتوبر 24) : الحرارة 28°C، الرطوبة 22% وحالة Sunny.\\nالأحد (أكتوبر 25) : الحرارة 28°C، الرطوبة 20% وحالة Sunny.\\nالاثنين (أكتوبر 26) : الحرارة 29°C، الرطوبة 24% وحالة Sunny.\\nالثلاثاء (أكتوبر 27) : الحرارة 29°C، الرطوبة 25% وحالة Sunny.\\nالأربعاء (أكتوبر 28) : الحرارة 29°C، الرطوبة 26% وحالة Partly Cloudy.\\nالخميس (أكتوبر 29) : الحرارة 28°C، الرطوبة 33% وحالة Patchy rain nearby.\\nالجمعة (أكتوبر 30) : الحرارة 25°C، الرطوبة 52% وحالة Patchy rain nearby.\\nالسبت (أكتوبر 31) : الحرارة 25°C، الرطوبة 30% وحالة Rain.\\nالأحد (نوفمبر 1) : الحرارة 24°C، الرطوبة 34% وحالة Rain.\\n\\n4. هل ستمطر في Baghdad اليوم?\",\"score\":0.85825616,\"raw_content\":null,\"id\":\"ac6de3-00\"},{\"url\":\"https://weathsci.giize.com/ar/weather/%D8%A8%D8%BA%D8%AF%D8%A7%D8%AF\",\"title\":\"حالة الطقس في بغداد الآن واليوم | توقعات 14 يوم\",\"content\":\"حالة الطقس في بغداد الآن: الحرارة 26° مئوية والجو غائم. الرياح 4 كم/س. تابع التوقعات الجوية اليوم وساعة بساعة لمدة 14 يوماً مع رادار الأمطار المباشر من علوم\",\"score\":0.85567063,\"raw_content\":null,\"id\":\"5fda6d-01\"},{\"url\":\"https://www.aqi.in/weather/ar/iraq/baghdad/baghdad/baghdad-us-embassy\",\"title\":\"أحوال الطقس في الوقت الفعلي في Baghdad US Embassy: درجة الحرارة | توقعات 30 يومًا\",\"content\":\"Humidity Icon\\n\\nUV Icon0.6\\n\\nUV Icon\\n\\n11.2 kmph /  NW\\n\\n2.\\n\\nIraq flagAl Amarah, Maysan\\n\\nIraq flag\\n\\n32 °C\\n\\nsevere sandstormSevere sandstorm\\n\\nsevere sandstorm\\n\\nHumidity Icon23%\\n\\nHumidity Icon\\n\\nUV Icon0.5\\n\\nUV Icon\\n\\n18.4 kmph /  W\\n\\n3.\\n\\nIraq flagHalabjah, As Sulaymaniyah\\n\\nIraq flag\\n\\n19 °C\\n\\ncloudyCloudy\\n\\ncloudy\\n\\nHumidity Icon32%\\n\\nHumidity Icon\\n\\nUV Icon0.5\\n\\nUV Icon\\n\\n17.6 kmph /  WSW\\n\\nآخر تحديث:  23 Oct 2026, 01:33 PM\\n\\n## FAQs About Baghdad US Embassy Weather Conditions\\n\\n1. ما درجة الحرارة الحالية في Baghdad US Embassy اليوم - 23 أكتوبر 2026?\\n\\nدرجة الحرارة الحالية في Baghdad US Embassy هي 33°C، مع درجة حرارة يشعر بها 30°C. تُظهر توقعات اليوم ارتفاعاً بـ 33°C وانخفاضاً بـ 23°C، مما يمنح فارقاً بمقدار 10 درجة خلال اليوم اعتباراً من 04:15 PM 23 أكتوبر 2026. [...] من 04:15 PM 23 أكتوبر 2026، تُظهر توقعات الطقس لـ 10 أيام لـ Baghdad US Embassy هذا الاتجاه:\\nاليوم (أكتوبر 23) : الحرارة 29°C، الرطوبة 31% وحالة Sunny.\\nالسبت (أكتوبر 24) : الحرارة 28°C، الرطوبة 22% وحالة Sunny.\\nالأحد (أكتوبر 25) : الحرارة 28°C، الرطوبة 20% وحالة Sunny.\\nالاثنين (أكتوبر 26) : الحرارة 29°C، الرطوبة 24% وحالة Sunny.\\nالثلاثاء (أكتوبر 27) : الحرارة 29°C، الرطوبة 25% وحالة Sunny.\\nالأربعاء (أكتوبر 28) : الحرارة 29°C، الرطوبة 26% وحالة Partly Cloudy.\\nالخميس (أكتوبر 29) : الحرارة 28°C، الرطوبة 33% وحالة Patchy rain nearby.\\nالجمعة (أكتوبر 30) : الحرارة 25°C، الرطوبة 52% وحالة Patchy rain nearby.\\nالسبت (أكتوبر 31) : الحرارة 25°C، الرطوبة 30% وحالة Rain.\\nالأحد (نوفمبر 1) : الحرارة 24°C، الرطوبة 34% وحالة Rain.\\n\\n4. هل ستمطر في Baghdad US Embassy اليوم? [...] 2. ما هي معاملات الطقس الحالية في Baghdad US Embassy اليوم?\\n\\nإليك نظرة شاملة على أحوال الطقس الحالية في Baghdad US Embassy اعتباراً من 04:15 PM 23 أكتوبر 2026:\\nالحالة : Sunny\\nدرجة الحرارة : 33°C حار (تبدو مثل 30°C)\\nالرطوبة : 20%\\nسرعة الرياح : 11.2 كم/س من NW (311 درجة)، هبوب 3.2 م/ث\\nمؤشر الأشعة فوق البنفسجية : 0.6 (Low\\nضغط الهواء : 1014 مللي بار\\nتغطية السحاب : 17%\\nمدى الرؤية : 10 كم\\nهطول الأمطار : 0 مم (3% احتمال مطر)\\n\\n3. ما هو توقعات الطقس لـ 10 أيام لـ Baghdad US Embassy من 04:15 PM 23 أكتوبر 2026?\",\"score\":0.82492816,\"raw_content\":null,\"id\":\"2f2c8e-02\"},{\"url\":\"https://www.facebook.com/shafaqnewsarabic/videos/%D8%AF%D8%B1%D8%AC%D8%A7%D8%AA_%D8%A7%D9%84%D8%AD%D8%B1%D8%A7%D8%B1%D8%A9-%D8%AA%D9%84%D8%A7%D9%85%D8%B3-50-%D8%AF%D8%B1%D8%AC%D8%A9-%D9%85%D8%A6%D9%88%D9%8A%D8%A9-%D9%81%D9%8A-%D8%A8%D8%BA%D8%AF%D8%A7%D8%AF-%D9%88%D8%A7%D9%84%D8%A3%D9%87%D8%A7%D9%84%D9%8A-%D9%8A%D8%B3%D8%AA%D8%B9%D9%8A%D9%86%D9%88%D9%86-%D8%A8%D8%A7%D9%84%D9%85%D8%B1%D8%B4%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%A7%D8%A6%D9%8A%D8%A9%D8%B4%D9%81%D9%82/1038620605185972\",\"title\":\"#درجات_الحرارة تلامس 50 درجة مئوية في #بغداد.. والأهالي ...\",\"content\":\"#درجات_الحرارة تلامس 50 درجة مئوية في #بغداد.. ... تشهد مناطق واسعة من العراق أجواءً شديدة الحرارة مع تسجيل خمس محافظات درجات حرارة بلغت خمسين.\",\"score\":0.7327644,\"raw_content\":null,\"id\":\"d81a68-03\"},{\"url\":\"https://www.accuweather.com/ar/iq/baghdad/207375/weather-forecast/207375\",\"title\":\"توقعات حالة الطقس لمدة ثلاثة أيام في بغداد, بغداد, العراق من\",\"content\":\"اليوم · كل ساعة 10 أيام الرادار MinuteCast® شهريًا جودة الهواء الصحة والأنشطة · الطقس الحالي. 12:55 PM. 90°F. سحب وشمس. RealFeel® 92°. التوقعات للأيام المقبلة.\",\"score\":0.7206637,\"raw_content\":null,\"id\":\"f5fd32-04\"}],\"response_time\":5.42,\"request_id\":\"a3a5d0d5-320d-41dc-a10d-b251a354a74b\"}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "تتراوح درجة الحرارة في بغداد اليوم، 23 أكتوبر 2026، ما بين **26°C إلى 33°C** تقريباً، اعتماداً على المصدر والمنطقة المحددة داخل المدينة وتوقيت التحديث.\n\nإليك ملخص للأجواء الحالية:\n*   **درجة الحرارة:** تتراوح بين 32°C و 33°C في معظم التحديثات الأخيرة.\n*   **الحالة الجوية:** الأجواء غائمة جزئياً إلى مشمسة.\n*   **الرطوبة:** منخفضة، تتراوح بين 20% و 21%.\n*   **الرياح:** خفيفة، بسرعة تقارب 11-12 كم/س.\n\nهل تحتاج إلى مساعدة في أي جانب تقني أو هندسي يتعلق ببيانات الطقس أو أي مشروع آخر؟",
+              "thoughtSignature": "EnMKcQFpFH0TrrXH5F/rmTNy2+UKXVwE/PNXPz6f1PRRKeFHrnFrdJn7cpbgk3sRZ8gckroFXxdVHv67oDbZ6QCs7Q3AIZKybG/XP7TfBlwWWQBScs982ymx1QQxlWtzHNMLsIFMvFVZUR/XSsN0GbAkjwvh"
+            }
+          ],
+          "model": "gemini-3.1-flash-lite"
         }
       ]
     }
   ],
   "activeSessionId": "1792764655677",
   "pendingHistory": null,
-  "timestamp": "2026-10-23T14:11:13.704Z"
+  "timestamp": "2026-10-23T14:11:50.517Z"
 }
