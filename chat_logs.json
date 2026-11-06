@@ -2,7 +2,7 @@
   "sessions": [
     {
       "id": "1793957061179",
-      "title": "أهلاً وسهلاً بك! \n\nأنا **Maste",
+      "title": "أنا **مهندس معماري ومطور برمجي",
       "history": [
         {
           "role": "user",
@@ -24,11 +24,29 @@
             }
           ],
           "model": "gemini-3.6-flash"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "ماذا يمكنك فعله"
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "أنا **مهندس معماري ومطور برمجيات ذكي شامل (Sovereign Omni-Architect & Engineer)**، أعمل وفق دورة هندسية مغلقة تبدأ من فهم المشكلة وحتى الفحص والتحقق الفعلي.\n\nإليك أبرز ما يمكنني القيام به لمساعدتك في مشاريعك البرمجية:\n\n---\n\n### 1. 🔍 **تحليل واستكشاف المعماريات البرمجية (Discovery & Architecture)**\n* **مسح المشرع واستكشافه بالكامل:** قراءة وتتبع هيكل الملفات والمكونات والـ APIs والعلاقات بينها.\n* **تحليل القيود والحدود (Boundaries):** فهم التبعيات الخارجية والداخلية لضمان عدم كسر أي جزء أثناء التعديل.\n* **اختيار أنماط التصميم (Design Patterns):** تحديد أفضل الأنماط المعمارية المناسبة لتوسيع النظام أو تحسين كفاءته.\n\n---\n\n### 2. 🛠️ **التطوير وكتابة الكود المتكامل (Full-Stack Engineering)**\n* **إضافة ميزات جديدة والتعديل عبر ملفات متعددة:** التعامل مع واجهات المستخدم (UI)، المنطق (Logic)، واجهات البرمجة (APIs)، وقواعد البيانات (Data).\n* **إعادة هيكلة الكود (Refactoring):** تحسين جودة الكود، التخلص من الديون البرمجية (Technical Debt)، وتقليل تعقيد الخوارزميات (Big-O).\n* **دعم مختلف التقنيات:** (React, Typescript, Node.js, Python, Electron, Supabase Edge Functions, وغيرها).\n\n---\n\n### 3. 🐞 **التشخيص والإصلاح والتحقق (Debugging, Repair & Verification)**\n* **اكتشاف الأخطاء وتتبع أسبابها الجوهرية (Root Cause Analysis).**\n* **تطبيق رقع برمجية دقيقة (Surgical Replacements):** تعديل الأجزاء المستهدفة فقط دون العبث بالكود الشغال.\n* **الفحص والتأكد الذاتي (Runtime & Contract Verification):** بناء وتشغيل الاختبارات للتأكد من أن الكود يعمل بنجاح قبل اعتماد النتيجة.\n\n---\n\n### 4. 🔒 **الأمان والحماية (Security & Secrets Management)**\n* مراعاة أفضل الممارسات الأمنية (عدم تضمين المفاتيح الحساسة كـ API Keys أو أسرار Supabase في كود العميل النهائي).\n* تأمين قنوات الاتصال والـ Edge Functions بشكل آمن.\n\n---\n\n### 5. 🧠 **نظام المهارات واستدامة المعرفة (Universal Skill System)**\n* بناء واستيراد وتطوير مهارات تخصصية دقيقة ومجربة.\n* الاحتفاظ بأفضل الممارسات والحلول الناجحة لتطبيقها في المشاريع المستقبلية.\n\n---\n\n💡 **كيف نبدأ؟**\nيمكنك إعطائي أي مهمة برمجية تريدها، مثل:\n- *\"قم بتحليل هذا المشروع وتشخيص الخلل فيه...\"*\n- *\"أضف ميزة جديدة لتصفية البيانات في الواجهة...\"*\n- *\"قم بإعادة هيكلة ملف X لتحسين الأداء...\"*\n\nما هي المهمة أو المشكلة التي تحب أن نعمل عليها الآن؟",
+              "thoughtSignature": "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"
+            }
+          ],
+          "model": "gemini-3.6-flash"
         }
       ]
     }
   ],
   "activeSessionId": "1793957061179",
   "pendingHistory": null,
-  "timestamp": "2026-11-06T09:25:30.526Z"
+  "timestamp": "2026-11-06T09:25:59.898Z"
 }
