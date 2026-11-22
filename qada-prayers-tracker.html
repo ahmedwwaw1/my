@@ -281,7 +281,7 @@
             <button type="button" class="secondary" id="syncDriveButton" disabled>↻ مزامنة الآن</button>
             <button type="button" class="warning" id="disconnectDriveButton" disabled>تسجيل الخروج</button>
           </div>
-          <p class="cloud-status-text" id="cloudStatusText" role="status" aria-live="polite">جار تجهيز اتصال Google...</p>
+          <p class="cloud-status-text" id="cloudStatusText" role="status" aria-live="polite">جار تجهيز اتصال Firebase...</p>
           <p class="cloud-last-sync" id="cloudLastSync"></p>
           <div class="cloud-conflict" id="cloudConflict" hidden>
             <strong>توجد نسختان مختلفتان من بيانات الصلوات</strong>
@@ -300,7 +300,7 @@
           <button type="button" class="warning" id="resetButton">إعادة ضبط جميع الأعداد</button>
           <input type="file" id="importFile" accept="application/json,.json" hidden>
         </div>
-        <p class="settings-help">تُحفظ بياناتك أولاً في المتصفح، وعند ربط Google Drive يحفظ Firebase جلسة حسابك على هذا المتصفح ويستعيدها تلقائياً عند فتح الصفحة. تتم مزامنة البيانات مع Firestore عند الاتصال بالإنترنت. عند استعادة نسخة احتياطية، ستحل بياناتها محل البيانات الحالية وتُرسل إلى السحابة إذا كان الاتصال نشطاً.</p>
+        <p class="settings-help">تُحفظ بياناتك محلياً أولاً، وبعد تسجيل الدخول عبر Google يحفظ Firebase جلسة حسابك على هذا المتصفح ويستعيدها تلقائياً عند فتح الصفحة. تتم مزامنة البيانات مع Firestore عند الاتصال بالإنترنت. عند استعادة نسخة احتياطية، ستحل بياناتها محل البيانات الحالية وتُرسل إلى Firebase إذا كان الاتصال نشطاً.</p>
       </div>
     </section>
   </main>
