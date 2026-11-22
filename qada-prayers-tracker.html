@@ -190,7 +190,7 @@
     <header class="hero">
       <div class="eyebrow"><span aria-hidden="true">☾</span> سجلّ شخصي للمتابعة</div>
       <h1>قضاء الصلوات</h1>
-      <p>تابع ما قضيته من الصلوات الخمس، وأضف الأعداد بشكل تراكمي. تُحفظ بياناتك تلقائياً على هذا الجهاز.</p>
+      <p>تابع ما قضيته من الصلوات الخمس، وأضف الأعداد بشكل تراكمي. تُحفظ بياناتك محلياً وتُزامن مع حسابك في Firebase عند تسجيل الدخول.</p>
     </header>
 
     <nav class="main-tabs" role="tablist" aria-label="الأقسام الرئيسية">
@@ -271,15 +271,15 @@
           <div class="cloud-head">
             <div class="cloud-title">
               <span class="cloud-icon" aria-hidden="true">☁️</span>
-              <div><h3 id="cloudHeading">مزامنة Google Drive</h3><p>حفظ نسخة بياناتك في مساحة التطبيق الخاصة</p></div>
+              <div><h3 id="cloudHeading">المزامنة السحابية عبر Firebase</h3><p>حفظ بياناتك في حسابك الخاص عبر Cloud Firestore</p></div>
             </div>
             <span class="cloud-badge" id="cloudBadge" data-state="loading">جار التحميل</span>
           </div>
-          <p class="cloud-description">بعد ربط حسابك، تُرفع كل إضافة أو عملية تراجع تلقائياً إلى Google Drive، وتُحمّل البيانات عند ربط الصفحة من جهاز آخر. بياناتك تبقى محفوظة محلياً أيضاً.</p>
+          <p class="cloud-description">سجّل الدخول بحساب Google مرة واحدة. ستُحفظ أعداد الصلوات وسجل الإضافات في Firestore تلقائياً، وتُستعاد عند فتح التطبيق من أجهزتك الأخرى. تبقى نسخة محلية احتياطية أيضاً.</p>
           <div class="cloud-actions">
-            <button type="button" class="primary" id="connectDriveButton" disabled>ربط حساب Google Drive</button>
+            <button type="button" class="primary" id="connectDriveButton" disabled>تسجيل الدخول باستخدام Google</button>
             <button type="button" class="secondary" id="syncDriveButton" disabled>↻ مزامنة الآن</button>
-            <button type="button" class="warning" id="disconnectDriveButton" disabled>قطع الاتصال</button>
+            <button type="button" class="warning" id="disconnectDriveButton" disabled>تسجيل الخروج</button>
           </div>
           <p class="cloud-status-text" id="cloudStatusText" role="status" aria-live="polite">جار تجهيز اتصال Google...</p>
           <p class="cloud-last-sync" id="cloudLastSync"></p>
@@ -288,8 +288,8 @@
             <p>لم أستبدل أي بيانات تلقائياً لتجنب فقدان أعدادك أو تكرارها. نزّل نسخة محلية للاحتفاظ بها، ثم اختر أي نسخة تريد اعتمادها. لن يتم جمع الأعداد آلياً.</p>
             <div class="cloud-conflict-actions">
               <button type="button" class="secondary" id="downloadConflictBackupButton">⬇ تنزيل بيانات هذا الجهاز</button>
-              <button type="button" class="secondary" id="useCloudDataButton">اعتماد بيانات السحابة</button>
-              <button type="button" class="primary" id="useLocalDataButton">اعتماد بيانات هذا الجهاز ورفعها</button>
+              <button type="button" class="secondary" id="useCloudDataButton">اعتماد بيانات Firebase</button>
+              <button type="button" class="primary" id="useLocalDataButton">اعتماد بيانات هذا الجهاز ورفعها إلى Firebase</button>
             </div>
           </div>
         </section>
@@ -300,21 +300,29 @@
           <button type="button" class="warning" id="resetButton">إعادة ضبط جميع الأعداد</button>
           <input type="file" id="importFile" accept="application/json,.json" hidden>
         </div>
-        <p class="settings-help">تُحفظ بياناتك أولاً في المتصفح، وعند ربط Google Drive تُزامن تلقائياً أثناء فتح الصفحة واتصالها بالإنترنت. رمز الوصول لا يُخزّن في الملف أو في التخزين المحلي؛ قد تحتاج إلى إعادة ربط الحساب بعد انتهاء صلاحيته. عند استعادة نسخة احتياطية، ستحل بياناتها محل البيانات الحالية وتُرسل إلى السحابة إذا كان الاتصال نشطاً.</p>
+        <p class="settings-help">تُحفظ بياناتك أولاً في المتصفح، وعند ربط Google Drive يحفظ Firebase جلسة حسابك على هذا المتصفح ويستعيدها تلقائياً عند فتح الصفحة. تتم مزامنة البيانات مع Firestore عند الاتصال بالإنترنت. عند استعادة نسخة احتياطية، ستحل بياناتها محل البيانات الحالية وتُرسل إلى السحابة إذا كان الاتصال نشطاً.</p>
       </div>
     </section>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="https://www.gstatic.com/firebasejs/13.3.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/13.3.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore-compat.js"></script>
   <script>
     (() => {
       'use strict';
       const STORAGE_KEY = 'qada-prayers-tracker-v1';
-      const CLOUD_AUTHORIZED_KEY = 'qada-google-drive-authorized-v1';
-      const CLOUD_LAST_SYNC_KEY = 'qada-google-drive-last-sync-v1';
-      const GOOGLE_CLIENT_ID = '962563812146-jbbjkrtvc0sk0fkue525olo49942pkkh.apps.googleusercontent.com';
-      const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
-      const DRIVE_FILE_NAME = 'qada-prayers-data.json';
+      const CLOUD_LAST_SYNC_KEY = 'qada-firebase-last-sync-v1';
+      const FIREBASE_CONFIG = {
+        apiKey: "AIzaSyAENeZkEDLIb0vEizVtxayUDJ8zSWB3zSU",
+        authDomain: "ahmed-4c02f.firebaseapp.com",
+        projectId: "ahmed-4c02f",
+        storageBucket: "ahmed-4c02f.firebasestorage.app",
+        messagingSenderId: "214953712891",
+        appId: "1:214953712891:web:eb1d2b205873de05f7e45e",
+        measurementId: "G-G4MRD57N8R"
+      };
       const prayers = [
         { id: 'fajr', name: 'الصبح' },
         { id: 'dhuhr', name: 'الظهر' },
@@ -326,11 +334,13 @@
       let state = { version: 1, totals: emptyTotals(), history: [], updatedAt: null };
       let toastTimer;
 
-      // Google Drive sync state. Access tokens stay in memory only and are never written to localStorage.
-      let tokenClient = null;
-      let driveAccessToken = null;
-      let driveTokenExpiresAt = 0;
-      let cloudFileId = null;
+      // Firebase Authentication + Firestore state.
+      let firebaseAuth = null;
+      let firestoreDb = null;
+      let currentUser = null;
+      let prayerDocument = null;
+      let unsubscribePrayerDocument = null;
+      let firebaseReady = false;
       let cloudSaveTimer = null;
       let cloudSyncRunning = false;
       let cloudSyncAgain = false;
@@ -530,7 +540,7 @@
         reader.readAsText(file);
       });
 
-      // ---------------- Google Drive cloud backup ----------------
+      // ---------------- Firebase Authentication + Firestore sync ----------------
       const cloudBadge = document.getElementById('cloudBadge');
       const cloudStatusText = document.getElementById('cloudStatusText');
       const cloudLastSync = document.getElementById('cloudLastSync');
@@ -540,60 +550,55 @@
       const cloudConflictPanel = document.getElementById('cloudConflict');
 
       function setCloudStatus(mode, message) {
-        const labels = {
-          loading: 'جار التحميل', offline: 'غير متصل', connected: 'متصل',
-          syncing: 'جار المزامنة', warning: 'يتطلب إجراء', error: 'خطأ'
-        };
+        const labels = { loading: 'جار التحميل', offline: 'غير متصل', connected: 'متصل',
+          syncing: 'جار المزامنة', warning: 'يتطلب إجراء', error: 'خطأ' };
         cloudBadge.dataset.state = mode;
         cloudBadge.textContent = labels[mode] || 'الحالة';
         cloudStatusText.textContent = message;
-        connectDriveButton.disabled = !tokenClient;
-        syncDriveButton.disabled = !driveAccessToken || !cloudFileId || !!pendingCloudConflict;
-        disconnectDriveButton.disabled = !driveAccessToken;
+        connectDriveButton.disabled = !firebaseReady;
+        syncDriveButton.disabled = !currentUser || !prayerDocument || !!pendingCloudConflict;
+        disconnectDriveButton.disabled = !currentUser;
+        connectDriveButton.textContent = currentUser ? 'تغيير حساب Google' : 'تسجيل الدخول باستخدام Google';
       }
 
       function updateLastSyncDisplay(value) {
         let saved = value || null;
-        try { if (!saved) saved = localStorage.getItem(CLOUD_LAST_SYNC_KEY); } catch (_) { saved = null; }
-        if (!saved) {
-          cloudLastSync.textContent = 'لم تتم أي مزامنة بعد.';
-          return;
-        }
+        try {
+          if (!saved) saved = localStorage.getItem(CLOUD_LAST_SYNC_KEY) ||
+            localStorage.getItem('qada-google-drive-last-sync-v1');
+        } catch (_) { saved = null; }
+        if (!saved) { cloudLastSync.textContent = 'لم تتم أي مزامنة بعد.'; return; }
         const date = new Date(saved);
         cloudLastSync.textContent = Number.isNaN(date.getTime()) ? '' :
-          `آخر مزامنة ناجحة: ${new Intl.DateTimeFormat('ar-IQ-u-nu-latn', { dateStyle: 'medium', timeStyle: 'short' }).format(date)}`;
+          'آخر مزامنة ناجحة: ' + new Intl.DateTimeFormat('ar-IQ-u-nu-latn', { dateStyle: 'medium', timeStyle: 'short' }).format(date);
       }
 
       function markCloudSynced() {
         const now = new Date().toISOString();
-        try { localStorage.setItem(CLOUD_LAST_SYNC_KEY, now); } catch (_) { /* cloud save succeeded even if local storage is restricted */ }
+        try { localStorage.setItem(CLOUD_LAST_SYNC_KEY, now); } catch (_) {}
         updateLastSyncDisplay(now);
       }
 
-      function cloneState(value = state) {
-        return JSON.parse(JSON.stringify(value));
-      }
+      function cloneState(value = state) { return JSON.parse(JSON.stringify(value)); }
 
       function normalizeCloudState(payload) {
         const candidate = payload && payload.state && typeof payload.state === 'object' ? payload.state : payload;
         if (!candidate || candidate.version !== 1 || !candidate.totals || typeof candidate.totals !== 'object') {
-          throw new Error('ملف السحابة لا يحتوي على بنية بيانات صالحة لهذا التطبيق.');
+          throw new Error('بيانات Firestore لا تحتوي على بنية صالحة لهذا التطبيق.');
         }
         const totals = {};
         for (const prayer of prayers) {
           const count = Number(candidate.totals[prayer.id]);
-          if (!Number.isSafeInteger(count) || count < 0) throw new Error('وجدت قيمة غير صالحة في ملف بيانات السحابة.');
+          if (!Number.isSafeInteger(count) || count < 0) throw new Error('وجدت قيمة غير صالحة في بيانات Firestore.');
           totals[prayer.id] = count;
         }
         const history = Array.isArray(candidate.history) ? candidate.history.filter(item =>
           item && typeof item.title === 'string' && item.delta && typeof item.delta === 'object'
         ).slice(0, 100) : [];
         return {
-          version: 1,
-          totals,
-          history,
+          version: 1, totals, history,
           updatedAt: typeof candidate.updatedAt === 'string' ? candidate.updatedAt :
-            (typeof payload.savedAt === 'string' ? payload.savedAt : null)
+            (typeof payload.updatedAt === 'string' ? payload.updatedAt : null)
         };
       }
 
@@ -611,106 +616,10 @@
         return Number.isFinite(time) ? time : null;
       }
 
-      function requireLiveToken() {
-        if (!driveAccessToken || Date.now() >= driveTokenExpiresAt - 15000) {
-          driveAccessToken = null;
-          driveTokenExpiresAt = 0;
-          setCloudStatus('warning', 'انتهت صلاحية اتصال Google أو قاربت على الانتهاء. اضغط «ربط حساب Google Drive» لتجديد الإذن؛ بياناتك المحلية آمنة.');
-          throw new Error('انتهت صلاحية رمز الوصول. أعد ربط Google Drive.');
-        }
-      }
-
-      async function driveFetch(url, options = {}) {
-        requireLiveToken();
-        const response = await fetch(url, {
-          ...options,
-          headers: {
-            ...(options.headers || {}),
-            Authorization: `Bearer ${driveAccessToken}`
-          }
-        });
-        if (!response.ok) {
-          let detail = '';
-          try {
-            const body = await response.json();
-            detail = body?.error?.message || body?.error_description || '';
-          } catch (_) { /* response may not be JSON */ }
-          if (response.status === 401) {
-            driveAccessToken = null;
-            driveTokenExpiresAt = 0;
-            setCloudStatus('warning', 'رفض Google رمز الوصول أو انتهت صلاحيته. أعد ربط الحساب؛ بياناتك محفوظة محلياً.');
-          }
-          const error = new Error(detail || `فشل طلب Google Drive (HTTP ${response.status}).`);
-          error.status = response.status;
-          throw error;
-        }
-        return response;
-      }
-
-      async function findCloudFile() {
-        const query = new URLSearchParams({
-          q: `'appDataFolder' in parents and name = '${DRIVE_FILE_NAME}' and trashed = false`,
-          spaces: 'appDataFolder',
-          pageSize: '100',
-          orderBy: 'modifiedTime desc',
-          fields: 'files(id,name,modifiedTime)'
-        });
-        const response = await driveFetch(`https://www.googleapis.com/drive/v3/files?${query.toString()}`);
-        const result = await response.json();
-        return Array.isArray(result.files) ? result.files : [];
-      }
-
-      async function downloadCloudState(fileId) {
-        const response = await driveFetch(`https://www.googleapis.com/drive/v3/files/${encodeURIComponent(fileId)}?alt=media`);
-        const raw = await response.text();
-        if (!raw.trim()) return null;
-        let payload;
-        try { payload = JSON.parse(raw); }
-        catch (_) { throw new Error('تعذرت قراءة ملف بيانات الصلوات الموجود في السحابة.'); }
-        return normalizeCloudState(payload);
-      }
-
-      async function createCloudFile() {
-        const response = await driveFetch('https://www.googleapis.com/drive/v3/files?fields=id,name,modifiedTime', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: DRIVE_FILE_NAME, mimeType: 'application/json', parents: ['appDataFolder'] })
-        });
-        const file = await response.json();
-        if (!file.id) throw new Error('أنشأ Google Drive استجابة غير مكتملة ولم يُرجع معرّف الملف.');
-        cloudFileId = file.id;
-      }
-
-      async function uploadCloudState(snapshot) {
-        if (!cloudFileId) await createCloudFile();
-        const documentToSave = {
-          app: 'qada-prayers-tracker',
-          schemaVersion: 1,
-          savedAt: new Date().toISOString(),
-          state: snapshot
-        };
-        try {
-          await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${encodeURIComponent(cloudFileId)}?uploadType=media`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
-            body: JSON.stringify(documentToSave)
-          });
-        } catch (error) {
-          if (error.status !== 404) throw error;
-          cloudFileId = null;
-          await createCloudFile();
-          await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${encodeURIComponent(cloudFileId)}?uploadType=media`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
-            body: JSON.stringify(documentToSave)
-          });
-        }
-      }
-
       function resolveCloudConflict(remoteState, localState) {
         pendingCloudConflict = { remoteState: cloneState(remoteState), localState: cloneState(localState) };
         cloudConflictPanel.hidden = false;
-        setCloudStatus('warning', 'توقف الدمج التلقائي لأن النسختين مختلفتان. اختر النسخة التي تريد اعتمادها بعد تنزيل نسخة احتياطية عند الحاجة.');
+        setCloudStatus('warning', 'توجد بيانات مختلفة على هذا الجهاز وفي Firebase. لم أستبدل أياً منهما؛ نزّل نسخة احتياطية ثم اختر النسخة التي تريد اعتمادها.');
       }
 
       function adoptCloudState(remoteState) {
@@ -719,181 +628,227 @@
         render();
       }
 
+      async function uploadCloudState(snapshot) {
+        if (!currentUser || !prayerDocument) throw new Error('سجّل الدخول إلى Google قبل حفظ البيانات السحابية.');
+        await prayerDocument.set({
+          app: 'qada-prayers-tracker',
+          schemaVersion: 1,
+          ownerUid: currentUser.uid,
+          state: snapshot,
+          updatedAt: snapshot.updatedAt || new Date().toISOString()
+        }, { merge: false });
+      }
+
+      function startRealtimeListener() {
+        if (unsubscribePrayerDocument) unsubscribePrayerDocument();
+        if (!prayerDocument) return;
+        unsubscribePrayerDocument = prayerDocument.onSnapshot(snapshot => {
+          if (!snapshot.exists || !currentUser || pendingCloudConflict) return;
+          try {
+            const remoteState = normalizeCloudState(snapshot.data());
+            const localState = cloneState(state);
+            if (sameStateContent(localState, remoteState)) return;
+            const localTime = stateTimestamp(localState);
+            const remoteTime = stateTimestamp(remoteState);
+            if (remoteTime !== null && (localTime === null || remoteTime > localTime)) {
+              adoptCloudState(remoteState);
+              markCloudSynced();
+              setCloudStatus('connected', 'تم استلام تحديث جديد من Firebase وحفظه على هذا الجهاز.');
+            } else if (localTime !== null && remoteTime !== null && localTime > remoteTime) {
+              queueCloudSave();
+            } else {
+              resolveCloudConflict(remoteState, localState);
+            }
+          } catch (error) {
+            console.error('Firestore listener error:', error);
+            setCloudStatus('error', 'وصلت بيانات غير صالحة من Firestore؛ لم يتم تغيير بيانات هذا الجهاز.');
+          }
+        }, error => {
+          console.error('Firestore listener error:', error);
+          setCloudStatus('error', 'انقطع استقبال تحديثات Firestore: ' + error.message);
+        });
+      }
+
       async function initializeCloudSync() {
+        if (!currentUser || !prayerDocument) return;
         cloudConflictPanel.hidden = true;
         pendingCloudConflict = null;
-        setCloudStatus('syncing', 'تم الاتصال بحساب Google. جارٍ فحص بيانات الصلوات في مساحة التطبيق...');
+        setCloudStatus('syncing', 'تم تسجيل الدخول. جارٍ فحص بيانات الصلوات في Firestore...');
         try {
-          const files = await findCloudFile();
-          if (!files.length) {
-            cloudFileId = null;
-            await uploadCloudState(cloneState(state));
-            markCloudSynced();
-            setCloudStatus('connected', 'تم إنشاء ملف بيانات الصلوات في Google Drive ورفع بيانات هذا الجهاز. ستُرفع التغييرات التالية تلقائياً.');
-            return;
-          }
-
-          cloudFileId = files[0].id;
-          const remoteState = await downloadCloudState(cloudFileId);
+          const snapshot = await prayerDocument.get();
           const localState = cloneState(state);
-          if (!remoteState) {
+
+          if (!snapshot.exists) {
+            // First sign-in: migrate saved browser data into the new Firestore document.
             await uploadCloudState(localState);
             markCloudSynced();
-            setCloudStatus('connected', 'ملف السحابة كان فارغاً؛ تم رفع بيانات هذا الجهاز إليه.');
+            setCloudStatus('connected', hasPrayerData(localState)
+              ? 'تم نقل بيانات هذا الجهاز إلى Firestore بنجاح. ستُزامن الإضافات والتراجعات تلقائياً.'
+              : 'تم تجهيز سجل قضاء الصلوات في Firestore. أضف صلواتك وسيتم حفظها تلقائياً.');
+            startRealtimeListener();
             return;
           }
 
+          const remoteState = normalizeCloudState(snapshot.data());
+          const localHasData = hasPrayerData(localState);
+          const remoteHasData = hasPrayerData(remoteState);
+
           if (sameStateContent(localState, remoteState)) {
-            if (stateTimestamp(remoteState) && (!stateTimestamp(localState) || stateTimestamp(remoteState) > stateTimestamp(localState))) {
+            if (stateTimestamp(remoteState) !== null &&
+                (stateTimestamp(localState) === null || stateTimestamp(remoteState) > stateTimestamp(localState))) {
               adoptCloudState(remoteState);
             }
             markCloudSynced();
-            setCloudStatus('connected', 'بيانات هذا الجهاز مطابقة لبيانات Google Drive. المزامنة التلقائية مفعّلة.');
-            return;
-          }
-
-          const localHasData = hasPrayerData(localState);
-          const remoteHasData = hasPrayerData(remoteState);
-          const localTime = stateTimestamp(localState);
-          const remoteTime = stateTimestamp(remoteState);
-
-          if (localTime !== null && remoteTime !== null && localTime > remoteTime) {
-            await uploadCloudState(localState);
-            markCloudSynced();
-            setCloudStatus('connected', 'وجدت تغييرات محلية أحدث من نسخة السحابة؛ تم رفع أحدث بيانات هذا الجهاز.');
-            return;
-          }
-          if (localTime !== null && remoteTime !== null && remoteTime > localTime) {
+            setCloudStatus('connected', 'بيانات هذا الجهاز مطابقة لبيانات Firebase. المزامنة المباشرة مفعّلة.');
+          } else if (!localHasData && remoteHasData) {
             adoptCloudState(remoteState);
             markCloudSynced();
-            setCloudStatus('connected', 'وجدت نسخة سحابية أحدث؛ تم تنزيلها وحفظها على هذا الجهاز.');
-            return;
-          }
-          if (!localHasData && remoteHasData) {
+            setCloudStatus('connected', 'تم استعادة بيانات الصلوات من Firebase إلى هذا الجهاز.');
+          } else if (localHasData && !remoteHasData) {
+            await uploadCloudState(localState);
+            markCloudSynced();
+            setCloudStatus('connected', 'كانت بيانات هذا الجهاز تحتوي على سجلات بينما Firestore فارغ؛ تم نقل بيانات الجهاز.');
+          } else if (!localHasData && !remoteHasData) {
             adoptCloudState(remoteState);
-            markCloudSynced();
-            setCloudStatus('connected', 'تم استعادة بيانات الصلوات من Google Drive إلى هذا الجهاز.');
-            return;
-          }
-          if (localHasData && !remoteHasData) {
-            await uploadCloudState(localState);
-            markCloudSynced();
-            setCloudStatus('connected', 'بيانات هذا الجهاز تحتوي على سجلات بينما ملف السحابة فارغ؛ تم رفع بيانات الجهاز.');
-            return;
-          }
-          if (!localHasData && !remoteHasData) {
-            await uploadCloudState(localState);
             markCloudSynced();
             setCloudStatus('connected', 'تمت مزامنة سجل الصلوات الفارغ.');
-            return;
+          } else {
+            const localTime = stateTimestamp(localState);
+            const remoteTime = stateTimestamp(remoteState);
+            if (localTime !== null && remoteTime !== null && localTime > remoteTime) {
+              await uploadCloudState(localState);
+              markCloudSynced();
+              setCloudStatus('connected', 'كانت بيانات هذا الجهاز أحدث؛ تم رفعها إلى Firestore.');
+            } else if (localTime !== null && remoteTime !== null && remoteTime > localTime) {
+              adoptCloudState(remoteState);
+              markCloudSynced();
+              setCloudStatus('connected', 'كانت بيانات Firestore أحدث؛ تم استعادتها إلى هذا الجهاز.');
+            } else {
+              resolveCloudConflict(remoteState, localState);
+            }
           }
-          resolveCloudConflict(remoteState, localState);
+          startRealtimeListener();
         } catch (error) {
-          console.error('Google Drive sync error:', error);
-          if (error.status === 403) {
-            setCloudStatus('error', 'رفض Google الوصول. تأكد من تفعيل Google Drive API وإضافة صلاحية drive.appdata في شاشة موافقة OAuth. بياناتك المحلية لم تتغير.');
-          } else if (driveAccessToken) {
-            setCloudStatus('error', `تعذرت المزامنة: ${error.message} بياناتك ما زالت محفوظة محلياً.`);
+          console.error('Firebase sync error:', error);
+          if (error.code === 'permission-denied') {
+            setCloudStatus('error', 'رفضت قواعد Firestore الوصول. تحقق من نشر Rules ومن أنك مسجل بالحساب الصحيح.');
+          } else if (error.code === 'unavailable' || !navigator.onLine) {
+            setCloudStatus('warning', 'لا يوجد اتصال متاح بـ Firestore الآن. بيانات هذا الجهاز محفوظة محلياً وستتم محاولة المزامنة عند عودة الاتصال.');
+          } else {
+            setCloudStatus('error', 'تعذرت مزامنة Firebase: ' + error.message + '. بيانات هذا الجهاز لم تُحذف.');
           }
         }
       }
 
       function queueCloudSave() {
-        if (!driveAccessToken || !cloudFileId || pendingCloudConflict) return;
+        if (!currentUser || !prayerDocument || pendingCloudConflict) return;
         clearTimeout(cloudSaveTimer);
-        cloudSaveTimer = setTimeout(() => syncLocalToCloud(), 850);
+        cloudSaveTimer = setTimeout(() => syncLocalToCloud(), 700);
       }
 
       async function syncLocalToCloud() {
-        if (!driveAccessToken || !cloudFileId || pendingCloudConflict) return;
+        if (!currentUser || !prayerDocument || pendingCloudConflict) return;
         if (cloudSyncRunning) { cloudSyncAgain = true; return; }
         cloudSyncRunning = true;
         try {
           do {
             cloudSyncAgain = false;
             const snapshot = cloneState(state);
-            setCloudStatus('syncing', 'جارٍ رفع أحدث بيانات الصلوات إلى Google Drive...');
+            setCloudStatus('syncing', 'جارٍ حفظ أحدث بيانات الصلوات في Firestore...');
             await uploadCloudState(snapshot);
             if (state.updatedAt !== snapshot.updatedAt) cloudSyncAgain = true;
           } while (cloudSyncAgain);
           markCloudSynced();
-          setCloudStatus('connected', 'تم حفظ بيانات الصلوات في Google Drive بنجاح.');
+          setCloudStatus('connected', 'تم حفظ بيانات الصلوات في Firestore بنجاح.');
         } catch (error) {
-          console.error('Google Drive auto-save error:', error);
-          if (error.status === 403) {
-            setCloudStatus('error', 'رفض Google رفع الملف. تحقق من صلاحية drive.appdata وتفعيل Drive API. النسخة المحلية محفوظة.');
-          } else if (driveAccessToken) {
-            setCloudStatus('error', `لم تكتمل المزامنة: ${error.message} ستبقى البيانات محفوظة محلياً؛ أعد المحاولة بعد معالجة الاتصال.`);
+          console.error('Firestore auto-save error:', error);
+          if (error.code === 'permission-denied') {
+            setCloudStatus('error', 'رفضت قواعد Firestore عملية الحفظ. تحقق من قواعد الأمان وحساب Google الحالي.');
+          } else {
+            setCloudStatus('error', 'لم تكتمل المزامنة: ' + error.message + '. بياناتك المحلية ما زالت محفوظة.');
           }
         } finally {
           cloudSyncRunning = false;
+          if (cloudSyncAgain && currentUser && !pendingCloudConflict) queueCloudSave();
         }
       }
 
-      function startDriveAuthorization() {
-        if (!tokenClient) {
-          setCloudStatus('loading', 'مكتبة Google لم تكتمل بعد. تأكد من اتصال الإنترنت ثم أعد تحميل الصفحة.');
+      async function startGoogleSignIn() {
+        if (!firebaseAuth) {
+          setCloudStatus('loading', 'جاري تجهيز Firebase Authentication. أعد المحاولة بعد لحظات.');
           return;
         }
         try {
-          let previouslyAuthorized = false;
-          try { previouslyAuthorized = localStorage.getItem(CLOUD_AUTHORIZED_KEY) === '1'; } catch (_) { /* ask for consent when storage is unavailable */ }
-          tokenClient.requestAccessToken({ prompt: previouslyAuthorized ? '' : 'consent' });
+          const provider = new firebase.auth.GoogleAuthProvider();
+          provider.setCustomParameters({ prompt: 'select_account' });
+          await firebaseAuth.signInWithPopup(provider);
         } catch (error) {
-          console.error(error);
-          setCloudStatus('error', 'لم يتمكن المتصفح من فتح نافذة Google. اسمح بالنوافذ المنبثقة لهذه الصفحة ثم حاول مجدداً.');
+          console.error('Firebase Google sign-in error:', error);
+          let message = error.message || 'تعذر تسجيل الدخول.';
+          if (error.code === 'auth/popup-blocked') message = 'منع المتصفح نافذة تسجيل الدخول. اسمح بالنوافذ المنبثقة لهذا الموقع ثم أعد المحاولة.';
+          if (error.code === 'auth/unauthorized-domain') message = 'النطاق غير مسموح في Firebase Authentication. أضف ahmedwwaw1.github.io إلى Authorized domains.';
+          if (error.code === 'auth/operation-not-allowed') message = 'تسجيل الدخول باستخدام Google غير مفعّل في Firebase Authentication.';
+          setCloudStatus('error', 'تعذر تسجيل الدخول إلى Firebase: ' + message);
         }
       }
 
-      function onDriveTokenResponse(response) {
-        if (!response || response.error || !response.access_token) {
-          const reason = response?.error_description || response?.error || 'لم يمنح Google رمز الوصول';
-          setCloudStatus('error', `لم يكتمل ربط Google Drive: ${reason}.`);
-          return;
+      async function onFirebaseAuthChanged(user) {
+        if (unsubscribePrayerDocument) {
+          unsubscribePrayerDocument();
+          unsubscribePrayerDocument = null;
         }
-        driveAccessToken = response.access_token;
-        driveTokenExpiresAt = Date.now() + (Math.max(60, Number(response.expires_in) || 3600) * 1000);
-        try { localStorage.setItem(CLOUD_AUTHORIZED_KEY, '1'); } catch (_) { /* token remains in memory for this page session */ }
-        initializeCloudSync();
-      }
-
-      window.qadaGoogleReady = function () {
-        try {
-          if (!window.google?.accounts?.oauth2) throw new Error('تعذّر تحميل Google Identity Services.');
-          tokenClient = window.google.accounts.oauth2.initTokenClient({
-            client_id: GOOGLE_CLIENT_ID,
-            scope: DRIVE_SCOPE,
-            callback: onDriveTokenResponse,
-            error_callback: (error) => {
-              console.error('Google OAuth popup error:', error);
-              setCloudStatus('error', 'تعذر فتح نافذة التفويض. اسمح بالنوافذ المنبثقة وتحقق من عنوان الموقع المسموح في Google Cloud.');
-            }
-          });
-          setCloudStatus('offline', 'لم يتم ربط Google Drive بعد. اضغط زر الربط، ثم اختر حساب Google واسمح للتطبيق بالوصول إلى بياناته الخاصة فقط.');
-          connectDriveButton.disabled = false;
-          updateLastSyncDisplay();
-        } catch (error) {
-          console.error(error);
-          setCloudStatus('error', 'تعذر تجهيز مكتبة Google. تحقق من الإنترنت ثم أعد تحميل الصفحة.');
-        }
-      };
-
-      connectDriveButton.addEventListener('click', startDriveAuthorization);
-      syncDriveButton.addEventListener('click', () => {
-        if (!driveAccessToken || Date.now() >= driveTokenExpiresAt - 15000) startDriveAuthorization();
-        else syncLocalToCloud();
-      });
-      disconnectDriveButton.addEventListener('click', () => {
-        if (driveAccessToken && window.google?.accounts?.oauth2) {
-          window.google.accounts.oauth2.revoke(driveAccessToken, () => {});
-        }
-        driveAccessToken = null;
-        driveTokenExpiresAt = 0;
-        cloudFileId = null;
         pendingCloudConflict = null;
         cloudConflictPanel.hidden = true;
-        try { localStorage.removeItem(CLOUD_AUTHORIZED_KEY); } catch (_) { /* ignore unavailable local storage */ }
-        setCloudStatus('offline', 'تم قطع اتصال Google Drive. بياناتك المحلية وملف السحابة لم يُحذفا.');
+        currentUser = user || null;
+        prayerDocument = null;
+
+        if (!currentUser) {
+          setCloudStatus('offline', 'لم يتم تسجيل الدخول بعد. اضغط «تسجيل الدخول باستخدام Google». ستبقى بياناتك محفوظة محلياً حتى تسجيل الدخول.');
+          return;
+        }
+
+        prayerDocument = firestoreDb.collection('users')
+          .doc(currentUser.uid).collection('qada').doc('data');
+        setCloudStatus('syncing', 'تم تسجيل الدخول بالحساب ' + (currentUser.email || '') + '. جارٍ مزامنة البيانات...');
+        await initializeCloudSync();
+      }
+
+      async function initializeFirebase() {
+        try {
+          if (!window.firebase || !firebase.initializeApp) {
+            throw new Error('تعذّر تحميل مكتبات Firebase. تحقق من اتصال الإنترنت ثم أعد تحميل الصفحة.');
+          }
+          if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+          firebaseAuth = firebase.auth();
+          firestoreDb = firebase.firestore();
+          await firebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+          firebaseReady = true;
+          setCloudStatus('loading', 'تم تجهيز Firebase. جارٍ التحقق من جلسة تسجيل الدخول المحفوظة...');
+          firebaseAuth.onAuthStateChanged(user => {
+            onFirebaseAuthChanged(user).catch(error => {
+              console.error('Firebase auth state error:', error);
+              setCloudStatus('error', 'تعذرت تهيئة المزامنة بعد تسجيل الدخول: ' + error.message);
+            });
+          });
+        } catch (error) {
+          console.error('Firebase initialization error:', error);
+          setCloudStatus('error', 'تعذر تشغيل Firebase: ' + error.message);
+        }
+      }
+
+      connectDriveButton.addEventListener('click', startGoogleSignIn);
+      syncDriveButton.addEventListener('click', () => {
+        if (currentUser) syncLocalToCloud();
+        else startGoogleSignIn();
+      });
+      disconnectDriveButton.addEventListener('click', async () => {
+        if (!firebaseAuth) return;
+        try {
+          await firebaseAuth.signOut();
+          setCloudStatus('offline', 'تم تسجيل الخروج. لم تُحذف بيانات Firestore أو النسخة المحلية على هذا الجهاز.');
+        } catch (error) {
+          setCloudStatus('error', 'تعذر تسجيل الخروج: ' + error.message);
+        }
       });
 
       document.getElementById('downloadConflictBackupButton').addEventListener('click', () => {
@@ -905,8 +860,8 @@
         pendingCloudConflict = null;
         cloudConflictPanel.hidden = true;
         markCloudSynced();
-        setCloudStatus('connected', 'تم اعتماد بيانات Google Drive وحفظها محلياً على هذا الجهاز.');
-        showToast('تم اعتماد نسخة السحابة.');
+        setCloudStatus('connected', 'تم اعتماد بيانات Firebase وحفظها محلياً على هذا الجهاز.');
+        showToast('تم اعتماد نسخة Firebase.');
       });
       document.getElementById('useLocalDataButton').addEventListener('click', async () => {
         if (!pendingCloudConflict) return;
@@ -919,16 +874,23 @@
           pendingCloudConflict = null;
           cloudConflictPanel.hidden = true;
           markCloudSynced();
-          setCloudStatus('connected', 'تم اعتماد بيانات هذا الجهاز ورفعها إلى Google Drive.');
-          showToast('تم رفع بيانات هذا الجهاز إلى السحابة.');
+          setCloudStatus('connected', 'تم اعتماد بيانات هذا الجهاز ورفعها إلى Firebase.');
+          showToast('تم رفع بيانات هذا الجهاز إلى Firebase.');
         } catch (error) {
           console.error(error);
-          setCloudStatus('error', `تعذر رفع بيانات هذا الجهاز: ${error.message}. لم يتم حذف النسختين.`);
+          setCloudStatus('error', 'تعذر رفع بيانات هذا الجهاز: ' + error.message + '. لم يتم حذف النسختين.');
         }
       });
+
+      window.addEventListener('online', () => {
+        if (currentUser && prayerDocument) {
+          setCloudStatus('syncing', 'عاد الاتصال بالإنترنت؛ جارٍ مزامنة بيانات الصلوات...');
+          syncLocalToCloud();
+        }
+      });
+
       updateLastSyncDisplay();
       // ---------------------------------------------------------
-
       // Keep numerals in Western form even when the keyboard/browser supplies Arabic digits.
       function westernDigits(value) {
         return String(value).replace(/[٠-٩۰-۹]/g, digit => {
@@ -973,8 +935,8 @@
 
       loadState();
       render();
+      initializeFirebase();
     })();
   </script>
-  <script async defer src="https://accounts.google.com/gsi/client" onload="window.qadaGoogleReady && window.qadaGoogleReady()" onerror="document.getElementById('cloudStatusText').textContent='تعذّر تحميل مكتبة Google؛ تحقق من اتصال الإنترنت.'"></script>
 </body>
 </html>
