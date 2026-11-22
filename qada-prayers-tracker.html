@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b171d">
+  <title>قضاء الصلوات</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0a151a;
+      --bg-soft: #0e1c22;
+      --surface: #14252c;
+      --surface-raised: #192e36;
+      --field: #0c1a20;
+      --field-focus: #10252b;
+      --ink: #edf6f4;
+      --muted: #9bb2b4;
+      --teal: #1b817a;
+      --teal-bright: #37b1a2;
+      --teal-dark: #115c59;
+      --line: #29434a;
+      --gold: #e3b45f;
+      --danger: #ffaaa2;
+      --shadow: 0 16px 42px rgba(0, 0, 0, .24);
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(25, 112, 101, .20), transparent 34rem),
+        radial-gradient(circle at 95% 25%, rgba(34, 75, 91, .17), transparent 28rem),
+        var(--bg);
+      font-family: Tahoma, Arial, sans-serif;
+      line-height: 1.7;
+    }
+    .page { width: min(1080px, calc(100% - 34px)); margin: 0 auto; padding: 28px 0 46px; }
+    .hero {
+      position: relative; overflow: hidden; padding: 28px clamp(20px, 4vw, 40px);
+      border: 1px solid rgba(92, 186, 170, .24); border-radius: 24px;
+      background: linear-gradient(125deg, #102a33, #145b59 66%, #177b70);
+      box-shadow: var(--shadow);
+    }
+    .hero::after {
+      content: ""; position: absolute; width: 230px; height: 230px; left: -65px; top: -110px;
+      border: 1px solid rgba(255,255,255,.14); border-radius: 50%;
+      box-shadow: 0 0 0 24px rgba(255,255,255,.035), 0 0 0 52px rgba(255,255,255,.025);
+      pointer-events: none;
+    }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: #bce9de; font-size: 13px; margin-bottom: 7px; }
+    h1 { margin: 0; color: #fff; font-size: clamp(27px, 4vw, 36px); line-height: 1.35; }
+    .hero p { max-width: 690px; margin: 9px 0 0; color: #d6eeea; font-size: 14px; }
+    .main-tabs, .sub-tabs {
+      display: flex; flex-wrap: wrap; gap: 9px; padding: 8px; margin: 16px 0;
+      border: 1px solid var(--line); border-radius: 16px; background: rgba(17, 34, 41, .92);
+      box-shadow: var(--shadow);
+    }
+    .tab-button {
+      min-height: 44px; padding: 9px 20px; color: var(--muted); background: transparent;
+      border: 1px solid transparent; border-radius: 11px; font-size: 14px;
+    }
+    .tab-button:hover { color: var(--ink); background: rgba(255,255,255,.045); }
+    .tab-button.active {
+      color: #fff; border-color: rgba(76, 190, 171, .24);
+      background: linear-gradient(130deg, #176e69, #218b7e);
+      box-shadow: 0 5px 18px rgba(9, 104, 93, .22);
+    }
+    .sub-tabs { margin: 0 0 18px; padding: 6px; background: rgba(14, 29, 35, .8); box-shadow: none; }
+    .sub-tabs .tab-button { min-height: 40px; padding: 7px 16px; font-size: 13px; }
+    .section-title { margin: 0 2px 15px; }
+    .section-title h2 { margin: 0; font-size: 21px; }
+    .section-title p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
+    .summary { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0 0 21px; }
+    .summary-card, .prayer-card, .panel, .settings-card {
+      border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow);
+    }
+    .summary-card { padding: 17px 21px; }
+    .summary-label { color: var(--muted); font-size: 13px; }
+    .summary-number { display: block; margin-top: 2px; color: #63d0bf; font-size: clamp(28px, 4vw, 35px); font-weight: 800; font-variant-numeric: tabular-nums; }
+    .prayer-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .prayer-card { padding: 19px; background: linear-gradient(145deg, #192e36, #14252c); }
+    .prayer-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+    .prayer-name { display: flex; align-items: center; gap: 10px; color: #f5fbfa; font-size: 18px; font-weight: 700; }
+    .prayer-icon { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid #31525a; border-radius: 12px; background: #203b42; font-size: 19px; }
+    .count { color: #65d1c1; font-size: 23px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .count small { color: var(--muted); font-size: 12px; font-weight: 400; }
+    .field-label { display: block; margin: 8px 0 5px; color: #a9c0c0; font-size: 13px; }
+    input.numeric-input {
+      display: block; width: 100%; min-width: 0; height: 46px; padding: 8px 13px;
+      direction: ltr; text-align: right; unicode-bidi: plaintext;
+      border: 1px solid #34515a; border-radius: 11px; outline: none;
+      background: var(--field); color: #f4fbf9; caret-color: var(--teal-bright);
+      font-family: Tahoma, Arial, sans-serif; font-size: 16px; font-variant-numeric: lining-nums tabular-nums;
+      transition: border-color .18s, box-shadow .18s, background .18s;
+    }
+    input.numeric-input::placeholder { color: #6f888d; opacity: 1; }
+    input.numeric-input:focus { border-color: var(--teal-bright); background: var(--field-focus); box-shadow: 0 0 0 3px rgba(55, 177, 162, .16); }
+    button {
+      border: 0; border-radius: 11px; padding: 10px 15px; color: var(--ink);
+      font: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: transform .12s, background .15s, opacity .15s, border-color .15s;
+    }
+    button:active { transform: translateY(1px); }
+    button:focus-visible { outline: 3px solid rgba(55, 177, 162, .34); outline-offset: 2px; }
+    button:disabled { cursor: not-allowed; }
+    .primary { width: 100%; min-height: 43px; margin-top: 9px; color: #fff; background: var(--teal); }
+    .primary:hover { background: #219187; }
+    .smart-panel { margin-top: 16px; padding: 21px; border-color: #315e59; background: linear-gradient(145deg, #172e33, #13272c); }
+    .smart-title { display: flex; align-items: center; gap: 10px; }
+    .smart-mark { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #665333; border-radius: 13px; color: #f0c879; background: #40351f; font-size: 20px; }
+    .smart-title h2 { margin: 0; color: #f4faf8; font-size: 19px; }
+    .smart-description { margin: 8px 0 15px; color: var(--muted); font-size: 13px; }
+    .smart-row { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: end; gap: 12px; }
+    .smart-row .primary { width: auto; min-width: 165px; height: 46px; margin: 0; padding-inline: 20px; }
+    .hint { margin: 11px 0 0; color: #90aaa7; font-size: 12px; }
+    .history-panel { padding: 20px 22px; }
+    .history-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .history-head h2 { margin: 0; color: #f0f8f6; font-size: 18px; }
+    .history-note { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+    .history-list { max-height: 520px; overflow-y: auto; list-style: none; padding: 0; margin: 13px 0 0; }
+    .history-list li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 2px; border-top: 1px solid #294047; }
+    .history-title { color: #e7f2ef; font-size: 13px; font-weight: 700; }
+    .history-time { color: #91a9ad; font-size: 11px; }
+    .empty { padding: 20px 0 5px; color: var(--muted); font-size: 13px; text-align: center; }
+    .secondary { color: #c8eee7; border: 1px solid #315b59; background: #1a3a3d; }
+    .secondary:hover { background: #214a49; }
+    .warning { color: #ffc0b9; border: 1px solid #70413f; background: #3b2529; }
+    .warning:hover { background: #512d31; }
+    .undo-button { flex: 0 0 auto; padding: 8px 12px; color: #f2d397; border: 1px solid #695435; background: #3b321f; font-size: 12px; }
+    .settings-card { padding: 22px; }
+    .settings-card h2 { margin: 0; font-size: 20px; }
+    .settings-card > p { margin: 6px 0 18px; color: var(--muted); font-size: 13px; }
+    .cloud-card {
+      margin: 0 0 18px; padding: 18px; border: 1px solid #315d5a; border-radius: 16px;
+      background: linear-gradient(145deg, rgba(24, 57, 58, .78), rgba(18, 39, 46, .96));
+    }
+    .cloud-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .cloud-title { display: flex; align-items: center; gap: 11px; }
+    .cloud-icon { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #356c65; border-radius: 13px; background: #1b4546; font-size: 20px; }
+    .cloud-title h3 { margin: 0; color: #f2fbf8; font-size: 17px; }
+    .cloud-title p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+    .cloud-badge { flex: 0 0 auto; padding: 5px 11px; border: 1px solid #53616a; border-radius: 999px; color: #c5d2d5; background: #263840; font-size: 11px; font-weight: 700; }
+    .cloud-badge[data-state="connected"] { color: #b7f0da; border-color: #307b64; background: #173e36; }
+    .cloud-badge[data-state="syncing"] { color: #ffe0a4; border-color: #80683b; background: #40351f; }
+    .cloud-badge[data-state="warning"], .cloud-badge[data-state="error"] { color: #ffc0b9; border-color: #70413f; background: #3b2529; }
+    .cloud-description { margin: 12px 0; color: #afc4c2; font-size: 13px; }
+    .cloud-actions { display: flex; flex-wrap: wrap; gap: 9px; }
+    .cloud-actions button { min-height: 42px; }
+    .cloud-status-text { margin: 12px 0 0; color: #d4e4df; font-size: 12px; }
+    .cloud-last-sync { margin: 4px 0 0; color: #8ea8a8; font-size: 11px; }
+    .cloud-conflict { margin-top: 14px; padding: 14px; border: 1px solid #80683b; border-radius: 12px; background: rgba(64, 53, 31, .42); }
+    .cloud-conflict strong { display: block; margin-bottom: 5px; color: #ffe0a4; }
+    .cloud-conflict p { margin: 0 0 12px; color: #d5c9aa; font-size: 12px; }
+    .cloud-conflict-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cloud-conflict-actions button { min-height: 39px; font-size: 12px; }
+    .settings-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .settings-actions button { min-height: 44px; padding-inline: 17px; }
+    .settings-help { margin-top: 17px !important; padding-top: 14px; border-top: 1px solid var(--line); color: #8ea8a8 !important; font-size: 12px !important; }
+    .toast {
+      position: fixed; z-index: 5; bottom: 20px; left: 50%; transform: translate(-50%, 18px);
+      padding: 10px 16px; border: 1px solid #3f6967; border-radius: 12px; color: #fff;
+      background: #183b3d; box-shadow: var(--shadow); opacity: 0; pointer-events: none;
+      transition: .2s; font-size: 13px; max-width: calc(100% - 30px); text-align: center;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 680px) {
+      .page { width: min(100% - 22px, 540px); padding-top: 13px; }
+      .hero { border-radius: 19px; padding: 23px 19px; }
+      .main-tabs { margin: 12px 0; }
+      .summary { gap: 9px; margin-bottom: 15px; }
+      .summary-card { padding: 13px; border-radius: 14px; }
+      .prayer-grid { grid-template-columns: 1fr; gap: 10px; }
+      .prayer-card { padding: 16px; }
+      .smart-panel, .history-panel, .settings-card { padding: 16px; }
+      .smart-row { grid-template-columns: 1fr; }
+      .smart-row .primary { width: 100%; }
+      .history-head { align-items: flex-start; flex-direction: column; }
+      .settings-actions, .cloud-actions, .cloud-conflict-actions { flex-direction: column; }
+      .settings-actions button, .cloud-actions button, .cloud-conflict-actions button { width: 100%; }
+      .cloud-head { align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="eyebrow"><span aria-hidden="true">☾</span> سجلّ شخصي للمتابعة</div>
+      <h1>قضاء الصلوات</h1>
+      <p>تابع ما قضيته من الصلوات الخمس، وأضف الأعداد بشكل تراكمي. تُحفظ بياناتك تلقائياً على هذا الجهاز.</p>
+    </header>
+
+    <nav class="main-tabs" role="tablist" aria-label="الأقسام الرئيسية">
+      <button class="tab-button active" type="button" role="tab" aria-selected="true" data-main-tab="qada">🕌 قضاء الصلوات</button>
+      <button class="tab-button" type="button" role="tab" aria-selected="false" data-main-tab="settings">⚙ الإعدادات</button>
+    </nav>
+
+    <section id="qadaView" aria-label="قسم قضاء الصلوات">
+      <nav class="sub-tabs" role="tablist" aria-label="صفحات قضاء الصلوات">
+        <button class="tab-button active" type="button" role="tab" aria-selected="true" data-qada-tab="tracker">متابعة قضاء الصلوات</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" data-qada-tab="history">سجل آخر الإضافات</button>
+      </nav>
+
+      <section id="trackerPanel" aria-labelledby="trackerHeading">
+        <div class="section-title">
+          <h2 id="trackerHeading">متابعة قضاء الصلوات</h2>
+          <p>أدخل عدد الصلوات التي قضيتها، وسيُضاف إلى رصيد الصلاة المحددة.</p>
+        </div>
+
+        <section class="summary" aria-label="ملخص القضاء">
+          <div class="summary-card">
+            <span class="summary-label">إجمالي الصلوات المسجّلة</span>
+            <strong class="summary-number" id="grandTotal">0</strong>
+          </div>
+          <div class="summary-card">
+            <span class="summary-label">عدد أنواع الصلوات المتابعة</span>
+            <strong class="summary-number">5 <span style="font-size:15px;font-weight:500">صلوات</span></strong>
+          </div>
+        </section>
+
+        <div class="section-title"><h2>القضاء لكل صلاة</h2></div>
+        <section class="prayer-grid" id="prayerGrid" aria-label="إدخال أعداد الصلوات">
+          <article class="prayer-card" data-prayer="fajr">
+            <div class="prayer-top"><div class="prayer-name"><span class="prayer-icon">🌅</span> صلاة الصبح</div><div class="count"><span id="total-fajr">0</span> <small>صلاة</small></div></div>
+            <form class="single-form" data-prayer="fajr"><label class="field-label" for="input-fajr">عدد صلوات الصبح التي قضيتها</label><input class="numeric-input" id="input-fajr" type="text" inputmode="numeric" pattern="[0-9]*" lang="en" dir="ltr" autocomplete="off" placeholder="مثال: 5" required><button class="primary" type="submit">＋ إضافة إلى رصيد الصبح</button></form>
+          </article>
+          <article class="prayer-card" data-prayer="dhuhr">
+            <div class="prayer-top"><div class="prayer-name"><span class="prayer-icon">☀️</span> صلاة الظهر</div><div class="count"><span id="total-dhuhr">0</span> <small>صلاة</small></div></div>
+            <form class="single-form" data-prayer="dhuhr"><label class="field-label" for="input-dhuhr">عدد صلوات الظهر التي قضيتها</label><input class="numeric-input" id="input-dhuhr" type="text" inputmode="numeric" pattern="[0-9]*" lang="en" dir="ltr" autocomplete="off" placeholder="مثال: 5" required><button class="primary" type="submit">＋ إضافة إلى رصيد الظهر</button></form>
+          </article>
+          <article class="prayer-card" data-prayer="asr">
+            <div class="prayer-top"><div class="prayer-name"><span class="prayer-icon">🌤️</span> صلاة العصر</div><div class="count"><span id="total-asr">0</span> <small>صلاة</small></div></div>
+            <form class="single-form" data-prayer="asr"><label class="field-label" for="input-asr">عدد صلوات العصر التي قضيتها</label><input class="numeric-input" id="input-asr" type="text" inputmode="numeric" pattern="[0-9]*" lang="en" dir="ltr" autocomplete="off" placeholder="مثال: 5" required><button class="primary" type="submit">＋ إضافة إلى رصيد العصر</button></form>
+          </article>
+          <article class="prayer-card" data-prayer="maghrib">
+            <div class="prayer-top"><div class="prayer-name"><span class="prayer-icon">🌇</span> صلاة المغرب</div><div class="count"><span id="total-maghrib">0</span> <small>صلاة</small></div></div>
+            <form class="single-form" data-prayer="maghrib"><label class="field-label" for="input-maghrib">عدد صلوات المغرب التي قضيتها</label><input class="numeric-input" id="input-maghrib" type="text" inputmode="numeric" pattern="[0-9]*" lang="en" dir="ltr" autocomplete="off" placeholder="مثال: 5" required><button class="primary" type="submit">＋ إضافة إلى رصيد المغرب</button></form>
+          </article>
+          <article class="prayer-card" data-prayer="isha">
+            <div class="prayer-top"><div class="prayer-name"><span class="prayer-icon">🌙</span> صلاة العشاء</div><div class="count"><span id="total-isha">0</span> <small>صلاة</small></div></div>
+            <form class="single-form" data-prayer="isha"><label class="field-label" for="input-isha">عدد صلوات العشاء التي قضيتها</label><input class="numeric-input" id="input-isha" type="text" inputmode="numeric" pattern="[0-9]*" lang="en" dir="ltr" autocomplete="off" placeholder="مثال: 5" required><button class="primary" type="submit">＋ إضافة إلى رصيد العشاء</button></form>
+          </article>
+        </section>
+
+        <section class="panel smart-panel" aria-labelledby="smartHeading">
+          <div class="smart-title"><span class="smart-mark">⚖️</span><h2 id="smartHeading">الإضافة الذكية بالتساوي</h2></div>
+          <p class="smart-description">اكتب العدد الإجمالي الذي تريد إضافته، وسيُقسّم بالتساوي على الصلوات الخمس، ثم يُضاف إلى رصيد كل صلاة.</p>
+          <form id="smartForm" class="smart-row">
+            <div><label class="field-label" for="smartInput">العدد الإجمالي (الحد الأدنى 5)</label><input class="numeric-input" id="smartInput" type="text" inputmode="numeric" pattern="[0-9]*" lang="en" dir="ltr" autocomplete="off" placeholder="مثال: 5 أو 10 أو 15" required></div>
+            <button class="primary" type="submit">＋ توزيع وإضافة</button>
+          </form>
+          <p class="hint">مثال: إدخال 5 يضيف صلاة واحدة لكل نوع، وإدخال 10 يضيف صلاتين لكل نوع، وإدخال 15 يضيف 3 صلوات لكل نوع. يجب أن يكون العدد من مضاعفات 5 لضمان التوزيع المتساوي.</p>
+        </section>
+      </section>
+
+      <section id="historyPanel" class="panel history-panel" aria-labelledby="historyHeading" hidden>
+        <div class="history-head"><div><h2 id="historyHeading">سجل آخر الإضافات</h2><p class="history-note">تظهر أحدث الإضافات أولاً، مع تاريخ ووقت كل عملية.</p></div><button type="button" class="undo-button" id="undoButton">↶ تراجع عن آخر إضافة</button></div>
+        <ul class="history-list" id="historyList"><li class="empty">لا توجد إضافات مسجّلة بعد.</li></ul>
+      </section>
+    </section>
+
+    <section id="settingsView" aria-labelledby="settingsHeading" hidden>
+      <div class="settings-card">
+        <h2 id="settingsHeading">الإعدادات</h2>
+        <p>إدارة بيانات قضاء الصلوات والمزامنة السحابية والنسخ الاحتياطية.</p>
+
+        <section class="cloud-card" aria-labelledby="cloudHeading">
+          <div class="cloud-head">
+            <div class="cloud-title">
+              <span class="cloud-icon" aria-hidden="true">☁️</span>
+              <div><h3 id="cloudHeading">مزامنة Google Drive</h3><p>حفظ نسخة بياناتك في مساحة التطبيق الخاصة</p></div>
+            </div>
+            <span class="cloud-badge" id="cloudBadge" data-state="loading">جار التحميل</span>
+          </div>
+          <p class="cloud-description">بعد ربط حسابك، تُرفع كل إضافة أو عملية تراجع تلقائياً إلى Google Drive، وتُحمّل البيانات عند ربط الصفحة من جهاز آخر. بياناتك تبقى محفوظة محلياً أيضاً.</p>
+          <div class="cloud-actions">
+            <button type="button" class="primary" id="connectDriveButton" disabled>ربط حساب Google Drive</button>
+            <button type="button" class="secondary" id="syncDriveButton" disabled>↻ مزامنة الآن</button>
+            <button type="button" class="warning" id="disconnectDriveButton" disabled>قطع الاتصال</button>
+          </div>
+          <p class="cloud-status-text" id="cloudStatusText" role="status" aria-live="polite">جار تجهيز اتصال Google...</p>
+          <p class="cloud-last-sync" id="cloudLastSync"></p>
+          <div class="cloud-conflict" id="cloudConflict" hidden>
+            <strong>توجد نسختان مختلفتان من بيانات الصلوات</strong>
+            <p>لم أستبدل أي بيانات تلقائياً لتجنب فقدان أعدادك أو تكرارها. نزّل نسخة محلية للاحتفاظ بها، ثم اختر أي نسخة تريد اعتمادها. لن يتم جمع الأعداد آلياً.</p>
+            <div class="cloud-conflict-actions">
+              <button type="button" class="secondary" id="downloadConflictBackupButton">⬇ تنزيل بيانات هذا الجهاز</button>
+              <button type="button" class="secondary" id="useCloudDataButton">اعتماد بيانات السحابة</button>
+              <button type="button" class="primary" id="useLocalDataButton">اعتماد بيانات هذا الجهاز ورفعها</button>
+            </div>
+          </div>
+        </section>
+
+        <div class="settings-actions">
+          <button type="button" class="secondary" id="exportButton">⬇ تنزيل نسخة احتياطية</button>
+          <button type="button" class="secondary" id="importButton">⬆ استعادة نسخة احتياطية</button>
+          <button type="button" class="warning" id="resetButton">إعادة ضبط جميع الأعداد</button>
+          <input type="file" id="importFile" accept="application/json,.json" hidden>
+        </div>
+        <p class="settings-help">تُحفظ بياناتك أولاً في المتصفح، وعند ربط Google Drive تُزامن تلقائياً أثناء فتح الصفحة واتصالها بالإنترنت. رمز الوصول لا يُخزّن في الملف أو في التخزين المحلي؛ قد تحتاج إلى إعادة ربط الحساب بعد انتهاء صلاحيته. عند استعادة نسخة احتياطية، ستحل بياناتها محل البيانات الحالية وتُرسل إلى السحابة إذا كان الاتصال نشطاً.</p>
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      'use strict';
+      const STORAGE_KEY = 'qada-prayers-tracker-v1';
+      const CLOUD_AUTHORIZED_KEY = 'qada-google-drive-authorized-v1';
+      const CLOUD_LAST_SYNC_KEY = 'qada-google-drive-last-sync-v1';
+      const GOOGLE_CLIENT_ID = '962563812146-jbbjkrtvc0sk0fkue525olo49942pkkh.apps.googleusercontent.com';
+      const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
+      const DRIVE_FILE_NAME = 'qada-prayers-data.json';
+      const prayers = [
+        { id: 'fajr', name: 'الصبح' },
+        { id: 'dhuhr', name: 'الظهر' },
+        { id: 'asr', name: 'العصر' },
+        { id: 'maghrib', name: 'المغرب' },
+        { id: 'isha', name: 'العشاء' }
+      ];
+      const emptyTotals = () => Object.fromEntries(prayers.map(p => [p.id, 0]));
+      let state = { version: 1, totals: emptyTotals(), history: [], updatedAt: null };
+      let toastTimer;
+
+      // Google Drive sync state. Access tokens stay in memory only and are never written to localStorage.
+      let tokenClient = null;
+      let driveAccessToken = null;
+      let driveTokenExpiresAt = 0;
+      let cloudFileId = null;
+      let cloudSaveTimer = null;
+      let cloudSyncRunning = false;
+      let cloudSyncAgain = false;
+      let pendingCloudConflict = null;
+
+      function validCount(value) {
+        return Number.isSafeInteger(value) && value > 0;
+      }
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const saved = JSON.parse(raw);
+          if (!saved || saved.version !== 1 || !saved.totals) return;
+          for (const p of prayers) {
+            const n = Number(saved.totals[p.id]);
+            state.totals[p.id] = Number.isSafeInteger(n) && n >= 0 ? n : 0;
+          }
+          state.history = Array.isArray(saved.history) ? saved.history.filter(item =>
+            item && typeof item.title === 'string' && item.delta && typeof item.delta === 'object'
+          ).slice(0, 100) : [];
+          state.updatedAt = typeof saved.updatedAt === 'string' ? saved.updatedAt : null;
+        } catch (error) {
+          console.warn('تعذّر تحميل البيانات المحفوظة:', error);
+        }
+      }
+      function saveState(syncCloud = true) {
+        try {
+          if (syncCloud) state.updatedAt = new Date().toISOString();
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          if (syncCloud) queueCloudSave();
+          return true;
+        } catch (error) {
+          showToast('تعذّر حفظ البيانات في المتصفح. نزّل نسخة احتياطية أو أفرغ مساحة.');
+          console.error(error);
+          return false;
+        }
+      }
+      function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+      }
+      function formatNumber(number) {
+        return new Intl.NumberFormat('ar-IQ-u-nu-latn').format(number);
+      }
+      function render() {
+        let grandTotal = 0;
+        for (const p of prayers) {
+          const value = state.totals[p.id];
+          document.getElementById(`total-${p.id}`).textContent = formatNumber(value);
+          grandTotal += value;
+        }
+        document.getElementById('grandTotal').textContent = formatNumber(grandTotal);
+        const list = document.getElementById('historyList');
+        list.replaceChildren();
+        if (!state.history.length) {
+          const empty = document.createElement('li');
+          empty.className = 'empty';
+          empty.textContent = 'لا توجد إضافات مسجّلة بعد.';
+          list.appendChild(empty);
+        } else {
+          state.history.forEach(item => {
+            const li = document.createElement('li');
+            const info = document.createElement('div');
+            const title = document.createElement('div');
+            title.className = 'history-title';
+            title.textContent = item.title;
+            const time = document.createElement('div');
+            time.className = 'history-time';
+            const date = new Date(item.timestamp);
+            time.textContent = Number.isNaN(date.getTime()) ? '' : new Intl.DateTimeFormat('ar-IQ-u-nu-latn', { dateStyle: 'medium', timeStyle: 'short' }).format(date);
+            info.append(title, time);
+            li.appendChild(info);
+            list.appendChild(li);
+          });
+        }
+        document.getElementById('undoButton').disabled = state.history.length === 0;
+        document.getElementById('undoButton').style.opacity = state.history.length ? '1' : '.5';
+      }
+      function addEntry(title, delta) {
+        for (const p of prayers) {
+          const amount = delta[p.id] || 0;
+          if (!Number.isSafeInteger(amount) || amount < 0 || !Number.isSafeInteger(state.totals[p.id] + amount)) {
+            showToast('العدد كبير جداً ولا يمكن إضافته.');
+            return false;
+          }
+        }
+        for (const p of prayers) state.totals[p.id] += delta[p.id] || 0;
+        state.history.unshift({ title, delta, timestamp: new Date().toISOString() });
+        if (state.history.length > 100) state.history.length = 100;
+        saveState();
+        render();
+        showToast('تمت الإضافة وحفظها بنجاح.');
+        return true;
+      }
+
+      document.querySelectorAll('.single-form').forEach(form => {
+        form.addEventListener('submit', event => {
+          event.preventDefault();
+          const prayerId = form.dataset.prayer;
+          const input = form.querySelector('input');
+          const amount = Number(input.value);
+          if (!validCount(amount)) {
+            showToast('أدخل عدداً صحيحاً أكبر من صفر.');
+            input.focus();
+            return;
+          }
+          const prayer = prayers.find(p => p.id === prayerId);
+          const delta = emptyTotals();
+          delta[prayerId] = amount;
+          if (addEntry(`إضافة ${formatNumber(amount)} إلى صلاة ${prayer.name}`, delta)) input.value = '';
+        });
+      });
+
+      document.getElementById('smartForm').addEventListener('submit', event => {
+        event.preventDefault();
+        const input = document.getElementById('smartInput');
+        const amount = Number(input.value);
+        if (!Number.isSafeInteger(amount) || amount < 5 || amount % 5 !== 0) {
+          showToast('أدخل 5 على الأقل، ويجب أن يكون العدد من مضاعفات 5.');
+          input.focus();
+          return;
+        }
+        const each = amount / 5;
+        const delta = Object.fromEntries(prayers.map(p => [p.id, each]));
+        if (addEntry(`توزيع ${formatNumber(amount)} بالتساوي: ${formatNumber(each)} لكل صلاة`, delta)) input.value = '';
+      });
+
+      document.getElementById('undoButton').addEventListener('click', () => {
+        if (!state.history.length) return;
+        const last = state.history[0];
+        for (const p of prayers) {
+          const amount = Number(last.delta[p.id] || 0);
+          if (Number.isSafeInteger(amount) && amount >= 0) state.totals[p.id] = Math.max(0, state.totals[p.id] - amount);
+        }
+        state.history.shift();
+        saveState();
+        render();
+        showToast('تم التراجع عن آخر إضافة.');
+      });
+
+      document.getElementById('resetButton').addEventListener('click', () => {
+        if (!confirm('هل أنت متأكد من إعادة ضبط جميع الأعداد وسجل الإضافات؟ لا يمكن التراجع عن هذه الخطوة.')) return;
+        state = { version: 1, totals: emptyTotals(), history: [] };
+        saveState();
+        render();
+        showToast('تمت إعادة ضبط السجل.');
+      });
+
+      function downloadBackup(sourceState = state, showMessage = true) {
+        const backup = { ...sourceState, exportedAt: new Date().toISOString() };
+        const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `نسخة-احتياطية-قضاء-الصلوات-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        if (showMessage) showToast('تم تجهيز النسخة الاحتياطية.');
+      }
+      document.getElementById('exportButton').addEventListener('click', () => downloadBackup());
+
+      const importFile = document.getElementById('importFile');
+      document.getElementById('importButton').addEventListener('click', () => importFile.click());
+      importFile.addEventListener('change', () => {
+        const file = importFile.files && importFile.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const backup = JSON.parse(String(reader.result));
+            if (!backup || backup.version !== 1 || !backup.totals || !prayers.every(p =>
+              Number.isSafeInteger(Number(backup.totals[p.id])) && Number(backup.totals[p.id]) >= 0
+            )) throw new Error('invalid backup');
+            if (!confirm('سيتم استبدال الأعداد الحالية بالأعداد الموجودة في النسخة الاحتياطية. هل تريد المتابعة؟')) return;
+            state = { version: 1, totals: emptyTotals(), history: [] };
+            for (const p of prayers) state.totals[p.id] = Number(backup.totals[p.id]);
+            state.history = Array.isArray(backup.history) ? backup.history.filter(item =>
+              item && typeof item.title === 'string' && item.delta && typeof item.delta === 'object'
+            ).slice(0, 100) : [];
+            state.updatedAt = null;
+            saveState();
+            render();
+            showToast('تمت استعادة النسخة الاحتياطية.');
+          } catch (error) {
+            showToast('الملف غير صالح أو ليس نسخة احتياطية من هذا البرنامج.');
+          } finally {
+            importFile.value = '';
+          }
+        };
+        reader.onerror = () => { showToast('تعذرت قراءة الملف.'); importFile.value = ''; };
+        reader.readAsText(file);
+      });
+
+      // ---------------- Google Drive cloud backup ----------------
+      const cloudBadge = document.getElementById('cloudBadge');
+      const cloudStatusText = document.getElementById('cloudStatusText');
+      const cloudLastSync = document.getElementById('cloudLastSync');
+      const connectDriveButton = document.getElementById('connectDriveButton');
+      const syncDriveButton = document.getElementById('syncDriveButton');
+      const disconnectDriveButton = document.getElementById('disconnectDriveButton');
+      const cloudConflictPanel = document.getElementById('cloudConflict');
+
+      function setCloudStatus(mode, message) {
+        const labels = {
+          loading: 'جار التحميل', offline: 'غير متصل', connected: 'متصل',
+          syncing: 'جار المزامنة', warning: 'يتطلب إجراء', error: 'خطأ'
+        };
+        cloudBadge.dataset.state = mode;
+        cloudBadge.textContent = labels[mode] || 'الحالة';
+        cloudStatusText.textContent = message;
+        connectDriveButton.disabled = !tokenClient;
+        syncDriveButton.disabled = !driveAccessToken || !cloudFileId || !!pendingCloudConflict;
+        disconnectDriveButton.disabled = !driveAccessToken;
+      }
+
+      function updateLastSyncDisplay(value) {
+        let saved = value || null;
+        try { if (!saved) saved = localStorage.getItem(CLOUD_LAST_SYNC_KEY); } catch (_) { saved = null; }
+        if (!saved) {
+          cloudLastSync.textContent = 'لم تتم أي مزامنة بعد.';
+          return;
+        }
+        const date = new Date(saved);
+        cloudLastSync.textContent = Number.isNaN(date.getTime()) ? '' :
+          `آخر مزامنة ناجحة: ${new Intl.DateTimeFormat('ar-IQ-u-nu-latn', { dateStyle: 'medium', timeStyle: 'short' }).format(date)}`;
+      }
+
+      function markCloudSynced() {
+        const now = new Date().toISOString();
+        try { localStorage.setItem(CLOUD_LAST_SYNC_KEY, now); } catch (_) { /* cloud save succeeded even if local storage is restricted */ }
+        updateLastSyncDisplay(now);
+      }
+
+      function cloneState(value = state) {
+        return JSON.parse(JSON.stringify(value));
+      }
+
+      function normalizeCloudState(payload) {
+        const candidate = payload && payload.state && typeof payload.state === 'object' ? payload.state : payload;
+        if (!candidate || candidate.version !== 1 || !candidate.totals || typeof candidate.totals !== 'object') {
+          throw new Error('ملف السحابة لا يحتوي على بنية بيانات صالحة لهذا التطبيق.');
+        }
+        const totals = {};
+        for (const prayer of prayers) {
+          const count = Number(candidate.totals[prayer.id]);
+          if (!Number.isSafeInteger(count) || count < 0) throw new Error('وجدت قيمة غير صالحة في ملف بيانات السحابة.');
+          totals[prayer.id] = count;
+        }
+        const history = Array.isArray(candidate.history) ? candidate.history.filter(item =>
+          item && typeof item.title === 'string' && item.delta && typeof item.delta === 'object'
+        ).slice(0, 100) : [];
+        return {
+          version: 1,
+          totals,
+          history,
+          updatedAt: typeof candidate.updatedAt === 'string' ? candidate.updatedAt :
+            (typeof payload.savedAt === 'string' ? payload.savedAt : null)
+        };
+      }
+
+      function hasPrayerData(value) {
+        return prayers.some(prayer => Number(value.totals[prayer.id] || 0) > 0) || value.history.length > 0;
+      }
+
+      function sameStateContent(a, b) {
+        return JSON.stringify({ version: 1, totals: a.totals, history: a.history }) ===
+          JSON.stringify({ version: 1, totals: b.totals, history: b.history });
+      }
+
+      function stateTimestamp(value) {
+        const time = value && value.updatedAt ? Date.parse(value.updatedAt) : NaN;
+        return Number.isFinite(time) ? time : null;
+      }
+
+      function requireLiveToken() {
+        if (!driveAccessToken || Date.now() >= driveTokenExpiresAt - 15000) {
+          driveAccessToken = null;
+          driveTokenExpiresAt = 0;
+          setCloudStatus('warning', 'انتهت صلاحية اتصال Google أو قاربت على الانتهاء. اضغط «ربط حساب Google Drive» لتجديد الإذن؛ بياناتك المحلية آمنة.');
+          throw new Error('انتهت صلاحية رمز الوصول. أعد ربط Google Drive.');
+        }
+      }
+
+      async function driveFetch(url, options = {}) {
+        requireLiveToken();
+        const response = await fetch(url, {
+          ...options,
+          headers: {
+            ...(options.headers || {}),
+            Authorization: `Bearer ${driveAccessToken}`
+          }
+        });
+        if (!response.ok) {
+          let detail = '';
+          try {
+            const body = await response.json();
+            detail = body?.error?.message || body?.error_description || '';
+          } catch (_) { /* response may not be JSON */ }
+          if (response.status === 401) {
+            driveAccessToken = null;
+            driveTokenExpiresAt = 0;
+            setCloudStatus('warning', 'رفض Google رمز الوصول أو انتهت صلاحيته. أعد ربط الحساب؛ بياناتك محفوظة محلياً.');
+          }
+          const error = new Error(detail || `فشل طلب Google Drive (HTTP ${response.status}).`);
+          error.status = response.status;
+          throw error;
+        }
+        return response;
+      }
+
+      async function findCloudFile() {
+        const query = new URLSearchParams({
+          q: `'appDataFolder' in parents and name = '${DRIVE_FILE_NAME}' and trashed = false`,
+          spaces: 'appDataFolder',
+          pageSize: '100',
+          orderBy: 'modifiedTime desc',
+          fields: 'files(id,name,modifiedTime)'
+        });
+        const response = await driveFetch(`https://www.googleapis.com/drive/v3/files?${query.toString()}`);
+        const result = await response.json();
+        return Array.isArray(result.files) ? result.files : [];
+      }
+
+      async function downloadCloudState(fileId) {
+        const response = await driveFetch(`https://www.googleapis.com/drive/v3/files/${encodeURIComponent(fileId)}?alt=media`);
+        const raw = await response.text();
+        if (!raw.trim()) return null;
+        let payload;
+        try { payload = JSON.parse(raw); }
+        catch (_) { throw new Error('تعذرت قراءة ملف بيانات الصلوات الموجود في السحابة.'); }
+        return normalizeCloudState(payload);
+      }
+
+      async function createCloudFile() {
+        const response = await driveFetch('https://www.googleapis.com/drive/v3/files?fields=id,name,modifiedTime', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: DRIVE_FILE_NAME, mimeType: 'application/json', parents: ['appDataFolder'] })
+        });
+        const file = await response.json();
+        if (!file.id) throw new Error('أنشأ Google Drive استجابة غير مكتملة ولم يُرجع معرّف الملف.');
+        cloudFileId = file.id;
+      }
+
+      async function uploadCloudState(snapshot) {
+        if (!cloudFileId) await createCloudFile();
+        const documentToSave = {
+          app: 'qada-prayers-tracker',
+          schemaVersion: 1,
+          savedAt: new Date().toISOString(),
+          state: snapshot
+        };
+        try {
+          await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${encodeURIComponent(cloudFileId)}?uploadType=media`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify(documentToSave)
+          });
+        } catch (error) {
+          if (error.status !== 404) throw error;
+          cloudFileId = null;
+          await createCloudFile();
+          await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${encodeURIComponent(cloudFileId)}?uploadType=media`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify(documentToSave)
+          });
+        }
+      }
+
+      function resolveCloudConflict(remoteState, localState) {
+        pendingCloudConflict = { remoteState: cloneState(remoteState), localState: cloneState(localState) };
+        cloudConflictPanel.hidden = false;
+        setCloudStatus('warning', 'توقف الدمج التلقائي لأن النسختين مختلفتان. اختر النسخة التي تريد اعتمادها بعد تنزيل نسخة احتياطية عند الحاجة.');
+      }
+
+      function adoptCloudState(remoteState) {
+        state = cloneState(remoteState);
+        saveState(false);
+        render();
+      }
+
+      async function initializeCloudSync() {
+        cloudConflictPanel.hidden = true;
+        pendingCloudConflict = null;
+        setCloudStatus('syncing', 'تم الاتصال بحساب Google. جارٍ فحص بيانات الصلوات في مساحة التطبيق...');
+        try {
+          const files = await findCloudFile();
+          if (!files.length) {
+            cloudFileId = null;
+            await uploadCloudState(cloneState(state));
+            markCloudSynced();
+            setCloudStatus('connected', 'تم إنشاء ملف بيانات الصلوات في Google Drive ورفع بيانات هذا الجهاز. ستُرفع التغييرات التالية تلقائياً.');
+            return;
+          }
+
+          cloudFileId = files[0].id;
+          const remoteState = await downloadCloudState(cloudFileId);
+          const localState = cloneState(state);
+          if (!remoteState) {
+            await uploadCloudState(localState);
+            markCloudSynced();
+            setCloudStatus('connected', 'ملف السحابة كان فارغاً؛ تم رفع بيانات هذا الجهاز إليه.');
+            return;
+          }
+
+          if (sameStateContent(localState, remoteState)) {
+            if (stateTimestamp(remoteState) && (!stateTimestamp(localState) || stateTimestamp(remoteState) > stateTimestamp(localState))) {
+              adoptCloudState(remoteState);
+            }
+            markCloudSynced();
+            setCloudStatus('connected', 'بيانات هذا الجهاز مطابقة لبيانات Google Drive. المزامنة التلقائية مفعّلة.');
+            return;
+          }
+
+          const localHasData = hasPrayerData(localState);
+          const remoteHasData = hasPrayerData(remoteState);
+          const localTime = stateTimestamp(localState);
+          const remoteTime = stateTimestamp(remoteState);
+
+          if (localTime !== null && remoteTime !== null && localTime > remoteTime) {
+            await uploadCloudState(localState);
+            markCloudSynced();
+            setCloudStatus('connected', 'وجدت تغييرات محلية أحدث من نسخة السحابة؛ تم رفع أحدث بيانات هذا الجهاز.');
+            return;
+          }
+          if (localTime !== null && remoteTime !== null && remoteTime > localTime) {
+            adoptCloudState(remoteState);
+            markCloudSynced();
+            setCloudStatus('connected', 'وجدت نسخة سحابية أحدث؛ تم تنزيلها وحفظها على هذا الجهاز.');
+            return;
+          }
+          if (!localHasData && remoteHasData) {
+            adoptCloudState(remoteState);
+            markCloudSynced();
+            setCloudStatus('connected', 'تم استعادة بيانات الصلوات من Google Drive إلى هذا الجهاز.');
+            return;
+          }
+          if (localHasData && !remoteHasData) {
+            await uploadCloudState(localState);
+            markCloudSynced();
+            setCloudStatus('connected', 'بيانات هذا الجهاز تحتوي على سجلات بينما ملف السحابة فارغ؛ تم رفع بيانات الجهاز.');
+            return;
+          }
+          if (!localHasData && !remoteHasData) {
+            await uploadCloudState(localState);
+            markCloudSynced();
+            setCloudStatus('connected', 'تمت مزامنة سجل الصلوات الفارغ.');
+            return;
+          }
+          resolveCloudConflict(remoteState, localState);
+        } catch (error) {
+          console.error('Google Drive sync error:', error);
+          if (error.status === 403) {
+            setCloudStatus('error', 'رفض Google الوصول. تأكد من تفعيل Google Drive API وإضافة صلاحية drive.appdata في شاشة موافقة OAuth. بياناتك المحلية لم تتغير.');
+          } else if (driveAccessToken) {
+            setCloudStatus('error', `تعذرت المزامنة: ${error.message} بياناتك ما زالت محفوظة محلياً.`);
+          }
+        }
+      }
+
+      function queueCloudSave() {
+        if (!driveAccessToken || !cloudFileId || pendingCloudConflict) return;
+        clearTimeout(cloudSaveTimer);
+        cloudSaveTimer = setTimeout(() => syncLocalToCloud(), 850);
+      }
+
+      async function syncLocalToCloud() {
+        if (!driveAccessToken || !cloudFileId || pendingCloudConflict) return;
+        if (cloudSyncRunning) { cloudSyncAgain = true; return; }
+        cloudSyncRunning = true;
+        try {
+          do {
+            cloudSyncAgain = false;
+            const snapshot = cloneState(state);
+            setCloudStatus('syncing', 'جارٍ رفع أحدث بيانات الصلوات إلى Google Drive...');
+            await uploadCloudState(snapshot);
+            if (state.updatedAt !== snapshot.updatedAt) cloudSyncAgain = true;
+          } while (cloudSyncAgain);
+          markCloudSynced();
+          setCloudStatus('connected', 'تم حفظ بيانات الصلوات في Google Drive بنجاح.');
+        } catch (error) {
+          console.error('Google Drive auto-save error:', error);
+          if (error.status === 403) {
+            setCloudStatus('error', 'رفض Google رفع الملف. تحقق من صلاحية drive.appdata وتفعيل Drive API. النسخة المحلية محفوظة.');
+          } else if (driveAccessToken) {
+            setCloudStatus('error', `لم تكتمل المزامنة: ${error.message} ستبقى البيانات محفوظة محلياً؛ أعد المحاولة بعد معالجة الاتصال.`);
+          }
+        } finally {
+          cloudSyncRunning = false;
+        }
+      }
+
+      function startDriveAuthorization() {
+        if (!tokenClient) {
+          setCloudStatus('loading', 'مكتبة Google لم تكتمل بعد. تأكد من اتصال الإنترنت ثم أعد تحميل الصفحة.');
+          return;
+        }
+        try {
+          let previouslyAuthorized = false;
+          try { previouslyAuthorized = localStorage.getItem(CLOUD_AUTHORIZED_KEY) === '1'; } catch (_) { /* ask for consent when storage is unavailable */ }
+          tokenClient.requestAccessToken({ prompt: previouslyAuthorized ? '' : 'consent' });
+        } catch (error) {
+          console.error(error);
+          setCloudStatus('error', 'لم يتمكن المتصفح من فتح نافذة Google. اسمح بالنوافذ المنبثقة لهذه الصفحة ثم حاول مجدداً.');
+        }
+      }
+
+      function onDriveTokenResponse(response) {
+        if (!response || response.error || !response.access_token) {
+          const reason = response?.error_description || response?.error || 'لم يمنح Google رمز الوصول';
+          setCloudStatus('error', `لم يكتمل ربط Google Drive: ${reason}.`);
+          return;
+        }
+        driveAccessToken = response.access_token;
+        driveTokenExpiresAt = Date.now() + (Math.max(60, Number(response.expires_in) || 3600) * 1000);
+        try { localStorage.setItem(CLOUD_AUTHORIZED_KEY, '1'); } catch (_) { /* token remains in memory for this page session */ }
+        initializeCloudSync();
+      }
+
+      window.qadaGoogleReady = function () {
+        try {
+          if (!window.google?.accounts?.oauth2) throw new Error('تعذّر تحميل Google Identity Services.');
+          tokenClient = window.google.accounts.oauth2.initTokenClient({
+            client_id: GOOGLE_CLIENT_ID,
+            scope: DRIVE_SCOPE,
+            callback: onDriveTokenResponse,
+            error_callback: (error) => {
+              console.error('Google OAuth popup error:', error);
+              setCloudStatus('error', 'تعذر فتح نافذة التفويض. اسمح بالنوافذ المنبثقة وتحقق من عنوان الموقع المسموح في Google Cloud.');
+            }
+          });
+          setCloudStatus('offline', 'لم يتم ربط Google Drive بعد. اضغط زر الربط، ثم اختر حساب Google واسمح للتطبيق بالوصول إلى بياناته الخاصة فقط.');
+          connectDriveButton.disabled = false;
+          updateLastSyncDisplay();
+        } catch (error) {
+          console.error(error);
+          setCloudStatus('error', 'تعذر تجهيز مكتبة Google. تحقق من الإنترنت ثم أعد تحميل الصفحة.');
+        }
+      };
+
+      connectDriveButton.addEventListener('click', startDriveAuthorization);
+      syncDriveButton.addEventListener('click', () => {
+        if (!driveAccessToken || Date.now() >= driveTokenExpiresAt - 15000) startDriveAuthorization();
+        else syncLocalToCloud();
+      });
+      disconnectDriveButton.addEventListener('click', () => {
+        if (driveAccessToken && window.google?.accounts?.oauth2) {
+          window.google.accounts.oauth2.revoke(driveAccessToken, () => {});
+        }
+        driveAccessToken = null;
+        driveTokenExpiresAt = 0;
+        cloudFileId = null;
+        pendingCloudConflict = null;
+        cloudConflictPanel.hidden = true;
+        try { localStorage.removeItem(CLOUD_AUTHORIZED_KEY); } catch (_) { /* ignore unavailable local storage */ }
+        setCloudStatus('offline', 'تم قطع اتصال Google Drive. بياناتك المحلية وملف السحابة لم يُحذفا.');
+      });
+
+      document.getElementById('downloadConflictBackupButton').addEventListener('click', () => {
+        if (pendingCloudConflict) downloadBackup(pendingCloudConflict.localState, false);
+      });
+      document.getElementById('useCloudDataButton').addEventListener('click', () => {
+        if (!pendingCloudConflict) return;
+        adoptCloudState(pendingCloudConflict.remoteState);
+        pendingCloudConflict = null;
+        cloudConflictPanel.hidden = true;
+        markCloudSynced();
+        setCloudStatus('connected', 'تم اعتماد بيانات Google Drive وحفظها محلياً على هذا الجهاز.');
+        showToast('تم اعتماد نسخة السحابة.');
+      });
+      document.getElementById('useLocalDataButton').addEventListener('click', async () => {
+        if (!pendingCloudConflict) return;
+        const localCopy = cloneState(pendingCloudConflict.localState);
+        try {
+          await uploadCloudState(localCopy);
+          state = localCopy;
+          saveState(false);
+          render();
+          pendingCloudConflict = null;
+          cloudConflictPanel.hidden = true;
+          markCloudSynced();
+          setCloudStatus('connected', 'تم اعتماد بيانات هذا الجهاز ورفعها إلى Google Drive.');
+          showToast('تم رفع بيانات هذا الجهاز إلى السحابة.');
+        } catch (error) {
+          console.error(error);
+          setCloudStatus('error', `تعذر رفع بيانات هذا الجهاز: ${error.message}. لم يتم حذف النسختين.`);
+        }
+      });
+      updateLastSyncDisplay();
+      // ---------------------------------------------------------
+
+      // Keep numerals in Western form even when the keyboard/browser supplies Arabic digits.
+      function westernDigits(value) {
+        return String(value).replace(/[٠-٩۰-۹]/g, digit => {
+          const code = digit.charCodeAt(0);
+          return String(code >= 0x06f0 ? code - 0x06f0 : code - 0x0660);
+        });
+      }
+      document.querySelectorAll('.numeric-input').forEach(input => {
+        input.addEventListener('input', () => {
+          const normalized = westernDigits(input.value).replace(/[^0-9]/g, '');
+          if (input.value !== normalized) input.value = normalized;
+        });
+      });
+
+      // Top-level navigation: Prayer tracker / Settings.
+      document.querySelectorAll('[data-main-tab]').forEach(button => {
+        button.addEventListener('click', () => {
+          const selected = button.dataset.mainTab;
+          document.getElementById('qadaView').hidden = selected !== 'qada';
+          document.getElementById('settingsView').hidden = selected !== 'settings';
+          document.querySelectorAll('[data-main-tab]').forEach(tab => {
+            const active = tab.dataset.mainTab === selected;
+            tab.classList.toggle('active', active);
+            tab.setAttribute('aria-selected', String(active));
+          });
+        });
+      });
+
+      // Prayer section sub-tabs: tracker / recent activity.
+      document.querySelectorAll('[data-qada-tab]').forEach(button => {
+        button.addEventListener('click', () => {
+          const selected = button.dataset.qadaTab;
+          document.getElementById('trackerPanel').hidden = selected !== 'tracker';
+          document.getElementById('historyPanel').hidden = selected !== 'history';
+          document.querySelectorAll('[data-qada-tab]').forEach(tab => {
+            const active = tab.dataset.qadaTab === selected;
+            tab.classList.toggle('active', active);
+            tab.setAttribute('aria-selected', String(active));
+          });
+        });
+      });
+
+      loadState();
+      render();
+    })();
+  </script>
+  <script async defer src="https://accounts.google.com/gsi/client" onload="window.qadaGoogleReady && window.qadaGoogleReady()" onerror="document.getElementById('cloudStatusText').textContent='تعذّر تحميل مكتبة Google؛ تحقق من اتصال الإنترنت.'"></script>
+</body>
+</html>
