@@ -128,35 +128,12 @@
   }
 
   function showLoginUi(){
-    if (!document.body || document.getElementById('vsaCloudAuthGate')) return;
-    const gate = document.createElement('div');
-    gate.id = 'vsaCloudAuthGate';
-    gate.innerHTML = `
-      <div class="vsa-auth-card">
-        <div class="vsa-auth-icon">🧠</div>
-        <h2>العقل المدبر السحابي</h2>
-        <p>تسجيل الدخول مطلوب لاستخدام النسخة السحابية من Agent.</p>
-        <button id="vsaGoogleLoginBtn" type="button">🔐 المتابعة باستخدام Google</button>
-        <div id="vsaAuthError" class="vsa-auth-error"></div>
-      </div>`;
-    document.body.appendChild(gate);
-    gate.addEventListener('click', (event) => { if (event.target === gate) gate.style.display = 'none'; });
-    document.getElementById('vsaGoogleLoginBtn')?.addEventListener('click', redirectToGoogle);
+    // The blocking cloud-login overlay has been intentionally removed.
+    // Authentication remains enforced by the protected cloud endpoint.
   }
 
-  function updateLoginUi(state, user, error){
-    const gate = document.getElementById('vsaCloudAuthGate');
-    const errorEl = document.getElementById('vsaAuthError');
-    const button = document.getElementById('vsaGoogleLoginBtn');
-    if (!gate) return;
-    if (state === 'ready' && user?.id) {
-      gate.style.display = 'none';
-      root.__VSA_CLOUD_USER__ = user;
-      return;
-    }
-    gate.style.display = 'flex';
-    if (button) button.disabled = false;
-    if (errorEl) errorEl.textContent = error || (state === 'pending' ? 'جارٍ التحقق من جلسة الدخول...' : 'يرجى تسجيل الدخول بحساب Google.');
+  function updateLoginUi(){
+    // Do not create or display a blocking login dialog on GitHub Pages.
   }
 
   async function ensure(){
@@ -183,17 +160,7 @@
   }
 
   function injectStyles(){
-    if (document.getElementById('vsaCloudAuthStyles')) return;
-    const style = document.createElement('style');
-    style.id = 'vsaCloudAuthStyles';
-    style.textContent = `
-      #vsaCloudAuthGate{position:fixed;inset:0;z-index:100001;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);direction:rtl;font-family:Arial,sans-serif}
-      .vsa-auth-card{width:min(420px,calc(100vw - 32px));padding:30px;border:1px solid #2d3748;border-radius:18px;background:#15171b;color:#fff;text-align:center;box-shadow:0 20px 70px rgba(0,0,0,.55)}
-      .vsa-auth-icon{font-size:48px;margin-bottom:8px}.vsa-auth-card h2{margin:0 0 10px}.vsa-auth-card p{color:#aeb4bf;line-height:1.7;margin:0 0 22px}
-      #vsaGoogleLoginBtn{border:0;border-radius:10px;padding:13px 20px;background:#fff;color:#111;font-weight:700;cursor:pointer;width:100%;font-size:15px}
-      #vsaGoogleLoginBtn:hover{background:#e9eef5}#vsaGoogleLoginBtn:disabled{opacity:.6;cursor:wait}.vsa-auth-error{min-height:20px;color:#ff8a80;font-size:12px;margin-top:14px}
-    `;
-    document.head.appendChild(style);
+    // No login-overlay styles are needed because the overlay is disabled.
   }
 
   const nativeFetch = root.fetch.bind(root);
